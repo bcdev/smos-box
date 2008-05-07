@@ -3,7 +3,18 @@ package org.esa.beam.dataio.smos;
 import java.awt.image.DataBuffer;
 
 public class SmosL1cRecordDescriptor {
-    private final static SmosL1cFieldDescriptor[] D1C_FIELD_DESCRIPTORS = new SmosL1cFieldDescriptor[]{
+
+    private final static SmosL1cFieldDescriptor[] L1C_DS_FIELD_DESCRIPTORS = new SmosL1cFieldDescriptor[]{
+            /*00*/ new SmosL1cFieldDescriptor("Grid_Point_ID", DataBuffer.TYPE_INT, 0),
+            /*01*/ new SmosL1cFieldDescriptor("Grid_Point_Latitude", DataBuffer.TYPE_FLOAT, 4),
+            /*02*/ new SmosL1cFieldDescriptor("Grid_Point_Longitude", DataBuffer.TYPE_FLOAT, 8),
+            /*03*/ new SmosL1cFieldDescriptor("Grid_Point_Altitude", DataBuffer.TYPE_FLOAT, 12),
+            /*04*/ new SmosL1cFieldDescriptor("Grid_Point_Mask", DataBuffer.TYPE_BYTE, 16),
+            /*05*/ new SmosL1cFieldDescriptor("BT_Data_Counter", DataBuffer.TYPE_BYTE, 17),
+            // --> size is 18 bytes total
+    };
+
+    private final static SmosL1cFieldDescriptor[] D1C_MDS_FIELD_DESCRIPTORS = new SmosL1cFieldDescriptor[]{
             /*00*/ new SmosL1cFieldDescriptor("Flags", DataBuffer.TYPE_USHORT, 0),
             /*01*/ new SmosL1cFieldDescriptor("BT_Value_Real", DataBuffer.TYPE_FLOAT, 2),
             /*02*/ new SmosL1cFieldDescriptor("Radiometric_Accuracy_of_Pixel", DataBuffer.TYPE_USHORT, 6),
@@ -17,7 +28,7 @@ public class SmosL1cRecordDescriptor {
             // --> size is 24 bytes total
     };
 
-    private final static SmosL1cFieldDescriptor[] F1C_FIELD_DESCRIPTORS = new SmosL1cFieldDescriptor[]{
+    private final static SmosL1cFieldDescriptor[] F1C_MDS_FIELD_DESCRIPTORS = new SmosL1cFieldDescriptor[]{
             /*00*/ new SmosL1cFieldDescriptor("Flags", DataBuffer.TYPE_USHORT, 0),
             /*01*/ new SmosL1cFieldDescriptor("BT_Value_Real", DataBuffer.TYPE_FLOAT, 2),
             /*02*/ new SmosL1cFieldDescriptor("BT_Value_Imag", DataBuffer.TYPE_FLOAT, 6),
@@ -32,7 +43,7 @@ public class SmosL1cRecordDescriptor {
             // --> size is 28 bytes total
     };
 
-    private final static SmosL1cFieldDescriptor[] BW1C_FIELD_DESCRIPTORS = new SmosL1cFieldDescriptor[]{
+    private final static SmosL1cFieldDescriptor[] BW1C_MDS_FIELD_DESCRIPTORS = new SmosL1cFieldDescriptor[]{
             /*00*/ new SmosL1cFieldDescriptor("Flags", DataBuffer.TYPE_USHORT, 0),
             /*01*/ new SmosL1cFieldDescriptor("BT_Value", DataBuffer.TYPE_FLOAT, 2),
             /*02*/ new SmosL1cFieldDescriptor("Radiometric_Accuracy_of_Pixel", DataBuffer.TYPE_USHORT, 6),
@@ -47,14 +58,14 @@ public class SmosL1cRecordDescriptor {
 
     public static SmosL1cRecordDescriptor create(String fileType) {
         if (fileType.endsWith("SCSD1C") || fileType.endsWith("SCLD1C")) {
-            return new SmosL1cRecordDescriptor(D1C_FIELD_DESCRIPTORS, 24);
+            return new SmosL1cRecordDescriptor(D1C_MDS_FIELD_DESCRIPTORS, 24);
         }
         if (fileType.endsWith("SCSF1C") || fileType.endsWith("SCLF1C")) {
-            return new SmosL1cRecordDescriptor(F1C_FIELD_DESCRIPTORS, 28);
+            return new SmosL1cRecordDescriptor(F1C_MDS_FIELD_DESCRIPTORS, 28);
         }
         if (fileType.endsWith("BWSD1C") || fileType.endsWith("BWLD1C") ||
                 fileType.endsWith("BWSF1C") || fileType.endsWith("BWLF1C")) {
-            return new SmosL1cRecordDescriptor(BW1C_FIELD_DESCRIPTORS, 14);
+            return new SmosL1cRecordDescriptor(BW1C_MDS_FIELD_DESCRIPTORS, 14);
         }
         return null;
     }

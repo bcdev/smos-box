@@ -45,10 +45,13 @@ public final class SmosD1cMdsr {
     }
 
     private float readScaledUShort(ImageInputStream iis, float scale) throws IOException {
-//        final int us = iis.readShort() & 0xFFFF;
-//        final float c = 1 << 16;
-//        return scale * (us / c);
-        iis.skipBytes(2);
-        return 0;
+        final short s = iis.readShort();
+        return scaleUShort(s, scale);
+    }
+
+    public static float scaleUShort(short s, float scale) {
+        final int us = s & 0xFFFF;
+        final float c = 1 << 16;
+        return scale * (us / c);
     }
 }

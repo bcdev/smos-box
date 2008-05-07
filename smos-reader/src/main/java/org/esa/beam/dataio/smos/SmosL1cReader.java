@@ -14,7 +14,7 @@ public class SmosL1cReader {
     private final int gridPointCount;
     private final long gridPointDsOffset;
     private final int gridPointDsrSize;
-    private final int btDataDsrSize;
+    private final int gridPointMdsrSize;
     private InputStream headerInputStream;
     private SmosGridPointInfo gridPointInfo;
 
@@ -42,7 +42,7 @@ public class SmosL1cReader {
         gridPointCount = dataInputStream.readInt();
         gridPointDsOffset = dataInputStream.getStreamPosition();
         gridPointDsrSize = 18;
-        btDataDsrSize = recordDescriptor.getRecordSize();
+        gridPointMdsrSize = recordDescriptor.getRecordSize();
 
         final long t0 = System.currentTimeMillis();
         gridPointInfo = createGridPointInfo();
@@ -86,23 +86,38 @@ public class SmosL1cReader {
         return gridPointInfo;
     }
 
-    private int readGridpointId() throws IOException {
-        return readGridpointIdImpl1();
+    int readGridpointId() throws IOException {
+//        return readGridpointIdImpl1();
 //        return readGridpointIdImpl2();
+        return readGridpointIdImpl3();
     }
 
-    private int readGridpointIdImpl1() throws IOException {
+    int readGridpointIdImpl1() throws IOException {
         int gridPointId = dataInputStream.readInt();
         dataInputStream.skipBytes(3 * 4 + 1);
         int btDataCount = dataInputStream.readByte() & 0xFF;
-        dataInputStream.skipBytes(btDataCount * btDataDsrSize);
+        dataInputStream.skipBytes(btDataCount * gridPointMdsrSize);
         return gridPointId;
     }
 
-    private int readGridpointIdImpl2() throws IOException {
+    int readGridpointIdImpl2() throws IOException {
         final SmosL1cGridPointRecord gridPointRecord = new SmosL1cGridPointRecord();
         gridPointRecord.readFrom(dataInputStream);
         return gridPointRecord.gridPointId;
+    }
+
+    byte[] gridPointDataBuffer;
+    final ByteArrayDecoder arrayDecoder = new ByteArrayDecoder(ByteOrder.LITTLE_ENDIAN);
+
+    private int readGridpointIdImpl3() throws IOException {
+        if (gridPointDataBuffer == null) {
+             gridPointDataBuffer = new byte[getGridPointDsrSize() + 255 * getGridPointMdsrSize()];
+        }
+        dataInputStream.read(gridPointDataBuffer, 0, getGridPointDsrSize());
+        int gridPointId = arrayDecoder.toInt(gridPointDataBuffer, 0);
+        int btDataCount = arrayDecoder.toByte(gridPointDataBuffer, 17) & 0xff;
+        dataInputStream.read(gridPointDataBuffer, getGridPointDsrSize(), btDataCount * getGridPointMdsrSize());
+        return gridPointId;
     }
 
     @Override
@@ -143,8 +158,8 @@ public class SmosL1cReader {
         return gridPointDsrSize;
     }
 
-    public int getBtDataDsrSize() {
-        return btDataDsrSize;
+    public int getGridPointMdsrSize() {
+        return gridPointMdsrSize;
     }
 
     public SmosSnapshotInfo readSnapshotInfo(int index) throws IOException {
