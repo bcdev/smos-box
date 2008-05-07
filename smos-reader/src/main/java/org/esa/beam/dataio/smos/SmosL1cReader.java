@@ -1,9 +1,7 @@
 package org.esa.beam.dataio.smos;
 
 import javax.imageio.stream.ImageInputStream;
-import java.io.EOFException;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.ByteOrder;
 
 public class SmosL1cReader {
@@ -51,7 +49,7 @@ public class SmosL1cReader {
         final long t1 = System.currentTimeMillis();
         final long dt = t1 - t0;
         System.out.println("gridPointInfo = " + gridPointInfo +  ", time = " + dt + " ms");
-        gridPointInfo.dump(System.out);
+//        gridPointInfo.dump(new PrintStream(new FileOutputStream("gridPointInfo.txt")));
     }
 
     SmosGridPointInfo createGridPointInfo() throws IOException {
