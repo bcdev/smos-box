@@ -4,7 +4,7 @@ import javax.imageio.stream.ImageInputStream;
 import java.io.IOException;
 
 
-public class SmosBtData {
+public final class SmosD1cMdsr {
 
     int flags;
     float btValueReal;
@@ -18,7 +18,14 @@ public class SmosBtData {
     float footprintAxis1;
     float footprintAxis2;
 
+    public SmosD1cMdsr() {
+    }
+
     void readFrom(ImageInputStream iis) throws IOException {
+//        iis.skipBytes(28);
+//        return;
+
+
 //        final long pos0 = iis.getStreamPosition();
 
         flags = iis.readShort() & 0xFFFF;
@@ -34,12 +41,14 @@ public class SmosBtData {
         footprintAxis2 = readScaledUShort(iis, 100.0F); // todo - use Pixel_Footprint_Scale from SPH
 
 //        final long dsrSize = iis.getStreamPosition() - pos0;
-//        System.out.println("SmosBtData.dsrSize = " + dsrSize);
+//        System.out.println("SmosD1cMdsr.dsrSize = " + dsrSize);
     }
 
     private float readScaledUShort(ImageInputStream iis, float scale) throws IOException {
-        final int us = iis.readShort() & 0xFFFF;
-        final float c = 1 << 16;
-        return scale * (us / c);
+//        final int us = iis.readShort() & 0xFFFF;
+//        final float c = 1 << 16;
+//        return scale * (us / c);
+        iis.skipBytes(2);
+        return 0;
     }
 }

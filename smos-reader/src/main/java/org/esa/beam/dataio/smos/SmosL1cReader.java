@@ -1,6 +1,7 @@
 package org.esa.beam.dataio.smos;
 
 import javax.imageio.stream.ImageInputStream;
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteOrder;
@@ -17,6 +18,7 @@ public class SmosL1cReader {
     private final int gridPointDsrSize;
     private final int btDataDsrSize;
     private InputStream headerInputStream;
+    private SmosGridPointInfo gridPointInfo;
 
     public SmosL1cReader(InputStream headerInputStream, ImageInputStream dataInputStream) throws IOException {
 
@@ -44,38 +46,65 @@ public class SmosL1cReader {
         gridPointDsrSize = 18;
         btDataDsrSize = recordDescriptor.getRecordSize();
 
-//        int minGridPointId = Integer.MAX_VALUE;
-//        int maxGridPointId = Integer.MIN_VALUE;
-//        final long t0 = System.currentTimeMillis();
-//
-//        dataInputStream.seek(gridPointDsOffset);
-//        for (int i = 0; i < gridPointCount; i++) {
-//            final long position = dataInputStream.getStreamPosition();
-//            int gridPointId = dataInputStream.readInt();
-//            int dggridSeqnum = SmosDgg.smosGridPointIdToDggridSeqnum(gridPointId);
-//            dataInputStream.skipBytes(3 * 4 + 1);
-//            int btDataCount = dataInputStream.readByte() & 0xFF;
-//            dataInputStream.skipBytes(btDataCount * btDataDsrSize);
-//            minGridPointId = Math.min(dggridSeqnum, minGridPointId);
-//            maxGridPointId = Math.max(dggridSeqnum, maxGridPointId);
-//        }
-//
-//        // Check that we are at EOF
-//        try {
-//            dataInputStream.readByte();
-//            throw new IOException("EOF expected");
-//        } catch (EOFException e) {
-//            // OK, expected
-//        }
-//
-//        System.out.println("minGridPointId = " + minGridPointId);
-//        System.out.println("maxGridPointId = " + maxGridPointId);
-//        final int availableGridPointCount = maxGridPointId - minGridPointId;
-//        System.out.println("availableGridPointCount = " + availableGridPointCount);
-//
-//        final long t1 = System.currentTimeMillis();
-//        final long dt = t1 - t0;
-//        System.out.println("dt = " + dt);
+        final long t0 = System.currentTimeMillis();
+        gridPointInfo = createGridPointInfo();
+        final long t1 = System.currentTimeMillis();
+        final long dt = t1 - t0;
+        System.out.println("gridPointInfo = " + gridPointInfo +  ", time = " + dt + " ms");
+        gridPointInfo.dump(System.out);
+    }
+
+    SmosGridPointInfo createGridPointInfo() throws IOException {
+        int minGridPointId = Integer.MAX_VALUE;
+        int maxGridPointId = Integer.MIN_VALUE;
+
+        dataInputStream.seek(gridPointDsOffset);
+        for (int i = 0; i < gridPointCount; i++) {
+            int gridPointId = readGridpointId();
+            minGridPointId = Math.min(gridPointId, minGridPointId);
+            maxGridPointId = Math.max(gridPointId, maxGridPointId);
+        }
+
+        // Check that we are at EOF
+        if (!isEof()) {
+            throw new IllegalStateException("Internal error or Illegal file format?");
+        }
+
+        final SmosGridPointInfo gridPointInfo = new SmosGridPointInfo(SmosDgg.smosGridPointIdToDggridSeqnum(minGridPointId),
+                                                              SmosDgg.smosGridPointIdToDggridSeqnum(maxGridPointId));
+        dataInputStream.seek(gridPointDsOffset);
+        for (int i = 0; i < gridPointCount; i++) {
+            final long position = dataInputStream.getStreamPosition();
+            int gridPointId = readGridpointId();
+            int dggridSeqnum = SmosDgg.smosGridPointIdToDggridSeqnum(gridPointId);
+            gridPointInfo.setOffset(dggridSeqnum, (int) (position - gridPointDsOffset));
+        }
+
+        // Check that we are at EOF
+        if (!isEof()) {
+            throw new IllegalStateException("Internal error or Illegal file format?");
+        }
+
+        return gridPointInfo;
+    }
+
+    private int readGridpointId() throws IOException {
+        return readGridpointIdImpl1();
+//        return readGridpointIdImpl2();
+    }
+
+    private int readGridpointIdImpl1() throws IOException {
+        int gridPointId = dataInputStream.readInt();
+        dataInputStream.skipBytes(3 * 4 + 1);
+        int btDataCount = dataInputStream.readByte() & 0xFF;
+        dataInputStream.skipBytes(btDataCount * btDataDsrSize);
+        return gridPointId;
+    }
+
+    private int readGridpointIdImpl2() throws IOException {
+        final SmosL1cGridPointRecord gridPointRecord = new SmosL1cGridPointRecord();
+        gridPointRecord.readFrom(dataInputStream);
+        return gridPointRecord.gridPointId;
     }
 
     @Override
@@ -141,6 +170,13 @@ public class SmosL1cReader {
                                           dataInputStream);
     }
 
+
+    public SmosL1cGridPointRecord readGridPointRecord() throws IOException {
+        final SmosL1cGridPointRecord smosL1cGridPointRecord = new SmosL1cGridPointRecord();
+        smosL1cGridPointRecord.readFrom(dataInputStream);
+        return smosL1cGridPointRecord;
+    }
+
     public void close() {
         try {
             headerInputStream.close();
@@ -153,5 +189,18 @@ public class SmosL1cReader {
         } catch (IOException e) {
             // ignore
         }
+    }
+
+    private boolean isEof() {
+        try {
+            final long position = dataInputStream.getStreamPosition();
+            dataInputStream.readByte();
+            dataInputStream.seek(position);
+        } catch (EOFException e) {
+            return true;
+        } catch (IOException e) {
+            // ok
+        }
+        return false;
     }
 }

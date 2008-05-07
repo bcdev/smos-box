@@ -43,6 +43,23 @@ public class SmosL1cReaderF1cTest extends TestCase {
         assertEquals(expectedOffset, reader.getGridPointDsOffset());
     }
 
+    public void testReadGridPointRecord() throws IOException {
+        reader.getDataInputStream().seek(reader.getGridPointDsOffset());
+        final SmosL1cGridPointRecord record = reader.readGridPointRecord();
+
+        assertInRange(1, 9262145, record.gridPointId);
+        assertInRange(0, 255, record.mask);
+        assertInRange(-90.0F, +90.0F, record.latitude);  // deg
+        assertInRange(-180.0F, +180.0F, record.longitude);   // deg
+        assertInRange(-1000.0F, +10000.0F, record.altitude); // m
+        assertInRange(0, 255, record.btDataCount); // #
+        final SmosD1cMdsr[] records = record.btDataRecords;
+        assertNotNull(records);
+        for (int i = 0; i < records.length; i++) {
+            testSmosD1cMdsr(records[i]);
+        }
+    }
+
     public void testReadGridPoint() throws JDOMException, IOException {
         final SmosL1cGridPointReader gridPointReader = reader.createSmosL1cGridPointReader();
         testGridPointData(gridPointReader.readNext());
@@ -72,7 +89,6 @@ public class SmosL1cReaderF1cTest extends TestCase {
         assertInRange(-90.0F, +90.0F, gridPointData.latitude);  // deg
         assertInRange(-180.0F, +180.0F, gridPointData.longitude);   // deg
         assertInRange(-1000.0F, +10000.0F, gridPointData.altitude); // m
-        assertInRange(0, 255, gridPointData.btDataCount);
 
         final Object[] data = gridPointData.bandData;
         assertNotNull(data);
@@ -81,12 +97,16 @@ public class SmosL1cReaderF1cTest extends TestCase {
 //        testBtData(gridPointData.btData[gridPointData.btDataCount - 1]);
     }
 
-    private void testBtData(SmosBtData btData) {
-        assertInRange(0.0F, 90.0F, btData.incidenceAngle);
-        assertInRange(0.0F, 360.0F, btData.azimuthAngle);
-        assertInRange(0.0F, 360.0F, btData.geometricRotationAngle);
-        assertInRange(0, 65535, btData.flags);
-        assertInRange(0, 50000, btData.snapshotId);
+
+    private void testSmosD1cMdsr(SmosD1cMdsr mdsr) {
+        assertInRange(0, 65535, mdsr.flags);
+        assertInRange(-10.0F, 400.0F, mdsr.btValueReal);
+        assertInRange(-10.0F, 400.0F, mdsr.btValueImag);
+        assertInRange(0.0F, 90.0F, mdsr.incidenceAngle);
+        assertInRange(0.0F, 360.0F, mdsr.azimuthAngle);
+        assertInRange(0.0F, 360.0F, mdsr.geometricRotationAngle);
+        assertInRange(0.0F, 360.0F, mdsr.faradayRotationAngle);
+        assertInRange(0, 50000, mdsr.snapshotId);
     }
 
     public void testReadSnapshotInfo() throws JDOMException, IOException {
