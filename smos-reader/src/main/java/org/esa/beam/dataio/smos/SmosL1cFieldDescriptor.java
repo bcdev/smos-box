@@ -8,11 +8,13 @@ public class SmosL1cFieldDescriptor {
     final String name;
     final int dataType;
     final int offset;
+    final int size;
 
     public SmosL1cFieldDescriptor(String name, int dataType, int offset) {
         this.name = name;
         this.dataType = dataType;
         this.offset = offset;
+        this.size = DataBuffer.getDataTypeSize(dataType) / 8;
     }
 
     public SmosL1cField createField(int length) {

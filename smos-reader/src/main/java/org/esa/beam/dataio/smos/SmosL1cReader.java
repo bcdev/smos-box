@@ -42,7 +42,7 @@ public class SmosL1cReader {
         gridPointCount = dataInputStream.readInt();
         gridPointDsOffset = dataInputStream.getStreamPosition();
         gridPointDsrSize = 18;
-        gridPointMdsrSize = recordDescriptor.getRecordSize();
+        gridPointMdsrSize = recordDescriptor.getSize();
 
         final long t0 = System.currentTimeMillis();
         gridPointInfo = createGridPointInfo();
@@ -172,14 +172,14 @@ public class SmosL1cReader {
     public SmosL1cGridPointReader createSmosL1cGridPointReader() throws IOException {
         dataInputStream.seek(gridPointDsOffset);
         return new SmosL1cGridPointReader(recordDescriptor.getFieldDescriptors(),
-                                          recordDescriptor.getRecordSize(),
+                                          recordDescriptor.getSize(),
                                           dataInputStream);
     }
 
     public SmosL1cGridPointReader createSmosL1cGridPointReader(int[] fieldIndexes) throws IOException {
         dataInputStream.seek(gridPointDsOffset);
         return new SmosL1cGridPointReader(recordDescriptor.getFieldDescriptors(fieldIndexes),
-                                          recordDescriptor.getRecordSize(),
+                                          recordDescriptor.getSize(),
                                           dataInputStream);
     }
 

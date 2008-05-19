@@ -54,7 +54,7 @@ public class SmosL1cRecordDescriptor {
     };
 
     private final SmosL1cFieldDescriptor[] fieldDescriptors;
-    private final int dsrSize;
+    private final int size;
 
     public static SmosL1cRecordDescriptor create(String fileType) {
         if (fileType.endsWith("SCSD1C") || fileType.endsWith("SCLD1C")) {
@@ -91,12 +91,12 @@ public class SmosL1cRecordDescriptor {
     }
 
 
-    public int getRecordSize() {
-        return dsrSize;
+    public int getSize() {
+        return size;
     }
 
-    private SmosL1cRecordDescriptor(SmosL1cFieldDescriptor[] fieldDescriptors, int dsrSize) {
+    private SmosL1cRecordDescriptor(SmosL1cFieldDescriptor[] fieldDescriptors, int size) {
         this.fieldDescriptors = fieldDescriptors;
-        this.dsrSize = dsrSize;
+        this.size = size;
     }
 }

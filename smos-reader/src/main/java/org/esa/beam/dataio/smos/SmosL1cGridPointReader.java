@@ -21,7 +21,7 @@ public class SmosL1cGridPointReader {
                            int[] fieldIndexes,
                            ImageInputStream dataInputStream) {
         this.fieldDescriptors = recordDescriptor.getFieldDescriptors(fieldIndexes);
-        this.recordSize = recordDescriptor.getRecordSize();
+        this.recordSize = recordDescriptor.getSize();
         this.dataInputStream = dataInputStream;
     }
 
