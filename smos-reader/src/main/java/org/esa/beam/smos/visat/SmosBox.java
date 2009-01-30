@@ -10,14 +10,14 @@ import org.esa.beam.visat.VisatPlugIn;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 public class SmosBox implements VisatPlugIn {
 
     private static final String WORLD_IMAGE_DIR_PROPERTY_NAME = "org.esa.beam.pview.worldImageDir";
-    static final String WORLD_MAP_LAYER_ID = "org.esa.beam.smos.layers.worldMap";
+    private static final String WORLD_MAP_LAYER_NAME = "World Map (NASA Blue Marble)";
 
     private static SmosBox instance;
-
     private SnapshotSelectionService snapshotSelectionService;
     private GridPointSelectionService gridPointSelectionService;
     private SceneViewSelectionService sceneViewSelectionService;
@@ -53,7 +53,7 @@ public class SmosBox implements VisatPlugIn {
             public void handleSceneViewSelectionChanged(ProductSceneView oldView, ProductSceneView newView) {
                 if (newView != null) {
                     Layer rootLayer = newView.getRootLayer();
-                    if (rootLayer.getChildIndex(WORLD_MAP_LAYER_ID) == -1) {
+                    if (hasWorldMapChildLayer(rootLayer)) {
                         Layer worldLayer = createWorldMapLayer();
                         if (worldLayer != null) {
                             rootLayer.getChildren().add(worldLayer);
@@ -62,6 +62,16 @@ public class SmosBox implements VisatPlugIn {
                 }
             }
         });
+    }
+
+    private static boolean hasWorldMapChildLayer(Layer layer) {
+        final List<Layer> rootChildren = layer.getChildren();
+        for (Layer child : rootChildren) {
+            if (WORLD_MAP_LAYER_NAME.equals(child.getName())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -91,9 +101,8 @@ public class SmosBox implements VisatPlugIn {
             return null;
         }
         final ImageLayer worldMapLayer = new ImageLayer(multiLevelSource);
-        worldMapLayer.setName("World Map (NASA Blue Marble)");
+        worldMapLayer.setName(WORLD_MAP_LAYER_NAME);
         worldMapLayer.setVisible(true);
-        worldMapLayer.setId(WORLD_MAP_LAYER_ID);
         worldMapLayer.getStyle().setOpacity(1.0);
         return worldMapLayer;
     }
