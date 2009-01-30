@@ -18,110 +18,204 @@ package org.esa.beam.dataio.smos;
 
 
 import com.bc.ceres.binio.*;
-import com.bc.ceres.binio.util.RandomAccessFileIOHandler;
 
+import java.awt.geom.Area;
+import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.io.IOException;
-import java.io.RandomAccessFile;
+import java.text.MessageFormat;
 import java.util.Arrays;
 
 
-class SmosFile {
+public class SmosFile implements GridPointDataProvider {
 
     private final File file;
-    private final Format format;
-    private final SequenceData gridPointList;
-    private int[] gridPointIndexes;
-    private final RandomAccessFile raf;
+    private final DataFormat format;
+    private final DataContext dataContext;
+    private final CompoundData dataBlock;
 
-    public SmosFile(File file, Format format) throws IOException {
+    private final SequenceData gridPointList;
+    private final CompoundType gridPointType;
+    private final int gridPointIdIndex;
+    private final int[] gridPointIndexes;
+    private final Area region;
+
+    private int minSeqnum;
+    private int maxSeqnum;
+
+    public SmosFile(File file, DataFormat format) throws IOException {
         this.file = file;
         this.format = format;
-        System.out.println("SmosFile: file = " + this.file);
-        System.out.println("SmosFile: format = " + this.format.getName());
-        this.raf = new RandomAccessFile(file, "r");
-        final IOHandler handler = new RandomAccessFileIOHandler(raf);
-        final IOContext context = new IOContext(format, handler);
-        CompoundData smosBinaryData = context.getData();
-        gridPointList = smosBinaryData.getSequence("Grid_Point_List");
-        initGridPointIndexes();
+
+        dataContext = format.createContext(file, "r");
+        dataBlock = dataContext.getData();
+
+        gridPointList = dataBlock.getSequence(SmosFormats.GRID_POINT_LIST_NAME);
+        if (gridPointList == null) {
+            throw new IllegalStateException(MessageFormat.format(
+                    "SMOS File ''{0}'': Missing grid point list.", file.getPath()));
+        }
+
+        gridPointType = (CompoundType) gridPointList.getSequenceType().getElementType();
+        gridPointIdIndex = gridPointType.getMemberIndex(SmosFormats.GRID_POINT_ID_NAME);
+        gridPointIndexes = createGridPointIndexes();
+        region = computeRegion();
     }
 
-    public File getFile() {
+    public final int getGridPointCount() {
+        return gridPointList.getElementCount();
+    }
+
+    public final int getGridPointId(int i) throws IOException {
+        return gridPointList.getCompound(i).getInt(gridPointIdIndex);
+    }
+
+    public final int getGridPointSeqnum(int i) throws IOException {
+        return SmosDgg.smosGridPointIdToDggridSeqnum(getGridPointId(i));
+    }
+
+    public final File getFile() {
         return file;
     }
 
-    public Format getFormat() {
+    public final DataFormat getFormat() {
         return format;
     }
 
-    public short getL1CBrowseBtDataShort(int gridPointIndex, int btDataIndex) throws IOException {
-        SequenceData btDataList = getBtDataList(gridPointIndex);
-        CompoundData btData = btDataList.getCompound(0);
-        return btData.getShort(btDataIndex);
+    public final DataContext getDataContext() {
+        return dataContext;
     }
 
-    public int getL1CBrowseBtDataInt(int gridPointIndex, int btDataIndex) throws IOException {
-        SequenceData btDataList = getBtDataList(gridPointIndex);
-        CompoundData btData = btDataList.getCompound(0);
-        return btData.getInt(btDataIndex);
+    public final CompoundData getDataBlock() {
+        return dataBlock;
     }
 
-    public float getL1CBrowseBtDataFloat(int gridPointIndex, int btDataIndex) throws IOException {
-        SequenceData btDataList = getBtDataList(gridPointIndex);
-        CompoundData btData = btDataList.getCompound(0);
-        return btData.getInt(btDataIndex);
+    public SequenceData getGridPointList() {
+        return gridPointList;
     }
 
-    public float getL1CBtDataFloat(int gridPointIndex, int btDataIndex) throws IOException {
-        SequenceData btDataList = getBtDataList(gridPointIndex);
-        final int btDataListCount = btDataList.getElementCount();
-        float mean = 0.0f;
-        // todo - collect values around incidence angle 42.5 degrees and average
-        int n = Math.min(1, btDataListCount);
-        for (int i = 0; i < n; i++) {
-            CompoundData btData = btDataList.getCompound(i);
-            mean += btData.getFloat(btDataIndex);
+    @Override
+    public int getGridPointIndex(int seqnum) {
+        if (seqnum < minSeqnum || seqnum > maxSeqnum) {
+            return -1;
         }
-        return mean / n;
+
+        return gridPointIndexes[seqnum - minSeqnum];
     }
 
-    private SequenceData getBtDataList(int gridPointIndex) throws IOException {
-        CompoundData gridPointEntry = gridPointList.getCompound(gridPointIndex);
-        return gridPointEntry.getSequence(6);
+    @Override
+    public CompoundType getGridPointType() {
+        return gridPointType;
     }
 
-    public int getGridPointId(int seqNum) {
-        return gridPointIndexes[seqNum];
+    @Override
+    public CompoundData getGridPointData(int gridPointIndex) throws IOException {
+        return gridPointList.getCompound(gridPointIndex);
     }
 
-    public void initGridPointIndexes() throws IOException {
-        // todo - OPT: first find seqnumMin, seqnumMax, then gridPointIndexes=new int[seqnumMax-seqnumMin+1];
-        gridPointIndexes = new int[2621442 + 1];
-        Arrays.fill(gridPointIndexes, -1);
-        final int gridPointCounter = gridPointList.getElementCount();
-        for (int i = 0; i < gridPointCounter; i++) {
-            CompoundData gridPointData = gridPointList.getCompound(i);
-            final int gridPointId = gridPointData.getInt(0);
-            final int seqnum = SmosDgg.smosGridPointIdToDggridSeqnum(gridPointId);
-            gridPointIndexes[seqnum] = i;
-        }
-        System.out.println("SmosFile: gridPointCounter = " + gridPointCounter);
-        System.out.println("SmosFile: gridPointIndexes.length = " + gridPointIndexes.length);
-        int n = 0;
-        for (int gridPointIndex : gridPointIndexes) {
-            if (gridPointIndex != -1) {
-                n++;
-            }
-        }
-        System.out.println("SmosFile: number of gridPointIndexes != -1: " + n);
+    @Override
+    public Area getRegion() {
+        return region;
     }
 
     public void close() {
-        try {
-            raf.close();
-        } catch (IOException e) {
-            // cannot do anything about this
+        dataContext.dispose();
+    }
+
+    private Area computeRegion() throws IOException {
+        final int latIndex = getGridPointType().getMemberIndex(SmosFormats.GRID_POINT_LATITUDE_NAME);
+        final int lonIndex = getGridPointType().getMemberIndex(SmosFormats.GRID_POINT_LONGITUDE_NAME);
+        final SequenceData gridPointList = getGridPointList();
+
+        final Rectangle2D[] tileRects = new Rectangle2D[512];
+        for (int i = 0; i < 32; ++i) {
+            for (int j = 0; j < 16; ++j) {
+                tileRects[i * 16 + j] = createTileRect(i, j);
+            }
         }
+
+        final Area region = new Area();
+
+        for (int i = 0; i < gridPointList.getElementCount(); i++) {
+            double lon = gridPointList.getCompound(i).getFloat(lonIndex);
+            double lat = gridPointList.getCompound(i).getFloat(latIndex);
+
+            // normalisation to [-180, 180] necessary for some L1c test products
+            if (lon > 180.0) {
+                lon = lon - 360.0;
+            }
+            final double hw = 0.02;
+            final double hh = 0.02;
+
+            final double x = lon - hw;
+            final double y = lat - hh;
+            final double w = 0.04;
+            final double h = 0.04;
+
+            if (!region.contains(x, y, w, h)) {
+                for (Rectangle2D tileRect : tileRects) {
+                    if (!region.contains(tileRect)) {
+                        if (tileRect.intersects(x, y, w, h)) {
+                            region.add(new Area(tileRect));
+                            if (region.contains(x, y, w, h)) {
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return region;
+    }
+
+    private int[] createGridPointIndexes() throws IOException {
+        minSeqnum = getGridPointSeqnum(0);
+        maxSeqnum = minSeqnum;
+
+        final int gridPointCount = getGridPointCount();
+        for (int i = 1; i < gridPointCount; i++) {
+            final int seqnum = getGridPointSeqnum(i);
+
+            if (seqnum < minSeqnum) {
+                minSeqnum = seqnum;
+            } else {
+                if (seqnum > maxSeqnum) {
+                    maxSeqnum = seqnum;
+                }
+            }
+        }
+
+        final int[] gridPointIndexes = new int[maxSeqnum - minSeqnum + 1];
+        Arrays.fill(gridPointIndexes, -1);
+
+        for (int i = 0; i < gridPointCount; i++) {
+            gridPointIndexes[getGridPointSeqnum(i) - minSeqnum] = i;
+        }
+
+        // todo - user logger or remove (rq-20081203)
+        System.out.println("SmosFile: gridPointCount = " + gridPointCount);
+        System.out.println("SmosFile: gridPointIndexes.length = " + gridPointIndexes.length);
+
+        int indexCount = 0;
+        for (final int gridPointIndex : gridPointIndexes) {
+            if (gridPointIndex != -1) {
+                indexCount++;
+            }
+        }
+
+        // todo - user logger or remove (rq-20081203)
+        System.out.println("SmosFile: number of gridPointIndexes != -1: " + indexCount);
+
+        return gridPointIndexes;
+    }
+
+    private static Rectangle2D createTileRect(int i, int j) {
+        final double w = 11.25;
+        final double h = 11.25;
+        final double x = w * i - 180.0;
+        final double y = 90.0 - h * j;
+
+        return new Rectangle2D.Double(x, y, w, w);
     }
 }
