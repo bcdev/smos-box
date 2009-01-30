@@ -42,4 +42,53 @@
         </action>
     </extension>
 
+    <extension point="beam-ui:toolViews">
+            <toolView>
+                <id>org.esa.beam.smos.visat.SnapshotInfoToolView</id>
+                <class>org.esa.beam.smos.visat.SnapshotInfoToolView</class>
+                <title>SMOS L1C Snapshot</title>
+                <tabTitle>SMOS L1C Snapshot</tabTitle>
+                <initState>HIDDEN</initState>
+                <initSide>SOUTH</initSide>
+                <initIndex>0</initIndex>
+                <toolBarId>SMOS_Box</toolBarId>
+            </toolView>
+
+            <toolView>
+                <id>org.esa.beam.smos.visat.GridPointBtDataTableToolView</id>
+                <class>org.esa.beam.smos.visat.GridPointBtDataTableToolView</class>
+                <title>SMOS L1C Table</title>
+                <tabTitle>SMOS L1C Table</tabTitle>
+                <initState>HIDDEN</initState>
+                <initSide>SOUTH</initSide>
+                <initIndex>0</initIndex>
+                <toolBarId>SMOS_Box</toolBarId>
+            </toolView>
+
+            <toolView>
+                <id>org.esa.beam.smos.visat.GridPointBtDataChartToolView</id>
+                <class>org.esa.beam.smos.visat.GridPointBtDataChartToolView</class>
+                <title>SMOS L1C Chart</title>
+                <tabTitle>SMOS L1C Chart</tabTitle>
+                <initState>HIDDEN</initState>
+                <initSide>SOUTH</initSide>
+                <initIndex>0</initIndex>
+                <toolBarId>SMOS_Box</toolBarId>
+            </toolView>
+
+            <toolView>
+                <id>org.esa.beam.smos.visat.GridPointBtDataFlagmatrixToolView</id>
+                <class>org.esa.beam.smos.visat.GridPointBtDataFlagmatrixToolView</class>
+                <title>SMOS L1C Flag-Matrix</title>
+                <tabTitle>SMOS L1C Flags</tabTitle>
+                <initState>HIDDEN</initState>
+                <initSide>SOUTH</initSide>
+                <initIndex>0</initIndex>
+                <toolBarId>SMOS_Box</toolBarId>
+            </toolView>
+
+
+        </extension>
+
+
 </module>
