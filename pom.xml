@@ -25,6 +25,7 @@
     <modules>
         <module>smos-bootstrap</module>
         <module>smos-reader</module>
+        <module>smos-header</module>
     </modules>
 
     <dependencyManagement>
