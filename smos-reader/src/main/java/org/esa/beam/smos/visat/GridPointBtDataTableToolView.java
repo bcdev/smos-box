@@ -2,6 +2,9 @@ package org.esa.beam.smos.visat;
 
 import com.bc.ceres.binio.CompoundMember;
 import com.bc.ceres.binio.CompoundType;
+import com.bc.ceres.swing.progress.ProgressMonitorSwingWorker;
+import com.bc.ceres.core.*;
+import com.bc.ceres.core.ProgressMonitor;
 import com.jidesoft.swing.CheckBoxList;
 import org.esa.beam.framework.ui.ModalDialog;
 import org.esa.beam.framework.ui.SelectExportMethodDialog;
@@ -158,11 +161,24 @@ public class GridPointBtDataTableToolView extends GridPointBtDataToolView {
             }
         }
 
-        private void exportTable(OutputStream outputStream) {
+        private void exportTable(final OutputStream outputStream) {
             final TableModelExporter exporter = new TableModelExporter(table.getModel());
             // todo - use filter defined by the column action (mp - 02.02.2009)
             // exporter.setColumnFilter();
-            exporter.export(outputStream);
+            final ProgressMonitorSwingWorker worker = new ProgressMonitorSwingWorker(
+                    GridPointBtDataTableToolView.this.getPaneWindow(), "Table Model Export") {
+                @Override
+                protected Object doInBackground(ProgressMonitor pm) throws Exception {
+                    pm.beginTask("Exporting table model...", 1);
+                    try {
+                        exporter.export(outputStream);
+                    } finally {
+                        pm.done();
+                    }
+                    return null;
+                }
+            };
+            worker.execute();
         }
 
         /**
