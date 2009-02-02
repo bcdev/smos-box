@@ -1,22 +1,24 @@
 package org.esa.beam.smos.visat;
 
-import org.esa.beam.visat.VisatApp;
+import com.bc.ceres.core.ProgressMonitor;
+import com.bc.ceres.swing.progress.ProgressMonitorSwingWorker;
 import org.esa.beam.framework.ui.SelectExportMethodDialog;
 import org.esa.beam.util.SystemUtils;
-
-import java.awt.Component;
-import java.io.*;
-import java.text.MessageFormat;
-import java.util.concurrent.ExecutionException;
-
-import com.bc.ceres.swing.progress.ProgressMonitorSwingWorker;
-import com.bc.ceres.core.ProgressMonitor;
+import org.esa.beam.visat.VisatApp;
 
 import javax.swing.JOptionPane;
 import javax.swing.table.TableModel;
+import java.awt.Component;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.text.MessageFormat;
+import java.util.concurrent.ExecutionException;
 
 /**
- * todo - add API doc
+ * A class to export a table model.
  *
  * @author Marco Peters
  * @version $Revision: $ $Date: $
@@ -28,16 +30,28 @@ class TableModelExportRunner {
     private String title;
     private final TableModel model;
 
+    /**
+     * Creates an instance of this class to export a table model.
+     *
+     * @param parentComponent The parent component to align displayed dialogs.
+     * @param title The title of displayed dialogs.
+     * @param model the model to export.
+     */
     TableModelExportRunner(Component parentComponent, String title, TableModel model) {
         this.parentComponent = parentComponent;
         this.title = title;
         this.model = model;
     }
 
+    /**
+     * Starts the export process.
+     */
     public void run() {
-        final VisatApp app = VisatApp.getApp();
         if (model.getRowCount() == 0) {
-            app.showInfoDialog("The table is empty!", null);
+            JOptionPane.showMessageDialog(parentComponent,
+                                  "The table is empty!",
+                                  title,
+                                  JOptionPane.INFORMATION_MESSAGE);
         }
         // Get export method from user
         final int method = SelectExportMethodDialog.run(parentComponent, title,
@@ -47,7 +61,7 @@ class TableModelExportRunner {
         }
 
         if (method == SelectExportMethodDialog.EXPORT_TO_FILE) {
-            final File outFile = promptForFile(app, title);
+            final File outFile = promptForFile(title);
             if (outFile != null) {
                 final TableModelExporter exporter = new TableModelExporter(model);
                 // todo - use filter defined by the column action (mp - 02.02.2009)
@@ -89,7 +103,10 @@ class TableModelExportRunner {
                         final String message = MessageFormat.format(
                                 "The table could not be exported!\nReason: {0}",
                                 e.getCause().getMessage());
-                        VisatApp.getApp().showErrorDialog(message);
+                    JOptionPane.showMessageDialog(parentComponent,
+                                          message,
+                                          title,
+                                          JOptionPane.ERROR_MESSAGE);
                 }
 
             }
@@ -127,7 +144,10 @@ class TableModelExportRunner {
                     cause.printStackTrace();
                     final String message = MessageFormat.format("The table could not be exported!\nReason: {0}",
                                                                 cause.getMessage());
-                    VisatApp.getApp().showErrorDialog(message);
+                    JOptionPane.showMessageDialog(parentComponent,
+                                          message,
+                                          title,
+                                          JOptionPane.ERROR_MESSAGE);
                 }
             }
         };
@@ -137,19 +157,19 @@ class TableModelExportRunner {
     /**
      * Opens a modal file chooser dialog that prompts the user to select the output file name.
      *
-     * @param visatApp        An instance of the VISAT application.
      * @param defaultFileName The default file name.
      *
      * @return The selected file, <code>null</code> means "Cancel".
      */
-    private File promptForFile(final VisatApp visatApp, String defaultFileName) {
+    private static File promptForFile(String defaultFileName) {
         // Loop while the user does not want to overwrite a selected, existing file
         // or if the user presses "Cancel"
         //
         final String dlgTitle = "Export Table";
         File file = null;
         while (file == null) {
-            file = visatApp.showFileSaveDialog(dlgTitle,
+            final VisatApp app = VisatApp.getApp();
+            file = app.showFileSaveDialog(dlgTitle,
                                                false,
                                                null,
                                                ".txt",
@@ -158,10 +178,10 @@ class TableModelExportRunner {
             if (file == null) {
                 return null; // Cancel
             } else if (file.exists()) {
-                int status = JOptionPane.showConfirmDialog(visatApp.getMainFrame(),
-                                                           "The file '" + file + "' already exists.\n" + /*I18N*/
-                                                           "Overwrite it?",
-                                                           MessageFormat.format("{0} - {1}", visatApp.getAppName(),
+                final String message = MessageFormat.format("The file ''{0}'' already exists.\nOverwrite it?", file);
+                int status = JOptionPane.showConfirmDialog(app.getMainFrame(),
+                                                           message,
+                                                           MessageFormat.format("{0} - {1}", app.getAppName(),
                                                                                 dlgTitle),
                                                            JOptionPane.YES_NO_CANCEL_OPTION,
                                                            JOptionPane.WARNING_MESSAGE);

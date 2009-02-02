@@ -11,7 +11,7 @@ import java.io.PrintWriter;
  * @author Marco Peters
  * @version $Revision: $ $Date: $
  */
-public class TableModelExporter {
+class TableModelExporter {
 
     private char separator;
     private final TableModel tableModel;
@@ -23,7 +23,7 @@ public class TableModelExporter {
      *
      * @param tableModel the table model to export.
      */
-    public TableModelExporter(TableModel tableModel) {
+    TableModelExporter(TableModel tableModel) {
         this.tableModel = tableModel;
         this.separator = ',';
         columnFilter = ColumnFilter.NULL;
