@@ -219,6 +219,20 @@ public class SmosL1cReaderF1cTest extends TestCase {
         assertTrue(msg, actual >= expectedMin && actual <= expectedMax);
     }
 
+
+    // Skips all tests in this TestCase if the property is not defined
+    @Override
+    public void runBare() throws Throwable {
+        final String propertyName = getClass().getName() + ".productDir";
+        final String sclf1cDirPath = System.getProperty(propertyName);
+        if (sclf1cDirPath == null || sclf1cDirPath.isEmpty()) {
+            System.err.println("System property '" + propertyName + "' must be set in order to perform reader tests!");
+            return;
+        }
+        super.runBare();
+
+    }
+
     @Override
     protected void setUp() throws Exception {
         final String propertyName = getClass().getName() + ".productDir";
