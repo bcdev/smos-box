@@ -4,20 +4,17 @@ import javax.swing.table.AbstractTableModel;
 
 
 class GridPointBtDataTableModel extends AbstractTableModel {
-    private final GridPointBtDataset ds;
-
-    GridPointBtDataTableModel(GridPointBtDataset ds) {
-        this.ds = ds;
-    }
+    private String[] columnNames;
+    private GridPointBtDataset ds;
 
     @Override
     public int getRowCount() {
-        return ds.data.length;
+        return ds == null ? 0 :ds.data.length;
     }
 
     @Override
     public int getColumnCount() {
-        return ds.columnNames.length + 1;
+        return columnNames == null ? 0 : columnNames.length + 1;
     }
 
     @Override
@@ -34,7 +31,7 @@ class GridPointBtDataTableModel extends AbstractTableModel {
         if (columnIndex == 0) {
             return "Rec#";
         } else {
-            return ds.columnNames[columnIndex - 1];
+            return columnNames == null ? "" : columnNames[columnIndex - 1];
         }
     }
 
@@ -43,7 +40,20 @@ class GridPointBtDataTableModel extends AbstractTableModel {
         if (columnIndex == 0) {
             return Integer.class;
         } else {
-            return ds.columnClasses[columnIndex - 1];
+            if (ds == null) {
+                return Number.class;
+            } else {
+                return ds.columnClasses[columnIndex - 1];
+            }
         }
+    }
+
+    public void setGridPointBtDataset(GridPointBtDataset ds) {
+        this.ds = ds;
+        fireTableDataChanged();
+    }
+    
+    public void setColumnNames(String[] columnNames) {
+        this.columnNames = columnNames;
     }
 }
