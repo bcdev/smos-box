@@ -388,7 +388,7 @@ public class SmosProductReader extends AbstractProductReader {
 
         for (final MetadataAttribute flag : flagCoding.getAttributes()) {
             final String name = bandName + "_" + flag.getName();
-            final String expr = bandName + " != " + band.getNoDataValue() + " && " + bandName + "." + flag;
+            final String expr = bandName + " != " + band.getNoDataValue() + " && " + bandName + "." + flag.getName();
             final Color color = new Color(random.nextInt(256), random.nextInt(256), random.nextInt(256));
             final BitmaskDef bitmaskDef = new BitmaskDef(name, flag.getDescription(), expr, color, 0.5f);
 
