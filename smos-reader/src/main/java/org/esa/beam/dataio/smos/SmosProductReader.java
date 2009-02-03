@@ -361,13 +361,13 @@ public class SmosProductReader extends AbstractProductReader {
     }
 
     private static void addGridCellIdBand(Product product) {
-        final BandInfo bandInfo = new BandInfo("Grid_Cell_ID", "", 0.0, 1.0, -999, 0, 1 << 31,
+        final BandInfo bandInfo = new BandInfo("Grid_Cell_ID", "", 0.0, 1.0, -999, 0, 1L << 31,
                                                "Unique identifier for Earth fixed grid point (ISEA4H9 DGG).");
         final Band band = product.addBand(bandInfo.name, ProductData.TYPE_UINT32);
 
         band.setDescription(bandInfo.description);
+        
         band.setSourceImage(dggridMultiLevelImage);
-        band.setImageInfo(createDefaultImageInfo(bandInfo));
     }
 
     private Band addBand(Product product, String bandName, int bandType, BandInfo bandInfo,
