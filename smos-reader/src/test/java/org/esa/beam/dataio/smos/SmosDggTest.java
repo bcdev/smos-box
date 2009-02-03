@@ -16,13 +16,6 @@ package org.esa.beam.dataio.smos;
 
 import junit.framework.TestCase;
 
-/**
- * todo - add API doc
- *
- * @author Ralf Quast
- * @version $Revision$ $Date$
- * @since SMOS-Box 1.0
- */
 public class SmosDggTest extends TestCase {
     /**
      * <i>Antonio Gutierrez (antonio.gutierrez@deimos.com.pt) wrote:</i>

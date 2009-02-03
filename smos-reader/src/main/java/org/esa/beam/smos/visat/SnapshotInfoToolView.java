@@ -28,7 +28,7 @@ public class SnapshotInfoToolView extends SmosToolView {
 
     public static final String ID = SnapshotInfoToolView.class.getName();
 
-    private SnapshotSelector snapshotSelector;
+    private SnapshotSelectorCombo snapshotSelectorCombo;
 
     private JTable snapshotTable;
     private L1cScienceSmosFile smosFile;
@@ -60,10 +60,8 @@ public class SnapshotInfoToolView extends SmosToolView {
 
     @Override
     protected JComponent createClientComponent() {
-
         snapshotSpinnerListener = new SpinnerChangeListener();
-        // todo - use snapshot selector combo (rq-20090114)
-        snapshotSelector = new SnapshotSelector();
+        snapshotSelectorCombo = new SnapshotSelectorCombo();
 
         snapshotSliderListener = new SliderChangeListener();
 
@@ -80,9 +78,10 @@ public class SnapshotInfoToolView extends SmosToolView {
         });
 
         JPanel panel1 = new JPanel(new BorderLayout(2, 2));
-        panel1.add(snapshotSelector.getSpinner(), BorderLayout.WEST);
-        panel1.add(snapshotSelector.getSlider(), BorderLayout.CENTER);
-        panel1.add(snapshotSelector.getSliderTextField(), BorderLayout.EAST);
+        panel1.add(snapshotSelectorCombo.getSpinner(), BorderLayout.WEST);
+        panel1.add(snapshotSelectorCombo.getSlider(), BorderLayout.CENTER);
+        panel1.add(snapshotSelectorCombo.getSliderInfoField(), BorderLayout.EAST);
+        panel1.add(snapshotSelectorCombo.getComboBox(), BorderLayout.SOUTH);
 
         snapshotModeButton = ToolButtonFactory.createButton(
                 new ImageIcon(SnapshotInfoToolView.class.getResource("Snapshot24.png")), true);
@@ -96,6 +95,7 @@ public class SnapshotInfoToolView extends SmosToolView {
         exportButton = new JButton("Export...");
         exportButton.addActionListener(new ActionListener() {
 
+            @Override
             public void actionPerformed(ActionEvent e) {
                 final TableModelExportRunner modelExportRunner = new TableModelExportRunner(
                         getPaneWindow(), getTitle(), snapshotTable.getModel(), snapshotTable.getColumnModel());
@@ -121,20 +121,20 @@ public class SnapshotInfoToolView extends SmosToolView {
     protected void updateClientComponent(ProductSceneView smosView) {
         boolean enabled = smosView != null && getSelectedSmosFile() instanceof L1cScienceSmosFile;
 
-        snapshotSelector.getSpinner().removeChangeListener(snapshotSpinnerListener);
-        snapshotSelector.getSlider().removeChangeListener(snapshotSliderListener);
+        snapshotSelectorCombo.getSpinner().removeChangeListener(snapshotSpinnerListener);
+        snapshotSelectorCombo.getSlider().removeChangeListener(snapshotSliderListener);
         if (enabled) {
             smosFile = (L1cScienceSmosFile) getSelectedSmosFile();
-            snapshotSelector.setModel(new SnapshotSelectorModel(smosFile.getSnapshotIds()));
+            snapshotSelectorCombo.setModel(new SnapshotSelectorComboModel(smosFile));
             realizeSnapshotIdChange(getSelectedSmosProduct());
-            snapshotSelector.getSpinner().addChangeListener(snapshotSpinnerListener);
-            snapshotSelector.getSlider().addChangeListener(snapshotSliderListener);
+            snapshotSelectorCombo.getSpinner().addChangeListener(snapshotSpinnerListener);
+            snapshotSelectorCombo.getSlider().addChangeListener(snapshotSliderListener);
         } else {
             smosFile = null;
         }
 
-        snapshotSelector.getSpinner().setEnabled(enabled);
-        snapshotSelector.getSlider().setEnabled(enabled);
+        snapshotSelectorCombo.getSpinner().setEnabled(enabled);
+        snapshotSelectorCombo.getSlider().setEnabled(enabled);
         snapshotTable.setEnabled(enabled);
         snapshotModeButton.setEnabled(enabled);
         snapshotModeButton.setSelected(getSnapshotIdFromView() != -1);
@@ -153,7 +153,7 @@ public class SnapshotInfoToolView extends SmosToolView {
         if (product == getSelectedSmosProduct()) {
             int snapshotId = getSelectedSnapshotId();
             if (snapshotId != -1) {
-                snapshotSelector.getModel().getSpinnerModel().setValue(snapshotId);
+                snapshotSelectorCombo.getSpinner().setValue(snapshotId);
                 int snapshotIndex = smosFile.getSnapshotIndex(snapshotId);
                 if (snapshotIndex != -1) {
                     try {
@@ -266,7 +266,7 @@ public class SnapshotInfoToolView extends SmosToolView {
         public void stateChanged(ChangeEvent e) {
             adjustingSpinner = true;
             if (getSelectedSmosProduct() != null) {
-                final Integer snapshotId = (Integer) snapshotSelector.getSpinner().getModel().getValue();
+                final Integer snapshotId = (Integer) snapshotSelectorCombo.getSpinner().getValue();
                 SmosBox.getInstance().getSnapshotSelectionService().setSelectedSnapshotId(getSelectedSmosProduct(),
                                                                                           snapshotId);
             }
@@ -277,13 +277,13 @@ public class SnapshotInfoToolView extends SmosToolView {
     private class SliderChangeListener implements ChangeListener {
         @Override
         public void stateChanged(ChangeEvent e) {
-            if (!adjustingSpinner) {
-                if (getSelectedSmosProduct() != null) {
-                    final Integer snapshotId = smosFile.getSnapshotIds()[snapshotSelector.getModel().getSliderModel().getValue()];
-                    SmosBox.getInstance().getSnapshotSelectionService().setSelectedSnapshotId(getSelectedSmosProduct(),
-                                                                                              snapshotId);
-                }
-            }
+//            if (!adjustingSpinner) {
+//                if (getSelectedSmosProduct() != null) {
+//                    final Integer snapshotId = smosFile.getAllSnapshotIds()[snapshotSelectorCombo.getSlider().getValue()];
+//                    SmosBox.getInstance().getSnapshotSelectionService().setSelectedSnapshotId(getSelectedSmosProduct(),
+//                                                                                              snapshotId);
+//                }
+//            }
         }
     }
 

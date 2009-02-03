@@ -34,7 +34,7 @@ import java.util.*;
  * @version $Revision$ $Date$
  * @since BEAM 4.2
  */
-public class L1cScienceSmosFile extends L1cSmosFile {
+public class L1cScienceSmosFile extends L1cSmosFile implements SnapshotProvider{
 
     public static final float CENTER_BROWSE_INCIDENCE_ANGLE = 42.5f;
     public static final float MIN_BROWSE_INCIDENCE_ANGLE = 37.5f;
@@ -381,11 +381,23 @@ public class L1cScienceSmosFile extends L1cSmosFile {
         return btDataList.getCompound(btDataIndex).getInt(snapshotIdOfPixelIndex);
     }
 
-    public Integer[] getSnapshotIds() {
+    @Override
+    public final Integer[] getAllSnapshotIds() {
         return snapshotIds.clone();
     }
 
-    public int getSnapshotIdCount() {
-        return snapshotIds.length;
+    @Override
+    public final Integer[] getXPolSnapshotIds() {
+        return xPolSnapshotIds.clone();
+    }
+
+    @Override
+    public final Integer[] getYPolSnapshotIds() {
+        return yPolSnapshotIds.clone();
+    }
+
+    @Override
+    public final Integer[] getCrossPolSnapshotIds() {
+        return xyPolSnapshotIds.clone();
     }
 }

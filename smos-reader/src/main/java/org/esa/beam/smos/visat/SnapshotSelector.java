@@ -14,33 +14,28 @@
  */
 package org.esa.beam.smos.visat;
 
+import javax.swing.JComponent;
 import javax.swing.JSlider;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 class SnapshotSelector {
     private final JSpinner spinner;
     private final JSlider slider;
-    private final JTextField sliderTextField;
+    private final JTextField sliderInfo;
 
     private SnapshotSelectorModel model;
 
     SnapshotSelector() {
         spinner = new JSpinner();
-        ((JSpinner.DefaultEditor) spinner.getEditor()).getTextField().setColumns(8);
-        
-        slider = new JSlider();
-        sliderTextField = new JTextField(10);
-        sliderTextField.setEditable(false);
+        final JComponent editor = spinner.getEditor();
+        if (editor instanceof JSpinner.DefaultEditor) {
+            ((JSpinner.DefaultEditor) editor).getTextField().setColumns(8);
+        }
 
-        slider.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                updateSliderTextField();
-            }
-        });
+        slider = new SnapshotSlider();
+        sliderInfo = new JTextField(10);
+        sliderInfo.setEditable(false);
     }
 
     SnapshotSelector(SnapshotSelectorModel model) {
@@ -48,16 +43,12 @@ class SnapshotSelector {
         setModel(model);
     }
 
-    SnapshotSelectorModel getModel() {
-        return model;
-    }
-
-    void setModel(SnapshotSelectorModel model) {
+    final void setModel(SnapshotSelectorModel model) {
         if (this.model != model) {
             this.model = model;
             spinner.setModel(model.getSpinnerModel());
             slider.setModel(model.getSliderModel());
-            updateSliderTextField();
+            sliderInfo.setDocument(model.getSliderInfoDocument());
         }
     }
 
@@ -69,15 +60,14 @@ class SnapshotSelector {
         return slider;
     }
 
-    JTextField getSliderTextField() {
-        return sliderTextField;
+    JTextField getSliderInfo() {
+        return sliderInfo;
     }
 
-    private void updateSliderTextField() {
-        if (model != null) {
-            sliderTextField.setText(model.getSliderInfo());
-        } else {
-            sliderTextField.setText("");
+    private class SnapshotSlider extends JSlider {
+        @Override
+        public void setValue(int value) {
+            super.setValue(value);
         }
     }
 }

@@ -18,49 +18,23 @@ import javax.swing.BoundedRangeModel;
 import javax.swing.DefaultBoundedRangeModel;
 import javax.swing.SpinnerListModel;
 import javax.swing.SpinnerModel;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+import javax.swing.text.PlainDocument;
 import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.List;
-import java.util.Arrays;
 
 class SnapshotSelectorModel {
     private final SpinnerListModel spinnerModel;
     private final DefaultBoundedRangeModel sliderModel;
+    private final PlainDocument sliderInfoDocument;
 
     SnapshotSelectorModel(Integer[] snapshotIds) {
-        this(Arrays.asList(snapshotIds));
-    }
-
-    SnapshotSelectorModel(List<Integer> snapshotIdList) {
-        spinnerModel = new SpinnerListModel(snapshotIdList);
-        sliderModel = new DefaultBoundedRangeModel(0, 0, 0, snapshotIdList.size() - 1);
-
-        spinnerModel.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                final SpinnerListModel spinnerListModel = (SpinnerListModel) e.getSource();
-                @SuppressWarnings("unchecked")
-                final List<Integer> list = (List<Integer>) spinnerListModel.getList();
-                @SuppressWarnings("unchecked")
-                final Integer spinnerValue = (Integer) spinnerListModel.getValue();
-                final int sliderValue = Collections.binarySearch(list, spinnerValue);
-
-                sliderModel.setValue(sliderValue);
-            }
-        });
-
-        sliderModel.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                final BoundedRangeModel sliderModel = (BoundedRangeModel) e.getSource();
-                final int sliderValue = sliderModel.getValue();
-                final Object spinnerValue = spinnerModel.getList().get(sliderValue);
-
-                spinnerModel.setValue(spinnerValue);
-            }
-        });
+        spinnerModel = new SnapshotSpinnerModel(snapshotIds);
+        sliderModel = new SnapshotSliderModel(0, 0, 0, snapshotIds.length - 1);
+        sliderInfoDocument = new PlainDocument();
+        updateSliderInfoDocumentText();
     }
 
     SpinnerModel getSpinnerModel() {
@@ -71,7 +45,59 @@ class SnapshotSelectorModel {
         return sliderModel;
     }
 
-    String getSliderInfo() {
+    Document getSliderInfoDocument() {
+        return sliderInfoDocument;
+    }
+
+    private final class SnapshotSpinnerModel extends SpinnerListModel {
+        private SnapshotSpinnerModel(Integer[] snapshotIds) {
+            super(snapshotIds);
+        }
+
+        @Override
+        public void setValue(Object spinnerValue) {
+            if (super.getValue().equals(spinnerValue)) {
+                return;
+            }
+            super.setValue(spinnerValue);
+
+            // this cast is safe by construction of the {@code SnapshotSpinnerModel}
+            @SuppressWarnings("unchecked")
+            final List<Integer> list = (List<Integer>) getList();
+            final int sliderValue = Collections.binarySearch(list, (Integer) spinnerValue);
+
+            sliderModel.setValue(sliderValue);
+        }
+    }
+
+    private final class SnapshotSliderModel extends DefaultBoundedRangeModel {
+        private SnapshotSliderModel(int value, int extent, int min, int max) {
+            super(value, extent, min, max);
+        }
+
+        @Override
+        public void setValue(int sliderValue) {
+            if (super.getValue() == sliderValue) {
+                return;
+            }
+            super.setValue(sliderValue);
+            updateSliderInfoDocumentText();
+
+            final Object spinnerValue = spinnerModel.getList().get(sliderValue);
+            spinnerModel.setValue(spinnerValue);
+        }
+    }
+
+    private void updateSliderInfoDocumentText() {
+        final String text = createSliderInfoText(sliderModel);
+        try {
+            sliderInfoDocument.replace(0, sliderInfoDocument.getLength(), text, null);
+        } catch (BadLocationException e) {
+            throw new IllegalStateException(e.getMessage(), e);
+        }
+    }
+
+    private String createSliderInfoText(BoundedRangeModel sliderModel) {
         return MessageFormat.format("{0} / {1}", sliderModel.getValue() + 1, sliderModel.getMaximum() + 1);
     }
 }

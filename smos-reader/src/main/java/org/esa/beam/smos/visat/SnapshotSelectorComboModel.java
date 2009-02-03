@@ -14,37 +14,39 @@
  */
 package org.esa.beam.smos.visat;
 
-import org.esa.beam.smos.visat.SnapshotProvider;
+import org.esa.beam.dataio.smos.SnapshotProvider;
 
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 class SnapshotSelectorComboModel {
     private final ComboBoxModel comboBoxModel;
+    private final Map<String, SnapshotSelectorModel> map;
 
-    public SnapshotSelectorComboModel(SnapshotProvider provider) {
-        if (provider.getSnapshotIdsXY().length != 0) {
-            comboBoxModel = new DefaultComboBoxModel(
-                    new SnapshotSelectorModel[]{
-                            new SnapshotSelectorModel(Arrays.asList(provider.getSnapshotIds())),
-                            new SnapshotSelectorModel(Arrays.asList(provider.getSnapshotIdsX())),
-                            new SnapshotSelectorModel(Arrays.asList(provider.getSnapshotIdsY())),
-                            new SnapshotSelectorModel(Arrays.asList(provider.getSnapshotIdsXY()))});
+    SnapshotSelectorComboModel(SnapshotProvider provider) {
+        map = new HashMap<String, SnapshotSelectorModel>();
+
+        map.put("Any", new SnapshotSelectorModel(provider.getAllSnapshotIds()));
+        map.put("X", new SnapshotSelectorModel(provider.getXPolSnapshotIds()));
+        map.put("Y", new SnapshotSelectorModel(provider.getYPolSnapshotIds()));
+
+        if (provider.getCrossPolSnapshotIds().length != 0) {
+            map.put("XY", new SnapshotSelectorModel(provider.getCrossPolSnapshotIds()));
+            comboBoxModel = new DefaultComboBoxModel(new String[]{"Any", "X", "Y", "XY"});
         } else {
-            comboBoxModel = new DefaultComboBoxModel(
-                    new SnapshotSelectorModel[]{
-                            new SnapshotSelectorModel(Arrays.asList(provider.getSnapshotIds())),
-                            new SnapshotSelectorModel(Arrays.asList(provider.getSnapshotIdsX())),
-                            new SnapshotSelectorModel(Arrays.asList(provider.getSnapshotIdsY()))});
+            comboBoxModel = new DefaultComboBoxModel(new String[]{"Any", "X", "Y"});
         }
     }
 
+    @SuppressWarnings({"SuspiciousMethodCalls"})
     SnapshotSelectorModel getSelectedSnapshotSelectorModel() {
-        return (SnapshotSelectorModel) comboBoxModel.getSelectedItem();
+        return map.get(comboBoxModel.getSelectedItem());
     }
 
-    public ComboBoxModel getComboBoxModel() {
+    ComboBoxModel getComboBoxModel() {
         return comboBoxModel;
     }
 }

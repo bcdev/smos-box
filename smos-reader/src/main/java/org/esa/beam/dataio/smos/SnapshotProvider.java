@@ -12,15 +12,15 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package org.esa.beam.smos.visat;
+package org.esa.beam.dataio.smos;
 
-interface SnapshotProvider {
+public interface SnapshotProvider {
 
-    Integer[] getSnapshotIds();
+    Integer[] getAllSnapshotIds();
 
-    Integer[] getSnapshotIdsX();
+    Integer[] getXPolSnapshotIds();
 
-    Integer[] getSnapshotIdsY();
+    Integer[] getYPolSnapshotIds();
 
-    Integer[] getSnapshotIdsXY();
+    Integer[] getCrossPolSnapshotIds();
 }
