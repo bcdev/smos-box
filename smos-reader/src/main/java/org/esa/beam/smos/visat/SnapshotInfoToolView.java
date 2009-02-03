@@ -59,7 +59,7 @@ public class SnapshotInfoToolView extends SmosToolView {
     }
 
     @Override
-    protected JComponent createClientComponent(ProductSceneView smosView) {
+    protected JComponent createClientComponent() {
 
         snapshotSpinnerListener = new SpinnerChangeListener();
         // todo - use snapshot selector combo (rq-20090114)

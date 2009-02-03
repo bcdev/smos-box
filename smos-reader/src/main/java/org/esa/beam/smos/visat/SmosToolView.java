@@ -104,10 +104,10 @@ public abstract class SmosToolView extends AbstractToolView {
     }
 
     protected void realizeSmosView(ProductSceneView newView) {
+        if (clientComponent == null) {
+            clientComponent = createClientComponent();
+        }
         if (newView != null) {
-            if (clientComponent == null) {
-                clientComponent = createClientComponent(newView);
-            }
             setToolViewComponent(clientComponent);
             updateClientComponent(newView);
         } else {
@@ -115,7 +115,7 @@ public abstract class SmosToolView extends AbstractToolView {
         }
     }
 
-    protected abstract JComponent createClientComponent(ProductSceneView smosView);
+    protected abstract JComponent createClientComponent();
 
     protected abstract void updateClientComponent(ProductSceneView smosView);
 

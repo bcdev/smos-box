@@ -3,7 +3,6 @@ package org.esa.beam.smos.visat;
 import org.esa.beam.dataio.smos.L1cSmosFile;
 import org.esa.beam.dataio.smos.SmosFile;
 import org.esa.beam.framework.datamodel.*;
-import org.esa.beam.framework.ui.product.ProductSceneView;
 
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
@@ -26,7 +25,7 @@ public abstract class GridPointBtDataToolView extends SmosToolView {
     }
 
     @Override
-    protected JComponent createClientComponent(ProductSceneView smosView) {
+    protected JComponent createClientComponent() {
         infoLabel = new JLabel();
         snapToSelectedPinCheckBox = new JCheckBox("Snap to selected pin");
         snapToSelectedPinCheckBox.addItemListener(new IL());
