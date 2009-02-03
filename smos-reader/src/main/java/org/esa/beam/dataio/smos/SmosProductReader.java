@@ -164,6 +164,14 @@ public class SmosProductReader extends AbstractProductReader {
         } else {
             throw new IllegalStateException("Illegal SMOS format: " + formatName);
         }
+        
+        // set quicklook band name to first BT band 
+        for (Band band : product.getBands()) {
+            if (band.getUnit().equals("K")) {
+                product.setQuicklookBandName(band.getName());
+                break;
+            }
+        }
 
         return product;
     }
