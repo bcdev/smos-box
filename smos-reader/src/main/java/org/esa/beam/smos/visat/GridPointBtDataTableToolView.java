@@ -99,7 +99,7 @@ public class GridPointBtDataTableToolView extends GridPointBtDataToolView {
 
             public void actionPerformed(ActionEvent e) {
                 final TableModelExportRunner modelExportRunner = new TableModelExportRunner(
-                        getPaneWindow(), getTitle(), table.getModel());
+                        getPaneWindow(), getTitle(), table.getModel(), table.getColumnModel());
                 modelExportRunner.run();
             }
         });

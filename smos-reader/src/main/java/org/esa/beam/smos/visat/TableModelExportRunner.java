@@ -2,11 +2,15 @@ package org.esa.beam.smos.visat;
 
 import com.bc.ceres.core.ProgressMonitor;
 import com.bc.ceres.swing.progress.ProgressMonitorSwingWorker;
+import com.jidesoft.grid.TableColumnChooser;
+
 import org.esa.beam.framework.ui.SelectExportMethodDialog;
+import org.esa.beam.smos.visat.TableModelExporter.ColumnFilter;
 import org.esa.beam.util.SystemUtils;
 import org.esa.beam.visat.VisatApp;
 
 import javax.swing.JOptionPane;
+import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import java.awt.Component;
 import java.io.BufferedOutputStream;
@@ -29,6 +33,7 @@ class TableModelExportRunner {
     private final Component parentComponent;
     private String title;
     private final TableModel model;
+    private final TableColumnModel columnModel;
 
     /**
      * Creates an instance of this class to export a table model.
@@ -37,10 +42,11 @@ class TableModelExportRunner {
      * @param title The title of displayed dialogs.
      * @param model the model to export.
      */
-    TableModelExportRunner(Component parentComponent, String title, TableModel model) {
+    TableModelExportRunner(Component parentComponent, String title, TableModel model, TableColumnModel columnModel) {
         this.parentComponent = parentComponent;
         this.title = title;
         this.model = model;
+        this.columnModel = columnModel;
     }
 
     /**
@@ -64,14 +70,12 @@ class TableModelExportRunner {
             final File outFile = promptForFile(title);
             if (outFile != null) {
                 final TableModelExporter exporter = new TableModelExporter(model);
-                // todo - use filter defined by the column action (mp - 02.02.2009)
-                // exporter.setColumnFilter();
+                exporter.setColumnFilter(new TableColumnFilter());
                 exportToFile(outFile, exporter);
             }
         } else if (method == SelectExportMethodDialog.EXPORT_TO_CLIPBOARD) {
             final TableModelExporter exporter = new TableModelExporter(model);
-            // todo - use filter defined by the column action (mp - 02.02.2009)
-            // exporter.setColumnFilter();
+            exporter.setColumnFilter(new TableColumnFilter());
             exportToClipboard(exporter);
 
         }
@@ -195,4 +199,12 @@ class TableModelExportRunner {
         return file;
     }
 
+    private class TableColumnFilter implements ColumnFilter {
+
+        @Override
+        public boolean exportColumn(int columnIndex) {
+            return TableColumnChooser.isVisibleColumn(columnModel, columnIndex);
+        }
+        
+    }
 }

@@ -98,7 +98,7 @@ public class SnapshotInfoToolView extends SmosToolView {
 
             public void actionPerformed(ActionEvent e) {
                 final TableModelExportRunner modelExportRunner = new TableModelExportRunner(
-                        getPaneWindow(), getTitle(), snapshotTable.getModel());
+                        getPaneWindow(), getTitle(), snapshotTable.getModel(), snapshotTable.getColumnModel());
                 modelExportRunner.run();
             }
         });
