@@ -31,10 +31,10 @@ class SnapshotSelectorModel {
     private final PlainDocument sliderInfoDocument;
 
     SnapshotSelectorModel(Integer[] snapshotIds) {
-        spinnerModel = new SnapshotSpinnerModel(snapshotIds);
-        sliderModel = new SnapshotSliderModel(0, 0, 0, snapshotIds.length - 1);
+        spinnerModel = new SliderModelAwareSpinnerModel(snapshotIds);
+        sliderModel = new SpinnerModelAwareSliderModel(0, 0, 0, snapshotIds.length - 1);
         sliderInfoDocument = new PlainDocument();
-        updateSliderInfoDocumentText();
+        updateSliderInfoDocument();
     }
 
     SpinnerModel getSpinnerModel() {
@@ -49,8 +49,8 @@ class SnapshotSelectorModel {
         return sliderInfoDocument;
     }
 
-    private final class SnapshotSpinnerModel extends SpinnerListModel {
-        private SnapshotSpinnerModel(Integer[] snapshotIds) {
+    private final class SliderModelAwareSpinnerModel extends SpinnerListModel {
+        private SliderModelAwareSpinnerModel(Integer[] snapshotIds) {
             super(snapshotIds);
         }
 
@@ -70,8 +70,8 @@ class SnapshotSelectorModel {
         }
     }
 
-    private final class SnapshotSliderModel extends DefaultBoundedRangeModel {
-        private SnapshotSliderModel(int value, int extent, int min, int max) {
+    private final class SpinnerModelAwareSliderModel extends DefaultBoundedRangeModel {
+        private SpinnerModelAwareSliderModel(int value, int extent, int min, int max) {
             super(value, extent, min, max);
         }
 
@@ -81,23 +81,24 @@ class SnapshotSelectorModel {
                 return;
             }
             super.setValue(sliderValue);
-            updateSliderInfoDocumentText();
+            updateSliderInfoDocument();
 
             final Object spinnerValue = spinnerModel.getList().get(sliderValue);
             spinnerModel.setValue(spinnerValue);
         }
     }
 
-    private void updateSliderInfoDocumentText() {
+    private void updateSliderInfoDocument() {
         final String text = createSliderInfoText(sliderModel);
         try {
             sliderInfoDocument.replace(0, sliderInfoDocument.getLength(), text, null);
         } catch (BadLocationException e) {
+            // cannot happen since the position within the document is always valid
             throw new IllegalStateException(e.getMessage(), e);
         }
     }
 
-    private String createSliderInfoText(BoundedRangeModel sliderModel) {
+    private static String createSliderInfoText(BoundedRangeModel sliderModel) {
         return MessageFormat.format("{0} / {1}", sliderModel.getValue() + 1, sliderModel.getMaximum() + 1);
     }
 }

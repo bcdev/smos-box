@@ -14,10 +14,7 @@
  */
 package org.esa.beam.smos.visat;
 
-import javax.swing.JComponent;
-import javax.swing.JSlider;
-import javax.swing.JSpinner;
-import javax.swing.JTextField;
+import javax.swing.*;
 
 class SnapshotSelector {
     private final JSpinner spinner;
@@ -27,13 +24,8 @@ class SnapshotSelector {
     private SnapshotSelectorModel model;
 
     SnapshotSelector() {
-        spinner = new JSpinner();
-        final JComponent editor = spinner.getEditor();
-        if (editor instanceof JSpinner.DefaultEditor) {
-            ((JSpinner.DefaultEditor) editor).getTextField().setColumns(8);
-        }
-
-        slider = new JSlider();
+        spinner = new ModelAwareSpinner();
+        slider = new ModelAwareSlider();
         sliderInfo = new JTextField(10);
         sliderInfo.setEditable(false);
     }
@@ -43,7 +35,40 @@ class SnapshotSelector {
         setModel(model);
     }
 
+    /**
+     * Returns the spinner component.
+     * <p/>
+     * Note that registered <code>ChangeListener</code>s  are notified
+     * each time a <code>ChangeEvent</code> is received from the model
+     * <em>or</em> the model is changed.
+     *
+     * @return the spinner component.
+     */
+    JSpinner getSpinner() {
+        return spinner;
+    }
+
+    /**
+     * Returns the slider component.
+     * <p/>
+     * Note that registered <code>ChangeListener</code>s  are notified
+     * each time a <code>ChangeEvent</code> is received from the model
+     * <em>or</em> the model is changed.
+     *
+     * @return the slider component.
+     */
+    JSlider getSlider() {
+        return slider;
+    }
+
+    JTextField getSliderInfo() {
+        return sliderInfo;
+    }
+
     final void setModel(SnapshotSelectorModel model) {
+        if (model == null) {
+            throw new IllegalArgumentException("null model");
+        }
         if (this.model != model) {
             this.model = model;
             spinner.setModel(model.getSpinnerModel());
@@ -52,15 +77,27 @@ class SnapshotSelector {
         }
     }
 
-    JSpinner getSpinner() {
-        return spinner;
+    private static final class ModelAwareSpinner extends JSpinner {
+        @Override
+        public void setModel(SpinnerModel newModel) {
+            final SpinnerModel oldModel = getModel();
+
+            if (oldModel != newModel) {
+                super.setModel(newModel);
+                fireStateChanged();
+            }
+        }
     }
 
-    JSlider getSlider() {
-        return slider;
-    }
+    private static final class ModelAwareSlider extends JSlider {
+        @Override
+        public void setModel(BoundedRangeModel newModel) {
+            final BoundedRangeModel oldModel = getModel();
 
-    JTextField getSliderInfo() {
-        return sliderInfo;
+            if (oldModel != newModel) {
+                super.setModel(newModel);
+                fireStateChanged();
+            }
+        }
     }
 }

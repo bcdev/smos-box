@@ -29,11 +29,9 @@ public class SnapshotInfoToolView extends SmosToolView {
     public static final String ID = SnapshotInfoToolView.class.getName();
 
     private SnapshotSelectorCombo snapshotSelectorCombo;
-
     private JTable snapshotTable;
     private L1cScienceSmosFile smosFile;
-    private SnapshotTableModel nullModel;
-    private SpinnerChangeListener snapshotSpinnerListener;
+    private final SnapshotTableModel nullModel;
     private SliderChangeListener snapshotSliderListener;
     private AbstractButton snapshotModeButton;
     private AbstractButton locateSnapshotButton;
@@ -60,9 +58,7 @@ public class SnapshotInfoToolView extends SmosToolView {
 
     @Override
     protected JComponent createClientComponent() {
-        snapshotSpinnerListener = new SpinnerChangeListener();
         snapshotSelectorCombo = new SnapshotSelectorCombo();
-
         snapshotSliderListener = new SliderChangeListener();
 
         snapshotTable = new JTable(nullModel);
@@ -94,7 +90,6 @@ public class SnapshotInfoToolView extends SmosToolView {
 
         exportButton = new JButton("Export...");
         exportButton.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 final TableModelExportRunner modelExportRunner = new TableModelExportRunner(
@@ -121,13 +116,11 @@ public class SnapshotInfoToolView extends SmosToolView {
     protected void updateClientComponent(ProductSceneView smosView) {
         boolean enabled = smosView != null && getSelectedSmosFile() instanceof L1cScienceSmosFile;
 
-        snapshotSelectorCombo.getSpinner().removeChangeListener(snapshotSpinnerListener);
         snapshotSelectorCombo.getSlider().removeChangeListener(snapshotSliderListener);
         if (enabled) {
             smosFile = (L1cScienceSmosFile) getSelectedSmosFile();
             snapshotSelectorCombo.setModel(new SnapshotSelectorComboModel(smosFile));
             realizeSnapshotIdChange(getSelectedSmosProduct());
-            snapshotSelectorCombo.getSpinner().addChangeListener(snapshotSpinnerListener);
             snapshotSelectorCombo.getSlider().addChangeListener(snapshotSliderListener);
         } else {
             smosFile = null;
@@ -258,32 +251,19 @@ public class SnapshotInfoToolView extends SmosToolView {
         }
     }
 
-
-    boolean adjustingSpinner = false;
-
-    private class SpinnerChangeListener implements ChangeListener {
+    private class SliderChangeListener implements ChangeListener {
+        boolean adjustingSlider = false;
+        
         @Override
         public void stateChanged(ChangeEvent e) {
-            adjustingSpinner = true;
+            System.out.println("e = " + e.toString());
+            adjustingSlider = true;
             if (getSelectedSmosProduct() != null) {
                 final Integer snapshotId = (Integer) snapshotSelectorCombo.getSpinner().getValue();
                 SmosBox.getInstance().getSnapshotSelectionService().setSelectedSnapshotId(getSelectedSmosProduct(),
                                                                                           snapshotId);
             }
-            adjustingSpinner = false;
-        }
-    }
-
-    private class SliderChangeListener implements ChangeListener {
-        @Override
-        public void stateChanged(ChangeEvent e) {
-//            if (!adjustingSpinner) {
-//                if (getSelectedSmosProduct() != null) {
-//                    final Integer snapshotId = smosFile.getAllSnapshotIds()[snapshotSelectorCombo.getSlider().getValue()];
-//                    SmosBox.getInstance().getSnapshotSelectionService().setSelectedSnapshotId(getSelectedSmosProduct(),
-//                                                                                              snapshotId);
-//                }
-//            }
+            adjustingSlider = false;
         }
     }
 
