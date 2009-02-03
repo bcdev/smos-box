@@ -33,7 +33,7 @@ class SnapshotSelector {
             ((JSpinner.DefaultEditor) editor).getTextField().setColumns(8);
         }
 
-        slider = new SnapshotSlider();
+        slider = new JSlider();
         sliderInfo = new JTextField(10);
         sliderInfo.setEditable(false);
     }
@@ -62,12 +62,5 @@ class SnapshotSelector {
 
     JTextField getSliderInfo() {
         return sliderInfo;
-    }
-
-    private class SnapshotSlider extends JSlider {
-        @Override
-        public void setValue(int value) {
-            super.setValue(value);
-        }
     }
 }
