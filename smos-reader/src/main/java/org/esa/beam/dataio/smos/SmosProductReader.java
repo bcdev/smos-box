@@ -290,10 +290,12 @@ public class SmosProductReader extends AbstractProductReader {
 
         for (int fieldIndex = 0; fieldIndex < members.length; fieldIndex++) {
             final CompoundMember member = members[fieldIndex];
-            final String memberName = member.getName();
-            // todo - band info
-            BandInfo bandInfo = new BandInfo(memberName);
-            addL2Band(product, memberName, memberTypeToBandType(member.getType()), bandInfo, fieldIndex);
+            if (member.getType().isSimpleType()) {
+                final String memberName = member.getName();
+                // todo - band info
+                BandInfo bandInfo = new BandInfo(memberName);
+                addL2Band(product, memberName, memberTypeToBandType(member.getType()), bandInfo, fieldIndex);
+            }
         }
     }
 
