@@ -167,7 +167,7 @@ public class SmosProductReader extends AbstractProductReader {
         
         // set quicklook band name to first BT band 
         for (Band band : product.getBands()) {
-            if (band.getUnit().equals("K")) {
+            if ("K".equals(band.getUnit())) {
                 product.setQuicklookBandName(band.getName());
                 break;
             }
