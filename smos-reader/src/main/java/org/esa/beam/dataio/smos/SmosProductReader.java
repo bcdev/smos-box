@@ -16,20 +16,33 @@
  */
 package org.esa.beam.dataio.smos;
 
-import com.bc.ceres.binio.*;
+import com.bc.ceres.binio.CompoundMember;
+import com.bc.ceres.binio.CompoundType;
+import com.bc.ceres.binio.DataFormat;
+import com.bc.ceres.binio.SimpleType;
+import com.bc.ceres.binio.Type;
 import com.bc.ceres.core.ProgressMonitor;
 import com.bc.ceres.glevel.MultiLevelImage;
-import com.bc.ceres.glevel.MultiLevelSource;
 import com.bc.ceres.glevel.support.DefaultMultiLevelImage;
 import org.esa.beam.framework.dataio.AbstractProductReader;
 import org.esa.beam.framework.dataio.ProductIO;
-import org.esa.beam.framework.datamodel.*;
+import org.esa.beam.framework.datamodel.Band;
+import org.esa.beam.framework.datamodel.BitmaskDef;
+import org.esa.beam.framework.datamodel.ColorPaletteDef;
+import org.esa.beam.framework.datamodel.FlagCoding;
+import org.esa.beam.framework.datamodel.GeoCoding;
+import org.esa.beam.framework.datamodel.ImageInfo;
+import org.esa.beam.framework.datamodel.MapGeoCoding;
+import org.esa.beam.framework.datamodel.MetadataAttribute;
+import org.esa.beam.framework.datamodel.MetadataElement;
+import org.esa.beam.framework.datamodel.Product;
+import org.esa.beam.framework.datamodel.ProductData;
 import org.esa.beam.framework.dataop.maptransf.Datum;
 import org.esa.beam.framework.dataop.maptransf.IdentityTransformDescriptor;
 import org.esa.beam.framework.dataop.maptransf.MapInfo;
 import org.esa.beam.framework.dataop.maptransf.MapProjectionRegistry;
-import org.esa.beam.glevel.TiledFileMultiLevelSource;
 import org.esa.beam.util.io.FileUtils;
+import org.esa.beam.smos.dgg.SmosDgg;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -48,8 +61,6 @@ import java.text.MessageFormat;
 import java.util.Random;
 
 public class SmosProductReader extends AbstractProductReader {
-    private static final String SMOS_DGG_DIR_PROPERTY_NAME = "org.esa.beam.pview.smosDggDir";
-
     private static MultiLevelImage dggridMultiLevelImage;
 
     private SmosFile smosFile;
@@ -65,22 +76,7 @@ public class SmosProductReader extends AbstractProductReader {
 
     @Override
     protected synchronized Product readProductNodesImpl() throws IOException {
-        if (dggridMultiLevelImage == null) {
-            String dirPath = System.getProperty(SMOS_DGG_DIR_PROPERTY_NAME);
-            if (dirPath == null || !new File(dirPath).exists()) {
-                throw new IOException(
-                        MessageFormat.format(
-                                "SMOS products require a DGG image.\nPlease set system property ''{0}''to a valid DGG image directory.",
-                                SMOS_DGG_DIR_PROPERTY_NAME));
-            }
-
-            try {
-                MultiLevelSource dggridMultiLevelSource = TiledFileMultiLevelSource.create(new File(dirPath), false);
-                dggridMultiLevelImage = new DefaultMultiLevelImage(dggridMultiLevelSource);
-            } catch (IOException e) {
-                throw new IOException(MessageFormat.format("Failed to load SMOS DDG ''{0}''", dirPath), e);
-            }
-        }
+        dggridMultiLevelImage = SmosDgg.getDggridMultiLevelImage();
 
         final File inputFile = getInputFile();
         final File hdrFile = FileUtils.exchangeExtension(inputFile, ".HDR");

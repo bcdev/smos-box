@@ -25,6 +25,12 @@
         <module>beam-visat</module>
         <optional>true</optional>
     </dependency>
+    <dependency>
+        <module>smos-dgg</module>
+    </dependency>
+    <dependency>
+        <module>smos-worldmap</module>
+    </dependency>
 
     <categories>Reader,SMOS</categories>
 

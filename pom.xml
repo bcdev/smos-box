@@ -1,5 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
@@ -12,7 +12,7 @@
     <packaging>pom</packaging>
 
     <repositories>
-        <repository>            
+        <repository>
             <id>bc-public</id>
             <name>Public Maven Repository at Brockmann-Consult</name>
             <url>http://www.brockmann-consult.de/mvn/os</url>
@@ -25,12 +25,13 @@
     <modules>
         <module>smos-bootstrap</module>
         <module>smos-reader</module>
+        <module>smos-dgg</module>
+        <module>smos-worldmap</module>
         <!--<module>smos-header</module>-->
     </modules>
 
     <dependencyManagement>
         <dependencies>
-		
             <!-- Ceres System Level Module ############################################# -->
 
             <dependency>
@@ -90,6 +91,19 @@
                 <groupId>org.esa.beam</groupId>
                 <artifactId>beam-visat</artifactId>
                 <version>4.5.1</version>
+            </dependency>
+
+            <!-- SMOS Libraries ############################################# -->
+
+            <dependency>
+                <groupId>org.esa.beam.smos</groupId>
+                <artifactId>smos-dgg</artifactId>
+                <version>0.5-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.esa.beam.smos</groupId>
+                <artifactId>smos-worldmap</artifactId>
+                <version>0.5-SNAPSHOT</version>
             </dependency>
 
             <!-- JAI Libraries ############################################# -->

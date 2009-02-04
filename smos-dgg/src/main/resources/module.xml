@@ -1,0 +1,32 @@
+<module>
+    <manifestVersion>1.0.0</manifestVersion>
+
+    <symbolicName>smos-dgg</symbolicName>
+    <name>SMOS Discrete Global Grid</name>
+    <version>0.5-SNAPSHOT</version>
+    <packaging>dir</packaging>
+
+    <description>Provides the Discrete Global Grid for SMOS-Box.</description>
+
+    <vendor>Brockmann Consult GmbH</vendor>
+    <contactAddress>Max Planck Str.2, 21502 Geesthacht (Germany)</contactAddress>
+    <copyright>(C) 2007 by Brockmann Consult GmbH</copyright>
+    <url>http://envisat.esa.int/beam/</url>
+    <licenseUrl>http://www.gnu.org/licenses/gpl.html</licenseUrl>
+
+    <changelog>
+        <![CDATA[
+
+        ]]>
+    </changelog>
+
+    <categories>SMOS,Grid</categories>
+
+    <dependency>
+        <module>ceres-glayer</module>
+    </dependency>
+    <dependency>
+        <module>beam-core</module>
+    </dependency>
+    
+</module>

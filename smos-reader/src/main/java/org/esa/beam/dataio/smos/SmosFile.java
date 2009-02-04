@@ -26,6 +26,8 @@ import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.Arrays;
 
+import org.esa.beam.smos.dgg.SmosDgg;
+
 
 public class SmosFile implements GridPointDataProvider {
 

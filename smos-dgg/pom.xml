@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<project>
+    <parent>
+        <artifactId>smos-box</artifactId>
+        <groupId>org.esa.beam.smos</groupId>
+        <version>0.5-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.esa.beam.smos</groupId>
+    <artifactId>smos-dgg</artifactId>
+    <name>SMOS Discrete Global Grid</name>
+    <version>0.5-SNAPSHOT</version>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.bc.ceres</groupId>
+            <artifactId>ceres-glayer</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.esa.beam</groupId>
+            <artifactId>beam-core</artifactId>
+        </dependency>
+    </dependencies>
+
+</project>

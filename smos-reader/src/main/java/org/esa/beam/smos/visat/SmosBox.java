@@ -1,22 +1,12 @@
 package org.esa.beam.smos.visat;
 
 import com.bc.ceres.glayer.Layer;
-import com.bc.ceres.glayer.support.ImageLayer;
-import com.bc.ceres.glevel.MultiLevelSource;
 import org.esa.beam.framework.ui.product.ProductSceneView;
-import org.esa.beam.glevel.TiledFileMultiLevelSource;
 import org.esa.beam.visat.VisatApp;
 import org.esa.beam.visat.VisatPlugIn;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
+import org.esa.beam.smos.worldmap.SmosWorldMapLayer;
 
 public class SmosBox implements VisatPlugIn {
-
-    private static final String WORLD_IMAGE_DIR_PROPERTY_NAME = "org.esa.beam.pview.worldImageDir";
-    private static final String WORLD_MAP_LAYER_NAME = "World Map (NASA Blue Marble)";
-
     private static SmosBox instance;
     private SnapshotSelectionService snapshotSelectionService;
     private GridPointSelectionService gridPointSelectionService;
@@ -53,8 +43,8 @@ public class SmosBox implements VisatPlugIn {
             public void handleSceneViewSelectionChanged(ProductSceneView oldView, ProductSceneView newView) {
                 if (newView != null) {
                     Layer rootLayer = newView.getRootLayer();
-                    if (hasWorldMapChildLayer(rootLayer)) {
-                        Layer worldLayer = createWorldMapLayer();
+                    if (!SmosWorldMapLayer.hasWorldMapChildLayer(rootLayer)) {
+                        Layer worldLayer = SmosWorldMapLayer.createWorldMapLayer();
                         if (worldLayer != null) {
                             rootLayer.getChildren().add(worldLayer);
                         }
@@ -62,16 +52,6 @@ public class SmosBox implements VisatPlugIn {
                 }
             }
         });
-    }
-
-    private static boolean hasWorldMapChildLayer(Layer layer) {
-        final List<Layer> rootChildren = layer.getChildren();
-        for (Layer child : rootChildren) {
-            if (WORLD_MAP_LAYER_NAME.equals(child.getName())) {
-                return true;
-            }
-        }
-        return false;
     }
 
     @Override
@@ -87,24 +67,6 @@ public class SmosBox implements VisatPlugIn {
 
     @Override
     public void updateComponentTreeUI() {
-    }
-
-    private Layer createWorldMapLayer() {
-        String dirPath = System.getProperty(WORLD_IMAGE_DIR_PROPERTY_NAME);
-        if (dirPath == null || dirPath.isEmpty()) {
-            return null;
-        }
-        MultiLevelSource multiLevelSource;
-        try {
-            multiLevelSource = TiledFileMultiLevelSource.create(new File(dirPath), false);
-        } catch (IOException e) {
-            return null;
-        }
-        final ImageLayer worldMapLayer = new ImageLayer(multiLevelSource);
-        worldMapLayer.setName(WORLD_MAP_LAYER_NAME);
-        worldMapLayer.setVisible(true);
-        worldMapLayer.getStyle().setOpacity(1.0);
-        return worldMapLayer;
     }
 
 }

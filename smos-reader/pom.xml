@@ -42,6 +42,14 @@
             <groupId>org.esa.beam</groupId>
             <artifactId>beam-visat</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.esa.beam.smos</groupId>
+            <artifactId>smos-dgg</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.esa.beam.smos</groupId>
+            <artifactId>smos-worldmap</artifactId>
+        </dependency>
     </dependencies>
 
 </project>
