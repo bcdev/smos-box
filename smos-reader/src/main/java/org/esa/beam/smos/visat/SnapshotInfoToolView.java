@@ -38,7 +38,6 @@ public class SnapshotInfoToolView extends SmosToolView {
     private SliderChangeListener snapshotSliderListener;
     private AbstractButton snapshotModeButton;
     private AbstractButton locateSnapshotButton;
-    private AbstractButton exportButton;
     private SSSL sssl;
 
     public SnapshotInfoToolView() {
@@ -91,16 +90,16 @@ public class SnapshotInfoToolView extends SmosToolView {
         locateSnapshotButton.addActionListener(new LocateSnapshotAction());
         locateSnapshotButton.setToolTipText("Locate selected snapshot in view");
 
-        exportButton = new JButton("Export...");
+        final JButton exportButton = new JButton("Export...");
         exportButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                final TableModelExportRunner modelExportRunner = new TableModelExportRunner(
-                        getPaneWindow(), getTitle(), snapshotTable.getModel(), snapshotTable.getColumnModel());
-                modelExportRunner.run();
+                new TableModelExportRunner(getPaneWindow(),
+                                           getTitle(),
+                                           snapshotTable.getModel(),
+                                           snapshotTable.getColumnModel()).run();
             }
         });
-
 
         JPanel panel2 = new JPanel(new FlowLayout(FlowLayout.RIGHT, 2, 2));
         panel2.add(snapshotModeButton);

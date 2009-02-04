@@ -55,6 +55,26 @@ class SnapshotSelectorModel {
         updateSliderInfoDocument();
     }
 
+    /**
+     * Returns the current snapshot ID.
+     *
+     * @return the current snapshot ID.
+     */
+    int getSnapshotId() {
+        return (Integer) spinnerModel.getValue();
+    }
+
+    /**
+     * Sets the current snapshot ID to a new value.
+     *
+     * @param id the new value.
+     *
+     * @throws IllegalArgumentException if the specified ID isn't allowed
+     */
+    void setSnapshotId(int id) {
+        spinnerModel.setValue(id);
+    }
+
     SpinnerModel getSpinnerModel() {
         return spinnerModel;
     }

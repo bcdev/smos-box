@@ -15,7 +15,6 @@
 package org.esa.beam.smos.visat;
 
 import javax.swing.*;
-import javax.swing.event.ChangeListener;
 
 class SnapshotSelectorCombo {
     private final JComboBox comboBox;
@@ -73,8 +72,8 @@ class SnapshotSelectorCombo {
         }
         if (this.model != model) {
             this.model = model;
-            comboBox.setModel(model.getComboBoxModel());
-            snapshotSelector.setModel(model.getSelectedSnapshotSelectorModel());
+            comboBox.setModel(model);
+            snapshotSelector.setModel(model.getSelectedModel());
         }
     }
 
@@ -84,7 +83,7 @@ class SnapshotSelectorCombo {
             super.setSelectedItem(object);
 
             if (model != null) {
-                snapshotSelector.setModel(model.getSelectedSnapshotSelectorModel());
+                snapshotSelector.setModel(model.getSelectedModel());
             }
         }
     }

@@ -26,20 +26,39 @@ public class SnapshotSelectorComboModelTest extends TestCase {
     }
 
     public void testInitialState() {
-        assertEquals(3, selectorComboModel.getComboBoxModel().getSize());
-        assertEquals("Any", selectorComboModel.getComboBoxModel().getSelectedItem());
+        assertEquals(3, selectorComboModel.getSize());
+        assertEquals("Any", selectorComboModel.getSelectedItem());
     }
 
     public void testSnapshotSelectorModelSelection() {
-        final SnapshotSelectorModel modelA = selectorComboModel.getSelectedSnapshotSelectorModel();
-        selectorComboModel.getComboBoxModel().setSelectedItem("X");
-        final SnapshotSelectorModel modelX = selectorComboModel.getSelectedSnapshotSelectorModel();
-        selectorComboModel.getComboBoxModel().setSelectedItem("Y");
-        final SnapshotSelectorModel modelY = selectorComboModel.getSelectedSnapshotSelectorModel();
+        final SnapshotSelectorModel modelA = selectorComboModel.getSelectedModel();
+        selectorComboModel.setSelectedItem("X");
+        final SnapshotSelectorModel modelX = selectorComboModel.getSelectedModel();
+        selectorComboModel.setSelectedItem("Y");
+        final SnapshotSelectorModel modelY = selectorComboModel.getSelectedModel();
 
         assertNotSame(modelA, modelX);
         assertNotSame(modelA, modelY);
         assertNotSame(modelX, modelY);
+    }
+
+    public void testSnapshotIdIsPreservedIfPossible() {
+        final SnapshotSelectorModel modelA = selectorComboModel.getSelectedModel();
+        modelA.setSnapshotId(3);
+
+        // snapshot ID can be preserved
+        selectorComboModel.setSelectedItem("X");
+        final SnapshotSelectorModel modelX = selectorComboModel.getSelectedModel();
+        assertEquals(3, modelX.getSnapshotId());
+
+        // snapshot ID cannot be preserved
+        selectorComboModel.setSelectedItem("Y");
+        final SnapshotSelectorModel modelY = selectorComboModel.getSelectedModel();
+        assertEquals(2, modelY.getSnapshotId());
+
+        // snapshot ID can be preserved
+        selectorComboModel.setSelectedItem("Any");
+        assertEquals(2, modelA.getSnapshotId());
     }
 
     static SnapshotSelectorComboModel createSnapshotSelectorComboModel() {

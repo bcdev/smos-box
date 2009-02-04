@@ -18,16 +18,19 @@ import org.esa.beam.dataio.smos.SnapshotProvider;
 
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.SpinnerModel;
+import javax.swing.event.ListDataListener;
+import javax.swing.event.ListDataEvent;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-class SnapshotSelectorComboModel {
+class SnapshotSelectorComboModel implements ComboBoxModel {
     private final ComboBoxModel comboBoxModel;
-    private final Map<String, SnapshotSelectorModel> map;
+    private final Map<Object, SnapshotSelectorModel> map;
 
     SnapshotSelectorComboModel(SnapshotProvider provider) {
-        map = new HashMap<String, SnapshotSelectorModel>();
+        map = new HashMap<Object, SnapshotSelectorModel>();
 
         map.put("Any", new SnapshotSelectorModel(provider.getAllSnapshotIds()));
         map.put("X", new SnapshotSelectorModel(provider.getXPolSnapshotIds()));
@@ -39,14 +42,57 @@ class SnapshotSelectorComboModel {
         } else {
             comboBoxModel = new DefaultComboBoxModel(new String[]{"Any", "X", "Y"});
         }
+
     }
 
     @SuppressWarnings({"SuspiciousMethodCalls"})
-    SnapshotSelectorModel getSelectedSnapshotSelectorModel() {
+    SnapshotSelectorModel getSelectedModel() {
         return map.get(comboBoxModel.getSelectedItem());
     }
 
-    ComboBoxModel getComboBoxModel() {
-        return comboBoxModel;
+    @Override
+    public void setSelectedItem(Object newItem) {
+        final Object oldItem = getSelectedItem();
+        if ("Any".equals(oldItem) || "Any".equals(newItem)) {
+            transferSpinnerValue(oldItem, newItem);
+        }
+        comboBoxModel.setSelectedItem(newItem);
     }
+
+    @Override
+    public Object getSelectedItem() {
+        return comboBoxModel.getSelectedItem();
+    }
+
+    @Override
+    public int getSize() {
+        return comboBoxModel.getSize();
+    }
+
+    @Override
+    public Object getElementAt(int index) {
+        return comboBoxModel.getElementAt(index);
+    }
+
+    @Override
+    public void addListDataListener(ListDataListener l) {
+        comboBoxModel.addListDataListener(l);
+    }
+
+    @Override
+    public void removeListDataListener(ListDataListener l) {
+        comboBoxModel.removeListDataListener(l);
+    }
+
+    private void transferSpinnerValue(Object oldItem, Object newItem) {
+        final SnapshotSelectorModel oldModel = map.get(oldItem);
+        final SnapshotSelectorModel newModel = map.get(newItem);
+
+        try {
+            newModel.setSnapshotId(oldModel.getSnapshotId());
+        } catch (Exception e) {
+            // the value of the old model is not valid for the new model, so
+            // the new model keeps its old value
+        }
+    }    
 }
