@@ -148,7 +148,7 @@ class SmosOpImage extends SingleBandedOpImage {
         final int targetLineStride = targetData.lineStride;
         final short[] targetDataArray = targetData.getShortData(0);
 
-        final int[] gridPointIndexCache = new int[w];
+        final int[] seqnumCache = new int[w];
         final short[] valueCache = new short[w];
 
         int seqnumLineOffset = seqnumData.getOffset(0);
@@ -160,25 +160,25 @@ class SmosOpImage extends SingleBandedOpImage {
 
             for (int x = 0; x < w; ++x) {
                 final int seqnum = seqnumDataArray[seqnumPixelOffset];
-                final int gridPointIndex = valueProvider.getGridPointIndex(seqnum);
-                short value = noDataValue;
-
-                if (gridPointIndex != -1) {
-                    if (x > 0 && gridPointIndexCache[x - 1] == gridPointIndex) {
-                        // pixel to the west
-                        value = valueCache[x - 1];
-                    } else if (y > 0 && gridPointIndexCache[x] == gridPointIndex) {
-                        // pixel to the north
-                        value = valueCache[x];
-                    } else if (x + 1 < w && y > 0 && gridPointIndexCache[x + 1] == gridPointIndex) {
-                        // pixel to the north-east
-                        value = valueCache[x + 1];
-                    } else {
+                short value;
+                if (x > 0 && seqnumCache[x - 1] == seqnum) {
+                    // pixel to the west
+                    value = valueCache[x - 1];
+                } else if (y > 0 && seqnumCache[x] == seqnum) {
+                    // pixel to the north
+                    value = valueCache[x];
+                } else if (x + 1 < w && y > 0 && seqnumCache[x + 1] == seqnum) {
+                    // pixel to the north-east
+                    value = valueCache[x + 1];
+                } else {
+                    final int gridPointIndex = valueProvider.getGridPointIndex(seqnum);
+                    if (gridPointIndex != -1) {
                         value = valueProvider.getValue(gridPointIndex, noDataValue);
+                    } else {
+                        value = noDataValue;
                     }
                 }
-
-                gridPointIndexCache[x] = gridPointIndex;
+                seqnumCache[x] = seqnum;
                 valueCache[x] = value;
 
                 targetDataArray[targetPixelOffset] = value;
@@ -203,7 +203,7 @@ class SmosOpImage extends SingleBandedOpImage {
         final int targetLineStride = targetData.lineStride;
         final int[] targetDataArray = targetData.getIntData(0);
 
-        final int[] gridPointIndexCache = new int[w];
+        final int[] seqnumCache = new int[w];
         final int[] valueCache = new int[w];
 
         int seqnumLineOffset = seqnumData.getOffset(0);
@@ -215,24 +215,25 @@ class SmosOpImage extends SingleBandedOpImage {
 
             for (int x = 0; x < w; ++x) {
                 final int seqnum = seqnumDataArray[seqnumPixelOffset];
-                final int gridPointIndex = valueProvider.getGridPointIndex(seqnum);
-                int value = noDataValue;
-
-                if (gridPointIndex != -1) {
-                    if (x > 0 && gridPointIndexCache[x - 1] == gridPointIndex) {
-                        // pixel to the west
-                        value = valueCache[x - 1];
-                    } else if (y > 0 && gridPointIndexCache[x] == gridPointIndex) {
-                        // pixel to the north
-                        value = valueCache[x];
-                    } else if (x + 1 < w && y > 0 && gridPointIndexCache[x + 1] == gridPointIndex) {
-                        // pixel to the north-east
-                        value = valueCache[x + 1];
-                    } else {
+                int value;
+                if (x > 0 && seqnumCache[x - 1] == seqnum) {
+                    // pixel to the west
+                    value = valueCache[x - 1];
+                } else if (y > 0 && seqnumCache[x] == seqnum) {
+                    // pixel to the north
+                    value = valueCache[x];
+                } else if (x + 1 < w && y > 0 && seqnumCache[x + 1] == seqnum) {
+                    // pixel to the north-east
+                    value = valueCache[x + 1];
+                } else {
+                    final int gridPointIndex = valueProvider.getGridPointIndex(seqnum);
+                    if (gridPointIndex != -1) {
                         value = valueProvider.getValue(gridPointIndex, noDataValue);
+                    } else {
+                        value = noDataValue;
                     }
                 }
-                gridPointIndexCache[x] = gridPointIndex;
+                seqnumCache[x] = seqnum;
                 valueCache[x] = value;
 
                 targetDataArray[targetPixelOffset] = value;
@@ -257,7 +258,7 @@ class SmosOpImage extends SingleBandedOpImage {
         final int targetLineStride = targetData.lineStride;
         final float[] targetDataArray = targetData.getFloatData(0);
 
-        final int[] gridPointIndexCache = new int[w];
+        final int[] seqnumCache = new int[w];
         final float[] valueCache = new float[w];
 
         int seqnumLineOffset = seqnumData.getOffset(0);
@@ -269,24 +270,25 @@ class SmosOpImage extends SingleBandedOpImage {
 
             for (int x = 0; x < w; ++x) {
                 final int seqnum = seqnumDataArray[seqnumPixelOffset];
-                final int gridPointIndex = valueProvider.getGridPointIndex(seqnum);
-                float value = noDataValue;
-
-                if (gridPointIndex != -1) {
-                    if (x > 0 && gridPointIndexCache[x - 1] == gridPointIndex) {
-                        // pixel to the west
-                        value = valueCache[x - 1];
-                    } else if (y > 0 && gridPointIndexCache[x] == gridPointIndex) {
-                        // pixel to the north
-                        value = valueCache[x];
-                    } else if (x + 1 < w && y > 0 && gridPointIndexCache[x + 1] == gridPointIndex) {
-                        // pixel to the north-east
-                        value = valueCache[x + 1];
-                    } else {
+                float value;
+                if (x > 0 && seqnumCache[x - 1] == seqnum) {
+                    // pixel to the west
+                    value = valueCache[x - 1];
+                } else if (y > 0 && seqnumCache[x] == seqnum) {
+                    // pixel to the north
+                    value = valueCache[x];
+                } else if (x + 1 < w && y > 0 && seqnumCache[x + 1] == seqnum) {
+                    // pixel to the north-east
+                    value = valueCache[x + 1];
+                } else {
+                    final int gridPointIndex = valueProvider.getGridPointIndex(seqnum);
+                    if (gridPointIndex != -1) {
                         value = valueProvider.getValue(gridPointIndex, noDataValue);
+                    } else {
+                        value = noDataValue;
                     }
                 }
-                gridPointIndexCache[x] = gridPointIndex;
+                seqnumCache[x] = seqnum;
                 valueCache[x] = value;
 
                 targetDataArray[targetPixelOffset] = value;
