@@ -167,11 +167,11 @@ public class SnapshotInfoToolView extends SmosToolView {
         }
 
         final CompoundType compoundType = data.getCompoundType();
-        final int memberCount = compoundType.getMemberCount();
+        final int memberCount = data.getMemberCount();
         final ArrayList<Object[]> list = new ArrayList<Object[]>(memberCount);
 
-        final Object[] entry = new Object[2];
         for (int i = 0; i < memberCount; i++) {
+            final Object[] entry = new Object[2];
             entry[0] = compoundType.getMemberName(i);
 
             final Type memberType = compoundType.getMemberType(i);

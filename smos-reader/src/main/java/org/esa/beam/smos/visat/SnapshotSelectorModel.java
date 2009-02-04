@@ -67,7 +67,7 @@ class SnapshotSelectorModel {
     /**
      * Sets the current snapshot ID to a new value.
      *
-     * @param id the new value.
+     * @param id the new snapshot ID.
      *
      * @throws IllegalArgumentException if the specified ID isn't allowed
      */
@@ -87,9 +87,9 @@ class SnapshotSelectorModel {
         return sliderInfoDocument;
     }
 
+    // the cast made herein is safe by construction of the {@code spinnerModel}
     @SuppressWarnings({"unchecked"})
     private List<? extends Comparable<? super Object>> getSpinnerModelList() {
-        // the cast made here is safe by construction of the {@code spinnerModel}
         return (List<? extends Comparable<? super Object>>) spinnerModel.getList();
     }
 
