@@ -53,19 +53,19 @@ public class L1cBrowseSmosFile extends L1cSmosFile {
 
     @Override
     public short getSnapshotBtData(int gridPointIndex, int fieldIndex, int polMode,
-                                   int snapshotId, short noDataValue) throws IOException {
+                                   long snapshotId, short noDataValue) throws IOException {
         return getBtData(gridPointIndex, polMode).getShort(fieldIndex);
     }
 
     @Override
     public int getSnapshotBtData(int gridPointIndex, int fieldIndex, int polMode,
-                                 int snapshotId, int noDataValue) throws IOException {
+                                 long snapshotId, int noDataValue) throws IOException {
         return getBtData(gridPointIndex, polMode).getInt(fieldIndex);
     }
 
     @Override
     public float getSnapshotBtData(int gridPointIndex, int fieldIndex, int polMode,
-                                   int snapshotId, float noDataValue) throws IOException {
+                                   long snapshotId, float noDataValue) throws IOException {
         return getBtData(gridPointIndex, polMode).getFloat(fieldIndex);
     }
 

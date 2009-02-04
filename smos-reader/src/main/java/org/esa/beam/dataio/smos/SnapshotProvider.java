@@ -16,11 +16,11 @@ package org.esa.beam.dataio.smos;
 
 public interface SnapshotProvider {
 
-    Integer[] getAllSnapshotIds();
+    Long[] getAllSnapshotIds();
 
-    Integer[] getXPolSnapshotIds();
+    Long[] getXPolSnapshotIds();
 
-    Integer[] getYPolSnapshotIds();
+    Long[] getYPolSnapshotIds();
 
-    Integer[] getCrossPolSnapshotIds();
+    Long[] getCrossPolSnapshotIds();
 }

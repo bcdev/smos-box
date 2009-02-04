@@ -11,12 +11,12 @@ import java.util.Map;
 public class SnapshotSelectionService {
     private final ProductManager productManager;
     private final List<SelectionListener> selectionListeners;
-    private final Map<Product, Integer> snapshotIds;
+    private final Map<Product, Long> snapshotIds;
     private final ProductManagerHandler productManagerHandler;
 
     public SnapshotSelectionService(ProductManager productManager) {
         this.selectionListeners = new ArrayList<SelectionListener>();
-        this.snapshotIds = new HashMap<Product, Integer>();
+        this.snapshotIds = new HashMap<Product, Long>();
         this.productManagerHandler = new ProductManagerHandler();
         this.productManager = productManager;
         this.productManager.addListener(productManagerHandler);
@@ -28,13 +28,13 @@ public class SnapshotSelectionService {
         productManager.addListener(productManagerHandler);
     }
 
-    public synchronized int getSelectedSnapshotId(Product product) {
-        Integer integer = snapshotIds.get(product);
-        return integer != null ? integer : -1;
+    public synchronized long getSelectedSnapshotId(Product product) {
+        Long id = snapshotIds.get(product);
+        return id != null ? id : -1;
     }
 
-    public synchronized void setSelectedSnapshotId(Product product, int id) {
-        int oldId = getSelectedSnapshotId(product);
+    public synchronized void setSelectedSnapshotId(Product product, long id) {
+        long oldId = getSelectedSnapshotId(product);
         if (oldId != id) {
             if (id >= 0) {
                 snapshotIds.put(product, id);
@@ -53,14 +53,14 @@ public class SnapshotSelectionService {
         selectionListeners.remove(selectionListener);
     }
 
-    private void fireSelectionChange(Product product, int oldId, int newId) {
+    private void fireSelectionChange(Product product, long oldId, long newId) {
         for (SelectionListener selectionListener : selectionListeners) {
             selectionListener.handleSnapshotIdChanged(product, oldId, newId);
         }
     }
 
     public interface SelectionListener {
-        void handleSnapshotIdChanged(Product product, int oldId, int newId);
+        void handleSnapshotIdChanged(Product product, long oldId, long newId);
     }
 
     private class ProductManagerHandler implements ProductManager.Listener {

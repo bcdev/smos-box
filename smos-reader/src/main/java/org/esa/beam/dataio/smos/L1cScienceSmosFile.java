@@ -25,7 +25,9 @@ import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.io.IOException;
 import java.text.MessageFormat;
-import java.util.*;
+import java.util.SortedSet;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 /**
  * Represents a SMOS L1c Science product file.
@@ -34,7 +36,7 @@ import java.util.*;
  * @version $Revision$ $Date$
  * @since BEAM 4.2
  */
-public class L1cScienceSmosFile extends L1cSmosFile implements SnapshotProvider{
+public class L1cScienceSmosFile extends L1cSmosFile implements SnapshotProvider {
 
     public static final float CENTER_BROWSE_INCIDENCE_ANGLE = 42.5f;
     public static final float MIN_BROWSE_INCIDENCE_ANGLE = 37.5f;
@@ -48,12 +50,12 @@ public class L1cScienceSmosFile extends L1cSmosFile implements SnapshotProvider{
     private final SequenceData snapshotList;
     private final CompoundType snapshotType;
 
-    private Map<Integer, Integer> snapshotIndexMap;
+    private TreeMap<Long, Integer> snapshotIndexMap;
 
-    private Integer[] snapshotIds;
-    private Integer[] xPolSnapshotIds;
-    private Integer[] yPolSnapshotIds;
-    private Integer[] xyPolSnapshotIds;
+    private Long[] snapshotIds;
+    private Long[] xPolSnapshotIds;
+    private Long[] yPolSnapshotIds;
+    private Long[] xyPolSnapshotIds;
 
     public L1cScienceSmosFile(File file, DataFormat format) throws IOException {
         super(file, format);
@@ -72,10 +74,10 @@ public class L1cScienceSmosFile extends L1cSmosFile implements SnapshotProvider{
     }
 
     private void tabulateSnapshotIds() throws IOException {
-        final SortedSet<Integer> x = new TreeSet<Integer>();
-        final SortedSet<Integer> y = new TreeSet<Integer>();
-        final SortedSet<Integer> xy = new TreeSet<Integer>();
-        final SortedSet<Integer> union = new TreeSet<Integer>();
+        final SortedSet<Long> any = new TreeSet<Long>();
+        final SortedSet<Long> x = new TreeSet<Long>();
+        final SortedSet<Long> y = new TreeSet<Long>();
+        final SortedSet<Long> xy = new TreeSet<Long>();
 
         final int gridPointCount = getGridPointCount();
         for (int i = 0; i < gridPointCount; i++) {
@@ -84,46 +86,46 @@ public class L1cScienceSmosFile extends L1cSmosFile implements SnapshotProvider{
             final int btCount = btList.getElementCount();
             for (int j = 0; j < btCount; j++) {
                 final CompoundData btData = btList.getCompound(j);
-                final int sid = btData.getInt(snapshotIdOfPixelIndex);
+                final long sid = btData.getLong(snapshotIdOfPixelIndex);
                 final int flags = btData.getInt(flagsIndex);
 
-                if (!union.contains(sid)) {
-                    switch (flags & SmosFormats.L1C_POL_FLAGS_MASK) {
-                        case SmosFormats.L1C_POL_MODE_X:
-                            x.add(sid);
-                            break;
-                        case SmosFormats.L1C_POL_MODE_Y:
-                            y.add(sid);
-                            break;
-                        case SmosFormats.L1C_POL_MODE_XY1:
-                        case SmosFormats.L1C_POL_MODE_XY2:
-                            xy.add(sid);
-                            break;
-                    }
-                    union.add(sid);
+                any.add(sid);
+                switch (flags & SmosFormats.L1C_POL_FLAGS_MASK) {
+                    case SmosFormats.L1C_POL_MODE_X:
+                        x.add(sid);
+                        break;
+                    case SmosFormats.L1C_POL_MODE_Y:
+                        y.add(sid);
+                        break;
+                    case SmosFormats.L1C_POL_MODE_XY1:
+                        xy.add(sid);
+                        break;
+                    case SmosFormats.L1C_POL_MODE_XY2:
+                        xy.add(sid);
+                        break;
                 }
             }
         }
 
-        snapshotIds = union.toArray(new Integer[union.size()]);
-        xPolSnapshotIds = x.toArray(new Integer[x.size()]);
-        yPolSnapshotIds = y.toArray(new Integer[y.size()]);
-        xyPolSnapshotIds = xy.toArray(new Integer[xy.size()]);
+        snapshotIds = any.toArray(new Long[any.size()]);
+        xPolSnapshotIds = x.toArray(new Long[x.size()]);
+        yPolSnapshotIds = y.toArray(new Long[y.size()]);
+        xyPolSnapshotIds = xy.toArray(new Long[xy.size()]);
 
         System.out.println("SmosFile: snapshotCount(x) = " + x.size());
         System.out.println("SmosFile: snapshotCount(y) = " + y.size());
         System.out.println("SmosFile: snapshotCount(xy) = " + xy.size());
-        System.out.println("SmosFile: snapshotCount(all) = " + union.size());
+        System.out.println("SmosFile: snapshotCount(all) = " + any.size());
 
-        snapshotIndexMap = new TreeMap<Integer, Integer>();
+        snapshotIndexMap = new TreeMap<Long, Integer>();
 
         final int snapshotIdIndex = snapshotType.getMemberIndex(SmosFormats.SNAPSHOT_ID_NAME);
         final int snapshotCount = snapshotList.getElementCount();
         for (int i = 0; i < snapshotCount; i++) {
             final CompoundData snapshotData = getSnapshotData(i);
-            final int sid = snapshotData.getInt(snapshotIdIndex);
+            final long sid = snapshotData.getLong(snapshotIdIndex);
 
-            if (union.contains(sid)) {
+            if (any.contains(sid)) {
                 snapshotIndexMap.put(sid, i);
             }
         }
@@ -138,7 +140,7 @@ public class L1cScienceSmosFile extends L1cSmosFile implements SnapshotProvider{
         if (fieldIndex == flagsIndex) {
             return (short) getCombinedBtFlags(gridPointIndex, polMode, noDataValue);
         } else {
-            return (short) (int) getInterpolatedBtData(gridPointIndex, fieldIndex, polMode, noDataValue);
+            return (short) getInterpolatedBtData(gridPointIndex, fieldIndex, polMode, noDataValue);
         }
     }
 
@@ -159,9 +161,9 @@ public class L1cScienceSmosFile extends L1cSmosFile implements SnapshotProvider{
     }
 
     @Override
-    public short getSnapshotBtData(int gridPointIndex, int fieldIndex, int polarisation, int snapshotId,
+    public short getSnapshotBtData(int gridPointIndex, int fieldIndex, int polMode, long snapshotId,
                                    short noDataValue) throws IOException {
-        final CompoundData btData = getSnapshotBtData(gridPointIndex, snapshotId, polarisation);
+        final CompoundData btData = getSnapshotBtData(gridPointIndex, polMode, snapshotId);
 
         if (btData != null) {
             return btData.getShort(fieldIndex);
@@ -171,9 +173,9 @@ public class L1cScienceSmosFile extends L1cSmosFile implements SnapshotProvider{
     }
 
     @Override
-    public int getSnapshotBtData(int gridPointIndex, int fieldIndex, int polMode, int snapshotId,
+    public int getSnapshotBtData(int gridPointIndex, int fieldIndex, int polMode, long snapshotId,
                                  int noDataValue) throws IOException {
-        final CompoundData btData = getSnapshotBtData(gridPointIndex, snapshotId, polMode);
+        final CompoundData btData = getSnapshotBtData(gridPointIndex, polMode, snapshotId);
 
         if (btData != null) {
             return btData.getInt(fieldIndex);
@@ -183,9 +185,9 @@ public class L1cScienceSmosFile extends L1cSmosFile implements SnapshotProvider{
     }
 
     @Override
-    public float getSnapshotBtData(int gridPointIndex, int fieldIndex, int polMode, int snapshotId,
+    public float getSnapshotBtData(int gridPointIndex, int fieldIndex, int polMode, long snapshotId,
                                    float noDataValue) throws IOException {
-        final CompoundData btData = getSnapshotBtData(gridPointIndex, snapshotId, polMode);
+        final CompoundData btData = getSnapshotBtData(gridPointIndex, polMode, snapshotId);
 
         if (btData != null) {
             return btData.getFloat(fieldIndex);
@@ -194,21 +196,21 @@ public class L1cScienceSmosFile extends L1cSmosFile implements SnapshotProvider{
         return noDataValue;
     }
 
-    private CompoundData getSnapshotBtData(int gridPointIndex, int snapshotId, int polMode) throws IOException {
+    private CompoundData getSnapshotBtData(int gridPointIndex, int polMode, long snapshotId) throws IOException {
         final SequenceData btDataList = getBtDataList(gridPointIndex);
         final int elementCount = btDataList.getElementCount();
 
         CompoundData btData = btDataList.getCompound(0);
-        if (btData.getInt(snapshotIdOfPixelIndex) > snapshotId) {
+        if (btData.getLong(snapshotIdOfPixelIndex) > snapshotId) {
             return null;
         }
         btData = btDataList.getCompound(elementCount - 1);
-        if (btData.getInt(snapshotIdOfPixelIndex) < snapshotId) {
+        if (btData.getLong(snapshotIdOfPixelIndex) < snapshotId) {
             return null;
         }
         for (int i = 0; i < elementCount; ++i) {
             btData = btDataList.getCompound(i);
-            if (btData.getInt(snapshotIdOfPixelIndex) == snapshotId) {
+            if (btData.getLong(snapshotIdOfPixelIndex) == snapshotId) {
                 final int flags = btData.getInt(flagsIndex);
                 if (polMode == (flags & 3) || (polMode & flags & 2) != 0) {
                     return btData;
@@ -302,15 +304,15 @@ public class L1cScienceSmosFile extends L1cSmosFile implements SnapshotProvider{
         return noDataValue;
     }
 
-    public final int getSnapshotIdMin() {
+    public final long getSnapshotIdMin() {
         return snapshotIds[0];
     }
 
-    public final int getSnapshotIdMax() {
+    public final long getSnapshotIdMax() {
         return snapshotIds[snapshotIds.length - 1];
     }
 
-    public final int getSnapshotIndex(int snapshotId) {
+    public final int getSnapshotIndex(long snapshotId) {
         if (!snapshotIndexMap.containsKey(snapshotId)) {
             throw new IllegalArgumentException(MessageFormat.format("Illegal snapshot ID: {0}", snapshotId));
         }
@@ -330,7 +332,7 @@ public class L1cScienceSmosFile extends L1cSmosFile implements SnapshotProvider{
         return snapshotType;
     }
 
-    public final Rectangle2D computeSnapshotRegion(int snapshotId, ProgressMonitor pm) throws IOException {
+    public final Rectangle2D computeSnapshotRegion(long snapshotId, ProgressMonitor pm) throws IOException {
         final int latIndex = getGridPointType().getMemberIndex("Grid_Point_Latitude");
         final int lonIndex = getGridPointType().getMemberIndex("Grid_Point_Longitude");
         final SequenceData gridPointList = getGridPointList();
@@ -342,11 +344,11 @@ public class L1cScienceSmosFile extends L1cSmosFile implements SnapshotProvider{
             for (int i = 0; i < gridPointList.getElementCount(); i++) {
                 final SequenceData btDataList = getBtDataList(i);
 
-                if (btDataList.getElementCount() >= 1) {
-                    final int minId = getSnapshotId(btDataList, 0);
+                if (btDataList.getElementCount() > 0) {
+                    final long minId = getSnapshotId(btDataList, 0);
 
                     if (snapshotId >= minId) {
-                        final int maxId = getSnapshotId(btDataList, btDataList.getElementCount() - 1);
+                        final long maxId = getSnapshotId(btDataList, btDataList.getElementCount() - 1);
                         if (snapshotId <= maxId) {
                             float lon = gridPointList.getCompound(i).getFloat(lonIndex);
                             float lat = gridPointList.getCompound(i).getFloat(latIndex);
@@ -376,28 +378,28 @@ public class L1cScienceSmosFile extends L1cSmosFile implements SnapshotProvider{
         return region;
     }
 
-    private int getSnapshotId(SequenceData btDataList, int btDataIndex) throws IOException {
+    private long getSnapshotId(SequenceData btDataList, int btDataIndex) throws IOException {
         Assert.argument(btDataList.getSequenceType().getElementType() == btDataType);
-        return btDataList.getCompound(btDataIndex).getInt(snapshotIdOfPixelIndex);
+        return btDataList.getCompound(btDataIndex).getLong(snapshotIdOfPixelIndex);
     }
 
     @Override
-    public final Integer[] getAllSnapshotIds() {
+    public final Long[] getAllSnapshotIds() {
         return snapshotIds.clone();
     }
 
     @Override
-    public final Integer[] getXPolSnapshotIds() {
+    public final Long[] getXPolSnapshotIds() {
         return xPolSnapshotIds.clone();
     }
 
     @Override
-    public final Integer[] getYPolSnapshotIds() {
+    public final Long[] getYPolSnapshotIds() {
         return yPolSnapshotIds.clone();
     }
 
     @Override
-    public final Integer[] getCrossPolSnapshotIds() {
+    public final Long[] getCrossPolSnapshotIds() {
         return xyPolSnapshotIds.clone();
     }
 }

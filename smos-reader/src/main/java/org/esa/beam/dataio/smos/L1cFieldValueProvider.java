@@ -24,7 +24,7 @@ public class L1cFieldValueProvider implements GridPointValueProvider {
     private final L1cSmosFile smosFile;
     private final int fieldIndex;
     private final int polMode;
-    private volatile int snapshotId;
+    private volatile long snapshotId;
 
     public L1cFieldValueProvider(L1cSmosFile smosFile, int fieldIndex, int polMode) {
         this.smosFile = smosFile;
@@ -33,11 +33,11 @@ public class L1cFieldValueProvider implements GridPointValueProvider {
         this.snapshotId = -1;
     }
 
-    public int getSnapshotId() {
+    public long getSnapshotId() {
         return snapshotId;
     }
 
-    public void setSnapshotId(int snapshotId) {
+    public void setSnapshotId(long snapshotId) {
         this.snapshotId = snapshotId;
     }
 

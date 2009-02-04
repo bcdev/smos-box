@@ -64,23 +64,23 @@ public class SnapshotSelectorComboModelTest extends TestCase {
     static SnapshotSelectorComboModel createSnapshotSelectorComboModel() {
         final SnapshotProvider provider = new SnapshotProvider() {
             @Override
-            public Integer[] getAllSnapshotIds() {
-                return new Integer[]{1, 2, 3, 4, 5, 6, 7, 8};
+            public Long[] getAllSnapshotIds() {
+                return new Long[]{1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L};
             }
 
             @Override
-            public Integer[] getXPolSnapshotIds() {
-                return new Integer[]{1, 3, 5, 7};
+            public Long[] getXPolSnapshotIds() {
+                return new Long[]{1L, 3L, 5L, 7L};
             }
 
             @Override
-            public Integer[] getYPolSnapshotIds() {
-                return new Integer[]{2, 4, 6, 8};
+            public Long[] getYPolSnapshotIds() {
+                return new Long[]{2L, 4L, 6L, 8L};
             }
 
             @Override
-            public Integer[] getCrossPolSnapshotIds() {
-                return new Integer[0];
+            public Long[] getCrossPolSnapshotIds() {
+                return new Long[0];
             }
         };
 

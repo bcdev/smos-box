@@ -32,7 +32,7 @@ class SnapshotSelectorModel {
     private final BoundedRangeModel sliderModel;
     private final PlainDocument sliderInfoDocument;
 
-    SnapshotSelectorModel(Integer[] snapshotIds) {
+    SnapshotSelectorModel(Long[] snapshotIds) {
         spinnerModel = new SpinnerListModel(snapshotIds);
         sliderModel = new DefaultBoundedRangeModel(0, 0, 0, snapshotIds.length - 1);
         sliderInfoDocument = new PlainDocument();
@@ -60,8 +60,8 @@ class SnapshotSelectorModel {
      *
      * @return the current snapshot ID.
      */
-    int getSnapshotId() {
-        return (Integer) spinnerModel.getValue();
+    long getSnapshotId() {
+        return (Long) spinnerModel.getValue();
     }
 
     /**
@@ -71,7 +71,7 @@ class SnapshotSelectorModel {
      *
      * @throws IllegalArgumentException if the specified ID isn't allowed
      */
-    void setSnapshotId(int id) {
+    void setSnapshotId(long id) {
         spinnerModel.setValue(id);
     }
 

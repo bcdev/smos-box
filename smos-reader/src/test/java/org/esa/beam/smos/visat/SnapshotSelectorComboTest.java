@@ -16,9 +16,7 @@ package org.esa.beam.smos.visat;
 
 import junit.framework.TestCase;
 
-import javax.swing.JPanel;
 import javax.swing.JFrame;
-import java.awt.BorderLayout;
 
 public class SnapshotSelectorComboTest extends TestCase {
     private SnapshotSelectorCombo selectorCombo;
@@ -29,27 +27,20 @@ public class SnapshotSelectorComboTest extends TestCase {
     }
 
     public void testInitialState() {
-        assertEquals(1, selectorCombo.getSpinner().getValue());
-        assertEquals(0, selectorCombo.getSlider().getValue());
+        assertEquals(1L, selectorCombo.getSpinner().getValue());
+        assertEquals(0L, selectorCombo.getSlider().getValue());
         assertEquals("Any", selectorCombo.getComboBox().getSelectedItem());
-    }
-
-    public static void main(String[] args) {
-        final SnapshotSelectorCombo selectorCombo = createSnapshotSelectorCombo();
-
-        final JPanel panel = new JPanel(new BorderLayout());
-        panel.add(selectorCombo.getSpinner(), BorderLayout.WEST);
-        panel.add(selectorCombo.getSlider(), BorderLayout.CENTER);
-        panel.add(selectorCombo.getSliderInfo(), BorderLayout.EAST);
-        panel.add(selectorCombo.getComboBox(), BorderLayout.SOUTH);
-
-        final JFrame frame = new JFrame();
-        frame.add(panel);
-        frame.pack();
-        frame.setVisible(true);
     }
 
     private static SnapshotSelectorCombo createSnapshotSelectorCombo() {
         return new SnapshotSelectorCombo(SnapshotSelectorComboModelTest.createSnapshotSelectorComboModel());
+    }
+
+    public static void main(String[] args) {
+        final SnapshotSelectorCombo combo = createSnapshotSelectorCombo();
+        final JFrame frame = new JFrame();
+        frame.add(SnapshotSelectorCombo.createComponent(combo, false));
+        frame.pack();
+        frame.setVisible(true);
     }
 }

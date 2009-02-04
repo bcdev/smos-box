@@ -15,6 +15,7 @@
 package org.esa.beam.smos.visat;
 
 import javax.swing.*;
+import java.awt.BorderLayout;
 
 class SnapshotSelectorCombo {
     private final JComboBox comboBox;
@@ -53,17 +54,12 @@ class SnapshotSelectorCombo {
         return getSlider().getValueIsAdjusting();
     }
 
-    int getSnapshotId() {
-        return (Integer) getSpinner().getValue();
+    long getSnapshotId() {
+        return (Long) getSpinner().getValue();
     }
 
-    void setSnapshotId(int id) {
+    void setSnapshotId(long id) {
         getSpinner().setValue(id);
-    }
-
-    void setEnabled(boolean enabled) {
-        snapshotSelector.setEnabled(enabled);
-        comboBox.setEnabled(enabled);
     }
 
     final void setModel(SnapshotSelectorComboModel model) {
@@ -75,6 +71,30 @@ class SnapshotSelectorCombo {
             comboBox.setModel(model);
             snapshotSelector.setModel(model.getSelectedModel());
         }
+    }
+
+    static JComponent createComponent(SnapshotSelectorCombo combo, boolean showSliderInfo) {
+        final JPanel westPanel = new JPanel(new BorderLayout());
+        westPanel.add(new JLabel("ID: "), BorderLayout.WEST);
+        westPanel.add(combo.getSpinner(), BorderLayout.EAST);
+
+        final JPanel centerPanel = new JPanel(new BorderLayout());
+        centerPanel.add(combo.getSlider(), BorderLayout.CENTER);
+        if (showSliderInfo) {
+            centerPanel.add(combo.getSliderInfo(), BorderLayout.EAST);
+        }
+
+        final JPanel eastPanel = new JPanel(new BorderLayout());
+        eastPanel.add(new JLabel("Mode: "), BorderLayout.WEST);
+        eastPanel.add(combo.getComboBox(), BorderLayout.EAST);
+
+        final JComponent component = new JPanel(new BorderLayout(4, 4));
+        component.add(westPanel, BorderLayout.WEST);
+        component.add(centerPanel, BorderLayout.CENTER);
+        component.add(eastPanel, BorderLayout.EAST);
+        component.setBorder(BorderFactory.createTitledBorder("Snapshot Selection"));
+        
+        return component;
     }
 
     private class SnapshotSelectorComboBox extends JComboBox {

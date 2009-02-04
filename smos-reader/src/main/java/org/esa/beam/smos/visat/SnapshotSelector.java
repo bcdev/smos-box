@@ -65,12 +65,6 @@ class SnapshotSelector {
         return sliderInfo;
     }
 
-    void setEnabled(boolean enabled) {
-        spinner.setEnabled(enabled);
-        slider.setEnabled(enabled);
-        sliderInfo.setEnabled(enabled);
-    }
-
     final void setModel(SnapshotSelectorModel model) {
         if (model == null) {
             throw new IllegalArgumentException("null model");

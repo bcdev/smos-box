@@ -18,10 +18,7 @@ import org.esa.beam.dataio.smos.SnapshotProvider;
 
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.SpinnerModel;
 import javax.swing.event.ListDataListener;
-import javax.swing.event.ListDataEvent;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -53,9 +50,16 @@ class SnapshotSelectorComboModel implements ComboBoxModel {
     @Override
     public void setSelectedItem(Object newItem) {
         final Object oldItem = getSelectedItem();
-        if ("Any".equals(oldItem) || "Any".equals(newItem)) {
-            transferSpinnerValue(oldItem, newItem);
+        final SnapshotSelectorModel oldModel = map.get(oldItem);
+        final SnapshotSelectorModel newModel = map.get(newItem);
+
+        try {
+            newModel.setSnapshotId(oldModel.getSnapshotId());
+        } catch (IllegalArgumentException e) {
+            // the value of the old model is not valid for the new model, so
+            // the new model keeps its old value
         }
+
         comboBoxModel.setSelectedItem(newItem);
     }
 
@@ -83,16 +87,4 @@ class SnapshotSelectorComboModel implements ComboBoxModel {
     public void removeListDataListener(ListDataListener l) {
         comboBoxModel.removeListDataListener(l);
     }
-
-    private void transferSpinnerValue(Object oldItem, Object newItem) {
-        final SnapshotSelectorModel oldModel = map.get(oldItem);
-        final SnapshotSelectorModel newModel = map.get(newItem);
-
-        try {
-            newModel.setSnapshotId(oldModel.getSnapshotId());
-        } catch (Exception e) {
-            // the value of the old model is not valid for the new model, so
-            // the new model keeps its old value
-        }
-    }    
 }
