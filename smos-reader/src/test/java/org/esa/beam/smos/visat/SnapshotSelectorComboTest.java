@@ -40,7 +40,7 @@ public class SnapshotSelectorComboTest extends TestCase {
         final JPanel panel = new JPanel(new BorderLayout());
         panel.add(selectorCombo.getSpinner(), BorderLayout.WEST);
         panel.add(selectorCombo.getSlider(), BorderLayout.CENTER);
-        panel.add(selectorCombo.getSliderInfoField(), BorderLayout.EAST);
+        panel.add(selectorCombo.getSliderInfo(), BorderLayout.EAST);
         panel.add(selectorCombo.getComboBox(), BorderLayout.SOUTH);
 
         final JFrame frame = new JFrame();

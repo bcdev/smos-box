@@ -24,8 +24,8 @@ class SnapshotSelector {
     private SnapshotSelectorModel model;
 
     SnapshotSelector() {
-        spinner = new ModelAwareSpinner();
-        slider = new ModelAwareSlider();
+        spinner = new StateAwareSpinner();
+        slider = new StateAwareSlider();
         sliderInfo = new JTextField(10);
         sliderInfo.setEditable(false);
     }
@@ -65,6 +65,12 @@ class SnapshotSelector {
         return sliderInfo;
     }
 
+    void setEnabled(boolean enabled) {
+        spinner.setEnabled(enabled);
+        slider.setEnabled(enabled);
+        sliderInfo.setEnabled(enabled);
+    }
+
     final void setModel(SnapshotSelectorModel model) {
         if (model == null) {
             throw new IllegalArgumentException("null model");
@@ -77,7 +83,7 @@ class SnapshotSelector {
         }
     }
 
-    private static final class ModelAwareSpinner extends JSpinner {
+    private static final class StateAwareSpinner extends JSpinner {
         @Override
         public void setModel(SpinnerModel newModel) {
             final SpinnerModel oldModel = getModel();
@@ -89,7 +95,7 @@ class SnapshotSelector {
         }
     }
 
-    private static final class ModelAwareSlider extends JSlider {
+    private static final class StateAwareSlider extends JSlider {
         @Override
         public void setModel(BoundedRangeModel newModel) {
             final BoundedRangeModel oldModel = getModel();

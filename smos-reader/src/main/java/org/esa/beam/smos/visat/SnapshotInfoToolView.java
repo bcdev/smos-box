@@ -1,6 +1,8 @@
 package org.esa.beam.smos.visat;
 
 import com.bc.ceres.binio.CompoundData;
+import com.bc.ceres.binio.CompoundType;
+import com.bc.ceres.binio.Type;
 import com.bc.ceres.core.ProgressMonitor;
 import com.bc.ceres.glayer.support.ImageLayer;
 import com.bc.ceres.glevel.support.DefaultMultiLevelImage;
@@ -23,6 +25,7 @@ import java.awt.event.ActionListener;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.RenderedImage;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class SnapshotInfoToolView extends SmosToolView {
 
@@ -76,7 +79,7 @@ public class SnapshotInfoToolView extends SmosToolView {
         JPanel panel1 = new JPanel(new BorderLayout(2, 2));
         panel1.add(snapshotSelectorCombo.getSpinner(), BorderLayout.WEST);
         panel1.add(snapshotSelectorCombo.getSlider(), BorderLayout.CENTER);
-        panel1.add(snapshotSelectorCombo.getSliderInfoField(), BorderLayout.EAST);
+        panel1.add(snapshotSelectorCombo.getSliderInfo(), BorderLayout.EAST);
         panel1.add(snapshotSelectorCombo.getComboBox(), BorderLayout.SOUTH);
 
         snapshotModeButton = ToolButtonFactory.createButton(
@@ -126,8 +129,7 @@ public class SnapshotInfoToolView extends SmosToolView {
             smosFile = null;
         }
 
-        snapshotSelectorCombo.getSpinner().setEnabled(enabled);
-        snapshotSelectorCombo.getSlider().setEnabled(enabled);
+        snapshotSelectorCombo.setEnabled(enabled);
         snapshotTable.setEnabled(enabled);
         snapshotModeButton.setEnabled(enabled);
         snapshotModeButton.setSelected(getSnapshotIdFromView() != -1);
@@ -146,15 +148,10 @@ public class SnapshotInfoToolView extends SmosToolView {
         if (product == getSelectedSmosProduct()) {
             int snapshotId = getSelectedSnapshotId();
             if (snapshotId != -1) {
-                snapshotSelectorCombo.getSpinner().setValue(snapshotId);
+                snapshotSelectorCombo.setSnapshotId(snapshotId);
                 int snapshotIndex = smosFile.getSnapshotIndex(snapshotId);
                 if (snapshotIndex != -1) {
-                    try {
-                        updateTable(snapshotIndex);
-                        setSnapshotIdOfView();
-                    } catch (IOException e) {
-                        snapshotTable.setModel(nullModel);
-                    }
+                    setSnapshotIdOfView();
                 } else {
                     snapshotTable.setModel(nullModel);
                 }
@@ -162,19 +159,34 @@ public class SnapshotInfoToolView extends SmosToolView {
         }
     }
 
-    private void updateTable(int snapshotIndex) throws IOException {
-        CompoundData data = smosFile.getSnapshotData(snapshotIndex);
-        int n = data.getMemberCount();
-        Object[][] tableData = new Object[n][2];
-        for (int i = 0; i < n; i++) {
-            tableData[i][0] = data.getCompoundType().getMemberName(i);
-            if (data.getCompoundType().getMemberType(i).isSimpleType()) {
-                tableData[i][1] = GridPointBtDataset.getNumbericMember(data, i);
-            } else {
-                tableData[i][1] = data.getCompoundType().getMemberType(i).getName();
+    private void updateTable(int snapshotIndex) {
+        final CompoundData data;
+        try {
+            data = smosFile.getSnapshotData(snapshotIndex);
+        } catch (IOException e) {
+            return;
+        }
+
+        final CompoundType compoundType = data.getCompoundType();
+        final int memberCount = compoundType.getMemberCount();
+        final ArrayList<Object[]> list = new ArrayList<Object[]>(memberCount);
+
+        final Object[] entry = new Object[2];
+        for (int i = 0; i < memberCount; i++) {
+            entry[0] = compoundType.getMemberName(i);
+
+            final Type memberType = compoundType.getMemberType(i);
+            if (memberType.isSimpleType()) {
+                try {
+                    entry[1] = GridPointBtDataset.getNumbericMember(data, i);
+                } catch (IOException e) {
+                    entry[1] = "Error";
+                }
+                list.add(entry);
             }
         }
-        snapshotTable.setModel(new SnapshotTableModel(tableData));
+
+        snapshotTable.setModel(new SnapshotTableModel(list.toArray(new Object[2][list.size()])));
     }
 
     private void setSnapshotIdOfView() {
@@ -252,23 +264,21 @@ public class SnapshotInfoToolView extends SmosToolView {
     }
 
     private class SliderChangeListener implements ChangeListener {
-        boolean adjustingSlider = false;
-        
         @Override
         public void stateChanged(ChangeEvent e) {
-            System.out.println("e = " + e.toString());
-            adjustingSlider = true;
+            updateTable(smosFile.getSnapshotIndex(snapshotSelectorCombo.getSnapshotId()));
+            if (snapshotSelectorCombo.isAdjusting()) {
+                return;
+            }
             if (getSelectedSmosProduct() != null) {
-                final Integer snapshotId = (Integer) snapshotSelectorCombo.getSpinner().getValue();
+                final int snapshotId = snapshotSelectorCombo.getSnapshotId();
                 SmosBox.getInstance().getSnapshotSelectionService().setSelectedSnapshotId(getSelectedSmosProduct(),
                                                                                           snapshotId);
             }
-            adjustingSlider = false;
         }
     }
 
     class ToggleSnapshotModeAction implements ActionListener {
-
         @Override
         public void actionPerformed(ActionEvent event) {
             if (getSelectedSnapshotId() != -1) {
@@ -284,7 +294,6 @@ public class SnapshotInfoToolView extends SmosToolView {
     }
 
     class LocateSnapshotAction implements ActionListener {
-
         @Override
         public void actionPerformed(ActionEvent event) {
             if (getSelectedSnapshotId() != -1) {
@@ -294,7 +303,6 @@ public class SnapshotInfoToolView extends SmosToolView {
     }
 
     class SSSL implements SnapshotSelectionService.SelectionListener {
-
         @Override
         public void handleSnapshotIdChanged(Product product, int oldId, int newId) {
             realizeSnapshotIdChange(product);

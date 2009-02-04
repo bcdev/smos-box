@@ -18,6 +18,8 @@ import javax.swing.BoundedRangeModel;
 import javax.swing.DefaultBoundedRangeModel;
 import javax.swing.SpinnerListModel;
 import javax.swing.SpinnerModel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.PlainDocument;
@@ -27,13 +29,29 @@ import java.util.List;
 
 class SnapshotSelectorModel {
     private final SpinnerListModel spinnerModel;
-    private final DefaultBoundedRangeModel sliderModel;
+    private final BoundedRangeModel sliderModel;
     private final PlainDocument sliderInfoDocument;
 
     SnapshotSelectorModel(Integer[] snapshotIds) {
-        spinnerModel = new SliderModelAwareSpinnerModel(snapshotIds);
-        sliderModel = new SpinnerModelAwareSliderModel(0, 0, 0, snapshotIds.length - 1);
+        spinnerModel = new SpinnerListModel(snapshotIds);
+        sliderModel = new DefaultBoundedRangeModel(0, 0, 0, snapshotIds.length - 1);
         sliderInfoDocument = new PlainDocument();
+
+        spinnerModel.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                final int sliderValue = Collections.binarySearch(getSpinnerModelList(), spinnerModel.getValue());
+                sliderModel.setValue(sliderValue);
+            }
+        });
+        sliderModel.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                updateSliderInfoDocument();
+                final Object spinnerValue = getSpinnerModelList().get(sliderModel.getValue());
+                spinnerModel.setValue(spinnerValue);
+            }
+        });
         updateSliderInfoDocument();
     }
 
@@ -49,43 +67,10 @@ class SnapshotSelectorModel {
         return sliderInfoDocument;
     }
 
-    private final class SliderModelAwareSpinnerModel extends SpinnerListModel {
-        private SliderModelAwareSpinnerModel(Integer[] snapshotIds) {
-            super(snapshotIds);
-        }
-
-        @Override
-        public void setValue(Object spinnerValue) {
-            if (super.getValue().equals(spinnerValue)) {
-                return;
-            }
-            super.setValue(spinnerValue);
-
-            // this cast is safe by construction of the {@code SnapshotSpinnerModel}
-            @SuppressWarnings("unchecked")
-            final List<Integer> list = (List<Integer>) getList();
-            final int sliderValue = Collections.binarySearch(list, (Integer) spinnerValue);
-
-            sliderModel.setValue(sliderValue);
-        }
-    }
-
-    private final class SpinnerModelAwareSliderModel extends DefaultBoundedRangeModel {
-        private SpinnerModelAwareSliderModel(int value, int extent, int min, int max) {
-            super(value, extent, min, max);
-        }
-
-        @Override
-        public void setValue(int sliderValue) {
-            if (super.getValue() == sliderValue) {
-                return;
-            }
-            super.setValue(sliderValue);
-            updateSliderInfoDocument();
-
-            final Object spinnerValue = spinnerModel.getList().get(sliderValue);
-            spinnerModel.setValue(spinnerValue);
-        }
+    @SuppressWarnings({"unchecked"})
+    private List<? extends Comparable<? super Object>> getSpinnerModelList() {
+        // the cast made here is safe by construction of the {@code spinnerModel}
+        return (List<? extends Comparable<? super Object>>) spinnerModel.getList();
     }
 
     private void updateSliderInfoDocument() {

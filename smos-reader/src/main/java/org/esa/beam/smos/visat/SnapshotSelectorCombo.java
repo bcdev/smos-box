@@ -46,8 +46,25 @@ class SnapshotSelectorCombo {
         return snapshotSelector.getSlider();
     }
 
-    JTextField getSliderInfoField() {
+    JTextField getSliderInfo() {
         return snapshotSelector.getSliderInfo();
+    }
+
+    boolean isAdjusting() {
+        return getSlider().getValueIsAdjusting();
+    }
+
+    int getSnapshotId() {
+        return (Integer) getSpinner().getValue();
+    }
+
+    void setSnapshotId(int id) {
+        getSpinner().setValue(id);
+    }
+
+    void setEnabled(boolean enabled) {
+        snapshotSelector.setEnabled(enabled);
+        comboBox.setEnabled(enabled);
     }
 
     final void setModel(SnapshotSelectorComboModel model) {
