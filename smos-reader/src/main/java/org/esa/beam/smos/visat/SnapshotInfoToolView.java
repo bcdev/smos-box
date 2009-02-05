@@ -7,14 +7,31 @@ import com.bc.ceres.core.ProgressMonitor;
 import com.bc.ceres.glayer.support.ImageLayer;
 import com.bc.ceres.glevel.support.DefaultMultiLevelImage;
 import com.bc.ceres.swing.progress.ProgressMonitorSwingWorker;
-import org.esa.beam.dataio.smos.*;
+import org.esa.beam.dataio.smos.GridPointValueProvider;
+import org.esa.beam.dataio.smos.L1cFieldValueProvider;
+import org.esa.beam.dataio.smos.L1cScienceSmosFile;
+import org.esa.beam.dataio.smos.SmosFile;
+import org.esa.beam.dataio.smos.SmosMultiLevelSource;
 import org.esa.beam.framework.datamodel.Product;
-import org.esa.beam.framework.ui.UIUtils;
 import org.esa.beam.framework.ui.product.ProductSceneView;
-import org.esa.beam.framework.ui.tool.ToolButtonFactory;
 import org.jfree.layout.CenterLayout;
 
-import javax.swing.*;
+
+import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
+import javax.swing.ButtonModel;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.SwingWorker;
+import javax.swing.border.Border;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -28,6 +45,7 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.RenderedImage;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 public class SnapshotInfoToolView extends SmosToolView {
 
@@ -35,11 +53,14 @@ public class SnapshotInfoToolView extends SmosToolView {
 
     private SnapshotSelectorCombo snapshotSelectorCombo;
     private JTable snapshotTable;
-    private L1cScienceSmosFile smosFile;
     private final SnapshotTableModel nullModel;
+    private ButtonModel locateSnapshotButtonModel;
+    private ButtonModel browseButtonModel;
+    private ButtonModel snapshotButtonModel;
+    private ButtonModel followModeButtonModel;
+    private ButtonModel synchroniseButtonModel;
+    private L1cScienceSmosFile smosFile;
     private SliderChangeListener snapshotSliderListener;
-    private AbstractButton snapshotModeButton;
-    private AbstractButton locateSnapshotButton;
     private SSSL sssl;
 
     public SnapshotInfoToolView() {
@@ -64,42 +85,6 @@ public class SnapshotInfoToolView extends SmosToolView {
     protected JComponent createClientComponent() {
         snapshotSliderListener = new SliderChangeListener();
 
-        snapshotTable = new JTable(nullModel);
-        snapshotTable.getColumnModel().getColumn(1).setCellRenderer(new DefaultTableCellRenderer() {
-            @Override
-            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-                super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-                if (value instanceof Number) {
-                    setHorizontalAlignment(RIGHT);
-                }
-                return this;
-            }
-        });
-
-
-        final JCheckBox synchroniseCheckBox = new JCheckBox("Synchronise with L1C view", false);
-
-        snapshotModeButton = ToolButtonFactory.createButton(
-                new ImageIcon(SnapshotInfoToolView.class.getResource("Snapshot24.png")), true);
-        snapshotModeButton.addActionListener(new ToggleSnapshotModeAction());
-        snapshotModeButton.setToolTipText("Toggle snapshot mode on/off");
-
-        locateSnapshotButton = ToolButtonFactory.createButton(UIUtils.loadImageIcon("icons/ZoomTool24.gif"), false);
-        locateSnapshotButton.addActionListener(new LocateSnapshotAction());
-        locateSnapshotButton.setToolTipText("Locate selected snapshot in view");
-
-        final JButton exportButton = new JButton("Export...");
-        exportButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new TableModelExportRunner(getPaneWindow(),
-                                           getTitle(),
-                                           snapshotTable.getModel(),
-                                           snapshotTable.getColumnModel()).run();
-            }
-        });
-
-
         JPanel mainPanel = new JPanel(new BorderLayout(4, 4));
         mainPanel.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
 
@@ -107,21 +92,13 @@ public class SnapshotInfoToolView extends SmosToolView {
         JComponent comboComponent = SnapshotSelectorCombo.createComponent(snapshotSelectorCombo, false);
         mainPanel.add(comboComponent, BorderLayout.NORTH);
 
-        final JPanel snapshotTablePanel = new JPanel(new BorderLayout());
-        snapshotTablePanel.setBorder(BorderFactory.createTitledBorder("Snapshot Information"));
-        snapshotTablePanel.add(new JScrollPane(snapshotTable), BorderLayout.CENTER);
-        final JPanel tableButtonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 4, 4));
-        tableButtonPanel.add(exportButton);
-        snapshotTablePanel.add(tableButtonPanel, BorderLayout.SOUTH);
+        final JPanel snapshotTablePanel = createSnapshotTablePanel();
         mainPanel.add(snapshotTablePanel, BorderLayout.CENTER);
 
-        JPanel viewSettingsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 4, 4));
-        viewSettingsPanel.setBorder(BorderFactory.createTitledBorder("View Settings"));
-        viewSettingsPanel.add(synchroniseCheckBox);
-        viewSettingsPanel.add(snapshotModeButton);
-        viewSettingsPanel.add(locateSnapshotButton);
+        JPanel viewSettingsPanel = createViewSettingsPanel();
         mainPanel.add(viewSettingsPanel, BorderLayout.SOUTH);
 
+        updateViewSettings();
         return mainPanel;
     }
 
@@ -135,7 +112,7 @@ public class SnapshotInfoToolView extends SmosToolView {
             if (!smosFile.isBackgroundInitStarted()) {
                 smosFile.startBackgroundInit();
             }
-            if(!smosFile.isBackgoundInitDone()) {
+            if (!smosFile.isBackgoundInitDone()) {
                 startPolModeInitWaiting();
                 return;
             }
@@ -148,13 +125,12 @@ public class SnapshotInfoToolView extends SmosToolView {
         }
 
         snapshotTable.setEnabled(enabled);
-        snapshotModeButton.setEnabled(enabled);
-        snapshotModeButton.setSelected(getSnapshotIdFromView() != -1);
-        locateSnapshotButton.setEnabled(enabled && snapshotModeButton.isSelected());
+        updateViewSettings();
         updateTable(smosFile.getSnapshotIndex(snapshotSelectorCombo.getSnapshotId()));
     }
 
-    long getSelectedSnapshotId() {
+
+    private long getSelectedSnapshotId() {
         Product selectedSmosProduct = getSelectedSmosProduct();
         if (selectedSmosProduct == null) {
             return -1;
@@ -218,7 +194,7 @@ public class SnapshotInfoToolView extends SmosToolView {
                 GridPointValueProvider gridPointValueProvider = smosMultiLevelSource.getValueProvider();
                 if (gridPointValueProvider instanceof L1cFieldValueProvider) {
                     L1cFieldValueProvider l1cFieldValueProvider = (L1cFieldValueProvider) gridPointValueProvider;
-                    long id = snapshotModeButton.isSelected() ? getSelectedSnapshotId() : -1;
+                    long id = snapshotButtonModel.isSelected() ? getSelectedSnapshotId() : -1;
                     if (l1cFieldValueProvider.getSnapshotId() != id) {
                         l1cFieldValueProvider.setSnapshotId(id);
                         smosMultiLevelSource.reset();
@@ -254,7 +230,7 @@ public class SnapshotInfoToolView extends SmosToolView {
             final L1cScienceSmosFile l1cScienceSmosFile = (L1cScienceSmosFile) file;
 
             ProgressMonitorSwingWorker<Rectangle2D, Object> pmsw = new ProgressMonitorSwingWorker<Rectangle2D, Object>(
-                    locateSnapshotButton, "Computing snapshot region") {
+                    getPaneControl(), "Computing snapshot region") {
                 @Override
                 protected Rectangle2D doInBackground(ProgressMonitor pm) throws Exception {
                     return l1cScienceSmosFile.computeSnapshotRegion(getSelectedSnapshotId(), pm);
@@ -267,12 +243,14 @@ public class SnapshotInfoToolView extends SmosToolView {
                         if (region != null) {
                             getSelectedSmosView().getLayerCanvas().getViewport().zoom(region);
                         } else {
-                            JOptionPane.showMessageDialog(locateSnapshotButton,
+                            JOptionPane.showMessageDialog(getPaneControl(),
                                                           "No snapshot found with ID=" + getSelectedSnapshotId());
                         }
-                    } catch (Exception e) {
-                        JOptionPane.showMessageDialog(locateSnapshotButton, "Error:\n" + e.getMessage());
+                    } catch (ExecutionException e) {
                         e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                        JOptionPane.showMessageDialog(getPaneControl(), "Error:\n" + e.getMessage());
                     }
                 }
             };
@@ -282,6 +260,7 @@ public class SnapshotInfoToolView extends SmosToolView {
     }
 
     private class SliderChangeListener implements ChangeListener {
+
         @Override
         public void stateChanged(ChangeEvent e) {
             updateTable(smosFile.getSnapshotIndex(snapshotSelectorCombo.getSnapshotId()));
@@ -296,22 +275,22 @@ public class SnapshotInfoToolView extends SmosToolView {
         }
     }
 
-    class ToggleSnapshotModeAction implements ActionListener {
+    private class ToggleSnapshotModeAction implements ActionListener {
+
         @Override
         public void actionPerformed(ActionEvent event) {
             if (getSelectedSnapshotId() != -1) {
-                if (snapshotModeButton.isSelected()) {
+                if (snapshotButtonModel.isSelected()) {
                     locateSnapshotIdOfView();
-                    locateSnapshotButton.setEnabled(true);
-                } else {
-                    locateSnapshotButton.setEnabled(false);
                 }
+                updateViewSettings();
                 setSnapshotIdOfView();
             }
         }
     }
 
-    class LocateSnapshotAction implements ActionListener {
+    private class LocateSnapshotAction implements ActionListener {
+
         @Override
         public void actionPerformed(ActionEvent event) {
             if (getSelectedSnapshotId() != -1) {
@@ -320,11 +299,110 @@ public class SnapshotInfoToolView extends SmosToolView {
         }
     }
 
-    class SSSL implements SnapshotSelectionService.SelectionListener {
+    private class SSSL implements SnapshotSelectionService.SelectionListener {
+
         @Override
         public void handleSnapshotIdChanged(Product product, long oldId, long newId) {
             realizeSnapshotIdChange(product);
         }
+    }
+
+    private JPanel createViewSettingsPanel() {
+        JPanel viewSettingsPanel = new JPanel(new BorderLayout(4, 4));
+        viewSettingsPanel.setBorder(BorderFactory.createTitledBorder("View Settings"));
+
+        final JPanel dataSourcePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 2));
+
+        JCheckBox synchroniseCheckBox = new JCheckBox("Synchronise with L1C view", false);
+        synchroniseButtonModel =  synchroniseCheckBox.getModel();
+        synchroniseButtonModel.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+                updateViewSettings();
+                Product selectedSmosProduct = getSelectedSmosProduct();
+                if (selectedSmosProduct != null) {
+                    final SnapshotSelectionService service = SmosBox.getInstance().getSnapshotSelectionService();
+                    service.setSelectedSnapshotId(selectedSmosProduct, snapshotSelectorCombo.getSnapshotId());
+                }
+            }
+        });
+        viewSettingsPanel.add(synchroniseCheckBox, BorderLayout.NORTH);
+
+
+        final Border outerBorder = BorderFactory.createEmptyBorder(0, 11, 0, 0);
+        final Border titledBorder = BorderFactory.createTitledBorder("Data Source");
+        dataSourcePanel.setBorder(BorderFactory.createCompoundBorder(outerBorder, titledBorder));
+
+        final ButtonGroup buttonGroup = new ButtonGroup();
+        final JRadioButton browseButton = new JRadioButton("Browse", true);
+        final JRadioButton snapshotButton = new JRadioButton("Snapshot", false);
+        buttonGroup.add(browseButton);
+        buttonGroup.add(snapshotButton);
+        browseButtonModel = browseButton.getModel();
+        snapshotButtonModel = snapshotButton.getModel();
+        final ToggleSnapshotModeAction toggleSnapshotModeAction = new ToggleSnapshotModeAction();
+        snapshotButtonModel.addActionListener(toggleSnapshotModeAction);
+        browseButtonModel.addActionListener(toggleSnapshotModeAction);
+        final JPanel buttonGroupPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        buttonGroupPanel.add(browseButton);
+        buttonGroupPanel.add(snapshotButton);
+        dataSourcePanel.add(buttonGroupPanel);
+
+        JCheckBox followModeCheckBox = new JCheckBox("Follow");
+        followModeButtonModel = followModeCheckBox.getModel();
+        final JPanel locateOptionPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        locateOptionPanel.add(followModeCheckBox);
+
+        JButton locateSnapshotButton = new JButton("Locate in view");
+        locateSnapshotButton.addActionListener(new LocateSnapshotAction());
+        locateSnapshotButton.setToolTipText("Locate selected snapshot in view");
+        locateSnapshotButtonModel = locateSnapshotButton.getModel();
+        locateOptionPanel.add(locateSnapshotButton);
+        dataSourcePanel.add(locateOptionPanel);
+        viewSettingsPanel.add(dataSourcePanel);
+        return viewSettingsPanel;
+    }
+
+    private void updateViewSettings() {
+        final boolean selected = synchroniseButtonModel.isSelected();
+        browseButtonModel.setEnabled(selected);
+        snapshotButtonModel.setEnabled(selected);
+
+        followModeButtonModel.setEnabled(selected && snapshotButtonModel.isSelected());
+        locateSnapshotButtonModel.setEnabled(selected && snapshotButtonModel.isSelected());
+    }
+
+    private JPanel createSnapshotTablePanel() {
+        snapshotTable = new JTable(nullModel);
+        snapshotTable.getColumnModel().getColumn(1).setCellRenderer(new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+                                                           boolean hasFocus, int row, int column) {
+                super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                if (value instanceof Number) {
+                    setHorizontalAlignment(RIGHT);
+                }
+                return this;
+            }
+        });
+
+        final JButton exportButton = new JButton("Export...");
+        exportButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new TableModelExportRunner(getPaneWindow(),
+                                           getTitle(),
+                                           snapshotTable.getModel(),
+                                           snapshotTable.getColumnModel()).run();
+            }
+        });
+        final JPanel snapshotTablePanel = new JPanel(new BorderLayout());
+        snapshotTablePanel.setBorder(BorderFactory.createTitledBorder("Snapshot Information"));
+        snapshotTablePanel.add(new JScrollPane(snapshotTable), BorderLayout.CENTER);
+        final JPanel tableButtonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 4, 4));
+        tableButtonPanel.add(exportButton);
+        snapshotTablePanel.add(tableButtonPanel, BorderLayout.SOUTH);
+        return snapshotTablePanel;
     }
 
     private void startPolModeInitWaiting() {
