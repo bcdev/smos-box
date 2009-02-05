@@ -62,7 +62,6 @@ public class SnapshotInfoToolView extends SmosToolView {
 
     @Override
     protected JComponent createClientComponent() {
-        snapshotSelectorCombo = new SnapshotSelectorCombo();
         snapshotSliderListener = new SliderChangeListener();
 
         snapshotTable = new JTable(nullModel);
@@ -77,9 +76,8 @@ public class SnapshotInfoToolView extends SmosToolView {
             }
         });
 
-        JComponent comboComponent = SnapshotSelectorCombo.createComponent(snapshotSelectorCombo, false);
 
-        final JCheckBox synchroniseCheckBox = new JCheckBox("Synchronise with view", false);
+        final JCheckBox synchroniseCheckBox = new JCheckBox("Synchronise with L1C view", false);
 
         snapshotModeButton = ToolButtonFactory.createButton(
                 new ImageIcon(SnapshotInfoToolView.class.getResource("Snapshot24.png")), true);
@@ -101,22 +99,30 @@ public class SnapshotInfoToolView extends SmosToolView {
             }
         });
 
-        JPanel panel2 = new JPanel(new FlowLayout(FlowLayout.RIGHT, 4, 4));
-        panel2.add(synchroniseCheckBox);
-        panel2.add(snapshotModeButton);
-        panel2.add(locateSnapshotButton);
-        panel2.add(exportButton);
 
-        JPanel panel3 = new JPanel(new BorderLayout(4, 4));
-        panel3.add(comboComponent, BorderLayout.NORTH);
-        final JScrollPane scrollPane = new JScrollPane(snapshotTable);
-        final JPanel scrollPanel = new JPanel(new BorderLayout());
-        scrollPanel.add(scrollPane, BorderLayout.CENTER);
-        scrollPanel.setBorder(BorderFactory.createTitledBorder("Snapshot Information"));
-        panel3.add(scrollPanel, BorderLayout.CENTER);
-        panel3.add(panel2, BorderLayout.SOUTH);
-        panel3.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
-        return panel3;
+        JPanel mainPanel = new JPanel(new BorderLayout(4, 4));
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
+
+        snapshotSelectorCombo = new SnapshotSelectorCombo();
+        JComponent comboComponent = SnapshotSelectorCombo.createComponent(snapshotSelectorCombo, false);
+        mainPanel.add(comboComponent, BorderLayout.NORTH);
+
+        final JPanel snapshotTablePanel = new JPanel(new BorderLayout());
+        snapshotTablePanel.setBorder(BorderFactory.createTitledBorder("Snapshot Information"));
+        snapshotTablePanel.add(new JScrollPane(snapshotTable), BorderLayout.CENTER);
+        final JPanel tableButtonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 4, 4));
+        tableButtonPanel.add(exportButton);
+        snapshotTablePanel.add(tableButtonPanel, BorderLayout.SOUTH);
+        mainPanel.add(snapshotTablePanel, BorderLayout.CENTER);
+
+        JPanel viewSettingsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 4, 4));
+        viewSettingsPanel.setBorder(BorderFactory.createTitledBorder("View Settings"));
+        viewSettingsPanel.add(synchroniseCheckBox);
+        viewSettingsPanel.add(snapshotModeButton);
+        viewSettingsPanel.add(locateSnapshotButton);
+        mainPanel.add(viewSettingsPanel, BorderLayout.SOUTH);
+
+        return mainPanel;
     }
 
     @Override
