@@ -115,6 +115,10 @@ public abstract class SmosToolView extends AbstractToolView {
         }
     }
 
+    protected final JComponent getClientComponent() {
+        return clientComponent;
+    }
+
     protected abstract JComponent createClientComponent();
 
     protected abstract void updateClientComponent(ProductSceneView smosView);
@@ -168,11 +172,12 @@ public abstract class SmosToolView extends AbstractToolView {
         return numberClass;
     }
 
-    private void setToolViewComponent(JComponent comp) {
+    protected final void setToolViewComponent(JComponent comp) {
         panel.removeAll();
         panel.add(comp, BorderLayout.CENTER);
         panel.invalidate();
         panel.validate();
+        panel.updateUI();
     }
 
     private class SVSL implements SceneViewSelectionService.SelectionListener {

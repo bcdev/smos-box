@@ -12,6 +12,7 @@ import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.framework.ui.UIUtils;
 import org.esa.beam.framework.ui.product.ProductSceneView;
 import org.esa.beam.framework.ui.tool.ToolButtonFactory;
+import org.jfree.layout.CenterLayout;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -20,6 +21,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.FlowLayout;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.Rectangle2D;
@@ -118,12 +120,20 @@ public class SnapshotInfoToolView extends SmosToolView {
     }
 
     @Override
-    protected void updateClientComponent(ProductSceneView smosView) {
+    protected synchronized void updateClientComponent(ProductSceneView smosView) {
         boolean enabled = smosView != null && getSelectedSmosFile() instanceof L1cScienceSmosFile;
 
         snapshotSelectorCombo.getSlider().removeChangeListener(snapshotSliderListener);
         if (enabled) {
             smosFile = (L1cScienceSmosFile) getSelectedSmosFile();
+            if (!smosFile.isBackgroundInitStarted()) {
+                smosFile.startBackgroundInit();
+            }
+            if(!smosFile.isBackgoundInitDone()) {
+                startPolModeInitWaiting();
+                return;
+            }
+
             snapshotSelectorCombo.setModel(new SnapshotSelectorComboModel(smosFile));
             realizeSnapshotIdChange(getSelectedSmosProduct());
             snapshotSelectorCombo.getSlider().addChangeListener(snapshotSliderListener);
@@ -135,6 +145,7 @@ public class SnapshotInfoToolView extends SmosToolView {
         snapshotModeButton.setEnabled(enabled);
         snapshotModeButton.setSelected(getSnapshotIdFromView() != -1);
         locateSnapshotButton.setEnabled(enabled && snapshotModeButton.isSelected());
+        updateTable(smosFile.getSnapshotIndex(snapshotSelectorCombo.getSnapshotId()));
     }
 
     long getSelectedSnapshotId() {
@@ -150,7 +161,7 @@ public class SnapshotInfoToolView extends SmosToolView {
             long snapshotId = getSelectedSnapshotId();
             if (snapshotId != -1) {
                 snapshotSelectorCombo.setSnapshotId(snapshotId);
-                int snapshotIndex = smosFile.getSnapshotIndex(snapshotId);
+                long snapshotIndex = smosFile.getSnapshotIndex(snapshotId);
                 if (snapshotIndex != -1) {
                     setSnapshotIdOfView();
                 } else {
@@ -307,6 +318,52 @@ public class SnapshotInfoToolView extends SmosToolView {
         @Override
         public void handleSnapshotIdChanged(Product product, long oldId, long newId) {
             realizeSnapshotIdChange(product);
+        }
+    }
+
+    private void startPolModeInitWaiting() {
+        final JPanel centerPanel = new JPanel(new CenterLayout());
+        centerPanel.setPreferredSize(new Dimension(300, 200));
+        final JPanel panel = new JPanel(new BorderLayout());
+        final JProgressBar progressBar = new JProgressBar();
+        progressBar.setIndeterminate(true);
+        final JLabel message = new JLabel();
+        panel.add(message, BorderLayout.NORTH);
+        panel.add(progressBar, BorderLayout.CENTER);
+        centerPanel.add(panel);
+        setToolViewComponent(centerPanel);
+        final ProgressMonitor progressMonitor = new ProgressBarProgressMonitor(progressBar, message);
+        final SwingWorker worker = new PolModeWaiter(progressMonitor);
+        worker.execute();
+    }
+
+
+    private class PolModeWaiter extends SwingWorker {
+
+        private final ProgressMonitor pm;
+
+        private PolModeWaiter(ProgressMonitor progressMonitor) {
+            pm = progressMonitor;
+        }
+
+        @Override
+        protected Object doInBackground() throws InterruptedException {
+            pm.beginTask("Finding Polarisation Modes of Snapshots...", 100);
+            try {
+                while (!smosFile.isBackgoundInitDone()) {
+                    Thread.sleep(100);
+                }
+            } finally {
+                pm.done();
+            }
+            return null;
+        }
+
+
+        @Override
+        protected void done() {
+            setToolViewComponent(getClientComponent());
+            updateClientComponent(getSelectedSmosView());
         }
     }
 }

@@ -21,6 +21,7 @@ import com.bc.ceres.binio.SequenceData;
 import com.bc.ceres.core.Assert;
 import com.bc.ceres.core.ProgressMonitor;
 
+import javax.swing.SwingWorker;
 import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.io.IOException;
@@ -28,6 +29,8 @@ import java.text.MessageFormat;
 import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.Map;
+import java.util.Collections;
 
 /**
  * Represents a SMOS L1c Science product file.
@@ -50,12 +53,9 @@ public class L1cScienceSmosFile extends L1cSmosFile implements SnapshotProvider 
     private final SequenceData snapshotList;
     private final CompoundType snapshotType;
 
-    private TreeMap<Long, Integer> snapshotIndexMap;
+    private volatile SwingWorker worker;
+    private volatile SnapshotPolarisationMode polMode;
 
-    private Long[] snapshotIds;
-    private Long[] xPolSnapshotIds;
-    private Long[] yPolSnapshotIds;
-    private Long[] xyPolSnapshotIds;
 
     public L1cScienceSmosFile(File file, DataFormat format) throws IOException {
         super(file, format);
@@ -69,8 +69,27 @@ public class L1cScienceSmosFile extends L1cSmosFile implements SnapshotProvider 
             throw new IOException("Data block does not include snapshot list.");
         }
         snapshotType = (CompoundType) snapshotList.getSequenceType().getElementType();
+        worker = new SwingWorker() {
+            @Override
+            protected Object doInBackground() throws Exception {
+                tabulateSnapshotIds();
+                return null;
+            }
+        };
+    }
 
-        tabulateSnapshotIds();
+    public void startBackgroundInit() {
+        if (!isBackgroundInitStarted()) {
+            worker.execute();
+        }
+    }
+
+    public boolean isBackgroundInitStarted() {
+        return !SwingWorker.StateValue.PENDING.equals(worker.getState());
+    }
+
+    public boolean isBackgoundInitDone() {
+        return SwingWorker.StateValue.DONE.equals(worker.getState());
     }
 
     private void tabulateSnapshotIds() throws IOException {
@@ -107,17 +126,17 @@ public class L1cScienceSmosFile extends L1cSmosFile implements SnapshotProvider 
             }
         }
 
-        snapshotIds = any.toArray(new Long[any.size()]);
-        xPolSnapshotIds = x.toArray(new Long[x.size()]);
-        yPolSnapshotIds = y.toArray(new Long[y.size()]);
-        xyPolSnapshotIds = xy.toArray(new Long[xy.size()]);
+        Long[] snapshotIds = any.toArray(new Long[any.size()]);
+        Long[] xPolSnapshotIds = x.toArray(new Long[x.size()]);
+        Long[] yPolSnapshotIds = y.toArray(new Long[y.size()]);
+        Long[] xyPolSnapshotIds = xy.toArray(new Long[xy.size()]);
 
         System.out.println("SmosFile: snapshotCount(x) = " + x.size());
         System.out.println("SmosFile: snapshotCount(y) = " + y.size());
         System.out.println("SmosFile: snapshotCount(xy) = " + xy.size());
         System.out.println("SmosFile: snapshotCount(all) = " + any.size());
 
-        snapshotIndexMap = new TreeMap<Long, Integer>();
+        final Map<Long, Integer> snapshotIndexMap = new TreeMap<Long, Integer>();
 
         final int snapshotIdIndex = snapshotType.getMemberIndex(SmosFormats.SNAPSHOT_ID_NAME);
         final int snapshotCount = snapshotList.getElementCount();
@@ -130,8 +149,14 @@ public class L1cScienceSmosFile extends L1cSmosFile implements SnapshotProvider 
             }
         }
 
+
         System.out.println("snapshotIds.length = " + snapshotIds.length);
         System.out.println("snapshotIndexMap.size() = " + snapshotIndexMap.size());
+
+//        this.snapshotIndexMap = snapshotIndexMap;
+        polMode = new SnapshotPolarisationMode(snapshotIndexMap, snapshotIds, xPolSnapshotIds, yPolSnapshotIds,
+                                               xyPolSnapshotIds);
+
     }
 
     @Override
@@ -305,14 +330,16 @@ public class L1cScienceSmosFile extends L1cSmosFile implements SnapshotProvider 
     }
 
     public final long getSnapshotIdMin() {
-        return snapshotIds[0];
+        return polMode.getAllSnapshotIds()[0];
     }
 
     public final long getSnapshotIdMax() {
+        final Long[] snapshotIds = polMode.getAllSnapshotIds();
         return snapshotIds[snapshotIds.length - 1];
     }
 
     public final int getSnapshotIndex(long snapshotId) {
+        final Map<Long, Integer> snapshotIndexMap = polMode.getSnapshotIndexMap();
         if (!snapshotIndexMap.containsKey(snapshotId)) {
             throw new IllegalArgumentException(MessageFormat.format("Illegal snapshot ID: {0}", snapshotId));
         }
@@ -385,21 +412,61 @@ public class L1cScienceSmosFile extends L1cSmosFile implements SnapshotProvider 
 
     @Override
     public final Long[] getAllSnapshotIds() {
-        return snapshotIds.clone();
+        return polMode.getAllSnapshotIds();
     }
 
     @Override
     public final Long[] getXPolSnapshotIds() {
-        return xPolSnapshotIds.clone();
+        return polMode.getXPolSnapshotIds();
     }
 
     @Override
     public final Long[] getYPolSnapshotIds() {
-        return yPolSnapshotIds.clone();
+        return polMode.getYPolSnapshotIds();
     }
 
     @Override
     public final Long[] getCrossPolSnapshotIds() {
-        return xyPolSnapshotIds.clone();
+        return polMode.getCrossPolSnapshotIds();
+    }
+
+    class SnapshotPolarisationMode {
+
+        private final Map<Long, Integer> snapshotIndexMap;
+
+        private final Long[] snapshotIds;
+        private final Long[] xPolSnapshotIds;
+        private final Long[] yPolSnapshotIds;
+        private final Long[] xyPolSnapshotIds;
+
+        SnapshotPolarisationMode(Map<Long, Integer> snapshotIndexMap, Long[] snapshotIds,
+                                 Long[] xPolSnapshotIds,
+                                 Long[] yPolSnapshotIds, Long[] xyPolSnapshotIds) {
+            this.snapshotIndexMap = Collections.unmodifiableMap(snapshotIndexMap);
+            this.snapshotIds = snapshotIds.clone();
+            this.xPolSnapshotIds = xPolSnapshotIds.clone();
+            this.yPolSnapshotIds = yPolSnapshotIds.clone();
+            this.xyPolSnapshotIds = xyPolSnapshotIds.clone();
+        }
+
+        public final Long[] getAllSnapshotIds() {
+            return snapshotIds.clone();
+        }
+
+        public final Long[] getXPolSnapshotIds() {
+            return xPolSnapshotIds.clone();
+        }
+
+        public final Long[] getYPolSnapshotIds() {
+            return yPolSnapshotIds.clone();
+        }
+
+        public final Long[] getCrossPolSnapshotIds() {
+            return xyPolSnapshotIds.clone();
+        }
+
+        public Map<Long, Integer> getSnapshotIndexMap() {
+            return Collections.unmodifiableMap(snapshotIndexMap);
+        }
     }
 }
