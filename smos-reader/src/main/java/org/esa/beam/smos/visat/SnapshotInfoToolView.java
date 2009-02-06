@@ -17,6 +17,7 @@ import org.esa.beam.framework.ui.product.ProductSceneView;
 import org.jfree.layout.CenterLayout;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -335,7 +336,9 @@ public class SnapshotInfoToolView extends SmosToolView {
         snapshotTable.addMouseListener(popupListener);
 
         final JPanel snapshotTablePanel = new JPanel(new BorderLayout());
-        snapshotTablePanel.add(new JLabel("Snapshot Information:"), BorderLayout.NORTH);
+        final JLabel tableLabel = new JLabel("Snapshot Information:");
+        tableLabel.setBorder(new EmptyBorder(4, 0, 0, 0));
+        snapshotTablePanel.add(tableLabel, BorderLayout.NORTH);
         snapshotTablePanel.add(new JScrollPane(snapshotTable), BorderLayout.CENTER);
         return snapshotTablePanel;
     }
