@@ -40,7 +40,7 @@ public class SmosWorldMapLayer {
         if (dirPath == null) {
             return null;
         }
-        MultiLevelSource multiLevelSource;
+        final MultiLevelSource multiLevelSource;
         try {
             multiLevelSource = TiledFileMultiLevelSource.create(new File(dirPath), false);
         } catch (IOException e) {

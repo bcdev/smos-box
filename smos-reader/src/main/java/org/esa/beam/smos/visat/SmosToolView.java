@@ -6,9 +6,9 @@ import com.bc.ceres.binio.SimpleType;
 import com.bc.ceres.binio.Type;
 import org.esa.beam.dataio.smos.SmosFile;
 import org.esa.beam.framework.datamodel.Product;
+import org.esa.beam.framework.ui.application.PageComponent;
 import org.esa.beam.framework.ui.application.support.AbstractToolView;
 import org.esa.beam.framework.ui.application.support.PageComponentListenerAdapter;
-import org.esa.beam.framework.ui.application.PageComponent;
 import org.esa.beam.framework.ui.product.ProductSceneView;
 
 import javax.swing.ImageIcon;
@@ -30,16 +30,32 @@ public abstract class SmosToolView extends AbstractToolView {
     protected SmosToolView() {
     }
 
-    public ProductSceneView getSelectedSmosView() {
-        return SmosBox.getInstance().getSmosViewSelectionService().getSelectedSceneView();
+    protected final SceneViewSelectionService getSmosViewSelectionService() {
+        return SmosBox.getInstance().getSmosViewSelectionService();
     }
 
-    public Product getSelectedSmosProduct() {
-        return SmosBox.getInstance().getSmosViewSelectionService().getSelectedSmosProduct();
+    protected final SnapshotSelectionService getSnapshotSelectionService() {
+        return SmosBox.getInstance().getSnapshotSelectionService();
     }
 
-    public SmosFile getSelectedSmosFile() {
-        return SmosBox.getInstance().getSmosViewSelectionService().getSelectedSmosFile();
+    protected final ProductSceneView getSelectedSmosView() {
+        return getSmosViewSelectionService().getSelectedSceneView();
+    }
+
+    protected final Product getSelectedSmosProduct() {
+        return getSmosViewSelectionService().getSelectedSmosProduct();
+    }
+
+    protected final SmosFile getSelectedSmosFile() {
+        return getSmosViewSelectionService().getSelectedSmosFile();
+    }
+
+    protected final long getSelectedSnapshotId(ProductSceneView view) {
+        return getSnapshotSelectionService().getSelectedSnapshotId(view);
+    }
+
+    protected final void setSelectedSnapshotId(ProductSceneView view, long id) {
+        getSnapshotSelectionService().setSelectedSnapshotId(view, id);
     }
 
     @Override
@@ -83,19 +99,19 @@ public abstract class SmosToolView extends AbstractToolView {
     @Override
     public void componentOpened() {
         svsl = new SVSL();
-        SmosBox.getInstance().getSmosViewSelectionService().addSceneViewSelectionListener(svsl);
-        realizeSmosView(SmosBox.getInstance().getSmosViewSelectionService().getSelectedSceneView());
+        getSmosViewSelectionService().addSceneViewSelectionListener(svsl);
+        realizeSmosView(getSelectedSmosView());
     }
 
     @Override
     public void componentClosed() {
-        SmosBox.getInstance().getSmosViewSelectionService().removeSceneViewSelectionListener(svsl);
+        getSmosViewSelectionService().removeSceneViewSelectionListener(svsl);
         realizeSmosView(null);
     }
 
     @Override
     public void componentShown() {
-        realizeSmosView(SmosBox.getInstance().getSmosViewSelectionService().getSelectedSceneView());
+        realizeSmosView(getSelectedSmosView());
     }
 
     @Override
@@ -124,52 +140,63 @@ public abstract class SmosToolView extends AbstractToolView {
     protected abstract void updateClientComponent(ProductSceneView smosView);
 
     public static Number getNumbericMember(CompoundData compoundData, int memberIndex) throws IOException {
-        Type memberType = compoundData.getCompoundType().getMemberType(memberIndex);
-        Number number;
+        final Type memberType = compoundData.getCompoundType().getMemberType(memberIndex);
+
         if (memberType == SimpleType.DOUBLE) {
-            number = compoundData.getDouble(memberIndex);
-        } else if (memberType == SimpleType.FLOAT) {
-            number = compoundData.getFloat(memberIndex);
-        } else if (memberType == SimpleType.ULONG) {
-            // This mask is used to obtain the value of an int as if it were unsigned.
-            BigInteger mask = BigInteger.valueOf(0xffffffffffffffffL);
-            BigInteger bi = BigInteger.valueOf(compoundData.getLong(memberIndex));
-            number = bi.and(mask);
-        } else if (memberType == SimpleType.LONG || memberType == SimpleType.UINT) {
-            number = compoundData.getDouble(memberIndex);
-        } else if (memberType == SimpleType.INT || memberType == SimpleType.USHORT) {
-            number = compoundData.getDouble(memberIndex);
-        } else if (memberType == SimpleType.SHORT || memberType == SimpleType.UBYTE) {
-            number = compoundData.getDouble(memberIndex);
-        } else if (memberType == SimpleType.BYTE) {
-            number = compoundData.getDouble(memberIndex);
-        } else {
-            number = null;
+            return compoundData.getDouble(memberIndex);
         }
-        return number;
+        if (memberType == SimpleType.FLOAT) {
+            return compoundData.getFloat(memberIndex);
+        }
+        if (memberType == SimpleType.ULONG) {
+            // This mask is used to obtain the value of an int as if it were unsigned.
+            // todo - write a test; according to the BigInteger API doc this cannot work as intended (rq-20090205)
+            final BigInteger mask = BigInteger.valueOf(0xffffffffffffffffL);
+            final BigInteger bi = BigInteger.valueOf(compoundData.getLong(memberIndex));
+            return bi.and(mask);
+        }
+        if (memberType == SimpleType.LONG || memberType == SimpleType.UINT) {
+            return compoundData.getDouble(memberIndex);
+        }
+        if (memberType == SimpleType.INT || memberType == SimpleType.USHORT) {
+            return compoundData.getDouble(memberIndex);
+        }
+        if (memberType == SimpleType.SHORT || memberType == SimpleType.UBYTE) {
+            return compoundData.getDouble(memberIndex);
+        }
+        if (memberType == SimpleType.BYTE) {
+            return compoundData.getDouble(memberIndex);
+        }
+
+        return null;
     }
 
     public static Class<? extends Number> getNumbericMemberType(CompoundType compoundData, int memberIndex) {
-        Type memberType = compoundData.getMemberType(memberIndex);
-        Class<? extends Number> numberClass;
+        final Type memberType = compoundData.getMemberType(memberIndex);
+
         if (memberType == SimpleType.DOUBLE) {
-            numberClass = Double.class;
-        } else if (memberType == SimpleType.FLOAT) {
-            numberClass = Float.class;
-        } else if (memberType == SimpleType.ULONG) {
-            numberClass = BigInteger.class;
-        } else if (memberType == SimpleType.LONG || memberType == SimpleType.UINT) {
-            numberClass = Long.class;
-        } else if (memberType == SimpleType.INT || memberType == SimpleType.USHORT) {
-            numberClass = Integer.class;
-        } else if (memberType == SimpleType.SHORT || memberType == SimpleType.UBYTE) {
-            numberClass = Short.class;
-        } else if (memberType == SimpleType.BYTE) {
-            numberClass = Byte.class;
-        } else {
-            numberClass = null;
+            return Double.class;
         }
-        return numberClass;
+        if (memberType == SimpleType.FLOAT) {
+            return Float.class;
+        }
+        if (memberType == SimpleType.ULONG) {
+            return BigInteger.class;
+        }
+        if (memberType == SimpleType.LONG || memberType == SimpleType.UINT) {
+            return Long.class;
+        }
+        if (memberType == SimpleType.INT || memberType == SimpleType.USHORT) {
+            return Integer.class;
+        }
+        if (memberType == SimpleType.SHORT || memberType == SimpleType.UBYTE) {
+            return Short.class;
+        }
+        if (memberType == SimpleType.BYTE) {
+            return Byte.class;
+        }
+        
+        return null;
     }
 
     protected final void setToolViewComponent(JComponent comp) {

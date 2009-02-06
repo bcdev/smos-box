@@ -6,7 +6,8 @@ import com.bc.ceres.glevel.MultiLevelImage;
 import org.esa.beam.dataio.smos.SmosFile;
 import org.esa.beam.dataio.smos.SmosProductReader;
 import org.esa.beam.framework.dataio.ProductReader;
-import org.esa.beam.framework.datamodel.*;
+import org.esa.beam.framework.datamodel.Band;
+import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.framework.ui.PixelPositionListener;
 import org.esa.beam.framework.ui.product.ProductSceneView;
 import org.esa.beam.visat.VisatApp;
@@ -25,7 +26,7 @@ public class SceneViewSelectionService {
     private final VisatApp visatApp;
     private final List<SelectionListener> selectionListeners;
     private final IFL ifl;
-    private PPL ppl;
+    private final PPL ppl;
 
     private ProductSceneView selectedSceneView;
 
@@ -46,17 +47,17 @@ public class SceneViewSelectionService {
         return selectedSceneView;
     }
 
-    private void setSelectedSceneView(ProductSceneView view) {
+    private void setSelectedSceneView(ProductSceneView newView) {
         ProductSceneView oldView = selectedSceneView;
         if (oldView != null) {
             oldView.removePixelPositionListener(ppl);
         }
-        if (oldView != view) {
-            if (view != null) {
-                Assert.argument(view.getProduct().getProductReader() instanceof SmosProductReader, "view");
+        if (oldView != newView) {
+            if (newView != null) {
+                Assert.argument(newView.getProduct().getProductReader() instanceof SmosProductReader, "view");
             }
-            selectedSceneView = view;
-            fireSelectionChange(oldView, selectedSceneView);
+            selectedSceneView = newView;
+            fireSelectionChange(oldView, newView);
             if (selectedSceneView != null) {
                 selectedSceneView.addPixelPositionListener(ppl);
             }
@@ -99,20 +100,6 @@ public class SceneViewSelectionService {
         selectionListeners.remove(selectionListener);
     }
 
-    private void setView(ProductSceneView view) {
-        if (selectedSceneView != view) {
-            if (view != null) {
-                if (view.getProduct().getProductReader() instanceof SmosProductReader) {
-                    setSelectedSceneView(view);
-                } else {
-                    setSelectedSceneView(null);
-                }
-            } else {
-                setSelectedSceneView(null);
-            }
-        }
-    }
-
     private void fireSelectionChange(ProductSceneView oldView, ProductSceneView newView) {
         for (SelectionListener selectionListener : selectionListeners) {
             selectionListener.handleSceneViewSelectionChanged(oldView, newView);
@@ -124,17 +111,24 @@ public class SceneViewSelectionService {
     }
 
     private class IFL extends InternalFrameAdapter {
-
         @Override
         public void internalFrameActivated(final InternalFrameEvent e) {
             final ProductSceneView view = getProductSceneViewByFrame(e);
-            setView(view);
+            if (view != null) {
+                if (view.getProduct().getProductReader() instanceof SmosProductReader) {
+                    setSelectedSceneView(view);
+                } else {
+                    setSelectedSceneView(null);
+                }
+            } else {
+                setSelectedSceneView(null);
+            }
         }
 
         @Override
         public void internalFrameDeactivated(final InternalFrameEvent e) {
             if (getSelectedSceneView() == getProductSceneViewByFrame(e)) {
-                setView(null);
+                setSelectedSceneView(null);
             }
         }
 

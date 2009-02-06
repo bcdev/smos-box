@@ -92,7 +92,6 @@ class SnapshotSelectorCombo {
         component.add(westPanel, BorderLayout.WEST);
         component.add(centerPanel, BorderLayout.CENTER);
         component.add(eastPanel, BorderLayout.EAST);
-        component.setBorder(BorderFactory.createTitledBorder("Snapshot Selection"));
         
         return component;
     }

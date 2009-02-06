@@ -26,6 +26,7 @@ class SnapshotSelector {
     SnapshotSelector() {
         spinner = new StateAwareSpinner();
         slider = new StateAwareSlider();
+        slider.setSnapToTicks(true);
         sliderInfo = new JTextField(10);
         sliderInfo.setEditable(false);
     }
