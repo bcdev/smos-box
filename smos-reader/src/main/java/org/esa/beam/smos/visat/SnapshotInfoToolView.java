@@ -270,15 +270,6 @@ public class SnapshotInfoToolView extends SmosToolView {
         return viewSettingsPanel;
     }
 
-    public static void main(String[] args) {
-        final JFrame frame = new JFrame("Test");
-        final SnapshotInfoToolView view = new SnapshotInfoToolView();
-        frame.setContentPane(view.createViewSettingsPanel());
-        frame.pack();
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setVisible(true);
-    }
-
     private void updateUI(ProductSceneView smosView) {
         final L1cScienceSmosFile smosFile = SmosBox.getL1cScienceSmosFile(smosView);
         snapshotSelectorCombo.setModel(new SnapshotSelectorComboModel(smosFile));
