@@ -92,18 +92,17 @@ class SnapshotSelectorCombo {
         component.add(westPanel, BorderLayout.WEST);
         component.add(centerPanel, BorderLayout.CENTER);
         component.add(eastPanel, BorderLayout.EAST);
-        
+
         return component;
     }
 
     private class SnapshotSelectorComboBox extends JComboBox {
         @Override
         public void setSelectedItem(Object object) {
-            super.setSelectedItem(object);
-
             if (model != null) {
-                snapshotSelector.setModel(model.getSelectedModel());
+                snapshotSelector.setModel(model.getModel(object));
             }
+            super.setSelectedItem(object);
         }
     }
 }

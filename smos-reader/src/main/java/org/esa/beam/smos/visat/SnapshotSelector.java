@@ -24,8 +24,8 @@ class SnapshotSelector {
     private SnapshotSelectorModel model;
 
     SnapshotSelector() {
-        spinner = new StateAwareSpinner();
-        slider = new StateAwareSlider();
+        spinner = new JSpinner();
+        slider = new JSlider();
         slider.setSnapToTicks(true);
         sliderInfo = new JTextField(10);
         sliderInfo.setEditable(false);
@@ -75,30 +75,6 @@ class SnapshotSelector {
             spinner.setModel(model.getSpinnerModel());
             slider.setModel(model.getSliderModel());
             sliderInfo.setDocument(model.getSliderInfoDocument());
-        }
-    }
-
-    private static final class StateAwareSpinner extends JSpinner {
-        @Override
-        public void setModel(SpinnerModel newModel) {
-            final SpinnerModel oldModel = getModel();
-
-            if (oldModel != newModel) {
-                super.setModel(newModel);
-                fireStateChanged();
-            }
-        }
-    }
-
-    private static final class StateAwareSlider extends JSlider {
-        @Override
-        public void setModel(BoundedRangeModel newModel) {
-            final BoundedRangeModel oldModel = getModel();
-
-            if (oldModel != newModel) {
-                super.setModel(newModel);
-                fireStateChanged();
-            }
         }
     }
 }

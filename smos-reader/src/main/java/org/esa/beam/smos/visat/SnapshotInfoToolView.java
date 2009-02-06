@@ -49,6 +49,12 @@ public class SnapshotInfoToolView extends SmosToolView {
 
         snapshotSelectorCombo = new SnapshotSelectorCombo();
         snapshotSelectorCombo.getSlider().addChangeListener(snapshotSliderListener);
+        snapshotSelectorCombo.getComboBox().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                updateTable(snapshotSelectorCombo.getSnapshotId());
+            }
+        });
         JComponent comboComponent = SnapshotSelectorCombo.createComponent(snapshotSelectorCombo, false);
         mainPanel.add(comboComponent, BorderLayout.NORTH);
 
@@ -57,8 +63,7 @@ public class SnapshotInfoToolView extends SmosToolView {
 
         JPanel viewSettingsPanel = createViewSettingsPanel();
         mainPanel.add(viewSettingsPanel, BorderLayout.SOUTH);
-
-        updateUiState();
+        
         return mainPanel;
     }
 
@@ -66,36 +71,18 @@ public class SnapshotInfoToolView extends SmosToolView {
     protected void updateClientComponent(ProductSceneView smosView) {
         final L1cScienceSmosFile smosFile = SmosBox.getL1cScienceSmosFile(smosView);
         if (smosFile != null) {
-            updateClientComponent(smosView, smosFile);
+            if (!smosFile.isBackgroundInitStarted()) {
+                smosFile.startBackgroundInit();
+            }
+            if (!smosFile.isBackgoundInitDone()) {
+                startPolModeInitWaiting(smosView, smosFile);
+                return;
+            }
+            updateUI(smosView);
+            updateTable(snapshotSelectorCombo.getSnapshotId());
         } else {
             super.realizeSmosView(null);
         }
-    }
-
-    private synchronized void updateClientComponent(ProductSceneView smosView, L1cScienceSmosFile smosFile) {
-        if (!smosFile.isBackgroundInitStarted()) {
-            smosFile.startBackgroundInit();
-        }
-        if (!smosFile.isBackgoundInitDone()) {
-            startPolModeInitWaiting(smosFile);
-            return;
-        }
-
-        realizeViewChange(smosView, smosFile);
-    }
-
-    private void realizeViewChange(ProductSceneView smosView, L1cScienceSmosFile smosFile) {
-        snapshotSelectorCombo.setModel(new SnapshotSelectorComboModel(smosFile));
-        snapshotTable.setEnabled(true);
-        if (synchroniseButtonModel.isSelected()) {
-            final long id = getSelectedSnapshotId(smosView);
-            if (id != -1) {
-                snapshotSelectorCombo.setSnapshotId(id);
-            } else {
-                browseButtonModel.setSelected(true);
-            }
-        }
-        updateUiState();
     }
 
     private void updateTable(long snapshotId) {
@@ -212,15 +199,16 @@ public class SnapshotInfoToolView extends SmosToolView {
     }
 
     private class ToggleSnapshotModeAction implements ActionListener {
-
         @Override
         public void actionPerformed(ActionEvent event) {
             final ProductSceneView smosView = getSelectedSmosView();
             if (snapshotButtonModel.isSelected()) {
-                setSelectedSnapshotId(smosView, snapshotSelectorCombo.getSnapshotId());
-                locateSnapshotIdOfView();
+                final long id = snapshotSelectorCombo.getSnapshotId();
+                setSelectedSnapshotId(smosView, id);
+            } else {
+                setSelectedSnapshotId(smosView, -1);
             }
-            updateUiState();
+            updateUI(smosView);
             updateImageLayer(smosView);
         }
     }
@@ -243,26 +231,7 @@ public class SnapshotInfoToolView extends SmosToolView {
         synchroniseButtonModel.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                updateUiState();
-                if (synchroniseButtonModel.isSelected()) {
-                    final ProductSceneView smosView = getSelectedSmosView();
-                    if (smosView != null) {
-                        final String bandName = smosView.getRaster().getName();
-                        if (bandName.endsWith("_X")) {
-                            snapshotSelectorCombo.getComboBox().setSelectedIndex(1);
-                        } else if (bandName.endsWith("_Y")) {
-                            snapshotSelectorCombo.getComboBox().setSelectedIndex(2);
-                        } else if (bandName.endsWith("_XY")) {
-                            snapshotSelectorCombo.getComboBox().setSelectedIndex(3);
-                        }
-                        final long id = getSelectedSnapshotId(smosView);
-                        if (id == -1) {
-                            setSelectedSnapshotId(smosView, snapshotSelectorCombo.getSnapshotId());
-                        } else {
-                            snapshotSelectorCombo.setSnapshotId(id);
-                        }
-                    }
-                }
+                updateUI(getSelectedSmosView());
             }
         });
         viewSettingsPanel.add(synchroniseCheckBox, BorderLayout.NORTH);
@@ -302,16 +271,33 @@ public class SnapshotInfoToolView extends SmosToolView {
         return viewSettingsPanel;
     }
 
-    private void updateUiState() {
-        final boolean selected = synchroniseButtonModel.isSelected();
+    private void updateUI(ProductSceneView smosView) {
+        final L1cScienceSmosFile smosFile = SmosBox.getL1cScienceSmosFile(smosView);
+        snapshotSelectorCombo.setModel(new SnapshotSelectorComboModel(smosFile));
+        final boolean sync = synchroniseButtonModel.isSelected();
+        if (sync) {
+            final long id = getSelectedSnapshotId(smosView);
+            if (id != -1) {
+                snapshotSelectorCombo.setSnapshotId(id);
+                snapshotButtonModel.setSelected(true);
+            } else {
+                browseButtonModel.setSelected(true);
+            }
+            final String bandName = smosView.getRaster().getName();
+            if (bandName.endsWith("_X")) {
+                snapshotSelectorCombo.getComboBox().setSelectedIndex(1);
+            } else if (bandName.endsWith("_Y")) {
+                snapshotSelectorCombo.getComboBox().setSelectedIndex(2);
+            } else if (bandName.contains("_XY")) {
+                snapshotSelectorCombo.getComboBox().setSelectedIndex(3);
+            }
+        }
 
-        snapshotSelectorCombo.getComboBox().setEnabled(!selected);
-
-        browseButtonModel.setEnabled(selected);
-        snapshotButtonModel.setEnabled(selected);
-
-        followModeButtonModel.setEnabled(selected && snapshotButtonModel.isSelected());
-        locateSnapshotButtonModel.setEnabled(selected && snapshotButtonModel.isSelected());
+        snapshotSelectorCombo.getComboBox().setEnabled(!sync);
+        browseButtonModel.setEnabled(sync);
+        snapshotButtonModel.setEnabled(sync);
+        followModeButtonModel.setEnabled(sync && snapshotButtonModel.isSelected());
+        locateSnapshotButtonModel.setEnabled(sync);
     }
 
     private JPanel createSnapshotTablePanel() {
@@ -351,7 +337,7 @@ public class SnapshotInfoToolView extends SmosToolView {
         return snapshotTablePanel;
     }
 
-    private void startPolModeInitWaiting(L1cScienceSmosFile smosFile) {
+    private void startPolModeInitWaiting(ProductSceneView smosView, L1cScienceSmosFile smosFile) {
         final JPanel centerPanel = new JPanel(new CenterLayout());
         centerPanel.setPreferredSize(new Dimension(300, 200));
         final JPanel panel = new JPanel(new BorderLayout());
@@ -363,17 +349,19 @@ public class SnapshotInfoToolView extends SmosToolView {
         centerPanel.add(panel);
         setToolViewComponent(centerPanel);
         final ProgressMonitor progressMonitor = new ProgressBarProgressMonitor(progressBar, message);
-        final SwingWorker worker = new PolModeWaiter(smosFile, progressMonitor);
+        final SwingWorker worker = new PolModeWaiter(smosView, smosFile, progressMonitor);
         worker.execute();
     }
 
 
     private class PolModeWaiter extends SwingWorker {
 
+        private final ProductSceneView smosView;
         private final L1cScienceSmosFile smosFile;
         private final ProgressMonitor pm;
 
-        private PolModeWaiter(L1cScienceSmosFile smosFile, ProgressMonitor progressMonitor) {
+        private PolModeWaiter(ProductSceneView smosView, L1cScienceSmosFile smosFile, ProgressMonitor progressMonitor) {
+            this.smosView = smosView;
             this.smosFile = smosFile;
             pm = progressMonitor;
         }
@@ -395,7 +383,7 @@ public class SnapshotInfoToolView extends SmosToolView {
         @Override
         protected void done() {
             setToolViewComponent(getClientComponent());
-            updateClientComponent(getSelectedSmosView());
+            updateClientComponent(smosView);
         }
     }
 

@@ -44,7 +44,11 @@ class SnapshotSelectorComboModel implements ComboBoxModel {
 
     @SuppressWarnings({"SuspiciousMethodCalls"})
     SnapshotSelectorModel getSelectedModel() {
-        return map.get(comboBoxModel.getSelectedItem());
+        return getModel(comboBoxModel.getSelectedItem());
+    }
+
+    SnapshotSelectorModel getModel(Object item) {
+        return map.get(item);
     }
 
     @Override
