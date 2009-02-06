@@ -9,6 +9,7 @@ import com.bc.ceres.glevel.support.DefaultMultiLevelImage;
 import com.bc.ceres.swing.progress.ProgressMonitorSwingWorker;
 import org.esa.beam.dataio.smos.*;
 import org.esa.beam.framework.ui.product.ProductSceneView;
+import org.esa.beam.framework.ui.TableLayout;
 import org.jfree.layout.CenterLayout;
 
 import javax.swing.*;
@@ -20,6 +21,8 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.event.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.RenderedImage;
@@ -221,12 +224,7 @@ public class SnapshotInfoToolView extends SmosToolView {
     }
 
     private JPanel createViewSettingsPanel() {
-        JPanel viewSettingsPanel = new JPanel(new BorderLayout(4, 4));
-        viewSettingsPanel.setBorder(BorderFactory.createTitledBorder("View Settings"));
-
-        final JPanel dataSourcePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 2));
-
-        JCheckBox synchroniseCheckBox = new JCheckBox("Synchronise with L1C view", false);
+        JCheckBox synchroniseCheckBox = new JCheckBox("Synchronise with view", false);
         synchroniseButtonModel = synchroniseCheckBox.getModel();
         synchroniseButtonModel.addActionListener(new ActionListener() {
             @Override
@@ -234,41 +232,51 @@ public class SnapshotInfoToolView extends SmosToolView {
                 updateUI(getSelectedSmosView());
             }
         });
-        viewSettingsPanel.add(synchroniseCheckBox, BorderLayout.NORTH);
 
 
-        final Border outerBorder = BorderFactory.createEmptyBorder(0, 11, 0, 0);
-        final Border titledBorder = BorderFactory.createTitledBorder("Data Source");
-        dataSourcePanel.setBorder(BorderFactory.createCompoundBorder(outerBorder, titledBorder));
+        final ToggleSnapshotModeAction toggleSnapshotModeAction = new ToggleSnapshotModeAction();
+
+        final JRadioButton browseButton = new JRadioButton("Browse", true);
+        browseButtonModel = browseButton.getModel();
+        browseButtonModel.addActionListener(toggleSnapshotModeAction);
+
+        final JRadioButton snapshotButton = new JRadioButton("Snapshot", false);
+        snapshotButtonModel = snapshotButton.getModel();
+        snapshotButtonModel.addActionListener(toggleSnapshotModeAction);
 
         final ButtonGroup buttonGroup = new ButtonGroup();
-        final JRadioButton browseButton = new JRadioButton("Browse", true);
-        final JRadioButton snapshotButton = new JRadioButton("Snapshot", false);
         buttonGroup.add(browseButton);
         buttonGroup.add(snapshotButton);
-        browseButtonModel = browseButton.getModel();
-        snapshotButtonModel = snapshotButton.getModel();
-        final ToggleSnapshotModeAction toggleSnapshotModeAction = new ToggleSnapshotModeAction();
-        snapshotButtonModel.addActionListener(toggleSnapshotModeAction);
-        browseButtonModel.addActionListener(toggleSnapshotModeAction);
-        final JPanel buttonGroupPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        buttonGroupPanel.add(browseButton);
-        buttonGroupPanel.add(snapshotButton);
-        dataSourcePanel.add(buttonGroupPanel);
 
-        JCheckBox followModeCheckBox = new JCheckBox("Follow");
+        final JCheckBox followModeCheckBox = new JCheckBox("Follow");
         followModeButtonModel = followModeCheckBox.getModel();
-        final JPanel locateOptionPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        locateOptionPanel.add(followModeCheckBox);
 
-        JButton locateSnapshotButton = new JButton("Locate in view");
+        final JButton locateSnapshotButton = new JButton("Locate in view");
         locateSnapshotButton.addActionListener(new LocateSnapshotAction());
         locateSnapshotButton.setToolTipText("Locate selected snapshot in view");
         locateSnapshotButtonModel = locateSnapshotButton.getModel();
-        locateOptionPanel.add(locateSnapshotButton);
-        dataSourcePanel.add(locateOptionPanel);
-        viewSettingsPanel.add(dataSourcePanel);
+
+        final TableLayout viewSettingsLayout = new TableLayout(4);
+        viewSettingsLayout.setTableAnchor(TableLayout.Anchor.NORTHWEST);
+        viewSettingsLayout.setColumnWeightX(3, 1.0);  // spacer column
+        JPanel viewSettingsPanel = new JPanel(viewSettingsLayout);
+        viewSettingsPanel.add(synchroniseCheckBox, new TableLayout.Cell(0,0));
+        viewSettingsPanel.add(browseButton, new TableLayout.Cell(0,1));
+        viewSettingsPanel.add(followModeCheckBox, new TableLayout.Cell(0,2));
+        viewSettingsPanel.add(snapshotButton, new TableLayout.Cell(1,1));
+        viewSettingsPanel.add(locateSnapshotButton, new TableLayout.Cell(1,2));
+
+        viewSettingsPanel.add(new JPanel(), new TableLayout.Cell(0,3));    // spacer column
         return viewSettingsPanel;
+    }
+
+    public static void main(String[] args) {
+        final JFrame frame = new JFrame("Test");
+        final SnapshotInfoToolView view = new SnapshotInfoToolView();
+        frame.setContentPane(view.createViewSettingsPanel());
+        frame.pack();
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setVisible(true);
     }
 
     private void updateUI(ProductSceneView smosView) {
