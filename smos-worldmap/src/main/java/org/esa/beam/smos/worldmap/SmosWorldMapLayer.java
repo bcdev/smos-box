@@ -20,12 +20,18 @@ import org.esa.beam.glevel.TiledFileMultiLevelSource;
  * @since BEAM 4.6
  */
 public class SmosWorldMapLayer {
+
     private static final String WORLD_IMAGE_DIR_PROPERTY_NAME = "org.esa.beam.pview.worldImageDir";
     private static final String WORLD_MAP_LAYER_NAME = "World Map (NASA Blue Marble)";
 
     private SmosWorldMapLayer() {
     }
 
+    /**
+     * Creates a new world map layer. Its visibility state is initially set to not visible.
+     *
+     * @return The world map layer.
+     */
     public static Layer createWorldMapLayer() {
         String dirPath = System.getProperty(WORLD_IMAGE_DIR_PROPERTY_NAME);
         if (dirPath == null || dirPath.isEmpty()) {
@@ -43,7 +49,7 @@ public class SmosWorldMapLayer {
         }
         final ImageLayer worldMapLayer = new ImageLayer(multiLevelSource);
         worldMapLayer.setName(WORLD_MAP_LAYER_NAME);
-        worldMapLayer.setVisible(true);
+        worldMapLayer.setVisible(false);
         worldMapLayer.getStyle().setOpacity(1.0);
         return worldMapLayer;
 

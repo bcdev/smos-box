@@ -47,6 +47,7 @@ public class SmosBox implements VisatPlugIn {
                         Layer worldLayer = SmosWorldMapLayer.createWorldMapLayer();
                         if (worldLayer != null) {
                             rootLayer.getChildren().add(worldLayer);
+                            worldLayer.setVisible(true);
                         }
                     }
                 }
