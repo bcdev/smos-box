@@ -7,31 +7,51 @@ import com.bc.ceres.core.ProgressMonitor;
 import com.bc.ceres.glayer.support.ImageLayer;
 import com.bc.ceres.glevel.support.DefaultMultiLevelImage;
 import com.bc.ceres.swing.progress.ProgressMonitorSwingWorker;
+import com.bc.ceres.grender.Viewport;
 import org.esa.beam.dataio.smos.GridPointValueProvider;
 import org.esa.beam.dataio.smos.L1cFieldValueProvider;
 import org.esa.beam.dataio.smos.L1cScienceSmosFile;
-import org.esa.beam.dataio.smos.SmosFile;
 import org.esa.beam.dataio.smos.SmosMultiLevelSource;
 import org.esa.beam.framework.ui.TableLayout;
 import org.esa.beam.framework.ui.product.ProductSceneView;
 import org.jfree.layout.CenterLayout;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
+import javax.swing.ButtonModel;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.JProgressBar;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.SwingWorker;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Rectangle2D;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
 import java.awt.image.RenderedImage;
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
@@ -45,7 +65,7 @@ public class SnapshotInfoToolView extends SmosToolView {
     private ButtonModel browseButtonModel;
     private ButtonModel snapshotButtonModel;
     private ButtonModel followModeButtonModel;
-    private ButtonModel synchroniseButtonModel;
+    private ButtonModel synchronizeButtonModel;
     private SliderChangeListener snapshotSliderListener;
 
     @Override
@@ -71,7 +91,7 @@ public class SnapshotInfoToolView extends SmosToolView {
 
         JPanel viewSettingsPanel = createViewSettingsPanel();
         mainPanel.add(viewSettingsPanel, BorderLayout.SOUTH);
-        
+
         return mainPanel;
     }
 
@@ -154,37 +174,10 @@ public class SnapshotInfoToolView extends SmosToolView {
         }
     }
 
-    private void locateSnapshotIdOfView() {
-        SmosFile file = getSelectedSmosFile();
-        if (file instanceof L1cScienceSmosFile) {
-            final L1cScienceSmosFile l1cScienceSmosFile = (L1cScienceSmosFile) file;
-            final long snapshotId = snapshotSelectorCombo.getSnapshotId();
-            ProgressMonitorSwingWorker<Rectangle2D, Object> pmsw = new ProgressMonitorSwingWorker<Rectangle2D, Object>(
-                    getPaneControl(), "Computing snapshot region") {
-                @Override
-                protected Rectangle2D doInBackground(ProgressMonitor pm) throws Exception {
-                    return l1cScienceSmosFile.computeSnapshotRegion(snapshotId, pm);
-                }
-
-                @Override
-                protected void done() {
-                    try {
-                        Rectangle2D region = get();
-                        if (region != null) {
-                            getSelectedSmosView().getLayerCanvas().getViewport().zoom(region);
-                        } else {
-                            JOptionPane.showMessageDialog(getPaneControl(), "No snapshot found with ID=" + snapshotId);
-                        }
-                    } catch (ExecutionException e) {
-                        e.printStackTrace();
-                    } catch (InterruptedException e) {
-                        e.getCause().printStackTrace();
-                        JOptionPane.showMessageDialog(getPaneControl(), "Error:\n" + e.getCause().getMessage());
-                    }
-                }
-            };
-
-            pmsw.execute();
+    private void locateSnapshotId(final ProductSceneView smosView, final long id) {
+        final L1cScienceSmosFile smosFile = SmosBox.getL1cScienceSmosFile(smosView);
+        if (smosFile != null) {
+            new LocateSnapshotWorker(getPaneControl(), smosView, smosFile, id).execute();
         }
     }
 
@@ -196,11 +189,14 @@ public class SnapshotInfoToolView extends SmosToolView {
             if (snapshotSelectorCombo.isAdjusting()) {
                 return;
             }
-            if (synchroniseButtonModel.isSelected() && snapshotButtonModel.isSelected()) {
-                final ProductSceneView selectedSmosView = getSelectedSmosView();
-                if (selectedSmosView != null) {
-                    setSelectedSnapshotId(selectedSmosView, id);
-                    updateImageLayer(selectedSmosView);
+            if (synchronizeButtonModel.isSelected() && snapshotButtonModel.isSelected()) {
+                final ProductSceneView smosView = getSelectedSmosView();
+                if (smosView != null) {
+                    setSelectedSnapshotId(smosView, id);
+                    if (followModeButtonModel.isSelected()) {
+                        locateSnapshotId(smosView, id);
+                    }
+                    updateImageLayer(smosView);
                 }
             }
         }
@@ -213,6 +209,9 @@ public class SnapshotInfoToolView extends SmosToolView {
             if (snapshotButtonModel.isSelected()) {
                 final long id = snapshotSelectorCombo.getSnapshotId();
                 setSelectedSnapshotId(smosView, id);
+                if (followModeButtonModel.isSelected()) {
+                    locateSnapshotId(smosView, id);
+                }
             } else {
                 setSelectedSnapshotId(smosView, -1);
             }
@@ -224,14 +223,15 @@ public class SnapshotInfoToolView extends SmosToolView {
     private class LocateSnapshotAction implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent event) {
-            locateSnapshotIdOfView();
+            final ProductSceneView smosView = getSelectedSmosView();
+            locateSnapshotId(smosView, getSelectedSnapshotId(smosView));
         }
     }
 
     private JPanel createViewSettingsPanel() {
         JCheckBox synchroniseCheckBox = new JCheckBox("Synchronise with view", false);
-        synchroniseButtonModel = synchroniseCheckBox.getModel();
-        synchroniseButtonModel.addActionListener(new ActionListener() {
+        synchronizeButtonModel = synchroniseCheckBox.getModel();
+        synchronizeButtonModel.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 updateUI(getSelectedSmosView());
@@ -253,7 +253,7 @@ public class SnapshotInfoToolView extends SmosToolView {
         buttonGroup.add(browseButton);
         buttonGroup.add(snapshotButton);
 
-        final JCheckBox followModeCheckBox = new JCheckBox("Follow");
+        final JCheckBox followModeCheckBox = new JCheckBox("Follow", true);
         followModeButtonModel = followModeCheckBox.getModel();
 
         final JButton locateSnapshotButton = new JButton("Locate in view");
@@ -265,20 +265,20 @@ public class SnapshotInfoToolView extends SmosToolView {
         viewSettingsLayout.setTableAnchor(TableLayout.Anchor.NORTHWEST);
         viewSettingsLayout.setColumnWeightX(3, 1.0);  // spacer column
         JPanel viewSettingsPanel = new JPanel(viewSettingsLayout);
-        viewSettingsPanel.add(synchroniseCheckBox, new TableLayout.Cell(0,0));
-        viewSettingsPanel.add(browseButton, new TableLayout.Cell(0,1));
-        viewSettingsPanel.add(followModeCheckBox, new TableLayout.Cell(0,2));
-        viewSettingsPanel.add(snapshotButton, new TableLayout.Cell(1,1));
-        viewSettingsPanel.add(locateSnapshotButton, new TableLayout.Cell(1,2));
+        viewSettingsPanel.add(synchroniseCheckBox, new TableLayout.Cell(0, 0));
+        viewSettingsPanel.add(browseButton, new TableLayout.Cell(0, 1));
+        viewSettingsPanel.add(followModeCheckBox, new TableLayout.Cell(0, 2));
+        viewSettingsPanel.add(snapshotButton, new TableLayout.Cell(1, 1));
+        viewSettingsPanel.add(locateSnapshotButton, new TableLayout.Cell(1, 2));
 
-        viewSettingsPanel.add(new JPanel(), new TableLayout.Cell(0,3));    // spacer column
+        viewSettingsPanel.add(new JPanel(), new TableLayout.Cell(0, 3));    // spacer column
         return viewSettingsPanel;
     }
 
     private void updateUI(ProductSceneView smosView) {
         final L1cScienceSmosFile smosFile = SmosBox.getL1cScienceSmosFile(smosView);
         snapshotSelectorCombo.setModel(new SnapshotSelectorComboModel(smosFile));
-        final boolean sync = synchroniseButtonModel.isSelected();
+        final boolean sync = synchronizeButtonModel.isSelected();
         if (sync) {
             final long id = getSelectedSnapshotId(smosView);
             if (id != -1) {
@@ -301,7 +301,7 @@ public class SnapshotInfoToolView extends SmosToolView {
         browseButtonModel.setEnabled(sync);
         snapshotButtonModel.setEnabled(sync);
         followModeButtonModel.setEnabled(sync && snapshotButtonModel.isSelected());
-        locateSnapshotButtonModel.setEnabled(sync);
+        locateSnapshotButtonModel.setEnabled(sync && snapshotButtonModel.isSelected());
     }
 
     private JPanel createSnapshotTablePanel() {
@@ -417,4 +417,51 @@ public class SnapshotInfoToolView extends SmosToolView {
         }
     }
 
+    private static class LocateSnapshotWorker extends ProgressMonitorSwingWorker<Rectangle2D, Object> {
+        private final Component paneControl;
+        private final ProductSceneView smosView;
+        private final L1cScienceSmosFile smosFile;
+        private final long id;
+
+        private LocateSnapshotWorker(Container paneControl,
+                                     ProductSceneView smosView,
+                                     L1cScienceSmosFile smosFile,
+                                     long id) {
+            super(paneControl, "Computing snapshot region");
+            this.paneControl = paneControl;
+            this.smosView = smosView;
+            this.smosFile = smosFile;
+            this.id = id;
+        }
+
+        @Override
+        protected Rectangle2D doInBackground(ProgressMonitor pm) throws Exception {
+            return smosFile.computeSnapshotRegion(id, pm);
+        }
+
+        @Override
+        protected void done() {
+            try {
+                final Rectangle2D region = get();
+                if (region != null) {
+                    final Viewport vp = smosView.getLayerCanvas().getViewport();
+                    final AffineTransform m2v = vp.getModelToViewTransform();
+                    final Point2D.Double center = new Point2D.Double(region.getCenterX(), region.getCenterY());
+                    m2v.transform(center, center);
+                    final Rectangle viewBounds = vp.getViewBounds();
+                    final double vx = viewBounds.getCenterX();
+                    final double vy = viewBounds.getCenterY();
+                    vp.moveViewDelta(vx - center.getX(), vy - center.getY());
+                } else {
+                    JOptionPane.showMessageDialog(paneControl,
+                                                  MessageFormat.format("No snapshot found with ID = {0}", id));
+                }
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                JOptionPane.showMessageDialog(paneControl,
+                                              MessageFormat.format("Error:\n{0}", e.getCause().getMessage()));
+            }
+        }
+    }
 }
