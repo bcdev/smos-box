@@ -34,14 +34,14 @@ public class SmosFile implements GridPointDataProvider {
     private final File file;
     private final DataFormat format;
     private final DataContext dataContext;
-    private final CompoundData dataBlock;
 
+    private final CompoundData dataBlock;
     private final SequenceData gridPointList;
     private final CompoundType gridPointType;
     private final int gridPointIdIndex;
     private final int[] gridPointIndexes;
-    private final Area region;
 
+    private final Area region;
     private int minSeqnum;
     private int maxSeqnum;
 

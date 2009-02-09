@@ -42,6 +42,8 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Rectangle;
+import java.awt.FlowLayout;
+import java.awt.ComponentOrientation;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -243,7 +245,7 @@ public class SnapshotInfoToolView extends SmosToolView {
         synchronizeButtonModel.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                updateUI(getSelectedSmosView(), true);
+                updateUI(getSelectedSmosView(), false);
             }
         });
 
@@ -270,17 +272,26 @@ public class SnapshotInfoToolView extends SmosToolView {
         locateSnapshotButton.setToolTipText("Locate selected snapshot in view");
         locateSnapshotButtonModel = locateSnapshotButton.getModel();
 
-        final TableLayout viewSettingsLayout = new TableLayout(4);
-        viewSettingsLayout.setTableAnchor(TableLayout.Anchor.NORTHWEST);
-        viewSettingsLayout.setColumnWeightX(3, 1.0);  // spacer column
-        JPanel viewSettingsPanel = new JPanel(viewSettingsLayout);
-        viewSettingsPanel.add(synchroniseCheckBox, new TableLayout.Cell(0, 0));
-        viewSettingsPanel.add(browseButton, new TableLayout.Cell(0, 1));
-        viewSettingsPanel.add(followModeCheckBox, new TableLayout.Cell(0, 2));
-        viewSettingsPanel.add(snapshotButton, new TableLayout.Cell(1, 1));
-        viewSettingsPanel.add(locateSnapshotButton, new TableLayout.Cell(1, 2));
+//        code using tabular layout - replaced by flow layout (rq-20090209)
+//        final TableLayout viewSettingsLayout = new TableLayout(4);
+//        viewSettingsLayout.setTableAnchor(TableLayout.Anchor.NORTHWEST);
+//        viewSettingsLayout.setColumnWeightX(3, 1.0);  // spacer column
+//        JPanel viewSettingsPanel = new JPanel(viewSettingsLayout);
+//        viewSettingsPanel.add(synchroniseCheckBox, new TableLayout.Cell(0, 0));
+//        viewSettingsPanel.add(browseButton, new TableLayout.Cell(0, 1));
+//        viewSettingsPanel.add(followModeCheckBox, new TableLayout.Cell(0, 2));
+//        viewSettingsPanel.add(snapshotButton, new TableLayout.Cell(1, 1));
+//        viewSettingsPanel.add(locateSnapshotButton, new TableLayout.Cell(1, 2));
+//        viewSettingsPanel.add(new JPanel(), new TableLayout.Cell(0, 3));    // spacer column
 
-        viewSettingsPanel.add(new JPanel(), new TableLayout.Cell(0, 3));    // spacer column
+        JPanel viewSettingsPanel = new JPanel(new FlowLayout(FlowLayout.LEADING, 4, 4));
+        viewSettingsPanel.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+        viewSettingsPanel.add(synchroniseCheckBox);
+        viewSettingsPanel.add(browseButton);
+        viewSettingsPanel.add(snapshotButton);
+        viewSettingsPanel.add(followModeCheckBox);
+        viewSettingsPanel.add(locateSnapshotButton);
+
         return viewSettingsPanel;
     }
 

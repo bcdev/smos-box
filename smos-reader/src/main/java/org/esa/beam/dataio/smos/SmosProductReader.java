@@ -146,14 +146,14 @@ public class SmosProductReader extends AbstractProductReader {
         } else if (formatName.contains("MIR_SCLD1C")
                 || formatName.contains("MIR_SCSD1C")) {
             addL1cFlagCoding(product);
-            final L1cScienceSmosFile scienceSmosFile = new L1cScienceSmosFile(dblFile, format);
+            final L1cScienceSmosFile scienceSmosFile = new L1cScienceSmosFile(dblFile, format, false);
             scienceSmosFile.startBackgroundInit();
             smosFile = scienceSmosFile;
             addDualPolBands(product, ((L1cSmosFile) smosFile).getBtDataType());
         } else if (formatName.contains("MIR_SCLF1C")
                 || formatName.contains("MIR_SCSF1C")) {
             addL1cFlagCoding(product);
-            final L1cScienceSmosFile scienceSmosFile = new L1cScienceSmosFile(dblFile, format);
+            final L1cScienceSmosFile scienceSmosFile = new L1cScienceSmosFile(dblFile, format, true);
             scienceSmosFile.startBackgroundInit();
             smosFile = scienceSmosFile;
             addFullPolScienceBands(product, ((L1cSmosFile) smosFile).getBtDataType());

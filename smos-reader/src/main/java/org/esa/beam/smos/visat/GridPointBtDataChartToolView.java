@@ -1,6 +1,7 @@
 package org.esa.beam.smos.visat;
 
 import org.esa.beam.dataio.smos.SmosFormats;
+import org.esa.beam.dataio.smos.L1cScienceSmosFile;
 import org.esa.beam.framework.ui.product.ProductSceneView;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -18,6 +19,8 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.FlowLayout;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 import java.io.IOException;
 
 public class GridPointBtDataChartToolView extends GridPointBtDataToolView {
@@ -29,9 +32,6 @@ public class GridPointBtDataChartToolView extends GridPointBtDataToolView {
     private JCheckBox[] modeCheckers;
     private static final double INCIDENCE_ANGLE_FACTOR = (90.0 / (1 << 16));
     private static final double NOISE_FACTOR = (50.0 / (1 << 16));
-
-    public GridPointBtDataChartToolView() {
-    }
 
     @Override
     protected JComponent createGridPointComponent() {
@@ -66,21 +66,29 @@ public class GridPointBtDataChartToolView extends GridPointBtDataToolView {
 
     @Override
     protected void updateClientComponent(ProductSceneView smosView) {
-        // todo - enable/disable HV modes depending on D1C/F1C
-        for (JCheckBox modeChecker : modeCheckers) {
-            modeChecker.setEnabled(smosView != null);
+        final L1cScienceSmosFile smosFile = SmosBox.getL1cScienceSmosFile(smosView);
+        if (smosFile != null) {
+            modeCheckers[0].setEnabled(true);
+            modeCheckers[1].setEnabled(true);
+            modeCheckers[2].setEnabled(smosFile.isFullPol());
         }
     }
 
     @Override
     protected JComponent createGridPointComponentOptionsComponent() {
         modeCheckers = new JCheckBox[]{
-                new JCheckBox("H", true),
-                new JCheckBox("V", true),
-                new JCheckBox("HV", true),
+                new JCheckBox("X", true),
+                new JCheckBox("Y", true),
+                new JCheckBox("XY", true),
         };
         final JPanel optionsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 2, 2));
         for (JCheckBox modeChecker : modeCheckers) {
+            modeChecker.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    updateGridPointBtDataComponent();
+                }
+            });
             optionsPanel.add(modeChecker);
         }
         return optionsPanel;
@@ -90,14 +98,12 @@ public class GridPointBtDataChartToolView extends GridPointBtDataToolView {
     protected void updateGridPointBtDataComponent(GridPointBtDataset ds) {
         dataset.removeAllSeries();
 
-
         int ix = ds.getColumnIndex("Incidence_Angle");
         int iq = ds.getColumnIndex("Flags");
         int id = ds.getColumnIndex("Pixel_Radiometric_Accuracy");
         if (ix != -1 && iq != -1 && id != -1) {
             int iy1 = ds.getColumnIndex("BT_Value");
             if (iy1 != -1) {
-
                 YIntervalSeries series1 = new YIntervalSeries("BT_H");
                 YIntervalSeries series2 = new YIntervalSeries("BT_V");
                 boolean m1 = modeCheckers[0].isSelected();
@@ -167,6 +173,4 @@ public class GridPointBtDataChartToolView extends GridPointBtDataToolView {
         dataset.removeAllSeries();
         plot.setNoDataMessage("No data");
     }
-
-
 }

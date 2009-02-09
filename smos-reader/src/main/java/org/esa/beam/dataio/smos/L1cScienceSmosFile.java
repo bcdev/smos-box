@@ -48,20 +48,20 @@ public class L1cScienceSmosFile extends L1cSmosFile implements SnapshotProvider 
     public static final float MAX_BROWSE_INCIDENCE_ANGLE = 52.5f;
     public static final float INCIDENCE_ANGLE_FACTOR = 0.001373291f; // 90.0 / 2^16
 
+    private final boolean fullPol;
     private final int flagsIndex;
-    private final int incidenceAngleIndex;
 
+    private final int incidenceAngleIndex;
     private final int snapshotIdOfPixelIndex;
     private final SequenceData snapshotList;
-    private final CompoundType snapshotType;
 
+    private final CompoundType snapshotType;
     private volatile SwingWorker worker;
     private volatile SnapshotPolarisationMode polMode;
-    private HashMap<Long,List<Long>> longListHashMap;
 
-
-    public L1cScienceSmosFile(File file, DataFormat format) throws IOException {
+    public L1cScienceSmosFile(File file, DataFormat format, boolean fullPol) throws IOException {
         super(file, format);
+        this.fullPol = fullPol;
 
         flagsIndex = getBtDataType().getMemberIndex(SmosFormats.BT_FLAGS_NAME);
         incidenceAngleIndex = this.btDataType.getMemberIndex(SmosFormats.BT_INCIDENCE_ANGLE_NAME);
@@ -79,6 +79,10 @@ public class L1cScienceSmosFile extends L1cSmosFile implements SnapshotProvider 
                 return null;
             }
         };
+    }
+
+    public boolean isFullPol() {
+        return fullPol;
     }
 
     public void startBackgroundInit() {

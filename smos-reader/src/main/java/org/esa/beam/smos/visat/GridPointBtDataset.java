@@ -56,6 +56,7 @@ class GridPointBtDataset {
             number = compoundData.getFloat(memberIndex);
         } else if (memberType == SimpleType.ULONG) {
             // This mask is used to obtain the value of an int as if it were unsigned.
+            // todo - according to the BigInteger API this method cannot work as intended - write a test (rq-20090209)
             BigInteger mask = BigInteger.valueOf(0xffffffffffffffffL);
             BigInteger bi = BigInteger.valueOf(compoundData.getLong(memberIndex));
             number = bi.and(mask);

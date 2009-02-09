@@ -2,7 +2,11 @@ package org.esa.beam.smos.visat;
 
 import org.esa.beam.dataio.smos.L1cSmosFile;
 import org.esa.beam.dataio.smos.SmosFile;
-import org.esa.beam.framework.datamodel.*;
+import org.esa.beam.framework.datamodel.Pin;
+import org.esa.beam.framework.datamodel.PixelPos;
+import org.esa.beam.framework.datamodel.ProductNode;
+import org.esa.beam.framework.datamodel.ProductNodeEvent;
+import org.esa.beam.framework.datamodel.ProductNodeListener;
 
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
@@ -21,9 +25,6 @@ public abstract class GridPointBtDataToolView extends SmosToolView {
     private JCheckBox snapToSelectedPinCheckBox;
     private GPSL gpsl;
 
-    public GridPointBtDataToolView() {
-    }
-
     @Override
     protected JComponent createClientComponent() {
         infoLabel = new JLabel();
@@ -34,11 +35,12 @@ public abstract class GridPointBtDataToolView extends SmosToolView {
         optionsPanel.add(snapToSelectedPinCheckBox, BorderLayout.WEST);
         optionsPanel.add(createGridPointComponentOptionsComponent(), BorderLayout.CENTER);
 
-        JPanel panel = new JPanel(new BorderLayout(2, 2));
-        panel.add(infoLabel, BorderLayout.CENTER);
-        panel.add(createGridPointComponent(), BorderLayout.CENTER);
-        panel.add(optionsPanel, BorderLayout.SOUTH);
-        return panel;
+        final JPanel mainPanel = new JPanel(new BorderLayout(2, 2));
+        mainPanel.add(infoLabel, BorderLayout.CENTER);
+        mainPanel.add(createGridPointComponent(), BorderLayout.CENTER);
+        mainPanel.add(optionsPanel, BorderLayout.SOUTH);
+
+        return mainPanel;
     }
 
     protected JComponent createGridPointComponentOptionsComponent() {
@@ -54,18 +56,34 @@ public abstract class GridPointBtDataToolView extends SmosToolView {
         super.componentOpened();
         gpsl = new GPSL();
         SmosBox.getInstance().getGridPointSelectionService().addGridPointSelectionListener(gpsl);
-        realizeGridPointChange(SmosBox.getInstance().getGridPointSelectionService().getSelectedGridPointId());
+        updateGridPointBtDataComponent(SmosBox.getInstance().getGridPointSelectionService().getSelectedGridPointId());
     }
 
     @Override
     public void componentClosed() {
         super.componentClosed();
         SmosBox.getInstance().getGridPointSelectionService().removeGridPointSelectionListener(gpsl);
-        realizeGridPointChange(-1);
+        updateGridPointBtDataComponent(-1);
     }
 
-    private void realizeGridPointChange(int selectedGridPointId) {
+    final void updateGridPointBtDataComponent() {
+        int id = -1;
+        if (!snapToSelectedPinCheckBox.isSelected()) {
+            id = SmosBox.getInstance().getGridPointSelectionService().getSelectedGridPointId();
+        } else {
+            final Pin selectedPin = getSelectedSmosProduct().getPinGroup().getSelectedNode();
 
+            if (selectedPin != null) {
+                final PixelPos pixelPos = selectedPin.getPixelPos();
+                final int x = (int) Math.floor(pixelPos.getX());
+                final int y = (int) Math.floor(pixelPos.getY());
+                id = SmosBox.getInstance().getSmosViewSelectionService().getGridPointId(x, y);
+            }
+        }
+        updateGridPointBtDataComponent(id);
+     }
+
+    private void updateGridPointBtDataComponent(int selectedGridPointId) {
         if (selectedGridPointId == -1) {
             setInfoText("No data");
             clearGridPointBtDataComponent();
@@ -77,10 +95,10 @@ public abstract class GridPointBtDataToolView extends SmosToolView {
 
         if (gridPointIndex >= 0 && smosFile instanceof L1cSmosFile) {
             setInfoText("" +
-                        "<html>" +
-                        "SEQNUM=<b>" + selectedGridPointId + "</b>, " +
-                        "INDEX=<b>" + gridPointIndex + "</b>" +
-                        "</html>");
+                    "<html>" +
+                    "SEQNUM=<b>" + selectedGridPointId + "</b>, " +
+                    "INDEX=<b>" + gridPointIndex + "</b>" +
+                    "</html>");
 
             try {
                 GridPointBtDataset ds = GridPointBtDataset.read((L1cSmosFile) smosFile, gridPointIndex);
@@ -107,17 +125,15 @@ public abstract class GridPointBtDataToolView extends SmosToolView {
     protected abstract void clearGridPointBtDataComponent();
 
     private class GPSL implements GridPointSelectionService.SelectionListener {
-
         @Override
         public void handleGridPointSelectionChanged(int oldId, int newId) {
             if (!snapToSelectedPinCheckBox.isSelected()) {
-                realizeGridPointChange(newId);
+                updateGridPointBtDataComponent(newId);
             }
         }
     }
 
     private class IL implements ItemListener {
-
         private final ProductNodeListener pnl;
 
         private IL() {
@@ -127,36 +143,18 @@ public abstract class GridPointBtDataToolView extends SmosToolView {
         @Override
         public void itemStateChanged(ItemEvent e) {
             if (e.getStateChange() == ItemEvent.SELECTED) {
-                realizeSelectedPin();
+                updateGridPointBtDataComponent();
                 getSelectedSmosProduct().addProductNodeListener(pnl);
             } else {
                 getSelectedSmosProduct().removeProductNodeListener(pnl);
             }
         }
 
-        private void realizeSelectedPin() {
-            final Pin selectedPin = getSelectedSmosProduct().getPinGroup().getSelectedNode();
-
-            if (selectedPin != null) {
-                final PixelPos pixelPos = selectedPin.getPixelPos();
-                final int x = (int) Math.floor(pixelPos.getX());
-                final int y = (int) Math.floor(pixelPos.getY());
-                final int id = SmosBox.getInstance().getSmosViewSelectionService().getGridPointId(x, y);
-
-                realizeGridPointChange(id);
-            } else {
-                setInfoText("No data");
-                clearGridPointBtDataComponent();
-            }
-        }
-
         private class PNL implements ProductNodeListener {
-
             @Override
             public void nodeChanged(ProductNodeEvent event) {
-                if (Pin.PROPERTY_NAME_SELECTED.equals(event.getPropertyName())) {
-                    updatePin(event);
-                }
+                // selection, pixel position, etc.
+                updatePin(event);
             }
 
             @Override
@@ -177,7 +175,7 @@ public abstract class GridPointBtDataToolView extends SmosToolView {
             private void updatePin(ProductNodeEvent event) {
                 final ProductNode sourceNode = event.getSourceNode();
                 if (sourceNode instanceof Pin) {
-                    realizeSelectedPin();
+                    updateGridPointBtDataComponent();
                 }
             }
         }
