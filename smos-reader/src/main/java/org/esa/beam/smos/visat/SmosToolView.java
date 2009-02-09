@@ -10,6 +10,7 @@ import org.esa.beam.framework.ui.application.PageComponent;
 import org.esa.beam.framework.ui.application.support.AbstractToolView;
 import org.esa.beam.framework.ui.application.support.PageComponentListenerAdapter;
 import org.esa.beam.framework.ui.product.ProductSceneView;
+import org.esa.beam.framework.help.HelpSys;
 
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
@@ -70,6 +71,8 @@ public abstract class SmosToolView extends AbstractToolView {
         defaultComponent.setIconTextGap(10);
         defaultComponent.setText("No SMOS image selected.");
         panel.add(defaultComponent);
+
+        HelpSys.enableHelpKey(getPaneControl(), getDescriptor().getHelpId());
 
         super.getContext().getPage().addPageComponentListener(new PageComponentListenerAdapter() {
             @Override
