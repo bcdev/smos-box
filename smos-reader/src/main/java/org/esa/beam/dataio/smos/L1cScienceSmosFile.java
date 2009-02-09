@@ -31,6 +31,8 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.Map;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Represents a SMOS L1c Science product file.
@@ -55,6 +57,7 @@ public class L1cScienceSmosFile extends L1cSmosFile implements SnapshotProvider 
 
     private volatile SwingWorker worker;
     private volatile SnapshotPolarisationMode polMode;
+    private HashMap<Long,List<Long>> longListHashMap;
 
 
     public L1cScienceSmosFile(File file, DataFormat format) throws IOException {
@@ -377,8 +380,9 @@ public class L1cScienceSmosFile extends L1cSmosFile implements SnapshotProvider 
                     if (snapshotId >= minId) {
                         final long maxId = getSnapshotId(btDataList, btDataList.getElementCount() - 1);
                         if (snapshotId <= maxId) {
-                            float lon = gridPointList.getCompound(i).getFloat(lonIndex);
-                            float lat = gridPointList.getCompound(i).getFloat(latIndex);
+                            final CompoundData btData = gridPointList.getCompound(i);
+                            float lon = btData.getFloat(lonIndex);
+                            float lat = btData.getFloat(latIndex);
                             // normalisation to [-180, 180] necessary for some L1c test products
                             if (lon > 180.0f) {
                                 lon = lon - 360.0f;
