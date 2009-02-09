@@ -107,7 +107,6 @@ public class SnapshotInfoToolView extends SmosToolView {
                 return;
             }
             updateUI(smosView);
-            updateTable(snapshotSelectorCombo.getSnapshotId());
         } else {
             super.realizeSmosView(null);
         }
@@ -297,6 +296,7 @@ public class SnapshotInfoToolView extends SmosToolView {
             }
         }
 
+        updateTable(snapshotSelectorCombo.getSnapshotId());
         snapshotSelectorCombo.getComboBox().setEnabled(!sync);
         browseButtonModel.setEnabled(sync);
         snapshotButtonModel.setEnabled(sync);

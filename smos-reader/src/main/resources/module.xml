@@ -58,6 +58,7 @@
                 <initSide>SOUTH</initSide>
                 <initIndex>0</initIndex>
                 <toolBarId>SMOS_Box</toolBarId>
+                <helpId>smosTools</helpId>
             </toolView>
 
             <toolView>
@@ -69,6 +70,7 @@
                 <initSide>SOUTH</initSide>
                 <initIndex>0</initIndex>
                 <toolBarId>SMOS_Box</toolBarId>
+                <helpId>smosTools</helpId>
             </toolView>
 
             <toolView>
@@ -80,6 +82,7 @@
                 <initSide>SOUTH</initSide>
                 <initIndex>0</initIndex>
                 <toolBarId>SMOS_Box</toolBarId>
+                <helpId>smosTools</helpId>
             </toolView>
 
             <toolView>
@@ -91,6 +94,7 @@
                 <initSide>SOUTH</initSide>
                 <initIndex>0</initIndex>
                 <toolBarId>SMOS_Box</toolBarId>
+                <helpId>smosTools</helpId>
             </toolView>
 
 
