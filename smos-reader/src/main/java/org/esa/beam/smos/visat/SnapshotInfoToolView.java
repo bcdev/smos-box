@@ -6,12 +6,13 @@ import com.bc.ceres.binio.Type;
 import com.bc.ceres.core.ProgressMonitor;
 import com.bc.ceres.glayer.support.ImageLayer;
 import com.bc.ceres.glevel.support.DefaultMultiLevelImage;
-import com.bc.ceres.swing.progress.ProgressMonitorSwingWorker;
 import com.bc.ceres.grender.Viewport;
+import com.bc.ceres.swing.progress.ProgressMonitorSwingWorker;
 import org.esa.beam.dataio.smos.GridPointValueProvider;
 import org.esa.beam.dataio.smos.L1cFieldValueProvider;
 import org.esa.beam.dataio.smos.L1cScienceSmosFile;
 import org.esa.beam.dataio.smos.SmosMultiLevelSource;
+import org.esa.beam.framework.help.HelpSys;
 import org.esa.beam.framework.ui.TableLayout;
 import org.esa.beam.framework.ui.product.ProductSceneView;
 import org.jfree.layout.CenterLayout;
@@ -46,9 +47,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.geom.Rectangle2D;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.RenderedImage;
 import java.io.IOException;
 import java.text.MessageFormat;
@@ -92,6 +93,15 @@ public class SnapshotInfoToolView extends SmosToolView {
         JPanel viewSettingsPanel = createViewSettingsPanel();
         mainPanel.add(viewSettingsPanel, BorderLayout.SOUTH);
 
+//        final AbstractButton helpButton = ToolButtonFactory.createButton(UIUtils.loadImageIcon("icons/Help24.gif"), false);
+//        helpButton.setToolTipText("Help."); /*I18N*/
+//        helpButton.setName("helpButton");
+
+        if (getDescriptor().getHelpId() != null) {
+//            HelpSys.enableHelpOnButton(helpButton, getDescriptor().getHelpId());
+            HelpSys.enableHelpKey(mainPanel, getDescriptor().getHelpId());
+        }
+
         return mainPanel;
     }
 
@@ -106,7 +116,7 @@ public class SnapshotInfoToolView extends SmosToolView {
                 startPolModeInitWaiting(smosView, smosFile);
                 return;
             }
-            updateUI(smosView);
+            updateUI(smosView, true);
         } else {
             super.realizeSmosView(null);
         }
@@ -214,7 +224,7 @@ public class SnapshotInfoToolView extends SmosToolView {
             } else {
                 setSelectedSnapshotId(smosView, -1);
             }
-            updateUI(smosView);
+            updateUI(smosView, false);
             updateImageLayer(smosView);
         }
     }
@@ -233,7 +243,7 @@ public class SnapshotInfoToolView extends SmosToolView {
         synchronizeButtonModel.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                updateUI(getSelectedSmosView());
+                updateUI(getSelectedSmosView(), true);
             }
         });
 
@@ -274,9 +284,11 @@ public class SnapshotInfoToolView extends SmosToolView {
         return viewSettingsPanel;
     }
 
-    private void updateUI(ProductSceneView smosView) {
-        final L1cScienceSmosFile smosFile = SmosBox.getL1cScienceSmosFile(smosView);
-        snapshotSelectorCombo.setModel(new SnapshotSelectorComboModel(smosFile));
+    private void updateUI(ProductSceneView smosView, boolean resetSelectorComboModel) {
+        if (resetSelectorComboModel) {
+            final L1cScienceSmosFile smosFile = SmosBox.getL1cScienceSmosFile(smosView);
+            snapshotSelectorCombo.setModel(new SnapshotSelectorComboModel(smosFile));
+        }
         final boolean sync = synchronizeButtonModel.isSelected();
         if (sync) {
             final long id = getSelectedSnapshotId(smosView);
@@ -361,20 +373,19 @@ public class SnapshotInfoToolView extends SmosToolView {
 
 
     private class PolModeWaiter extends SwingWorker {
-
         private final ProductSceneView smosView;
         private final L1cScienceSmosFile smosFile;
         private final ProgressMonitor pm;
 
-        private PolModeWaiter(ProductSceneView smosView, L1cScienceSmosFile smosFile, ProgressMonitor progressMonitor) {
+        private PolModeWaiter(ProductSceneView smosView, L1cScienceSmosFile smosFile, ProgressMonitor pm) {
             this.smosView = smosView;
             this.smosFile = smosFile;
-            pm = progressMonitor;
+            this.pm = pm;
         }
 
         @Override
         protected Object doInBackground() throws InterruptedException {
-            pm.beginTask("Finding Polarisation Modes of Snapshots...", 100);
+            pm.beginTask("Indexing snapshot polarisation modes...", 100);
             try {
                 while (!smosFile.isBackgoundInitDone()) {
                     Thread.sleep(100);
@@ -385,7 +396,6 @@ public class SnapshotInfoToolView extends SmosToolView {
             return null;
         }
 
-
         @Override
         protected void done() {
             setToolViewComponent(getClientComponent());
@@ -393,7 +403,7 @@ public class SnapshotInfoToolView extends SmosToolView {
         }
     }
 
-    static class PopupListener extends MouseAdapter {
+    private static class PopupListener extends MouseAdapter {
         private final JPopupMenu popup;
 
         PopupListener(JPopupMenu popup) {

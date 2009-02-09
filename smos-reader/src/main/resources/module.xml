@@ -23,7 +23,6 @@
     </dependency>
     <dependency>
         <module>beam-visat</module>
-        <optional>true</optional>
     </dependency>
     <dependency>
         <module>smos-dgg</module>
