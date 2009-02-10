@@ -138,11 +138,6 @@ public class L1cScienceSmosFile extends L1cSmosFile implements SnapshotProvider 
         Long[] yPolSnapshotIds = y.toArray(new Long[y.size()]);
         Long[] xyPolSnapshotIds = xy.toArray(new Long[xy.size()]);
 
-        System.out.println("SmosFile: snapshotCount(x) = " + x.size());
-        System.out.println("SmosFile: snapshotCount(y) = " + y.size());
-        System.out.println("SmosFile: snapshotCount(xy) = " + xy.size());
-        System.out.println("SmosFile: snapshotCount(all) = " + any.size());
-
         final Map<Long, Integer> snapshotIndexMap = new TreeMap<Long, Integer>();
 
         final int snapshotIdIndex = snapshotType.getMemberIndex(SmosFormats.SNAPSHOT_ID_NAME);
@@ -157,10 +152,6 @@ public class L1cScienceSmosFile extends L1cSmosFile implements SnapshotProvider 
         }
 
 
-        System.out.println("snapshotIds.length = " + snapshotIds.length);
-        System.out.println("snapshotIndexMap.size() = " + snapshotIndexMap.size());
-
-//        this.snapshotIndexMap = snapshotIndexMap;
         polMode = new SnapshotPolarisationMode(snapshotIndexMap, snapshotIds, xPolSnapshotIds, yPolSnapshotIds,
                                                xyPolSnapshotIds);
 
@@ -336,15 +327,6 @@ public class L1cScienceSmosFile extends L1cSmosFile implements SnapshotProvider 
         return noDataValue;
     }
 
-    public final long getSnapshotIdMin() {
-        return polMode.getAllSnapshotIds()[0];
-    }
-
-    public final long getSnapshotIdMax() {
-        final Long[] snapshotIds = polMode.getAllSnapshotIds();
-        return snapshotIds[snapshotIds.length - 1];
-    }
-
     public final int getSnapshotIndex(long snapshotId) {
         final Map<Long, Integer> snapshotIndexMap = polMode.getSnapshotIndexMap();
         if (!snapshotIndexMap.containsKey(snapshotId)) {
@@ -373,7 +355,7 @@ public class L1cScienceSmosFile extends L1cSmosFile implements SnapshotProvider 
 
         Rectangle2D.Float region = null;
         try {
-            pm.beginTask("Visiting grid points...", gridPointList.getElementCount() / 100);
+            pm.beginTask("Visiting grid points...", gridPointList.getElementCount());
 
             for (int i = 0; i < gridPointList.getElementCount(); i++) {
                 final SequenceData btDataList = getBtDataList(i);
@@ -389,7 +371,7 @@ public class L1cScienceSmosFile extends L1cSmosFile implements SnapshotProvider 
                             float lat = btData.getFloat(latIndex);
                             // normalisation to [-180, 180] necessary for some L1c test products
                             if (lon > 180.0f) {
-                                lon = lon - 360.0f;
+                                lon -= 360.0f;
                             }
                             final Rectangle2D.Float rectangle =
                                     new Rectangle2D.Float(lon - 0.02f, lat - 0.02f, 0.04f, 0.04f);

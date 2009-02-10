@@ -195,20 +195,6 @@ public class SmosFile implements GridPointDataProvider {
             gridPointIndexes[getGridPointSeqnum(i) - minSeqnum] = i;
         }
 
-        // todo - user logger or remove (rq-20081203)
-        System.out.println("SmosFile: gridPointCount = " + gridPointCount);
-        System.out.println("SmosFile: gridPointIndexes.length = " + gridPointIndexes.length);
-
-        int indexCount = 0;
-        for (final int gridPointIndex : gridPointIndexes) {
-            if (gridPointIndex != -1) {
-                indexCount++;
-            }
-        }
-
-        // todo - user logger or remove (rq-20081203)
-        System.out.println("SmosFile: number of gridPointIndexes != -1: " + indexCount);
-
         return gridPointIndexes;
     }
 
