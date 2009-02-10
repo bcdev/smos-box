@@ -38,34 +38,27 @@
 <h4>Capabilities</h4>
 
 <p>
-    Version 0.5 of the SMOS-Box is capable of importing the following SMOS data products into the BEAM product model:
+    Version 0.5 of the SMOS-Box is capable of reading SMOS user data products complying with Schemas Version
+    2009-02-10_v04-03-00:
 </p>
 
 <ul>
     <li>
-        Level 1C Browse products.
+        Level-1c Browse Full and Dual Polarisation products. All measurements contained in the <em>BT_Data_Type</em>
+        record are converted into BEAM bands.
     </li>
     <li>
-        Due to the representation of SMOS products as a global product, it is not possible to draw lines or shapes
-        crossing the anti-meridian.
+        Level-1c Science Full and Dual Polarisation products. All measurements contained in the <em>BT_Data_Type</em>
+        record are converted into BEAM bands. For each band, the user can choose whether the band data should be
+        provided by a snapshot or a simulated browse product which is computed on-the-fly. The latter is the default.
     </li>
     <li>
-        Exporting a displayed SMOS image results in an out-of-memory error. The VISAT application must be restarted
-        in order to recover from this error.
+        Level-2 Ocean Salinity UDP products. All measurements provided in the <em>Grid_Point_Data_Type</em> record
+        and the enclosed record types are converted into BEAM bands.
     </li>
     <li>
-        Some map projections do not work with SMOS products. Those projections which do work need too much time in
-        order to complete the calculations.
-    </li>
-    <li>
-        Exporting a SMOS product as BEAM-DIMAP, HDF5 or GeoTIFF does not work.
-    </li>
-    <li>
-        Statistics, scatter plots, histograms and profile plots use image pixel data rather than SMOS grid point
-        data.
-    </li>
-    <li>
-        The graphical user interface occasionally is not responsive while working with SMOS products.
+        Level-2 Surface Moisture UDP products. All measurements provided in the <em>Grid_Point_Data_Type</em> record
+        and the enclosed record types are converted into BEAM bands.
     </li>
 </ul>
 
