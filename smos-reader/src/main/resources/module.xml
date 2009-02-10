@@ -60,6 +60,7 @@
                 <helpId>smosTools</helpId>
                 <smallIcon>/org/esa/beam/smos/visat/SmosSnapshot16.png</smallIcon>
                 <largeIcon>/org/esa/beam/smos/visat/SmosSnapshot24.png</largeIcon>
+                <description>Browse SMOS snapshot information and view snapshot data</description>
             </toolView>
 
             <toolView>
@@ -74,6 +75,7 @@
                 <helpId>smosTools</helpId>
                 <smallIcon>/org/esa/beam/smos/visat/SmosGridPoint16.png</smallIcon>
                 <largeIcon>/org/esa/beam/smos/visat/SmosGridPoint24.png</largeIcon>
+                <description>View SMOS grid point data table</description>
             </toolView>
 
             <toolView>
@@ -88,6 +90,7 @@
                 <helpId>smosTools</helpId>
                 <smallIcon>/org/esa/beam/smos/visat/SmosBtGraph16.png</smallIcon>
                 <largeIcon>/org/esa/beam/smos/visat/SmosBtGraph24.png</largeIcon>
+                <description>View SMOS brightness temperature chart</description>
             </toolView>
 
             <toolView>
@@ -102,6 +105,7 @@
                 <helpId>smosTools</helpId>
                 <smallIcon>/org/esa/beam/smos/visat/SmosFlags16.png</smallIcon>
                 <largeIcon>/org/esa/beam/smos/visat/SmosFlags24.png</largeIcon>
+                <description>View SMOS flag matrix</description>
             </toolView>
 
 
