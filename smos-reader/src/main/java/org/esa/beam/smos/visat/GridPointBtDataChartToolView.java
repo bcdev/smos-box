@@ -44,7 +44,6 @@ public class GridPointBtDataChartToolView extends GridPointBtDataToolView {
                                                true, // Legend?
                                                true,
                                                false);
-
         DeviationRenderer renderer = new DeviationRenderer(true, false);
         renderer.setSeriesFillPaint(0, new Color(255, 127, 127));
         renderer.setSeriesFillPaint(1, new Color(127, 127, 255));
@@ -57,6 +56,7 @@ public class GridPointBtDataChartToolView extends GridPointBtDataToolView {
         final NumberAxis xAxis = (NumberAxis) plot.getDomainAxis();
         xAxis.setLabel("Incidence Angle (deg)");
         xAxis.setAutoRangeIncludesZero(false);
+        xAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
 
         final NumberAxis yAxis = (NumberAxis) plot.getRangeAxis();
         yAxis.setLabel("Brightness Temperature (K)");
