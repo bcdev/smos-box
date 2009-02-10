@@ -38,22 +38,66 @@
 <h4>Capabilities</h4>
 
 <p>
-    
+
 </p>
 
 <h4>Limitations</h4>
 
 <p>
-    Cannot make coffee yet.
+    Besides issues related to runtime performance, Version 0.5 of the SMOS-Box has the following limitations:
 </p>
+
+<ul>
+    <li>
+        All SMOS data products are represented as global products covering the whole surface of the Earth. Therefore
+        SMOS products do not have a geographical boundary.
+    </li>
+    <li>
+        Due to the representation of SMOS products as a global product, it is not possible to draw lines or shapes
+        crossing the anti-meridian.
+    </li>
+    <li>
+        Exporting a displayed SMOS image results in an out-of-memory error. The VISAT application must be restarted
+        in order to recover from this error.
+    </li>
+    <li>
+        Some map projections do not work with SMOS products. Those projections which do work need too much time in
+        order to complete the calculations.
+    </li>
+    <li>
+        Exporting a SMOS product as BEAM-DIMAP, HDF5 or GeoTIFF does not work.
+    </li>
+    <li>
+        Statistics, scatter plots, histograms and profile plots use image pixel data rather than SMOS grid point
+        data.
+    </li>
+    <li>
+        The graphical user interface occasionally is not responsive while working with SMOS products.
+    </li>
+</ul>
 
 <h4>Usage</h4>
 
 <p>
-    Version 0.5 of the SMOS-Box is comprised of four tools: the grid point brightness temperature data table,
-    the grid point brightness temperature flag matrix diagram, the grid point brightness temperature chart,
-    and the snapshot information tool. The tools can be invoked by clicking on corresponding icons arranged in
-    the SMOS-Box toolbar.
+    Version 0.5 of the SMOS-Box is comprised of four tools:
+    <img src="images/SmosGridPoint16.png" alt="Icon"/>
+    the grid point brightness temperature data table,
+    <img src="images/SmosFlags16.png" alt="Icon"/>
+    the grid point brightness temperature flag matrix diagram,
+    <img src="images/SmosBtGraph16.png" alt="Icon"/>
+    the grid point brightness temperature chart, and
+    <img src="images/SmosSnapshot16.png" alt="Icon"/>
+    the snapshot information tool. The tools can be invoked by clicking on the corresponding icons arranged in
+    the SMOS-Box toolbar shown below.
+</p>
+
+<p>
+    <img src="images/smos-toolbar.png" alt="SMOS Toolbar"/>
+</p>
+
+<p>
+    By default the SMOS-Box toolbar (right column of icons) is located next to the standard VISAT toolbar (left column
+    of icons).
 </p>
 
 <hr>
