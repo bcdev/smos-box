@@ -38,8 +38,36 @@
 <h4>Capabilities</h4>
 
 <p>
-
+    Version 0.5 of the SMOS-Box is capable of importing the following SMOS data products into the BEAM product model:
 </p>
+
+<ul>
+    <li>
+        Level 1C Browse products.
+    </li>
+    <li>
+        Due to the representation of SMOS products as a global product, it is not possible to draw lines or shapes
+        crossing the anti-meridian.
+    </li>
+    <li>
+        Exporting a displayed SMOS image results in an out-of-memory error. The VISAT application must be restarted
+        in order to recover from this error.
+    </li>
+    <li>
+        Some map projections do not work with SMOS products. Those projections which do work need too much time in
+        order to complete the calculations.
+    </li>
+    <li>
+        Exporting a SMOS product as BEAM-DIMAP, HDF5 or GeoTIFF does not work.
+    </li>
+    <li>
+        Statistics, scatter plots, histograms and profile plots use image pixel data rather than SMOS grid point
+        data.
+    </li>
+    <li>
+        The graphical user interface occasionally is not responsive while working with SMOS products.
+    </li>
+</ul>
 
 <h4>Limitations</h4>
 
