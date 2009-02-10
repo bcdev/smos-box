@@ -1,14 +1,10 @@
 package org.esa.beam.smos.visat;
 
+import com.bc.ceres.binio.CompoundMember;
+import com.bc.ceres.binio.CompoundType;
+import com.jidesoft.grid.TableColumnChooser;
 import org.esa.beam.dataio.smos.L1cSmosFile;
 import org.esa.beam.framework.ui.product.ProductSceneView;
-
-import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.util.Map;
-import java.util.WeakHashMap;
 
 import javax.swing.Action;
 import javax.swing.JButton;
@@ -17,11 +13,14 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableColumnModel;
+import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
-
-import com.bc.ceres.binio.CompoundMember;
-import com.bc.ceres.binio.CompoundType;
-import com.jidesoft.grid.TableColumnChooser;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.util.Map;
+import java.util.WeakHashMap;
 
 public class GridPointBtDataTableToolView extends GridPointBtDataToolView {
 
@@ -38,12 +37,14 @@ public class GridPointBtDataTableToolView extends GridPointBtDataToolView {
     public GridPointBtDataTableToolView() {
         gridPointBtDataTableModel = new GridPointBtDataTableModel();
         table = new JTable(gridPointBtDataTableModel);
+        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
     }
 
     @Override
     protected void updateClientComponent(ProductSceneView smosView) {
         boolean enabled = smosView != null && getSelectedSmosFile() instanceof L1cSmosFile;
         table.setEnabled(enabled);
+
         columnsButton.setEnabled(enabled);
         exportButton.setEnabled(enabled);
         if (enabled) {
@@ -52,7 +53,7 @@ public class GridPointBtDataTableToolView extends GridPointBtDataToolView {
             boolean initTableModel = false;
             String[] names;
             synchronized (this) {
-                smosFile = (L1cSmosFile)getSelectedSmosFile();
+                smosFile = (L1cSmosFile) getSelectedSmosFile();
                 columnModel = columnModels.get(smosFile);
                 names = columnNames.get(smosFile);
                 if (columnModel == null) {
@@ -93,10 +94,10 @@ public class GridPointBtDataTableToolView extends GridPointBtDataToolView {
         Action action = TableColumnChooser.getTableColumnChooserButton(table).getAction();
         action.putValue(Action.NAME, "Columns...");
         columnsButton = new JButton(action);
-        
+
         exportButton = new JButton("Export...");
         exportButton.addActionListener(new ActionListener() {
-
+            @Override
             public void actionPerformed(ActionEvent e) {
                 final TableModelExportRunner modelExportRunner = new TableModelExportRunner(
                         getPaneWindow(), getTitle(), table.getModel(), table.getColumnModel());

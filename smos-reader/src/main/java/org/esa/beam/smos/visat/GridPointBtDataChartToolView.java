@@ -59,6 +59,7 @@ public class GridPointBtDataChartToolView extends GridPointBtDataToolView {
         xAxis.setAutoRangeIncludesZero(false);
 
         final NumberAxis yAxis = (NumberAxis) plot.getRangeAxis();
+        yAxis.setLabel("Brightness Temperature (K)");
         yAxis.setAutoRangeIncludesZero(false);
 
         return new ChartPanel(chart);
@@ -104,8 +105,8 @@ public class GridPointBtDataChartToolView extends GridPointBtDataToolView {
         if (ix != -1 && iq != -1 && id != -1) {
             int iy1 = ds.getColumnIndex("BT_Value");
             if (iy1 != -1) {
-                YIntervalSeries series1 = new YIntervalSeries("BT_H");
-                YIntervalSeries series2 = new YIntervalSeries("BT_V");
+                YIntervalSeries series1 = new YIntervalSeries("X");
+                YIntervalSeries series2 = new YIntervalSeries("Y");
                 boolean m1 = modeCheckers[0].isSelected();
                 boolean m2 = modeCheckers[1].isSelected();
                 int length = ds.data.length;
@@ -127,10 +128,10 @@ public class GridPointBtDataChartToolView extends GridPointBtDataToolView {
                 iy1 = ds.getColumnIndex("BT_Value_Real");
                 iy2 = ds.getColumnIndex("BT_Value_Imag");
                 if (iy1 != -1 && iy2 != -1) {
-                    YIntervalSeries series1 = new YIntervalSeries("BT_H");
-                    YIntervalSeries series2 = new YIntervalSeries("BT_V");
-                    YIntervalSeries series3 = new YIntervalSeries("BT_HV_Re");
-                    YIntervalSeries series4 = new YIntervalSeries("BT_HV_Im");
+                    YIntervalSeries series1 = new YIntervalSeries("X");
+                    YIntervalSeries series2 = new YIntervalSeries("Y");
+                    YIntervalSeries series3 = new YIntervalSeries("XY_Real");
+                    YIntervalSeries series4 = new YIntervalSeries("XY_Imag");
                     boolean m1 = modeCheckers[0].isSelected();
                     boolean m2 = modeCheckers[1].isSelected();
                     boolean m3 = modeCheckers[2].isSelected();
