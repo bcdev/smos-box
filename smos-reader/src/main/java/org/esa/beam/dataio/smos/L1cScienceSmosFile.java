@@ -26,13 +26,11 @@ import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.io.IOException;
 import java.text.MessageFormat;
+import java.util.Collections;
+import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
-import java.util.Map;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
 
 /**
  * Represents a SMOS L1c Science product file.
