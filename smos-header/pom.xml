@@ -5,13 +5,13 @@
     <parent>
         <artifactId>smos-box</artifactId>
         <groupId>org.esa.beam.smos</groupId>
-        <version>0.5-SNAPSHOT</version>
+        <version>0.5</version>
     </parent>
 
     <groupId>org.esa.beam</groupId>
     <artifactId>smos-header</artifactId>
     <packaging>jar</packaging>
-    <version>0.5-SNAPSHOT</version>
+    <version>0.5</version>
     <name>smos-header</name>
     <url>http://maven.apache.org</url>
 	

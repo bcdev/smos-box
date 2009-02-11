@@ -3,7 +3,7 @@
 
     <symbolicName>smos-dgg</symbolicName>
     <name>SMOS Discrete Global Grid</name>
-    <version>0.5-SNAPSHOT</version>
+    <version>0.5</version>
     <packaging>dir</packaging>
 
     <description>Provides the Discrete Global Grid for SMOS-Box.</description>

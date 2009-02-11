@@ -3,7 +3,7 @@
 
     <symbolicName>smos-worldmap</symbolicName>
     <name>SMOS Worldmap</name>
-    <version>0.5-SNAPSHOT</version>
+    <version>0.5</version>
     <packaging>dir</packaging>
 
 
