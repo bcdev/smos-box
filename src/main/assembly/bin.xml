@@ -1,0 +1,35 @@
+<assembly>
+    <id>bin</id>
+
+    <includeBaseDirectory>false</includeBaseDirectory>
+
+    <formats>
+        <format>dir</format>
+    </formats>
+
+    <files>
+        <file>
+            <source>readme.html</source>
+            <lineEnding>unix</lineEnding>
+            <filtered>true</filtered>
+        </file>
+        <file>
+            <source>license.html</source>
+        </file>
+    </files>
+
+    <moduleSets>
+        <moduleSet>
+            <excludes>
+                <exclude>org.esa.beam.smos:smos-bootstrap</exclude>
+            </excludes>
+
+            <binaries>
+                <includeDependencies>false</includeDependencies>
+                <unpack>false</unpack>
+                <outputDirectory>modules</outputDirectory>
+                <outputFileNameMapping>${artifactId}-${version}.${extension}</outputFileNameMapping>
+            </binaries>
+        </moduleSet>
+    </moduleSets>
+</assembly>
