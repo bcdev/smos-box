@@ -22,7 +22,7 @@
 
 <p>
     The SMOS-Box is a collection of tools which aim at providing facilities for visualisation and basic
-    analysis of SMOS Level 1 and 2 Data Products which fully complies with the BEAM Toolbox.
+    analysis of SMOS Level 1 and 2 Data Products and fully comply with the BEAM Toolbox.
     Technical objective is the development of BEAM compliant software modules – all distributed under
     the GNU General Public License – for visualisation of measurement values, errors, flags and supplementary data
     contained in SMOS User Data Products (UDPs) as well as for advanced plotting and charting of data contained
@@ -44,20 +44,24 @@
 
 <ul>
     <li>
-        Level-1c Browse Full and Dual Polarisation products. All measurements contained in the <em>BT_Data_Type</em>
+        Level-1c Browse Full and Dual Polarisation products. All measurements contained in the
+        <strong>BT_Data_Type</strong>
         record are converted into BEAM bands.
     </li>
     <li>
-        Level-1c Science Full and Dual Polarisation products. All measurements contained in the <em>BT_Data_Type</em>
+        Level-1c Science Full and Dual Polarisation products. All measurements contained in the
+        <strong>BT_Data_Type</strong>
         record are converted into BEAM bands. For each band, the user can choose whether the band data should be
         provided by a snapshot or a simulated browse product which is computed on-the-fly. The latter is the default.
     </li>
     <li>
-        Level-2 Ocean Salinity UDP products. All measurements provided in the <em>Grid_Point_Data_Type</em> record
+        Level-2 Ocean Salinity UDP products. All measurements provided in the <strong>Grid_Point_Data_Type</strong>
+        record
         and the enclosed record types are converted into BEAM bands.
     </li>
     <li>
-        Level-2 Surface Moisture UDP products. All measurements provided in the <em>Grid_Point_Data_Type</em> record
+        Level-2 Surface Moisture UDP products. All measurements provided in the <strong>Grid_Point_Data_Type</strong>
+        record
         and the enclosed record types are converted into BEAM bands.
     </li>
 </ul>
@@ -93,7 +97,7 @@
 <h4>Limitations</h4>
 
 <p>
-    Besides issues related to runtime performance, Version 0.5 of the SMOS-Box has the following limitations:
+    Version 0.5 of the SMOS-Box has the following limitations:
 </p>
 
 <ul>
@@ -121,7 +125,10 @@
         data.
     </li>
     <li>
-        The graphical user interface occasionally is not responsive while working with SMOS products.
+        The brightness temperature measurements are not transformed into the earth-fixed frame yet.
+    </li>
+    <li>
+        The graphical user interface might occasionally be unresponsive while working with SMOS products.
     </li>
 </ul>
 
@@ -129,13 +136,13 @@
 
 <p>
     Version 0.5 of the SMOS-Box is comprised of four tools:
-    <img src="images/SmosGridPoint16.png" alt="Icon"/>
+    <img src="images/SmosGridPoint16.png" alt="Grid point data table icon"/>
     the grid point data table,
-    <img src="images/SmosFlags16.png" alt="Icon"/>
+    <img src="images/SmosFlags16.png" alt="Grid point flag matrix icon"/>
     the grid point flag matrix diagram,
-    <img src="images/SmosBtGraph16.png" alt="Icon"/>
+    <img src="images/SmosBtGraph16.png" alt="Brightness temperature chart icon"/>
     the grid point brightness temperature chart, and
-    <img src="images/SmosSnapshot16.png" alt="Icon"/>
+    <img src="images/SmosSnapshot16.png" alt="Snapshot information tool icon"/>
     the snapshot information tool. The tools can be invoked by clicking on the corresponding icons arranged in
     the SMOS-Box toolbar shown below.
 </p>
@@ -150,8 +157,32 @@
 </p>
 
 <h5>
-    Opening a SMOS product
+    Opening a SMOS product and displaying image data
 </h5>
+
+<p>
+    When a SMOS product is opened in VISAT, the list of available band data is displayed in the <strong>Products
+    View</strong>.
+    Double-clicking onto a band name opens a window displaying the band data as an image (see the screenshots below).
+    Due to the BEAM data model used internally to represent all EO data products, it is required to resample SMOS L1C
+    and L2 gridded data to rectangular raster data. The images created from SMOS products in BEAM thus use a Geographic
+    coordinate reference system with the WGS-84 datum.
+</p>
+
+<p>
+    The mapping between image pixels and SMOS grid cells is established by a lookup table being a raster dataset
+    of 16384 by 8192 image pixels, yielding about 30 image pixels for an equatorial grid cell of the ISEA4H-R9 grid.
+    The LUT lookup table was pregenerated with the <a
+        href="http://www.sou.edu/cs/sahr/dgg/dggrid/dggrid.html">DGGRID software</a>. The SMOS grid cell ID for a given
+    image pixel can easily be obtained by opening the <strong>Grid_Cell_ID</strong> band, which always appears as the
+    first band in the <strong>Products View</strong>.
+</p>
+
+<p>
+    For SMOS L1c Science products the image displayed by default when double-clicking on a band is computed on-the-fly.
+    Actually, the image is computed from the snapshot data in the same manner as a Browse product is computed from the
+    corresponding Science product.
+</p>
 
 <p>
     <img src="images/smos-visat.png" alt="VISAT with SMOS product opened"/>
@@ -162,32 +193,200 @@
 </p>
 
 <h5>
-    Using the grid point data table
+    <img src="images/SmosGridPoint16.png" alt="Grid point data table icon"/> Using the grid point data table
 </h5>
+
+<p>
+    The grid point data table tool can be invoked by clicking on the <img src="images/SmosGridPoint16.png"
+                                                                          alt="Grid point data table icon"/> icon in the
+    SMOS-Box toolbar. The table shows all measurements made for the currently selected grid point, with a single
+    measurement record per row. By default the selected grid point is defined by the position of the mouse pointer.
+    By activating the <strong>Snap to selected pin</strong> option the selected grid point may also be defined by the
+    position of a currently selected pin.
+</p>
+
+<p>
+    The measurements displayed in the table columns can be explicitly choosen by clicking on the
+    <strong>Columns...</strong>
+    button, which pops up a dialog for selecting or deselecting individual measurements. The whole table can be exported
+    to character-separated text, either stored in a file or the clipboard.
+</p>
 
 <p>
     <img src="images/tableview.png" alt="Grid point data table"/>
 </p>
 
 <h5>
-    Using the grid point flag matrix
+    <img src="images/SmosFlags16.png" alt="Grid point flag matrix icon"/> Using the grid point flag matrix
 </h5>
+
+<p>
+    The grid point flag matrix tool can be invoked by clicking on the <img src="images/SmosFlags16.png"
+                                                                           alt="Grid point flag matrix icon"/> icon in
+    the SMOS-Box toolbar. The flag matrix shows all flags associated with measurement records acquired for the currently
+    selected grid point, with a single measurement record per column and a single flag per row. A raised flag is
+    indicated by a coloured entry in the flag matrix. By default the selected grid point is defined by
+    the position of the mouse pointer. By activating the <strong>Snap to selected pin</strong> option the selected grid
+    point may also be defined by the position of a currently selected pin.
+</p>
 
 <p>
     <img src="images/flagmatrix.png" alt="Grid point flag matrix"/>
 </p>
 
 <h5>
-    Using the grid point brightness temperature chart
+    <img src="images/SmosBtGraph16.png" alt="Brightness temperature chart icon"/> Using the grid point brightness
+    temperature chart
 </h5>
+
+<p>
+    The grid point brightness temperature chart tool can be invoked by clicking on the <img
+        src="images/SmosBtGraph16.png"
+        alt="Brightness temperature chart icon"/>
+    icon in the SMOS-Box toolbar. The brightness temperature chart shows a diagram of the brightness temperatures
+    measured for the currently selected grid point. A single series of brightness temperatures versus incidence angle is
+    shown for each polarisation mode. By default the selected grid point is defined by the position of the mouse
+    pointer. By activating the <strong>Snap to selected pin</strong> option the selected grid
+    point may also be defined by the position of a currently selected pin.
+</p>
+
+<p>
+    For the brightness temperature measurements made in the X and Y copolarisation modes the uncertainties are shown as
+    error bars. The display of individual polarisation modes can be switched on and off by activating or deactivating
+    the corresponding checkboxes.
+</p>
 
 <p>
     <img src="images/chartview.png" alt="Grid point brightness temperature chart"/>
 </p>
 
 <h5>
-    Using the snapshot information tool
+    <img src="images/SmosSnapshot16.png" alt="Snapshot information tool icon"/> Using the snapshot information tool
 </h5>
+
+<p>
+    The snapshot information tool can be invoked by clicking on the <img
+        src="images/SmosSnapshot16.png"
+        alt="Brightness temperature chart icon"/>
+    icon in the SMOS-Box toolbar. The tool can be used for browsing the 'Swath Snapshot List' contained in the SMOS L1c
+    Science products. The components of this tool are described below.
+</p>
+
+<h6>
+    Spinner component
+</h6>
+
+<p>
+    For selecting an individual snapshot the tool provides a spinner which allows to manually specify a certain snapshot
+    ID and to navigate forward and backward in the list of snapshot IDs.
+</p>
+
+
+<h6>
+    Slider component
+</h6>
+
+<p>
+    The slider provides an easy mechanism for fast navigation through the list of snapshot IDs.
+</p>
+
+<h6>
+    Combobox component
+</h6>
+
+<p>
+    The combobox provides a facility for selecting a certain polarisation mode (any, H, V, HV). When a
+    certain mode is selected, only IDs of snapshots acquired at the selected mode are navigable (i.e. IDs of snapshots
+    acquired at a different mode do not appear in the list of snapshot IDs) by the spinner and slider components.
+</p>
+
+
+<h6>
+    Table component
+</h6>
+
+<p>
+    While navigating through the snapshots, the corresponding 'Snapshot Information' like TEC and
+    geomagnetic field, etc. are displayed in a table.
+</p>
+
+<h6>
+    Synchronise checkbox
+</h6>
+
+<p>
+    Enabled only when there is an active product scene view (PSV). Synchronising implies:
+</p>
+<ol>
+    <li>
+        The combobox component is disabled while its value is set to the polarisation mode of the band displayed in the
+        active view.
+    </li>
+    <li>
+        Only IDs of snapshots acquired at the selected polarisation mode are navigable. When the selected snapshot ID is
+        not navigable, the first navigable snapshot becomes selected unless the active PSV is associated with a snapshot
+        ID which then becomes selected.
+    </li>
+    <li>
+        The region and ID of the selected snapshot are displayed in the active PSV as an additional layer.
+    </li>
+    <li>
+        The radio buttons (see below) are enabled.
+    </li>
+    <li>
+        The 'follow checkbox' is enabled.
+    </li>
+    <li>
+        The 'locate button' is enabled.
+    </li>
+</ol>
+<p>
+    Changing the active PSV while being in synchonised mode implies:
+</p>
+<ol>
+    <li>
+        The value of the combobox is set to the polarisation mode of the band displayed in the active view.
+        Only IDs of snapshots acquired at the selected polarisation mode are navigable.
+    </li>
+    <li>
+        When the selected snapshot ID is not navigable, the nearest navigable snapshot becomes selected unless the
+        active PSV is associated with a snapshot ID which then becomes selected.
+    </li>
+    <li>
+        The region and ID of the selected snapshot are displayed in the active PSV.
+    </li>
+</ol>
+
+<h6>Radio buttons</h6>
+
+<p>
+    There are two radio buttons for selection the raster data source for the active PSV.
+    Selecting the 'Snapshot' radio button implies that, firstly, the active PSV shows the raster data of the selected
+    snapshot instead of the browse, and, secondly, the active PSV becomes associated with the ID of the selected
+    snapshot.
+</p>
+
+<p>
+    Selecting the 'Browse' radio button implies that, firstly,
+    the active PSV shows the raster data of the browse instead of the selected snapshot, and, secondly,
+    the active PSV is not associated with a snapshot.
+</p>
+
+<h6>
+    Follow checkbox
+</h6>
+
+<p>
+    When checked the viewport of the active PSV automatically zooms to the region of the selected
+    snapshot.
+</p>
+<h6>
+    Locate button
+</h6>
+
+<p>
+    When pressed the viewport of the active PSV zooms to the region of the selected snapshot.
+</p>
 
 <p>
     <img src="images/snapshotview.png" alt="Snapshot information tool"/>
