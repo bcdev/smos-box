@@ -26,7 +26,6 @@
         <dependency>
             <groupId>org.esa.beam.smos</groupId>
             <artifactId>smos-ui</artifactId>
-            <version>0.5</version>
         </dependency>
     </dependencies>
 
