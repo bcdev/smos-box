@@ -4,9 +4,11 @@
     <symbolicName>smos-dgg</symbolicName>
     <name>SMOS Discrete Global Grid</name>
     <version>0.5</version>
+    <description>
+        This module provides the mapping between the SMOS Discrete Global
+        Grid and VISAT image pixels.
+    </description>
     <packaging>dir</packaging>
-
-    <description>Provides the Discrete Global Grid for SMOS-Box.</description>
 
     <vendor>Brockmann Consult GmbH</vendor>
     <contactAddress>Max Planck Str.2, 21502 Geesthacht (Germany)</contactAddress>

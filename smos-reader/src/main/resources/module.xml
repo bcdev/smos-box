@@ -3,7 +3,11 @@
     <symbolicName>smos-reader</symbolicName>
     <version>0.5</version>
     <name>SMOS Product Reader</name>
-    <description>SMOS Product Reader</description>
+    <description>
+        The SMOS Product Reader provides the capability of reading data
+        products acquired by ESA's SMOS mission; supported products are:
+        L1C Browse, L1C Science, L2 SM and L2 OS. 
+    </description>
 
     <vendor>Brockmann Consult GmbH</vendor>
     <contactAddress>

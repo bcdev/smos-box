@@ -3,7 +3,11 @@
     <symbolicName>smos-ui</symbolicName>
     <version>0.5</version>
     <name>SMOS UI Components</name>
-    <description>SMOS UI Components</description>
+    <description>
+        This module provides several UI components suited for visual
+        inspection and analysis of data products acquired by ESA's
+        SMOS mission.
+    </description>
 
     <vendor>Brockmann Consult GmbH</vendor>
     <contactAddress>

@@ -4,10 +4,10 @@
     <symbolicName>smos-worldmap</symbolicName>
     <name>SMOS Worldmap</name>
     <version>0.5</version>
+    <description>
+        This module provides a world map layer for the SMOS-Box.
+    </description>
     <packaging>dir</packaging>
-
-
-    <description>Provides a world map for the SMOS-Box.</description>
 
     <vendor>Brockmann Consult GmbH</vendor>
     <contactAddress>Max Planck Str.2, 21502 Geesthacht (Germany)</contactAddress>
