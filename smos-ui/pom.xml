@@ -12,22 +12,25 @@
     <packaging>jar</packaging>
 
     <groupId>org.esa.beam.smos</groupId>
-    <artifactId>smos-reader</artifactId>
-    <name>SMOS Product Reader</name>
+    <artifactId>smos-ui</artifactId>
+    <name>SMOS UI Components</name>
     <version>0.5</version>
-    <description>SMOS Product Reader</description>
+    <description>SMOS UI Components</description>
 
     <dependencies>
-    <!-- 
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
         </dependency>
+        <!-- 
         <dependency>
             <groupId>com.bc.ceres</groupId>
             <artifactId>ceres-core</artifactId>
         </dependency>
-        
+        <dependency>
+            <groupId>com.bc.ceres</groupId>
+            <artifactId>ceres-binio</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.esa.beam</groupId>
             <artifactId>beam-core</artifactId>
@@ -36,26 +39,43 @@
             <groupId>org.esa.beam</groupId>
             <artifactId>beam-gpf</artifactId>
         </dependency>
+        -->
         <dependency>
             <groupId>org.esa.beam</groupId>
             <artifactId>beam-visat</artifactId>
         </dependency>
-         -->
-         <dependency>
-            <groupId>com.bc.ceres</groupId>
-            <artifactId>ceres-binio</artifactId>
-        </dependency>
         <dependency>
             <groupId>org.esa.beam.smos</groupId>
-            <artifactId>smos-dgg</artifactId>
+            <artifactId>smos-reader</artifactId>
         </dependency>
-        <!-- 
         <dependency>
             <groupId>org.esa.beam.smos</groupId>
             <artifactId>smos-worldmap</artifactId>
         </dependency>
-         -->
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <configuration>
+                            <tasks>
+                                <property file="../build.properties"/>
+                                <property name="helpdir" value="${project.build.outputDirectory}/doc/help"/>
+                                <ant antfile="../build.xml" target="create-jh-search-db"/>
+                            </tasks>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
     
 </project>
 
