@@ -37,6 +37,7 @@ import org.esa.beam.framework.datamodel.MetadataAttribute;
 import org.esa.beam.framework.datamodel.MetadataElement;
 import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.framework.datamodel.ProductData;
+import org.esa.beam.framework.datamodel.Stx;
 import org.esa.beam.framework.dataop.maptransf.Datum;
 import org.esa.beam.framework.dataop.maptransf.IdentityTransformDescriptor;
 import org.esa.beam.framework.dataop.maptransf.MapInfo;
@@ -383,7 +384,7 @@ public class SmosProductReader extends AbstractProductReader {
         }
 
         band.setSourceImage(createSourceImage(valueProvider, band));
-        band.setImageInfo(createDefaultImageInfo(bandInfo));
+        band.setImageInfo(createDefaultImageInfo(band, bandInfo));
 
         return band;
     }
@@ -435,7 +436,7 @@ public class SmosProductReader extends AbstractProductReader {
         return new DefaultMultiLevelImage(new SmosMultiLevelSource(valueProvider, dggridMultiLevelImage, band));
     }
 
-    private static ImageInfo createDefaultImageInfo(BandInfo bandInfo) {
+    private static ImageInfo createDefaultImageInfo(Band band, BandInfo bandInfo) {
         final Color[] colors = new Color[]{
                 new Color(0, 0, 0),
                 new Color(85, 0, 136),
@@ -446,9 +447,13 @@ public class SmosProductReader extends AbstractProductReader {
                 new Color(255, 140, 0),
                 new Color(255, 0, 0)
         };
+        final Stx stx = band.getStx();
+        double min = band.scale(stx.getMin());
+        double max = band.scale(stx.getMax());
+        
         final ColorPaletteDef.Point[] points = new ColorPaletteDef.Point[colors.length];
         for (int i = 0; i < colors.length; i++) {
-            final double sample = bandInfo.min + ((bandInfo.max - bandInfo.min) * i / (colors.length - 1));
+            final double sample = min + ((max - min) * i / (colors.length - 1));
             points[i] = new ColorPaletteDef.Point(sample, colors[i]);
         }
 
