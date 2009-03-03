@@ -99,22 +99,22 @@
             <dependency>
                 <groupId>org.esa.beam.smos</groupId>
                 <artifactId>smos-dgg</artifactId>
-                <version>0.5</version>
+                <version>${pom.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.esa.beam.smos</groupId>
                 <artifactId>smos-worldmap</artifactId>
-                <version>0.5</version>
+                <version>${pom.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.esa.beam.smos</groupId>
                 <artifactId>smos-reader</artifactId>
-                <version>0.5</version>
+                <version>${pom.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.esa.beam.smos</groupId>
                 <artifactId>smos-ui</artifactId>
-                <version>0.5</version>
+                <version>${pom.version}</version>
             </dependency>
 
             <!-- JAI Libraries ############################################# -->
