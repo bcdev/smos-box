@@ -64,7 +64,6 @@ public class SmosProductReader extends AbstractProductReader {
     private static MultiLevelImage dggridMultiLevelImage;
 
     private SmosFile smosFile;
-    private Rectangle2D region;
 
     SmosProductReader(final SmosProductReaderPlugIn productReaderPlugIn) {
         super(productReaderPlugIn);
