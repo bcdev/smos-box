@@ -1,7 +1,7 @@
 <module>
     <manifestVersion>1.0.0</manifestVersion>
     <symbolicName>smos-reader</symbolicName>
-    <version>0.5</version>
+    <version>1.0-SNAPSHOT</version>
     <name>SMOS Product Reader</name>
     <description>
         The SMOS Product Reader provides the capability of reading data
