@@ -53,7 +53,6 @@ import org.jdom.input.SAXBuilder;
 import javax.media.jai.JAI;
 import java.awt.Color;
 import java.awt.Rectangle;
-import java.awt.geom.Rectangle2D;
 import java.awt.image.Raster;
 import java.awt.image.RenderedImage;
 import java.io.File;
@@ -127,7 +126,6 @@ public class SmosProductReader extends AbstractProductReader {
         product.setPreferredTileSize(512, 512);
         product.setFileLocation(dblFile);
         product.setGeoCoding(createGeoCoding(product));
-        addGridCellIdBand(product);
 
         final String formatName = format.getName();
 
@@ -165,6 +163,8 @@ public class SmosProductReader extends AbstractProductReader {
             throw new IllegalStateException("Illegal SMOS format: " + formatName);
         }
 
+        addGridPointSequentialNumberBand(product);
+        
         // set quicklook band name to first BT band
         for (Band band : product.getBands()) {
             if ("K".equals(band.getUnit())) {
@@ -360,8 +360,8 @@ public class SmosProductReader extends AbstractProductReader {
         product.getFlagCodingGroup().add(flagCoding);
     }
 
-    private static void addGridCellIdBand(Product product) {
-        final BandInfo bandInfo = new BandInfo("Grid_Cell_ID", "", 0.0, 1.0, -999, 0, 1L << 31,
+    private static void addGridPointSequentialNumberBand(Product product) {
+        final BandInfo bandInfo = new BandInfo("Grid_Point_Sequential_Number", "", 0.0, 1.0, -999, 0, 1L << 31,
                                                "Unique identifier for Earth fixed grid point (ISEA4H9 DGG).");
         final Band band = product.addBand(bandInfo.name, ProductData.TYPE_UINT32);
 
