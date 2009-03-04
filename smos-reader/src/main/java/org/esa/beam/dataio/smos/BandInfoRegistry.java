@@ -370,13 +370,13 @@ class BandInfoRegistry {
          */
         // TODO: no-data values & typical ranges
         registerBandInfo("Dg_chi2_1", "", 0.0, 1.0, 0.0, 0, 2 << 16 - 1,
-                         "Retrieval   fit   quality   index   with   forward model 1.");
+                         "Retrieval fit quality index with forward model 1.");
         registerBandInfo("Dg_chi2_2", "", 0.0, 1.0, 0.0, 0, 2 << 16 - 1,
-                         "Retrieval   fit   quality   index   with   forward model 2.");
+                         "Retrieval fit quality index with forward model 2.");
         registerBandInfo("Dg_chi2_3", "", 0.0, 1.0, 0.0, 0, 2 << 16 - 1,
-                         "Retrieval   fit   quality   index   with   forward model 3.");
+                         "Retrieval fit quality index with forward model 3.");
         registerBandInfo("Dg_chi2_Acard", "", 0.0, 1.0, 0.0, 0, 2 << 16 - 1,
-                         "Retrieval   fit   quality   index   with   cardioid model.");
+                         "Retrieval fit quality index with cardioid model.");
         registerBandInfo("Dg_chi2_P_1", "", 0.0, 1.0, 0.0, 0, 2 << 16 - 1,
                          "Normalised chi2 high value acceptability probability " +
                                  "with forward model 1, scaled by multiplying by 1000.");
@@ -386,7 +386,7 @@ class BandInfoRegistry {
         registerBandInfo("Dg_chi2_P_3", "", 0.0, 1.0, 0.0, 0, 2 << 16 - 1,
                          "Normalised chi2 high value acceptability probability " +
                                  "with forward model 3, scaled by multiplying by 1000.");
-        registerBandInfo("Dg_chi2_P_3", "", 0.0, 1.0, 0.0, 0, 2 << 16 - 1,
+        registerBandInfo("Dg_chi2_P_Acard", "", 0.0, 1.0, 0.0, 0, 2 << 16 - 1,
                          "Normalised chi2 high value acceptability probability " +
                                  "with cardioid, scaled by multiplying by 1000.");
         registerBandInfo("Dg_quality_SSS_1", "", 0.0, 1.0, 0.0, 0, 2 << 16 - 1,
