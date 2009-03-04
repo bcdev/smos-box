@@ -27,7 +27,8 @@ public class GridPointBtDataChartToolView extends GridPointBtDataToolView {
     public static final String ID = GridPointBtDataChartToolView.class.getName();
 
     private JFreeChart chart;
-    private YIntervalSeriesCollection dataset;
+    private YIntervalSeriesCollection coPolDataset;
+    private YIntervalSeriesCollection crossPolDataset;
     private XYPlot plot;
     private JCheckBox[] modeCheckers;
     private static final double INCIDENCE_ANGLE_FACTOR = (90.0 / (1 << 16));
@@ -35,32 +36,44 @@ public class GridPointBtDataChartToolView extends GridPointBtDataToolView {
 
     @Override
     protected JComponent createGridPointComponent() {
-        dataset = new YIntervalSeriesCollection();
+        coPolDataset = new YIntervalSeriesCollection();
+        crossPolDataset = new YIntervalSeriesCollection();
         chart = ChartFactory.createXYLineChart(null,
                                                null,
                                                null,
-                                               dataset,
+                                               coPolDataset,
                                                PlotOrientation.VERTICAL,
                                                true, // Legend?
                                                true,
                                                false);
-        DeviationRenderer renderer = new DeviationRenderer(true, false);
-        renderer.setSeriesFillPaint(0, new Color(255, 127, 127));
-        renderer.setSeriesFillPaint(1, new Color(127, 127, 255));
-
+        
         plot = chart.getXYPlot();
         plot.setNoDataMessage("No data");
         plot.setAxisOffset(new RectangleInsets(5, 5, 5, 5));
-        plot.setRenderer(renderer);
 
         final NumberAxis xAxis = (NumberAxis) plot.getDomainAxis();
         xAxis.setLabel("Incidence Angle (deg)");
-        xAxis.setAutoRangeIncludesZero(false);
+        xAxis.setRange(0, 70);
         xAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
 
         final NumberAxis yAxis = (NumberAxis) plot.getRangeAxis();
-        yAxis.setLabel("Brightness Temperature (K)");
-        yAxis.setAutoRangeIncludesZero(false);
+        yAxis.setLabel("Co-Polarization Brightness Temperature (K)");
+        yAxis.setRange(50, 350);
+        
+        final NumberAxis yAxis2 = new NumberAxis("Cross-Polarization Brightness Temperature (K)");
+        yAxis2.setRange(-25, 25);
+        plot.setRangeAxis(1, yAxis2);
+        plot.setDataset(1, crossPolDataset);
+        plot.mapDatasetToRangeAxis(1, 1);
+        
+        DeviationRenderer coPolRenderer = new DeviationRenderer(true, false);
+        coPolRenderer.setSeriesFillPaint(0, new Color(255, 127, 127));
+        coPolRenderer.setSeriesFillPaint(1, new Color(127, 127, 255));
+        DeviationRenderer crossPolRenderer = new DeviationRenderer(true, false);
+        crossPolRenderer.setSeriesFillPaint(0, new Color(127, 255, 127));
+        crossPolRenderer.setSeriesFillPaint(1, new Color(255, 255, 127));
+        plot.setRenderer(0, coPolRenderer);
+        plot.setRenderer(1, crossPolRenderer);
 
         return new ChartPanel(chart);
     }
@@ -97,7 +110,8 @@ public class GridPointBtDataChartToolView extends GridPointBtDataToolView {
 
     @Override
     protected void updateGridPointBtDataComponent(GridPointBtDataset ds) {
-        dataset.removeAllSeries();
+        coPolDataset.removeAllSeries();
+        crossPolDataset.removeAllSeries();
 
         int ix = ds.getColumnIndex("Incidence_Angle");
         int iq = ds.getColumnIndex("Flags");
@@ -121,8 +135,8 @@ public class GridPointBtDataChartToolView extends GridPointBtDataToolView {
                         series2.add(x, y, y - dev, y + dev);
                     }
                 }
-                dataset.addSeries(series1);
-                dataset.addSeries(series2);
+                coPolDataset.addSeries(series1);
+                coPolDataset.addSeries(series2);
             } else {
                 int iy2;
                 iy1 = ds.getColumnIndex("BT_Value_Real");
@@ -151,10 +165,10 @@ public class GridPointBtDataChartToolView extends GridPointBtDataToolView {
                             series4.add(x, y2, y2 - dev, y2 + dev);
                         }
                     }
-                    dataset.addSeries(series1);
-                    dataset.addSeries(series2);
-                    dataset.addSeries(series3);
-                    dataset.addSeries(series4);
+                    coPolDataset.addSeries(series1);
+                    coPolDataset.addSeries(series2);
+                    crossPolDataset.addSeries(series3);
+                    crossPolDataset.addSeries(series4);
                 }
             }
         } else {
@@ -165,13 +179,15 @@ public class GridPointBtDataChartToolView extends GridPointBtDataToolView {
 
     @Override
     protected void updateGridPointBtDataComponent(IOException e) {
-        dataset.removeAllSeries();
+        coPolDataset.removeAllSeries();
+        crossPolDataset.removeAllSeries();
         plot.setNoDataMessage("I/O error");
     }
 
     @Override
     protected void clearGridPointBtDataComponent() {
-        dataset.removeAllSeries();
+        coPolDataset.removeAllSeries();
+        crossPolDataset.removeAllSeries();
         plot.setNoDataMessage("No data");
     }
 }

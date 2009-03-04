@@ -1,7 +1,7 @@
 <module>
     <manifestVersion>1.0.0</manifestVersion>
     <symbolicName>smos-ui</symbolicName>
-    <version>0.5</version>
+    <version>1.0-SNAPSHOT</version>
     <name>SMOS UI Components</name>
     <description>
         This module provides several UI components suited for visual
@@ -17,7 +17,12 @@
     <url>http://envisat.esa.int/beam</url>
     <licenseUrl>http://www.gnu.org/licenses/gpl.html</licenseUrl>
 
-    <changelog/>
+    <changelog><![CDATA[
+       <p>Changes from version 0.5 to 1.0:<br/>
+        [SBOX-7] Show radiometric accuracy as error bars<br/>
+        [SBOX-6] Fix range for L1c chart view<br/>
+       </p>]]>
+       </changelog>
 
     <dependency>
         <module>beam-visat</module>
