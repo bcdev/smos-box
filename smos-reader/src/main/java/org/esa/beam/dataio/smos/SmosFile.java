@@ -139,8 +139,9 @@ public class SmosFile implements GridPointDataProvider {
         final Area region = new Area();
 
         for (int i = 0; i < gridPointList.getElementCount(); i++) {
-            double lon = gridPointList.getCompound(i).getFloat(lonIndex);
-            double lat = gridPointList.getCompound(i).getFloat(latIndex);
+            CompoundData compound = gridPointList.getCompound(i);
+            double lon = compound.getFloat(lonIndex);
+            double lat = compound.getFloat(latIndex);
 
             // normalisation to [-180, 180] necessary for some L1c test products
             if (lon > 180.0) {
@@ -156,12 +157,10 @@ public class SmosFile implements GridPointDataProvider {
 
             if (!region.contains(x, y, w, h)) {
                 for (Rectangle2D tileRect : tileRects) {
-                    if (!region.contains(tileRect)) {
-                        if (tileRect.intersects(x, y, w, h)) {
-                            region.add(new Area(tileRect));
-                            if (region.contains(x, y, w, h)) {
-                                break;
-                            }
+                    if (tileRect.intersects(x, y, w, h) && !region.contains(tileRect)) {
+                        region.add(new Area(tileRect));
+                        if (region.contains(x, y, w, h)) {
+                            break;
                         }
                     }
                 }
