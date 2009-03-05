@@ -49,10 +49,10 @@ public class SceneViewSelectionService {
 
     private void setSelectedSceneView(ProductSceneView newView) {
         ProductSceneView oldView = selectedSceneView;
-        if (oldView != null) {
-            oldView.removePixelPositionListener(ppl);
-        }
         if (oldView != newView) {
+            if (oldView != null) {
+                oldView.removePixelPositionListener(ppl);
+            }
             if (newView != null) {
                 Assert.argument(newView.getProduct().getProductReader() instanceof SmosProductReader, "view");
             }
