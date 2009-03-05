@@ -337,35 +337,38 @@ public class SmosProductReader extends AbstractProductReader {
         final Band band = addBand(product, bandName, bandType, bandInfo, valueProvider);
 
         if (bandName.equals("Flags")) {
-            addFlagCodingAndBitmaskDefs(band, product, product.getFlagCodingGroup().get(0));
+            final Random random = new Random(5489);
+            addFlagCodingAndBitmaskDefs(band, product, product.getFlagCodingGroup().get(0), random);
         }
     }
 
     private void addL2OsBand(Product product, String bandName, int bandType, BandInfo bandInfo, int fieldIndex) {
         final Band band = addBand(product, bandName, bandType, bandInfo, new L2FieldValueProvider(smosFile, fieldIndex));
 
+        final Random random = new Random(5489);
         if (bandName.startsWith("Control_Flags")) {
-            addFlagCodingAndBitmaskDefs(band, product, product.getFlagCodingGroup().get(0));
+            addFlagCodingAndBitmaskDefs(band, product, product.getFlagCodingGroup().get(0), random);
         }
         if (bandName.startsWith("Science_Flags")) {
-            addFlagCodingAndBitmaskDefs(band, product, product.getFlagCodingGroup().get(1));
+            addFlagCodingAndBitmaskDefs(band, product, product.getFlagCodingGroup().get(1), random);
         }
     }
 
     private void addL2SmBand(Product product, String bandName, int bandType, BandInfo bandInfo, int fieldIndex) {
         final Band band = addBand(product, bandName, bandType, bandInfo, new L2FieldValueProvider(smosFile, fieldIndex));
 
+        final Random random = new Random(5489);
         if (bandName.equals("Confidence_Flags")) {
-            addFlagCodingAndBitmaskDefs(band, product, product.getFlagCodingGroup().get(0));
+            addFlagCodingAndBitmaskDefs(band, product, product.getFlagCodingGroup().get(0), random);
         }
         if (bandName.equals("Science_Flags")) {
-            addFlagCodingAndBitmaskDefs(band, product, product.getFlagCodingGroup().get(1));
+            addFlagCodingAndBitmaskDefs(band, product, product.getFlagCodingGroup().get(1), random);
         }
         if (bandName.equals("Processing_Flags")) {
-            addFlagCodingAndBitmaskDefs(band, product, product.getFlagCodingGroup().get(2));
+            addFlagCodingAndBitmaskDefs(band, product, product.getFlagCodingGroup().get(2), random);
         }
         if (bandName.equals("DGG_Current_Flags")) {
-            addFlagCodingAndBitmaskDefs(band, product, product.getFlagCodingGroup().get(3));
+            addFlagCodingAndBitmaskDefs(band, product, product.getFlagCodingGroup().get(3), random);
         }
     }
 
@@ -479,11 +482,10 @@ public class SmosProductReader extends AbstractProductReader {
         return band;
     }
 
-    private static void addFlagCodingAndBitmaskDefs(Band band, Product product, FlagCoding flagCoding) {
+    private static void addFlagCodingAndBitmaskDefs(Band band, Product product, FlagCoding flagCoding, Random random) {
         band.setSampleCoding(flagCoding);
 
         final String bandName = band.getName();
-        final Random random = new Random(5489);
 
         for (final MetadataAttribute flag : flagCoding.getAttributes()) {
             final String name = bandName + "_" + flag.getName();
