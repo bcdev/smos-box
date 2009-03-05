@@ -7,13 +7,11 @@ import com.bc.ceres.core.ProgressMonitor;
 import com.bc.ceres.glayer.support.ImageLayer;
 import com.bc.ceres.glevel.support.DefaultMultiLevelImage;
 import com.bc.ceres.grender.Viewport;
-import com.bc.ceres.swing.progress.ProgressMonitorSwingWorker;
 import org.esa.beam.dataio.smos.GridPointValueProvider;
 import org.esa.beam.dataio.smos.L1cFieldValueProvider;
 import org.esa.beam.dataio.smos.L1cScienceSmosFile;
 import org.esa.beam.dataio.smos.SmosMultiLevelSource;
 import org.esa.beam.framework.help.HelpSys;
-import org.esa.beam.framework.ui.TableLayout;
 import org.esa.beam.framework.ui.product.ProductSceneView;
 import org.jfree.layout.CenterLayout;
 
@@ -39,7 +37,6 @@ import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.awt.FlowLayout;
@@ -56,7 +53,6 @@ import java.awt.image.RenderedImage;
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
 
 public class SnapshotInfoToolView extends SmosToolView {
     public static final String ID = SnapshotInfoToolView.class.getName();
@@ -188,7 +184,22 @@ public class SnapshotInfoToolView extends SmosToolView {
     private void locateSnapshotId(final ProductSceneView smosView, final long id) {
         final L1cScienceSmosFile smosFile = SmosBox.getL1cScienceSmosFile(smosView);
         if (smosFile != null) {
-            new LocateSnapshotWorker(getPaneControl(), smosView, smosFile, id).execute();
+            Rectangle2D snapshotRegion = smosFile.getSnapshotRegion(id);
+            if (snapshotRegion != null) {
+                final Viewport vp = smosView.getLayerCanvas().getViewport();
+                final AffineTransform m2v = vp.getModelToViewTransform();
+                final Point2D.Double center = new Point2D.Double(snapshotRegion.getCenterX(), snapshotRegion.getCenterY());
+                m2v.transform(center, center);
+                final Rectangle viewBounds = vp.getViewBounds();
+                final double vx = viewBounds.getCenterX();
+                final double vy = viewBounds.getCenterY();
+                vp.moveViewDelta(vx - center.getX(), vy - center.getY());
+            } else {
+                JOptionPane.showMessageDialog(getPaneControl(),
+                                              MessageFormat.format("No snapshot found with ID = {0}", id));
+            }
+            
+            
         }
     }
 
@@ -434,54 +445,6 @@ public class SnapshotInfoToolView extends SmosToolView {
         private void maybeShowPopup(MouseEvent e) {
             if (e.isPopupTrigger()) {
                 popup.show(e.getComponent(), e.getX(), e.getY());
-            }
-        }
-    }
-
-    private static class LocateSnapshotWorker extends ProgressMonitorSwingWorker<Rectangle2D, Object> {
-        private final Component paneControl;
-        private final ProductSceneView smosView;
-        private final L1cScienceSmosFile smosFile;
-        private final long id;
-
-        private LocateSnapshotWorker(Container paneControl,
-                                     ProductSceneView smosView,
-                                     L1cScienceSmosFile smosFile,
-                                     long id) {
-            super(paneControl, "Computing snapshot region");
-            this.paneControl = paneControl;
-            this.smosView = smosView;
-            this.smosFile = smosFile;
-            this.id = id;
-        }
-
-        @Override
-        protected Rectangle2D doInBackground(ProgressMonitor pm) throws Exception {
-            return smosFile.computeSnapshotRegion(id, pm);
-        }
-
-        @Override
-        protected void done() {
-            try {
-                final Rectangle2D region = get();
-                if (region != null) {
-                    final Viewport vp = smosView.getLayerCanvas().getViewport();
-                    final AffineTransform m2v = vp.getModelToViewTransform();
-                    final Point2D.Double center = new Point2D.Double(region.getCenterX(), region.getCenterY());
-                    m2v.transform(center, center);
-                    final Rectangle viewBounds = vp.getViewBounds();
-                    final double vx = viewBounds.getCenterX();
-                    final double vy = viewBounds.getCenterY();
-                    vp.moveViewDelta(vx - center.getX(), vy - center.getY());
-                } else {
-                    JOptionPane.showMessageDialog(paneControl,
-                                                  MessageFormat.format("No snapshot found with ID = {0}", id));
-                }
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                JOptionPane.showMessageDialog(paneControl,
-                                              MessageFormat.format("Error:\n{0}", e.getCause().getMessage()));
             }
         }
     }
