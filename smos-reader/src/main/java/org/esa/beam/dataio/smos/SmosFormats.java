@@ -47,8 +47,8 @@ public class SmosFormats {
 
     @SuppressWarnings({"PointlessBitwiseExpression"})
     public static final FlagDescriptor[] L1C_FLAGS = {
-//            new FlagDescriptor(1 << 0, "POL_FLAG_1", ""),
-//            new FlagDescriptor(1 << 1, "POL_FLAG_2", ""),
+            new FlagDescriptor(1 << 0, "POL_FLAG_1", ""),
+            new FlagDescriptor(1 << 1, "POL_FLAG_2", ""),
             new FlagDescriptor(1 << 2, "SUN_FOV", "Direct  Sun  correction  has  been  performed  during  image reconstruction of this pixel"),
             new FlagDescriptor(1 << 3, "SUN_GLINT_FOV", "Reflected  Sun  correction  has  been  performed  during  image reconstruction of this pixel"),
             new FlagDescriptor(1 << 4, "MOON_GLINT_FOV", "Direct  Moon  correction  has  been  performed  during  image reconstruction of this pixel"),

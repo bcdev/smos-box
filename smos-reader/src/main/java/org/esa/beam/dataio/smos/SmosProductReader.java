@@ -129,6 +129,7 @@ public class SmosProductReader extends AbstractProductReader {
 
         final String formatName = format.getName();
 
+        addGridPointSequentialNumberBand(product);
         if (formatName.contains("MIR_BWLD1C")
                 || formatName.contains("MIR_BWND1C")
                 || formatName.contains("MIR_BWSD1C")) {
@@ -166,8 +167,6 @@ public class SmosProductReader extends AbstractProductReader {
         } else {
             throw new IllegalStateException("Illegal SMOS format: " + formatName);
         }
-
-        addGridPointSequentialNumberBand(product);
 
         // set quicklook band name to first BT band
         for (Band band : product.getBands()) {
