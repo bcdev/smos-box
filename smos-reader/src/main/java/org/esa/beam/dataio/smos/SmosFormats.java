@@ -47,21 +47,21 @@ public class SmosFormats {
 
     @SuppressWarnings({"PointlessBitwiseExpression"})
     public static final FlagDescriptor[] L1C_FLAGS = {
-            new FlagDescriptor(1 << 0, "POL_FLAG_1", ""),
-            new FlagDescriptor(1 << 1, "POL_FLAG_2", ""),
-            new FlagDescriptor(1 << 2, "SUN_FOV", ""),
-            new FlagDescriptor(1 << 3, "SUN_GLINT_FOV", ""),
-            new FlagDescriptor(1 << 4, "MOON_GLINT_FOV", ""),
+//            new FlagDescriptor(1 << 0, "POL_FLAG_1", ""),
+//            new FlagDescriptor(1 << 1, "POL_FLAG_2", ""),
+            new FlagDescriptor(1 << 2, "SUN_FOV", "Direct  Sun  correction  has  been  performed  during  image reconstruction of this pixel"),
+            new FlagDescriptor(1 << 3, "SUN_GLINT_FOV", "Reflected  Sun  correction  has  been  performed  during  image reconstruction of this pixel"),
+            new FlagDescriptor(1 << 4, "MOON_GLINT_FOV", "Direct  Moon  correction  has  been  performed  during  image reconstruction of this pixel"),
             new FlagDescriptor(1 << 5, "SINGLE_SNAPSHOT", ""),
-            new FlagDescriptor(1 << 6, "FTT", ""),
-            new FlagDescriptor(1 << 7, "SUN_POINT", ""),
-            new FlagDescriptor(1 << 8, "SUN_GLINT_AREA", ""),
-            new FlagDescriptor(1 << 9, "MOON_POINT", ""),
-            new FlagDescriptor(1 << 10, "AF_FOV", ""),
-            new FlagDescriptor(1 << 11, "EAF_FOV", ""),
-            new FlagDescriptor(1 << 12, "BORDER_FOV", ""),
-            new FlagDescriptor(1 << 13, "SUN_TAILS", ""),
-            new FlagDescriptor(1 << 14, "RFI", ""),
+            new FlagDescriptor(1 << 6, "FTT", "Flat Target  Transformation  has  been  performed  during  image reconstruction of this pixel"),
+            new FlagDescriptor(1 << 7, "SUN_POINT", "Pixel is located in a zone where a Sun alias was reconstructed (after Sun removal, measurement may be degraded)"),
+            new FlagDescriptor(1 << 8, "SUN_GLINT_AREA", "Pixel is located in a zone where Sun reflection has been detected"),
+            new FlagDescriptor(1 << 9, "MOON_POINT", "Pixel  is  located  in a zone where a Moon alias was reconstructed (after Moon removal, measurement may be degraded)"),
+            new FlagDescriptor(1 << 10, "AF_FOV", "Pixel is inside the exclusive zone of Alias free (delimited by the six aliased unit circles)"),
+            new FlagDescriptor(1 << 11, "EAF_FOV", "Pixel is inside the Extended Alias free zone (obtained after removing sky aliases)"),
+            new FlagDescriptor(1 << 12, "BORDER_FOV", "Pixel is close to the border delimiting the Extended Alias free zone"),
+            new FlagDescriptor(1 << 13, "SUN_TAILS", "Pixel is located in the hexagonal alias directions centred on a Sun alias (if Sun is not removed, measurement may be degraded in these directions)"),
+            new FlagDescriptor(1 << 14, "RFI", "Pixel is affected by RFI effects (as identified in static ADF file)"),
     };
 
     @SuppressWarnings({"PointlessBitwiseExpression"})
