@@ -6,6 +6,8 @@ import com.bc.ceres.binio.SequenceData;
 import com.bc.ceres.binio.SimpleType;
 import com.bc.ceres.binio.Type;
 import org.esa.beam.dataio.smos.L1cSmosFile;
+import org.esa.beam.dataio.smos.BandInfoRegistry;
+import org.esa.beam.dataio.smos.BandInfo;
 
 import java.io.IOException;
 import java.math.BigInteger;
@@ -26,19 +28,33 @@ class GridPointBtDataset {
 
         int btDataListCount = btDataList.getElementCount();
 
-        String[] columnNames = new String[memberCount];
-        Class[] columnClasses = new Class[memberCount];
+        final String[] columnNames = new String[memberCount];
+        final Class[] columnClasses = new Class[memberCount];
+        final BandInfo[] bandInfos = new BandInfo[memberCount];
 
         for (int j = 0; j < memberCount; j++) {
-            columnNames[j] = type.getMemberName(j);
-            columnClasses[j] = getNumbericMemberType(type, j);
+            final String memberName = type.getMemberName(j);
+            columnNames[j] = memberName;
+            final BandInfo bandInfo = BandInfoRegistry.getInstance().getBandInfo(memberName);
+            if (bandInfo == null || bandInfo.getScaleFactor() == 1.0 && bandInfo.getScaleOffset() == 0.0) {
+                columnClasses[j] = getNumericMemberType(type, j);
+            } else {
+                columnClasses[j] = Double.class;
+            }
+            bandInfos[j] = bandInfo;
         }
 
-        Number[][] tableData = new Number[btDataListCount][memberCount];
+        final Number[][] tableData = new Number[btDataListCount][memberCount];
         for (int i = 0; i < btDataListCount; i++) {
             CompoundData btData = btDataList.getCompound(i);
             for (int j = 0; j < memberCount; j++) {
-                tableData[i][j] = getNumbericMember(btData, j);
+                final Number member = getNumbericMember(btData, j);
+                final BandInfo bandInfo = bandInfos[j];
+                if (bandInfo == null || bandInfo.getScaleFactor() == 1.0 && bandInfo.getScaleOffset() == 0.0) {
+                    tableData[i][j] = member;
+                } else {
+                    tableData[i][j] = member.doubleValue() * bandInfo.getScaleFactor() + bandInfo.getScaleOffset();
+                }
             }
         }
 
@@ -76,7 +92,7 @@ class GridPointBtDataset {
 
     // todo - move this to binio.utils (nf - 20081205)
     // todo - test this (nf - 20081205)
-    public static Class<? extends Number> getNumbericMemberType(CompoundType compoundData, int memberIndex) {
+    public static Class<? extends Number> getNumericMemberType(CompoundType compoundData, int memberIndex) {
         Type memberType = compoundData.getMemberType(memberIndex);
         Class<? extends Number> numberClass;
         if (memberType == SimpleType.DOUBLE) {

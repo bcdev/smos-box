@@ -24,7 +24,7 @@ import java.util.concurrent.ConcurrentMap;
  * @version $Revision$ $Date$
  * @since BEAM 4.6
  */
-class BandInfoRegistry {
+public class BandInfoRegistry {
 
     private static final BandInfoRegistry uniqueInstance = new BandInfoRegistry();
 
@@ -470,11 +470,11 @@ class BandInfoRegistry {
                                  "strong galactic source");
     }
 
-    static BandInfoRegistry getInstance() {
+    public static BandInfoRegistry getInstance() {
         return uniqueInstance;
     }
 
-    BandInfo getBandInfo(String name) {
+    public BandInfo getBandInfo(String name) {
         return bandInfoMap.get(name);
     }
 

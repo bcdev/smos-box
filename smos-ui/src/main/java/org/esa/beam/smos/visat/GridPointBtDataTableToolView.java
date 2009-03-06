@@ -29,8 +29,8 @@ public class GridPointBtDataTableToolView extends GridPointBtDataToolView {
     private JTable table;
     private JButton columnsButton;
     private JButton exportButton;
-    private Map<L1cSmosFile, TableColumnModel> columnModels = new WeakHashMap<L1cSmosFile, TableColumnModel>();
-    private Map<L1cSmosFile, String[]> columnNames = new WeakHashMap<L1cSmosFile, String[]>();
+//    private Map<L1cSmosFile, TableColumnModel> columnModels = new WeakHashMap<L1cSmosFile, TableColumnModel>();
+//    private Map<L1cSmosFile, String[]> columnNames = new WeakHashMap<L1cSmosFile, String[]>();
 
     private GridPointBtDataTableModel gridPointBtDataTableModel;
 
@@ -50,25 +50,25 @@ public class GridPointBtDataTableToolView extends GridPointBtDataToolView {
         if (enabled) {
             L1cSmosFile smosFile;
             TableColumnModel columnModel;
-            boolean initTableModel = false;
+//            boolean initTableModel = false;
             String[] names;
-            synchronized (this) {
+//            synchronized (this) {
                 smosFile = (L1cSmosFile) getSelectedSmosFile();
-                columnModel = columnModels.get(smosFile);
-                names = columnNames.get(smosFile);
-                if (columnModel == null) {
+//                columnModel = columnModels.get(smosFile);
+//                names = columnNames.get(smosFile);
+//                if (columnModel == null) {
                     columnModel = new DefaultTableColumnModel();
-                    columnModels.put(smosFile, columnModel);
+//                    columnModels.put(smosFile, columnModel);
                     names = getColumnNames(smosFile);
-                    columnNames.put(smosFile, names);
-                    initTableModel = true;
-                }
-            }
+//                    columnNames.put(smosFile, names);
+//                    initTableModel = true;
+//                }
+//            }
             gridPointBtDataTableModel.setColumnNames(names);
             table.setColumnModel(columnModel);
-            if (initTableModel) {
+//            if (initTableModel) {
                 table.createDefaultColumnsFromModel();
-            }
+//            }
         }
     }
 

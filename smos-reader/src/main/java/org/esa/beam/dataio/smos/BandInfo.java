@@ -21,7 +21,7 @@ package org.esa.beam.dataio.smos;
  * @version $Revision$ $Date$
  * @since BEAM 4.6
  */
-class BandInfo {
+public class BandInfo {
 
     final String name;
     final String unit;
@@ -47,5 +47,13 @@ class BandInfo {
         this.min = min;
         this.max = max;
         this.description = description;
+    }
+
+    public double getScaleOffset() {
+        return scaleOffset;
+    }
+
+    public double getScaleFactor() {
+        return scaleFactor;
     }
 }
