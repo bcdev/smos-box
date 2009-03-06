@@ -2,11 +2,16 @@ package org.esa.beam.smos.visat;
 
 import org.esa.beam.dataio.smos.L1cSmosFile;
 import org.esa.beam.dataio.smos.SmosFile;
+import org.esa.beam.dataio.smos.SmosProductReader;
 import org.esa.beam.framework.datamodel.Pin;
 import org.esa.beam.framework.datamodel.PixelPos;
 import org.esa.beam.framework.datamodel.ProductNode;
 import org.esa.beam.framework.datamodel.ProductNodeEvent;
 import org.esa.beam.framework.datamodel.ProductNodeListener;
+import org.esa.beam.framework.datamodel.Product;
+import org.esa.beam.framework.datamodel.MetadataElement;
+import org.esa.beam.framework.dataio.ProductReader;
+import org.esa.beam.visat.VisatApp;
 
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
@@ -81,7 +86,7 @@ public abstract class GridPointBtDataToolView extends SmosToolView {
             }
         }
         updateGridPointBtDataComponent(id);
-     }
+    }
 
     private void updateGridPointBtDataComponent(int selectedGridPointId) {
         if (selectedGridPointId == -1) {
@@ -90,7 +95,23 @@ public abstract class GridPointBtDataToolView extends SmosToolView {
             return;
         }
 
-        final SmosFile smosFile = getSelectedSmosFile();
+        SmosFile smosFile = getSelectedSmosFile();
+
+        // If smosFile is not an L1cSmosFile (i.e. its an L2SmosFile)
+        // find the corresponding L1cSmosFile
+        if (!(smosFile instanceof L1cSmosFile)) {
+            final Product selectedProduct = getSelectedSmosProduct();
+            final MetadataElement element = findElement(selectedProduct.getMetadataRoot(), "List_of_Data_Sets");
+            if (element != null) {
+                final String name = getRefFilename(element);
+                if (name != null) {
+                    final L1cSmosFile l1cSmosFile = findL1cSmosFile(name);
+                    if (l1cSmosFile != null) {
+                        smosFile = l1cSmosFile;
+                    }
+                }
+            }
+        }
         final int gridPointIndex = smosFile.getGridPointIndex(selectedGridPointId);
 
         if (gridPointIndex >= 0 && smosFile instanceof L1cSmosFile) {
@@ -124,6 +145,45 @@ public abstract class GridPointBtDataToolView extends SmosToolView {
 
     protected abstract void clearGridPointBtDataComponent();
 
+    private static MetadataElement findElement(MetadataElement element, String elementName) {
+        // TODO: implement
+        return null;
+    }
+
+    private static String getRefFilename(MetadataElement element) {
+        for (final MetadataElement metadataElement : element.getElements()) {
+            if ("L1C_SM_FILE".equals(metadataElement.getAttributeString("DS_Name", ""))
+                    || "L1C_OS_FILE".equals(metadataElement.getAttributeString("DS_Name", ""))) {
+                final String name = metadataElement.getAttributeString("Ref_Filename", "");
+                if (name.length() > 10) {
+                    // ignore version numbers in file name
+                    return name.substring(0, name.length() - 10);
+                }
+                break;
+            }
+        }
+
+        return null;
+    }
+
+    private static L1cSmosFile findL1cSmosFile(String name) {
+        final Product[] products = VisatApp.getApp().getProductManager().getProducts();
+
+        for (final Product product : products) {
+            final ProductReader productReader = product.getProductReader();
+            if (productReader instanceof SmosProductReader) {
+                final SmosFile smosFile = ((SmosProductReader) productReader).getSmosFile();
+                if (smosFile instanceof L1cSmosFile) {
+                    if (name.equalsIgnoreCase(smosFile.getFile().getName())) {
+                        return (L1cSmosFile) smosFile;
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+    
     private class GPSL implements GridPointSelectionService.SelectionListener {
         @Override
         public void handleGridPointSelectionChanged(int oldId, int newId) {
