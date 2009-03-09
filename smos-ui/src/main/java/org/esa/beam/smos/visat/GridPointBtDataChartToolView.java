@@ -31,8 +31,6 @@ public class GridPointBtDataChartToolView extends GridPointBtDataToolView {
     private YIntervalSeriesCollection crossPolDataset;
     private XYPlot plot;
     private JCheckBox[] modeCheckers;
-    private static final double INCIDENCE_ANGLE_FACTOR = (90.0 / (1 << 16));
-    private static final double NOISE_FACTOR = (50.0 / (1 << 16));
 
     @Override
     protected JComponent createGridPointComponent() {
@@ -126,9 +124,9 @@ public class GridPointBtDataChartToolView extends GridPointBtDataToolView {
                 int length = ds.data.length;
                 for (int i = 0; i < length; i++) {
                     int polMode = ds.data[i][iq].intValue() & SmosFormats.L1C_POL_FLAGS_MASK;
-                    double x = ds.data[i][ix].doubleValue()  * INCIDENCE_ANGLE_FACTOR;
+                    double x = ds.data[i][ix].doubleValue();
                     double y = ds.data[i][iy1].doubleValue();
-                    double dev = ds.data[i][id].doubleValue() * NOISE_FACTOR;
+                    double dev = ds.data[i][id].doubleValue();
                      if (m1 && polMode == SmosFormats.L1C_POL_MODE_X) {
                         series1.add(x, y, y - dev, y + dev);
                     } else if (m2 && polMode == SmosFormats.L1C_POL_MODE_Y) {
@@ -152,8 +150,8 @@ public class GridPointBtDataChartToolView extends GridPointBtDataToolView {
                     int length = ds.data.length;
                     for (int i = 0; i < length; i++) {
                         int polMode = ds.data[i][iq].intValue() & SmosFormats.L1C_POL_FLAGS_MASK;
-                        double dev = ds.data[i][id].doubleValue() * NOISE_FACTOR;
-                        double x = ds.data[i][ix].doubleValue() * INCIDENCE_ANGLE_FACTOR;
+                        double dev = ds.data[i][id].doubleValue();
+                        double x = ds.data[i][ix].doubleValue();
                         double y1 = ds.data[i][iy1].doubleValue();
                         if (m1 && polMode == SmosFormats.L1C_POL_MODE_X) {
                             series1.add(x, y1, y1 - dev, y1 + dev);
