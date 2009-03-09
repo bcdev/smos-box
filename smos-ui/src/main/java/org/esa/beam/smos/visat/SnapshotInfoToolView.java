@@ -10,6 +10,7 @@ import com.bc.ceres.grender.Viewport;
 import org.esa.beam.dataio.smos.GridPointValueProvider;
 import org.esa.beam.dataio.smos.L1cFieldValueProvider;
 import org.esa.beam.dataio.smos.L1cScienceSmosFile;
+import org.esa.beam.dataio.smos.SmosFile;
 import org.esa.beam.dataio.smos.SmosMultiLevelSource;
 import org.esa.beam.framework.help.HelpSys;
 import org.esa.beam.framework.ui.product.ProductSceneView;
@@ -35,6 +36,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableModel;
+
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -121,21 +124,25 @@ public class SnapshotInfoToolView extends SmosToolView {
     }
 
     private void updateTable(long snapshotId) {
-        final CompoundData data;
-        final L1cScienceSmosFile smosFile = (L1cScienceSmosFile) getSelectedSmosFile();
-        final int snapshotIndex = smosFile.getSnapshotIndex(snapshotId);
-        if (snapshotIndex != -1) {
-            try {
-                data = smosFile.getSnapshotData(snapshotIndex);
-            } catch (IOException e) {
-                snapshotTable.setModel(NULL_MODEL);
-                return;
+        final SmosFile selectedSmosFile = getSelectedSmosFile();
+        if (selectedSmosFile != null && selectedSmosFile instanceof L1cScienceSmosFile) {
+            L1cScienceSmosFile l1cScienceSmosFile = (L1cScienceSmosFile) selectedSmosFile;
+            final int snapshotIndex = l1cScienceSmosFile.getSnapshotIndex(snapshotId);
+            if (snapshotIndex != -1) {
+                try {
+                    final CompoundData data = l1cScienceSmosFile.getSnapshotData(snapshotIndex);
+                    snapshotTable.setModel(createSnapshotTableModel(data));
+                    return;
+                } catch (IOException e) {
+                    snapshotTable.setModel(NULL_MODEL);
+                    return;
+                }
             }
-        } else {
-            snapshotTable.setModel(NULL_MODEL);
-            return;
         }
-
+        snapshotTable.setModel(NULL_MODEL);
+    }
+    
+    private TableModel createSnapshotTableModel(CompoundData data) {
         final CompoundType compoundType = data.getCompoundType();
         final int memberCount = data.getMemberCount();
         final ArrayList<Object[]> list = new ArrayList<Object[]>(memberCount);
@@ -155,7 +162,7 @@ public class SnapshotInfoToolView extends SmosToolView {
             }
         }
 
-        snapshotTable.setModel(new SnapshotTableModel(list.toArray(new Object[2][list.size()])));
+        return new SnapshotTableModel(list.toArray(new Object[2][list.size()]));
     }
 
     private void updateImageLayer(ProductSceneView smosView) {
