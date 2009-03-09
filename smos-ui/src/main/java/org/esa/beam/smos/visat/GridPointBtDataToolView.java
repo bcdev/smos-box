@@ -74,9 +74,11 @@ public abstract class GridPointBtDataToolView extends SmosToolView {
     protected L1cSmosFile getL1cSmosFile() {
         SmosFile smosFile = getSelectedSmosFile();
         L1cSmosFile l1cSmosFile = null;
-        // If smosFile is not an L1cSmosFile (i.e. its an L2SmosFile)
-        // find the corresponding L1cSmosFile
-        if (!(smosFile instanceof L1cSmosFile)) {
+        if (smosFile instanceof L1cSmosFile) {
+            l1cSmosFile = (L1cSmosFile) smosFile;
+        } else {
+            // If smosFile is not an L1cSmosFile (i.e. its an L2SmosFile)
+            // find the corresponding L1cSmosFile
             final Product selectedProduct = getSelectedSmosProduct();
             final MetadataElement element = findElement(selectedProduct.getMetadataRoot(), "List_of_Data_Sets");
             if (element != null) {
