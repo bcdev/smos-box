@@ -3,6 +3,7 @@ package org.esa.beam.smos.visat;
 import com.bc.ceres.glayer.Layer;
 import org.esa.beam.framework.ui.product.ProductSceneView;
 import org.esa.beam.framework.dataio.ProductReader;
+import org.esa.beam.framework.datamodel.RasterDataNode;
 import org.esa.beam.smos.worldmap.SmosWorldMapLayer;
 import org.esa.beam.visat.VisatApp;
 import org.esa.beam.visat.VisatPlugIn;
@@ -82,11 +83,14 @@ public class SmosBox implements VisatPlugIn {
 
     static L1cScienceSmosFile getL1cScienceSmosFile(ProductSceneView smosView) {
         if (smosView != null) {
-            final ProductReader productReader = smosView.getRaster().getProductReader();
-            if (productReader instanceof SmosProductReader) {
-                final SmosFile smosFile = ((SmosProductReader) productReader).getSmosFile();
-                if (smosFile instanceof L1cScienceSmosFile) {
-                    return (L1cScienceSmosFile) smosFile;
+            RasterDataNode raster = smosView.getRaster();
+            if (raster != null) {
+                final ProductReader productReader = raster.getProductReader();
+                if (productReader instanceof SmosProductReader) {
+                    final SmosFile smosFile = ((SmosProductReader) productReader).getSmosFile();
+                    if (smosFile instanceof L1cScienceSmosFile) {
+                        return (L1cScienceSmosFile) smosFile;
+                    }
                 }
             }
         }
