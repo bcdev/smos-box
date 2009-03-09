@@ -21,6 +21,7 @@
        <p>Changes from version 0.5 to 1.0:<br/>
         [SBOX-7] Show radiometric accuracy as error bars<br/>
         [SBOX-6] Fix range for L1c chart view<br/>
+        [SBOX-5] Link Level 2 product with corresponding Level 1c<br/>
        </p>]]>
        </changelog>
 

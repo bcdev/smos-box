@@ -4,6 +4,7 @@ import com.bc.ceres.binio.CompoundMember;
 import com.bc.ceres.binio.CompoundType;
 import com.jidesoft.grid.TableColumnChooser;
 import org.esa.beam.dataio.smos.L1cSmosFile;
+import org.esa.beam.dataio.smos.SmosFile;
 import org.esa.beam.framework.ui.product.ProductSceneView;
 
 import javax.swing.Action;
@@ -29,8 +30,6 @@ public class GridPointBtDataTableToolView extends GridPointBtDataToolView {
     private JTable table;
     private JButton columnsButton;
     private JButton exportButton;
-//    private Map<L1cSmosFile, TableColumnModel> columnModels = new WeakHashMap<L1cSmosFile, TableColumnModel>();
-//    private Map<L1cSmosFile, String[]> columnNames = new WeakHashMap<L1cSmosFile, String[]>();
 
     private GridPointBtDataTableModel gridPointBtDataTableModel;
 
@@ -42,33 +41,23 @@ public class GridPointBtDataTableToolView extends GridPointBtDataToolView {
 
     @Override
     protected void updateClientComponent(ProductSceneView smosView) {
-        boolean enabled = smosView != null && getSelectedSmosFile() instanceof L1cSmosFile;
+        boolean enabled = smosView != null;
+        L1cSmosFile smosFile = null;
+        if (enabled) {
+            smosFile = getL1cSmosFile();
+            if (smosFile == null) {
+                enabled = false;
+            }
+        }
         table.setEnabled(enabled);
-
         columnsButton.setEnabled(enabled);
         exportButton.setEnabled(enabled);
         if (enabled) {
-            L1cSmosFile smosFile;
-            TableColumnModel columnModel;
-//            boolean initTableModel = false;
-            String[] names;
-//            synchronized (this) {
-                smosFile = (L1cSmosFile) getSelectedSmosFile();
-//                columnModel = columnModels.get(smosFile);
-//                names = columnNames.get(smosFile);
-//                if (columnModel == null) {
-                    columnModel = new DefaultTableColumnModel();
-//                    columnModels.put(smosFile, columnModel);
-                    names = getColumnNames(smosFile);
-//                    columnNames.put(smosFile, names);
-//                    initTableModel = true;
-//                }
-//            }
+            String[] names = getColumnNames(smosFile);
+            TableColumnModel columnModel = new DefaultTableColumnModel();
             gridPointBtDataTableModel.setColumnNames(names);
             table.setColumnModel(columnModel);
-//            if (initTableModel) {
-                table.createDefaultColumnsFromModel();
-//            }
+            table.createDefaultColumnsFromModel();
         }
     }
 

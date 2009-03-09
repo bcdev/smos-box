@@ -70,6 +70,24 @@ public abstract class GridPointBtDataToolView extends SmosToolView {
         SmosBox.getInstance().getGridPointSelectionService().removeGridPointSelectionListener(gpsl);
         updateGridPointBtDataComponent(-1);
     }
+    
+    protected L1cSmosFile getL1cSmosFile() {
+        SmosFile smosFile = getSelectedSmosFile();
+        L1cSmosFile l1cSmosFile = null;
+        // If smosFile is not an L1cSmosFile (i.e. its an L2SmosFile)
+        // find the corresponding L1cSmosFile
+        if (!(smosFile instanceof L1cSmosFile)) {
+            final Product selectedProduct = getSelectedSmosProduct();
+            final MetadataElement element = findElement(selectedProduct.getMetadataRoot(), "List_of_Data_Sets");
+            if (element != null) {
+                final String name = getRefFilename(element);
+                if (name != null) {
+                    l1cSmosFile = findL1cSmosFile(name);
+                }
+            }
+        }
+        return l1cSmosFile;
+    }
 
     final void updateGridPointBtDataComponent() {
         int id = -1;
@@ -94,27 +112,10 @@ public abstract class GridPointBtDataToolView extends SmosToolView {
             clearGridPointBtDataComponent();
             return;
         }
+        L1cSmosFile l1cSmosFile = getL1cSmosFile();
+        final int gridPointIndex = l1cSmosFile != null ? l1cSmosFile.getGridPointIndex(selectedGridPointId) : -1;
 
-        SmosFile smosFile = getSelectedSmosFile();
-
-        // If smosFile is not an L1cSmosFile (i.e. its an L2SmosFile)
-        // find the corresponding L1cSmosFile
-        if (!(smosFile instanceof L1cSmosFile)) {
-            final Product selectedProduct = getSelectedSmosProduct();
-            final MetadataElement element = findElement(selectedProduct.getMetadataRoot(), "List_of_Data_Sets");
-            if (element != null) {
-                final String name = getRefFilename(element);
-                if (name != null) {
-                    final L1cSmosFile l1cSmosFile = findL1cSmosFile(name);
-                    if (l1cSmosFile != null) {
-                        smosFile = l1cSmosFile;
-                    }
-                }
-            }
-        }
-        final int gridPointIndex = smosFile.getGridPointIndex(selectedGridPointId);
-
-        if (gridPointIndex >= 0 && smosFile instanceof L1cSmosFile) {
+        if (gridPointIndex >= 0) {
             setInfoText("" +
                     "<html>" +
                     "SEQNUM=<b>" + selectedGridPointId + "</b>, " +
@@ -122,7 +123,7 @@ public abstract class GridPointBtDataToolView extends SmosToolView {
                     "</html>");
 
             try {
-                GridPointBtDataset ds = GridPointBtDataset.read((L1cSmosFile) smosFile, gridPointIndex);
+                GridPointBtDataset ds = GridPointBtDataset.read(l1cSmosFile, gridPointIndex);
                 updateGridPointBtDataComponent(ds);
             } catch (IOException e) {
                 updateGridPointBtDataComponent(e);
@@ -146,7 +147,16 @@ public abstract class GridPointBtDataToolView extends SmosToolView {
     protected abstract void clearGridPointBtDataComponent();
 
     private static MetadataElement findElement(MetadataElement element, String elementName) {
-        // TODO: implement
+        if (element.getName().equals(elementName)) {
+            return element;
+        } else {
+            for (final MetadataElement childElement : element.getElements()) {
+                MetadataElement metadataElement = findElement(childElement, elementName);
+                if (metadataElement != null) {
+                    return metadataElement;
+                }
+            }
+        }
         return null;
     }
 
@@ -155,14 +165,17 @@ public abstract class GridPointBtDataToolView extends SmosToolView {
             if ("L1C_SM_FILE".equals(metadataElement.getAttributeString("DS_Name", ""))
                     || "L1C_OS_FILE".equals(metadataElement.getAttributeString("DS_Name", ""))) {
                 final String name = metadataElement.getAttributeString("Ref_Filename", "");
-                if (name.length() > 10) {
-                    // ignore version numbers in file name
-                    return name.substring(0, name.length() - 10);
-                }
-                break;
+                return getRelevantProductname(name);
             }
         }
-
+        return null;
+    }
+    
+    private static String getRelevantProductname(String name) {
+        if (name.length() > 10) {
+            // ignore version numbers in file name
+            return name.substring(0, name.length() - 10);
+        }
         return null;
     }
 
@@ -174,13 +187,14 @@ public abstract class GridPointBtDataToolView extends SmosToolView {
             if (productReader instanceof SmosProductReader) {
                 final SmosFile smosFile = ((SmosProductReader) productReader).getSmosFile();
                 if (smosFile instanceof L1cSmosFile) {
-                    if (name.equalsIgnoreCase(smosFile.getFile().getName())) {
+                    String productName = product.getName();
+                    String relevantProductname = getRelevantProductname(productName);
+                    if (name.equalsIgnoreCase(relevantProductname)) {
                         return (L1cSmosFile) smosFile;
                     }
                 }
             }
         }
-
         return null;
     }
     
