@@ -83,14 +83,14 @@ public class BandInfoRegistry {
                          "Incidence angle value corresponding to the " +
                                  "measured BT value over current Earth fixed " +
                                  "grid point. Measured as angle from pixel to " +
-                                 "S/C with respect to the pixel local normal (0º " +
+                                 "S/C with respect to the pixel local normal (0Â° " +
                                  "if vertical)");
         registerBandInfo("Azimuth_Angle", "deg", 0.0, 360.0 / (1 << 16), -999.0, 0.0, 360.0,
                          "Azimuth angle value corresponding to the " +
                                  "measured BT value over current Earth fixed " +
                                  "grid point. Measured as angle in pixel local " +
                                  "tangent plane from projected pixel to S/C " +
-                                 "direction with respect to the local North (0º if" +
+                                 "direction with respect to the local North (0Â° if" +
                                  "local North)");
         registerBandInfo("Faraday_Rotation_Angle", "deg", 0.0, 360.0 / (1 << 16), -999.0, 0.0, 360.0,
                          "Faraday rotation angle value corresponding " +
@@ -122,7 +122,7 @@ public class BandInfoRegistry {
         registerBandInfo("Optical_Thickness_Nad_DQX", "Np", 0.0, 1.0, -999.0, 0.0, 1.0,
                          "DQX for nadir optical thickness.");
         registerBandInfo("Surface_Temperature", "K", 0.0, 1.0, -999.0, 0.0, 400.0,
-                         "Surface temperature – may be a retrieved value " +
+                         "Surface temperature - may be a retrieved value " +
                                  "or from an external source.");
         registerBandInfo("Surface_Temperature_DQX", "K", 0.0, 1.0, -999.0, 0.0, 40.0,
                          "DQX for surface temperature.");
@@ -173,27 +173,27 @@ public class BandInfoRegistry {
         registerBandInfo("TB_ASL_Theta_B_H", "K", 0.0, 1.0, -999.0, 0.0, 100.0,
                          "Surface level TB (corrected from sky/atmosphere " +
                                  "contribution) computed from forward model with " +
-                                 "a specific incidence angle of 42.5°, and for H " +
+                                 "a specific incidence angle of 42.5Â°, and for H " +
                                  "polarisation.");
         registerBandInfo("TB_ASL_Theta_B_H_DQX", "K", 0.0, 1.0, -999.0, 0.0, 10.0,
                          "DQX for surface level TB for H polarisation.");
         registerBandInfo("TB_ASL_Theta_B_V", "K", 0.0, 1.0, -999.0, 0.0, 100.0,
                          "Surface level TB (corrected from sky/atmosphere " +
                                  "contribution) computed from forward model with " +
-                                 "a specific incidence angle of 42.5°, and for V " +
+                                 "a specific incidence angle of 42.5Â°, and for V " +
                                  "polarisation.");
         registerBandInfo("TB_ASL_Theta_B_V_DQX", "K", 0.0, 1.0, -999.0, 0.0, 10.0,
                          "DQX for surface level TB for V polarisation.");
         registerBandInfo("TB_TOA_Theta_B_H", "K", 0.0, 1.0, -999.0, 0.0, 100.0,
                          "Top of the atmosphere TB computed from " +
                                  "forward model at specific incidence angle of " +
-                                 "42.5º, for H polarisation.");
+                                 "42.5Â°, for H polarisation.");
         registerBandInfo("TB_TOA_Theta_B_H_DQX", "K", 0.0, 1.0, -999.0, 0.0, 10.0,
                          "DQX for top of the atmosphere TB for H polarisation.");
         registerBandInfo("TB_TOA_Theta_B_V", "K", 0.0, 1.0, -999.0, 0.0, 100.0,
                          "Top of the atmosphere TB computed from " +
                                  "forward model at specific incidence angle of " +
-                                 "42.5º, for V polarisation.");
+                                 "42.5Â°, for V polarisation.");
         registerBandInfo("TB_TOA_Theta_B_V_DQX", "K", 0.0, 1.0, -999.0, 0.0, 10.0,
                          "DQX for top of the atmosphere TB for V polarisation.");
         /*
@@ -213,22 +213,22 @@ public class BandInfoRegistry {
         registerBandInfo("M_AVA0", "", 0.0, 1.0, 0.0, 0, 2 << 8 - 1,
                          "Initial number of TB measurements available in L1c.");
         registerBandInfo("M_AVA", "", 0.0, 1.0, 0.0, 0, 2 << 8 - 1,
-                         "Preprocessing – number of TB measurements " +
+                         "Preprocessing - number of TB measurements " +
                                  "available for retrieval.");
         registerBandInfo("AFP", "Km", 0.0, 1.0, -999.0, 0.0, 30.0,
                          "Mean Surface of the antenna Footprint ellipses " +
                                  "on Earth.");
         registerBandInfo("N_Border_FOV", "", 0.0, 0.0, -999.0, 0, 2 << 8 - 1,
-                         "Counter view – number of views that flag is set off " +
+                         "Counter view - number of views that flag is set off " +
                                  "to AF_FOV_flag.");
         registerBandInfo("N_Sun_Tails", "", 0.0, 1.0, 0.0, 0, 2 << 8 - 1,
-                         "Counter view – number of views that flag is set on " +
+                         "Counter view - number of views that flag is set on " +
                                  "to Sun_Tails flag.");
         registerBandInfo("N_Sun_Glint_Area", "", 0.0, 1.0, 0.0, 0, 2 << 8 - 1,
-                         "Counter view – number of views that flag is set on " +
+                         "Counter view - number of views that flag is set on " +
                                  "to Sun_Glint_Area flag.");
         registerBandInfo("N_Sun_FOV", "", 0.0, 1.0, 0.0, 0, 2 << 8 - 1,
-                         "Counter view – number of views that flag is set on " +
+                         "Counter view - number of views that flag is set on " +
                                  "Sun_FOV flag.");
         registerBandInfo("N_Instrument_Error", "", 0.0, 1.0, 0.0, 0, 2 << 8 - 1,
                          "This counts the number of TBs that pass the " +
