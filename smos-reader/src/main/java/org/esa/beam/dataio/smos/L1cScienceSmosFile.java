@@ -19,9 +19,7 @@ import com.bc.ceres.binio.CompoundType;
 import com.bc.ceres.binio.DataFormat;
 import com.bc.ceres.binio.SequenceData;
 import com.bc.ceres.core.Assert;
-import com.bc.ceres.core.ProgressMonitor;
 
-import javax.swing.SwingWorker;
 import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.io.IOException;
@@ -32,6 +30,9 @@ import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 /**
  * Represents a SMOS L1c Science product file.
@@ -55,7 +56,7 @@ public class L1cScienceSmosFile extends L1cSmosFile implements SnapshotProvider 
     private final SequenceData snapshotList;
 
     private final CompoundType snapshotType;
-    private volatile SwingWorker worker;
+    private volatile Future<Void> backgroundTask;
     private volatile SnapshotPolarisationMode polMode;
 
     public L1cScienceSmosFile(File file, DataFormat format, boolean fullPol) throws IOException {
@@ -71,13 +72,6 @@ public class L1cScienceSmosFile extends L1cSmosFile implements SnapshotProvider 
             throw new IOException("Data block does not include snapshot list.");
         }
         snapshotType = (CompoundType) snapshotList.getSequenceType().getElementType();
-        worker = new SwingWorker() {
-            @Override
-            protected Object doInBackground() throws Exception {
-                tabulateSnapshotIds();
-                return null;
-            }
-        };
     }
 
     public boolean isFullPol() {
@@ -86,16 +80,22 @@ public class L1cScienceSmosFile extends L1cSmosFile implements SnapshotProvider 
 
     public void startBackgroundInit() {
         if (!isBackgroundInitStarted()) {
-            worker.execute();
+            Callable<Void> callable = new Callable<Void>() {
+                public Void call() throws IOException {
+                    tabulateSnapshotIds();
+                    return null;
+                }
+            };
+            backgroundTask = Executors.newSingleThreadExecutor().submit(callable);
         }
     }
 
     public boolean isBackgroundInitStarted() {
-        return !SwingWorker.StateValue.PENDING.equals(worker.getState());
+        return backgroundTask != null;
     }
 
     public boolean isBackgoundInitDone() {
-        return SwingWorker.StateValue.DONE.equals(worker.getState());
+        return backgroundTask.isDone();
     }
 
     private void tabulateSnapshotIds() throws IOException {
