@@ -70,7 +70,7 @@ public class BandInfoRegistry {
                                  "temperature measurement over current " +
                                  "Earth fixed grid point, obtained by DFT " +
                                  "interpolation from L1b data.");
-        registerBandInfo("BT_Value_Imag", "K", 0.0, 1.0, -999.0, 50.0, 350.0,
+        registerBandInfo("BT_Value_Imag", "K", 0.0, 1.0, -999.0, -10.0, 10.0,
                          "Imaginary component of HH, HV or VV polarisation brightness " +
                                  "temperature measurement over current " +
                                  "Earth fixed grid point, obtained by DFT " +
@@ -103,9 +103,9 @@ public class BandInfoRegistry {
                                  "over current Earth fixed grid point. It is " +
                                  "computed as the rotation from surface to " +
                                  "antenna (i.e. direct angle).");
-        registerBandInfo("Footprint_Axis1", "km", 0.0, 100.0 / (1 << 16), -999.0, 20.0, 30.0,
+        registerBandInfo("Footprint_Axis1", "km", 0.0, 100.0 / (1 << 16), -999.0, 20.0, 35.0,
                          "Elliptical footprint major semi-axis value.");
-        registerBandInfo("Footprint_Axis2", "km", 0.0, 100.0 / (1 << 16), -999.0, 20.0, 30.0,
+        registerBandInfo("Footprint_Axis2", "km", 0.0, 100.0 / (1 << 16), -999.0, 20.0, 35.0,
                          "Elliptical footprint minor semi-axis value.");
 
         /*

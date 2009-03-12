@@ -219,20 +219,20 @@ public class SmosProductReader extends AbstractProductReader {
                     addL1cBand(product, memberName,
                                memberTypeToBandType(member.getType()), bandInfo, fieldIndex,
                                SmosFormats.L1C_POL_MODE_X);
-                    continue;
-                }
-                if ("BT_Value".equals(memberName)) {
+                } else if ("BT_Value".equals(memberName)) {
                     addL1cBand(product, memberName + "_X",
                                memberTypeToBandType(member.getType()), bandInfo, fieldIndex,
                                SmosFormats.L1C_POL_MODE_X);
                     addL1cBand(product, memberName + "_Y",
                                memberTypeToBandType(member.getType()), bandInfo, fieldIndex,
                                SmosFormats.L1C_POL_MODE_Y);
+                    BandInfo bandInfoComplex = new BandInfo(bandInfo.name, bandInfo.unit, bandInfo.scaleOffset,
+                                                            bandInfo.scaleFactor, bandInfo.noDataValue, -10.0, 10.0, bandInfo.description);
                     addL1cBand(product, memberName + "_XY_Real",
-                               memberTypeToBandType(member.getType()), bandInfo, fieldIndex,
+                               memberTypeToBandType(member.getType()), bandInfoComplex, fieldIndex,
                                SmosFormats.L1C_POL_MODE_XY1);
                     addL1cBand(product, memberName + "_XY_Imag",
-                               memberTypeToBandType(member.getType()), bandInfo, fieldIndex,
+                               memberTypeToBandType(member.getType()), bandInfoComplex, fieldIndex,
                                SmosFormats.L1C_POL_MODE_XY2);
                 } else {
                     addL1cBand(product, memberName + "_X",
@@ -263,21 +263,19 @@ public class SmosProductReader extends AbstractProductReader {
                     addL1cBand(product, memberName,
                                memberTypeToBandType(member.getType()), bandInfo, fieldIndex,
                                SmosFormats.L1C_POL_MODE_X);
-                    continue;
-                }
-                if ("BT_Value_Real".equals(memberName)) {
+                } else if ("BT_Value_Real".equals(memberName)) {
                     addL1cBand(product, "BT_Value_X",
                                memberTypeToBandType(member.getType()), bandInfo, fieldIndex,
                                SmosFormats.L1C_POL_MODE_X);
                     addL1cBand(product, "BT_Value_Y",
                                memberTypeToBandType(member.getType()), bandInfo, fieldIndex,
                                SmosFormats.L1C_POL_MODE_Y);
+                    BandInfo bandInfoComplex = new BandInfo(bandInfo.name, bandInfo.unit, bandInfo.scaleOffset,
+                                                         bandInfo.scaleFactor, bandInfo.noDataValue, -10.0, 10.0, bandInfo.description);
                     addL1cBand(product, "BT_Value_XY_Real",
-                               memberTypeToBandType(member.getType()), bandInfo, fieldIndex,
+                               memberTypeToBandType(member.getType()), bandInfoComplex, fieldIndex,
                                SmosFormats.L1C_POL_MODE_XY1);
-                    continue;
-                }
-                if ("BT_Value_Imag".equals(memberName)) {
+                } else if ("BT_Value_Imag".equals(memberName)) {
                     addL1cBand(product, "BT_Value_XY_Imag",
                                memberTypeToBandType(member.getType()), bandInfo, fieldIndex,
                                SmosFormats.L1C_POL_MODE_XY1);
@@ -347,8 +345,7 @@ public class SmosProductReader extends AbstractProductReader {
         final Random random = new Random(5489);
         if (bandName.startsWith("Control_Flags")) {
             addFlagCodingAndBitmaskDefs(band, product, product.getFlagCodingGroup().get(0), random);
-        }
-        if (bandName.startsWith("Science_Flags")) {
+        } else if (bandName.startsWith("Science_Flags")) {
             addFlagCodingAndBitmaskDefs(band, product, product.getFlagCodingGroup().get(1), random);
         }
     }
@@ -359,14 +356,11 @@ public class SmosProductReader extends AbstractProductReader {
         final Random random = new Random(5489);
         if (bandName.equals("Confidence_Flags")) {
             addFlagCodingAndBitmaskDefs(band, product, product.getFlagCodingGroup().get(0), random);
-        }
-        if (bandName.equals("Science_Flags")) {
+        } else if (bandName.equals("Science_Flags")) {
             addFlagCodingAndBitmaskDefs(band, product, product.getFlagCodingGroup().get(1), random);
-        }
-        if (bandName.equals("Processing_Flags")) {
+        } else if (bandName.equals("Processing_Flags")) {
             addFlagCodingAndBitmaskDefs(band, product, product.getFlagCodingGroup().get(2), random);
-        }
-        if (bandName.equals("DGG_Current_Flags")) {
+        } else if (bandName.equals("DGG_Current_Flags")) {
             addFlagCodingAndBitmaskDefs(band, product, product.getFlagCodingGroup().get(3), random);
         }
     }
@@ -476,7 +470,7 @@ public class SmosProductReader extends AbstractProductReader {
         }
 
         band.setSourceImage(createSourceImage(valueProvider, band));
-        band.setImageInfo(createDefaultImageInfo(band, bandInfo));
+        band.setImageInfo(createDefaultImageInfo(bandInfo));
 
         return band;
     }
@@ -527,7 +521,7 @@ public class SmosProductReader extends AbstractProductReader {
     }
 
     // TODO: when bandInfo are completely defined, use bandInfo only 
-    private static ImageInfo createDefaultImageInfo(Band band, BandInfo bandInfo) {
+    private static ImageInfo createDefaultImageInfo(BandInfo bandInfo) {
         final Color[] colors = new Color[]{
                 new Color(0, 0, 0),
                 new Color(85, 0, 136),
@@ -537,10 +531,9 @@ public class SmosProductReader extends AbstractProductReader {
                 new Color(255, 255, 0),
                 new Color(255, 140, 0),
                 new Color(255, 0, 0)
-        };
-        final Stx stx = band.getStx();
-        double min = band.scale(stx.getMin());
-        double max = band.scale(stx.getMax());
+        };        
+        double min = bandInfo.min;
+        double max = bandInfo.max;
 
         final ColorPaletteDef.Point[] points = new ColorPaletteDef.Point[colors.length];
         for (int i = 0; i < colors.length; i++) {
