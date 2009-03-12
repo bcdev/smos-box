@@ -125,12 +125,12 @@ public class L1cScienceSmosFile extends L1cSmosFile implements SnapshotProvider 
                 final Rectangle2D.Float rectangle =
                         new Rectangle2D.Float(lon - 0.02f, lat - 0.02f, 0.04f, 0.04f);
                 
+                long lastSid = -1;
                 for (int j = 0; j < btCount; j++) {
                     final CompoundData btData = btList.getCompound(j);
                     final long sid = btData.getLong(snapshotIdOfPixelIndex);
                     final int flags = btData.getInt(flagsIndex);
 
-                    any.add(sid);
                     switch (flags & SmosFormats.L1C_POL_FLAGS_MASK) {
                         case SmosFormats.L1C_POL_MODE_X:
                             x.add(sid);
@@ -145,14 +145,18 @@ public class L1cScienceSmosFile extends L1cSmosFile implements SnapshotProvider 
                             xy.add(sid);
                             break;
                     }
-                
-                    Rectangle2D region = regions.get(sid);
-                    if (region == null) {
-                        region = new Rectangle2D.Float();
-                        region.setRect(rectangle);
-                        regions.put(sid, region);
-                    } else {
-                        region.add(rectangle);
+                    if (lastSid != sid) {
+                        // snapshots are ordered
+                        any.add(sid);
+                        Rectangle2D region = regions.get(sid);
+                        if (region == null) {
+                            region = new Rectangle2D.Float();
+                            region.setRect(rectangle);
+                            regions.put(sid, region);
+                        } else {
+                            region.add(rectangle);
+                        }
+                        lastSid = sid;
                     }
                 }
             }
