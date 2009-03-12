@@ -56,10 +56,10 @@ public class GridPointBtDataChartToolView extends GridPointBtDataToolView {
         xAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
 
         final NumberAxis yAxis = (NumberAxis) plot.getRangeAxis();
-        yAxis.setLabel("Co-Polarization Brightness Temperature (K)");
+        yAxis.setLabel("Co-Pol BT(K)");
         yAxis.setRange(50, 350);
         
-        final NumberAxis yAxis2 = new NumberAxis("Cross-Polarization Brightness Temperature (K)");
+        final NumberAxis yAxis2 = new NumberAxis("Cross-Pol BT(K)");
         yAxis2.setRange(-25, 25);
         plot.setRangeAxis(1, yAxis2);
         plot.setDataset(1, crossPolDataset);
