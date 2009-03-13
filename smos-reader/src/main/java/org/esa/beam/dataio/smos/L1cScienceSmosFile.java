@@ -43,10 +43,10 @@ import java.util.concurrent.Future;
  */
 public class L1cScienceSmosFile extends L1cSmosFile implements SnapshotProvider {
 
-    public static final float CENTER_BROWSE_INCIDENCE_ANGLE = 42.5f;
-    public static final float MIN_BROWSE_INCIDENCE_ANGLE = 37.5f;
-    public static final float MAX_BROWSE_INCIDENCE_ANGLE = 52.5f;
-    public static final float INCIDENCE_ANGLE_FACTOR = 0.001373291f; // 90.0 / 2^16
+    private static final float CENTER_BROWSE_INCIDENCE_ANGLE = 42.5f;
+    private static final float MIN_BROWSE_INCIDENCE_ANGLE = 37.5f;
+    private static final float MAX_BROWSE_INCIDENCE_ANGLE = 52.5f;
+    private static final float INCIDENCE_ANGLE_FACTOR = 0.001373291f; // 90.0 / 2^16
 
     private final boolean fullPol;
     private final int flagsIndex;
