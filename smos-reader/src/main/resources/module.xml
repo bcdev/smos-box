@@ -17,7 +17,12 @@
     <url>http://envisat.esa.int/beam</url>
     <licenseUrl>http://www.gnu.org/licenses/gpl.html</licenseUrl>
 
-    <changelog/>
+    <changelog><![CDATA[
+       <p>Changes from version 0.5 to 1.0:<br/>
+        [SBOX-4] No bitmask overlay available for L2 products<br/>
+        [SBOX-3] Slow and chaotic image redraw<br/>
+       </p>]]>
+    </changelog>
 
     <dependency>
         <module>ceres-binio</module>

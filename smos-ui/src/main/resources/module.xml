@@ -23,7 +23,7 @@
         [SBOX-6] Fix range for L1c chart view<br/>
         [SBOX-5] Link Level 2 product with corresponding Level 1c<br/>
        </p>]]>
-       </changelog>
+    </changelog>
 
     <dependency>
         <module>beam-visat</module>
