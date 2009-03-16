@@ -32,7 +32,7 @@ class SmosOpImage extends SingleBandedOpImage {
     private final GridPointValueProvider valueProvider;
     private final RasterDataNode node;
     private final RenderedImage seqnumImage;
-    private final ValidDataRegion validRegion;
+    private final Area region;
 
     SmosOpImage(GridPointValueProvider valueProvider, RasterDataNode node, RenderedImage seqnumImage,
                 ResolutionLevel level, Area region) {
@@ -46,18 +46,7 @@ class SmosOpImage extends SingleBandedOpImage {
         this.valueProvider = valueProvider;
         this.node = node;
         this.seqnumImage = seqnumImage;
-        
-        ValidDataRegion validDataRegion = null;
-        if (valueProvider instanceof L1cFieldValueProvider) {
-            L1cFieldValueProvider l1cFieldValueProvider = (L1cFieldValueProvider) valueProvider;
-            if (l1cFieldValueProvider.getSnapshotId() != -1) {
-                validDataRegion = new SnapshotValidRegion(region.getBounds());
-            }
-        }
-        if (validDataRegion == null) {
-            validDataRegion = new SwathValidRegion(region, this);
-        }
-        validRegion = validDataRegion;
+        this.region = region;
     }
 
     @Override
@@ -69,8 +58,11 @@ class SmosOpImage extends SingleBandedOpImage {
         final int y = rectangle.y;
         final int w = rectangle.width;
         final int h = rectangle.height;
-
-        if (!validRegion.rectangleContainsData(rectangle)) {
+        
+        Area tileArea = new Area(rectangle);
+        tileArea.intersect(region);
+        
+        if (tileArea.isEmpty()) {
             switch (targetRaster.getTransferType()) {
                 case DataBuffer.TYPE_SHORT:
                 case DataBuffer.TYPE_USHORT:
@@ -99,16 +91,17 @@ class SmosOpImage extends SingleBandedOpImage {
         final UnpackedImageData targetData = targetAccessor.getPixels(
                 targetRaster, rectangle, targetRaster.getSampleModel().getTransferType(), true);
 
+        ValidRect validRect = new ValidRect(tileArea.getBounds(), rectangle);
         switch (targetData.type) {
             case DataBuffer.TYPE_SHORT:
             case DataBuffer.TYPE_USHORT:
-                shortLoop(seqnumData, targetData, (short) noDataValue);
+                shortLoop(seqnumData, targetData, validRect, (short) noDataValue);
                 break;
             case DataBuffer.TYPE_INT:
-                intLoop(seqnumData, targetData, (int) noDataValue);
+                intLoop(seqnumData, targetData, validRect, (int) noDataValue);
                 break;
             case DataBuffer.TYPE_FLOAT:
-                floatLoop(seqnumData, targetData, (float) noDataValue);
+                floatLoop(seqnumData, targetData, validRect, (float) noDataValue);
                 break;
             default:
                 // do nothing
@@ -126,7 +119,7 @@ class SmosOpImage extends SingleBandedOpImage {
 
         return array;
     }
-
+    
     private static int[] createArray(int w, int h, int value) {
         final int[] array = new int[w * h];
         Arrays.fill(array, value);
@@ -141,7 +134,7 @@ class SmosOpImage extends SingleBandedOpImage {
         return array;
     }
 
-    private void shortLoop(UnpackedImageData seqnumData, UnpackedImageData targetData, short noDataValue) {
+    private void shortLoop(UnpackedImageData seqnumData, UnpackedImageData targetData, ValidRect validRect, short noDataValue) {
         final int w = targetData.rect.width;
         final int h = targetData.rect.height;
 
@@ -163,53 +156,49 @@ class SmosOpImage extends SingleBandedOpImage {
             int seqnumPixelOffset = seqnumLineOffset;
             int targetPixelOffset = targetLineOffset;
 
-            if (!validRegion.lineContainsData(seqnumData.rect.y + y)) {
-                if (targetPixelStride == 1) {
-                    Arrays.fill(targetDataArray, targetPixelOffset, targetPixelOffset+w, noDataValue);
-                } else {
-                    for (int x = 0; x < w; ++x) {
-                        targetDataArray[targetPixelOffset] = noDataValue;
-                        targetPixelOffset += targetPixelStride;
-                    }
-                }
-            } else {
-                for (int x = 0; x < w; ++x) {
+            validRect.checkLine(seqnumData.rect.y + y);
+            if (validRect.wLeftMargin > 0) {
+                Arrays.fill(targetDataArray, targetPixelOffset, targetPixelOffset + validRect.wLeftMargin, noDataValue);
+                targetPixelOffset += validRect.wLeftMargin * targetPixelStride;
+                seqnumPixelOffset += validRect.wLeftMargin * seqnumPixelStride;
+            }
+            if (validRect.wData > 0) {
+                for (int x = validRect.wLeftMargin; x < validRect.wLeftMargin+validRect.wData; ++x) {
                     short value;
-                    if (validRegion.pointContainsData(seqnumData.rect.x + x, seqnumData.rect.y + y)) {
-                        final int seqnum = seqnumDataArray[seqnumPixelOffset];
-                        if (x > 0 && seqnumCache[x - 1] == seqnum) {
-                            // pixel to the west
-                            value = valueCache[x - 1];
-                        } else if (y > 0 && seqnumCache[x] == seqnum) {
-                            // pixel to the north
-                            value = valueCache[x];
-                        } else if (x + 1 < w && y > 0 && seqnumCache[x + 1] == seqnum) {
-                            // pixel to the north-east
-                            value = valueCache[x + 1];
-                        } else {
-                            final int gridPointIndex = valueProvider.getGridPointIndex(seqnum);
-                            if (gridPointIndex != -1) {
-                                value = valueProvider.getValue(gridPointIndex, noDataValue);
-                            } else {
-                                value = noDataValue;
-                            }
-                        }
-                        seqnumCache[x] = seqnum;
-                        valueCache[x] = value;
+                    final int seqnum = seqnumDataArray[seqnumPixelOffset];
+                    if (x > 0 && seqnumCache[x - 1] == seqnum) {
+                        // pixel to the west
+                        value = valueCache[x - 1];
+                    } else if (y > 0 && seqnumCache[x] == seqnum) {
+                        // pixel to the north
+                        value = valueCache[x];
+                    } else if (x + 1 < w && y > 0 && seqnumCache[x + 1] == seqnum) {
+                        // pixel to the north-east
+                        value = valueCache[x + 1];
                     } else {
-                        value = noDataValue;
+                        final int gridPointIndex = valueProvider.getGridPointIndex(seqnum);
+                        if (gridPointIndex != -1) {
+                            value = valueProvider.getValue(gridPointIndex, noDataValue);
+                        } else {
+                            value = noDataValue;
+                        }
                     }
+                    seqnumCache[x] = seqnum;
+                    valueCache[x] = value;
                     targetDataArray[targetPixelOffset] = value;
                     seqnumPixelOffset += seqnumPixelStride;
                     targetPixelOffset += targetPixelStride;
                 }
+            }
+            if (validRect.wRightMargin > 0) {
+                Arrays.fill(targetDataArray, targetPixelOffset, targetPixelOffset + validRect.wRightMargin, noDataValue);
             }
             seqnumLineOffset += seqnumLineStride;
             targetLineOffset += targetLineStride;
         }
     }
 
-    private void intLoop(UnpackedImageData seqnumData, UnpackedImageData targetData, int noDataValue) {
+    private void intLoop(UnpackedImageData seqnumData, UnpackedImageData targetData, ValidRect validRect, int noDataValue) {
         final int w = targetData.rect.width;
         final int h = targetData.rect.height;
 
@@ -231,53 +220,49 @@ class SmosOpImage extends SingleBandedOpImage {
             int seqnumPixelOffset = seqnumLineOffset;
             int targetPixelOffset = targetLineOffset;
 
-            if (!validRegion.lineContainsData(seqnumData.rect.y + y)) {
-                if (targetPixelStride == 1) {
-                    Arrays.fill(targetDataArray, targetPixelOffset, targetPixelOffset+w, noDataValue);
-                } else {
-                    for (int x = 0; x < w; ++x) {
-                        targetDataArray[targetPixelOffset] = noDataValue;
-                        targetPixelOffset += targetPixelStride;
-                    }
-                }
-            } else {
-                for (int x = 0; x < w; ++x) {
+            validRect.checkLine(seqnumData.rect.y + y);
+            if (validRect.wLeftMargin > 0) {
+                Arrays.fill(targetDataArray, targetPixelOffset, targetPixelOffset + validRect.wLeftMargin, noDataValue);
+                targetPixelOffset += validRect.wLeftMargin * targetPixelStride;
+                seqnumPixelOffset += validRect.wLeftMargin * seqnumPixelStride;
+            }
+            if (validRect.wData > 0) {
+                final int seqnum = seqnumDataArray[seqnumPixelOffset];
+                for (int x = validRect.wLeftMargin; x < validRect.wLeftMargin+validRect.wData; ++x) {
                     int value;
-                    if (validRegion.pointContainsData(seqnumData.rect.x + x, seqnumData.rect.y + y)) {
-                        final int seqnum = seqnumDataArray[seqnumPixelOffset];
-                        if (x > 0 && seqnumCache[x - 1] == seqnum) {
-                            // pixel to the west
-                            value = valueCache[x - 1];
-                        } else if (y > 0 && seqnumCache[x] == seqnum) {
-                            // pixel to the north
-                            value = valueCache[x];
-                        } else if (x + 1 < w && y > 0 && seqnumCache[x + 1] == seqnum) {
-                            // pixel to the north-east
-                            value = valueCache[x + 1];
-                        } else {
-                            final int gridPointIndex = valueProvider.getGridPointIndex(seqnum);
-                            if (gridPointIndex != -1) {
-                                value = valueProvider.getValue(gridPointIndex, noDataValue);
-                            } else {
-                                value = noDataValue;
-                            }
-                        }
-                        seqnumCache[x] = seqnum;
-                        valueCache[x] = value;
+                    if (x > 0 && seqnumCache[x - 1] == seqnum) {
+                        // pixel to the west
+                        value = valueCache[x - 1];
+                    } else if (y > 0 && seqnumCache[x] == seqnum) {
+                        // pixel to the north
+                        value = valueCache[x];
+                    } else if (x + 1 < w && y > 0 && seqnumCache[x + 1] == seqnum) {
+                        // pixel to the north-east
+                        value = valueCache[x + 1];
                     } else {
-                        value = noDataValue;
+                        final int gridPointIndex = valueProvider.getGridPointIndex(seqnum);
+                        if (gridPointIndex != -1) {
+                            value = valueProvider.getValue(gridPointIndex, noDataValue);
+                        } else {
+                            value = noDataValue;
+                        }
                     }
+                    seqnumCache[x] = seqnum;
+                    valueCache[x] = value;
                     targetDataArray[targetPixelOffset] = value;
                     seqnumPixelOffset += seqnumPixelStride;
                     targetPixelOffset += targetPixelStride;
                 }
+            }
+            if (validRect.wRightMargin > 0) {
+                Arrays.fill(targetDataArray, targetPixelOffset, targetPixelOffset + validRect.wRightMargin, noDataValue);
             }
             seqnumLineOffset += seqnumLineStride;
             targetLineOffset += targetLineStride;
         }
     }
 
-    private void floatLoop(UnpackedImageData seqnumData, UnpackedImageData targetData, float noDataValue) {
+    private void floatLoop(UnpackedImageData seqnumData, UnpackedImageData targetData, ValidRect validRect, float noDataValue) {
         final int w = targetData.rect.width;
         final int h = targetData.rect.height;
 
@@ -298,49 +283,73 @@ class SmosOpImage extends SingleBandedOpImage {
         for (int y = 0; y < h; ++y) {
             int seqnumPixelOffset = seqnumLineOffset;
             int targetPixelOffset = targetLineOffset;
-            if (!validRegion.lineContainsData(seqnumData.rect.y + y)) {
-                if (targetPixelStride == 1) {
-                    Arrays.fill(targetDataArray, targetPixelOffset, targetPixelOffset+w, noDataValue);
-                } else {
-                    for (int x = 0; x < w; ++x) {
-                        targetDataArray[targetPixelOffset] = noDataValue;
-                        targetPixelOffset += targetPixelStride;
-                    }
-                }
-            } else {
-                for (int x = 0; x < w; ++x) {
+            
+            validRect.checkLine(seqnumData.rect.y + y);
+            if (validRect.wLeftMargin > 0) {
+                Arrays.fill(targetDataArray, targetPixelOffset, targetPixelOffset + validRect.wLeftMargin, noDataValue);
+                targetPixelOffset += validRect.wLeftMargin * targetPixelStride;
+                seqnumPixelOffset += validRect.wLeftMargin * seqnumPixelStride;
+            }
+            if (validRect.wData > 0) {
+                for (int x = validRect.wLeftMargin; x < validRect.wLeftMargin+validRect.wData; ++x) {
                     float value;
-                    if (validRegion.pointContainsData(seqnumData.rect.x + x, seqnumData.rect.y + y)) {
-                        final int seqnum = seqnumDataArray[seqnumPixelOffset];
-                        if (x > 0 && seqnumCache[x - 1] == seqnum) {
-                            // pixel to the west
-                            value = valueCache[x - 1];
-                        } else if (y > 0 && seqnumCache[x] == seqnum) {
-                            // pixel to the north
-                            value = valueCache[x];
-                        } else if (x + 1 < w && y > 0 && seqnumCache[x + 1] == seqnum) {
-                            // pixel to the north-east
-                            value = valueCache[x + 1];
-                        } else {
-                            final int gridPointIndex = valueProvider.getGridPointIndex(seqnum);
-                            if (gridPointIndex != -1) {
-                                value = valueProvider.getValue(gridPointIndex, noDataValue);
-                            } else {
-                                value = noDataValue;
-                            }
-                        }
-                        seqnumCache[x] = seqnum;
-                        valueCache[x] = value;
+                    final int seqnum = seqnumDataArray[seqnumPixelOffset];
+                    if (x > 0 && seqnumCache[x - 1] == seqnum) {
+                        // pixel to the west
+                        value = valueCache[x - 1];
+                    } else if (y > 0 && seqnumCache[x] == seqnum) {
+                        // pixel to the north
+                        value = valueCache[x];
+                    } else if (x + 1 < w && y > 0 && seqnumCache[x + 1] == seqnum) {
+                        // pixel to the north-east
+                        value = valueCache[x + 1];
                     } else {
-                        value = noDataValue;
+                        final int gridPointIndex = valueProvider.getGridPointIndex(seqnum);
+                        if (gridPointIndex != -1) {
+                            value = valueProvider.getValue(gridPointIndex, noDataValue);
+                        } else {
+                            value = noDataValue;
+                        }
                     }
+                    seqnumCache[x] = seqnum;
+                    valueCache[x] = value;
                     targetDataArray[targetPixelOffset] = value;
                     seqnumPixelOffset += seqnumPixelStride;
                     targetPixelOffset += targetPixelStride;
                 }
             }
+            if (validRect.wRightMargin > 0) {
+                Arrays.fill(targetDataArray, targetPixelOffset, targetPixelOffset + validRect.wRightMargin, noDataValue);
+            }
             seqnumLineOffset += seqnumLineStride;
             targetLineOffset += targetLineStride;
         }
+    }
+    
+    static class ValidRect {
+        final Rectangle validRect;
+        final Rectangle tileRect;
+        int wLeftMargin;
+        int wData;
+        int wRightMargin;
+        
+        ValidRect(Rectangle validRect, Rectangle tileRect) {
+            this.validRect = validRect;
+            this.tileRect = tileRect;
+        }
+        
+        void checkLine(int y) {
+            if (y < validRect.y || y > (validRect.y + validRect.height)) {
+                wLeftMargin = tileRect.width;
+                wData = 0;
+                wRightMargin = 0;
+            } else {
+                wLeftMargin = validRect.x - tileRect.x;
+                wData = validRect.width;
+                wRightMargin = tileRect.width - wData - wLeftMargin;
+            }
+        }
+        
+        
     }
 }
