@@ -29,10 +29,10 @@
         <module>beam-visat</module>
     </dependency>
     <dependency>
-        <module>smos-reader</module>
+        <module>blue-marble-worldmap</module>
     </dependency>
     <dependency>
-        <module>smos-worldmap</module>
+        <module>smos-reader</module>
     </dependency>
 
     <categories>SMOS</categories>

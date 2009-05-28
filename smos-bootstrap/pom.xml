@@ -35,10 +35,6 @@
             <groupId>org.esa.beam.smos</groupId>
             <artifactId>smos-ui</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.esa.beam.smos</groupId>
-            <artifactId>smos-worldmap</artifactId>
-        </dependency>
     </dependencies>
 
 </project>

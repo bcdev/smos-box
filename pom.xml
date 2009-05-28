@@ -27,7 +27,7 @@
         <module>smos-reader</module>
         <module>smos-ui</module>
         <module>smos-dgg</module>
-        <module>smos-worldmap</module>
+        <!--<module>smos-worldmap</module>-->
         <!--<module>smos-header</module>-->
     </modules>
 
@@ -38,37 +38,37 @@
             <dependency>
                 <groupId>com.bc.ceres</groupId>
                 <artifactId>ceres-launcher</artifactId>
-                <version>0.8</version>
+                <version>0.9-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>com.bc.ceres</groupId>
                 <artifactId>ceres-core</artifactId>
-                <version>0.8.1</version>
+                <version>0.9-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>com.bc.ceres</groupId>
                 <artifactId>ceres-binding</artifactId>
-                <version>0.8</version>
+                <version>0.9-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>com.bc.ceres</groupId>
                 <artifactId>ceres-ui</artifactId>
-                <version>0.8.1</version>
+                <version>0.9-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>com.bc.ceres</groupId>
                 <artifactId>ceres-binio</artifactId>
-                <version>0.8.1</version>
+                <version>0.9-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>com.bc.ceres</groupId>
                 <artifactId>ceres-glayer</artifactId>
-                <version>0.8.1</version>
+                <version>0.9-SNAPSHOT</version>
             </dependency>
 
             <!-- BEAM System Level Modules ############################################# -->
@@ -76,22 +76,27 @@
             <dependency>
                 <groupId>org.esa.beam</groupId>
                 <artifactId>beam-core</artifactId>
-                <version>4.5.1</version>
+                <version>4.6-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.esa.beam</groupId>
                 <artifactId>beam-gpf</artifactId>
-                <version>4.5</version>
+                <version>4.6-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.esa.beam</groupId>
                 <artifactId>beam-ui</artifactId>
-                <version>4.5.2</version>
+                <version>4.6-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.esa.beam</groupId>
                 <artifactId>beam-visat</artifactId>
-                <version>4.5.1</version>
+                <version>4.6-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.esa.beam</groupId>
+                <artifactId>blue-marble-worldmap</artifactId>
+                <version>1.0-SNAPSHOT</version>
             </dependency>
 
             <!-- SMOS Libraries ############################################# -->
@@ -149,8 +154,8 @@
 
             <dependency>
                 <groupId>javax.help</groupId>
-                <artifactId>jhall</artifactId>
-                <version>2.0-02</version>
+                <artifactId>javahelp</artifactId>
+                <version>2.0.02</version>
             </dependency>
 
             <!-- JDOM Library ############################################# -->

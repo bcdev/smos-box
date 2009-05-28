@@ -1,17 +1,20 @@
 package org.esa.beam.smos.visat;
 
+import com.bc.ceres.binding.ValueContainer;
 import com.bc.ceres.glayer.Layer;
-import org.esa.beam.framework.ui.product.ProductSceneView;
+import com.bc.ceres.glayer.LayerType;
+import org.esa.beam.dataio.smos.L1cScienceSmosFile;
+import org.esa.beam.dataio.smos.SmosFile;
+import org.esa.beam.dataio.smos.SmosProductReader;
 import org.esa.beam.framework.dataio.ProductReader;
 import org.esa.beam.framework.datamodel.RasterDataNode;
-import org.esa.beam.smos.worldmap.SmosWorldMapLayer;
+import org.esa.beam.framework.ui.product.ProductSceneView;
 import org.esa.beam.visat.VisatApp;
 import org.esa.beam.visat.VisatPlugIn;
-import org.esa.beam.dataio.smos.L1cScienceSmosFile;
-import org.esa.beam.dataio.smos.SmosProductReader;
-import org.esa.beam.dataio.smos.SmosFile;
+import org.esa.beam.worldmap.BlueMarbleLayerType;
 
 public class SmosBox implements VisatPlugIn {
+
     private static volatile SmosBox instance;
 
     private volatile SnapshotSelectionService snapshotSelectionService;
@@ -47,8 +50,10 @@ public class SmosBox implements VisatPlugIn {
                 public void handleSceneViewSelectionChanged(ProductSceneView oldView, ProductSceneView newView) {
                     if (newView != null) {
                         final Layer rootLayer = newView.getRootLayer();
-                        if (!SmosWorldMapLayer.hasWorldMapChildLayer(rootLayer)) {
-                            final Layer worldMapLayer = SmosWorldMapLayer.createWorldMapLayer();
+                        final LayerType layerType = LayerType.getLayerType(BlueMarbleLayerType.class.getName());
+                        if (!hasLayer(rootLayer, layerType)) {
+                            final ValueContainer configuration = layerType.getConfigurationTemplate();
+                            final Layer worldMapLayer = layerType.createLayer(null, configuration);
                             if (worldMapLayer != null) {
                                 rootLayer.getChildren().add(worldMapLayer);
                                 worldMapLayer.setVisible(true);
@@ -95,5 +100,14 @@ public class SmosBox implements VisatPlugIn {
             }
         }
         return null;
+    }
+
+    public static boolean hasLayer(Layer parentLayer, LayerType layerType) {
+        for (final Layer childLayer : parentLayer.getChildren()) {
+            if (layerType == childLayer.getLayerType()) {
+                return true;
+            }
+        }
+        return false;
     }
 }
