@@ -23,15 +23,16 @@ package org.esa.beam.dataio.smos;
  */
 public class BandInfo {
 
-    final String name;
-    final String unit;
+    private final String name;
+    private final String unit;
 
-    final double scaleOffset;
-    final double scaleFactor;
-    final Number noDataValue;
-    final double min;
-    final double max;
-    final String description;
+    private final double scaleOffset;
+    private final double scaleFactor;
+    private final Number noDataValue;
+    private final double min;
+    private final double max;
+    private final String description;
+    private final boolean topologyCircular;
 
     BandInfo(String name) {
         this(name, "", 0.0, 1.0, -999.0, 0.0, 1000.0, "");
@@ -39,6 +40,11 @@ public class BandInfo {
 
     BandInfo(String name, String unit, double scaleOffset, double scaleFactor, Number noDataValue, double min,
              double max, String description) {
+        this(name, unit, scaleOffset, scaleFactor, noDataValue, min, max, description, false);
+    }
+
+    BandInfo(String name, String unit, double scaleOffset, double scaleFactor, Number noDataValue, double min,
+             double max, String description, boolean topologyCircular) {
         this.name = name;
         this.unit = unit;
         this.scaleOffset = scaleOffset;
@@ -47,13 +53,42 @@ public class BandInfo {
         this.min = min;
         this.max = max;
         this.description = description;
+        this.topologyCircular = topologyCircular;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getUnit() {
+        return unit;
     }
 
     public double getScaleOffset() {
         return scaleOffset;
     }
 
+    public Number getNoDataValue() {
+        return noDataValue;
+    }
+
     public double getScaleFactor() {
         return scaleFactor;
+    }
+
+    public double getMin() {
+        return min;
+    }
+
+    public double getMax() {
+        return max;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public boolean isTopologyCircular() {
+        return topologyCircular;
     }
 }
