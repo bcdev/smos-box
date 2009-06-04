@@ -187,6 +187,8 @@ public class SnapshotInfoToolView extends SmosToolView {
                         if (raster.isGeophysicalImageSet()) {
                             raster.getGeophysicalImage().reset();
                         }
+                        raster.setStx(null);
+                        raster.getStx();
                         imageLayer.regenerate();
                     }
                 }
