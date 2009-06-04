@@ -5,6 +5,7 @@ import com.bc.ceres.binio.CompoundType;
 import com.bc.ceres.binio.Type;
 import com.bc.ceres.core.ProgressMonitor;
 import com.bc.ceres.glayer.support.ImageLayer;
+import com.bc.ceres.glevel.MultiLevelImage;
 import com.bc.ceres.glevel.support.DefaultMultiLevelImage;
 import com.bc.ceres.grender.Viewport;
 import org.esa.beam.dataio.smos.GridPointValueProvider;
@@ -12,6 +13,7 @@ import org.esa.beam.dataio.smos.L1cFieldValueProvider;
 import org.esa.beam.dataio.smos.L1cScienceSmosFile;
 import org.esa.beam.dataio.smos.SmosFile;
 import org.esa.beam.dataio.smos.SmosMultiLevelSource;
+import org.esa.beam.framework.datamodel.RasterDataNode;
 import org.esa.beam.framework.help.HelpSys;
 import org.esa.beam.framework.ui.product.ProductSceneView;
 import org.jfree.layout.CenterLayout;
@@ -52,7 +54,6 @@ import java.awt.event.MouseListener;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
-import java.awt.image.RenderedImage;
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -167,7 +168,8 @@ public class SnapshotInfoToolView extends SmosToolView {
 
     private void updateImageLayer(ProductSceneView smosView) {
         ImageLayer imageLayer = smosView.getBaseImageLayer();
-        RenderedImage sourceImage = smosView.getRaster().getSourceImage();
+        RasterDataNode raster = smosView.getRaster();
+        MultiLevelImage sourceImage = raster.getSourceImage();
         if (sourceImage instanceof DefaultMultiLevelImage) {
             DefaultMultiLevelImage defaultMultiLevelImage = (DefaultMultiLevelImage) sourceImage;
             if (defaultMultiLevelImage.getSource() instanceof SmosMultiLevelSource) {
@@ -179,8 +181,12 @@ public class SnapshotInfoToolView extends SmosToolView {
                     if (l1cFieldValueProvider.getSnapshotId() != id) {
                         l1cFieldValueProvider.setSnapshotId(id);
                         smosMultiLevelSource.reset();
-                        smosView.getRaster().setValidMaskImage(null);
-                        smosView.getRaster().setGeophysicalImage(null);
+                        if (raster.isValidMaskImageSet()) {
+                            raster.getValidMaskImage().reset();
+                        }
+                        if (raster.isGeophysicalImageSet()) {
+                            raster.getGeophysicalImage().reset();
+                        }
                         imageLayer.regenerate();
                     }
                 }
