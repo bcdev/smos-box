@@ -293,181 +293,163 @@ public class BandInfoRegistry {
         /*
          * Ocean salinity geophysical parameters.
          */
-        // TODO: no-data values & typical ranges
-        registerBandInfo("Equiv_ftprt_diam", "m", 0.0, 1.0, 0.0, 0.0, 100.0,
+        registerBandInfo("Equiv_ftprt_diam", "m", 0.0, 1.0, -9999.0, 30.0, 90.0,
                          "Equivalent Footprint diameter.");
-        registerBandInfo("Mean_acq_time", "dd", 0.0, 1.0, 0.0, 0.0, 10000.0,
+        registerBandInfo("Mean_acq_time", "dd", 0.0, 1.0, -9999.0, 2610.0, 2615.0,
                          "Mean acquisition time.");
-        registerBandInfo("SSS1", "psu", 0.0, 1.0, 0.0, 0.0, 50.0,
+        registerBandInfo("SSS1", "psu", 0.0, 1.0, -9999.0, 0.0, 40.0,
                          "Sea surface salinity using roughness model 1.");
-        registerBandInfo("Sigma_SSS1", "psu", 0.0, 1.0, 0.0, 0.0, 5.0,
+        registerBandInfo("Sigma_SSS1", "psu", 0.0, 1.0, -9999.0, 0.1, 1.5,
                          "Theoretical uncertainty computed for SSS1.");
-        registerBandInfo("SSS2", "psu", 0.0, 1.0, 0.0, 0.0, 50.0,
+        registerBandInfo("SSS2", "psu", 0.0, 1.0, -9999.0, 0.0, 40.0,
                          "Sea surface salinity using roughness model 2.");
-        registerBandInfo("Sigma_SSS2", "psu", 0.0, 1.0, 0.0, 0.0, 5.0,
+        registerBandInfo("Sigma_SSS2", "psu", 0.0, 1.0, -9999.0, 0.1, 1.5,
                          "Theoretical uncertainty computed for SSS2.");
-        registerBandInfo("SSS3", "psu", 0.0, 1.0, 0.0, 0.0, 50.0,
+        registerBandInfo("SSS3", "psu", 0.0, 1.0, -9999.0, 0.0, 40.0,
                          "Sea surface salinity using roughness model 3.");
-        registerBandInfo("Sigma_SSS3", "psu", 0.0, 1.0, 0.0, 0.0, 5.0,
+        registerBandInfo("Sigma_SSS3", "psu", 0.0, 1.0, -9999.0, 0.1, 1.5,
                          "Theoretical uncertainty computed for SSS3.");
-        registerBandInfo("A_card", "", 0.0, 1.0, 0.0, 0.0, 50.0,
+        registerBandInfo("A_card", "", 0.0, 1.0, -9999.0, 0.1, 70.0,
                          "Effective_Acard retrieved with minimalist model.");
-        registerBandInfo("Sigma_Acard", "", 0.0, 1.0, 0.0, 0.0, 5.0,
+        registerBandInfo("Sigma_Acard", "", 0.0, 1.0, -9999.0, 0.1, 1.0,
                          "Theoretical uncertainty computed for Acard.");
-        registerBandInfo("WS", "m s-1", 0.0, 1.0, 0.0, 0.0, 20.0,
+        registerBandInfo("WS", "m s-1", 0.0, 1.0, -9999.0, 0.0, 30.0,
                          "Equivalent  neutral  wind  speed  as  derived from " +
                                  "ECMWF.");
-        registerBandInfo("Sigma_WS", "m s-1", 0.0, 1.0, 0.0, 0.0, 2.0,
+        registerBandInfo("Sigma_WS", "m s-1", 0.0, 1.0, -9999.0, 0.1, 1.0,
                          "Theoretical uncertainty associated with WS.");
-        registerBandInfo("SST", "K", 0.0, 1.0, 0.0, 0.0, 20.0,
+        registerBandInfo("SST", "K", 0.0, 1.0, -9999.0, 273.0, 293.0,
                          "Sea  Surface  Temperature  as  derived  from ECMWF.");
-        registerBandInfo("Sigma_SST", "K", 0.0, 1.0, 0.0, 0.0, 2.0,
+        registerBandInfo("Sigma_SST", "K", 0.0, 1.0, -9999.0, 0.1, 1.0,
                          "Theoretical uncertainty associated with SST.");
-        registerBandInfo("Tb_42.5H", "K", 0.0, 1.0, 0.0, 0.0, 20.0,
-                         "Brightness   Temperature   at   surface   level derived " +
+        registerBandInfo("Tb_42.5H", "K", 0.0, 1.0, -9999.0, 70.0, 130.0,
+                         "Brightness Temperature at surface level derived " +
                                  "with default forward model and retrieved " +
                                  "geophysical parameters, H polarisation direction.");
-        registerBandInfo("Sigma_Tb_42.5H", "K", 0.0, 1.0, 0.0, 0.0, 2.0,
+        registerBandInfo("Sigma_Tb_42.5H", "K", 0.0, 1.0, -9999.0, 0.1, 0.8,
                          "Theoretical uncertainty computed for Tb42.5H.");
-        registerBandInfo("Tb_42.5V", "K", 0.0, 1.0, 0.0, 0.0, 20.0,
-                         "Brightness   Temperature   at   surface   level derived " +
+        registerBandInfo("Tb_42.5V", "K", 0.0, 1.0, -9999.0, 70.0, 130.0,
+                         "Brightness Temperature at surface level derived " +
                                  "with default forward model and retrieved " +
                                  "geophysical parameters, V polarisation direction.");
-        registerBandInfo("Sigma_Tb_42.5V", "K", 0.0, 1.0, 0.0, 0.0, 2.0,
+        registerBandInfo("Sigma_Tb_42.5V", "K", 0.0, 1.0, -9999.0, 0.1, 0.8,
                          "Theoretical uncertainty computed for Tb42.5V.");
-        registerBandInfo("Tb_42.5X", "K", 0.0, 1.0, 0.0, 0.0, 20.0,
+        registerBandInfo("Tb_42.5X", "K", 0.0, 1.0, -9999.0, 70.0, 130.0,
                          "Brightness Temperature at antenna level derived with " +
                                  "default forward model and retrieved geophysical " +
                                  "parameters, X polarisation direction.");
-        registerBandInfo("Sigma_Tb_42.5X", "K", 0.0, 1.0, 0.0, 0.0, 2.0,
+        registerBandInfo("Sigma_Tb_42.5X", "K", 0.0, 1.0, -9999.0, 0.1, 0.8,
                          "Theoretical uncertainty computed for Tb42.5X.");
-        registerBandInfo("Tb_42.5Y", "K", 0.0, 1.0, 0.0, 0.0, 20.0,
+        registerBandInfo("Tb_42.5Y", "K", 0.0, 1.0, -9999.0, 70.0, 130.0,
                          "Brightness Temperature at antenna level derived with " +
                                  "default forward model and retrieved geophysical " +
                                  "parameters, Y polarisation direction.");
-        registerBandInfo("Sigma_Tb_42.5Y", "K", 0.0, 1.0, 0.0, 0.0, 2.0,
+        registerBandInfo("Sigma_Tb_42.5Y", "K", 0.0, 1.0, -9999.0, 0.1, 0.8,
                          "Theoretical uncertainty computed for Tb42.5Y.");
 
-        registerBandInfo("Control_Flags_1", "", 0.0, 1.0, 0.0, 0, 2 << 23 - 1,
-                         "Control Flags for SSS retrieval with forward model 1. " +
-                                 "See Table 4-19 for details. Least significant bit is field " +
-                                 "#01. Most significant bit is field #32.");
-        registerBandInfo("Control_Flags_2", "", 0.0, 1.0, 0.0, 0, 2 << 23 - 1,
-                         "Control Flags for SSS retrieval with forward model 2. " +
-                                 "See Table 4-19 for details. Least significant bit is field " +
-                                 "#01. Most significant bit is field #32.");
-        registerBandInfo("Control_Flags_3", "", 0.0, 1.0, 0.0, 0, 2 << 23 - 1,
-                         "Control Flags for SSS retrieval with forward model 3. " +
-                                 "Least significant bit is field " +
-                                 "#01. Most significant bit is field #32.");
-        registerBandInfo("Control_Flags_4", "", 0.0, 1.0, 0.0, 0, 2 << 23 - 1,
-                         "Control Flags for SSS retrieval with forward model 4. " +
-                                 "Least significant bit is field " +
-                                 "#01. Most significant bit is field #32.");
+        registerBandInfo("Control_Flags_1", "", 0.0, 1.0, 2147483647, 0, 2 << 23 - 1,
+                         "Control Flags for SSS retrieval with forward model 1.");
+        registerBandInfo("Control_Flags_2", "", 0.0, 1.0, 2147483647, 0, 2 << 23 - 1,
+                         "Control Flags for SSS retrieval with forward model 2.");
+        registerBandInfo("Control_Flags_3", "", 0.0, 1.0, 2147483647, 0, 2 << 23 - 1,
+                         "Control Flags for SSS retrieval with forward model 3.");
+        registerBandInfo("Control_Flags_4", "", 0.0, 1.0, 2147483647, 0, 2 << 23 - 1,
+                         "Control Flags for SSS retrieval with forward model 4.");
 
         /*
          * Ocean salinity confidence descriptors.
          */
-        // TODO: no-data values & typical ranges
-        registerBandInfo("Dg_chi2_1", "", 0.0, 1.0, 0.0, 0, 2 << 16 - 1,
+        registerBandInfo("Dg_chi2_1", "", 0.0, 1.0, 0.0, 1.0, 1000.0,
                          "Retrieval fit quality index with forward model 1.");
-        registerBandInfo("Dg_chi2_2", "", 0.0, 1.0, 0.0, 0, 2 << 16 - 1,
+        registerBandInfo("Dg_chi2_2", "", 0.0, 1.0, 0.0, 1.0, 1000.0,
                          "Retrieval fit quality index with forward model 2.");
-        registerBandInfo("Dg_chi2_3", "", 0.0, 1.0, 0.0, 0, 2 << 16 - 1,
+        registerBandInfo("Dg_chi2_3", "", 0.0, 1.0, 0.0, 1.0, 1000.0,
                          "Retrieval fit quality index with forward model 3.");
-        registerBandInfo("Dg_chi2_Acard", "", 0.0, 1.0, 0.0, 0, 2 << 16 - 1,
+        registerBandInfo("Dg_chi2_Acard", "", 0.0, 1.0, 0.0, 1.0, 1000.0,
                          "Retrieval fit quality index with cardioid model.");
-        registerBandInfo("Dg_chi2_P_1", "", 0.0, 1.0, 0.0, 0, 2 << 16 - 1,
+        registerBandInfo("Dg_chi2_P_1", "", 0.0, 1.0, 0.0, 1.0, 1000.0,
                          "Normalised chi2 high value acceptability probability " +
                                  "with forward model 1, scaled by multiplying by 1000.");
-        registerBandInfo("Dg_chi2_P_2", "", 0.0, 1.0, 0.0, 0, 2 << 16 - 1,
+        registerBandInfo("Dg_chi2_P_2", "", 0.0, 1.0, 0.0, 1.0, 1000.0,
                          "Normalised chi2 high value acceptability probability " +
                                  "with forward model 2, scaled by multiplying by 1000.");
-        registerBandInfo("Dg_chi2_P_3", "", 0.0, 1.0, 0.0, 0, 2 << 16 - 1,
+        registerBandInfo("Dg_chi2_P_3", "", 0.0, 1.0, 0.0, 1.0, 1000.0,
                          "Normalised chi2 high value acceptability probability " +
                                  "with forward model 3, scaled by multiplying by 1000.");
-        registerBandInfo("Dg_chi2_P_Acard", "", 0.0, 1.0, 0.0, 0, 2 << 16 - 1,
+        registerBandInfo("Dg_chi2_P_Acard", "", 0.0, 1.0, 0.0, 1.0, 1000.0,
                          "Normalised chi2 high value acceptability probability " +
                                  "with cardioid, scaled by multiplying by 1000.");
-        registerBandInfo("Dg_quality_SSS_1", "", 0.0, 1.0, 0.0, 0, 2 << 16 - 1,
+        registerBandInfo("Dg_quality_SSS_1", "", 0.0, 1.0, 0.0, 20.0, 15000.0,
                          "Quality index for SSS1.");
-        registerBandInfo("Dg_quality_SSS_2", "", 0.0, 1.0, 0.0, 0, 2 << 16 - 1,
+        registerBandInfo("Dg_quality_SSS_2", "", 0.0, 1.0, 0.0, 20.0, 15000.0,
                          "Quality index for SSS2.");
-        registerBandInfo("Dg_quality_SSS_3", "", 0.0, 1.0, 0.0, 0, 2 << 16 - 1,
+        registerBandInfo("Dg_quality_SSS_3", "", 0.0, 1.0, 0.0, 20.0, 15000.0,
                          "Quality index for SSS3.");
-        registerBandInfo("Dg_quality_Acard", "", 0.0, 1.0, 0.0, 0, 2 << 16 - 1,
+        registerBandInfo("Dg_quality_Acard", "", 0.0, 1.0, 0.0, 20.0, 15000.0,
                          "Quality Index for Acard.");
-        registerBandInfo("Dg_num_iter_1", "", 0.0, 1.0, 0.0, 0, 2 << 16 - 1,
+        registerBandInfo("Dg_num_iter_1", "", 0.0, 1.0, 0.0, 1.0, 21.0,
                          "Number of iterations for the retrieval of SSS with " +
                                  "forward model 1.");
-        registerBandInfo("Dg_num_iter_2", "", 0.0, 1.0, 0.0, 0, 2 << 16 - 1,
+        registerBandInfo("Dg_num_iter_2", "", 0.0, 1.0, 0.0, 1.0, 21.0,
                          "Number of iterations for the retrieval of SSS with " +
                                  "forward model 2.");
-        registerBandInfo("Dg_num_iter_3", "", 0.0, 1.0, 0.0, 0, 2 << 16 - 1,
+        registerBandInfo("Dg_num_iter_3", "", 0.0, 1.0, 0.0, 1.0, 21.0,
                          "Number of iterations for the retrieval of SSS with " +
                                  "forward model 3.");
-        registerBandInfo("Dg_num_iter_4", "", 0.0, 1.0, 0.0, 0, 2 << 16 - 1,
+        registerBandInfo("Dg_num_iter_4", "", 0.0, 1.0, 0.0, 1.0, 21.0,
                          "Number of iterations for the retrieval of SSS with " +
                                  "cardioid model.");
-        registerBandInfo("Dg_num_meas_l1c", "", 0.0, 1.0, 0.0, 0, 2 << 16 - 1,
+        registerBandInfo("Dg_num_meas_l1c", "", 0.0, 1.0, 0.0, 1.0, 300.0,
                          "Number of  measurements available in  L1c product");
-        registerBandInfo("Dg_num_meas_valid", "", 0.0, 1.0, 0.0, 0, 2 << 16 - 1,
+        registerBandInfo("Dg_num_meas_valid", "", 0.0, 1.0, 0.0, 1.0, 300.0,
                          "Number of valid measurement available for SSS " +
                                  "retrieval.");
-        registerBandInfo("Dg_border_fov", "", 0.0, 1.0, 0.0, 0, 2 << 16 - 1,
+        registerBandInfo("Dg_border_fov", "", 0.0, 1.0, 0.0, 1.0, 300.0,
                          "Number of valid measurements with BORDER_FOV " +
                                  "flag raised.");
-        registerBandInfo("Dg_eaf_fov", "", 0.0, 1.0, 0.0, 0, 2 << 16 - 1,
+        registerBandInfo("Dg_eaf_fov", "", 0.0, 1.0, 0.0, 1.0, 300.0,
                          "Number of valid measurements with EAF_FOV flag " +
                                  "raised.");
-        registerBandInfo("Dg_af_fov", "", 0.0, 1.0, 0.0, 0, 2 << 16 - 1,
+        registerBandInfo("Dg_af_fov", "", 0.0, 1.0, 0.0, 1.0, 300.0,
                          "Number of valid measurements with AF_FOV flag " +
                                  "raised.");
-        registerBandInfo("Dg_sun_tails", "", 0.0, 1.0, 0.0, 0, 2 << 16 - 1,
+        registerBandInfo("Dg_sun_tails", "", 0.0, 1.0, 0.0, 1.0, 300.0,
                          "Number of measurements with SUN_TAILS flag " +
                                  "raised.");
-        registerBandInfo("Dg_sun_glint_area", "", 0.0, 1.0, 0.0, 0, 2 << 16 - 1,
+        registerBandInfo("Dg_sun_glint_area", "", 0.0, 1.0, 0.0, 1.0, 300.0,
                          "Number of measurements with SUN_GLINT_AREA " +
                                  "flag raised.");
-        registerBandInfo("Dg_sun_glint_fov", "", 0.0, 1.0, 0.0, 0, 2 << 16 - 1,
+        registerBandInfo("Dg_sun_glint_fov", "", 0.0, 1.0, 0.0, 1.0, 300.0,
                          "Number of measurements with SUN_GLINT_FOV flag " +
                                  "raised.");
-        registerBandInfo("Dg_sun_fov", "", 0.0, 1.0, 0.0, 0, 2 << 16 - 1,
+        registerBandInfo("Dg_sun_fov", "", 0.0, 1.0, 0.0, 1.0, 300.0,
                          "Number of measurements with SUN_FOV flag raised.");
-        registerBandInfo("Dg_sun_glint_L2", "", 0.0, 1.0, 0.0, 0, 2 << 16 - 1,
+        registerBandInfo("Dg_sun_glint_L2", "", 0.0, 1.0, 0.0, 1.0, 300.0,
                          "Number of  measurements with  L2 sunglint flag " +
                                  "raised.");
-        registerBandInfo("Dg_Suspect_ice", "", 0.0, 1.0, 0.0, 0, 2 << 16 - 1,
+        registerBandInfo("Dg_Suspect_ice", "", 0.0, 1.0, 0.0, 1.0, 300.0,
                          "Number of suspected ice contaminated measurements.");
-        registerBandInfo("Dg_galactic_Noise_Error", "", 0.0, 1.0, 0.0, 0, 2 << 16 - 1,
+        registerBandInfo("Dg_galactic_Noise_Error", "", 0.0, 1.0, 0.0, 1.0, 300.0,
                          "Number of measurements discarded due to errors in \n" +
                                  "galactic noise.");
-        registerBandInfo("Dg_galactic_Noise_Pol", "", 0.0, 1.0, 0.0, 0, 2 << 16 - 1,
+        registerBandInfo("Dg_galactic_Noise_Pol", "", 0.0, 1.0, 0.0, 1.0, 300.0,
                          "Number of measurements with Fm_gal_noise_pol flag " +
                                  "raised.");
-        registerBandInfo("Dg_moonglint", "", 0.0, 1.0, 0.0, 0, 2 << 16 - 1,
+        registerBandInfo("Dg_moonglint", "", 0.0, 1.0, 0.0, 1.0, 300.0,
                          "Number of measurements with L2 moonglint raised.");
 
-        registerBandInfo("Science_Flags_1", "", 0.0, 1.0, 0.0, 0, 2 << 22 - 1,
-                         "Science flags for SSS retrieval with forward model 1. " +
-                                 "Least significant bit is field " +
-                                 "#01. Most significant bit is field #32.");
-        registerBandInfo("Science_Flags_2", "", 0.0, 1.0, 0.0, 0, 2 << 22 - 1,
-                         "Science flags for SSS retrieval with forward model 12. " +
-                                 "Least significant bit is field " +
-                                 "#01. Most significant bit is field #32.");
-        registerBandInfo("Science_Flags_3", "", 0.0, 1.0, 0.0, 0, 2 << 22 - 1,
-                         "Science flags for SSS retrieval with forward model 3. " +
-                                 "Least significant bit is field " +
-                                 "#01. Most significant bit is field #32.");
-        registerBandInfo("Science_Flags_4", "", 0.0, 1.0, 0.0, 0, 2 << 22 - 1,
-                         "Science flags for SSS retrieval with cardioid model. See " +
-                                 "Least significant bit is field #01." +
-                                 "Most significant bit is field #32.");
+        registerBandInfo("Science_Flags_1", "", 0.0, 1.0, 0.0, 0, 2097152,
+                         "Science flags for SSS retrieval with forward model 1.");
+        registerBandInfo("Science_Flags_2", "", 0.0, 1.0, 0.0, 0, 2097152,
+                         "Science flags for SSS retrieval with forward model 12.");
+        registerBandInfo("Science_Flags_3", "", 0.0, 1.0, 0.0, 0, 2097152,
+                         "Science flags for SSS retrieval with forward model 3.");
+        registerBandInfo("Science_Flags_4", "", 0.0, 1.0, 0.0, 0, 2097152,
+                         "Science flags for SSS retrieval with cardioid model.");
 
-        registerBandInfo("Dg_sky", "", 0.0, 1.0, 0.0, 0, 2 << 8 - 1,
+        registerBandInfo("Dg_sky", "", 0.0, 1.0, 0.0, 1.0, 300.0,
                          "Count measurements with specular direction toward a " +
-                                 "strong galactic source");
+                                 "strong galactic source.");
     }
 
     public static BandInfoRegistry getInstance() {
