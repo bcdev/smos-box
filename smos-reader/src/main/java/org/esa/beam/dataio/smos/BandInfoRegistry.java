@@ -52,10 +52,11 @@ public class BandInfoRegistry {
         registerBandInfo("Grid_Point_Latitude", "deg", 0.0, 1.0, 0.0, -90.0, 90.0,
                          "Latitude of DGG point.");
         registerBandInfo("Grid_Point_Longitude", "deg", 0.0, 1.0, 0.0, -180.0, 180.0,
-                         "Longitude of DGG point.", true);
+                         "Longitude of DGG point.");
         registerBandInfo("Grid_point_Altitude", "mm", 0.0, 1.0, 0.0, -10.0E6, 10.0E6,
                          "Altitude of DGG point.");
         // TODO: <unsignedByte-8 varName="Water_Fraction"/>
+        // included in BWN[DF]1C only. Do we support this type? (rq-20090604)
 
         // TODO: no-data values & typical ranges
         registerBandInfo("Flags", "", 0.0, 1.0, -1, 0, 1 << 16,
