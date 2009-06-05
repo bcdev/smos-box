@@ -200,8 +200,8 @@ public class SmosFile implements GridPointDataProvider {
     private static Rectangle2D createTileRect(int i, int j) {
         final double w = 11.25;
         final double h = 11.25;
-        final double x = w * i - 180.0;
-        final double y = 90.0 - h * j;
+        final double x = w * i - 180.0 - w;
+        final double y = 90.0 - h * (j + 1);
 
         return new Rectangle2D.Double(x, y, w, w);
     }

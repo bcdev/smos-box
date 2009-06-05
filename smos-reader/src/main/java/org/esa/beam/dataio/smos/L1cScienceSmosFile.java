@@ -81,6 +81,7 @@ public class L1cScienceSmosFile extends L1cSmosFile implements SnapshotProvider 
     public void startBackgroundInit() {
         if (!isBackgroundInitStarted()) {
             Callable<Void> callable = new Callable<Void>() {
+                @Override
                 public Void call() throws IOException {
                     tabulateSnapshotIds();
                     return null;
@@ -103,11 +104,11 @@ public class L1cScienceSmosFile extends L1cSmosFile implements SnapshotProvider 
         final SortedSet<Long> x = new TreeSet<Long>();
         final SortedSet<Long> y = new TreeSet<Long>();
         final SortedSet<Long> xy = new TreeSet<Long>();
-        
-        final Map<Long, Rectangle2D> regions = new HashMap<Long, Rectangle2D>();
+
+        final Map<Long, Rectangle2D> snapshotRegionMap = new HashMap<Long, Rectangle2D>();
         final int latIndex = getGridPointType().getMemberIndex("Grid_Point_Latitude");
         final int lonIndex = getGridPointType().getMemberIndex("Grid_Point_Longitude");
-        
+
         final SequenceData gridPointList = getGridPointList();
         final int gridPointCount = getGridPointCount();
         for (int i = 0; i < gridPointCount; i++) {
@@ -116,47 +117,52 @@ public class L1cScienceSmosFile extends L1cSmosFile implements SnapshotProvider 
             final int btCount = btList.getElementCount();
             if (btCount > 0) {
                 final CompoundData gridData = gridPointList.getCompound(i);
-                float lon = gridData.getFloat(lonIndex);
-                float lat = gridData.getFloat(latIndex);
-                // normalisation to [-180, 180] necessary for some L1c test products
-                if (lon > 180.0f) {
-                    lon -= 360.0f;
+                double lon = gridData.getDouble(lonIndex);
+                double lat = gridData.getDouble(latIndex);
+                lon -= 0.02;
+                if (lon < -180.0) {
+                    lon = -180.0;
                 }
-                final Rectangle2D.Float rectangle =
-                        new Rectangle2D.Float(lon - 0.02f, lat - 0.02f, 0.04f, 0.04f);
-                
+                lat += 0.02;
+                if (lat > 90.0) {
+                    lat = 90.0;
+                }
+                // normalisation to [-180, 180] necessary for some L1c test products
+                if (lon > 180.0) {
+                    lon -= 360.0;
+                }
+                final Rectangle2D.Double rectangle = new Rectangle2D.Double(lon, lat, 0.04, 0.04);
+
                 long lastSid = -1;
                 for (int j = 0; j < btCount; j++) {
                     final CompoundData btData = btList.getCompound(j);
                     final long sid = btData.getLong(snapshotIdOfPixelIndex);
-                    final int flags = btData.getInt(flagsIndex);
 
-                    switch (flags & SmosFormats.L1C_POL_FLAGS_MASK) {
-                        case SmosFormats.L1C_POL_MODE_X:
-                            x.add(sid);
-                            break;
-                        case SmosFormats.L1C_POL_MODE_Y:
-                            y.add(sid);
-                            break;
-                        case SmosFormats.L1C_POL_MODE_XY1:
-                            xy.add(sid);
-                            break;
-                        case SmosFormats.L1C_POL_MODE_XY2:
-                            xy.add(sid);
-                            break;
-                    }
-                    if (lastSid != sid) {
-                        // snapshots are ordered
+                    if (lastSid != sid) { // snapshots are ordered
                         any.add(sid);
-                        Rectangle2D region = regions.get(sid);
-                        if (region == null) {
-                            region = new Rectangle2D.Float();
-                            region.setRect(rectangle);
-                            regions.put(sid, region);
+                        if (snapshotRegionMap.containsKey(sid)) {
+                            // TODO: take into account snapshots
+                            snapshotRegionMap.get(sid).add(rectangle);
                         } else {
-                            region.add(rectangle);
+                            snapshotRegionMap.put(sid, rectangle);
                         }
                         lastSid = sid;
+                    }
+
+                    final int flags = btData.getInt(flagsIndex);
+                    switch (flags & SmosFormats.L1C_POL_FLAGS_MASK) {
+                    case SmosFormats.L1C_POL_MODE_X:
+                        x.add(sid);
+                        break;
+                    case SmosFormats.L1C_POL_MODE_Y:
+                        y.add(sid);
+                        break;
+                    case SmosFormats.L1C_POL_MODE_XY1:
+                        xy.add(sid);
+                        break;
+                    case SmosFormats.L1C_POL_MODE_XY2:
+                        xy.add(sid);
+                        break;
                     }
                 }
             }
@@ -180,7 +186,7 @@ public class L1cScienceSmosFile extends L1cSmosFile implements SnapshotProvider 
         }
 
         polMode = new SnapshotPolarisationMode(snapshotIndexMap, snapshotIds, xPolSnapshotIds, yPolSnapshotIds,
-                                               xyPolSnapshotIds, regions);
+                                               xyPolSnapshotIds, snapshotRegionMap);
     }
 
     @Override
@@ -373,11 +379,6 @@ public class L1cScienceSmosFile extends L1cSmosFile implements SnapshotProvider 
     public final CompoundType getSnapshotType() {
         return snapshotType;
     }
-    
-    private long getSnapshotId(SequenceData btDataList, int btDataIndex) throws IOException {
-        Assert.argument(btDataList.getSequenceType().getElementType() == btDataType);
-        return btDataList.getCompound(btDataIndex).getLong(snapshotIdOfPixelIndex);
-    }
 
     @Override
     public final Long[] getAllSnapshotIds() {
@@ -398,7 +399,7 @@ public class L1cScienceSmosFile extends L1cSmosFile implements SnapshotProvider 
     public final Long[] getCrossPolSnapshotIds() {
         return polMode.xyPolSnapshotIds;
     }
-    
+
     public final Rectangle2D getSnapshotRegion(long snapshotId) {
         return polMode.regions.get(snapshotId);
     }
@@ -412,9 +413,12 @@ public class L1cScienceSmosFile extends L1cSmosFile implements SnapshotProvider 
         private final Long[] xyPolSnapshotIds;
         private final Map<Long, Rectangle2D> regions;
 
-        SnapshotPolarisationMode(Map<Long, Integer> snapshotIndexMap, Long[] snapshotIds,
+        SnapshotPolarisationMode(Map<Long, Integer> snapshotIndexMap,
+                                 Long[] snapshotIds,
                                  Long[] xPolSnapshotIds,
-                                 Long[] yPolSnapshotIds, Long[] xyPolSnapshotIds, Map<Long, Rectangle2D> regions) {
+                                 Long[] yPolSnapshotIds,
+                                 Long[] xyPolSnapshotIds,
+                                 Map<Long, Rectangle2D> regions) {
             this.snapshotIndexMap = Collections.unmodifiableMap(snapshotIndexMap);
             this.snapshotIds = snapshotIds;
             this.xPolSnapshotIds = xPolSnapshotIds;

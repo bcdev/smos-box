@@ -54,15 +54,15 @@ class SmosOpImage extends SingleBandedOpImage {
         long t1 = System.currentTimeMillis();
         final double noDataValue = node.getNoDataValue();
 
-        final int x = rectangle.x;
-        final int y = rectangle.y;
-        final int w = rectangle.width;
-        final int h = rectangle.height;
-        
-        Area tileArea = new Area(rectangle);
-        tileArea.intersect(region);
-        
-        if (tileArea.isEmpty()) {
+        final Area rectangleArea = new Area(rectangle);
+        rectangleArea.intersect(region);
+
+        if (!region.intersects(rectangle)) {
+            final int x = rectangle.x;
+            final int y = rectangle.y;
+            final int w = rectangle.width;
+            final int h = rectangle.height;
+
             switch (targetRaster.getTransferType()) {
                 case DataBuffer.TYPE_SHORT:
                 case DataBuffer.TYPE_USHORT:
@@ -91,7 +91,7 @@ class SmosOpImage extends SingleBandedOpImage {
         final UnpackedImageData targetData = targetAccessor.getPixels(
                 targetRaster, rectangle, targetRaster.getSampleModel().getTransferType(), true);
 
-        ValidRect validRect = new ValidRect(tileArea.getBounds(), rectangle);
+        final ValidRect validRect = new ValidRect(rectangleArea.getBounds(), rectangle);
         switch (targetData.type) {
             case DataBuffer.TYPE_SHORT:
             case DataBuffer.TYPE_USHORT:
@@ -326,7 +326,7 @@ class SmosOpImage extends SingleBandedOpImage {
         }
     }
     
-    static class ValidRect {
+    private static class ValidRect {
         final Rectangle validRect;
         final Rectangle tileRect;
         int wLeftMargin;
@@ -349,7 +349,5 @@ class SmosOpImage extends SingleBandedOpImage {
                 wRightMargin = tileRect.width - wData - wLeftMargin;
             }
         }
-        
-        
     }
 }
