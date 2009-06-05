@@ -1,8 +1,100 @@
 ============================================
 SCHEMAS VERSION
 ============================================
-2009-02-10_v04-03-00
+2009-06-02_v04-03-09
 
+
+
+===============================
+CHANGE LOG 2009-06-02_v04-03-09
+===============================
+HDR_SM_XXXX_AUX_FARA_C, HDR_SM_XXXX_AUX_FARA_P,HDR_SM_XXXX_AUX_FARA_R and DBL_SM_XXXX_AUX_CNFFAR have been modified in order to consider
+all the fields beginning with capital letter. 
+
+"FARA_Algorithm_Configuration" structure has been added to the HDR_SM_XXXX_AUX_FARA_C, HDR_SM_XXXX_AUX_FARA_P,HDR_SM_XXXX_AUX_FARA:
+It collects the Snapshot_Time_Sampling, Magnetic_Model_ID, Faraday_Computation_Method, VTEC_Model and Simulated_Orbit. 
+
+
+===============================
+CHANGE LOG 2009-05-29_v04-03-08
+===============================
+New schemas have been added to the distribution for the AUX_FARA_C, AUX_FARA_P and AUX_FARA_R,
+REP_FARA_C, REP_FARA_P, REP_FARA_R, AUX_CNFFAR, CNF_FARA__.
+
+===============================
+CHANGE LOG 2009-04-30_v04-03-07
+===============================
+
+New DBL_SM_XXXX_AUX_CNFNRT_0202 schema delivered by DMS has been added to the distribution. 
+
+
+===============================
+CHANGE LOG 2009-04-21_v04-03-06
+===============================
+
+AUX_VTEC_C, AUX_VTEC_P and AUX_VTEC_R Header schemas have been modified: "Ftp_Server" tag has been removed in order to be consistent with L1 Specs v5.8
+
+
+===============================
+CHANGE LOG 2009-04-02_v04-03-05
+===============================
+
+-New DBL_SM_XXXX_AUX_PLM____0203.xsd delivered by DMS has been added to the schemas distribution.
+-AUX_VTEC_C, AUX_VTEC_P and AUX_VTEC_R Header schemas have been updated. The VTEC_PCD format has been
+changed from %05d to %8s to be compliant with L1 Spec v5.7
+-AUX_GAL2OS Data block schema has been updated to be consistent with L2 Spec v4.2
+-MPL_JOBORD schema has been updated. "File_Counter" field has been removed from the "List_of_Brk_Files"
+structure to be consistent with SO-ID-IDR-GS-1001_1_10_ Generic IPF ICD (L2P-PR-0069 can be closed). 
+-REP_OSUDP2 and REP_OSDAP2 Data block schemas have been modified. "Warning_Log_identifier" and "Error_Log_identifier"
+formats have been limited to 12 characters (Schemas provided by ARGANS + "Warning_Log_identifier" format correction applied by Indra )
+-REP_SMUDP2 and REP_SMDAP2 Data block schemas have been modified. "Warning_Log_identifier" and "Error_Log_identifier"
+formats have been limited to 12 characters (Schemas provided by Array)
+
+===============================
+CHANGE LOG 2009-03-12_v04-03-04
+===============================
+- Fixed bugs in REP_XAR___ and REP_XDAR__ schemas. The new versions are consistent with SO-ID-IDR-GS-0018 XBAS-CORE ICD v1.8 2008-11-03 document.
+
+===============================
+CHANGE LOG 2009-03-11_v04-03-03
+===============================
+
+- DBL_SM_XXXX_AUX_PLM____0202.xsd delivered by DMS has been added to the DPGS schemas distribution.
+- DBL_SM_XXXX_CNF_L2OS___0201.xsd delivered by ARGANS has been added to the DPGS schemas distribution.
+- REP_SC_D1B, REP_SC_F1B, REP_TARD1B and REP_TARF1B schemas have been updated: Values from 0 to 9 are allowed for the 
+  "Sun_Corr", "Moon_Corr", "Gibbs_Corr", "Sunglint_Corr", "Backlobes_Corr" and "FTT_Corr" fields.
+
+
+===============================
+CHANGE LOG 2009-03-03_v04-03-02
+===============================
+
+The following changes have been made in the NRT schemas:
+
+-AUX_CNFNRT Header and Data block schemas have been updated in order to harmonize the version of the “Basic_Types” file referenced in the "includes".
+-AUX_NRTMSK Header schema has been changed in order to include the "Auxiliary_L1_Main_SPH_for_Binary_0010.xsd" and
+"Auxiliary_SPH_Data_Sets_0011.xsd" associated to the files with binary Data block instead of the "Auxiliary_L1_Main_SPH_for_XML_0010.xsd" defined for pure XML files. 
+The "/common/common/Fixed_Header" schema has been also updated to use in all the "includes" the same version of the "Basic_Types" file.
+-REP_BWND1C, REP_BWNF1C, REP_SCND1C and REP_SCNF1C Header and Data block schemas have been updated in order to harmonize the version of the 
+“Basic_Types” file.
+
+The AUX_CNFSMF/AUX_CNFSMD Data block schemas have been modified after SM Core V4 FAT:
+
+- k2_Tau_H20 unit has been changed to neper
+- Tau_Nad_Min/Max unit has been changed to neper
+- TH_SCENE_TAU_FO unit has been changed to neper
+- TH_TEC unit has been changed to 10**16 electrons/m**2
+
+The AUX_CNFL1P Data block schema has been modified according to SO-TN-IDR-GS-0005 L1 Spec v5.6:
+
+-Direct_Sun_Correction_External_Type, Direct_Moon_Correction_External_Type, Earth_Contribution_Removed_External,
+ Sky_Contribution_Removed_External, H_Pol_Max_BT_Sea, V_Pol_Max_BT_Sea, H_Pol_Max_BT_Land, V_Pol_Max_BT_Land and HV_Pol_Max_BT_module fields have been added.
+
+===============================
+CHANGE LOG 2009-02-20_v04-03-01
+===============================
+-The "Basic_Types", included in the following Data block schemas, have been harmonized to the v0016: 
+REP_SC_D1B, REP_SC_F1B, REP_TARD1B and REP_TARF1B.
 
 ===============================
 CHANGE LOG 2009-02-10_v04-03-00
