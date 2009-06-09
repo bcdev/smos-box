@@ -47,66 +47,66 @@ public class BandInfoRegistry {
          * Level 1C
          */
         // TODO: no-data values
-        registerBandInfo("Grid_Point_ID", "", 0.0, 1.0, 0.0, 1, 2621442,
+        registerBandInfo("Grid_Point_ID", "", 0.0, 1.0, 0, 1, 2621442,
                          "Unique identifier of Earth fixed grid point.");
-        registerBandInfo("Grid_Point_Latitude", "deg", 0.0, 1.0, 0.0, -90.0, 90.0,
+        registerBandInfo("Grid_Point_Latitude", "deg", 0.0, 1.0, Double.NaN, -90.0, 90.0,
                          "Latitude of DGG point.");
-        registerBandInfo("Grid_Point_Longitude", "deg", 0.0, 1.0, 0.0, -180.0, 180.0,
+        registerBandInfo("Grid_Point_Longitude", "deg", 0.0, 1.0, Double.NaN, -180.0, 180.0,
                          "Longitude of DGG point.");
-        registerBandInfo("Grid_point_Altitude", "mm", 0.0, 1.0, 0.0, -10.0E6, 10.0E6,
+        registerBandInfo("Grid_point_Altitude", "mm", 0.0, 1.0, Double.NaN, -10.0E6, 10.0E6,
                          "Altitude of DGG point.");
         // TODO: <unsignedByte-8 varName="Water_Fraction"/>
         // included in BWN[DF]1C only. Do we support this type? (rq-20090604)
 
         // TODO: no-data values & typical ranges
-        registerBandInfo("Flags", "", 0.0, 1.0, -1, 0, 1 << 16,
+        registerBandInfo("Flags", "", 0.0, 1.0, 0, 0, 1 << 16,
                          "L1c flags applicable to the pixel for this " +
                          "particular integration time.");
-        registerBandInfo("BT_Value", "K", 0.0, 1.0, -999.0, 50.0, 350.0,
+        registerBandInfo("BT_Value", "K", 0.0, 1.0, Double.NaN, 50.0, 350.0,
                          "Brightness temperature measurement over current " +
                          "Earth fixed grid point, obtained by DFT " +
                          "interpolation from L1b data.");
-        registerBandInfo("BT_Value_Real", "K", 0.0, 1.0, -999.0, 50.0, 350.0,
+        registerBandInfo("BT_Value_Real", "K", 0.0, 1.0, Double.NaN, 50.0, 350.0,
                          "Real component of HH, HV or VV polarisation brightness " +
                          "temperature measurement over current " +
                          "Earth fixed grid point, obtained by DFT " +
                          "interpolation from L1b data.");
-        registerBandInfo("BT_Value_Imag", "K", 0.0, 1.0, -999.0, -10.0, 10.0,
+        registerBandInfo("BT_Value_Imag", "K", 0.0, 1.0, Double.NaN, -10.0, 10.0,
                          "Imaginary component of HH, HV or VV polarisation brightness " +
                          "temperature measurement over current " +
                          "Earth fixed grid point, obtained by DFT " +
                          "interpolation from L1b data.");
-        registerBandInfo("Pixel_Radiometric_Accuracy", "K", 0.0, 50.0 / (1 << 16), -999.0, 0.0, 5.0,
+        registerBandInfo("Pixel_Radiometric_Accuracy", "K", 0.0, 50.0 / (1 << 16), 0, 0.0, 5.0,
                          "Error accuracy measurement in the Brightness " +
                          "Temperature presented in the previous field, " +
                          "extracted in the direction of the pixel.");
-        registerBandInfo("Incidence_Angle", "deg", 0.0, 90.0 / (1 << 16), -999.0, 0.0, 90.0,
+        registerBandInfo("Incidence_Angle", "deg", 0.0, 90.0 / (1 << 16), 0, 0.0, 90.0,
                          "Incidence angle value corresponding to the " +
                          "measured BT value over current Earth fixed " +
                          "grid point. Measured as angle from pixel to " +
                          "S/C with respect to the pixel local normal (0° " +
                          "if vertical)");
-        registerBandInfo("Azimuth_Angle", "deg", 0.0, 360.0 / (1 << 16), -999.0, 0.0, 360.0,
+        registerBandInfo("Azimuth_Angle", "deg", 0.0, 360.0 / (1 << 16), 0, 0.0, 360.0,
                          "Azimuth angle value corresponding to the " +
                          "measured BT value over current Earth fixed " +
                          "grid point. Measured as angle in pixel local " +
                          "tangent plane from projected pixel to S/C " +
                          "direction with respect to the local North (0° if" +
                          "local North)", true);
-        registerBandInfo("Faraday_Rotation_Angle", "deg", 0.0, 360.0 / (1 << 16), -999.0, 0.0, 360.0,
+        registerBandInfo("Faraday_Rotation_Angle", "deg", 0.0, 360.0 / (1 << 16), 0, 0.0, 360.0,
                          "Faraday rotation angle value corresponding " +
                          "to the measured BT value over current Earth " +
                          "fixed grid point. It is computed as the rotation " +
                          "from antenna to surface (i.e. inverse angle)", true);
-        registerBandInfo("Geometric_Rotation_Angle", "deg", 0.0, 360.0 / (1 << 16), -999.0, 0.0, 360.0,
+        registerBandInfo("Geometric_Rotation_Angle", "deg", 0.0, 360.0 / (1 << 16), 0, 0.0, 360.0,
                          "Geometric rotation angle value " +
                          "corresponding to the measured BT value " +
                          "over current Earth fixed grid point. It is " +
                          "computed as the rotation from surface to " +
                          "antenna (i.e. direct angle).", true);
-        registerBandInfo("Footprint_Axis1", "km", 0.0, 100.0 / (1 << 16), -999.0, 20.0, 35.0,
+        registerBandInfo("Footprint_Axis1", "km", 0.0, 100.0 / (1 << 16), 0, 20.0, 35.0,
                          "Elliptical footprint major semi-axis value.");
-        registerBandInfo("Footprint_Axis2", "km", 0.0, 100.0 / (1 << 16), -999.0, 20.0, 35.0,
+        registerBandInfo("Footprint_Axis2", "km", 0.0, 100.0 / (1 << 16), 0, 20.0, 35.0,
                          "Elliptical footprint minor semi-axis value.");
 
         /*
@@ -243,7 +243,7 @@ public class BandInfoRegistry {
                          "This counts the number of TBs that pass the " +
                          "initial TB filtering and have the L1c " +
                          "ADF_Error_flag on.");
-        registerBandInfo("N_Calibration_Error", "", 0.0, 1.0, 0.0, 0, 2 << 8 - 1,
+        registerBandInfo("N_Calibration_Error", "", 0.0, 1.0, 0, 0, 2 << 8 - 1,
                          "This counts the number of TBs that pass the " +
                          "initial TB filtering and have the L1c " +
                          "Calibration_Error_flag ON");
@@ -468,7 +468,7 @@ public class BandInfoRegistry {
                                   double min,
                                   double max,
                                   String description) {
-        registerBandInfo(name, new BandInfo(name, unit, scaleOffset, scaleFactor, noDataValue, min, max, description));
+        registerBandInfo(name, unit, scaleOffset, scaleFactor, noDataValue, min, max, description, false);
     }
 
     private void registerBandInfo(String name, String unit,

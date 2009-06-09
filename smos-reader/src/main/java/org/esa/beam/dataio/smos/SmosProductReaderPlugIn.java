@@ -40,7 +40,7 @@ public class SmosProductReaderPlugIn implements ProductReaderPlugIn {
     public DecodeQualification getDecodeQualification(Object input) {
         final File file = input instanceof File ? (File) input : new File(input.toString());
 
-        if (file.getName().endsWith(".DBL") || file.getName().endsWith(".HDR")) {
+        if (file.getName().endsWith(".HDR") || file.getName().endsWith(".DBL")) {
             final File hdrFile = FileUtils.exchangeExtension(file, ".HDR");
             final File dblFile = FileUtils.exchangeExtension(file, ".DBL");
 
