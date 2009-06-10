@@ -12,17 +12,26 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package org.esa.beam.smos.visat;
+package org.esa.beam.smos.visat.swing;
 
-import javax.swing.*;
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JSlider;
+import javax.swing.JSpinner;
+import javax.swing.JTextField;
+import javax.swing.event.ChangeListener;
 import java.awt.BorderLayout;
+import java.awt.event.ActionListener;
 
-class SnapshotSelectorCombo {
+public class SnapshotSelectorCombo {
+
     private final JComboBox comboBox;
     private final SnapshotSelector snapshotSelector;
     private SnapshotSelectorComboModel model;
 
-    SnapshotSelectorCombo() {
+    public SnapshotSelectorCombo() {
         comboBox = new SnapshotSelectorComboBox();
         snapshotSelector = new SnapshotSelector();
 
@@ -50,19 +59,23 @@ class SnapshotSelectorCombo {
         return snapshotSelector.getSliderInfo();
     }
 
-    boolean isAdjusting() {
+    public void addSliderChangeListener(ChangeListener l) {
+        getSlider().addChangeListener(l);
+    }
+
+    public boolean isAdjusting() {
         return getSlider().getValueIsAdjusting();
     }
 
-    long getSnapshotId() {
+    public long getSnapshotId() {
         return (Long) getSpinner().getValue();
     }
 
-    void setSnapshotId(long id) {
+    public void setSnapshotId(long id) {
         getSpinner().setValue(id);
     }
 
-    final void setModel(SnapshotSelectorComboModel model) {
+    final public void setModel(SnapshotSelectorComboModel model) {
         if (model == null) {
             throw new IllegalArgumentException("null model");
         }
@@ -73,7 +86,19 @@ class SnapshotSelectorCombo {
         }
     }
 
-    static JComponent createComponent(SnapshotSelectorCombo combo, boolean showSliderInfo) {
+    public void setComboBoxEnabled(boolean enabled) {
+        getComboBox().setEnabled(enabled);
+    }
+
+    public void setComboBoxSelectedIndex(int index) {
+        getComboBox().setSelectedIndex(index);
+    }
+
+    public void addComboBoxActionListener(ActionListener l) {
+        getComboBox().addActionListener(l);
+    }
+
+    public static JComponent createComponent(SnapshotSelectorCombo combo, boolean showSliderInfo) {
         final JPanel westPanel = new JPanel(new BorderLayout());
         westPanel.add(new JLabel("ID: "), BorderLayout.WEST);
         westPanel.add(combo.getSpinner(), BorderLayout.EAST);
@@ -97,6 +122,7 @@ class SnapshotSelectorCombo {
     }
 
     private class SnapshotSelectorComboBox extends JComboBox {
+
         @Override
         public void setSelectedItem(Object object) {
             if (model != null) {

@@ -12,7 +12,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package org.esa.beam.smos.visat;
+package org.esa.beam.smos.visat.swing;
 
 import junit.framework.TestCase;
 
@@ -21,6 +21,8 @@ import javax.swing.JComponent;
 import javax.swing.JSpinner;
 import javax.swing.JFormattedTextField;
 import java.text.ParseException;
+
+import org.esa.beam.smos.visat.swing.SnapshotSelectorCombo;
 
 public class SnapshotSelectorComboTest extends TestCase {
     private SnapshotSelectorCombo selectorCombo;

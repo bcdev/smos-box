@@ -16,6 +16,8 @@ import org.esa.beam.dataio.smos.SmosMultiLevelSource;
 import org.esa.beam.framework.datamodel.RasterDataNode;
 import org.esa.beam.framework.help.HelpSys;
 import org.esa.beam.framework.ui.product.ProductSceneView;
+import org.esa.beam.smos.visat.swing.SnapshotSelectorCombo;
+import org.esa.beam.smos.visat.swing.SnapshotSelectorComboModel;
 import org.jfree.layout.CenterLayout;
 
 import javax.swing.BorderFactory;
@@ -79,8 +81,8 @@ public class SnapshotInfoToolView extends SmosToolView {
         mainPanel.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
 
         snapshotSelectorCombo = new SnapshotSelectorCombo();
-        snapshotSelectorCombo.getSlider().addChangeListener(snapshotSliderListener);
-        snapshotSelectorCombo.getComboBox().addActionListener(new ActionListener() {
+        snapshotSelectorCombo.addSliderChangeListener(snapshotSliderListener);
+        snapshotSelectorCombo.addComboBoxActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 updateTable(snapshotSelectorCombo.getSnapshotId());
@@ -337,16 +339,16 @@ public class SnapshotInfoToolView extends SmosToolView {
             }
             final String bandName = smosView.getRaster().getName();
             if (bandName.endsWith("_X")) {
-                snapshotSelectorCombo.getComboBox().setSelectedIndex(1);
+                snapshotSelectorCombo.setComboBoxSelectedIndex(1);
             } else if (bandName.endsWith("_Y")) {
-                snapshotSelectorCombo.getComboBox().setSelectedIndex(2);
+                snapshotSelectorCombo.setComboBoxSelectedIndex(2);
             } else if (bandName.contains("_XY")) {
-                snapshotSelectorCombo.getComboBox().setSelectedIndex(3);
+                snapshotSelectorCombo.setComboBoxSelectedIndex(3);
             }
         }
 
         updateTable(snapshotSelectorCombo.getSnapshotId());
-        snapshotSelectorCombo.getComboBox().setEnabled(!sync);
+        snapshotSelectorCombo.setComboBoxEnabled(!sync);
         browseButtonModel.setEnabled(sync);
         snapshotButtonModel.setEnabled(sync);
         followModeButtonModel.setEnabled(sync && snapshotButtonModel.isSelected());

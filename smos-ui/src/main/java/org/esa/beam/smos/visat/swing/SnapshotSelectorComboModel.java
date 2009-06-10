@@ -12,7 +12,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package org.esa.beam.smos.visat;
+package org.esa.beam.smos.visat.swing;
 
 import org.esa.beam.dataio.smos.SnapshotProvider;
 
@@ -22,11 +22,11 @@ import javax.swing.event.ListDataListener;
 import java.util.HashMap;
 import java.util.Map;
 
-class SnapshotSelectorComboModel implements ComboBoxModel {
+public class SnapshotSelectorComboModel implements ComboBoxModel {
     private final ComboBoxModel comboBoxModel;
     private final Map<Object, SnapshotSelectorModel> map;
 
-    SnapshotSelectorComboModel(SnapshotProvider provider) {
+    public SnapshotSelectorComboModel(SnapshotProvider provider) {
         map = new HashMap<Object, SnapshotSelectorModel>();
 
         map.put("Any", new SnapshotSelectorModel(provider.getAllSnapshotIds()));
