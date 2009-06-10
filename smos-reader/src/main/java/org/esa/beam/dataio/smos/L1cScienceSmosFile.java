@@ -18,7 +18,6 @@ import com.bc.ceres.binio.CompoundData;
 import com.bc.ceres.binio.CompoundType;
 import com.bc.ceres.binio.DataFormat;
 import com.bc.ceres.binio.SequenceData;
-import com.bc.ceres.core.Assert;
 
 import java.awt.geom.Rectangle2D;
 import java.io.File;
@@ -57,7 +56,7 @@ public class L1cScienceSmosFile extends L1cSmosFile implements SnapshotProvider 
 
     private final CompoundType snapshotType;
     private volatile Future<Void> backgroundTask;
-    private volatile SnapshotPolarisationMode polMode;
+    private volatile SnapshotInfo snapshotInfo;
 
     public L1cScienceSmosFile(File file, DataFormat format, boolean fullPol) throws IOException {
         super(file, format);
@@ -141,7 +140,7 @@ public class L1cScienceSmosFile extends L1cSmosFile implements SnapshotProvider 
                     if (lastSid != sid) { // snapshots are ordered
                         any.add(sid);
                         if (snapshotRegionMap.containsKey(sid)) {
-                            // TODO: take into account snapshots
+                            // TODO: snapshots on the anti-meridian (rq-20090610)
                             snapshotRegionMap.get(sid).add(rectangle);
                         } else {
                             snapshotRegionMap.put(sid, rectangle);
@@ -167,10 +166,10 @@ public class L1cScienceSmosFile extends L1cSmosFile implements SnapshotProvider 
                 }
             }
         }
-        Long[] snapshotIds = any.toArray(new Long[any.size()]);
-        Long[] xPolSnapshotIds = x.toArray(new Long[x.size()]);
-        Long[] yPolSnapshotIds = y.toArray(new Long[y.size()]);
-        Long[] xyPolSnapshotIds = xy.toArray(new Long[xy.size()]);
+        final Long[] snapshotIds = any.toArray(new Long[any.size()]);
+        final Long[] xPolSnapshotIds = x.toArray(new Long[x.size()]);
+        final Long[] yPolSnapshotIds = y.toArray(new Long[y.size()]);
+        final Long[] xyPolSnapshotIds = xy.toArray(new Long[xy.size()]);
 
         final Map<Long, Integer> snapshotIndexMap = new TreeMap<Long, Integer>();
 
@@ -185,8 +184,12 @@ public class L1cScienceSmosFile extends L1cSmosFile implements SnapshotProvider 
             }
         }
 
-        polMode = new SnapshotPolarisationMode(snapshotIndexMap, snapshotIds, xPolSnapshotIds, yPolSnapshotIds,
-                                               xyPolSnapshotIds, snapshotRegionMap);
+        snapshotInfo = new SnapshotInfo(snapshotIndexMap,
+                                        snapshotIds,
+                                        xPolSnapshotIds,
+                                        yPolSnapshotIds,
+                                        xyPolSnapshotIds,
+                                        snapshotRegionMap);
     }
 
     @Override
@@ -360,7 +363,7 @@ public class L1cScienceSmosFile extends L1cSmosFile implements SnapshotProvider 
     }
 
     public final int getSnapshotIndex(long snapshotId) {
-        final Map<Long, Integer> snapshotIndexMap = polMode.snapshotIndexMap;
+        final Map<Long, Integer> snapshotIndexMap = snapshotInfo.snapshotIndexMap;
         if (!snapshotIndexMap.containsKey(snapshotId)) {
             throw new IllegalArgumentException(MessageFormat.format("Illegal snapshot ID: {0}", snapshotId));
         }
@@ -382,29 +385,29 @@ public class L1cScienceSmosFile extends L1cSmosFile implements SnapshotProvider 
 
     @Override
     public final Long[] getAllSnapshotIds() {
-        return polMode.snapshotIds;
+        return snapshotInfo.snapshotIds;
     }
 
     @Override
     public final Long[] getXPolSnapshotIds() {
-        return polMode.xPolSnapshotIds;
+        return snapshotInfo.xPolSnapshotIds;
     }
 
     @Override
     public final Long[] getYPolSnapshotIds() {
-        return polMode.yPolSnapshotIds;
+        return snapshotInfo.yPolSnapshotIds;
     }
 
     @Override
     public final Long[] getCrossPolSnapshotIds() {
-        return polMode.xyPolSnapshotIds;
+        return snapshotInfo.xyPolSnapshotIds;
     }
 
     public final Rectangle2D getSnapshotRegion(long snapshotId) {
-        return polMode.regions.get(snapshotId);
+        return snapshotInfo.regions.get(snapshotId);
     }
 
-    class SnapshotPolarisationMode {
+    private static class SnapshotInfo {
 
         private final Map<Long, Integer> snapshotIndexMap;
         private final Long[] snapshotIds;
@@ -413,12 +416,12 @@ public class L1cScienceSmosFile extends L1cSmosFile implements SnapshotProvider 
         private final Long[] xyPolSnapshotIds;
         private final Map<Long, Rectangle2D> regions;
 
-        SnapshotPolarisationMode(Map<Long, Integer> snapshotIndexMap,
-                                 Long[] snapshotIds,
-                                 Long[] xPolSnapshotIds,
-                                 Long[] yPolSnapshotIds,
-                                 Long[] xyPolSnapshotIds,
-                                 Map<Long, Rectangle2D> regions) {
+        SnapshotInfo(Map<Long, Integer> snapshotIndexMap,
+                     Long[] snapshotIds,
+                     Long[] xPolSnapshotIds,
+                     Long[] yPolSnapshotIds,
+                     Long[] xyPolSnapshotIds,
+                     Map<Long, Rectangle2D> regions) {
             this.snapshotIndexMap = Collections.unmodifiableMap(snapshotIndexMap);
             this.snapshotIds = snapshotIds;
             this.xPolSnapshotIds = xPolSnapshotIds;

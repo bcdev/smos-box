@@ -14,9 +14,14 @@
  */
 package org.esa.beam.smos.visat;
 
-import javax.swing.*;
+import javax.swing.JFormattedTextField;
+import javax.swing.JSlider;
+import javax.swing.JSpinner;
+import javax.swing.JTextField;
+import java.beans.PropertyChangeEvent;
 
 class SnapshotSelector {
+
     private final JSpinner spinner;
     private final JSlider slider;
     private final JTextField sliderInfo;
@@ -73,8 +78,52 @@ class SnapshotSelector {
         if (this.model != model) {
             this.model = model;
             spinner.setModel(model.getSpinnerModel());
+            spinner.setEditor(new ListEditor(spinner));
             slider.setModel(model.getSliderModel());
             sliderInfo.setDocument(model.getSliderInfoDocument());
+        }
+    }
+
+    private static class ListEditor extends JSpinner.ListEditor {
+
+        public ListEditor(JSpinner spinner) {
+            super(spinner);
+        }
+
+        @Override
+        public void propertyChange(PropertyChangeEvent e) {
+            final JSpinner spinner = getSpinner();
+
+            if (spinner == null) {
+                // Indicates we aren't installed anywhere.
+                return;
+            }
+
+            final Object source = e.getSource();
+            final String name = e.getPropertyName();
+            if ((source instanceof JFormattedTextField) && "value".equals(name)) {
+                final Object lastValue = spinner.getValue();
+
+                // Try to set the new value
+                try {
+                    final Object value = getTextField().getValue();
+                    if (value instanceof Number) {
+                        final Number number = (Number) value;
+                        spinner.setValue(number.longValue());
+                    } else {
+                        spinner.setValue(Long.parseLong(value.toString()));
+                    }
+                } catch (IllegalArgumentException iae) {
+                    // SpinnerModel didn't like new value, reset
+                    try {
+                        ((JFormattedTextField) source).setValue(lastValue);
+                    } catch (IllegalArgumentException iae2) {
+                        // Still bogus, nothing else we can do, the
+                        // SpinnerModel and JFormattedTextField are now out
+                        // of sync.
+                    }
+                }
+            }
         }
     }
 }

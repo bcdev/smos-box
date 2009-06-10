@@ -17,6 +17,10 @@ package org.esa.beam.smos.visat;
 import junit.framework.TestCase;
 
 import javax.swing.JFrame;
+import javax.swing.JComponent;
+import javax.swing.JSpinner;
+import javax.swing.JFormattedTextField;
+import java.text.ParseException;
 
 public class SnapshotSelectorComboTest extends TestCase {
     private SnapshotSelectorCombo selectorCombo;
@@ -30,6 +34,21 @@ public class SnapshotSelectorComboTest extends TestCase {
         assertEquals(1L, selectorCombo.getSpinner().getValue());
         assertEquals(0L, selectorCombo.getSlider().getValue());
         assertEquals("Any", selectorCombo.getComboBox().getSelectedItem());
+    }
+
+    public void testSpinnerEditor() throws ParseException {
+        final JSpinner spinner = selectorCombo.getSpinner();
+        assertTrue(spinner != null);
+        final JComponent component = spinner.getEditor();
+        assertTrue(component instanceof JSpinner.ListEditor);
+
+        final JSpinner.ListEditor listEditor = (JSpinner.ListEditor) component;
+
+        final JFormattedTextField textField = listEditor.getTextField();
+        assertTrue(textField.isEditable());
+
+        textField.setValue(2);
+        assertEquals(2L, spinner.getValue());
     }
 
     private static SnapshotSelectorCombo createSnapshotSelectorCombo() {
