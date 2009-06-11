@@ -36,6 +36,17 @@
     </dependency>
 
     <categories>SMOS</categories>
+    
+    <extension point="beam-ui:actions">
+        <action>
+            <class>org.esa.beam.smos.visat.GridCellExporterAction</class>
+            <id>gridCellExporter</id>
+            <helpID>gridCellExporter</helpID>
+            <parent>tool</parent>
+            <text>SMOS GridCell Exporter..</text>
+            <mnemonic>G</mnemonic>
+        </action>
+    </extension>
 
     <extension point="beam-ui:toolViews">
         <toolView>
