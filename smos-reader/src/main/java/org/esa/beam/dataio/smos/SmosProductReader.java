@@ -125,7 +125,7 @@ public class SmosProductReader extends AbstractProductReader {
             || formatName.contains("MIR_BWSD1C")) {
             addL1cFlagCoding(product);
             smosFile = new L1cBrowseSmosFile(dblFile, format);
-            addDualPolBands(product, ((L1cSmosFile) smosFile).getBtDataType());
+            addDualPolBrowseBands(product, ((L1cSmosFile) smosFile).getBtDataType());
         } else if (formatName.contains("MIR_BWLF1C")
                    || formatName.contains("MIR_BWNF1C")
                    || formatName.contains("MIR_BWSF1C")) {
@@ -138,7 +138,7 @@ public class SmosProductReader extends AbstractProductReader {
             final L1cScienceSmosFile scienceSmosFile = new L1cScienceSmosFile(dblFile, format, false);
             scienceSmosFile.startBackgroundInit();
             smosFile = scienceSmosFile;
-            addDualPolBands(product, ((L1cSmosFile) smosFile).getBtDataType());
+            addDualPolScienceBands(product, ((L1cSmosFile) smosFile).getBtDataType());
         } else if (formatName.contains("MIR_SCLF1C")
                    || formatName.contains("MIR_SCSF1C")) {
             addL1cFlagCoding(product);
@@ -169,7 +169,7 @@ public class SmosProductReader extends AbstractProductReader {
         return product;
     }
 
-    private void addDualPolBands(Product product, CompoundType compoundDataType) {
+    private void addDualPolBrowseBands(Product product, CompoundType compoundDataType) {
         final CompoundMember[] members = compoundDataType.getMembers();
 
         for (int fieldIndex = 0; fieldIndex < members.length; fieldIndex++) {
@@ -244,6 +244,32 @@ public class SmosProductReader extends AbstractProductReader {
         }
     }
 
+    private void addDualPolScienceBands(Product product, CompoundType compoundDataType) {
+        final CompoundMember[] members = compoundDataType.getMembers();
+
+        for (int fieldIndex = 0; fieldIndex < members.length; fieldIndex++) {
+            final CompoundMember member = members[fieldIndex];
+            final String memberName = member.getName();
+            final BandInfo bandInfo = BandInfoRegistry.getInstance().getBandInfo(memberName);
+
+            if (bandInfo != null) {
+                if ("Flags".equals(memberName)) {
+                    // flags do not depend on polarisation mode, so there is a single flag band only
+                    addL1cBand(product, memberName,
+                               memberTypeToBandType(member.getType()), bandInfo, fieldIndex,
+                               SmosFormats.L1C_POL_MODE_ANY);
+                } else {
+                    addL1cBand(product, memberName + "_X",
+                               memberTypeToBandType(member.getType()), bandInfo, fieldIndex,
+                               SmosFormats.L1C_POL_MODE_X);
+                    addL1cBand(product, memberName + "_Y",
+                               memberTypeToBandType(member.getType()), bandInfo, fieldIndex,
+                               SmosFormats.L1C_POL_MODE_Y);
+                }
+            }
+        }
+    }
+
     private void addFullPolScienceBands(Product product, CompoundType compoundDataType) {
         final CompoundMember[] members = compoundDataType.getMembers();
 
@@ -257,7 +283,7 @@ public class SmosProductReader extends AbstractProductReader {
                     // flags do not depend on polarisation mode, so there is a single flag band only
                     addL1cBand(product, memberName,
                                memberTypeToBandType(member.getType()), bandInfo, fieldIndex,
-                               SmosFormats.L1C_POL_MODE_X);
+                               SmosFormats.L1C_POL_MODE_ANY);
                 } else if ("BT_Value_Real".equals(memberName)) {
                     addL1cBand(product, "BT_Value_X",
                                memberTypeToBandType(member.getType()), bandInfo, fieldIndex,

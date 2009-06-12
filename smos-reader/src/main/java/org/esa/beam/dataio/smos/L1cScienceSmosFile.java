@@ -270,7 +270,7 @@ public class L1cScienceSmosFile extends L1cSmosFile implements SnapshotProvider 
             btData = btDataList.getCompound(i);
             if (btData.getLong(snapshotIdOfPixelIndex) == snapshotId) {
                 final int flags = btData.getInt(flagsIndex);
-                if (polMode == (flags & 3) || (polMode & flags & 2) != 0) {
+                if (polMode == SmosFormats.L1C_POL_MODE_ANY || polMode == (flags & 3) || (polMode & flags & 2) != 0) {
                     return btData;
                 }
             }
@@ -292,7 +292,7 @@ public class L1cScienceSmosFile extends L1cSmosFile implements SnapshotProvider 
             final CompoundData btData = btDataList.getCompound(i);
             final int flags = btData.getInt(flagsIndex);
 
-            if (polMode == (flags & 3) || (polMode & flags & 2) != 0) {
+            if (polMode == SmosFormats.L1C_POL_MODE_ANY || polMode == (flags & 3) || (polMode & flags & 2) != 0) {
                 final float incidenceAngle = INCIDENCE_ANGLE_FACTOR * btData.getInt(incidenceAngleIndex);
 
                 if (incidenceAngle >= MIN_BROWSE_INCIDENCE_ANGLE && incidenceAngle <= MAX_BROWSE_INCIDENCE_ANGLE) {
@@ -332,7 +332,7 @@ public class L1cScienceSmosFile extends L1cSmosFile implements SnapshotProvider 
             final CompoundData btData = btDataList.getCompound(i);
             final int flags = btData.getInt(flagsIndex);
 
-            if (polMode == (flags & 3) || (polMode & flags & 2) != 0) {
+            if (polMode == SmosFormats.L1C_POL_MODE_ANY || polMode == (flags & 3) || (polMode & flags & 2) != 0) {
                 final float incidenceAngle = INCIDENCE_ANGLE_FACTOR * btData.getInt(incidenceAngleIndex);
 
                 if (incidenceAngle >= MIN_BROWSE_INCIDENCE_ANGLE && incidenceAngle <= MAX_BROWSE_INCIDENCE_ANGLE) {

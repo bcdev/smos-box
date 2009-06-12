@@ -4,50 +4,44 @@ import com.bc.ceres.binio.CompoundData;
 import com.bc.ceres.binio.CompoundType;
 import com.bc.ceres.binio.Type;
 import com.bc.ceres.core.ProgressMonitor;
+import com.bc.ceres.glayer.CollectionLayer;
+import com.bc.ceres.glayer.Layer;
 import com.bc.ceres.glayer.support.ImageLayer;
 import com.bc.ceres.glevel.MultiLevelImage;
 import com.bc.ceres.glevel.support.DefaultMultiLevelImage;
+import com.bc.ceres.glevel.support.FileMultiLevelSource;
 import com.bc.ceres.grender.Viewport;
 import org.esa.beam.dataio.smos.GridPointValueProvider;
 import org.esa.beam.dataio.smos.L1cFieldValueProvider;
 import org.esa.beam.dataio.smos.L1cScienceSmosFile;
 import org.esa.beam.dataio.smos.SmosFile;
 import org.esa.beam.dataio.smos.SmosMultiLevelSource;
+import org.esa.beam.dataio.smos.SnapshotProvider;
+import org.esa.beam.framework.datamodel.Band;
+import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.framework.datamodel.RasterDataNode;
+import org.esa.beam.framework.datamodel.VirtualBand;
 import org.esa.beam.framework.help.HelpSys;
 import org.esa.beam.framework.ui.product.ProductSceneView;
+import org.esa.beam.glevel.TiledFileMultiLevelSource;
+import org.esa.beam.jai.ImageManager;
 import org.esa.beam.smos.visat.swing.SnapshotSelectorCombo;
 import org.esa.beam.smos.visat.swing.SnapshotSelectorComboModel;
+import org.esa.beam.visat.VisatApp;
 import org.jfree.layout.CenterLayout;
 
-import javax.swing.BorderFactory;
-import javax.swing.ButtonGroup;
-import javax.swing.ButtonModel;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-import javax.swing.JProgressBar;
-import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.SwingWorker;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableModel;
-
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Rectangle;
-import java.awt.FlowLayout;
 import java.awt.ComponentOrientation;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -59,8 +53,11 @@ import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class SnapshotInfoToolView extends SmosToolView {
+
     public static final String ID = SnapshotInfoToolView.class.getName();
     private static final SnapshotTableModel NULL_MODEL = new SnapshotTableModel(new Object[0][0]);
 
@@ -71,17 +68,18 @@ public class SnapshotInfoToolView extends SmosToolView {
     private ButtonModel snapshotButtonModel;
     private ButtonModel followModeButtonModel;
     private ButtonModel synchronizeButtonModel;
-    private SliderChangeListener snapshotSliderListener;
+    @SuppressWarnings({"FieldCanBeLocal"})
+    private SnapshotIdListener snapshotIdListener;
 
     @Override
     protected JComponent createClientComponent() {
-        snapshotSliderListener = new SliderChangeListener();
+        snapshotIdListener = new SnapshotIdListener();
 
         JPanel mainPanel = new JPanel(new BorderLayout(4, 4));
         mainPanel.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
 
         snapshotSelectorCombo = new SnapshotSelectorCombo();
-        snapshotSelectorCombo.addSliderChangeListener(snapshotSliderListener);
+        snapshotSelectorCombo.addSliderChangeListener(snapshotIdListener);
         snapshotSelectorCombo.addComboBoxActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -144,7 +142,7 @@ public class SnapshotInfoToolView extends SmosToolView {
         }
         snapshotTable.setModel(NULL_MODEL);
     }
-    
+
     private TableModel createSnapshotTableModel(CompoundData data) {
         final CompoundType compoundType = data.getCompoundType();
         final int memberCount = data.getMemberCount();
@@ -198,6 +196,24 @@ public class SnapshotInfoToolView extends SmosToolView {
         }
     }
 
+    private void updateSmosImage(RasterDataNode raster, long snapshotId) {
+        final MultiLevelImage sourceImage = raster.getSourceImage();
+        if (sourceImage instanceof DefaultMultiLevelImage) {
+            final DefaultMultiLevelImage multiLevelImage = (DefaultMultiLevelImage) sourceImage;
+            if (multiLevelImage.getSource() instanceof SmosMultiLevelSource) {
+                final SmosMultiLevelSource smosMultiLevelSource = (SmosMultiLevelSource) multiLevelImage.getSource();
+                final GridPointValueProvider gridPointValueProvider = smosMultiLevelSource.getValueProvider();
+                if (gridPointValueProvider instanceof L1cFieldValueProvider) {
+                    final L1cFieldValueProvider l1cFieldValueProvider = (L1cFieldValueProvider) gridPointValueProvider;
+                    if (l1cFieldValueProvider.getSnapshotId() != snapshotId) {
+                        l1cFieldValueProvider.setSnapshotId(snapshotId);
+                        resetRasterImages(raster);
+                    }
+                }
+            }
+        }
+    }
+
     private void locateSnapshotId(final ProductSceneView smosView, final long id) {
         final L1cScienceSmosFile smosFile = SmosBox.getL1cScienceSmosFile(smosView);
         if (smosFile != null) {
@@ -205,61 +221,142 @@ public class SnapshotInfoToolView extends SmosToolView {
             if (snapshotRegion != null) {
                 final Viewport vp = smosView.getLayerCanvas().getViewport();
                 final AffineTransform m2v = vp.getModelToViewTransform();
-                final Point2D.Double center = new Point2D.Double(snapshotRegion.getCenterX(), snapshotRegion.getCenterY());
+                final Point2D.Double center = new Point2D.Double(snapshotRegion.getCenterX(),
+                                                                 snapshotRegion.getCenterY());
                 m2v.transform(center, center);
                 final Rectangle viewBounds = vp.getViewBounds();
                 final double vx = viewBounds.getCenterX();
                 final double vy = viewBounds.getCenterY();
                 vp.moveViewDelta(vx - center.getX(), vy - center.getY());
             } else {
-                JOptionPane.showMessageDialog(getPaneControl(),
-                                              MessageFormat.format("No snapshot found with ID = {0}", id));
+                JOptionPane.showMessageDialog(getPaneControl(), MessageFormat.format(
+                        "No snapshot found with ID = {0}", id));
             }
-            
-            
         }
     }
 
-    private class SliderChangeListener implements ChangeListener {
+    private class SnapshotIdListener implements ChangeListener {
+
         @Override
         public void stateChanged(ChangeEvent e) {
-            final long id = snapshotSelectorCombo.getSnapshotId();
-            updateTable(id);
+            final long snapshotId = snapshotSelectorCombo.getSnapshotId();
+            updateTable(snapshotId);
             if (snapshotSelectorCombo.isAdjusting()) {
                 return;
             }
             if (synchronizeButtonModel.isSelected() && snapshotButtonModel.isSelected()) {
                 final ProductSceneView smosView = getSelectedSmosView();
                 if (smosView != null) {
-                    setSelectedSnapshotId(smosView, id);
                     if (followModeButtonModel.isSelected()) {
-                        locateSnapshotId(smosView, id);
+                        locateSnapshotId(smosView, snapshotId);
                     }
-                    updateImageLayer(smosView);
+                    updateAllImagesAndViews(smosView.getProduct(), snapshotId);
                 }
+            }
+        }
+//        @Override
+//        public void stateChanged(ChangeEvent e) {
+//            final long id = snapshotSelectorCombo.getSnapshotId();
+//            updateTable(id);
+//            if (snapshotSelectorCombo.isAdjusting()) {
+//                return;
+//            }
+//            if (synchronizeButtonModel.isSelected() && snapshotButtonModel.isSelected()) {
+//                final ProductSceneView smosView = getSelectedSmosView();
+//                if (smosView != null) {
+//                    setSelectedSnapshotId(smosView, id);
+//                    if (followModeButtonModel.isSelected()) {
+//                        locateSnapshotId(smosView, id);
+//                    }
+//                    updateImageLayer(smosView);
+//                }
+//            }
+//        }
+    }
+
+    private class ToggleSnapshotModeAction implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent event) {
+            final ProductSceneView smosView = getSelectedSmosView();
+            final long snapshotId;
+
+            if (snapshotButtonModel.isSelected()) {
+                snapshotId = snapshotSelectorCombo.getSnapshotId();
+                if (followModeButtonModel.isSelected()) {
+                    locateSnapshotId(smosView, snapshotId);
+                }
+            } else {
+                snapshotId = -1;
+            }
+            updateAllImagesAndViews(smosView.getProduct(), snapshotId);
+            updateUI(smosView, false);
+        }
+    }
+
+    private void updateAllImagesAndViews(Product smosProduct, long snapshotId) {
+        final long xPolId;
+        final long yPolId;
+        final long crossPolId;
+
+        if (snapshotId != -1) {
+            final SnapshotProvider snapshotProvider = (SnapshotProvider) getSelectedSmosFile();
+            xPolId = findSnapshotId(snapshotProvider.getXPolSnapshotIds(), snapshotId);
+            yPolId = findSnapshotId(snapshotProvider.getYPolSnapshotIds(), snapshotId);
+            crossPolId = findSnapshotId(snapshotProvider.getCrossPolSnapshotIds(), snapshotId);
+        } else {
+            xPolId = -1;
+            yPolId = -1;
+            crossPolId = -1;
+        }
+
+        // a workaround for the problem that all displayed mask images are cached (rq-20090612)
+        MaskImageCacheAccessor.removeAll(ImageManager.getInstance(), smosProduct);
+
+        for (final Band band : smosProduct.getBands()) {
+            if (band.getName().endsWith("_X")) {
+                updateSmosImage(band, xPolId);
+            } else if (band.getName().endsWith("_Y")) {
+                updateSmosImage(band, yPolId);
+            } else if (band.getName().endsWith("_XY")) {
+                updateSmosImage(band, crossPolId);
+            } else if (band.isFlagBand()) {
+                updateSmosImage(band, snapshotId);
+            } else if (band instanceof VirtualBand) {
+                resetRasterImages(band);
+            }
+        }
+        for (final Band band : smosProduct.getBands()) {
+            if (band.getName().endsWith("_X")) {
+                resetViews(band, xPolId);
+            } else if (band.getName().endsWith("_Y")) {
+                resetViews(band, yPolId);
+            } else if (band.getName().endsWith("_XY")) {
+                resetViews(band, crossPolId);
+            } else if (band.isFlagBand()) {
+                resetViews(band, snapshotId);
+            } else if (band instanceof VirtualBand) {
+                resetViews(band, snapshotId);
             }
         }
     }
 
-    private class ToggleSnapshotModeAction implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent event) {
-            final ProductSceneView smosView = getSelectedSmosView();
-            if (snapshotButtonModel.isSelected()) {
-                final long id = snapshotSelectorCombo.getSnapshotId();
-                setSelectedSnapshotId(smosView, id);
-                if (followModeButtonModel.isSelected()) {
-                    locateSnapshotId(smosView, id);
+    private void resetViews(RasterDataNode raster, long snapshotId) {
+        for (final JInternalFrame internalFrame : VisatApp.getApp().findInternalFrames(raster)) {
+            if (internalFrame != null) {
+                if (internalFrame.getContentPane() instanceof ProductSceneView) {
+                    final ProductSceneView view = (ProductSceneView) internalFrame.getContentPane();
+                    if (getSelectedSnapshotId(view) != snapshotId) {
+                        regenerateImageLayers(view.getRootLayer());
+                        setSelectedSnapshotId(view, snapshotId);
+                    }
                 }
-            } else {
-                setSelectedSnapshotId(smosView, -1);
             }
-            updateUI(smosView, false);
-            updateImageLayer(smosView);
         }
     }
 
     private class LocateSnapshotAction implements ActionListener {
+
         @Override
         public void actionPerformed(ActionEvent event) {
             final ProductSceneView smosView = getSelectedSmosView();
@@ -412,6 +509,7 @@ public class SnapshotInfoToolView extends SmosToolView {
 
 
     private class PolModeWaiter extends SwingWorker {
+
         private final ProductSceneView smosView;
         private final L1cScienceSmosFile smosFile;
         private final ProgressMonitor pm;
@@ -443,6 +541,7 @@ public class SnapshotInfoToolView extends SmosToolView {
     }
 
     private static class PopupListener extends MouseAdapter {
+
         private final JPopupMenu popup;
 
         PopupListener(JPopupMenu popup) {
@@ -465,4 +564,73 @@ public class SnapshotInfoToolView extends SmosToolView {
             }
         }
     }
+
+    private static long findSnapshotId(Long[] snapshotIds, long requestedId) {
+        if (snapshotIds.length == 0) {
+            return -1;
+        }
+        final int foundIndex = Arrays.binarySearch(snapshotIds, requestedId);
+        if (foundIndex >= 0) {
+            return snapshotIds[foundIndex];
+        }
+        final int lowerIndex = -(foundIndex + 1) - 1;
+        final int upperIndex = -(foundIndex + 1);
+
+        final long lowerId;
+        if (lowerIndex < 0) {
+            lowerId = snapshotIds[0];
+        } else {
+            lowerId = snapshotIds[lowerIndex];
+        }
+        final long upperId;
+        if (upperIndex < snapshotIds.length) {
+            upperId = snapshotIds[upperIndex];
+        } else {
+            upperId = snapshotIds[snapshotIds.length - 1];
+        }
+        final long foundId;
+        if (requestedId - lowerId < upperId - requestedId) {
+            foundId = lowerId;
+        } else {
+            foundId = upperId;
+        }
+
+        return foundId;
+    }
+
+    private static void regenerateImageLayers(Layer layer) {
+        final List<Layer> children = layer.getChildren();
+        for (int i = children.size(); i-- > 0;) {
+            final Layer child = children.get(i);
+            if (child instanceof ImageLayer) {
+                final ImageLayer imageLayer = (ImageLayer) child;
+
+                // skip static image layers
+                if (imageLayer.getMultiLevelSource() instanceof FileMultiLevelSource) {
+                    continue;
+                }
+                if (imageLayer.getMultiLevelSource() instanceof TiledFileMultiLevelSource) {
+                    continue;
+                }
+                imageLayer.regenerate();
+            } else {
+                if (child instanceof CollectionLayer) {
+                    regenerateImageLayers(child);
+                }
+            }
+        }
+    }
+
+    private static void resetRasterImages(RasterDataNode raster) {
+        raster.getSourceImage().reset();
+        if (raster.isValidMaskImageSet()) {
+            raster.getValidMaskImage().reset();
+        }
+        if (raster.isGeophysicalImageSet()) {
+            raster.getGeophysicalImage().reset();
+        }
+        raster.setStx(null);
+        raster.getStx();
+    }
+
 }
