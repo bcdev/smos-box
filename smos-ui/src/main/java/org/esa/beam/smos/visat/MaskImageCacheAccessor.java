@@ -14,9 +14,9 @@ final class MaskImageCacheAccessor {
 
     private final WeakReference<Map<?, MultiLevelImage>> maskImageMap;
 
-    public static void remove(String expression, Product product, ImageManager imageManager) {
+    public static void remove(ImageManager imageManager, Product product, String expression) {
         try {
-            new MaskImageCacheAccessor(imageManager).remove(expression, product);
+            new MaskImageCacheAccessor(imageManager).remove(product, expression);
         } catch (NoSuchFieldException e) {
             // ignore
         } catch (IllegalAccessException e) {
@@ -24,17 +24,19 @@ final class MaskImageCacheAccessor {
         }
     }
 
-    public static void remove(MultiLevelSource multiLevelSource, ImageManager imageManager) {
+    private static void remove(MultiLevelSource multiLevelSource, ImageManager imageManager) {
         try {
-            Object obj = getValue(multiLevelSource, "expression");
-            if (obj instanceof String) {
-                final String expression = (String) obj;
-                obj = getValue(multiLevelSource, "product");
-                if (obj instanceof Product) {
-                    final Product product = (Product) obj;
-                    MaskImageCacheAccessor.remove(expression, product, imageManager);
-                }
-            }
+            new MaskImageCacheAccessor(imageManager).remove(multiLevelSource);
+        } catch (NoSuchFieldException e) {
+            // ignore
+        } catch (IllegalAccessException e) {
+            // ignore
+        }
+    }
+
+    public static void removeAll(ImageManager imageManager, Product product) {
+        try {
+            new MaskImageCacheAccessor(imageManager).removeAll(product);
         } catch (NoSuchFieldException e) {
             // ignore
         } catch (IllegalAccessException e) {
@@ -49,9 +51,9 @@ final class MaskImageCacheAccessor {
         maskImageMap = new WeakReference<Map<?, MultiLevelImage>>(map);
     }
 
-    MultiLevelImage get(String expression, Product product) throws NoSuchFieldException, IllegalAccessException {
+    MultiLevelImage get(Product product, String expression) throws NoSuchFieldException, IllegalAccessException {
         for (final Object key : maskImageMap.get().keySet()) {
-            if (getExpression(key).equals(expression) && getProduct(key) == product) {
+            if (getProduct(key) == product && getExpression(key).equals(expression)) {
                 //noinspection SuspiciousMethodCalls
                 return maskImageMap.get().get(key);
             }
@@ -59,14 +61,56 @@ final class MaskImageCacheAccessor {
         return null;
     }
 
-    void remove(String expression, Product product) throws NoSuchFieldException, IllegalAccessException {
+    void remove(Product product, String expression) {
         final Iterator<?> iterator = maskImageMap.get().keySet().iterator();
 
-        while (iterator.hasNext()) {
-            final Object key = iterator.next();
-            if (getExpression(key).equals(expression) && getProduct(key) == product) {
-                iterator.remove();
+        try {
+            while (iterator.hasNext()) {
+                final Object key = iterator.next();
+                if (getProduct(key) == product && getExpression(key).equals(expression)) {
+                    iterator.remove();
+                    return;
+                }
             }
+        } catch (NoSuchFieldException e) {
+            // ignore
+        } catch (IllegalAccessException e) {
+            // ignore
+        }
+    }
+
+    private void remove(MultiLevelSource multiLevelSource) {
+        try {
+            Object obj = getValue(multiLevelSource, "expression");
+            if (obj instanceof String) {
+                final String expression = (String) obj;
+                obj = getValue(multiLevelSource, "product");
+                if (obj instanceof Product) {
+                    final Product product = (Product) obj;
+                    remove(product, expression);
+                }
+            }
+        } catch (NoSuchFieldException e) {
+            // ignore
+        } catch (IllegalAccessException e) {
+            // ignore
+        }
+    }
+
+    void removeAll(Product product) {
+        final Iterator<?> iterator = maskImageMap.get().keySet().iterator();
+
+        try {
+            while (iterator.hasNext()) {
+                final Object key = iterator.next();
+                if (getProduct(key) == product) {
+                    iterator.remove();
+                }
+            }
+        } catch (NoSuchFieldException e) {
+            // ignore
+        } catch (IllegalAccessException e) {
+            // ignore
         }
     }
 
