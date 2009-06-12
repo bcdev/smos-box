@@ -39,7 +39,7 @@
     
     <extension point="beam-ui:actions">
         <action>
-            <class>org.esa.beam.smos.visat.GridCellExporterAction</class>
+            <class>org.esa.beam.smos.visat.export.GridCellExporterAction</class>
             <id>gridCellExporter</id>
             <helpID>gridCellExporter</helpID>
             <parent>tool</parent>

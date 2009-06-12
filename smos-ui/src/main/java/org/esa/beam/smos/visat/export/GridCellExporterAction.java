@@ -14,7 +14,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package org.esa.beam.smos.visat;
+package org.esa.beam.smos.visat.export;
 
 import com.bc.ceres.binding.ValidationException;
 import com.bc.ceres.binding.ValueContainer;
@@ -31,18 +31,28 @@ import com.bc.ceres.binding.swing.internal.TextFieldEditor;
 import com.bc.ceres.swing.TableLayout;
 
 import org.esa.beam.framework.datamodel.Band;
+import org.esa.beam.framework.datamodel.GeoCoding;
 import org.esa.beam.framework.datamodel.Pin;
 import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.framework.datamodel.ProductNode;
 import org.esa.beam.framework.datamodel.ProductNodeGroup;
+import org.esa.beam.framework.datamodel.ROIDefinition;
+import org.esa.beam.framework.draw.Figure;
 import org.esa.beam.framework.ui.ModalDialog;
 import org.esa.beam.framework.ui.command.CommandEvent;
 import org.esa.beam.framework.ui.command.ExecCommand;
+import org.esa.beam.util.ProductUtils;
 import org.esa.beam.visat.VisatApp;
 
 import java.awt.Component;
 import java.awt.Insets;
+import java.awt.Shape;
+import java.awt.geom.Area;
+import java.awt.geom.GeneralPath;
+import java.awt.geom.Rectangle2D;
 import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -64,6 +74,7 @@ import javax.swing.JRadioButton;
 /**
  * @author Marco Zuehlke
  * @version $Revision$ $Date$
+ * @since SMOS 1.0
  */
 public class GridCellExporterAction extends ExecCommand  {
 
@@ -82,24 +93,83 @@ public class GridCellExporterAction extends ExecCommand  {
         
         private final VisatApp visatApp;
         private final Product[] openProducts;
-        private ValueContainer vc;
-        private BindingContext bindingContext;
+        private final ValueContainer vc;
+        private final BindingContext bindingContext;
+        private final GridCellExportModel model;
 
         GridCellExportDialog(final VisatApp visatApp, Product[] openProducts, String helpId) {
             super(visatApp.getMainFrame(), "SMOS Grid Cell Exporter", ID_OK_CANCEL_HELP, null); /* I18N */
             this.visatApp = visatApp;
             this.openProducts = openProducts;
+            model = new GridCellExportModel();
+            vc = ValueContainer.createObjectBacked(model);
+            bindingContext = new BindingContext(vc);
             try {
                 prepareBinding();
             } catch (ValidationException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                // should not happen
             }
             makeUI();
         }
         
+        @Override
+        protected void onOK() {
+            CsvGridExport csvGridExport = new CsvGridExport(new PrintWriter(System.out)); //TODO
+            Area area = getArea();
+            GridPointFilterStreamHandler streamHandler = new GridPointFilterStreamHandler(csvGridExport);
+            try {
+                if (model.useOpenProduct) {
+                    streamHandler.processProductList(openProducts, area);
+                } else {
+                    streamHandler.processDirectory(model.scanDirectory, model.scanRecursive, area);
+                }
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } finally {
+                try {
+                    csvGridExport.close();
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+            // TODO do in background
+            super.onOK();
+        }
+        
+        private Area getArea() {
+            if (model.roiSource == 0) {
+                final GeoCoding currentGeoCoding = model.roiRaster.getGeoCoding();
+                Shape shape = model.roiRaster.getROIDefinition().getShapeFigure().getShape();
+                GeneralPath geoPath = ProductUtils.convertToGeoPath(shape, currentGeoCoding);
+                return new Area(geoPath);
+            } else if (model.roiSource == 1) {
+                Pin pin = model.roiPin;
+                double lon = pin.getGeoPos().getLat();
+                double lat = pin.getGeoPos().getLon();
+
+                final double hw = 0.02;
+                final double hh = 0.02;
+
+                final double x = lon - hw;
+                final double y = lat - hh;
+                final double w = 0.04;
+                final double h = 0.04;
+                
+                return new Area(new Rectangle2D.Double(x, y, w, h));
+            } else if (model.roiSource == 2) {
+                final double x = model.west;
+                final double y = model.north;
+                final double w = model.east - model.west;
+                final double h = model.south - model.north;
+                // TODO check this stuff !!!!
+                return new Area(new Rectangle2D.Double(x, y, w, h));
+            }
+            throw new IllegalArgumentException("roiSource must be in range [0,2], is " + model.roiSource);
+        }
+        
         private void prepareBinding() throws ValidationException {
-            vc = ValueContainer.createValueBacked(GridCellExportModel.class);
             ValueModel roiSourceModel = vc.getModel("roiSource");
             roiSourceModel.setValue(2);
             List<Band> roiRdns = new ArrayList<Band>();
@@ -144,7 +214,7 @@ public class GridCellExporterAction extends ExecCommand  {
             outputdesc.setNotNull(true);
             ValueModel useOpenModel = vc.getModel("useOpenProduct");
             useOpenModel.setValue((openProducts.length != 0));
-            bindingContext = new BindingContext(vc);
+            
             bindingContext.bindEnabledState("roiRaster", true, "roiSource", 0);
             bindingContext.bindEnabledState("roiPin", true, "roiSource", 1);
         }
