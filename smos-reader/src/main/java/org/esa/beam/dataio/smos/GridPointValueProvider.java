@@ -29,6 +29,8 @@ public interface GridPointValueProvider {
     
     int getGridPointIndex(int seqnum);
 
+    byte getValue(int gridPointIndex, byte noDataValue);
+
     short getValue(int gridPointIndex, short noDataValue);
 
     int getValue(int gridPointIndex, int noDataValue);

@@ -45,6 +45,15 @@ public class L2FieldValueProvider implements GridPointValueProvider {
     }
 
     @Override
+    public byte getValue(int gridPointIndex, byte noDataValue) {
+        try {
+            return provider.getGridPointData(gridPointIndex).getByte(fieldIndex);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     public short getValue(int gridPointIndex, short noDataValue) {
         try {
             return provider.getGridPointData(gridPointIndex).getShort(fieldIndex);

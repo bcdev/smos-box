@@ -14,7 +14,11 @@
  */
 package org.esa.beam.dataio.smos;
 
-import com.bc.ceres.binio.*;
+import com.bc.ceres.binio.CompoundType;
+import com.bc.ceres.binio.DataFormat;
+import com.bc.ceres.binio.SequenceData;
+import com.bc.ceres.binio.SequenceType;
+import com.bc.ceres.binio.Type;
 
 import java.io.File;
 import java.io.IOException;
@@ -63,6 +67,9 @@ public abstract class L1cSmosFile extends SmosFile {
         return getGridPointData(gridPointIndex).getSequence(btDataListIndex);
     }
 
+    public abstract byte getBrowseBtData(int gridPointIndex, int fieldIndex, int polMode,
+                                         byte noDataValue) throws IOException;
+
     public abstract short getBrowseBtData(int gridPointIndex, int fieldIndex, int polMode,
                                           short noDataValue) throws IOException;
 
@@ -71,6 +78,9 @@ public abstract class L1cSmosFile extends SmosFile {
 
     public abstract float getBrowseBtData(int gridPointIndex, int fieldIndex, int polMode,
                                           float noDataValue) throws IOException;
+
+    public abstract byte getSnapshotBtData(int gridPointIndex, int fieldIndex, int polMode,
+                                           long snapshotId, byte noDataValue) throws IOException;
 
     public abstract short getSnapshotBtData(int gridPointIndex, int fieldIndex, int polMode,
                                             long snapshotId, short noDataValue) throws IOException;

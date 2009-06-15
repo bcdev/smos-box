@@ -68,6 +68,7 @@ public class SnapshotInfoToolView extends SmosToolView {
     private ButtonModel snapshotButtonModel;
     private ButtonModel followModeButtonModel;
     private ButtonModel synchronizeButtonModel;
+
     @SuppressWarnings({"FieldCanBeLocal"})
     private SnapshotIdListener snapshotIdListener;
 
@@ -86,6 +87,7 @@ public class SnapshotInfoToolView extends SmosToolView {
                 updateTable(snapshotSelectorCombo.getSnapshotId());
             }
         });
+
         JComponent comboComponent = SnapshotSelectorCombo.createComponent(snapshotSelectorCombo, false);
         mainPanel.add(comboComponent, BorderLayout.NORTH);
 
@@ -118,7 +120,8 @@ public class SnapshotInfoToolView extends SmosToolView {
                 startPolModeInitWaiting(smosView, smosFile);
                 return;
             }
-            updateUI(smosView, true);
+            final long snapshotId = getSelectedSnapshotId(smosView);
+            updateUI(smosView, true, snapshotId);
         } else {
             super.realizeSmosView(null);
         }
@@ -127,7 +130,7 @@ public class SnapshotInfoToolView extends SmosToolView {
     private void updateTable(long snapshotId) {
         final SmosFile selectedSmosFile = getSelectedSmosFile();
         if (selectedSmosFile != null && selectedSmosFile instanceof L1cScienceSmosFile) {
-            L1cScienceSmosFile l1cScienceSmosFile = (L1cScienceSmosFile) selectedSmosFile;
+            final L1cScienceSmosFile l1cScienceSmosFile = (L1cScienceSmosFile) selectedSmosFile;
             final int snapshotIndex = l1cScienceSmosFile.getSnapshotIndex(snapshotId);
             if (snapshotIndex != -1) {
                 try {
@@ -164,36 +167,6 @@ public class SnapshotInfoToolView extends SmosToolView {
         }
 
         return new SnapshotTableModel(list.toArray(new Object[2][list.size()]));
-    }
-
-    private void updateImageLayer(ProductSceneView smosView) {
-        ImageLayer imageLayer = smosView.getBaseImageLayer();
-        RasterDataNode raster = smosView.getRaster();
-        MultiLevelImage sourceImage = raster.getSourceImage();
-        if (sourceImage instanceof DefaultMultiLevelImage) {
-            DefaultMultiLevelImage defaultMultiLevelImage = (DefaultMultiLevelImage) sourceImage;
-            if (defaultMultiLevelImage.getSource() instanceof SmosMultiLevelSource) {
-                SmosMultiLevelSource smosMultiLevelSource = (SmosMultiLevelSource) defaultMultiLevelImage.getSource();
-                GridPointValueProvider gridPointValueProvider = smosMultiLevelSource.getValueProvider();
-                if (gridPointValueProvider instanceof L1cFieldValueProvider) {
-                    L1cFieldValueProvider l1cFieldValueProvider = (L1cFieldValueProvider) gridPointValueProvider;
-                    long id = snapshotButtonModel.isSelected() ? snapshotSelectorCombo.getSnapshotId() : -1;
-                    if (l1cFieldValueProvider.getSnapshotId() != id) {
-                        l1cFieldValueProvider.setSnapshotId(id);
-                        smosMultiLevelSource.reset();
-                        if (raster.isValidMaskImageSet()) {
-                            raster.getValidMaskImage().reset();
-                        }
-                        if (raster.isGeophysicalImageSet()) {
-                            raster.getGeophysicalImage().reset();
-                        }
-                        raster.setStx(null);
-                        raster.getStx();
-                        imageLayer.regenerate();
-                    }
-                }
-            }
-        }
     }
 
     private void updateSmosImage(RasterDataNode raster, long snapshotId) {
@@ -254,24 +227,6 @@ public class SnapshotInfoToolView extends SmosToolView {
                 }
             }
         }
-//        @Override
-//        public void stateChanged(ChangeEvent e) {
-//            final long id = snapshotSelectorCombo.getSnapshotId();
-//            updateTable(id);
-//            if (snapshotSelectorCombo.isAdjusting()) {
-//                return;
-//            }
-//            if (synchronizeButtonModel.isSelected() && snapshotButtonModel.isSelected()) {
-//                final ProductSceneView smosView = getSelectedSmosView();
-//                if (smosView != null) {
-//                    setSelectedSnapshotId(smosView, id);
-//                    if (followModeButtonModel.isSelected()) {
-//                        locateSnapshotId(smosView, id);
-//                    }
-//                    updateImageLayer(smosView);
-//                }
-//            }
-//        }
     }
 
     private class ToggleSnapshotModeAction implements ActionListener {
@@ -289,8 +244,8 @@ public class SnapshotInfoToolView extends SmosToolView {
             } else {
                 snapshotId = -1;
             }
+            updateUI(smosView, false, snapshotId);
             updateAllImagesAndViews(smosView.getProduct(), snapshotId);
-            updateUI(smosView, false);
         }
     }
 
@@ -310,6 +265,7 @@ public class SnapshotInfoToolView extends SmosToolView {
             crossPolId = -1;
         }
 
+        ImageManager.getInstance().dispose();
         // a workaround for the problem that all displayed mask images are cached (rq-20090612)
         MaskImageCacheAccessor.removeAll(ImageManager.getInstance(), smosProduct);
 
@@ -370,7 +326,9 @@ public class SnapshotInfoToolView extends SmosToolView {
         synchronizeButtonModel.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                updateUI(getSelectedSmosView(), false);
+                final ProductSceneView smosView = getSelectedSmosView();
+                final long snapshotId = getSelectedSnapshotId(smosView);
+                updateUI(smosView, false, snapshotId);
             }
         });
 
@@ -420,20 +378,13 @@ public class SnapshotInfoToolView extends SmosToolView {
         return viewSettingsPanel;
     }
 
-    private void updateUI(ProductSceneView smosView, boolean resetSelectorComboModel) {
+    private void updateUI(ProductSceneView smosView, boolean resetSelectorComboModel, long id) {
         if (resetSelectorComboModel) {
             final L1cScienceSmosFile smosFile = SmosBox.getL1cScienceSmosFile(smosView);
             snapshotSelectorCombo.setModel(new SnapshotSelectorComboModel(smosFile));
         }
         final boolean sync = synchronizeButtonModel.isSelected();
         if (sync) {
-            final long id = getSelectedSnapshotId(smosView);
-            if (id != -1) {
-                snapshotSelectorCombo.setSnapshotId(id);
-                snapshotButtonModel.setSelected(true);
-            } else {
-                browseButtonModel.setSelected(true);
-            }
             final String bandName = smosView.getRaster().getName();
             if (bandName.endsWith("_X")) {
                 snapshotSelectorCombo.setComboBoxSelectedIndex(1);
@@ -441,10 +392,20 @@ public class SnapshotInfoToolView extends SmosToolView {
                 snapshotSelectorCombo.setComboBoxSelectedIndex(2);
             } else if (bandName.contains("_XY")) {
                 snapshotSelectorCombo.setComboBoxSelectedIndex(3);
+            } else {
+                snapshotSelectorCombo.setComboBoxSelectedIndex(0);
+            }
+//            final long id = getSelectedSnapshotId(smosView);
+            if (id != -1) {
+                snapshotSelectorCombo.setSnapshotId(id);
+                snapshotButtonModel.setSelected(true);
+            } else {
+                browseButtonModel.setSelected(true);
             }
         }
 
         updateTable(snapshotSelectorCombo.getSnapshotId());
+
         snapshotSelectorCombo.setComboBoxEnabled(!sync);
         browseButtonModel.setEnabled(sync);
         snapshotButtonModel.setEnabled(sync);

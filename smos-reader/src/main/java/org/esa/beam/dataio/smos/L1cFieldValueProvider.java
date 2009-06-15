@@ -54,6 +54,19 @@ public class L1cFieldValueProvider implements GridPointValueProvider {
     }
 
     @Override
+    public byte getValue(int gridPointIndex, byte noDataValue) {
+        try {
+            if (snapshotId == -1) {
+                return smosFile.getBrowseBtData(gridPointIndex, fieldIndex, polMode, noDataValue);
+            } else {
+                return smosFile.getSnapshotBtData(gridPointIndex, fieldIndex, polMode, snapshotId, noDataValue);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     public short getValue(int gridPointIndex, short noDataValue) {
         try {
             if (snapshotId == -1) {

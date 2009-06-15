@@ -193,6 +193,15 @@ public class L1cScienceSmosFile extends L1cSmosFile implements SnapshotProvider 
     }
 
     @Override
+    public byte getBrowseBtData(int gridPointIndex, int fieldIndex, int polMode, byte noDataValue) throws IOException {
+        if (fieldIndex == flagsIndex) {
+            return (byte) getCombinedBtFlags(gridPointIndex, polMode, noDataValue);
+        } else {
+            return (byte) getInterpolatedBtData(gridPointIndex, fieldIndex, polMode, noDataValue);
+        }
+    }
+
+    @Override
     public short getBrowseBtData(int gridPointIndex, int fieldIndex, int polMode,
                                  short noDataValue) throws IOException {
         if (fieldIndex == flagsIndex) {
@@ -216,6 +225,18 @@ public class L1cScienceSmosFile extends L1cSmosFile implements SnapshotProvider 
     public float getBrowseBtData(int gridPointIndex, int fieldIndex, int polMode,
                                  float noDataValue) throws IOException {
         return getInterpolatedBtData(gridPointIndex, fieldIndex, polMode, noDataValue);
+    }
+
+    @Override
+    public byte getSnapshotBtData(int gridPointIndex, int fieldIndex, int polMode, long snapshotId,
+                                  byte noDataValue) throws IOException {
+        final CompoundData btData = getSnapshotBtData(gridPointIndex, polMode, snapshotId);
+
+        if (btData != null) {
+            return btData.getByte(fieldIndex);
+        }
+
+        return noDataValue;
     }
 
     @Override

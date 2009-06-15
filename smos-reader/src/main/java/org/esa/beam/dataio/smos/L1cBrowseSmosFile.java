@@ -34,6 +34,11 @@ public class L1cBrowseSmosFile extends L1cSmosFile {
     }
 
     @Override
+    public byte getBrowseBtData(int gridPointIndex, int fieldIndex, int polMode, byte noDataValue) throws IOException {
+        return getBtData(gridPointIndex, polMode).getByte(fieldIndex);
+    }
+
+    @Override
     public short getBrowseBtData(int gridPointIndex, int fieldIndex, int polMode,
                                  short noDataValue) throws IOException {
         return getBtData(gridPointIndex, polMode).getShort(fieldIndex);
@@ -49,6 +54,12 @@ public class L1cBrowseSmosFile extends L1cSmosFile {
     public float getBrowseBtData(int gridPointIndex, int fieldIndex, int polMode,
                                  float noDataValue) throws IOException {
         return getBtData(gridPointIndex, polMode).getFloat(fieldIndex);
+    }
+
+    @Override
+    public byte getSnapshotBtData(int gridPointIndex, int fieldIndex, int polMode, long snapshotId,
+                                  byte noDataValue) throws IOException {
+        return getBtData(gridPointIndex, polMode).getByte(fieldIndex);
     }
 
     @Override
