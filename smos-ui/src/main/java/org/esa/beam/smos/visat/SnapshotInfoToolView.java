@@ -55,6 +55,7 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class SnapshotInfoToolView extends SmosToolView {
 
@@ -121,7 +122,7 @@ public class SnapshotInfoToolView extends SmosToolView {
                 return;
             }
             final long snapshotId = getSelectedSnapshotId(smosView);
-            updateUI(smosView, true, snapshotId);
+            updateUI(smosView, snapshotId, true);
         } else {
             super.realizeSmosView(null);
         }
@@ -133,14 +134,27 @@ public class SnapshotInfoToolView extends SmosToolView {
             final L1cScienceSmosFile l1cScienceSmosFile = (L1cScienceSmosFile) selectedSmosFile;
             final int snapshotIndex = l1cScienceSmosFile.getSnapshotIndex(snapshotId);
             if (snapshotIndex != -1) {
-                try {
-                    final CompoundData data = l1cScienceSmosFile.getSnapshotData(snapshotIndex);
-                    snapshotTable.setModel(createSnapshotTableModel(data));
-                    return;
-                } catch (IOException e) {
-                    snapshotTable.setModel(NULL_MODEL);
-                    return;
-                }
+                final SwingWorker<TableModel, Object> worker = new SwingWorker<TableModel, Object>() {
+                    @Override
+                    protected TableModel doInBackground() throws Exception {
+                        final CompoundData data = l1cScienceSmosFile.getSnapshotData(snapshotIndex);
+                        return createSnapshotTableModel(data);
+                    }
+
+                    @Override
+                    protected void done() {
+                        try {
+                            final TableModel tableModel = get();
+                            snapshotTable.setModel(tableModel);
+                        } catch (InterruptedException e) {
+                            snapshotTable.setModel(NULL_MODEL);
+                        } catch (ExecutionException e) {
+                            snapshotTable.setModel(NULL_MODEL);
+                        }
+                    }
+                };
+                worker.execute();
+                return;
             }
         }
         snapshotTable.setModel(NULL_MODEL);
@@ -244,8 +258,8 @@ public class SnapshotInfoToolView extends SmosToolView {
             } else {
                 snapshotId = -1;
             }
-            updateUI(smosView, false, snapshotId);
             updateAllImagesAndViews(smosView.getProduct(), snapshotId);
+            updateUI(smosView, snapshotId, false);
         }
     }
 
@@ -265,33 +279,32 @@ public class SnapshotInfoToolView extends SmosToolView {
             crossPolId = -1;
         }
 
-        ImageManager.getInstance().dispose();
         // a workaround for the problem that all displayed mask images are cached (rq-20090612)
         MaskImageCacheAccessor.removeAll(ImageManager.getInstance(), smosProduct);
 
         for (final Band band : smosProduct.getBands()) {
-            if (band.getName().endsWith("_X")) {
+            if (band instanceof VirtualBand) {
+                resetRasterImages(band);
+            } else if (band.getName().endsWith("_X")) {
                 updateSmosImage(band, xPolId);
             } else if (band.getName().endsWith("_Y")) {
                 updateSmosImage(band, yPolId);
-            } else if (band.getName().endsWith("_XY")) {
+            } else if (band.getName().contains("_XY")) {
                 updateSmosImage(band, crossPolId);
             } else if (band.isFlagBand()) {
                 updateSmosImage(band, snapshotId);
-            } else if (band instanceof VirtualBand) {
-                resetRasterImages(band);
             }
         }
         for (final Band band : smosProduct.getBands()) {
-            if (band.getName().endsWith("_X")) {
+            if (band instanceof VirtualBand) {
+                resetViews(band, snapshotId);
+            } else if (band.getName().endsWith("_X")) {
                 resetViews(band, xPolId);
             } else if (band.getName().endsWith("_Y")) {
                 resetViews(band, yPolId);
-            } else if (band.getName().endsWith("_XY")) {
+            } else if (band.getName().contains("_XY")) {
                 resetViews(band, crossPolId);
             } else if (band.isFlagBand()) {
-                resetViews(band, snapshotId);
-            } else if (band instanceof VirtualBand) {
                 resetViews(band, snapshotId);
             }
         }
@@ -328,7 +341,7 @@ public class SnapshotInfoToolView extends SmosToolView {
             public void actionPerformed(ActionEvent e) {
                 final ProductSceneView smosView = getSelectedSmosView();
                 final long snapshotId = getSelectedSnapshotId(smosView);
-                updateUI(smosView, false, snapshotId);
+                updateUI(smosView, snapshotId, false);
             }
         });
 
@@ -378,7 +391,7 @@ public class SnapshotInfoToolView extends SmosToolView {
         return viewSettingsPanel;
     }
 
-    private void updateUI(ProductSceneView smosView, boolean resetSelectorComboModel, long id) {
+    private void updateUI(ProductSceneView smosView, long snapshotId, boolean resetSelectorComboModel) {
         if (resetSelectorComboModel) {
             final L1cScienceSmosFile smosFile = SmosBox.getL1cScienceSmosFile(smosView);
             snapshotSelectorCombo.setModel(new SnapshotSelectorComboModel(smosFile));
@@ -395,9 +408,8 @@ public class SnapshotInfoToolView extends SmosToolView {
             } else {
                 snapshotSelectorCombo.setComboBoxSelectedIndex(0);
             }
-//            final long id = getSelectedSnapshotId(smosView);
-            if (id != -1) {
-                snapshotSelectorCombo.setSnapshotId(id);
+            if (snapshotId != -1) {
+                snapshotSelectorCombo.setSnapshotId(snapshotId);
                 snapshotButtonModel.setSelected(true);
             } else {
                 browseButtonModel.setSelected(true);
@@ -582,7 +594,7 @@ public class SnapshotInfoToolView extends SmosToolView {
         }
     }
 
-    private static void resetRasterImages(RasterDataNode raster) {
+    private static void resetRasterImages(final RasterDataNode raster) {
         raster.getSourceImage().reset();
         if (raster.isValidMaskImageSet()) {
             raster.getValidMaskImage().reset();
