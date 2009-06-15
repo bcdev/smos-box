@@ -1,16 +1,5 @@
 package org.esa.beam.smos.visat;
 
-import com.bc.ceres.binio.CompoundData;
-import com.bc.ceres.binio.CompoundType;
-import com.bc.ceres.binio.Type;
-import com.bc.ceres.core.ProgressMonitor;
-import com.bc.ceres.glayer.CollectionLayer;
-import com.bc.ceres.glayer.Layer;
-import com.bc.ceres.glayer.support.ImageLayer;
-import com.bc.ceres.glevel.MultiLevelImage;
-import com.bc.ceres.glevel.support.DefaultMultiLevelImage;
-import com.bc.ceres.glevel.support.FileMultiLevelSource;
-import com.bc.ceres.grender.Viewport;
 import org.esa.beam.dataio.smos.GridPointValueProvider;
 import org.esa.beam.dataio.smos.L1cFieldValueProvider;
 import org.esa.beam.dataio.smos.L1cScienceSmosFile;
@@ -30,18 +19,15 @@ import org.esa.beam.smos.visat.swing.SnapshotSelectorComboModel;
 import org.esa.beam.visat.VisatApp;
 import org.jfree.layout.CenterLayout;
 
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.TableModel;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.Shape;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -56,6 +42,42 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+
+import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
+import javax.swing.ButtonModel;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComponent;
+import javax.swing.JInternalFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.JProgressBar;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.SwingWorker;
+import javax.swing.border.EmptyBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableModel;
+
+import com.bc.ceres.binio.CompoundData;
+import com.bc.ceres.binio.CompoundType;
+import com.bc.ceres.binio.Type;
+import com.bc.ceres.core.ProgressMonitor;
+import com.bc.ceres.glayer.CollectionLayer;
+import com.bc.ceres.glayer.Layer;
+import com.bc.ceres.glayer.support.ImageLayer;
+import com.bc.ceres.glayer.swing.LayerCanvas;
+import com.bc.ceres.glevel.MultiLevelImage;
+import com.bc.ceres.glevel.support.DefaultMultiLevelImage;
+import com.bc.ceres.glevel.support.FileMultiLevelSource;
+import com.bc.ceres.grender.Viewport;
 
 public class SnapshotInfoToolView extends SmosToolView {
 
@@ -223,14 +245,22 @@ public class SnapshotInfoToolView extends SmosToolView {
     }
 
     private class SnapshotIdListener implements ChangeListener {
+        
+        private static final String OVERLAY_ID = "ssnopshotRegionOverlay";
+        private SnapshotRegionOverlay overlay = new SnapshotRegionOverlay();
 
         @Override
         public void stateChanged(ChangeEvent e) {
             final long snapshotId = snapshotSelectorCombo.getSnapshotId();
             updateTable(snapshotId);
             if (snapshotSelectorCombo.isAdjusting()) {
+                if (snapshotButtonModel.isSelected()) {
+                    overlay.setId(snapshotId);
+                    getSelectedSmosView().getLayerCanvas().addOverlay(OVERLAY_ID, overlay);
+                }
                 return;
             }
+            getSelectedSmosView().getLayerCanvas().removeOverlay(OVERLAY_ID);
             if (synchronizeButtonModel.isSelected() && snapshotButtonModel.isSelected()) {
                 final ProductSceneView smosView = getSelectedSmosView();
                 if (smosView != null) {
@@ -240,6 +270,33 @@ public class SnapshotInfoToolView extends SmosToolView {
                     updateAllImagesAndViews(smosView.getProduct(), snapshotId);
                 }
             }
+        }
+    }
+    
+    private class SnapshotRegionOverlay implements LayerCanvas.Overlay {
+
+        private long snapshotId;
+
+        @Override
+        public void paintOverlay(LayerCanvas canvas, Graphics2D graphics) {
+            ProductSceneView view = getSelectedSmosView();
+            L1cScienceSmosFile scienceSmosFile = SmosBox.getL1cScienceSmosFile(view);
+            if (scienceSmosFile != null) {
+                Rectangle2D snapshotRegion = scienceSmosFile.getSnapshotRegion(snapshotId);
+                if (snapshotRegion != null) {
+                    final Viewport vp = view.getLayerCanvas().getViewport();
+                    final AffineTransform m2v = vp.getModelToViewTransform();
+                    Shape transformedShape = m2v.createTransformedShape(snapshotRegion);
+                    Color color = graphics.getColor();
+                    graphics.setColor(Color.WHITE);
+                    graphics.draw(transformedShape);
+                    graphics.setColor(color);
+                }
+            }
+        }
+
+        void setId(long snapshotId) {
+            this.snapshotId = snapshotId;
         }
     }
 
