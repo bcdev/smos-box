@@ -35,7 +35,7 @@ public interface GridPointFilterStream {
     
     void stopFile(SmosFile smosfile) throws IOException;
 
-    void handleGridPoint(CompoundData gridPointData) throws IOException;
+    void handleGridPoint(int id, CompoundData gridPointData) throws IOException;
     
     void close() throws IOException;
 }

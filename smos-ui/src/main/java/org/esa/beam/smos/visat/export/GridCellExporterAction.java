@@ -36,8 +36,6 @@ import org.esa.beam.framework.datamodel.Pin;
 import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.framework.datamodel.ProductNode;
 import org.esa.beam.framework.datamodel.ProductNodeGroup;
-import org.esa.beam.framework.datamodel.ROIDefinition;
-import org.esa.beam.framework.draw.Figure;
 import org.esa.beam.framework.ui.ModalDialog;
 import org.esa.beam.framework.ui.command.CommandEvent;
 import org.esa.beam.framework.ui.command.ExecCommand;
@@ -51,8 +49,10 @@ import java.awt.geom.Area;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Rectangle2D;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -68,6 +68,7 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
@@ -114,24 +115,40 @@ public class GridCellExporterAction extends ExecCommand  {
         
         @Override
         protected void onOK() {
-            CsvGridExport csvGridExport = new CsvGridExport(new PrintWriter(System.out)); //TODO
+            if (model.output.exists()) {
+                String message = MessageFormat.format("The specified output file\n\"{0}\"\n already exists.\n\n"
+                        + "Do you want to overwrite the existing file?", model.output.getPath());
+                final int answer = JOptionPane.showConfirmDialog(getJDialog(), message,
+                                                                 getTitle(), JOptionPane.YES_NO_OPTION);
+                if (answer != JOptionPane.YES_OPTION) {
+                    return;
+                }
+            }
+            PrintWriter printWriter;
+            try {
+                printWriter = new PrintWriter(model.output);
+            } catch (FileNotFoundException e) {
+                visatApp.showErrorDialog("Could not create CSV file :\n"+e.getMessage());
+                return;
+            }
+            CsvGridExport csvGridExport = new CsvGridExport(printWriter);
             Area area = getArea();
-            GridPointFilterStreamHandler streamHandler = new GridPointFilterStreamHandler(csvGridExport);
+            GridPointFilterStreamHandler streamHandler = new GridPointFilterStreamHandler(csvGridExport, area);
             try {
                 if (model.useOpenProduct) {
-                    streamHandler.processProductList(openProducts, area);
+                    streamHandler.processProductList(openProducts);
                 } else {
-                    streamHandler.processDirectory(model.scanDirectory, model.scanRecursive, area);
+                    streamHandler.processDirectory(model.scanDirectory, model.scanRecursive);
                 }
             } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                visatApp.showErrorDialog("An error occured while exporting the grid cell data:\n"+e.getMessage());
+                return;
             } finally {
                 try {
                     csvGridExport.close();
                 } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
+                    visatApp.showErrorDialog("An error occured while closing the CSV file:\n"+e.getMessage());
+                    return;
                 }
             }
             // TODO do in background
@@ -146,18 +163,31 @@ public class GridCellExporterAction extends ExecCommand  {
                 return new Area(geoPath);
             } else if (model.roiSource == 1) {
                 Pin pin = model.roiPin;
-                double lon = pin.getGeoPos().getLat();
-                double lat = pin.getGeoPos().getLon();
+                double lat = pin.getGeoPos().getLat();
+                double lon = pin.getGeoPos().getLon();
 
-                final double hw = 0.02;
-                final double hh = 0.02;
+                final double hw = 0.08;
+                final double hh = 0.08;
 
                 final double x = lon - hw;
                 final double y = lat - hh;
-                final double w = 0.04;
-                final double h = 0.04;
+                final double w = 0.16;
+                final double h = 0.16;
                 
-                return new Area(new Rectangle2D.Double(x, y, w, h));
+                Rectangle2D rect = new Rectangle2D.Double(x, y, w, h);
+                
+//                final ProductSceneView smosView = SmosBox.getInstance().getSmosViewSelectionService().getSelectedSceneView();
+//                final Viewport vp = smosView.getLayerCanvas().getViewport();
+//                final AffineTransform m2v = vp.getModelToViewTransform();
+//                Shape transformedShape = m2v.createTransformedShape(rect);
+//                Rectangle bounds = transformedShape.getBounds();
+//                Graphics graphics = smosView.getLayerCanvas().getGraphics();
+//                Color color = graphics.getColor();
+//                graphics.setColor(Color.WHITE);
+//                graphics.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
+//                graphics.setColor(color);
+                
+                return new Area(rect);
             } else if (model.roiSource == 2) {
                 final double x = model.west;
                 final double y = model.north;

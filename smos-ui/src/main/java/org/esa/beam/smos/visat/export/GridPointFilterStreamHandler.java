@@ -30,8 +30,6 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * todo - add API doc
- *
  * @author Marco Zuehlke
  * @version $Revision$ $Date$
  * @since SMOS 1.0
@@ -39,28 +37,30 @@ import java.io.IOException;
 public class GridPointFilterStreamHandler {
     
     private final GridPointFilterStream filterStream;
+    private final Area area;
     
-    public GridPointFilterStreamHandler(GridPointFilterStream filterStream) {
+    public GridPointFilterStreamHandler(GridPointFilterStream filterStream, Area area) {
         this.filterStream = filterStream;
+        this.area = area;
     }
     
-    public void processProductList(Product[] products, Area area) throws IOException {
+    public void processProductList(Product[] products) throws IOException {
         for (Product product : products) {
             ProductReader productReader = product.getProductReader();
             if (productReader instanceof SmosProductReader) {
                 SmosProductReader smosProductReader = (SmosProductReader) productReader;
                 SmosFile smosFile = smosProductReader.getSmosFile();
-                handleSmosFile(smosFile, area);
+                handleSmosFile(smosFile);
             }
         }
     }
     
 
-    public void processDirectory(File dir, boolean recursive, Area area) throws IOException {
-        
+    public void processDirectory(File dir, boolean recursive) throws IOException {
+        // TODO impl
     }
     
-    private void handleSmosFile(SmosFile smosFile, Area area) throws IOException {
+    public void handleSmosFile(SmosFile smosFile) throws IOException {
         CompoundType gridPointType = smosFile.getGridPointType();
         final int latIndex = gridPointType.getMemberIndex(SmosFormats.GRID_POINT_LATITUDE_NAME);
         final int lonIndex = gridPointType.getMemberIndex(SmosFormats.GRID_POINT_LONGITUDE_NAME);
@@ -72,7 +72,7 @@ public class GridPointFilterStreamHandler {
             double lat = gridPointData.getDouble(latIndex);
             double lon = gridPointData.getDouble(lonIndex);
             if (area.contains(lon, lat)) {
-                filterStream.handleGridPoint(gridPointData);
+                filterStream.handleGridPoint(i, gridPointData);
             }
         }
         filterStream.stopFile(smosFile);
