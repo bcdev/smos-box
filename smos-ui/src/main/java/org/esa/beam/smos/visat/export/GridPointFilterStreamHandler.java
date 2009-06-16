@@ -22,12 +22,17 @@ import com.bc.ceres.binio.CompoundType;
 import org.esa.beam.dataio.smos.SmosFile;
 import org.esa.beam.dataio.smos.SmosFormats;
 import org.esa.beam.dataio.smos.SmosProductReader;
+import org.esa.beam.dataio.smos.SmosProductReaderPlugIn;
+import org.esa.beam.framework.dataio.ProductIO;
 import org.esa.beam.framework.dataio.ProductReader;
 import org.esa.beam.framework.datamodel.Product;
+import org.esa.beam.util.io.FileUtils;
 
 import java.awt.geom.Area;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Marco Zuehlke
@@ -46,21 +51,55 @@ public class GridPointFilterStreamHandler {
     
     public void processProductList(Product[] products) throws IOException {
         for (Product product : products) {
-            ProductReader productReader = product.getProductReader();
-            if (productReader instanceof SmosProductReader) {
-                SmosProductReader smosProductReader = (SmosProductReader) productReader;
-                SmosFile smosFile = smosProductReader.getSmosFile();
-                handleSmosFile(smosFile);
+            processProduct(product);
+        }
+    }
+
+    private void processProduct(Product product) throws IOException {
+        ProductReader productReader = product.getProductReader();
+        if (productReader instanceof SmosProductReader) {
+            SmosProductReader smosProductReader = (SmosProductReader) productReader;
+            SmosFile smosFile = smosProductReader.getSmosFile();
+            handleSmosFile(smosFile);
+        }
+    }
+
+    public void processDirectory(File dir, boolean recursive) throws IOException {
+        List<File> fileList = new ArrayList<File>();
+        scanDir(dir, recursive, fileList, 0);
+        
+        ProductReader smosProductReader = ProductIO.getProductReader("SMOS");
+        for (File file : fileList) {
+            System.out.println(file);
+            Product product = smosProductReader.readProductNodes(file, null);
+            processProduct(product);
+            System.out.println("done");
+        }
+    }
+    
+    private void scanDir(File dir, boolean recursive, List<File> fileList, int depth) throws IOException {
+        final File[] files = dir.listFiles();
+        if (files == null) {
+            return;
+        }
+        for (int i = 0; i < files.length; i++) {
+            final File file = files[i];
+            if (file.isDirectory()) {
+                if (recursive || depth < 1) {
+                    scanDir(file, recursive, fileList, depth+1);
+                }
+            } else {
+                if (file.getName().endsWith(".HDR")) {
+                    final File dblFile = FileUtils.exchangeExtension(file, ".DBL");
+                    if (dblFile.exists()) {
+                        fileList.add(file);
+                    }
+                }
             }
         }
     }
     
-
-    public void processDirectory(File dir, boolean recursive) throws IOException {
-        // TODO impl
-    }
-    
-    public void handleSmosFile(SmosFile smosFile) throws IOException {
+    private void handleSmosFile(SmosFile smosFile) throws IOException {
         CompoundType gridPointType = smosFile.getGridPointType();
         final int latIndex = gridPointType.getMemberIndex(SmosFormats.GRID_POINT_LATITUDE_NAME);
         final int lonIndex = gridPointType.getMemberIndex(SmosFormats.GRID_POINT_LONGITUDE_NAME);

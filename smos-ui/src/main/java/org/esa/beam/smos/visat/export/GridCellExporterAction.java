@@ -22,11 +22,14 @@ import com.bc.ceres.binding.ValueDescriptor;
 import com.bc.ceres.binding.ValueModel;
 import com.bc.ceres.binding.ValueRange;
 import com.bc.ceres.binding.ValueSet;
+import com.bc.ceres.binding.swing.Binding;
 import com.bc.ceres.binding.swing.BindingContext;
+import com.bc.ceres.binding.swing.ComponentAdapter;
 import com.bc.ceres.binding.swing.ValueEditor;
 import com.bc.ceres.binding.swing.ValueEditorRegistry;
 import com.bc.ceres.binding.swing.internal.FileEditor;
 import com.bc.ceres.binding.swing.internal.SingleSelectionEditor;
+import com.bc.ceres.binding.swing.internal.TextFieldAdapter;
 import com.bc.ceres.binding.swing.internal.TextFieldEditor;
 import com.bc.ceres.swing.TableLayout;
 
@@ -40,11 +43,15 @@ import org.esa.beam.framework.ui.ModalDialog;
 import org.esa.beam.framework.ui.command.CommandEvent;
 import org.esa.beam.framework.ui.command.ExecCommand;
 import org.esa.beam.util.ProductUtils;
+import org.esa.beam.util.SystemUtils;
 import org.esa.beam.visat.VisatApp;
 
+import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Insets;
 import java.awt.Shape;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.geom.Area;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Rectangle2D;
@@ -63,14 +70,17 @@ import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultListCellRenderer;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JTextField;
 
 /**
  * @author Marco Zuehlke
@@ -92,6 +102,8 @@ public class GridCellExporterAction extends ExecCommand  {
     
     private static class GridCellExportDialog extends ModalDialog {
         
+        private static final String LAST_DIR_KEY = "user.smos.import.dir";
+        
         private final VisatApp visatApp;
         private final Product[] openProducts;
         private final ValueContainer vc;
@@ -103,6 +115,11 @@ public class GridCellExporterAction extends ExecCommand  {
             this.visatApp = visatApp;
             this.openProducts = openProducts;
             model = new GridCellExportModel();
+            
+            String smosDirPath = visatApp.getPreferences().getPropertyString(LAST_DIR_KEY, SystemUtils.getUserHomeDir().getPath());
+            model.scanDirectory = new File(smosDirPath);
+            model.output = new File(SystemUtils.getUserHomeDir(), "grid_cell_export.csv");
+            
             vc = ValueContainer.createObjectBacked(model);
             bindingContext = new BindingContext(vc);
             try {
@@ -190,11 +207,13 @@ public class GridCellExporterAction extends ExecCommand  {
                 return new Area(rect);
             } else if (model.roiSource == 2) {
                 final double x = model.west;
-                final double y = model.north;
+                final double y = model.south;
                 final double w = model.east - model.west;
-                final double h = model.south - model.north;
+                final double h = model.north - model.south;
                 // TODO check this stuff !!!!
-                return new Area(new Rectangle2D.Double(x, y, w, h));
+                Rectangle2D rect = new Rectangle2D.Double(x, y, w, h);
+                System.out.println("roi rect: "+rect);
+                return new Area(rect);
             }
             throw new IllegalArgumentException("roiSource must be in range [0,2], is " + model.roiSource);
         }
@@ -289,10 +308,31 @@ public class GridCellExporterAction extends ExecCommand  {
             bindingContext.bindEnabledState("scanRecursive", true, "useOpenProduct", Boolean.FALSE);
             panel.add(scanRecursive);
             layout.setCellPadding(3, 0, new Insets(0, 24, 3, 3));
-            ValueEditor fileEditor = ValueEditorRegistry.getInstance().getValueEditor(FileEditor.class.getName());
             bindingContext.bindEnabledState("scanDirectory", true, "useOpenProduct", Boolean.FALSE);
-            panel.add(fileEditor.createEditorComponent(vc.getDescriptor("scanDirectory"), bindingContext));
+            panel.add(createFileSelectorComponent(vc.getDescriptor("scanDirectory"), bindingContext));
             return panel;
+        }
+        
+        private JComponent createFileSelectorComponent(ValueDescriptor valueDescriptor, BindingContext bindingContext) {
+            JTextField textField = new JTextField();
+            ComponentAdapter adapter = new TextFieldAdapter(textField);
+            final Binding binding = bindingContext.bind(valueDescriptor.getName(), adapter);
+            final JPanel subPanel = new JPanel(new BorderLayout(2, 2));
+            subPanel.add(textField, BorderLayout.CENTER);
+            JButton etcButton = new JButton("...");
+            etcButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    JFileChooser fileChooser = new JFileChooser();
+                    fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+                    int i = fileChooser.showDialog(subPanel, "Select");
+                    if (i == JFileChooser.APPROVE_OPTION && fileChooser.getSelectedFile() != null) {
+                        binding.setPropertyValue(fileChooser.getSelectedFile());
+                    }
+                }
+            });
+            subPanel.add(etcButton, BorderLayout.EAST);
+            return subPanel;
         }
         
         private Component createRoiPanel() {
@@ -430,10 +470,10 @@ public class GridCellExporterAction extends ExecCommand  {
         private Band roiRaster;
         private Pin roiPin;
         
-        private double north;
-        private double south;
-        private double east;
-        private double west;
+        private double north = 90;
+        private double south = -90;
+        private double east = 180;
+        private double west = -180;
         
         private File output;
     }
