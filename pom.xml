@@ -113,12 +113,12 @@
             <dependency>
                 <groupId>org.esa.beam</groupId>
                 <artifactId>beam-core</artifactId>
-                <version>4.6</version>
+                <version>4.6.1-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.esa.beam</groupId>
                 <artifactId>beam-gpf</artifactId>
-                <version>4.6</version>
+                <version>4.6.1-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.esa.beam</groupId>
@@ -141,11 +141,6 @@
             <dependency>
                 <groupId>org.esa.beam.smos</groupId>
                 <artifactId>smos-dgg</artifactId>
-                <version>${pom.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.esa.beam.smos</groupId>
-                <artifactId>smos-worldmap</artifactId>
                 <version>${pom.version}</version>
             </dependency>
             <dependency>
@@ -324,7 +319,7 @@
                 <artifactId>maven-source-plugin</artifactId>
                 <executions>
                     <execution>
-                        <phase>package</phase>
+                        <phase>verify</phase>
                         <goals>
                             <goal>jar</goal>
                         </goals>
