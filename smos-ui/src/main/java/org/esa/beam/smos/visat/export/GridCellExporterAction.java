@@ -111,7 +111,7 @@ public class GridCellExporterAction extends ExecCommand  {
         private final GridCellExportModel model;
 
         GridCellExportDialog(final VisatApp visatApp, Product[] openProducts, String helpId) {
-            super(visatApp.getMainFrame(), "SMOS Grid Cell Exporter", ID_OK_CANCEL_HELP, null); /* I18N */
+            super(visatApp.getMainFrame(), "SMOS Grid Cell Exporter", ID_OK_CANCEL_HELP, helpId); /* I18N */
             this.visatApp = visatApp;
             this.openProducts = openProducts;
             model = new GridCellExportModel();
@@ -191,29 +191,13 @@ public class GridCellExporterAction extends ExecCommand  {
                 final double w = 0.16;
                 final double h = 0.16;
                 
-                Rectangle2D rect = new Rectangle2D.Double(x, y, w, h);
-                
-//                final ProductSceneView smosView = SmosBox.getInstance().getSmosViewSelectionService().getSelectedSceneView();
-//                final Viewport vp = smosView.getLayerCanvas().getViewport();
-//                final AffineTransform m2v = vp.getModelToViewTransform();
-//                Shape transformedShape = m2v.createTransformedShape(rect);
-//                Rectangle bounds = transformedShape.getBounds();
-//                Graphics graphics = smosView.getLayerCanvas().getGraphics();
-//                Color color = graphics.getColor();
-//                graphics.setColor(Color.WHITE);
-//                graphics.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
-//                graphics.setColor(color);
-                
-                return new Area(rect);
+                return new Area(new Rectangle2D.Double(x, y, w, h));
             } else if (model.roiSource == 2) {
                 final double x = model.west;
                 final double y = model.south;
                 final double w = model.east - model.west;
                 final double h = model.north - model.south;
-                // TODO check this stuff !!!!
-                Rectangle2D rect = new Rectangle2D.Double(x, y, w, h);
-                System.out.println("roi rect: "+rect);
-                return new Area(rect);
+                return new Area(new Rectangle2D.Double(x, y, w, h));
             }
             throw new IllegalArgumentException("roiSource must be in range [0,2], is " + model.roiSource);
         }

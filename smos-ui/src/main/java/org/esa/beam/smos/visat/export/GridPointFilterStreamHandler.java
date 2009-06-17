@@ -22,9 +22,10 @@ import com.bc.ceres.binio.CompoundType;
 import org.esa.beam.dataio.smos.SmosFile;
 import org.esa.beam.dataio.smos.SmosFormats;
 import org.esa.beam.dataio.smos.SmosProductReader;
-import org.esa.beam.dataio.smos.SmosProductReaderPlugIn;
+import org.esa.beam.framework.dataio.DecodeQualification;
 import org.esa.beam.framework.dataio.ProductIO;
 import org.esa.beam.framework.dataio.ProductReader;
+import org.esa.beam.framework.dataio.ProductReaderPlugIn;
 import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.util.io.FileUtils;
 
@@ -69,11 +70,17 @@ public class GridPointFilterStreamHandler {
         scanDir(dir, recursive, fileList, 0);
         
         ProductReader smosProductReader = ProductIO.getProductReader("SMOS");
+        ProductReaderPlugIn readerPlugIn = smosProductReader.getReaderPlugIn();
         for (File file : fileList) {
-            System.out.println(file);
-            Product product = smosProductReader.readProductNodes(file, null);
-            processProduct(product);
-            System.out.println("done");
+            DecodeQualification qualification = readerPlugIn.getDecodeQualification(file);
+            if (qualification.equals(DecodeQualification.INTENDED)) {
+                try {
+                    Product product = smosProductReader.readProductNodes(file, null);
+                  processProduct(product);
+                } catch (Exception e) {
+                    // ignore
+                }
+            }
         }
     }
     
@@ -110,6 +117,10 @@ public class GridPointFilterStreamHandler {
             CompoundData gridPointData = smosFile.getGridPointData(i);
             double lat = gridPointData.getDouble(latIndex);
             double lon = gridPointData.getDouble(lonIndex);
+            // normalisation to [-180, 180] necessary for some L1c test products
+            if (lon > 180.0) {
+                lon = lon - 360.0;
+            }
             if (area.contains(lon, lat)) {
                 filterStream.handleGridPoint(i, gridPointData);
             }

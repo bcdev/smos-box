@@ -54,18 +54,45 @@ public class CsvGridExport implements GridPointFilterStream {
         printWriter.println();
     }
     
-    @Override
-    public void stopFile(SmosFile smosfile) {
-//        printWriter.println("----------------------");
+    private void printTypeHeader(Type type) {
+        if (type.isCompoundType()) {
+            CompoundType compoundType = (CompoundType) type;
+            int memberCount = compoundType.getMemberCount();
+            for (int i = 0; i < memberCount; i++) {
+                CompoundMember member = compoundType.getMember(i);
+                if (member.getType().isSimpleType()) {
+                    printWriter.print(member.getName());
+                } else {
+                    printTypeHeader(member.getType());
+                }
+                if (i < memberCount-1) {
+                    printWriter.print(",");
+                }
+            }
+        } else if (type.isSequenceType()) {
+            SequenceType sequenceType = (SequenceType) type;
+            Type elementType = sequenceType.getElementType();
+            printTypeHeader(elementType);
+        }
     }
     
+    @Override
+    public void stopFile(SmosFile smosfile) {
+        printWriter.println("-----------------------------------------------");
+    }
 
     @Override
     public void handleGridPoint(int id, CompoundData gridPointData) throws IOException {
-        SequenceData sequence = gridPointData.getSequence("BT_Data_List");
-        for (int i = 0; i < sequence.getElementCount(); i++) {
+        int btDataIndex = gridPointData.getMemberIndex("BT_Data_List");
+        if (btDataIndex != -1) {
+            SequenceData sequence = gridPointData.getSequence(btDataIndex);
+            for (int i = 0; i < sequence.getElementCount(); i++) {
+                writeCompound(gridPointData);
+                writeCompound(sequence.getCompound(i));
+                printWriter.println();
+            }
+        } else {
             writeCompound(gridPointData);
-            writeCompound(sequence.getCompound(i));
             printWriter.println();
         }
     }
@@ -89,42 +116,17 @@ public class CsvGridExport implements GridPointFilterStream {
                         printWriter.print(longValue);
                     }
                 }
+            } else if (member.getType().isCompoundType()) {
+                writeCompound(compoundData.getCompound(i));
             }
             if (i < memberCount-1) {
                 printWriter.print(",");
             }
         }
     }
-    
-    
 
     @Override
     public void close() throws IOException {
         printWriter.close();
-    }
-    
-    private void printTypeHeader(Type type) {
-        if (type.isSimpleType()) {
-//            printWriter.print(type.getName());
-        } else if (type.isCompoundType()) {
-            CompoundType compoundType = (CompoundType) type;
-            int memberCount = compoundType.getMemberCount();
-            for (int i = 0; i < memberCount; i++) {
-                CompoundMember member = compoundType.getMember(i);
-                if (member.getType().isSimpleType()) {
-                    printWriter.print(member.getName());
-                    if (i < memberCount-1) {
-                        printWriter.print(",");
-                    }
-                } else {
-                    printTypeHeader(member.getType());
-                }
-            }
-        } else if (type.isSequenceType()) {
-            SequenceType sequenceType = (SequenceType) type;
-            Type elementType = sequenceType.getElementType();
-            printTypeHeader(elementType);
-            printWriter.print(",");
-        }
     }
 }
