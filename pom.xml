@@ -113,12 +113,12 @@
             <dependency>
                 <groupId>org.esa.beam</groupId>
                 <artifactId>beam-core</artifactId>
-                <version>4.6.1-SNAPSHOT</version>
+                <version>4.6.1</version>
             </dependency>
             <dependency>
                 <groupId>org.esa.beam</groupId>
                 <artifactId>beam-gpf</artifactId>
-                <version>4.6.1-SNAPSHOT</version>
+                <version>4.6.1</version>
             </dependency>
             <dependency>
                 <groupId>org.esa.beam</groupId>
