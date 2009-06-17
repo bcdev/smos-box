@@ -23,7 +23,6 @@ import org.esa.beam.util.io.BeamFileFilter;
 import org.esa.beam.util.io.FileUtils;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Locale;
 
 /**
@@ -49,7 +48,7 @@ public class SmosProductReaderPlugIn implements ProductReaderPlugIn {
                     if (SmosFormats.getFormat(hdrFile) != null) {
                         return DecodeQualification.INTENDED;
                     }
-                } catch (IOException e) {
+                } catch (Exception e) {
                     // ignore
                 }
             }
