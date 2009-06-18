@@ -56,7 +56,7 @@ public class GridPointFilterStreamHandler {
         }
     }
 
-    private void processProduct(Product product) throws IOException {
+    public void processProduct(Product product) throws IOException {
         ProductReader productReader = product.getProductReader();
         if (productReader instanceof SmosProductReader) {
             SmosProductReader smosProductReader = (SmosProductReader) productReader;
