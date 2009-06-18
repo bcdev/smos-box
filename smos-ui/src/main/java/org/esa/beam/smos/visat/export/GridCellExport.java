@@ -81,7 +81,11 @@ public class GridCellExport {
         private File[] inputFiles;
         
         public Arguments(String[] args) {
-            parse(args);
+            try {
+                parse(args);
+            } catch (Exception e) {
+                printHelp();
+            }
         }
         
         private void printHelp() {
@@ -100,8 +104,20 @@ public class GridCellExport {
                 }
                 north = Double.valueOf(args[1]);
                 south = Double.valueOf(args[2]);
+                if (north <= south) {
+                    System.err.println("Value for north can not be smaller than value for south.");
+                    System.err.println("north="+north);
+                    System.err.println("south="+south);
+                    printHelp();
+                }
                 east = Double.valueOf(args[3]);
                 west = Double.valueOf(args[4]);
+                if (east <= west) {
+                    System.err.println("Value for east can not be smaller than value for west.");
+                    System.err.println("east="+east);
+                    System.err.println("west="+west);
+                    printHelp();
+                }
                 productStartIndex = 5;
             }
             List<File> files = new ArrayList<File>();
