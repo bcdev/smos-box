@@ -46,32 +46,31 @@ public class BandInfoRegistry {
         /*
          * Level 1C
          */
-        // TODO: no-data values
-        registerBandInfo("Grid_Point_ID", "", 0.0, 1.0, 0, 1, 2621442,
+        registerBandInfo("Grid_Point_ID", "", 0.0, 1.0, 0, 0, 9262145,
                          "Unique identifier of Earth fixed grid point.");
-        registerBandInfo("Grid_Point_Latitude", "deg", 0.0, 1.0, Double.NaN, -90.0, 90.0,
+        registerBandInfo("Grid_Point_Latitude", "deg", 0.0, 1.0, -999.0, -90.0, 90.0,
                          "Latitude of DGG point.");
-        registerBandInfo("Grid_Point_Longitude", "deg", 0.0, 1.0, Double.NaN, -180.0, 180.0,
+        registerBandInfo("Grid_Point_Longitude", "deg", 0.0, 1.0, -999.0, -180.0, 180.0,
                          "Longitude of DGG point.");
-        registerBandInfo("Grid_Point_Altitude", "mm", 0.0, 1.0, Double.NaN, -10.0E6, 10.0E6,
+        registerBandInfo("Grid_Point_Altitude", "m", 0.0, 1.0, -999.0, -300.0, 9000.0,
                          "Altitude of DGG point.");
         // TODO: <unsignedByte-8 varName="Water_Fraction"/>
 
         // TODO: no-data values & typical ranges
-        registerBandInfo("Flags", "", 0.0, 1.0, null, 0, 1 << 16 - 1,
+        registerBandInfo("Flags", "", 0.0, 1.0, null, 0, 65535,
                          "L1c flags applicable to the pixel for this " +
                          "particular integration time.");
-        registerBandInfo("BT_Value", "K", 0.0, 1.0, Double.NaN, 50.0, 350.0,
+        registerBandInfo("BT_Value", "K", 0.0, 1.0, -999.0, 0.0, 350.0,
                          "Brightness temperature measurement over current " +
                          "Earth fixed grid point, obtained by DFT " +
                          "interpolation from L1b data.");
-        registerBandInfo("BT_Value_Real", "K", 0.0, 1.0, Double.NaN, 50.0, 350.0,
-                         "Real component of HH, HV or VV polarisation brightness " +
+        registerBandInfo("BT_Value_Real", "K", 0.0, 1.0, -999.0, 0.0, 350.0,
+                         "Real component of XX, XY or YY polarisation brightness " +
                          "temperature measurement over current " +
                          "Earth fixed grid point, obtained by DFT " +
                          "interpolation from L1b data.");
-        registerBandInfo("BT_Value_Imag", "K", 0.0, 1.0, Double.NaN, -10.0, 10.0,
-                         "Imaginary component of HH, HV or VV polarisation brightness " +
+        registerBandInfo("BT_Value_Imag", "K", 0.0, 1.0, -999.0, -20.0, 20.0,
+                         "Imaginary component of XX, XY or YY polarisation brightness " +
                          "temperature measurement over current " +
                          "Earth fixed grid point, obtained by DFT " +
                          "interpolation from L1b data.");
@@ -289,67 +288,67 @@ public class BandInfoRegistry {
         /*
          * Ocean salinity geophysical parameters.
          */
-        registerBandInfo("Equiv_ftprt_diam", "m", 0.0, 1.0, -9999.0, 30.0, 90.0,
+        registerBandInfo("Equiv_ftprt_diam", "m", 0.0, 1.0, -999.0, 30.0, 90.0,
                          "Equivalent Footprint diameter.");
-        registerBandInfo("Mean_acq_time", "dd", 0.0, 1.0, -9999.0, 2610.0, 2615.0,
+        registerBandInfo("Mean_acq_time", "dd", 0.0, 1.0, -999.0, 2610.0, 2615.0,
                          "Mean acquisition time.");
-        registerBandInfo("SSS1", "psu", 0.0, 1.0, -9999.0, 0.0, 40.0,
+        registerBandInfo("SSS1", "psu", 0.0, 1.0, -999.0, 0.0, 40.0,
                          "Sea surface salinity using roughness model 1.");
-        registerBandInfo("Sigma_SSS1", "psu", 0.0, 1.0, -9999.0, 0.1, 1.5,
+        registerBandInfo("Sigma_SSS1", "psu", 0.0, 1.0, -999.0, 0.1, 1.5,
                          "Theoretical uncertainty computed for SSS1.");
-        registerBandInfo("SSS2", "psu", 0.0, 1.0, -9999.0, 0.0, 40.0,
+        registerBandInfo("SSS2", "psu", 0.0, 1.0, -999.0, 0.0, 40.0,
                          "Sea surface salinity using roughness model 2.");
-        registerBandInfo("Sigma_SSS2", "psu", 0.0, 1.0, -9999.0, 0.1, 1.5,
+        registerBandInfo("Sigma_SSS2", "psu", 0.0, 1.0, -999.0, 0.1, 1.5,
                          "Theoretical uncertainty computed for SSS2.");
-        registerBandInfo("SSS3", "psu", 0.0, 1.0, -9999.0, 0.0, 40.0,
+        registerBandInfo("SSS3", "psu", 0.0, 1.0, -999.0, 0.0, 40.0,
                          "Sea surface salinity using roughness model 3.");
-        registerBandInfo("Sigma_SSS3", "psu", 0.0, 1.0, -9999.0, 0.1, 1.5,
+        registerBandInfo("Sigma_SSS3", "psu", 0.0, 1.0, -999.0, 0.1, 1.5,
                          "Theoretical uncertainty computed for SSS3.");
-        registerBandInfo("A_card", "", 0.0, 1.0, -9999.0, 0.1, 70.0,
+        registerBandInfo("A_card", "", 0.0, 1.0, -999.0, 0.1, 70.0,
                          "Effective_Acard retrieved with minimalist model.");
-        registerBandInfo("Sigma_Acard", "", 0.0, 1.0, -9999.0, 0.1, 1.0,
+        registerBandInfo("Sigma_Acard", "", 0.0, 1.0, -999.0, 0.1, 1.0,
                          "Theoretical uncertainty computed for Acard.");
-        registerBandInfo("WS", "m s-1", 0.0, 1.0, -9999.0, 0.0, 30.0,
+        registerBandInfo("WS", "m s-1", 0.0, 1.0, -999.0, 0.0, 30.0,
                          "Equivalent  neutral  wind  speed  as  derived from " +
                          "ECMWF.");
-        registerBandInfo("Sigma_WS", "m s-1", 0.0, 1.0, -9999.0, 0.1, 1.0,
+        registerBandInfo("Sigma_WS", "m s-1", 0.0, 1.0, -999.0, 0.1, 1.0,
                          "Theoretical uncertainty associated with WS.");
-        registerBandInfo("SST", "K", 0.0, 1.0, -9999.0, 273.0, 293.0,
+        registerBandInfo("SST", "K", 0.0, 1.0, -999.0, 273.0, 293.0,
                          "Sea  Surface  Temperature  as  derived  from ECMWF.");
-        registerBandInfo("Sigma_SST", "K", 0.0, 1.0, -9999.0, 0.1, 1.0,
+        registerBandInfo("Sigma_SST", "K", 0.0, 1.0, -999.0, 0.1, 1.0,
                          "Theoretical uncertainty associated with SST.");
-        registerBandInfo("Tb_42.5H", "K", 0.0, 1.0, -9999.0, 70.0, 130.0,
+        registerBandInfo("Tb_42.5H", "K", 0.0, 1.0, -999.0, 70.0, 130.0,
                          "Brightness Temperature at surface level derived " +
                          "with default forward model and retrieved " +
                          "geophysical parameters, H polarisation direction.");
-        registerBandInfo("Sigma_Tb_42.5H", "K", 0.0, 1.0, -9999.0, 0.1, 0.8,
+        registerBandInfo("Sigma_Tb_42.5H", "K", 0.0, 1.0, -999.0, 0.1, 0.8,
                          "Theoretical uncertainty computed for Tb42.5H.");
-        registerBandInfo("Tb_42.5V", "K", 0.0, 1.0, -9999.0, 70.0, 130.0,
+        registerBandInfo("Tb_42.5V", "K", 0.0, 1.0, -999.0, 70.0, 130.0,
                          "Brightness Temperature at surface level derived " +
                          "with default forward model and retrieved " +
                          "geophysical parameters, V polarisation direction.");
-        registerBandInfo("Sigma_Tb_42.5V", "K", 0.0, 1.0, -9999.0, 0.1, 0.8,
+        registerBandInfo("Sigma_Tb_42.5V", "K", 0.0, 1.0, -999.0, 0.1, 0.8,
                          "Theoretical uncertainty computed for Tb42.5V.");
-        registerBandInfo("Tb_42.5X", "K", 0.0, 1.0, -9999.0, 70.0, 130.0,
+        registerBandInfo("Tb_42.5X", "K", 0.0, 1.0, -999.0, 70.0, 130.0,
                          "Brightness Temperature at antenna level derived with " +
                          "default forward model and retrieved geophysical " +
                          "parameters, X polarisation direction.");
-        registerBandInfo("Sigma_Tb_42.5X", "K", 0.0, 1.0, -9999.0, 0.1, 0.8,
+        registerBandInfo("Sigma_Tb_42.5X", "K", 0.0, 1.0, -999.0, 0.1, 0.8,
                          "Theoretical uncertainty computed for Tb42.5X.");
-        registerBandInfo("Tb_42.5Y", "K", 0.0, 1.0, -9999.0, 70.0, 130.0,
+        registerBandInfo("Tb_42.5Y", "K", 0.0, 1.0, -999.0, 70.0, 130.0,
                          "Brightness Temperature at antenna level derived with " +
                          "default forward model and retrieved geophysical " +
                          "parameters, Y polarisation direction.");
-        registerBandInfo("Sigma_Tb_42.5Y", "K", 0.0, 1.0, -9999.0, 0.1, 0.8,
+        registerBandInfo("Sigma_Tb_42.5Y", "K", 0.0, 1.0, -999.0, 0.1, 0.8,
                          "Theoretical uncertainty computed for Tb42.5Y.");
 
-        registerBandInfo("Control_Flags_1", "", 0.0, 1.0, 2147483647, 0, 2 << 23 - 1,
+        registerBandInfo("Control_Flags_1", "", 0.0, 1.0, 2147483647, 0, Integer.MAX_VALUE,
                          "Control Flags for SSS retrieval with forward model 1.");
-        registerBandInfo("Control_Flags_2", "", 0.0, 1.0, 2147483647, 0, 2 << 23 - 1,
+        registerBandInfo("Control_Flags_2", "", 0.0, 1.0, 2147483647, 0, Integer.MAX_VALUE,
                          "Control Flags for SSS retrieval with forward model 2.");
-        registerBandInfo("Control_Flags_3", "", 0.0, 1.0, 2147483647, 0, 2 << 23 - 1,
+        registerBandInfo("Control_Flags_3", "", 0.0, 1.0, 2147483647, 0, Integer.MAX_VALUE,
                          "Control Flags for SSS retrieval with forward model 3.");
-        registerBandInfo("Control_Flags_4", "", 0.0, 1.0, 2147483647, 0, 2 << 23 - 1,
+        registerBandInfo("Control_Flags_4", "", 0.0, 1.0, 2147483647, 0, Integer.MAX_VALUE,
                          "Control Flags for SSS retrieval with forward model 4.");
 
         /*
