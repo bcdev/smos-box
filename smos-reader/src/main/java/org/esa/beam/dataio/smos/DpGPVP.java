@@ -34,12 +34,12 @@ abstract class DpGPVP implements GridPointValueProvider {
 
     @Override
     public final Area getRegion() {
-        return btxProvider.getRegion();
+        return frxProvider.getRegion();
     }
 
     @Override
     public final int getGridPointIndex(int seqnum) {
-        return btxProvider.getGridPointIndex(seqnum);
+        return frxProvider.getGridPointIndex(seqnum);
     }
 
     @Override

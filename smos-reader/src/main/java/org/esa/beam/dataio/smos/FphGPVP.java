@@ -7,7 +7,7 @@ import java.util.HashMap;
 class FphGPVP extends FpGPVP {
 
     public FphGPVP(Product product, HashMap<String, GridPointValueProvider> valueProviderMap, boolean accuracy) {
-        super(product, valueProviderMap, accuracy, true);
+        super(product, valueProviderMap, accuracy, false);
     }
 
     @Override
