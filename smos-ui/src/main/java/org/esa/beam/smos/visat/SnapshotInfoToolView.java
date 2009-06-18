@@ -247,6 +247,7 @@ public class SnapshotInfoToolView extends SmosToolView {
     private class SnapshotIdListener implements ChangeListener {
         
         private SnapshotRegionOverlay overlay = new SnapshotRegionOverlay();
+        private boolean overlayAdded;
 
         @Override
         public void stateChanged(ChangeEvent e) {
@@ -255,11 +256,17 @@ public class SnapshotInfoToolView extends SmosToolView {
             if (snapshotSelectorCombo.isAdjusting()) {
                 if (snapshotButtonModel.isSelected()) {
                     overlay.setId(snapshotId);
-                    getSelectedSmosView().getLayerCanvas().addOverlay(overlay);
+                    if (!overlayAdded) {
+                        overlayAdded = true;
+                        getSelectedSmosView().getLayerCanvas().addOverlay(overlay);
+                    } else {
+                        getSelectedSmosView().getLayerCanvas().repaint();
+                    }
                 }
                 return;
             }
             getSelectedSmosView().getLayerCanvas().removeOverlay(overlay);
+            overlayAdded = false;
             if (synchronizeButtonModel.isSelected() && snapshotButtonModel.isSelected()) {
                 final ProductSceneView smosView = getSelectedSmosView();
                 if (smosView != null) {
