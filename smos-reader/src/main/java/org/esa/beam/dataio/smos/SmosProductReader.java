@@ -24,9 +24,11 @@ import com.bc.ceres.binio.Type;
 import com.bc.ceres.core.ProgressMonitor;
 import com.bc.ceres.glevel.MultiLevelImage;
 import com.bc.ceres.glevel.support.DefaultMultiLevelImage;
+import com.bc.jexp.ParseException;
 import org.esa.beam.framework.dataio.AbstractProductReader;
 import org.esa.beam.framework.dataio.ProductIO;
 import org.esa.beam.framework.datamodel.*;
+import org.esa.beam.framework.dataop.barithm.BandArithmetic;
 import org.esa.beam.framework.dataop.maptransf.Datum;
 import org.esa.beam.framework.dataop.maptransf.IdentityTransformDescriptor;
 import org.esa.beam.framework.dataop.maptransf.MapInfo;
@@ -47,6 +49,7 @@ import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
 import java.text.MessageFormat;
+import java.util.HashMap;
 import java.util.Random;
 
 public class SmosProductReader extends AbstractProductReader {
@@ -171,6 +174,7 @@ public class SmosProductReader extends AbstractProductReader {
 
     private void addDualPolBrowseBands(Product product, CompoundType compoundDataType) {
         final CompoundMember[] members = compoundDataType.getMembers();
+        final HashMap<String, GridPointValueProvider> valueProviderMap = new HashMap<String, GridPointValueProvider>();
 
         for (int fieldIndex = 0; fieldIndex < members.length; fieldIndex++) {
             final CompoundMember member = members[fieldIndex];
@@ -182,14 +186,14 @@ public class SmosProductReader extends AbstractProductReader {
                     // flags do not depend on polarisation mode, so there is a single flag band only
                     addL1cBand(product, memberName,
                                memberTypeToBandType(member.getType()), bandInfo, fieldIndex,
-                               SmosFormats.L1C_POL_MODE_X);
+                               SmosFormats.L1C_POL_MODE_X, valueProviderMap);
                 } else {
                     addL1cBand(product, memberName + "_X",
                                memberTypeToBandType(member.getType()), bandInfo, fieldIndex,
-                               SmosFormats.L1C_POL_MODE_X);
+                               SmosFormats.L1C_POL_MODE_X, valueProviderMap);
                     addL1cBand(product, memberName + "_Y",
                                memberTypeToBandType(member.getType()), bandInfo, fieldIndex,
-                               SmosFormats.L1C_POL_MODE_Y);
+                               SmosFormats.L1C_POL_MODE_Y, valueProviderMap);
                 }
             }
         }
@@ -197,6 +201,7 @@ public class SmosProductReader extends AbstractProductReader {
 
     private void addFullPolBrowseBands(Product product, CompoundType compoundDataType) {
         final CompoundMember[] members = compoundDataType.getMembers();
+        final HashMap<String, GridPointValueProvider> valueProviderMap = new HashMap<String, GridPointValueProvider>();
 
         for (int fieldIndex = 0; fieldIndex < members.length; fieldIndex++) {
             final CompoundMember member = members[fieldIndex];
@@ -208,14 +213,14 @@ public class SmosProductReader extends AbstractProductReader {
                     // flags do not depend on polarisation mode, so there is a single flag band only
                     addL1cBand(product, memberName,
                                memberTypeToBandType(member.getType()), bandInfo, fieldIndex,
-                               SmosFormats.L1C_POL_MODE_X);
+                               SmosFormats.L1C_POL_MODE_X, valueProviderMap);
                 } else if ("BT_Value".equals(memberName)) {
                     addL1cBand(product, memberName + "_X",
                                memberTypeToBandType(member.getType()), bandInfo, fieldIndex,
-                               SmosFormats.L1C_POL_MODE_X);
+                               SmosFormats.L1C_POL_MODE_X, valueProviderMap);
                     addL1cBand(product, memberName + "_Y",
                                memberTypeToBandType(member.getType()), bandInfo, fieldIndex,
-                               SmosFormats.L1C_POL_MODE_Y);
+                               SmosFormats.L1C_POL_MODE_Y, valueProviderMap);
                     final BandInfo bandInfoCrossPol = new BandInfo(bandInfo.getName(),
                                                                    bandInfo.getUnit(),
                                                                    bandInfo.getScaleOffset(),
@@ -225,20 +230,20 @@ public class SmosProductReader extends AbstractProductReader {
                                                                    bandInfo.getDescription());
                     addL1cBand(product, memberName + "_XY_Real",
                                memberTypeToBandType(member.getType()), bandInfoCrossPol, fieldIndex,
-                               SmosFormats.L1C_POL_MODE_XY1);
+                               SmosFormats.L1C_POL_MODE_XY1, valueProviderMap);
                     addL1cBand(product, memberName + "_XY_Imag",
                                memberTypeToBandType(member.getType()), bandInfoCrossPol, fieldIndex,
-                               SmosFormats.L1C_POL_MODE_XY2);
+                               SmosFormats.L1C_POL_MODE_XY2, valueProviderMap);
                 } else {
                     addL1cBand(product, memberName + "_X",
                                memberTypeToBandType(member.getType()), bandInfo, fieldIndex,
-                               SmosFormats.L1C_POL_MODE_X);
+                               SmosFormats.L1C_POL_MODE_X, valueProviderMap);
                     addL1cBand(product, memberName + "_Y",
                                memberTypeToBandType(member.getType()), bandInfo, fieldIndex,
-                               SmosFormats.L1C_POL_MODE_Y);
+                               SmosFormats.L1C_POL_MODE_Y, valueProviderMap);
                     addL1cBand(product, memberName + "_XY",
                                memberTypeToBandType(member.getType()), bandInfo, fieldIndex,
-                               SmosFormats.L1C_POL_MODE_XY1);
+                               SmosFormats.L1C_POL_MODE_XY1, valueProviderMap);
                 }
             }
         }
@@ -246,6 +251,7 @@ public class SmosProductReader extends AbstractProductReader {
 
     private void addDualPolScienceBands(Product product, CompoundType compoundDataType) {
         final CompoundMember[] members = compoundDataType.getMembers();
+        final HashMap<String, GridPointValueProvider> valueProviderMap = new HashMap<String, GridPointValueProvider>();
 
         for (int fieldIndex = 0; fieldIndex < members.length; fieldIndex++) {
             final CompoundMember member = members[fieldIndex];
@@ -257,21 +263,24 @@ public class SmosProductReader extends AbstractProductReader {
                     // flags do not depend on polarisation mode, so there is a single flag band only
                     addL1cBand(product, memberName,
                                memberTypeToBandType(member.getType()), bandInfo, fieldIndex,
-                               SmosFormats.L1C_POL_MODE_ANY);
+                               SmosFormats.L1C_POL_MODE_ANY, valueProviderMap);
                 } else {
                     addL1cBand(product, memberName + "_X",
                                memberTypeToBandType(member.getType()), bandInfo, fieldIndex,
-                               SmosFormats.L1C_POL_MODE_X);
+                               SmosFormats.L1C_POL_MODE_X, valueProviderMap);
                     addL1cBand(product, memberName + "_Y",
                                memberTypeToBandType(member.getType()), bandInfo, fieldIndex,
-                               SmosFormats.L1C_POL_MODE_Y);
+                               SmosFormats.L1C_POL_MODE_Y, valueProviderMap);
                 }
             }
         }
+
+        addRotatedDualPolBands(product, valueProviderMap);
     }
 
     private void addFullPolScienceBands(Product product, CompoundType compoundDataType) {
         final CompoundMember[] members = compoundDataType.getMembers();
+        final HashMap<String, GridPointValueProvider> valueProviderMap = new HashMap<String, GridPointValueProvider>();
 
         for (int fieldIndex = 0; fieldIndex < members.length; fieldIndex++) {
             final CompoundMember member = members[fieldIndex];
@@ -283,39 +292,121 @@ public class SmosProductReader extends AbstractProductReader {
                     // flags do not depend on polarisation mode, so there is a single flag band only
                     addL1cBand(product, memberName,
                                memberTypeToBandType(member.getType()), bandInfo, fieldIndex,
-                               SmosFormats.L1C_POL_MODE_ANY);
+                               SmosFormats.L1C_POL_MODE_ANY, valueProviderMap);
                 } else if ("BT_Value_Real".equals(memberName)) {
                     addL1cBand(product, "BT_Value_X",
                                memberTypeToBandType(member.getType()), bandInfo, fieldIndex,
-                               SmosFormats.L1C_POL_MODE_X);
+                               SmosFormats.L1C_POL_MODE_X, valueProviderMap);
                     addL1cBand(product, "BT_Value_Y",
                                memberTypeToBandType(member.getType()), bandInfo, fieldIndex,
-                               SmosFormats.L1C_POL_MODE_Y);
+                               SmosFormats.L1C_POL_MODE_Y, valueProviderMap);
                     final BandInfo bandInfoCrossPol = new BandInfo(bandInfo.getName(),
-                                                             bandInfo.getUnit(),
-                                                             bandInfo.getScaleOffset(),
-                                                             bandInfo.getScaleFactor(),
-                                                             bandInfo.getNoDataValue(), -10.0, 10.0,
-                                                             bandInfo.getDescription());
+                                                                   bandInfo.getUnit(),
+                                                                   bandInfo.getScaleOffset(),
+                                                                   bandInfo.getScaleFactor(),
+                                                                   bandInfo.getNoDataValue(), -10.0, 10.0,
+                                                                   bandInfo.getDescription());
                     addL1cBand(product, "BT_Value_XY_Real",
                                memberTypeToBandType(member.getType()), bandInfoCrossPol, fieldIndex,
-                               SmosFormats.L1C_POL_MODE_XY1);
+                               SmosFormats.L1C_POL_MODE_XY1, valueProviderMap);
                 } else if ("BT_Value_Imag".equals(memberName)) {
                     addL1cBand(product, "BT_Value_XY_Imag",
                                memberTypeToBandType(member.getType()), bandInfo, fieldIndex,
-                               SmosFormats.L1C_POL_MODE_XY1);
+                               SmosFormats.L1C_POL_MODE_XY1, valueProviderMap);
                 } else {
                     addL1cBand(product, memberName + "_X",
                                memberTypeToBandType(member.getType()), bandInfo, fieldIndex,
-                               SmosFormats.L1C_POL_MODE_X);
+                               SmosFormats.L1C_POL_MODE_X, valueProviderMap);
                     addL1cBand(product, memberName + "_Y",
                                memberTypeToBandType(member.getType()), bandInfo, fieldIndex,
-                               SmosFormats.L1C_POL_MODE_Y);
+                               SmosFormats.L1C_POL_MODE_Y, valueProviderMap);
                     addL1cBand(product, memberName + "_XY",
                                memberTypeToBandType(member.getType()), bandInfo, fieldIndex,
-                               SmosFormats.L1C_POL_MODE_XY1);
+                               SmosFormats.L1C_POL_MODE_XY1, valueProviderMap);
                 }
             }
+        }
+
+        addRotatedFullPolBands(product, valueProviderMap);
+    }
+
+    private void addRotatedDualPolBands(Product product, HashMap<String, GridPointValueProvider> valueProviderMap) {
+        DpGPVP provider;
+        BandInfo bandInfo;
+
+        provider = new DphGPVP(product, valueProviderMap, false);
+        bandInfo = BandInfoRegistry.getInstance().getBandInfo("BT_Value");
+        addBand(product, "BT_Value_H", ProductData.TYPE_FLOAT32, bandInfo, provider);
+
+        provider = new DpvGPVP(product, valueProviderMap, false);
+        bandInfo = BandInfoRegistry.getInstance().getBandInfo("BT_Value");
+        addBand(product, "BT_Value_V", ProductData.TYPE_FLOAT32, bandInfo, provider);
+
+        provider = new DphGPVP(product, valueProviderMap, false);
+        bandInfo = BandInfoRegistry.getInstance().getBandInfo("Pixel_Radiometric_Accuracy");
+        addBand(product, "Pixel_Radiometric_Accuracy_H", ProductData.TYPE_FLOAT32, bandInfo, provider);
+
+        provider = new DpvGPVP(product, valueProviderMap, false);
+        bandInfo = BandInfoRegistry.getInstance().getBandInfo("Pixel_Radiometric_Accuracy");
+        addBand(product, "Pixel_Radiometric_Accuracy_V", ProductData.TYPE_FLOAT32, bandInfo, provider);
+
+        addVirtualBand(product, "Stokes_1", "(BT_Value_H + BT_Value_V) / 2.0");
+        addVirtualBand(product, "Stokes_2", "(BT_Value_H - BT_Value_V) / 2.0");
+    }
+
+    private void addRotatedFullPolBands(Product product, HashMap<String, GridPointValueProvider> valueProviderMap) {
+        FpGPVP provider;
+        BandInfo bandInfo;
+
+        provider = new FphGPVP(product, valueProviderMap, false);
+        bandInfo = BandInfoRegistry.getInstance().getBandInfo("BT_Value");
+        addBand(product, "BT_Value_H", ProductData.TYPE_FLOAT32, bandInfo, provider);
+
+        provider = new FpvGPVP(product, valueProviderMap, false);
+        bandInfo = BandInfoRegistry.getInstance().getBandInfo("BT_Value");
+        addBand(product, "BT_Value_V", ProductData.TYPE_FLOAT32, bandInfo, provider);
+
+        provider = new FprGPVP(product, valueProviderMap, false);
+        bandInfo = BandInfoRegistry.getInstance().getBandInfo("BT_Value_Real");
+        addBand(product, "BT_Value_HV_Real", ProductData.TYPE_FLOAT32, bandInfo, provider);
+
+        provider = new FpiGPVP(product, valueProviderMap, false);
+        bandInfo = BandInfoRegistry.getInstance().getBandInfo("BT_Value_Imag");
+        addBand(product, "BT_Value_HV_Imag", ProductData.TYPE_FLOAT32, bandInfo, provider);
+
+        provider = new FphGPVP(product, valueProviderMap, false);
+        bandInfo = BandInfoRegistry.getInstance().getBandInfo("Pixel_Radiometric_Accuracy");
+        addBand(product, "Pixel_Radiometric_Accuracy_H", ProductData.TYPE_FLOAT32, bandInfo, provider);
+
+        provider = new FpvGPVP(product, valueProviderMap, false);
+        bandInfo = BandInfoRegistry.getInstance().getBandInfo("Pixel_Radiometric_Accuracy");
+        addBand(product, "Pixel_Radiometric_Accuracy_V", ProductData.TYPE_FLOAT32, bandInfo, provider);
+
+        provider = new FprGPVP(product, valueProviderMap, false);
+        bandInfo = BandInfoRegistry.getInstance().getBandInfo("Pixel_Radiometric_Accuracy");
+        addBand(product, "Pixel_Radiometric_Accuracy_HV", ProductData.TYPE_FLOAT32, bandInfo, provider);
+
+        addVirtualBand(product, "Stokes_1", "(BT_Value_H + BT_Value_V) / 2.0");
+        addVirtualBand(product, "Stokes_2", "(BT_Value_H - BT_Value_V) / 2.0");
+        addVirtualBand(product, "Stokes_3", "BT_Value_HV_Real");
+        addVirtualBand(product, "Stokes_4", "BT_Value_HV_Imag");
+    }
+
+    private static void addVirtualBand(Product product, String name, String expression) {
+        final VirtualBand band = new VirtualBand(name, ProductData.TYPE_FLOAT32,
+                                                 product.getSceneRasterWidth(),
+                                                 product.getSceneRasterHeight(),
+                                                 expression);
+
+        band.setValidPixelExpression(createValidPixelExpression(product, expression));
+        product.addBand(band);
+    }
+
+    private static String createValidPixelExpression(Product product, String expression) {
+        try {
+            return BandArithmetic.getValidMaskExpression(expression, new Product[]{product}, 0, null);
+        } catch (ParseException e) {
+            return null;
         }
     }
 
@@ -354,7 +445,7 @@ public class SmosProductReader extends AbstractProductReader {
     }
 
     private void addL1cBand(Product product, String bandName, int bandType, BandInfo bandInfo, int fieldIndex,
-                            int polMode) {
+                            int polMode, HashMap<String, GridPointValueProvider> valueProviderMap) {
         final GridPointValueProvider valueProvider =
                 new L1cFieldValueProvider((L1cSmosFile) smosFile, fieldIndex, polMode);
         final Band band = addBand(product, bandName, bandType, bandInfo, valueProvider);
@@ -363,6 +454,8 @@ public class SmosProductReader extends AbstractProductReader {
             final Random random = new Random(5489);
             addFlagCodingAndBitmaskDefs(band, product, product.getFlagCodingGroup().get(0), random);
         }
+
+        valueProviderMap.put(bandName, valueProvider);
     }
 
     private void addL2OsBand(Product product, String bandName, int bandType, BandInfo bandInfo, int fieldIndex) {
@@ -486,18 +579,22 @@ public class SmosProductReader extends AbstractProductReader {
     private Band addBand(Product product, String bandName, int bandType, BandInfo bandInfo,
                          GridPointValueProvider valueProvider) {
         final Band band = product.addBand(bandName, bandType);
-        band.setScalingFactor(bandInfo.getScaleFactor());
-        band.setScalingOffset(bandInfo.getScaleOffset());
-        band.setUnit(bandInfo.getUnit());
-        band.setDescription(bandInfo.getDescription());
+        if (bandInfo != null) {
+            band.setScalingFactor(bandInfo.getScaleFactor());
+            band.setScalingOffset(bandInfo.getScaleOffset());
+            band.setUnit(bandInfo.getUnit());
+            band.setDescription(bandInfo.getDescription());
 
-        if (bandInfo.getNoDataValue() != null) {
-            band.setNoDataValueUsed(true);
-            band.setNoDataValue(bandInfo.getNoDataValue().doubleValue());
+            if (bandInfo.getNoDataValue() != null) {
+                band.setNoDataValueUsed(true);
+                band.setNoDataValue(bandInfo.getNoDataValue().doubleValue());
+            }
         }
 
         band.setSourceImage(createSourceImage(valueProvider, band));
-        band.setImageInfo(createDefaultImageInfo(bandInfo));
+        if (bandInfo != null) {
+            band.setImageInfo(createDefaultImageInfo(bandInfo));
+        }
 
         return band;
     }

@@ -356,6 +356,8 @@ public class SnapshotInfoToolView extends SmosToolView {
                 updateSmosImage(band, crossPolId);
             } else if (band.isFlagBand()) {
                 updateSmosImage(band, snapshotId);
+            } else {
+                resetRasterImages(band);
             }
         }
         for (final Band band : smosProduct.getBands()) {
@@ -368,6 +370,8 @@ public class SnapshotInfoToolView extends SmosToolView {
             } else if (band.getName().contains("_XY")) {
                 resetViews(band, crossPolId);
             } else if (band.isFlagBand()) {
+                resetViews(band, snapshotId);
+            } else {
                 resetViews(band, snapshotId);
             }
         }
@@ -443,7 +447,7 @@ public class SnapshotInfoToolView extends SmosToolView {
 //        viewSettingsPanel.add(locateSnapshotButton, new TableLayout.Cell(1, 2));
 //        viewSettingsPanel.add(new JPanel(), new TableLayout.Cell(0, 3));    // spacer column
 
-        JPanel viewSettingsPanel = new JPanel(new FlowLayout(FlowLayout.LEADING, 4, 4));
+        final JPanel viewSettingsPanel = new JPanel(new FlowLayout(FlowLayout.LEADING, 4, 4));
         viewSettingsPanel.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
         viewSettingsPanel.add(synchroniseCheckBox);
         viewSettingsPanel.add(browseButton);
