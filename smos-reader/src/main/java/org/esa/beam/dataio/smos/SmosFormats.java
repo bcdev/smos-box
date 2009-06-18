@@ -224,7 +224,7 @@ public class SmosFormats {
         return formatMap.get(name);
     }
 
-    static DataFormat getFormat(File hdrFile) throws IOException {
+    public static DataFormat getFormat(File hdrFile) throws IOException {
         final Document document;
 
         try {
