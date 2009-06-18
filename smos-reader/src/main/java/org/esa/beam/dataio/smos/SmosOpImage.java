@@ -55,7 +55,6 @@ class SmosOpImage extends SingleBandedOpImage {
 
     @Override
     protected final void computeRect(PlanarImage[] planarImages, WritableRaster targetRaster, Rectangle rectangle) {
-        long t1 = System.currentTimeMillis();
         final double noDataValue = node.getNoDataValue();
 
         final Area rectangleArea = new Area(rectangle);
@@ -116,8 +115,6 @@ class SmosOpImage extends SingleBandedOpImage {
         }
 
         targetAccessor.setPixels(targetData);
-        long t2 = System.currentTimeMillis();
-        System.err.println(t2 - t1);
     }
 
     private static short[] createArray(int w, int h, short value) {
