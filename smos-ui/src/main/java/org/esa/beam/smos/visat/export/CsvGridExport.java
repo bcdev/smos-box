@@ -41,9 +41,11 @@ import java.io.PrintWriter;
 public class CsvGridExport implements GridPointFilterStream {
     
     private final PrintWriter printWriter;
+    private final String separator;
 
-    public CsvGridExport(PrintWriter printWriter) {
+    public CsvGridExport(PrintWriter printWriter, String separator) {
         this.printWriter = printWriter;
+        this.separator = separator;
     }
 
     @Override
@@ -66,7 +68,7 @@ public class CsvGridExport implements GridPointFilterStream {
                     printTypeHeader(member.getType());
                 }
                 if (i < memberCount-1) {
-                    printWriter.print(",");
+                    printWriter.print(separator);
                 }
             }
         } else if (type.isSequenceType()) {
@@ -120,7 +122,7 @@ public class CsvGridExport implements GridPointFilterStream {
                 writeCompound(compoundData.getCompound(i));
             }
             if (i < memberCount-1) {
-                printWriter.print(",");
+                printWriter.print(separator);
             }
         }
     }

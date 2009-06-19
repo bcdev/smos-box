@@ -43,7 +43,7 @@
             <id>gridCellExporter</id>
             <helpID>gridCellExporter</helpID>
             <parent>tool</parent>
-            <text>SMOS GridCell Exporter..</text>
+            <text>Export SMOS Grid Cells..</text>
             <mnemonic>G</mnemonic>
         </action>
     </extension>
