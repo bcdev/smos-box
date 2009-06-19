@@ -22,7 +22,8 @@
 
 <p>
     Readers not familiar with the SMOS-Box software might read the <a href="Introduction.html">Introduction
-    to the SMOS-Box</a> first.
+    to the SMOS-Box</a> and the explanation of the representation of <a href="DataModel.html">SMOS Data in
+    BEAM</a> first.
 </p>
 
 <h4>Usage</h4>
@@ -58,17 +59,14 @@
     View</strong>.
     Double-clicking onto a band name opens a window displaying the band data as an image (see the screenshots below).
     Due to the BEAM data model used internally to represent all EO data products, it is required to resample SMOS L1C
-    and L2 gridded data to rectangular raster data. The images created from SMOS products in BEAM thus use a Geographic
-    coordinate reference system with the WGS-84 datum.
+    and L2 gridded data to rectangular raster data. The images created from SMOS products in BEAM thus use the
+    Geographic WGS-84 coordinate reference system.
 </p>
 
 <p>
-    The mapping between image pixels and SMOS grid cells is established by a lookup table being a raster dataset
+    The geo-coding of all SMOS data products is provided by the same WGS-84 geographic coordinate reference system.
+    The mapping between image pixels and SMOS grid points is established by a lookup table being a raster dataset
     of 16384 by 8192 image pixels, yielding about 30 image pixels for an equatorial grid cell of the ISEA4H-R9 grid.
-    The LUT lookup table was pregenerated with the <a
-        href="http://www.sou.edu/cs/sahr/dgg/dggrid/dggrid.html">DGGRID software</a>. The SMOS grid cell ID for a given
-    image pixel can easily be obtained by opening the <strong>Grid_Cell_ID</strong> band, which always appears as the
-    first band in the <strong>Products View</strong>.
 </p>
 
 <p>
@@ -180,7 +178,7 @@
 </h6>
 
 <p>
-    The slider provides an easy mechanism for fast navigation through the list of snapshot IDs.
+    The slider provides an explicit mechanism for fast navigation through the list of snapshot IDs.
 </p>
 
 <h6>
