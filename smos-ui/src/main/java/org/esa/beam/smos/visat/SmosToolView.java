@@ -7,12 +7,15 @@ import com.bc.ceres.binio.Type;
 import org.esa.beam.dataio.smos.SmosFile;
 import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.framework.datamodel.RasterDataNode;
+import org.esa.beam.framework.help.HelpSys;
+import org.esa.beam.framework.ui.UIUtils;
 import org.esa.beam.framework.ui.application.PageComponent;
 import org.esa.beam.framework.ui.application.support.AbstractToolView;
 import org.esa.beam.framework.ui.application.support.PageComponentListenerAdapter;
 import org.esa.beam.framework.ui.product.ProductSceneView;
-import org.esa.beam.framework.help.HelpSys;
+import org.esa.beam.framework.ui.tool.ToolButtonFactory;
 
+import javax.swing.AbstractButton;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -153,6 +156,22 @@ public abstract class SmosToolView extends AbstractToolView {
 
     protected abstract void updateClientComponent(ProductSceneView smosView);
 
+    protected final void setToolViewComponent(JComponent comp) {
+        panel.removeAll();
+        panel.add(comp, BorderLayout.CENTER);
+        panel.invalidate();
+        panel.validate();
+        panel.updateUI();
+    }
+
+    private class SVSL implements SceneViewSelectionService.SelectionListener {
+
+        @Override
+        public void handleSceneViewSelectionChanged(ProductSceneView oldView, ProductSceneView newView) {
+            realizeSmosView(newView);
+        }
+    }
+
     public static Number getNumbericMember(CompoundData compoundData, int memberIndex) throws IOException {
         final Type memberType = compoundData.getCompoundType().getMemberType(memberIndex);
 
@@ -209,22 +228,16 @@ public abstract class SmosToolView extends AbstractToolView {
         if (memberType == SimpleType.BYTE) {
             return Byte.class;
         }
-        
+
         return null;
     }
 
-    protected final void setToolViewComponent(JComponent comp) {
-        panel.removeAll();
-        panel.add(comp, BorderLayout.CENTER);
-        panel.invalidate();
-        panel.validate();
-        panel.updateUI();
-    }
+    protected static AbstractButton createHelpButton() {
+        final ImageIcon icon = UIUtils.loadImageIcon("icons/Help24.gif");
+        final AbstractButton button = ToolButtonFactory.createButton(icon, false);
+        button.setToolTipText("Help."); /*I18N*/
+        button.setName("helpButton");
 
-    private class SVSL implements SceneViewSelectionService.SelectionListener {
-        @Override
-        public void handleSceneViewSelectionChanged(ProductSceneView oldView, ProductSceneView newView) {
-            realizeSmosView(newView);
-        }
+        return button;
     }
 }

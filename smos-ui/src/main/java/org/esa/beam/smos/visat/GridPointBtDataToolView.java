@@ -11,12 +11,16 @@ import org.esa.beam.framework.datamodel.ProductNodeListener;
 import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.framework.datamodel.MetadataElement;
 import org.esa.beam.framework.dataio.ProductReader;
+import org.esa.beam.framework.ui.tool.ToolButtonFactory;
+import org.esa.beam.framework.ui.UIUtils;
+import org.esa.beam.framework.help.HelpSys;
 import org.esa.beam.visat.VisatApp;
 
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.AbstractButton;
 import java.awt.BorderLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -44,6 +48,14 @@ public abstract class GridPointBtDataToolView extends SmosToolView {
         mainPanel.add(infoLabel, BorderLayout.CENTER);
         mainPanel.add(createGridPointComponent(), BorderLayout.CENTER);
         mainPanel.add(optionsPanel, BorderLayout.SOUTH);
+
+        final AbstractButton helpButton = createHelpButton();
+        optionsPanel.add(helpButton, BorderLayout.EAST);
+
+        if (getDescriptor().getHelpId() != null) {
+            HelpSys.enableHelpOnButton(helpButton, getDescriptor().getHelpId());
+            HelpSys.enableHelpKey(mainPanel, getDescriptor().getHelpId());
+        }
 
         return mainPanel;
     }

@@ -4,9 +4,10 @@ import com.bc.ceres.binio.CompoundMember;
 import com.bc.ceres.binio.CompoundType;
 import com.jidesoft.grid.TableColumnChooser;
 import org.esa.beam.dataio.smos.L1cSmosFile;
-import org.esa.beam.dataio.smos.SmosFile;
 import org.esa.beam.framework.ui.product.ProductSceneView;
+import org.esa.beam.framework.help.HelpSys;
 
+import javax.swing.AbstractButton;
 import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -14,14 +15,11 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableColumnModel;
-import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.util.Map;
-import java.util.WeakHashMap;
 
 public class GridPointBtDataTableToolView extends GridPointBtDataToolView {
 
@@ -97,6 +95,7 @@ public class GridPointBtDataTableToolView extends GridPointBtDataToolView {
         final JPanel optionsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 2, 2));
         optionsPanel.add(columnsButton);
         optionsPanel.add(exportButton);
+
         return optionsPanel;
     }
 

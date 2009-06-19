@@ -104,12 +104,13 @@ public class SnapshotInfoToolView extends SmosToolView {
         mainPanel.add(snapshotTablePanel, BorderLayout.CENTER);
 
         final JPanel viewSettingsPanel = createViewSettingsPanel();
-        final AbstractButton helpButton = ToolButtonFactory.createButton(UIUtils.loadImageIcon("icons/Help24.gif"), false);
-        helpButton.setToolTipText("Help."); /*I18N*/
-        helpButton.setName("helpButton");
-        viewSettingsPanel.add(helpButton);
 
-        mainPanel.add(viewSettingsPanel, BorderLayout.SOUTH);
+        final JPanel southPanel = new JPanel(new BorderLayout(6, 0));
+        southPanel.add(viewSettingsPanel, BorderLayout.WEST);
+        final AbstractButton helpButton = createHelpButton();
+        southPanel.add(helpButton, BorderLayout.EAST);
+
+        mainPanel.add(southPanel, BorderLayout.SOUTH);
 
         if (getDescriptor().getHelpId() != null) {
             HelpSys.enableHelpOnButton(helpButton, getDescriptor().getHelpId());
