@@ -5,6 +5,8 @@
 
 <map version="2.0">
 
+    <mapID target="smosIntroduction" url="smosbox/Introduction.html"/>
+    <mapID target="smosDataModel" url="smosbox/DataModel.html"/>
     <mapID target="smosTools" url="smosbox/Tools.html"/>
 
 </map>
