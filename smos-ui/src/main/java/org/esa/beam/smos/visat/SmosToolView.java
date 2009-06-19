@@ -6,6 +6,7 @@ import com.bc.ceres.binio.SimpleType;
 import com.bc.ceres.binio.Type;
 import org.esa.beam.dataio.smos.SmosFile;
 import org.esa.beam.framework.datamodel.Product;
+import org.esa.beam.framework.datamodel.RasterDataNode;
 import org.esa.beam.framework.ui.application.PageComponent;
 import org.esa.beam.framework.ui.application.support.AbstractToolView;
 import org.esa.beam.framework.ui.application.support.PageComponentListenerAdapter;
@@ -51,12 +52,22 @@ public abstract class SmosToolView extends AbstractToolView {
         return getSmosViewSelectionService().getSelectedSmosFile();
     }
 
-    protected final long getSelectedSnapshotId(ProductSceneView view) {
-        return getSnapshotSelectionService().getSelectedSnapshotId(view);
+    protected final long getSelectedSnapshotId(RasterDataNode raster) {
+        return getSnapshotSelectionService().getSelectedSnapshotId(raster);
     }
 
-    protected final void setSelectedSnapshotId(ProductSceneView view, long id) {
-        getSnapshotSelectionService().setSelectedSnapshotId(view, id);
+    protected final long getSelectedSnapshotId(ProductSceneView view) {
+        final RasterDataNode raster;
+        if (view != null) {
+            raster = view.getRaster();
+        } else {
+            raster = null;
+        }
+        return getSnapshotSelectionService().getSelectedSnapshotId(raster);
+    }
+
+    protected final void setSelectedSnapshotId(RasterDataNode raster, long id) {
+        getSnapshotSelectionService().setSelectedSnapshotId(raster, id);
     }
 
     @Override

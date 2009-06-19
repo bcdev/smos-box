@@ -143,7 +143,7 @@ public class SnapshotInfoToolView extends SmosToolView {
                 startPolModeInitWaiting(smosView, smosFile);
                 return;
             }
-            final long snapshotId = getSelectedSnapshotId(smosView);
+            final long snapshotId = getSelectedSnapshotId(smosView.getRaster());
             updateUI(smosView, snapshotId, true);
         } else {
             super.realizeSmosView(null);
@@ -280,7 +280,6 @@ public class SnapshotInfoToolView extends SmosToolView {
     }
     
     private class SnapshotRegionOverlay implements LayerCanvas.Overlay {
-
         private long snapshotId;
 
         @Override
@@ -307,7 +306,6 @@ public class SnapshotInfoToolView extends SmosToolView {
     }
 
     private class ToggleSnapshotModeAction implements ActionListener {
-
         @Override
         public void actionPerformed(ActionEvent event) {
             final ProductSceneView smosView = getSelectedSmosView();
@@ -342,9 +340,6 @@ public class SnapshotInfoToolView extends SmosToolView {
             crossPolId = -1;
         }
 
-        // a workaround for the problem that all displayed mask images are cached (rq-20090612)
-        MaskImageCacheAccessor.removeAll(ImageManager.getInstance(), smosProduct);
-
         for (final Band band : smosProduct.getBands()) {
             if (band instanceof VirtualBand) {
                 resetRasterImages(band);
@@ -360,6 +355,10 @@ public class SnapshotInfoToolView extends SmosToolView {
                 resetRasterImages(band);
             }
         }
+
+        // a workaround for the problem that all displayed mask images are cached (rq-20090612)
+        MaskImageCacheAccessor.removeAll(ImageManager.getInstance(), smosProduct);
+
         for (final Band band : smosProduct.getBands()) {
             if (band instanceof VirtualBand) {
                 resetViews(band, snapshotId);
@@ -369,10 +368,21 @@ public class SnapshotInfoToolView extends SmosToolView {
                 resetViews(band, yPolId);
             } else if (band.getName().contains("_XY")) {
                 resetViews(band, crossPolId);
-            } else if (band.isFlagBand()) {
-                resetViews(band, snapshotId);
             } else {
                 resetViews(band, snapshotId);
+            }
+        }
+        for (final Band band : smosProduct.getBands()) {
+            if (band instanceof VirtualBand) {
+                setSelectedSnapshotId(band, snapshotId);
+            } else if (band.getName().endsWith("_X")) {
+                setSelectedSnapshotId(band, xPolId);
+            } else if (band.getName().endsWith("_Y")) {
+                setSelectedSnapshotId(band, yPolId);
+            } else if (band.getName().contains("_XY")) {
+                setSelectedSnapshotId(band, crossPolId);
+            } else {
+                setSelectedSnapshotId(band, snapshotId);
             }
         }
     }
@@ -382,9 +392,8 @@ public class SnapshotInfoToolView extends SmosToolView {
             if (internalFrame != null) {
                 if (internalFrame.getContentPane() instanceof ProductSceneView) {
                     final ProductSceneView view = (ProductSceneView) internalFrame.getContentPane();
-                    if (getSelectedSnapshotId(view) != snapshotId) {
+                    if (getSelectedSnapshotId(view.getRaster()) != snapshotId) {
                         regenerateImageLayers(view.getRootLayer());
-                        setSelectedSnapshotId(view, snapshotId);
                     }
                 }
             }
@@ -401,7 +410,7 @@ public class SnapshotInfoToolView extends SmosToolView {
     }
 
     private JPanel createViewSettingsPanel() {
-        JCheckBox synchroniseCheckBox = new JCheckBox("Synchronise with view", false);
+        final JCheckBox synchroniseCheckBox = new JCheckBox("Synchronise with view", false);
         synchronizeButtonModel = synchroniseCheckBox.getModel();
         synchronizeButtonModel.addActionListener(new ActionListener() {
             @Override
@@ -411,7 +420,6 @@ public class SnapshotInfoToolView extends SmosToolView {
                 updateUI(smosView, snapshotId, false);
             }
         });
-
 
         final ToggleSnapshotModeAction toggleSnapshotModeAction = new ToggleSnapshotModeAction();
 

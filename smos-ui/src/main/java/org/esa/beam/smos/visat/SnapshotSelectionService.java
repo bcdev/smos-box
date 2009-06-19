@@ -1,5 +1,6 @@
 package org.esa.beam.smos.visat;
 
+import org.esa.beam.framework.datamodel.RasterDataNode;
 import org.esa.beam.framework.ui.product.ProductSceneView;
 
 import java.util.ArrayList;
@@ -8,21 +9,22 @@ import java.util.Map;
 import java.util.WeakHashMap;
 
 public class SnapshotSelectionService {
+
     private final SceneViewSelectionService smosViewSelectionService;
     private final List<SelectionListener> selectionListenerList;
-    private final Map<ProductSceneView, Long> snapshotIdMap;
+    private final Map<RasterDataNode, Long> snapshotIdMap;
     private final SceneViewSelectionService.SelectionListener smosViewSelectionListener;
 
     public SnapshotSelectionService(SceneViewSelectionService smosViewSelectionService) {
         this.smosViewSelectionService = smosViewSelectionService;
         this.selectionListenerList = new ArrayList<SelectionListener>();
-        this.snapshotIdMap = new WeakHashMap<ProductSceneView, Long>();
+        this.snapshotIdMap = new WeakHashMap<RasterDataNode, Long>();
         this.smosViewSelectionListener = new SceneViewSelectionService.SelectionListener() {
             @Override
             public void handleSceneViewSelectionChanged(ProductSceneView oldView, ProductSceneView newView) {
                 if (SmosBox.isL1cScienceSmosView(newView)) {
                     synchronized (snapshotIdMap) {
-                        final Long newId = snapshotIdMap.get(newView);
+                        final Long newId = snapshotIdMap.get(newView.getRaster());
                         if (newId != null) {
                             fireSelectionChange(newView, newId);
                         } else {
@@ -41,10 +43,10 @@ public class SnapshotSelectionService {
         smosViewSelectionService.removeSceneViewSelectionListener(smosViewSelectionListener);
     }
 
-    public final long getSelectedSnapshotId(ProductSceneView view) {
+    public final long getSelectedSnapshotId(RasterDataNode raster) {
         final Long id;
         synchronized (snapshotIdMap) {
-            id = snapshotIdMap.get(view);
+            id = snapshotIdMap.get(raster);
         }
         if (id != null) {
             return id;
@@ -52,15 +54,15 @@ public class SnapshotSelectionService {
         return -1;
     }
 
-    public void setSelectedSnapshotId(ProductSceneView view, long id) {
-        if (SmosBox.isL1cScienceSmosView(view)) {
+    public void setSelectedSnapshotId(RasterDataNode raster, long id) {
+        if (SmosBox.isL1cScienceSmosRaster(raster)) {
             if (id >= 0) {
                 synchronized (snapshotIdMap) {
-                    snapshotIdMap.put(view, id);
+                    snapshotIdMap.put(raster, id);
                 }
             } else {
                 synchronized (snapshotIdMap) {
-                    snapshotIdMap.remove(view);
+                    snapshotIdMap.remove(raster);
                 }
             }
         }
@@ -87,6 +89,7 @@ public class SnapshotSelectionService {
     }
 
     public interface SelectionListener {
+
         void handleSnapshotIdChanged(ProductSceneView newView, long newId);
     }
 }

@@ -82,22 +82,31 @@ public class SmosBox implements VisatPlugIn {
     public final void updateComponentTreeUI() {
     }
 
+    static boolean isL1cScienceSmosRaster(RasterDataNode raster) {
+        return getL1cScienceSmosFile(raster) != null;
+    }
+
     static boolean isL1cScienceSmosView(ProductSceneView smosView) {
         return getL1cScienceSmosFile(smosView) != null;
     }
 
-    static L1cScienceSmosFile getL1cScienceSmosFile(ProductSceneView smosView) {
-        if (smosView != null) {
-            RasterDataNode raster = smosView.getRaster();
-            if (raster != null) {
-                final ProductReader productReader = raster.getProductReader();
-                if (productReader instanceof SmosProductReader) {
-                    final SmosFile smosFile = ((SmosProductReader) productReader).getSmosFile();
-                    if (smosFile instanceof L1cScienceSmosFile) {
-                        return (L1cScienceSmosFile) smosFile;
-                    }
+    static L1cScienceSmosFile getL1cScienceSmosFile(RasterDataNode raster) {
+        if (raster != null) {
+            final ProductReader productReader = raster.getProductReader();
+            if (productReader instanceof SmosProductReader) {
+                final SmosFile smosFile = ((SmosProductReader) productReader).getSmosFile();
+                if (smosFile instanceof L1cScienceSmosFile) {
+                    return (L1cScienceSmosFile) smosFile;
                 }
             }
+        }
+
+        return null;
+    }
+
+    static L1cScienceSmosFile getL1cScienceSmosFile(ProductSceneView smosView) {
+        if (smosView != null) {
+            return getL1cScienceSmosFile(smosView.getRaster());
         }
         return null;
     }

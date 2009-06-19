@@ -57,7 +57,7 @@ public class BandInfoRegistry {
         // TODO: <unsignedByte-8 varName="Water_Fraction"/>
 
         // TODO: no-data values & typical ranges
-        registerBandInfo("Flags", "", 0.0, 1.0, null, 0, 65535,
+        registerBandInfo("Flags", "", 0.0, 1.0, 0, 0, 65535,
                          "L1c flags applicable to the pixel for this " +
                          "particular integration time.");
         registerBandInfo("BT_Value", "K", 0.0, 1.0, -999.0, 0.0, 350.0,
@@ -197,7 +197,7 @@ public class BandInfoRegistry {
         /*
          * Soil moisture confidence descriptors.
          */
-        registerBandInfo("Confidence_Flags", "", 0.0, 1.0, null, 0, 65535,
+        registerBandInfo("Confidence_Flags", "", 0.0, 1.0, 0, 0, 65535,
                          "Confidence flags.");
         registerBandInfo("GQX", "", 0.0, 1.0, 0, 0, 200,
                          "Global Quality Index.");
@@ -249,14 +249,14 @@ public class BandInfoRegistry {
         /*
         * Soil moisture science descriptors.
         */
-        registerBandInfo("Science_Flags", "", 0.0, 1.0, null, 0, 4294967295L,
+        registerBandInfo("Science_Flags", "", 0.0, 1.0, 0, 0, 4294967295L,
                          "Science flags.");
         registerBandInfo("N_Sky", "", 0.0, 1.0, 0, 0, 255,
                          "Strong Galactic Source.");
         /*
          * Soil moisture processing descriptors.
          */
-        registerBandInfo("Processing_Flags", "", 0.0, 1.0, null, 0, 65535,
+        registerBandInfo("Processing_Flags", "", 0.0, 1.0, 0, 0, 65535,
                          "Processing flags.");
         registerBandInfo("S_Tree_1", "", 0.0, 1.0, 0, 0, 20,
                          "Branches of decision tree stage 1.");
