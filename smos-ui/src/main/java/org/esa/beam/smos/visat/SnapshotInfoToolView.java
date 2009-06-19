@@ -12,6 +12,8 @@ import org.esa.beam.framework.datamodel.RasterDataNode;
 import org.esa.beam.framework.datamodel.VirtualBand;
 import org.esa.beam.framework.help.HelpSys;
 import org.esa.beam.framework.ui.product.ProductSceneView;
+import org.esa.beam.framework.ui.UIUtils;
+import org.esa.beam.framework.ui.tool.ToolButtonFactory;
 import org.esa.beam.glevel.TiledFileMultiLevelSource;
 import org.esa.beam.jai.ImageManager;
 import org.esa.beam.smos.visat.swing.SnapshotSelectorCombo;
@@ -43,23 +45,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-import javax.swing.BorderFactory;
-import javax.swing.ButtonGroup;
-import javax.swing.ButtonModel;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComponent;
-import javax.swing.JInternalFrame;
-import javax.swing.JLabel;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-import javax.swing.JProgressBar;
-import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.SwingWorker;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -117,15 +103,16 @@ public class SnapshotInfoToolView extends SmosToolView {
         final JPanel snapshotTablePanel = createSnapshotTablePanel();
         mainPanel.add(snapshotTablePanel, BorderLayout.CENTER);
 
-        JPanel viewSettingsPanel = createViewSettingsPanel();
+        final JPanel viewSettingsPanel = createViewSettingsPanel();
+        final AbstractButton helpButton = ToolButtonFactory.createButton(UIUtils.loadImageIcon("icons/Help24.gif"), false);
+        helpButton.setToolTipText("Help."); /*I18N*/
+        helpButton.setName("helpButton");
+        viewSettingsPanel.add(helpButton);
+
         mainPanel.add(viewSettingsPanel, BorderLayout.SOUTH);
 
-//        final AbstractButton helpButton = ToolButtonFactory.createButton(UIUtils.loadImageIcon("icons/Help24.gif"), false);
-//        helpButton.setToolTipText("Help."); /*I18N*/
-//        helpButton.setName("helpButton");
-
         if (getDescriptor().getHelpId() != null) {
-//            HelpSys.enableHelpOnButton(helpButton, getDescriptor().getHelpId());
+            HelpSys.enableHelpOnButton(helpButton, getDescriptor().getHelpId());
             HelpSys.enableHelpKey(mainPanel, getDescriptor().getHelpId());
         }
 
