@@ -105,7 +105,7 @@ public class GridCellExport {
                 north = Double.valueOf(args[1]);
                 south = Double.valueOf(args[2]);
                 if (north <= south) {
-                    System.err.println("Value for north can not be smaller than value for south.");
+                    System.err.println("The specified value for north can not be smaller than value for south.");
                     System.err.println("north="+north);
                     System.err.println("south="+south);
                     printHelp();
@@ -113,7 +113,7 @@ public class GridCellExport {
                 east = Double.valueOf(args[3]);
                 west = Double.valueOf(args[4]);
                 if (east <= west) {
-                    System.err.println("Value for east can not be smaller than value for west.");
+                    System.err.println("The specified value for east can not be smaller than value for west.");
                     System.err.println("east="+east);
                     System.err.println("west="+west);
                     printHelp();

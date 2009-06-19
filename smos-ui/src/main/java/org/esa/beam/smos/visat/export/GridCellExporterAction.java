@@ -141,6 +141,16 @@ public class GridCellExporterAction extends ExecCommand  {
                     return;
                 }
             }
+            if (model.north <= model.south) {
+                String message = "The specified value for north can not be smaller than value for south.";
+                JOptionPane.showConfirmDialog(getJDialog(), message, getTitle(), JOptionPane.OK_OPTION);
+                return;
+            }
+            if (model.east <= model.west) {
+                String message = "The specified value for east can not be smaller than value for west.";
+                JOptionPane.showConfirmDialog(getJDialog(), message, getTitle(), JOptionPane.OK_OPTION);
+                return;
+            }
             PrintWriter printWriter;
             try {
                 printWriter = new PrintWriter(model.output);
