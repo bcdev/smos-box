@@ -5,8 +5,8 @@
 <toc version="2.0" categoryclosedimage="folder" categoryopenimage="folder" topicimage="doc">
 
     <tocitem text="SMOS Box" target="smosIntroduction">
-        <tocitem text="SMOS Introduction" target="smosIntroduction"/>
-        <tocitem text="SMOS Data Model" target="smosDataModel"/>
-        <tocitem text="SMOS Tools" target="smosTools"/>
+        <tocitem text="Introduction" target="smosIntroduction"/>
+        <tocitem text="SMOS Data in BEAM" target="smosDataModel"/>
+        <tocitem text="Tools" target="smosTools"/>
     </tocitem>
 </toc>
