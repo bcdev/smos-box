@@ -1,6 +1,6 @@
 <html>
 <head>
-    <title>SMOS Tools</title>
+    <title>SMOS-Box Tools</title>
     <link rel="stylesheet" href="../../style.css">
 </head>
 
@@ -9,126 +9,26 @@
 <table class="header">
     <tr class="header">
         <td class="header">&nbsp;
-            SMOS Tools
+            SMOS-Box Tools
         </td>
         <td class="header" align="right"><a href="../../index.html"><img src="../images/BeamHeader.jpg" border=0></a>
         </td>
     </tr>
 </table>
 
-<h3>SMOS Tools</h3>
+<h3>SMOS-Box Tools</h3>
 
 <h4>Introduction</h4>
 
 <p>
-    The BEAM SMOS-Box project has been brought into life in order to support users of data
-    acquired by ESA's Soil Moisture and Ocean Salinity (SMOS) mission.
+    Readers not familiar with the SMOS-Box software might read the <a href="Introduction.html">Introduction
+    to the SMOS-Box</a> first.
 </p>
-
-<p>
-    This document provides the online help for Version 0.5 of the SMOS-Box, which is preliminary software released and
-    distributed for the purpose of obtaining user feedback and additional user requirements at an early stage of
-    development.
-</p>
-
-<h4>Capabilities</h4>
-
-<p>
-    Version 0.5 of the SMOS-Box is capable of reading SMOS user data products complying with Schemas Release
-    2009-02-10_v04-03-00:
-</p>
-
-<ul>
-    <li>
-        Level-1c Browse Full and Dual Polarisation products. All measurements contained in the
-        <strong>BT_Data_Type</strong> record are converted into BEAM bands.
-    </li>
-    <li>
-        Level-1c Science Full and Dual Polarisation products. All measurements contained in the
-        <strong>BT_Data_Type</strong> record are converted into BEAM bands. For each band, the user can choose whether
-        the band data should be provided by a snapshot or a simulated browse product which is computed on-the-fly. The
-        latter is the default.
-    </li>
-    <li>
-        Level-2 Ocean Salinity UDP products. All measurements provided in the <strong>Grid_Point_Data_Type</strong>
-        record and the enclosed record types are converted into BEAM bands.
-    </li>
-    <li>
-        Level-2 Surface Moisture UDP products. All measurements provided in the <strong>Grid_Point_Data_Type</strong>
-        record and the enclosed record types are converted into BEAM bands.
-    </li>
-</ul>
-
-<p>
-    Version 0.5 of the SMOS-Box also includes four SMOS-specific tools:
-</p>
-
-<ul>
-    <li>
-        Grid point brightness temperature data table: All measurements made for the grid point selected by either
-        the mouse pointer or a selected pin are displayed in a table.
-    </li>
-    <li>
-        Grid point brightness temperature flag matrix diagram. All flags associated with the measurements made for the
-        grid point selected by either the mouse pointer or a selected pin are displayed in a flag matrix.
-    </li>
-    <li>
-        Grid point brightness temperature chart. All brightness temperatures measured for the grid point selected by
-        either the mouse pointer or a selected pin are displayed in a chart.
-    </li>
-    <li>
-        Snapshot information tool. Information for all snapshots contained in a Level-1c Science product can be
-        browsed with a slider. When synchronised with the current view, the slider can be used to select a snapshot
-        providing the band data for the view.
-    </li>
-</ul>
-
-<p>
-    The tools and their usage are described in detail further below.
-</p>
-
-<h4>Limitations</h4>
-
-<p>
-    Version 0.5 of the SMOS-Box has the following limitations:
-</p>
-
-<ul>
-    <li>
-        All SMOS data products are represented as global products covering the whole surface of the Earth. Therefore
-        SMOS products do not have a geographical boundary.
-    </li>
-    <li>
-        Due to the representation of SMOS products as a global product, it is not possible to draw lines or shapes
-        crossing the anti-meridian.
-    </li>
-    <li>
-        Exporting a displayed SMOS image results in an out-of-memory error. The VISAT application must be restarted
-        in order to recover from this error.
-    </li>
-    <li>
-        Some map projections do not work with SMOS products. Those projections which do work need too much time in
-        order to complete the calculations.
-    </li>
-    <li>
-        Exporting a SMOS product as BEAM-DIMAP, HDF5 or GeoTIFF does not work.
-    </li>
-    <li>
-        Statistics, scatter plots, histograms and profile plots use image pixel data rather than SMOS grid point
-        data.
-    </li>
-    <li>
-        The brightness temperature measurements are not transformed into the earth-fixed frame yet.
-    </li>
-    <li>
-        The graphical user interface might occasionally be unresponsive while working with SMOS products.
-    </li>
-</ul>
 
 <h4>Usage</h4>
 
 <p>
-    Version 0.5 of the SMOS-Box is comprised of four tools:
+    Version 1.0 of the SMOS-Box is comprised of four tools:
     <img src="images/SmosGridPoint16.png" alt="Grid point data table icon"/>
     the grid point data table,
     <img src="images/SmosFlags16.png" alt="Grid point flag matrix icon"/>
