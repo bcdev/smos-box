@@ -18,6 +18,42 @@
 
 <h3>SMOS Grid Cell Export</h3>
 
+<h2>Export tool from within VISAT</h2>
+
+<p>
+    The grid cell export tool allows to write the data of a selection of grid cells as
+    into a CSV (character separated values) file. The values are separated by a semicolon.
+</p>
+
+<p>
+    <img src="images/GridCellExportTool.png" alt="grid cell export tool"/>
+</p>
+
+<p>
+    <b>Input:</b> The selected product within VISAT can be for the export. 
+    Alternatively the export tool can do an directory scan to export data from multiple SMOS products.
+    This directory scan can be either flat, where only products that reside in the selected directory are found,
+    or recursive, where also all sub directories are searched for products.
+</p>
+
+<p>
+    <b>Region of interest:</b> There are three different possibilities to specify for which grid cells data should be exported.
+    <ol>
+      <it>- A ROI containing a figure which can defined on any band.<br/></it>
+      <it>- The grid cells from all selected pin of the currently selected product.<br/></it>
+      <it>- A specified longitude/latitude box.<br/></it>
+    </ol>
+</p>
+
+<p>
+    <b>Output:</b> The CSV file to which the data is written. 
+    Please be aware that the amount of data can be huge, if the region of interest contains
+    many grid cells.  
+</p>
+
+
+<h2>Command line export tool</h2>
+
 <hr>
 </body>
 </html>
