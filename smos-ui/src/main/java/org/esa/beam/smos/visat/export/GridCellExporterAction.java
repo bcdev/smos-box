@@ -423,7 +423,7 @@ public class GridCellExporterAction extends ExecCommand  {
             JPanel panel = new JPanel(new FlowLayout());
             panel.add(new JLabel(displayName));
             panel.add(textEditor.createEditorComponent(vc.getDescriptor(name), bindingContext));
-            panel.add(new JLabel("°"));
+            panel.add(new JLabel("\u00b0"));
             return panel;
         }
         
