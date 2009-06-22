@@ -94,7 +94,9 @@ public class GridCellExporterAction extends ExecCommand  {
 
     @Override
     public void actionPerformed(final CommandEvent event) {
-        openDialog(VisatApp.getApp(), event.getCommand().getHelpId());
+        openDialog(VisatApp.getApp(), "smosGridCellExport");
+//TODO mz - 22090622 check why teh command has no helpId        
+//        openDialog(VisatApp.getApp(), event.getCommand().getHelpId());
     }
     
     private void openDialog(VisatApp visatApp, String helpId) {
