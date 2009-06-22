@@ -102,7 +102,7 @@ public class GridCellExport {
         }
         
         private void printHelp() {
-            System.err.println("Usage: [-box <west> <east> <south> <north>|-point lon lat][-o output] smosProducts...");
+            System.err.println("Usage: [-box <lon1> <lon2> <lat1> <lat2>|-point lon lat][-o output] smosProducts...");
             System.exit(1);
         }
         
@@ -119,27 +119,27 @@ public class GridCellExport {
                         System.err.println("Only one of the parameter '-box' or '-point' can specified.");
                         printHelp();
                     }
-                    double west = Double.valueOf(args[i+1]);
-                    rangeCheck(west, "west", -180, 180);
-                    double east = Double.valueOf(args[i+2]);
-                    rangeCheck(east, "east", -180, 180);
-                    if (east <= west) {
-                        System.err.println("The specified value for east can not be smaller than value for west.");
-                        System.err.println("east="+east);
-                        System.err.println("west="+west);
+                    double lon1 = Double.valueOf(args[i+1]);
+                    rangeCheck(lon1, "lon1", -180, 180);
+                    double lon2 = Double.valueOf(args[i+2]);
+                    rangeCheck(lon2, "lon2", -180, 180);
+                    if (lon2 <= lon1) {
+                        System.err.println("The specified value for lon2 can not be smaller than value for lon1.");
+                        System.err.println("lon2="+lon2);
+                        System.err.println("lon1="+lon1);
                         printHelp();
                     }
-                    double south = Double.valueOf(args[i+3]);
-                    rangeCheck(south, "south", -90, 90);
-                    double north = Double.valueOf(args[i+4]);
-                    rangeCheck(north, "north", -90, 90);
-                    if (north <= south) {
-                        System.err.println("The specified value for north can not be smaller than value for south.");
-                        System.err.println("north="+north);
-                        System.err.println("south="+south);
+                    double lat1 = Double.valueOf(args[i+3]);
+                    rangeCheck(lat1, "lat1", -90, 90);
+                    double lat2 = Double.valueOf(args[i+4]);
+                    rangeCheck(lat2, "lat2", -90, 90);
+                    if (lat2 <= lat1) {
+                        System.err.println("The specified value for lat2 can not be smaller than value for lat1.");
+                        System.err.println("lat2="+lat2);
+                        System.err.println("lat1="+lat1);
                         printHelp();
                     }
-                    area = computeBoxArea(west, east, south, north);
+                    area = computeBoxArea(lon1, lon2, lat1, lat2);
                     i += 4;
                 } else if (args[i].equals("-point")) {
                     if (args.length < i+4) {
@@ -183,11 +183,11 @@ public class GridCellExport {
             }
         }
         
-        private static Area computeBoxArea(double west, double east, double south, double north) {
-            final double x = west;
-            final double y = south;
-            final double w = east - west;
-            final double h = north - south;
+        private static Area computeBoxArea(double lon1, double lon2, double lat1, double lat2) {
+            final double x = lon1;
+            final double y = lat1;
+            final double w = lon2 - lon1;
+            final double h = lat2 - lat1;
             return new Area(new Rectangle2D.Double(x, y, w, h));
         }
         
