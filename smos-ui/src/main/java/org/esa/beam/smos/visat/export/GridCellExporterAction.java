@@ -404,24 +404,26 @@ public class GridCellExporterAction extends ExecCommand  {
             JPanel panel = new JPanel(layout);
             JLabel emptyLabel = new JLabel(" ");
             panel.add(emptyLabel);
-            panel.add(createLatLonInputElement("north", "North:"));
+            panel.add(createLatLonInputElement("north", "North:", 4));
             panel.add(emptyLabel);
             
-            panel.add(createLatLonInputElement("west", "West:"));
+            panel.add(createLatLonInputElement("west", "West:", 5));
             panel.add(emptyLabel);
-            panel.add(createLatLonInputElement("east", "East:"));
+            panel.add(createLatLonInputElement("east", "East:", 5));
             
             panel.add(emptyLabel);
-            panel.add(createLatLonInputElement("south", "South:"));
+            panel.add(createLatLonInputElement("south", "South:", 4));
             panel.add(emptyLabel);
             return panel;
         }
         
-        private Component createLatLonInputElement(String name, String displayName) {
+        private Component createLatLonInputElement(String name, String displayName, int numColumns) {
             ValueEditor textEditor = ValueEditorRegistry.getInstance().getValueEditor(TextFieldEditor.class.getName());
             JPanel panel = new JPanel(new FlowLayout());
             panel.add(new JLabel(displayName));
-            panel.add(textEditor.createEditorComponent(vc.getDescriptor(name), bindingContext));
+            JTextField editor = (JTextField) textEditor.createEditorComponent(vc.getDescriptor(name), bindingContext);
+            editor.setColumns(numColumns);
+            panel.add(editor);
             panel.add(new JLabel("\u00b0"));
             return panel;
         }
@@ -435,7 +437,7 @@ public class GridCellExporterAction extends ExecCommand  {
 
             JPanel panel = new JPanel(layout);
             panel.setBorder(BorderFactory.createTitledBorder("Output"));
-            panel.add(new JLabel("CSV-File"));
+            panel.add(new JLabel("CSV-File:"));
             ValueEditor fileEditor = ValueEditorRegistry.getInstance().getValueEditor(FileEditor.class.getName());
             panel.add(fileEditor.createEditorComponent(vc.getDescriptor("output"), bindingContext));
             setFileEditorWidth("output");
