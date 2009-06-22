@@ -18,12 +18,12 @@
 
 <h3>SMOS Grid Cell Export</h3>
 
-<h2>Export tool from within VISAT</h2>
-
 <p>
-    The grid cell export tool allows to write the data of a selection of grid cells as
+    The grid cell export tool writes the data of a selection of grid cells
     into a CSV (character separated values) file. The values are separated by a semicolon.
 </p>
+
+<h2>Export tool from within VISAT</h2>
 
 <p>
     <img src="images/GridCellExportTool.png" alt="grid cell export tool"/>
@@ -54,6 +54,46 @@
 
 <h2>Command line export tool</h2>
 
-<hr>
+<p>
+    The command line tool for grid cell exporting can executing using the "export-grid-cells.sh" or "export-grid-cells.bat" which resides
+    in the BEAM_HOME/bin directory. 
+</p>
+
+<p>
+    The grid cells for which data should be exported can be specified 
+    by defining a point with its longitude and latitude:
+    <br/>
+    <code>
+      export-grid-cells.sh -point 120 30 smosproduct.HDR 
+    </code>
+    <br/>
+    <br/>
+    Alternatively a longitude/latidue box can be given:
+    <br/>
+    <code>
+      export-grid-cells.sh -box -120 -100 30 40 smosproduct.HDR 
+    </code>
+    <br/>
+    <br/> 
+    Only one these both options can be used.
+</p>
+<br/>
+<p>
+    The file to which the data should be written can specified using the <code>-o</code parameter:
+    option. Otherwise stdout is used.
+    <br/>
+    <code>
+      export-grid-cells.sh -point 120 30 -o grid_cell_data.csv smosproduct.HDR 
+    </code>
+</p>
+
+<p>
+    Multiple SMOS products from which data should be exported can be specified.
+    Then usual shell pattern can be used to specify multiple files:
+    <br/>
+    <code>
+      export-grid-cells.sh -point 120 30 -o grid_cell_data.csv SMOS_archive/SM_*/SM*.HDR 
+    </code>   
+</p>
 </body>
 </html>
