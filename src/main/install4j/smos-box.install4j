@@ -143,12 +143,27 @@ if (smosModuleFiles != null &amp;&amp; smosModuleFiles.length &gt; 0) {
     Util.showMessage(sb.toString());
 
     sb = new StringBuilder();
+    
+    Deque&lt;File&gt; toDelete = new ArrayDeque&lt;File&gt;(); 
     for (int i = 0; i &lt; smosModuleFiles.length; i++) {
         File file = smosModuleFiles[i];
-        if (!file.delete()) {
-            sb.append("  " + file.getName() + "\n");
+        toDelete.add(file);
+    }
+    while (!toDelete.isEmpty()) {
+        File file = toDelete.peek();
+        if (file.isDirectory()) {
+            File[] directoryContent = file.listFiles();
+            for (File f : directoryContent) {
+                toDelete.addFirst(f);
+            }
+        } else {
+            toDelete.pop();
+            if (!file.delete()) {
+                sb.append("  " + file.getName() + "\n");
+            }
         }
     }
+    
     if (sb.length() &gt; 0) {
         Util.showMessage("Following existing BEAM SMOS-Box modules could not be removed:\n"
                           + sb + "Please remove them manually from the BEAM modules directory at\n"
