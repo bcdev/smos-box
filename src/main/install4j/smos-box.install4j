@@ -153,11 +153,18 @@ if (smosModuleFiles != null &amp;&amp; smosModuleFiles.length &gt; 0) {
         File file = toDelete.peek();
         if (file.isDirectory()) {
             File[] directoryContent = file.listFiles();
-            for (File f : directoryContent) {
-                toDelete.addFirst(f);
+            if (directoryContent == null || directoryContent.length == 0) {
+                toDelete.removeFirst();
+                if (!file.delete()) {
+                    sb.append("  " + file.getName() + "\n");
+                }    
+            } else {
+                for (File f : directoryContent) {
+                    toDelete.addFirst(f);
+                }
             }
         } else {
-            toDelete.pop();
+            toDelete.removeFirst();
             if (!file.delete()) {
                 sb.append("  " + file.getName() + "\n");
             }
