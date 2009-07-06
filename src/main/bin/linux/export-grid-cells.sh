@@ -11,7 +11,7 @@ if [ -z "$BEAM4_HOME" ]; then
     exit 2
 fi
 
-. "$BEAM4_HOME/bin/detect_java_smos.sh"
+. "$BEAM4_HOME/bin/detect_java.sh"
 
 "$app_java_home/bin/java" \
     -Xmx1024M \

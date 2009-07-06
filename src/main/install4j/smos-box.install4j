@@ -366,7 +366,6 @@ return;</preActivation>
       <excludedBeans />
       <overriddenPrincipalLanguage id="en" customLocalizationFile="" />
       <exclude>
-        <entry location="bin/detect_java_smos.sh" fileType="regular" />
         <entry location="bin/export-grid-cells.command" fileType="regular" />
         <entry location="bin/export-grid-cells.sh" fileType="regular" />
       </exclude>
@@ -378,7 +377,6 @@ return;</preActivation>
       <excludedBeans />
       <overriddenPrincipalLanguage id="en" customLocalizationFile="" />
       <exclude>
-        <entry location="bin/detect_java_smos.sh" fileType="regular" />
         <entry location="bin/export-grid-cells.sh" fileType="regular" />
         <entry location="bin/export-grid-cells.bat" fileType="regular" />
       </exclude>
