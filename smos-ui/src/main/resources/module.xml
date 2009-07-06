@@ -1,7 +1,7 @@
 <module>
     <manifestVersion>1.0.0</manifestVersion>
     <symbolicName>smos-ui</symbolicName>
-    <version>1.0</version>
+    <version>1.0.1</version>
     <name>SMOS UI Components</name>
     <description>
         This module provides several UI components suited for visual
@@ -18,6 +18,9 @@
     <licenseUrl>http://www.gnu.org/licenses/gpl.html</licenseUrl>
 
     <changelog><![CDATA[
+       <p> Changes in 1.0.1:<br>
+        [SBOS-19] Rebuild SMOS-Box for BEAM 4.6.1<br>
+       </p> 
        <p>Changes from version 0.5 to 1.0:<br/>
         [SBOX-7] Show radiometric accuracy as error bars<br/>
         [SBOX-6] Fix range for L1c chart view<br/>

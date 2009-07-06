@@ -3,7 +3,7 @@
 
     <symbolicName>smos-dgg</symbolicName>
     <name>SMOS Discrete Global Grid</name>
-    <version>1.0</version>
+    <version>1.0.1</version>
     <description>
         This module provides the mapping between the SMOS Discrete Global
         Grid and VISAT image pixels.
@@ -18,7 +18,9 @@
 
     <changelog>
         <![CDATA[
-
+        <p> Changes in 1.0.1:<br>
+        [SBOS-19] Rebuild SMOS-Box for BEAM 4.6.1<br>
+       </p> 
         ]]>
     </changelog>
 

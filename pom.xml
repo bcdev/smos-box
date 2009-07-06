@@ -7,7 +7,7 @@
     <name>SMOS-Box</name>
     <groupId>org.esa.beam.smos</groupId>
     <artifactId>smos-box</artifactId>
-    <version>1.0</version>
+    <version>1.0.1</version>
 
     <packaging>pom</packaging>
 
@@ -64,7 +64,6 @@
         <module>smos-reader</module>
         <module>smos-ui</module>
         <module>smos-dgg</module>
-        <!--<module>smos-worldmap</module>-->
         <!--<module>smos-header</module>-->
     </modules>
 
