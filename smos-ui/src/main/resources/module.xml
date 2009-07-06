@@ -19,7 +19,7 @@
 
     <changelog><![CDATA[
        <p> Changes in 1.0.1:<br>
-        [SBOS-19] Rebuild SMOS-Box for BEAM 4.6.1<br>
+        [SBOX-19] Rebuild SMOS-Box for BEAM 4.6.1<br>
        </p> 
        <p>Changes from version 0.5 to 1.0:<br/>
         [SBOX-7] Show radiometric accuracy as error bars<br/>
