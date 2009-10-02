@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- XML schema for smos product -->
+<!--  v 7.0 22/01/2008 -->
+<!-- www.indra.es -->
+<!-- teledeteccion@indra.es -->
+<!-- Copyright (c) 2006 Indra Espacio -->
+<xs:schema xmlns="http://213.170.46.150/smos/schemas" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://213.170.46.150/smos/schemas" elementFormDefault="qualified" attributeFormDefault="unqualified" version="0007">
+	<xs:include schemaLocation="../common/Basic_Types_0013.xsd"/>
+	<xs:complexType name="FTT_Generation_Type">
+		<xs:sequence>
+			<xs:element name="Number_of_scenes" type="integer_04d_Type" default="0000"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="Specific_Product_Report_Type">
+		<xs:sequence>
+			<xs:element name="FTT_Generation" type="FTT_Generation_Type"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- binX schema for smos product -->
+<!-- v 1.0 30/03/2006 -->
+<!-- www.indra.es -->
+<!-- teledeteccion@indra.es -->
+<!-- Copyright (c) 2006 Indra Espacio -->
+<binx xmlns="http://www.edikt.org/binx/2003/06/binx" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.edikt.org/binx/2003/06/binx binx.xsd">
+	<definitions>
+		<defineType typeName="UTC_Type">
+			<struct>
+				<integer-32 varName="Days"/>
+				<unsignedInteger-32 varName="Seconds"/>
+				<unsignedInteger-32 varName="Microseconds"/>
+			</struct>
+		</defineType>
+		<defineType typeName="VTEC_Data_Type">
+			<struct>
+				<short-16 varName="VTEC_value"/>
+			</struct>
+		</defineType>	
+		<defineType typeName="VTEC_Record_Type">
+			<struct>
+				<float-32 varName="Latitude"/>
+				<float-32 varName="Longitude_start"/>
+				<float-32 varName="Longitude_stop"/>
+				<float-32 varName="Delta_Longitude"/>
+				<float-32 varName="Height"/>
+				<arrayVariable varName="VTEC_Data">
+					<sizeRef>
+						<short-16 varName="VTEC_Record_Elements"/>
+					</sizeRef>
+					<useType typeName="VTEC_Data_Type"/>
+					<dim/>
+				</arrayVariable>
+			</struct>
+		</defineType>	
+		<defineType typeName="VTEC_Map_Type">
+			<struct>
+				<short-16 varName="Map_Number"/>
+				<useType typeName="UTC_Type" varName="Epoch_Current_Map"/>
+				<short-16 varName="VTEC_Record_Counter"/>
+				<arrayVariable varName="VTEC_Record">
+					<sizeRef>
+						<short-16 varName="VTEC_Record_Counter"/>
+					</sizeRef>
+					<useType typeName="VTEC_Record_Type"/>
+					<dim/>
+				</arrayVariable>
+			</struct>
+		</defineType>	
+		<defineType typeName="Data_Block_Type">
+			<struct>
+				<arrayVariable varName="VTEC_Info" byteOrder="littleEndian">
+					<sizeRef>
+						<unsignedInteger-32 varName="VTEC_Maps_Counter"/>
+					</sizeRef>
+					<useType typeName="VTEC_Map_Type"/>
+					<dim/>
+				</arrayVariable>
+			</struct>
+		</defineType>
+	</definitions>
+	<dataset src=" ">
+		<useType typeName="Data_Block_Type" varName="Data_Block"/>
+	</dataset>
+</binx>

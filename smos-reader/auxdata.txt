@@ -28,8 +28,8 @@ X SM_xxxx_AUX_DFFLAI_ Leaf Area Index derived from MODIS Data
   SM_xxxx_AUX_DGGTLV_ Current Low Vegetation Optical Thickness
   SM_xxxx_AUX_DGGXYZ_ Earth Centered Earth Fixed Cartesian coord.
   SM_xxxx_AUX_DISTAN_ Distance to the coast and monthly Sea/Ice Flag
-  SM_xxxx_AUX_ECMWF__ Leaf Area Index derived from 36 ECOCLIMAP
-X SM_xxxx_AUX_ECOLAI_ ECMWF data on the ISEA 4-9 DGG
+  SM_xxxx_AUX_ECMWF__ ECMWF data on the ISEA 4-9 DGG
+X SM_xxxx_AUX_ECOLAI_ Leaf Area Index derived from 36 ECOCLIMAP
   SM_xxxx_AUX_FAIL___ Failing Components Table
   SM_xxxx_AUX_FLATT__ Flat Target Transformation Measurements
   SM_xxxx_AUX_FLTSEA_ Physical Constants needed by Flat Sea Model

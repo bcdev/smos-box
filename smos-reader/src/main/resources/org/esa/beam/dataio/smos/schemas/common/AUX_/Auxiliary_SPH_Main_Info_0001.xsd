@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- XML schema for smos product -->
+<!--  v 1.0 24/02/2006 -->
+<!-- www.indra.es -->
+<!-- teledeteccion@indra.es -->
+<!-- Copyright (c) 2006 Indra Espacio -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://213.170.46.150/smos/schemas" targetNamespace="http://213.170.46.150/smos/schemas" elementFormDefault="qualified" attributeFormDefault="unqualified" version="0001">
+	<xs:include schemaLocation="../common/Basic_Types_0001.xsd"/>
+	<xs:complexType name="Time_Info_Type">
+		<xs:sequence>
+			<xs:element name="Validity_Start" type="string_date_30_Type" default="UTC=2007-01-01T00:00:00.000000"/>
+			<xs:element name="Validity_Stop" type="string_date_30_Type" default="UTC=2007-01-01T00:00:00.000000"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- XML schema for smos product -->
+<!--  v 9.0 05/09/2008 -->
+<!-- www.indra.es -->
+<!-- teledeteccion@indra.es -->
+<!-- Copyright (c) 2006 Indra Espacio -->
+<xs:schema xmlns="http://213.170.46.150/smos/schemas" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://213.170.46.150/smos/schemas" elementFormDefault="qualified" attributeFormDefault="unqualified" version="0009">
+	<xs:include schemaLocation="../common/Basic_Types_0015.xsd"/>
+	<xs:complexType name="L1c_pixel_info_Type">
+		<xs:sequence>
+			<xs:element name="Ratio_of_pixels_in_browse" type="float_03p3f_Type" default="000.000"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="Specific_Product_Report_Type">
+		<xs:sequence>
+			<xs:element name="L1c_pixel_info" type="L1c_pixel_info_Type"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

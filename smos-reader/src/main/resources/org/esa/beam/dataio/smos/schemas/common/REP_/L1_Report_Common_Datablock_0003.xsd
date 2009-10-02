@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- XML schema for smos product -->
+<!--  v 0003 05/09/2008 -->
+<!-- www.indra.es -->
+<!-- teledeteccion@indra.es -->
+<!-- Copyright (c) 2006 Indra Espacio -->
+<xs:schema xmlns="http://213.170.46.150/smos/schemas" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://213.170.46.150/smos/schemas" elementFormDefault="qualified" attributeFormDefault="unqualified" version="0003">
+	<xs:include schemaLocation="../../common/common/Basic_Types_0015.xsd"/>
+	<xs:simpleType name="string_Warning_Name_Type">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="INCOMPLETE_PRODUCT|DEFAULT_VALUE_USED|NO_OPTIONAL_INPUTS|DIVISION_BY_ZERO|DATA_CORRUPTED|NO_CONVERGENCE|ERROR_FROM_EE_CFI_LIB|ERROR_FROM_XML_RW_API|NO_PRODUCT_GENERATED|UNDEFINED_WARNING"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="Processing_Warning_Type">
+		<xs:sequence>
+			<xs:element name="Warning_Name" type="string_Warning_Name_Type" default="UNDEFINED_WARNING"/>
+			<xs:element name="Warning_Description" type="string_max_200_Type" default="x"/>
+			<xs:element name="Warning_Log_identifier" type="string_12_Type" default="000000000000"/>
+			<xs:element name="Possible_Corruption" type="integer_01d_Flag_Type" default="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="List_Processing_Warnings_Type">
+		<xs:sequence>
+			<xs:element name="Processing_Warning" type="Processing_Warning_Type" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="count" type="integer_d_Type" default="0"/>
+	</xs:complexType>
+	<xs:simpleType name="string_Error_Name_Type">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="MISSING_CONFIGURATION_FILE|MISSING_MANDATORY_INPUT|MISSING_CONSTANTS|FATAL_ERROR_FROM_EE_CFI_LIB|FATAL_ERROR_FROM_XML_RW_API|FATAL_ERROR_ALLOCATING_MEMORY|UNDEFINED_ERROR"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="string_System_Reaction_Type">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="Processing Continued|Processing Breakdown|Cancelled by System"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="Processing_Error_Type">
+		<xs:sequence>
+			<xs:element name="Error_Name" type="string_Error_Name_Type" default="UNDEFINED_ERROR"/>
+			<xs:element name="Error_Description" type="string_max_200_Type" default="x"/>
+			<xs:element name="Error_Log_identifier" type="string_12_Type" default="000000000000"/>
+			<xs:element name="System_Reaction" type="string_System_Reaction_Type" default="Processing Continued"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="List_Processing_Errors_Type">
+		<xs:sequence>
+			<xs:element name="Processing_Error" type="Processing_Error_Type" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="count" type="integer_d_Type" default="0"/>
+	</xs:complexType>
+	<xs:complexType name="Input_File_Type">
+		<xs:sequence>
+			<xs:element name="Filename" type="string_Type" default="XX_XXXX_XXXXXXXXXX_XXXXXXXXTXXXXXX_XXXXXXXXTXXXXXX_XXX_XXX_X"/>
+			<xs:element name="File_Type" type="string_File_Type_DBL_REP_Type" default="Constants"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="List_Input_Files_Type">
+		<xs:sequence>
+			<xs:element name="Input_File" type="Input_File_Type" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="count" type="integer_d_Type" default="0"/>
+	</xs:complexType>
+	<xs:simpleType name="string_Product_Result_Type">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="SUCCESSFUL|DEGRADED|FAILURE|CANCELLED"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="Processing_Info_Type">
+		<xs:sequence>
+			<xs:element name="Processing_Start_Time" type="string_date_30_Type" default="UTC=0000-00-00T00:00:00.000000"/>
+			<xs:element name="Processing_Stop_Time" type="string_date_30_Type" default="UTC=0000-00-00T00:00:00.000000"/>
+			<xs:element name="Job_Order" type="string_File_Name_60_Type" default="SM_TEST_MPL_JOBORD_XXXXXXXXTXXXXXX_XXXXXXXXTXXXXXX_001_001_0"/>
+			<xs:element name="List_of_Input_Files" type="List_Input_Files_Type"/>
+			<xs:element name="List_of_Processing_Errors" type="List_Processing_Errors_Type"/>
+			<xs:element name="List_of_Processing_Warnings" type="List_Processing_Warnings_Type"/>
+			<xs:element name="Product_Result" type="string_Product_Result_Type" default="SUCCESSFUL"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="Product_Element_Type">
+		<xs:sequence>
+			<xs:element name="Product_Name" type="string_File_Name_60_Type" default="XX_XXXX_XXXXXXXXXX_XXXXXXXXXXXXXXX_XXXXXXXXXXXXXXX_XXX_XXX_X"/>
+			<xs:element name="Product_Start" type="string_date_30_Type" default="UTC=0000-00-00T00:00:00.000000"/>
+			<xs:element name="Product_Stop" type="string_date_30_Type" default="UTC=0000-00-00T00:00:00.000000"/>
+			<xs:element name="Product_Creation_Date" type="string_date_30_Type" default="UTC=0000-00-00T00:00:00.000000"/>
+			<xs:element name="PID" type="string_12_Type" default="000000000000"/>
+			<xs:element name="CRC" type="string_Type" default="0000000"/>
+			<xs:element name="PCD" type="string_Product_Confidence_Type" default="NOMINAL"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

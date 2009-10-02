@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- XML schema for smos product -->
+<!--  v 4.0 28/05/2007 -->
+<!-- www.indra.es -->
+<!-- teledeteccion@indra.es -->
+<!-- Copyright (c) 2006 Indra Espacio -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://213.170.46.150/smos/schemas" targetNamespace="http://213.170.46.150/smos/schemas" elementFormDefault="qualified" attributeFormDefault="unqualified" version="0004">
+	<xs:include schemaLocation="../common/Basic_Types_0011.xsd"/>
+	<xs:complexType name="Temp_pixel_out_of_range_Type">
+		<xs:sequence>
+			<xs:element name="Grid_Point_ID" type="integer_08d_Type" default="00000000"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="List_Temp_pixel_out_of_ranges_Type">
+		<xs:sequence>
+			<xs:element name="Temp_pixel_out_of_range" type="Temp_pixel_out_of_range_Type" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="count" type="unsigned_Integer_hd_Type" default="0"/>
+	</xs:complexType>
+	<xs:complexType name="L1c_pixel_info_Type">
+		<xs:sequence>
+			<xs:element name="List_of_Temp_pixel_out_of_ranges" type="List_Temp_pixel_out_of_ranges_Type"/>
+			<xs:element name="Ratio_of_pixels_in_browse" type="float_03p3f_Type" default="000.000"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="Specific_Product_Report_Type">
+		<xs:sequence>
+			<xs:element name="L1c_pixel_info" type="L1c_pixel_info_Type"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

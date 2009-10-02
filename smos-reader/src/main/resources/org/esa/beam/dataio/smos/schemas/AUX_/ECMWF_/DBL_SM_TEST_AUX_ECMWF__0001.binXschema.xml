@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- binX schema for smos product -->
+<!-- v 1.0 30/03/2006 -->
+<!-- www.indra.es -->
+<!-- teledeteccion@indra.es -->
+<!-- Copyright (c) 2006 Indra Espacio -->
+<binx xmlns="http://www.edikt.org/binx/2003/06/binx" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.edikt.org/binx/2003/06/binx binx.xsd">
+	<definitions>
+		<defineType typeName="WEF_Data_Type">
+			<struct>
+				<float-32 varName="WEF_Value"/>
+			</struct>
+		</defineType>
+		<defineType typeName="WEF_Type">
+			<struct>
+				<float-32 varName="Step_Size"/>
+				<unsignedShort-16 varName="Num_Entries"/>
+				<arrayVariable varName="WEF_Data">
+					<sizeRef>
+						<unsignedInteger-32 varName="WEF_Data_Counter"/>
+					</sizeRef>
+					<useType typeName="WEF_Data_Type"/>
+					<dim/>
+				</arrayVariable>
+			</struct>
+		</defineType>
+		<defineType typeName="Data_Block_Type">
+			<struct>
+				<arrayFixed varName="WEF" byteOrder="littleEndian">
+					<useType typeName="WEF_Type"/>
+					<dim indexTo="0"/>
+				</arrayFixed>
+			</struct>
+		</defineType>
+	</definitions>
+	<dataset src=" ">
+		<useType typeName="Data_Block_Type" varName="Data_Block"/>
+	</dataset>
+</binx>

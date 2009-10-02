@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2006 U (http://www.altova.com) by mtmpalomares (EMBRACE) -->
+<!-- XML schema for smos product -->
+<!--  v 2.0 29/11/2006 -->
+<!-- www.indra.es -->
+<!-- teledeteccion@indra.es -->
+<!-- Copyright (c) 2006 Indra Espacio -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://213.170.46.150/smos/schemas" targetNamespace="http://213.170.46.150/smos/schemas" elementFormDefault="qualified" attributeFormDefault="unqualified" version="0003">
+	<xs:include schemaLocation="../../common/common/Complex_Unit_Types_0001.xsd"/>
+	<xs:include schemaLocation="../../common/common/Fixed_Header_0004.xsd"/>
+	<xs:include schemaLocation="../../common/AUX_/Auxiliary_SPH_Data_Sets_0002.xsd"/>
+	<xs:include schemaLocation="../../common/AUX_/Auxiliary_L1_Main_SPH_for_Binary_0001.xsd"/>
+	<xs:complexType name="Longitude_Vector_Type">
+		<xs:sequence>
+			<xs:element name="Longitude_Vector_1st" type="deg_float_s04p3f_Unit_Type" default="+000.000"/>
+			<xs:element name="Longitude_Vector_2nd" type="deg_float_s04p3f_Unit_Type" default="+000.000"/>
+			<xs:element name="Longitude_Vector_Increment" type="deg_float_s04p3f_Unit_Type" default="+000.000"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="Latitude_Vector_Type">
+		<xs:sequence>
+			<xs:element name="Latitude_Vector_1st" type="deg_float_s03p3f_Unit_Type" default="+00.000"/>
+			<xs:element name="Latitude_Vector_2nd" type="deg_float_s03p3f_Unit_Type" default="+00.000"/>
+			<xs:element name="Latitude_Vector_Increment" type="deg_float_s03p3f_Unit_Type" default="+00.000"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="Height_Vector_Type">
+		<xs:sequence>
+			<xs:element name="Height_Vector_1st" type="Km_float_04p3f_Unit_Type" default="0000.000"/>
+			<xs:element name="Height_Vector_2nd" type="Km_float_04p3f_Unit_Type" default="0000.000"/>
+			<xs:element name="Height_Vector_Increment" type="Km_float_04p3f_Unit_Type" default="0000.000"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="Data_set_QC_Type">
+		<xs:sequence>
+			<xs:element name="Mean_TEC" type="integer_03d_Type" default="000"/>
+			<xs:element name="STD_TEC" type="integer_03d_Type" default="000"/>
+			<xs:element name="Max_TEC" type="integer_03d_Type" default="000"/>
+			<xs:element name="Min_TEC" type="integer_03d_Type" default="000"/>
+			<xs:element name="VTEC_PCD" type="integer_05d_Type" default="00000"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="List_Data_set_QC_Type">
+		<xs:sequence>
+			<xs:element name="Data_set_QC" type="Data_set_QC_Type" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="count" type="string_Type" default="0"/>
+	</xs:complexType>
+	<xs:complexType name="AUX_VTEC_Descriptor_Type">
+		<xs:sequence>
+			<xs:element name="ftp_server" type="string_60_Type" default="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"/>
+			<xs:element name="ftp_server_polling" type="min_integer_03d_Unit_Type" default="000"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="IONEX_Descriptor_Type">
+		<xs:sequence>
+			<xs:element name="IONEX_version" type="string_8_Type" default="xxxxxxxx"/>
+			<xs:element name="Type" type="string_1_Type" default="x"/>
+			<xs:element name="Source" type="string_3_Type" default="xxx"/>
+			<xs:element name="SW_version" type="string_20_Type" default="xxxxxxxxxxxxxxxxxxxx"/>
+			<xs:element name="Institute" type="string_20_Type" default="xxxxxxxxxxxxxxxxxxxx"/>
+			<xs:element name="Creation_date" type="string_30_Type" default="UTC=2007-01-01T00:00:00.000000"/>
+			<xs:element name="Epoch_first_map" type="string_30_Type" default="UTC=2007-01-01T00:00:00.000000"/>
+			<xs:element name="Epoch_last_map" type="string_30_Type" default="UTC=2007-01-01T00:00:00.000000"/>
+			<xs:element name="Interval" type="sec_integer_05d_Unit_Type" default="00000"/>
+			<xs:element name="Number_of_maps" type="integer_03d_Type" default="000"/>
+			<xs:element name="Mapping_function" type="string_4_Type" default="xxxx"/>
+			<xs:element name="Elevation_cutoff" type="deg_float_s04p3f_Unit_Type" default="+000.000"/>
+			<xs:element name="Observables_used" type="string_60_Type" default="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"/>
+			<xs:element name="Number_of_station" type="integer_04d_Type" default="0000"/>
+			<xs:element name="Number_of_satellite" type="integer_02d_Type" default="00"/>
+			<xs:element name="Base_radius" type="Km_double_05p6lf_Unit_Type" default="00000.000000"/>
+			<xs:element name="Map_dimension" type="integer_02d_Type" default="00"/>
+			<xs:element name="Height_Vector" type="Height_Vector_Type"/>
+			<xs:element name="Latitude_Vector" type="Latitude_Vector_Type"/>
+			<xs:element name="Longitude_Vector" type="Longitude_Vector_Type"/>
+			<xs:element name="Scale_factor" type="integer_s03d_Type" default="+00"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="Specific_Product_Header_Type">
+		<xs:sequence>
+			<xs:element name="Main_SPH" type="Main_SPH_Type"/>
+			<xs:element name="IONEX_Descriptor" type="IONEX_Descriptor_Type"/>
+			<xs:element name="AUX_VTEC_Descriptor" type="AUX_VTEC_Descriptor_Type"/>
+			<xs:element name="List_Data_set_QC" type="List_Data_set_QC_Type"/>
+			<xs:element name="List_of_Data_Sets" type="List_Data_Sets_Type"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="Variable_Header_Type">
+		<xs:sequence>
+			<xs:element name="Specific_Product_Header" type="Specific_Product_Header_Type"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="Header_Type">
+		<xs:sequence>
+			<xs:element name="Fixed_Header" type="Fixed_Header_Type"/>
+			<xs:element name="Variable_Header" type="Variable_Header_Type"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="Earth_Explorer_Header" type="Header_Type"/>
+</xs:schema>

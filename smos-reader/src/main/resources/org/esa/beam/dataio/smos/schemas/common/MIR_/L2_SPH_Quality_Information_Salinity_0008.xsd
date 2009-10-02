@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- XML schema for smos product -->
+<!--  v 8.0 17/12/2008 -->
+<!-- www.indra.es -->
+<!-- teledeteccion@indra.es -->
+<!-- Copyright (c) 2006 Indra Espacio -->
+<xs:schema xmlns="http://213.170.46.150/smos/schemas" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://213.170.46.150/smos/schemas" elementFormDefault="qualified" attributeFormDefault="unqualified" version="0008">
+	<!--	<xs:include schemaLocation="../common/Basic_Types_0013.xsd"/>
+	<xs:include schemaLocation="../common/Complex_Unit_Types_0012.xsd"/>
+
+	<xs:simpleType name="Class_Type">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="All|Low|Normal|High"/>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="Grid_Point_Type_Type">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="Sea|Near_Coast|Coast|Land|Sea_Ice"/>
+		</xs:restriction>
+	</xs:simpleType>
+-->
+	<xs:simpleType name="string_Retrieval_Scheme_Type">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="1|2|3|4"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="Quality_Record_Type">
+		<xs:sequence>
+			<xs:element name="Grid_Point_Type" type="xs:string"/>
+			<xs:element name="SSS_Class" type="xs:string"/>
+			<xs:element name="SST_Class" type="xs:string"/>
+			<xs:element name="WS_Class" type="xs:string"/>
+			<xs:element name="Good_Quality" type="xs:unsignedLong" default="0"/>
+			<xs:element name="Good_Quality_Retrieved" type="xs:unsignedLong" default="0"/>
+			<xs:element name="Good_Quality_Retrieved_Average_Sigma" type="xs:double" default="0.0"/>
+			<xs:element name="Good_Quality_Failed_Outside_Valid_Range" type="xs:unsignedLong" default="0"/>
+			<xs:element name="Good_Quality_Failed_Sigma_Too_High" type="xs:unsignedLong" default="0"/>
+			<xs:element name="Good_Quality_Failed_Poor_Fit" type="xs:unsignedLong" default="0"/>
+			<xs:element name="Good_Quality_Failed_Marquardt" type="xs:unsignedLong" default="0"/>
+			<xs:element name="Good_Quality_Failed_Maxiter" type="xs:unsignedLong" default="0"/>
+			<xs:element name="Good_Quality_Failed_OOLUT" type="xs:unsignedLong" default="0"/>
+			<xs:element name="Poor_Quality" type="xs:unsignedLong" default="0"/>
+			<xs:element name="Poor_Quality_Retrieved" type="xs:unsignedLong" default="0"/>
+			<xs:element name="Poor_Quality_Retrieved_Average_Sigma" type="xs:double" default="0.0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="List_of_Quality_Classes_Type">
+		<xs:sequence>
+			<xs:element name="Quality_Record" type="Quality_Record_Type" minOccurs="27" maxOccurs="27"/>
+		</xs:sequence>
+		<xs:attribute name="count" type="xs:unsignedShort" default="27"/>
+	</xs:complexType>
+	<xs:complexType name="Quality_Description_Type">
+		<xs:sequence>
+			<xs:element name="Retrieval_Scheme" type="string_Retrieval_Scheme_Type"/>
+			<xs:element name="Land_Rejected" type="xs:unsignedLong" default="0"/>
+			<xs:element name="Too_Close_To_Land_Rejected" type="xs:unsignedLong" default="0"/>
+			<xs:element name="Ice_Rejected" type="xs:unsignedLong" default="0"/>
+			<xs:element name="Missing_ECMWF_Rejected" type="xs:unsignedLong" default="0"/>
+			<xs:element name="Too_Few_Measurements_Rejected" type="xs:unsignedLong" default="0"/>
+			<xs:element name="Good_Quality_Grid_Points" type="xs:unsignedLong" default="0"/>
+			<xs:element name="Poor_Quality_Grid_Points" type="xs:unsignedLong" default="0"/>
+			<xs:element name="Sea_Quality" type="Quality_Record_Type"/>
+			<xs:element name="Near_Coast_Quality" type="Quality_Record_Type"/>
+			<xs:element name="Sea_Ice_Quality" type="Quality_Record_Type"/>
+			<xs:element name="List_of_Quality_Classes" type="List_of_Quality_Classes_Type"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="List_of_Retrieval_Schemes_Type">
+		<xs:sequence>
+			<xs:element name="Quality_Description" type="Quality_Description_Type" minOccurs="4" maxOccurs="4"/>
+		</xs:sequence>
+		<xs:attribute name="count" type="xs:unsignedShort" default="4"/>
+	</xs:complexType>
+	<xs:complexType name="Quality_Information_Type">
+		<xs:sequence>
+			<xs:element name="Total_Selected_L1c_Grid_Points" type="xs:unsignedLong"/>
+			<xs:element name="List_of_Retrieval_Schemes" type="List_of_Retrieval_Schemes_Type"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

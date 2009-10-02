@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- XML schema for smos product -->
+<!--  v 2.0 10/08/2009 -->
+<!-- www.indra.es -->
+<!-- teledeteccion@indra.es -->
+<!-- Copyright (c) 2006 Indra Espacio and DEIMOS Space -->
+<xs:schema xmlns="http://213.170.46.150/smos/schemas" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://213.170.46.150/smos/schemas" elementFormDefault="qualified" attributeFormDefault="unqualified" version="0002">
+	<xs:include schemaLocation="../common/Basic_Types_0016.xsd"/>
+	<xs:include schemaLocation="../common/Complex_Unit_Types_DMS_0005.xsd"/>
+	<xs:complexType name="Specific_NRT_Product_Report_Type">
+		<xs:sequence>
+			<xs:element name="BUFR_Name" type="string_Type" default="miras_00000000_000000_00000000_000000_smos_00000_t_00000000_000000_l1c.bufr"/>
+			<xs:element name="BUFR_Processing_Time" type="s_integer_05d_Unit_Type" default="00000"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

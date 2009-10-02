@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- binX schema for smos product -->
+<!-- v 2.0 19/12/2006 -->
+<!-- www.indra.es -->
+<!-- teledeteccion@indra.es -->
+<!-- Copyright (c) 2006 Indra Espacio -->
+<binx xmlns="http://www.edikt.org/binx/2003/06/binx" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.edikt.org/binx/2003/06/binx binx.xsd">
+	<definitions>
+		<defineType typeName="ECMWF_PARAMS_Data_Type">
+			<struct>
+				<unsignedInteger-32 varName="Latitude"/>
+				<unsignedInteger-32 varName="Longitude"/>
+				<character-8 varName="Land_Sea_Mask"/>
+				<character-8 varName="Sea_Ice_Cover"/>
+				<unsignedInteger-32 varName="Surface_Pressure"/>
+				<unsignedShort-16 varName="Air_Temperature_2m"/>
+				<unsignedShort-16 varName="Sea_Surface_Temperature"/>
+				<unsignedInteger-32 varName="Total_Coulmn_Water_Vapor"/>
+				<unsignedShort-16 varName="Large_Scale_Precipitation"/>
+				<unsignedShort-16 varName="Convective_Precipitation"/>
+				<unsignedShort-16 varName="Volumetric_Soil_Water_L1"/>
+				<unsignedShort-16 varName="Volumetric_Soil_Water_L2"/>
+				<unsignedShort-16 varName="Skin_Reservoir_Content"/>
+				<unsignedShort-16 varName="Soil_Temperature_L1"/>
+				<unsignedShort-16 varName="Soil_Temperature_L2"/>
+				<unsignedShort-16 varName="Soil_Temperature_L3"/>
+				<unsignedShort-16 varName="Soil_Temperature_L4"/>
+				<unsignedShort-16 varName="Skin_Temperature"/>
+				<unsignedShort-16 varName="Temperature_Snow_Layer"/>
+				<unsignedShort-16 varName="Ice_Surface_Temperature"/>
+				<unsignedShort-16 varName="Snow_Depth"/>
+				<unsignedShort-16 varName="Accumutated_Water"/>
+				<unsignedInteger-32 varName="Snow_Density"/>
+				<integer-32 varName="10m_Zonal_Wind_Lowest_Level"/>
+				<integer-32 varName="10m_Meridional_Wind_Lowest_Level"/>
+				<unsignedShort-16 varName="Temperature_Lowest_Level"/>
+				<unsignedShort-16 varName="Specific_Humidity_Lowest_Level"/>
+				<unsignedShort-16 varName="Charnock_Parameter"/>
+				<unsignedShort-16 varName="Dewpoint_2m"/>
+				<unsignedInteger-32 varName="Sea_Level_Pressure"/>
+				<integer-32 varName="Northward_Surface_Stress"/>
+				<integer-32 varName="Eastward_Surface_Stress"/>
+				<integer-32 varName="Surface_Shortwave_Radiation"/>
+				<integer-32 varName="Surface_Thermal_Radiative_Flux"/>
+				<integer-32 varName="Surface_Sensible_Heat_Flux"/>
+				<integer-32 varName="Surface_Latent_Heat_Flux"/>
+				<unsignedInteger-32 varName="Drag_Coefficient_With_Waves"/>
+				<integer-32 varName="Wind_10m_Wave_Model"/>
+				<unsignedShort-16 varName="Peak_Period_1D"/>
+				<unsignedShort-16 varName="Significant_Wave_Height"/>
+				<unsignedShort-16 varName="Mean_Square_Slope"/>
+				<unsignedShort-16 varName="Mean_Period_Wind_Waves"/>
+				<unsignedShort-16 varName="Significant_Height_Wind_Waves"/>
+				<integer-32 varName="10m_Neutral_Equivalent_Zonal_Wind"/>
+				<integer-32 varName="10m_Neutral_Equivalent_Meridional_Wind"/>
+				<unsignedShort-16 varName="Roughness_Lenght"/>
+				<unsignedShort-16 varName="Friction_Velocity"/>
+			</struct>
+		</defineType>
+		<defineType typeName="Data_Block_Type">
+			<struct>
+				<arrayVariable varName="ECMWF_PARAMS" byteOrder="littleEndian">
+					<sizeRef>
+						<unsignedInteger-32 varName="Num_Points"/>
+					</sizeRef>
+					<useType typeName="ECMWF_PARAMS_Data_Type"/>
+					<dim/>
+				</arrayVariable>
+			</struct>
+		</defineType>
+	</definitions>
+	<dataset src=" ">
+		<useType typeName="Data_Block_Type" varName="Data_Block"/>
+	</dataset>
+</binx>
