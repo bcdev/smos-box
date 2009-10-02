@@ -1,4 +1,33 @@
-S Type                Description
+
+  ==========================
+  List of SMOS data products
+  ==========================
+
+  Products supported by SMOS-Box are marked with (+)
+
+    LEVEL 1C
+    
++ SM_xxxx_MIR_SCLD1C_ Measurement Mode, Science Data, Land, Dual-Pol
++ SM_xxxx_MIR_SCLF1C_ Measurement Mode, Science Data, Land, Full-Pol
++ SM_xxxx_MIR_SCSD1C_ Measurement Mode, Science Data, Sea, Dual-Pol
++ SM_xxxx_MIR_SCSF1C_ Measurement Mode, Science Data, Sea, Full-Pol
++ SM_xxxx_MIR_BWLD1C_ Measurement Mode, Browse Data, Land, Dual-Pol
++ SM_xxxx_MIR_BWLF1C_ Measurement Mode, Browse Data, Land, Full-Pol
++ SM_xxxx_MIR_BWSD1C_ Measurement Mode, Browse Data, Sea, Dual-Pol
++ SM_xxxx_MIR_BWSF1C_ Measurement Mode, Browse Data, Sea, Full-Pol
+
+    LEVEL 2
+
+  SO_xxxx_MIR_TSM_2__ Brightness Temperature Land
+  SO_xxxx_MIR_TOS_2__ Brightness Temperature Sea
+  SO_xxxx_MIR_SM__2__ Soil Moisture
+  SO_xxxx_MIR_OS__2__ Ocean Salinity
++ SM_xxxx_MIR_SMUDP2_ L2 Soil Moisture Output User Data Product
+  SM_xxxx_MIR_SMDAP2_ L2 Soil Moisture Output Data Analysis Product
++ SM_xxxx_MIR_OSUDP2_ L2 Ocean Salinity Output User Data Product
+  SM_xxxx_MIR_OSDAP2_ L2 Ocean Sal. Output Data Analysis Product
+
+    AUX
 
   SM_xxxx_AUX_AGDPT__ Look Up Tables to init. Geophysical Parameters
   SM_xxxx_AUX_APDL___ Apodisation Window Land
@@ -17,7 +46,7 @@ S Type                Description
   SM_xxxx_AUX_CNFSMD_ Processor Conf. Param. for L2 Soil Moisture
   SM_xxxx_AUX_CNFSMD_ Processor Conf. Param. for L2 Soil Moisture
   SM_xxxx_AUX_DFFFRA_ Land Cover Classes Fractions over the DGG
-X SM_xxxx_AUX_DFFLAI_ Leaf Area Index derived from MODIS Data
++ SM_xxxx_AUX_DFFLAI_ Leaf Area Index derived from MODIS Data
   SM_xxxx_AUX_DFFLMX_ Maximum value for the Leaf Area Index
   SM_xxxx_AUX_DFFXYZ_ Earth Centered Earth Fixed Cartesian coord.
   SM_xxxx_AUX_DGG____ Discrete Global Grid
@@ -28,7 +57,7 @@ X SM_xxxx_AUX_DFFLAI_ Leaf Area Index derived from MODIS Data
   SM_xxxx_AUX_DGGTLV_ Current Low Vegetation Optical Thickness
   SM_xxxx_AUX_DGGXYZ_ Earth Centered Earth Fixed Cartesian coord.
   SM_xxxx_AUX_DISTAN_ Distance to the coast and monthly Sea/Ice Flag
-X SM_xxxx_AUX_ECMWF__ ECMWF data on the ISEA 4-9 DGG
++ SM_xxxx_AUX_ECMWF__ ECMWF data on the ISEA 4-9 DGG
   SM_xxxx_AUX_ECOLAI_ Leaf Area Index derived from 36 ECOCLIMAP
   SM_xxxx_AUX_FAIL___ Failing Components Table
   SM_xxxx_AUX_FLATT__ Flat Target Transformation Measurements
@@ -61,8 +90,8 @@ X SM_xxxx_AUX_ECMWF__ ECMWF data on the ISEA 4-9 DGG
   SM_xxxx_AUX_SSS____ Monthly Sea Surface Salinity
   SM_xxxx_AUX_SUNT___ Sun Brightness Temperature Map Model
   SM_xxxx_AUX_TIME___ Time corr. to init Earth Explorer functions
-X SM_xxxx_AUX_VTEC_C_ Consolidated Vertical Total Electron Content
-X SM_xxxx_AUX_VTEC_P_ Predicted Vertical Total Electron Content
++ SM_xxxx_AUX_VTEC_C_ Consolidated Vertical Total Electron Content
++ SM_xxxx_AUX_VTEC_P_ Predicted Vertical Total Electron Content
   SM_xxxx_AUX_WEF____ Weighting Function for Brightness Temperature
   SM_xxxx_AUX_MN_WEF_ Weighting Function for Brightness Temperature
   SM_xxxx_MPL_ORBSCT_ Reference Orbit Scenario File
