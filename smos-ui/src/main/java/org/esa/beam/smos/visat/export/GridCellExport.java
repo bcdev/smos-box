@@ -57,8 +57,8 @@ public class GridCellExport {
         } else {
             printWriter = new PrintWriter(System.out);
         }
-        CsvGridExport csvGridExport = new CsvGridExport(printWriter, ";");
-        GridPointFilterStreamHandler streamHandler = new GridPointFilterStreamHandler(csvGridExport, arguments.area);
+        CsvExport csvExport = new CsvExport(printWriter, ";");
+        GridPointFilterStreamHandler streamHandler = new GridPointFilterStreamHandler(csvExport, arguments.area);
         
         ProductReader smosProductReader = ProductIO.getProductReader("SMOS");
         ProductReaderPlugIn readerPlugIn = smosProductReader.getReaderPlugIn();

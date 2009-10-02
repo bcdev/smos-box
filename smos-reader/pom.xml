@@ -18,29 +18,6 @@
     <description>SMOS Product Reader</description>
 
     <dependencies>
-    <!-- 
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.bc.ceres</groupId>
-            <artifactId>ceres-core</artifactId>
-        </dependency>
-        
-        <dependency>
-            <groupId>org.esa.beam</groupId>
-            <artifactId>beam-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.esa.beam</groupId>
-            <artifactId>beam-gpf</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.esa.beam</groupId>
-            <artifactId>beam-visat</artifactId>
-        </dependency>
-         -->
          <dependency>
             <groupId>com.bc.ceres</groupId>
             <artifactId>ceres-binio</artifactId>
@@ -49,12 +26,6 @@
             <groupId>org.esa.beam.smos</groupId>
             <artifactId>smos-dgg</artifactId>
         </dependency>
-        <!-- 
-        <dependency>
-            <groupId>org.esa.beam.smos</groupId>
-            <artifactId>smos-worldmap</artifactId>
-        </dependency>
-         -->
     </dependencies>
     
 </project>

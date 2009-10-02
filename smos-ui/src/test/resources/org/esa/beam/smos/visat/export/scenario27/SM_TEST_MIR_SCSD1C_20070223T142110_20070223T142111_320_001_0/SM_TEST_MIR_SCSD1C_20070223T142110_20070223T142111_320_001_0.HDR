@@ -1,0 +1,252 @@
+<?xml version="1.0"?>
+<Earth_Explorer_Header xmlns="http://193.146.123.163/smos/schemas" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://193.146.123.163/smos/schemas HDR_SM_XXXX_MIR_SCSD1C_0201.xsd">
+
+  <Fixed_Header>
+    <File_Name>SM_TEST_MIR_SCSD1C_20070223T142110_20070223T142111_320_001_0</File_Name>
+    <File_Description>Level 1C Dual Polarization Sea Science measurements product</File_Description>
+    <Notes>x</Notes>
+    <Mission>SMOS</Mission>
+    <File_Class>TEST</File_Class>
+    <File_Type>MIR_SCSD1C</File_Type>
+    <Validity_Period>
+      <Validity_Start>UTC=2007-02-23T14:21:10</Validity_Start>
+      <Validity_Stop>UTC=2007-02-23T14:21:11</Validity_Stop>
+    </Validity_Period>
+    <File_Version>0001</File_Version>
+    <Source>
+      <System>L1PP</System>
+      <Creator>L1PP</Creator>
+      <Creator_Version>320</Creator_Version>
+      <Creation_Date>UTC=2009-09-25T11:31:58</Creation_Date>
+    </Source>
+  </Fixed_Header>
+
+  <Variable_Header>
+    <Main_Product_Header>
+      <Ref_Doc>SO-TN-IDR-GS-0005</Ref_Doc>
+      <Acquisition_Station> VFR</Acquisition_Station>
+      <Processing_Centre>DMEP</Processing_Centre>
+      <Logical_Proc_Centre>DME</Logical_Proc_Centre>
+      <Orbit_Information>
+        <Phase>+001</Phase>
+        <Cycle>+000</Cycle>
+        <Rel_Orbit>+00000</Rel_Orbit>
+        <Abs_Orbit>+00000</Abs_Orbit>
+        <OSV_TAI>TAI=2007-06-04T13:07:57.400000</OSV_TAI>
+        <OSV_UTC>UTC=2007-06-04T13:07:57.400000</OSV_UTC>
+        <OSV_UT1>UT1=2007-06-04T13:07:57.400000</OSV_UT1>
+        <Leap_Second>UTC=2000-01-01T00:00:00.000000</Leap_Second>
+        <X_Position unit="m">+0000000.000</X_Position>
+        <Y_Position unit="m">+0000000.000</Y_Position>
+        <Z_Position unit="m">+0000000.000</Z_Position>
+        <X_Velocity unit="m/s">+0000.000000</X_Velocity>
+        <Y_Velocity unit="m/s">+0000.000000</Y_Velocity>
+        <Z_Velocity unit="m/s">+0000.000000</Z_Velocity>
+        <Vector_Source>FP</Vector_Source>
+      </Orbit_Information>
+      <Product_Confidence>NOMINAL</Product_Confidence>
+    </Main_Product_Header>
+    <Specific_Product_Header>
+      <Main_Info>
+        <SPH_Descriptor>MIR_SCSD1C_SPH</SPH_Descriptor>
+        <Time_Info>
+          <Precise_Validity_Start>UTC=2007-02-23T14:21:10.198059</Precise_Validity_Start>
+          <Precise_Validity_Stop>UTC=2007-02-23T14:21:11.398056</Precise_Validity_Stop>
+          <Abs_Orbit_Start>+00006</Abs_Orbit_Start>
+          <Start_Time_ANX_T unit="s">0046.200001</Start_Time_ANX_T>
+          <Abs_Orbit_Stop>+00006</Abs_Orbit_Stop>
+          <Stop_Time_ANX_T unit="s">0047.399998</Stop_Time_ANX_T>
+          <UTC_at_ANX>UTC=2007-02-23T14:20:23.998058</UTC_at_ANX>
+          <Long_at_ANX unit="deg">+0234.906716</Long_at_ANX>
+          <Ascending_Flag>A</Ascending_Flag>
+          <Semiorbit_Start>UTC=0000-00-00T00:00:00.000000</Semiorbit_Start>
+          <Semiorbit_Stop>UTC=0000-00-00T00:00:00.000000</Semiorbit_Stop>
+        </Time_Info>
+        <Correlator_Layer>N</Correlator_Layer>
+        <Checksum>2676805138</Checksum>
+        <Header_Schema>HDR_SM_XXXX_MIR_SCSD1C_0201.xsd</Header_Schema>
+        <Datablock_Schema>DBL_SM_XXXX_MIR_SCSD1C_0200.binXschema.xml</Datablock_Schema>
+        <Header_Size unit="bytes">011122</Header_Size>
+        <Datablock_Size unit="bytes">00000367475</Datablock_Size>
+        <HW_Identifier>L1PP</HW_Identifier>
+      </Main_Info>
+      <Quality_Information>
+        <Software_Error_Counter>00000</Software_Error_Counter>
+        <Instrument_Error_Counter>00000</Instrument_Error_Counter>
+        <ADF_Error_Counter>00000</ADF_Error_Counter>
+        <Calibration_Error_Counter>00000</Calibration_Error_Counter>
+        <N_Discarded_Scenes unit="scenes">00000</N_Discarded_Scenes>
+        <N_Invalid_Blocks unit="blocks">000000</N_Invalid_Blocks>
+        <N_Missing_Packets unit="packets">000000</N_Missing_Packets>
+      </Quality_Information>
+      <Product_Location>
+        <Start_Lat unit="deg">+002.759256</Start_Lat>
+        <Start_Lon unit="deg">+234.306409</Start_Lon>
+        <Stop_Lat unit="deg">+002.842804</Stop_Lat>
+        <Stop_Lon unit="deg">+234.289043</Stop_Lon>
+        <Mid_Lat unit="deg">+002.759256</Mid_Lat>
+        <Mid_Lon unit="deg">+234.306409</Mid_Lon>
+      </Product_Location>
+      <Radiometric_Accuracy_Scale>050</Radiometric_Accuracy_Scale>
+      <Pixel_Footprint_Scale>100</Pixel_Footprint_Scale>
+      <Geolocation_Information>
+        <Percentage_of_Mixed_Pixels>000.000</Percentage_of_Mixed_Pixels>
+        <Apodisation_Window>001</Apodisation_Window>
+        <Total_Num_Grid_Points>005533</Total_Num_Grid_Points>
+      </Geolocation_Information>
+      <List_of_Data_Sets count="15">
+        <Data_Set>
+          <DS_Name>SNAPSHOT_LIST               </DS_Name>
+          <DS_Type>M</DS_Type>
+          <DS_Size>0000000336</DS_Size>
+          <DS_Offset>0000000000</DS_Offset>
+          <Ref_Filename>                                                            </Ref_Filename>
+          <Num_DSR>0000000002</Num_DSR>
+          <DSR_Size>00000166</DSR_Size>
+          <Byte_Order>0123</Byte_Order>
+        </Data_Set>
+        <Data_Set>
+          <DS_Name>TEMP_SWATH_DUAL             </DS_Name>
+          <DS_Type>M</DS_Type>
+          <DS_Size>0000367139</DS_Size>
+          <DS_Offset>0000000336</DS_Offset>
+          <Ref_Filename>                                                            </Ref_Filename>
+          <Num_DSR>0000005533</Num_DSR>
+          <DSR_Size>-0000001</DSR_Size>
+          <Byte_Order>0123</Byte_Order>
+        </Data_Set>
+        <Data_Set>
+          <DS_Name>L1B_FILE</DS_Name>
+          <DS_Type>R</DS_Type>
+          <DS_Size>0000000000</DS_Size>
+          <DS_Offset>0000000000</DS_Offset>
+          <Ref_Filename>SM_TEST_MIR_SC_D1B_20070223T142110_20070223T142111_320_001_0</Ref_Filename>
+          <Num_DSR>0000000000</Num_DSR>
+          <DSR_Size>00000000</DSR_Size>
+          <Byte_Order>0000</Byte_Order>
+        </Data_Set>
+        <Data_Set>
+          <DS_Name>DGG_FILE</DS_Name>
+          <DS_Type>R</DS_Type>
+          <DS_Size>0000000000</DS_Size>
+          <DS_Offset>0000000000</DS_Offset>
+          <Ref_Filename>SM_TEST_AUX_DGG____20070101T000000_20500101T000000_300_001_0</Ref_Filename>
+          <Num_DSR>0000000000</Num_DSR>
+          <DSR_Size>00000000</DSR_Size>
+          <Byte_Order>0000</Byte_Order>
+        </Data_Set>
+        <Data_Set>
+          <DS_Name>TEC_FILE</DS_Name>
+          <DS_Type>R</DS_Type>
+          <DS_Size>0000000000</DS_Size>
+          <DS_Offset>0000000000</DS_Offset>
+          <Ref_Filename>SM_TEST_AUX_VTEC_P_20070222T230000_20070224T010000_300_001_0</Ref_Filename>
+          <Num_DSR>0000000000</Num_DSR>
+          <DSR_Size>00000000</DSR_Size>
+          <Byte_Order>0000</Byte_Order>
+        </Data_Set>
+        <Data_Set>
+          <DS_Name>PLM_FILE</DS_Name>
+          <DS_Type>R</DS_Type>
+          <DS_Size>0000000000</DS_Size>
+          <DS_Offset>0000000000</DS_Offset>
+          <Ref_Filename>SM_TEST_AUX_PLM____20070101T000000_20500101T000000_300_001_0</Ref_Filename>
+          <Num_DSR>0000000000</Num_DSR>
+          <DSR_Size>00000000</DSR_Size>
+          <Byte_Order>0000</Byte_Order>
+        </Data_Set>
+        <Data_Set>
+          <DS_Name>RFI_FILE</DS_Name>
+          <DS_Type>R</DS_Type>
+          <DS_Size>0000000000</DS_Size>
+          <DS_Offset>0000000000</DS_Offset>
+          <Ref_Filename>SM_TEST_AUX_RFI____20070101T000000_20500101T000000_300_002_0</Ref_Filename>
+          <Num_DSR>0000000000</Num_DSR>
+          <DSR_Size>00000000</DSR_Size>
+          <Byte_Order>0000</Byte_Order>
+        </Data_Set>
+        <Data_Set>
+          <DS_Name>ANTENNA_PATTERNS_FILE</DS_Name>
+          <DS_Type>R</DS_Type>
+          <DS_Size>0000000000</DS_Size>
+          <DS_Offset>0000000000</DS_Offset>
+          <Ref_Filename>SM_TEST_AUX_PATT___20070101T000000_20500101T000000_320_001_0</Ref_Filename>
+          <Num_DSR>0000000000</Num_DSR>
+          <DSR_Size>00000000</DSR_Size>
+          <Byte_Order>0000</Byte_Order>
+        </Data_Set>
+        <Data_Set>
+          <DS_Name>FAILURES_FILE</DS_Name>
+          <DS_Type>R</DS_Type>
+          <DS_Size>0000000000</DS_Size>
+          <DS_Offset>0000000000</DS_Offset>
+          <Ref_Filename>SM_TEST_AUX_FAIL___20070101T000000_20500101T000000_300_001_0</Ref_Filename>
+          <Num_DSR>0000000000</Num_DSR>
+          <DSR_Size>00000000</DSR_Size>
+          <Byte_Order>0000</Byte_Order>
+        </Data_Set>
+        <Data_Set>
+          <DS_Name>BEST_FIT_PLANE_FILE</DS_Name>
+          <DS_Type>R</DS_Type>
+          <DS_Size>0000000000</DS_Size>
+          <DS_Offset>0000000000</DS_Offset>
+          <Ref_Filename>SM_TEST_AUX_BFP____20070101T000000_20500101T000000_300_002_0</Ref_Filename>
+          <Num_DSR>0000000000</Num_DSR>
+          <DSR_Size>00000000</DSR_Size>
+          <Byte_Order>0000</Byte_Order>
+        </Data_Set>
+        <Data_Set>
+          <DS_Name>L1C_PIXEL_MASK_FILE</DS_Name>
+          <DS_Type>R</DS_Type>
+          <DS_Size>0000000000</DS_Size>
+          <DS_Offset>0000000000</DS_Offset>
+          <Ref_Filename>SM_TEST_AUX_MASK___20070101T000000_20500101T000000_300_001_0</Ref_Filename>
+          <Num_DSR>0000000000</Num_DSR>
+          <DSR_Size>00000000</DSR_Size>
+          <Byte_Order>0000</Byte_Order>
+        </Data_Set>
+        <Data_Set>
+          <DS_Name>APODISATION_FILE</DS_Name>
+          <DS_Type>R</DS_Type>
+          <DS_Size>0000000000</DS_Size>
+          <DS_Offset>0000000000</DS_Offset>
+          <Ref_Filename>SM_TEST_AUX_APDL___20070101T000000_20500101T000000_300_001_0</Ref_Filename>
+          <Num_DSR>0000000000</Num_DSR>
+          <DSR_Size>00000000</DSR_Size>
+          <Byte_Order>0000</Byte_Order>
+        </Data_Set>
+        <Data_Set>
+          <DS_Name>ALGORITHM_CONFIG_FILE</DS_Name>
+          <DS_Type>R</DS_Type>
+          <DS_Size>0000000000</DS_Size>
+          <DS_Offset>0000000000</DS_Offset>
+          <Ref_Filename>                                                            </Ref_Filename>
+          <Num_DSR>0000000000</Num_DSR>
+          <DSR_Size>00000000</DSR_Size>
+          <Byte_Order>0000</Byte_Order>
+        </Data_Set>
+        <Data_Set>
+          <DS_Name>ORBIT_SCENARIO_FILE</DS_Name>
+          <DS_Type>R</DS_Type>
+          <DS_Size>0000000000</DS_Size>
+          <DS_Offset>0000000000</DS_Offset>
+          <Ref_Filename>SM_TEST_MPL_ORBSCT_20070223T060002_20781231T235959_666_001_0</Ref_Filename>
+          <Num_DSR>0000000000</Num_DSR>
+          <DSR_Size>00000000</DSR_Size>
+          <Byte_Order>0000</Byte_Order>
+        </Data_Set>
+        <Data_Set>
+          <DS_Name>MISPOINTING_ANGLES_FILE</DS_Name>
+          <DS_Type>R</DS_Type>
+          <DS_Size>0000000000</DS_Size>
+          <DS_Offset>0000000000</DS_Offset>
+          <Ref_Filename>SM_TEST_AUX_MISP___20070101T000000_20500101T000000_300_002_0</Ref_Filename>
+          <Num_DSR>0000000000</Num_DSR>
+          <DSR_Size>00000000</DSR_Size>
+          <Byte_Order>0000</Byte_Order>
+        </Data_Set>
+      </List_of_Data_Sets>
+    </Specific_Product_Header>
+  </Variable_Header>
+
+</Earth_Explorer_Header>

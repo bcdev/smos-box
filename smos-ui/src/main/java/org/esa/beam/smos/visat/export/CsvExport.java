@@ -37,12 +37,12 @@ import java.io.PrintWriter;
  * @version $Revision$ $Date$
  * @since SMOS-Box 2.0
  */
-public class CsvGridExport implements GridPointFilterStream {
+public class CsvExport implements GridPointFilterStream {
 
     private final PrintWriter printWriter;
     private final String separator;
 
-    public CsvGridExport(PrintWriter printWriter, String separator) {
+    public CsvExport(PrintWriter printWriter, String separator) {
         this.printWriter = printWriter;
         this.separator = separator;
     }

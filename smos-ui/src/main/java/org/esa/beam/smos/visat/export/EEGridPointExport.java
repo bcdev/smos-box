@@ -2,7 +2,6 @@ package org.esa.beam.smos.visat.export;
 
 import com.bc.ceres.binio.*;
 import org.esa.beam.dataio.smos.SmosFile;
-import org.esa.beam.dataio.smos.SmosFormats;
 import org.esa.beam.util.io.FileUtils;
 
 import javax.imageio.stream.FileImageInputStream;
@@ -10,7 +9,7 @@ import javax.imageio.stream.FileImageOutputStream;
 import java.io.File;
 import java.io.IOException;
 
-public class EEGridExport implements GridPointFilterStream {
+public class EEGridPointExport implements GridPointFilterStream {
 
     private final File outputDir;
     private static final int ONE_KB = 1024;
@@ -21,7 +20,7 @@ public class EEGridExport implements GridPointFilterStream {
     private int size;
     private DataContext ouputContext;
 
-    public EEGridExport(File outputDir) {
+    public EEGridPointExport(File outputDir) {
         this.outputDir = outputDir;
     }
 
@@ -36,7 +35,7 @@ public class EEGridExport implements GridPointFilterStream {
         // @todo 2 tb/tb check if successful - handle if not
         outDbl.createNewFile();
 
-        final SequenceData inData = smosfile.getDataBlock().getSequence(SmosFormats.GRID_POINT_LIST_NAME);
+        final SequenceData inData = smosfile.getGridPointList();
         final SequenceType sequenceType = inData.getSequenceType();
         sequenceType.getElementType();
 
