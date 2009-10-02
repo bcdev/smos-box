@@ -1,0 +1,68 @@
+S Type                Description
+
+  SM_xxxx_AUX_AGDPT__ Look Up Tables to init. Geophysical Parameters
+  SM_xxxx_AUX_APDL___ Apodisation Window Land
+  SM_xxxx_AUX_APDL00_ Apodisation Window Land
+  SM_xxxx_AUX_APDS___ Apodisation Window Sea
+  SM_xxxx_AUX_APDS00_ Apodisation Window Sea
+  SM_xxxx_AUX_APOD01_ Apodisation Window Coefficients
+  SM_xxxx_AUX_ATMOS__ Physical Constants used by Atmospheric Model
+  SM_xxxx_AUX_BFP____ Best Fit Plane
+  SM_xxxx_AUX_BNDLST_ Binding Lists to propagate ECMWF parameters
+  SM_xxxx_AUX_BSCAT__ Bistatic Scattering Coefficients
+  SM_xxxx_AUX_BWGHT__ Baseline Weights
+  SM_xxxx_AUX_CNFL1P_ Processor Algorithm Parameters for L1OP
+  SM_xxxx_AUX_CNFOSD_ Processor Conf. Param. for L2 Ocean Salinity
+  SM_xxxx_AUX_CNFOSF_ Processor Conf. Param. for L2 Ocean Salinity
+  SM_xxxx_AUX_CNFSMD_ Processor Conf. Param. for L2 Soil Moisture
+  SM_xxxx_AUX_CNFSMD_ Processor Conf. Param. for L2 Soil Moisture
+  SM_xxxx_AUX_DFFFRA_ Land Cover Classes Fractions over the DGG
+X SM_xxxx_AUX_DFFLAI_ Leaf Area Index derived from MODIS Data
+  SM_xxxx_AUX_DFFLMX_ Maximum value for the Leaf Area Index
+  SM_xxxx_AUX_DFFXYZ_ Earth Centered Earth Fixed Cartesian coord.
+  SM_xxxx_AUX_DGG____ Discrete Global Grid
+  SM_xxxx_AUX_DGGFLO_ Current Flood Flag Probability
+  SM_xxxx_AUX_DGGRFI_ Current Radio Frequency Interf. Probability
+  SM_xxxx_AUX_DGGROU_ Current land Roughness
+  SM_xxxx_AUX_DGGTFO_ Current Forest Optical Thickness
+  SM_xxxx_AUX_DGGTLV_ Current Low Vegetation Optical Thickness
+  SM_xxxx_AUX_DGGXYZ_ Earth Centered Earth Fixed Cartesian coord.
+  SM_xxxx_AUX_DISTAN_ Distance to the coast and monthly Sea/Ice Flag
+  SM_xxxx_AUX_ECMWF__ Leaf Area Index derived from 36 ECOCLIMAP
+X SM_xxxx_AUX_ECOLAI_ ECMWF data on the ISEA 4-9 DGG
+  SM_xxxx_AUX_FAIL___ Failing Components Table
+  SM_xxxx_AUX_FLATT__ Flat Target Transformation Measurements
+  SM_xxxx_AUX_FLTSEA_ Physical Constants needed by Flat Sea Model
+  SM_xxxx_AUX_FOAM___ Physical Constants used by Foam Model
+  SM_xxxx_AUX_GAL_OS_ AUX_GALAXY Map convolved
+  SM_xxxx_AUX_GAL_SM_ AUX_GALAXY Map convolved
+  SM_xxxx_AUX_GAL2OS_ Galactic Map Product
+  SM_xxxx_AUX_GALAXY_ Galaxy L-band Map
+  SM_xxxx_AUX_GALNIR_ L-Band Galactic Brightness Temperature Map SM_xxxx_AUX_GLXY___ - Galaxy L-band Map
+  SM_xxxx_AUX_LANDCL_ Land Cover parameters
+  SM_xxxx_AUX_LCF____ Receivers Characterisation
+  SM_xxxx_AUX_LSMASK_ Land/Sea Mask
+  SM_xxxx_AUX_MASK___ L1C Pixel Mask
+  SM_xxxx_AUX_MISP___ Mispointing angles between the Body Frame
+  SM_xxxx_AUX_MOONT__ Moon Brightness Temperature Map Model
+  SM_xxxx_AUX_NIR____ NIR Characterisation Tables
+  SM_xxxx_AUX_ORBPRE_ Predicted Orbit File used for the L0 Product
+  SM_xxxx_AUX_ORBSCT_ Mission planning, EE CFI orbit_id + time_id
+  SM_xxxx_AUX_PATTxx_ Antenna Patterns Auxiliary Data Files
+  SM_xxxx_AUX_PLM____ PLM Characterisation Table
+  SM_xxxx_AUX_PMS____ PMS Characterisation Table
+  SM_xxxx_AUX_RFI____ RFI sources Map
+  SM_xxxx_AUX_RGHNS1_ Look Up Tables IPSL Ocean Roughness
+  SM_xxxx_AUX_RGHNS2_ Look Up Tables IPSL Ocean Roughness
+  SM_xxxx_AUX_RGHNS3_ Look Up Tables IPSL Ocean Roughness
+  SM_xxxx_AUX_SGLINT_ Coefficients LUT used in Sun glint correction
+  SM_xxxx_AUX_SOIL_P_ Percentage of sand and clay, soil bulk density
+  SM_xxxx_AUX_SPAR___ Relevant S-Parameters Of MIRAS
+  SM_xxxx_AUX_SSS____ Monthly Sea Surface Salinity
+  SM_xxxx_AUX_SUNT___ Sun Brightness Temperature Map Model
+  SM_xxxx_AUX_TIME___ Time corr. to init Earth Explorer functions
+X SM_xxxx_AUX_VTEC_C_ Consolidated Vertical Total Electron Content
+  SM_xxxx_AUX_VTEC_P_ Predicted Vertical Total Electron Content
+  SM_xxxx_AUX_WEF____ Weighting Function for Brightness Temperature
+  SM_xxxx_AUX_MN_WEF_ Weighting Function for Brightness Temperature
+  SM_xxxx_MPL_ORBSCT_ Reference Orbit Scenario File
