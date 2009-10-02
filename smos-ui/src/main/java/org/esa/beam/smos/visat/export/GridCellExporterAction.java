@@ -29,12 +29,11 @@ import com.bc.ceres.binding.swing.ValueEditor;
 import com.bc.ceres.binding.swing.ValueEditorRegistry;
 import com.bc.ceres.binding.swing.internal.FileEditor;
 import com.bc.ceres.binding.swing.internal.SingleSelectionEditor;
-import com.bc.ceres.binding.swing.internal.TextFieldAdapter;
+import com.bc.ceres.binding.swing.internal.TextComponentAdapter;
 import com.bc.ceres.binding.swing.internal.TextFieldEditor;
 import com.bc.ceres.core.ProgressMonitor;
 import com.bc.ceres.swing.TableLayout;
 import com.bc.ceres.swing.progress.ProgressMonitorSwingWorker;
-
 import org.esa.beam.framework.datamodel.Band;
 import org.esa.beam.framework.datamodel.GeoCoding;
 import org.esa.beam.framework.datamodel.Pin;
@@ -48,6 +47,7 @@ import org.esa.beam.util.ProductUtils;
 import org.esa.beam.util.SystemUtils;
 import org.esa.beam.visat.VisatApp;
 
+import javax.swing.*;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.FlowLayout;
@@ -68,29 +68,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.AbstractButton;
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.ButtonGroup;
-import javax.swing.DefaultListCellRenderer;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JFileChooser;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JTextField;
-
 /**
  * @author Marco Zuehlke
  * @version $Revision$ $Date$
- * @since SMOS 1.0
+ * @since SMOS 2.0
  */
-public class GridCellExporterAction extends ExecCommand  {
+public class GridCellExporterAction extends ExecCommand {
 
     @Override
     public void actionPerformed(final CommandEvent event) {
@@ -98,17 +81,17 @@ public class GridCellExporterAction extends ExecCommand  {
 //TODO mz - 22090622 check why teh command has no helpId        
 //        openDialog(VisatApp.getApp(), event.getCommand().getHelpId());
     }
-    
+
     private void openDialog(VisatApp visatApp, String helpId) {
         final Product selectedProduct = visatApp.getSelectedProduct();
         GridCellExportDialog dialog = new GridCellExportDialog(visatApp, selectedProduct, helpId);
         dialog.show();
     }
-    
+
     private static class GridCellExportDialog extends ModalDialog {
-        
+
         private static final String LAST_DIR_KEY = "user.smos.import.dir";
-        
+
         private final VisatApp visatApp;
         private final Product product;
         private final ValueContainer vc;
@@ -120,11 +103,12 @@ public class GridCellExporterAction extends ExecCommand  {
             this.visatApp = visatApp;
             this.product = selectedProduct;
             model = new GridCellExportModel();
-            
-            String smosDirPath = visatApp.getPreferences().getPropertyString(LAST_DIR_KEY, SystemUtils.getUserHomeDir().getPath());
+
+            String smosDirPath = visatApp.getPreferences().getPropertyString(LAST_DIR_KEY,
+                                                                             SystemUtils.getUserHomeDir().getPath());
             model.scanDirectory = new File(smosDirPath);
             model.output = new File(SystemUtils.getUserHomeDir(), "grid_cell_export.csv");
-            
+
             vc = ValueContainer.createObjectBacked(model);
             bindingContext = new BindingContext(vc);
             try {
@@ -134,12 +118,13 @@ public class GridCellExporterAction extends ExecCommand  {
             }
             makeUI();
         }
-        
+
         @Override
         protected void onOK() {
             if (model.output.exists()) {
                 String message = MessageFormat.format("The specified output file\n\"{0}\"\n already exists.\n\n"
-                        + "Do you want to overwrite the existing file?", model.output.getPath());
+                                                      + "Do you want to overwrite the existing file?",
+                                                      model.output.getPath());
                 final int answer = JOptionPane.showConfirmDialog(getJDialog(), message,
                                                                  getTitle(), JOptionPane.YES_NO_OPTION);
                 if (answer != JOptionPane.YES_OPTION) {
@@ -162,11 +147,12 @@ public class GridCellExporterAction extends ExecCommand  {
             try {
                 printWriter = new PrintWriter(model.output);
             } catch (FileNotFoundException e) {
-                visatApp.showErrorDialog("Could not create CSV file :\n"+e.getMessage());
+                visatApp.showErrorDialog("Could not create CSV file :\n" + e.getMessage());
                 return;
             }
             final CsvGridExport csvGridExport = new CsvGridExport(printWriter, ";");
-            ProgressMonitorSwingWorker<Void,Void> swingWorker = new ProgressMonitorSwingWorker<Void, Void>(getJDialog(), "Exporting grid cells") {
+            ProgressMonitorSwingWorker<Void, Void> swingWorker = new ProgressMonitorSwingWorker<Void, Void>(
+                    getJDialog(), "Exporting grid cells") {
 
                 @Override
                 protected Void doInBackground(ProgressMonitor pm) throws Exception {
@@ -179,14 +165,14 @@ public class GridCellExporterAction extends ExecCommand  {
                             streamHandler.processDirectory(model.scanDirectory, model.scanRecursive, pm);
                         }
                     } catch (IOException e) {
-                        visatApp.showErrorDialog("An error occured while exporting the grid cell data:\n"+e.getMessage());
+                        visatApp.showErrorDialog(
+                                "An error occured while exporting the grid cell data:\n" + e.getMessage());
                         return null;
                     } finally {
                         try {
                             csvGridExport.close();
                         } catch (IOException e) {
-                            visatApp.showErrorDialog("An error occured while closing the CSV file:\n"+e.getMessage());
-                            return null;
+                            visatApp.showErrorDialog("An error occured while closing the CSV file:\n" + e.getMessage());
                         }
                     }
                     return null;
@@ -195,7 +181,7 @@ public class GridCellExporterAction extends ExecCommand  {
             super.onOK();
             swingWorker.execute();
         }
-        
+
         private Area getArea() {
             if (model.roiSource == 0) {
                 final GeoCoding currentGeoCoding = model.roiRaster.getGeoCoding();
@@ -204,13 +190,13 @@ public class GridCellExporterAction extends ExecCommand  {
                 return new Area(geoPath);
             } else if (model.roiSource == 1) {
                 Area wholeArea = null;
-                for (Pin  pin : product.getPinGroup().getSelectedNodes()) {
+                for (Pin pin : product.getPinGroup().getSelectedNodes()) {
                     double lat = pin.getGeoPos().getLat();
                     double lon = pin.getGeoPos().getLon();
-                    
+
                     final double hw = 0.08;
                     final double hh = 0.08;
-                    
+
                     final double x = lon - hw;
                     final double y = lat - hh;
                     final double w = 0.16;
@@ -223,8 +209,8 @@ public class GridCellExporterAction extends ExecCommand  {
                         wholeArea.add(area);
                     }
                 }
-                
-                return wholeArea; 
+
+                return wholeArea;
             } else if (model.roiSource == 2) {
                 final double x = model.west;
                 final double y = model.south;
@@ -234,7 +220,7 @@ public class GridCellExporterAction extends ExecCommand  {
             }
             throw new IllegalArgumentException("roiSource must be in range [0,2], is " + model.roiSource);
         }
-        
+
         private void prepareBinding() throws ValidationException {
             ValueModel roiSourceModel = vc.getModel("roiSource");
             roiSourceModel.setValue(2);
@@ -248,7 +234,7 @@ public class GridCellExporterAction extends ExecCommand  {
                         }
                     }
                 }
-            
+
                 if (!product.getPinGroup().getSelectedNodes().isEmpty()) {
                     roiSourceModel.setValue(1);
                 }
@@ -257,7 +243,7 @@ public class GridCellExporterAction extends ExecCommand  {
                     roiRasterDesc.setNotNull(true);
                     roiRasterDesc.setNotEmpty(true);
                     roiRasterDesc.setValueSet(new ValueSet(roiRdns.toArray()));
-                    
+
                     roiSourceModel.setValue(0);
                     vc.getModel("roiRaster").setValue(roiRdns.get(0));
                 }
@@ -273,7 +259,7 @@ public class GridCellExporterAction extends ExecCommand  {
             outputdesc.setNotNull(true);
             ValueModel useOpenModel = vc.getModel("useOpenProduct");
             useOpenModel.setValue((product != null));
-            
+
             bindingContext.bindEnabledState("roiRaster", true, "roiSource", 0);
             bindingContext.bindEnabledState("roiPin", true, "roiSource", 1);
         }
@@ -287,7 +273,7 @@ public class GridCellExporterAction extends ExecCommand  {
             mainPanel.add(createOutputPanel());
             setContent(mainPanel);
         }
-        
+
 
         private JComponent createInputPanel() {
             TableLayout layout = new TableLayout(1);
@@ -323,15 +309,16 @@ public class GridCellExporterAction extends ExecCommand  {
             setFileEditorWidth("scanDirectory");
             return panel;
         }
-        
+
         private void setFileEditorWidth(String name) {
-            JTextField textField = (JTextField) bindingContext.getBinding(name).getComponentAdapter().getComponents()[0];
-            textField.setColumns(30);   
+            JTextField textField = (JTextField) bindingContext.getBinding(
+                    name).getComponentAdapter().getComponents()[0];
+            textField.setColumns(30);
         }
-        
+
         private JComponent createFileSelectorComponent(ValueDescriptor valueDescriptor, BindingContext bindingContext) {
             JTextField textField = new JTextField();
-            ComponentAdapter adapter = new TextFieldAdapter(textField);
+            ComponentAdapter adapter = new TextComponentAdapter(textField);
             final Binding binding = bindingContext.bind(valueDescriptor.getName(), adapter);
             final JPanel subPanel = new JPanel(new BorderLayout(2, 2));
             subPanel.add(textField, BorderLayout.CENTER);
@@ -350,7 +337,7 @@ public class GridCellExporterAction extends ExecCommand  {
             subPanel.add(etcButton, BorderLayout.EAST);
             return subPanel;
         }
-        
+
         private Component createRoiPanel() {
             JRadioButton useROIButton = new JRadioButton("Shape from ROI definition of band");
             if (vc.getDescriptor("roiRaster").getValueSet() == null) {
@@ -370,10 +357,12 @@ public class GridCellExporterAction extends ExecCommand  {
             buttonGroup.add(usePinButton);
             buttonGroup.add(useAreaButton);
             bindingContext.bind("roiSource", buttonGroup, inputValueSet);
-            
-            ValueEditor selectionEditor = ValueEditorRegistry.getInstance().getValueEditor(SingleSelectionEditor.class.getName());
-            JComboBox roiCombo = (JComboBox) selectionEditor.createEditorComponent(vc.getDescriptor("roiRaster"), bindingContext);
-            
+
+            ValueEditor selectionEditor = ValueEditorRegistry.getInstance().getValueEditor(
+                    SingleSelectionEditor.class.getName());
+            JComboBox roiCombo = (JComboBox) selectionEditor.createEditorComponent(vc.getDescriptor("roiRaster"),
+                                                                                   bindingContext);
+
             DefaultListCellRenderer listCellRenderer = new ProductNodeRenderer();
             roiCombo.setRenderer(listCellRenderer);
 
@@ -382,22 +371,23 @@ public class GridCellExporterAction extends ExecCommand  {
             layout.setTableFill(TableLayout.Fill.HORIZONTAL);
             layout.setTablePadding(3, 3);
             layout.setTableWeightX(1.0);
-            
+
             JPanel panel = new JPanel(layout);
             panel.setBorder(BorderFactory.createTitledBorder("Region of interest"));
-            
+
             panel.add(useROIButton);
             layout.setCellPadding(1, 0, new Insets(0, 24, 3, 3));
             panel.add(roiCombo);
 
             panel.add(usePinButton);
-            
+
             panel.add(useAreaButton);
             layout.setCellPadding(3, 0, new Insets(0, 24, 3, 3));
             panel.add(createLatLonPanel());
-            
+
             return panel;
         }
+
         private Component createLatLonPanel() {
             TableLayout layout = new TableLayout(3);
             layout.setTableAnchor(TableLayout.Anchor.WEST);
@@ -408,17 +398,17 @@ public class GridCellExporterAction extends ExecCommand  {
             panel.add(emptyLabel);
             panel.add(createLatLonInputElement("north", "North:", 4));
             panel.add(emptyLabel);
-            
+
             panel.add(createLatLonInputElement("west", "West:", 5));
             panel.add(emptyLabel);
             panel.add(createLatLonInputElement("east", "East:", 5));
-            
+
             panel.add(emptyLabel);
             panel.add(createLatLonInputElement("south", "South:", 4));
             panel.add(emptyLabel);
             return panel;
         }
-        
+
         private Component createLatLonInputElement(String name, String displayName, int numColumns) {
             ValueEditor textEditor = ValueEditorRegistry.getInstance().getValueEditor(TextFieldEditor.class.getName());
             JPanel panel = new JPanel(new FlowLayout());
@@ -429,7 +419,7 @@ public class GridCellExporterAction extends ExecCommand  {
             panel.add(new JLabel("\u00b0"));
             return panel;
         }
-        
+
         private JComponent createOutputPanel() {
             TableLayout layout = new TableLayout(1);
             layout.setTableAnchor(TableLayout.Anchor.WEST);
@@ -446,8 +436,9 @@ public class GridCellExporterAction extends ExecCommand  {
             return panel;
         }
     }
-    
+
     private static class ProductNodeRenderer extends DefaultListCellRenderer {
+
         @Override
         public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected,
                                                       boolean cellHasFocus) {
@@ -462,20 +453,21 @@ public class GridCellExporterAction extends ExecCommand  {
         }
     }
 
-    
+
     private static class GridCellExportModel {
+
         private boolean useOpenProduct;
         private boolean scanRecursive;
         private File scanDirectory;
-        
+
         private int roiSource;
         private Band roiRaster;
-        
+
         private double north = 90;
         private double south = -90;
         private double east = 180;
         private double west = -180;
-        
+
         private File output;
     }
 }

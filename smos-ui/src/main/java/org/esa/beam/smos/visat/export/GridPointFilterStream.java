@@ -27,7 +27,7 @@ import java.io.IOException;
  *
  * @author Marco Zuehlke
  * @version $Revision$ $Date$
- * @since SMOS 1.0
+ * @since SMOS 2.0
  */
 public interface GridPointFilterStream {
     

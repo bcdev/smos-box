@@ -39,7 +39,7 @@ import java.util.Set;
  *
  * @author Marco Zuehlke
  * @version $Revision$ $Date$
- * @since BEAM 4.2
+ * @since SMOS-Box 2.0
  */
 public class GridCellExport {
     

@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class EEGridExport implements GridPointFilterStream {
+
     private final File outputDir;
     private static final int ONE_KB = 1024;
     private File inHdr;
@@ -24,6 +25,7 @@ public class EEGridExport implements GridPointFilterStream {
         this.outputDir = outputDir;
     }
 
+    @Override
     public void startFile(SmosFile smosfile) throws IOException {
         final String dblName = smosfile.getFile().getName();
         inHdr = FileUtils.exchangeExtension(smosfile.getFile(), ".HDR");
@@ -50,16 +52,19 @@ public class EEGridExport implements GridPointFilterStream {
         offSet = 4;
     }
 
+    @Override
     public void stopFile(SmosFile smosfile) throws IOException {
         // @todo 1 tb/tb patch relevant fields
         final File outHdr = new File(outputDir, inHdr.getName());
         copy(inHdr, outHdr);
-        final CompoundData data = ouputContext.getData(TypeBuilder.COMPOUND("foo", TypeBuilder.MEMBER("int", SimpleType.INT)), 0L);
+        final CompoundData data = ouputContext.createData(
+                TypeBuilder.COMPOUND("foo", TypeBuilder.MEMBER("int", SimpleType.INT)), 0L);
         data.setInt(0, counter);
         data.flush();
 
     }
 
+    @Override
     public void handleGridPoint(int id, CompoundData gridPointDataIn) throws IOException {
 //        final String s = gridPointDataIn.getCompoundType().getName();
 //        if (counter == 0) {
@@ -67,7 +72,7 @@ public class EEGridExport implements GridPointFilterStream {
 //            dataPrinter.print(gridPointDataIn);
 //        }
         final CompoundType compoundType = gridPointDataIn.getCompoundType();
-        final CompoundData data = ouputContext.getData(compoundType, offSet);
+        final CompoundData data = ouputContext.createData(compoundType, offSet);
         size = 0;
         copyCompound(gridPointDataIn, data);
         data.flush();
@@ -123,8 +128,9 @@ public class EEGridExport implements GridPointFilterStream {
     }
 
 
+    @Override
     public void close() throws IOException {
-        //To change body of implemented methods use File | Settings | File Templates.
+        // todo - implement, if necessary (rq-20091002)
     }
 
     public static void copy(File source, File target) throws IOException {

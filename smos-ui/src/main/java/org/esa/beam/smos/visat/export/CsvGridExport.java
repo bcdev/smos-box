@@ -23,7 +23,6 @@ import com.bc.ceres.binio.SequenceData;
 import com.bc.ceres.binio.SequenceType;
 import com.bc.ceres.binio.SimpleType;
 import com.bc.ceres.binio.Type;
-
 import org.esa.beam.dataio.smos.BandInfo;
 import org.esa.beam.dataio.smos.BandInfoRegistry;
 import org.esa.beam.dataio.smos.SmosFile;
@@ -36,10 +35,10 @@ import java.io.PrintWriter;
  *
  * @author Marco Zuehlke
  * @version $Revision$ $Date$
- * @since SMOS 1.0
+ * @since SMOS-Box 2.0
  */
 public class CsvGridExport implements GridPointFilterStream {
-    
+
     private final PrintWriter printWriter;
     private final String separator;
 
@@ -51,11 +50,11 @@ public class CsvGridExport implements GridPointFilterStream {
     @Override
     public void startFile(SmosFile smosfile) throws IOException {
         printWriter.println(smosfile.getFile().getName());
-        
+
         printTypeHeader(smosfile.getGridPointType());
         printWriter.println();
     }
-    
+
     private void printTypeHeader(Type type) {
         if (type.isCompoundType()) {
             CompoundType compoundType = (CompoundType) type;
@@ -67,7 +66,7 @@ public class CsvGridExport implements GridPointFilterStream {
                 } else {
                     printTypeHeader(member.getType());
                 }
-                if (i < memberCount-1) {
+                if (i < memberCount - 1) {
                     printWriter.print(separator);
                 }
             }
@@ -77,7 +76,7 @@ public class CsvGridExport implements GridPointFilterStream {
             printTypeHeader(elementType);
         }
     }
-    
+
     @Override
     public void stopFile(SmosFile smosfile) {
         printWriter.println("-----------------------------------------------");
@@ -98,7 +97,7 @@ public class CsvGridExport implements GridPointFilterStream {
             printWriter.println();
         }
     }
-    
+
     private void writeCompound(CompoundData compoundData) throws IOException {
         int memberCount = compoundData.getMemberCount();
         CompoundType gridPointType = compoundData.getCompoundType();
@@ -121,7 +120,7 @@ public class CsvGridExport implements GridPointFilterStream {
             } else if (member.getType().isCompoundType()) {
                 writeCompound(compoundData.getCompound(i));
             }
-            if (i < memberCount-1) {
+            if (i < memberCount - 1) {
                 printWriter.print(separator);
             }
         }

@@ -40,7 +40,7 @@ import java.util.List;
 /**
  * @author Marco Zuehlke
  * @version $Revision$ $Date$
- * @since SMOS 1.0
+ * @since SMOS-Box 2.0
  */
 public class GridPointFilterStreamHandler {
 
