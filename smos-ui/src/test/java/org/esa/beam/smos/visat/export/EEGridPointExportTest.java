@@ -46,7 +46,7 @@ public class EEGridPointExportTest {
         final CompoundType gridPointType = smosFile.getGridPointType();
 
         final CompoundData inputData = inputContext.getData();
-        assertEquals(1, inputData.getInt(0));
+        assertEquals(2, inputData.getInt(0));
     }
 
     public static void main(String[] args) {
