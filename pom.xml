@@ -7,13 +7,13 @@
     <name>SMOS-Box</name>
     <groupId>org.esa.beam.smos</groupId>
     <artifactId>smos-box</artifactId>
-    <version>1.0.1</version>
+    <version>2.0-SNAPSHOT</version>
 
     <packaging>pom</packaging>
 
     <repositories>
         <repository>
-            <id>bc-public</id>
+            <id>bc-mvn-repo-public</id>
             <name>Public Maven Repository at Brockmann-Consult</name>
             <url>http://www.brockmann-consult.de/mvn/os</url>
             <releases>
@@ -25,16 +25,11 @@
                 <checksumPolicy>warn</checksumPolicy>
             </snapshots>
         </repository>
-        <repository>
-            <id>gt-primary</id>
-            <name>Primary GeoTools Maven Repository</name>
-            <url>http://maven.geotools.fr/repository</url>
-        </repository>
     </repositories>
 
     <pluginRepositories>
         <pluginRepository>
-            <id>bc-public</id>
+            <id>bc-mvn-repo-public</id>
             <name>Public Maven Repository at Brockmann-Consult</name>
             <url>http://www.brockmann-consult.de/mvn/os</url>
             <releases>
@@ -74,37 +69,37 @@
             <dependency>
                 <groupId>com.bc.ceres</groupId>
                 <artifactId>ceres-launcher</artifactId>
-                <version>0.9</version>
+                <version>0.10-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>com.bc.ceres</groupId>
                 <artifactId>ceres-core</artifactId>
-                <version>0.9</version>
+                <version>0.10-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>com.bc.ceres</groupId>
                 <artifactId>ceres-binding</artifactId>
-                <version>0.9</version>
+                <version>0.10-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>com.bc.ceres</groupId>
                 <artifactId>ceres-ui</artifactId>
-                <version>0.9</version>
+                <version>0.10-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>com.bc.ceres</groupId>
                 <artifactId>ceres-binio</artifactId>
-                <version>0.9</version>
+                <version>0.10-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>com.bc.ceres</groupId>
                 <artifactId>ceres-glayer</artifactId>
-                <version>0.9</version>
+                <version>0.10-SNAPSHOT</version>
             </dependency>
 
             <!-- BEAM System Level Modules ############################################# -->
@@ -112,27 +107,27 @@
             <dependency>
                 <groupId>org.esa.beam</groupId>
                 <artifactId>beam-core</artifactId>
-                <version>4.6.1</version>
+                <version>4.7-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.esa.beam</groupId>
                 <artifactId>beam-gpf</artifactId>
-                <version>4.6.1</version>
+                <version>4.7-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.esa.beam</groupId>
                 <artifactId>beam-ui</artifactId>
-                <version>4.6.1</version>
+                <version>4.7-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.esa.beam</groupId>
                 <artifactId>beam-visat</artifactId>
-                <version>4.6.1</version>
+                <version>4.7-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.esa.beam</groupId>
                 <artifactId>blue-marble-worldmap</artifactId>
-                <version>1.0</version>
+                <version>1.0.1</version>
             </dependency>
 
             <!-- SMOS Libraries ############################################# -->
@@ -211,12 +206,13 @@
             <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
-                <version>4.4</version>
+                <version>[4.4,)</version>
                 <scope>test</scope>
             </dependency>
 
             <!-- JIDE Swing Libraries ############################################# -->
 
+<!--
             <dependency>
                 <groupId>com.jidesoft</groupId>
                 <artifactId>jide-dock</artifactId>
@@ -242,6 +238,7 @@
                 <artifactId>jide-common</artifactId>
                 <version>2.6.7</version>
             </dependency>
+-->
 
             <!-- XStream Libraries ############################################# -->
 
@@ -306,13 +303,13 @@
                     <exclude>target</exclude>
                 </configuration>
             </plugin>
-	        <plugin>
-		         <artifactId>maven-eclipse-plugin</artifactId>
-		         <configuration>
-			         <downloadSources>true</downloadSources>
-			         <downloadJavadocs>true</downloadJavadocs>
-		         </configuration>
-	        </plugin>
+            <plugin>
+                <artifactId>maven-eclipse-plugin</artifactId>
+                <configuration>
+                    <downloadSources>true</downloadSources>
+                    <downloadJavadocs>true</downloadJavadocs>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
