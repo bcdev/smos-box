@@ -114,8 +114,8 @@ public class GridPointFilterStreamHandler {
 
     private void handleSmosFile(SmosFile smosFile, ProgressMonitor pm) throws IOException {
         CompoundType gridPointType = smosFile.getGridPointType();
-        final int latIndex = gridPointType.getMemberIndex(SmosFormats.GRID_POINT_LATITUDE_NAME);
-        final int lonIndex = gridPointType.getMemberIndex(SmosFormats.GRID_POINT_LONGITUDE_NAME);
+        final int latIndex = gridPointType.getMemberIndex(SmosFormats.GRID_POINT_LAT_NAME);
+        final int lonIndex = gridPointType.getMemberIndex(SmosFormats.GRID_POINT_LON_NAME);
 
         filterStream.startFile(smosFile);
         final int gridPointCount = smosFile.getGridPointCount();

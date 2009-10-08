@@ -58,7 +58,7 @@ public class SmosFile implements GridPointDataProvider {
                     "SMOS File ''{0}'': Missing grid point list.", file.getPath()));
         }
 
-        gridPointType = (CompoundType) gridPointList.getSequenceType().getElementType();
+        gridPointType = (CompoundType) gridPointList.getType().getElementType();
         gridPointIdIndex = gridPointType.getMemberIndex(SmosFormats.GRID_POINT_ID_NAME);
         gridPointIndexes = createGridPointIndexes();
         region = computeRegion();
@@ -125,8 +125,8 @@ public class SmosFile implements GridPointDataProvider {
     }
 
     private Area computeRegion() throws IOException {
-        final int latIndex = getGridPointType().getMemberIndex(SmosFormats.GRID_POINT_LATITUDE_NAME);
-        final int lonIndex = getGridPointType().getMemberIndex(SmosFormats.GRID_POINT_LONGITUDE_NAME);
+        final int latIndex = getGridPointType().getMemberIndex(SmosFormats.GRID_POINT_LAT_NAME);
+        final int lonIndex = getGridPointType().getMemberIndex(SmosFormats.GRID_POINT_LON_NAME);
         final SequenceData gridPointList = getGridPointList();
 
         final Rectangle2D[] tileRects = new Rectangle2D[512];

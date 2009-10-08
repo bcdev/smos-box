@@ -29,8 +29,8 @@ public class SmosFormats {
     public static final String GRID_POINT_COUNTER_NAME = "Grid_Point_Counter";
     public static final String GRID_POINT_LIST_NAME = "Grid_Point_List";
     public static final String GRID_POINT_ID_NAME = "Grid_Point_ID";
-    public static final String GRID_POINT_LATITUDE_NAME = "Grid_Point_Latitude";
-    public static final String GRID_POINT_LONGITUDE_NAME = "Grid_Point_Longitude";
+    public static final String GRID_POINT_LAT_NAME = "Grid_Point_Latitude";
+    public static final String GRID_POINT_LON_NAME = "Grid_Point_Longitude";
 
     public static final String SNAPSHOT_LIST_NAME = "Snapshot_List";
     public static final String SNAPSHOT_ID_NAME = "Snapshot_ID";
