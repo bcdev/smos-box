@@ -141,7 +141,7 @@ public class EEGridPointExportTest {
             }
             if (targetFilter.accept(id, gridPointData)) {
                 targetContext.getData().setLong(SmosFormats.GRID_POINT_COUNTER_NAME, ++gridPointCount);
-                // ATTENTION: must be flushed before grid point data is written, don't know why (rq-20091008)
+                // ATTENTION: flush must occur <em>before</em> grid point data is written (rq-20091008)
                 targetContext.getData().flush();
 
                 gridPointData.resolveSize();
