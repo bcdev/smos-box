@@ -83,7 +83,7 @@ public class EEGridPointExport implements GridPointFilterStream {
         System.out.println("counter = " + counter);
     }
 
-    private void copyCompound(CompoundData in, CompoundData out) throws IOException {
+    void copyCompound(CompoundData in, CompoundData out) throws IOException {
         CompoundType inCompoundType = in.getCompoundType();
         CompoundType outCompoundType = out.getCompoundType();
         if (!inCompoundType.equals(outCompoundType)) {

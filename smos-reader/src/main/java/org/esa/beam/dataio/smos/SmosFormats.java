@@ -26,6 +26,7 @@ import java.util.concurrent.ConcurrentMap;
  */
 public class SmosFormats {
 
+    public static final String GRID_POINT_COUNTER_NAME = "Grid_Point_Counter";
     public static final String GRID_POINT_LIST_NAME = "Grid_Point_List";
     public static final String GRID_POINT_ID_NAME = "Grid_Point_ID";
     public static final String GRID_POINT_LATITUDE_NAME = "Grid_Point_Latitude";
