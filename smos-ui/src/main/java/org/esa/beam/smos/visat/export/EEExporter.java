@@ -11,6 +11,9 @@ import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * Example class or exporting subsets of SMOS data to EE format.
+ */
 public class EEExporter {
 
     private static final Shape TARGET_REGION = new Rectangle2D.Double(92.0, 7.0, 2.0, 2.0);

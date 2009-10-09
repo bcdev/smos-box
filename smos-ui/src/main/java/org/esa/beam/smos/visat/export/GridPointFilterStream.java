@@ -18,11 +18,13 @@ package org.esa.beam.smos.visat.export;
 
 import org.esa.beam.dataio.smos.SmosFile;
 
-import java.io.IOException;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 /**
  * A filter stream that works on a SMOS grid points.
+ * <p/>
+ * todo - rq/tb/mz consider reworking this interface (rq-20091009)
  *
  * @author Marco Zuehlke
  * @version $Revision$ $Date$
