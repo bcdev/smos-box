@@ -37,18 +37,18 @@ import java.io.PrintWriter;
  * @version $Revision$ $Date$
  * @since SMOS-Box 2.0
  */
-public class CsvExport implements GridPointFilterStream {
+class CsvExportStream implements GridPointFilterStream {
 
     private final PrintWriter printWriter;
     private final String separator;
 
-    public CsvExport(PrintWriter printWriter, String separator) {
+    public CsvExportStream(PrintWriter printWriter, String separator) {
         this.printWriter = printWriter;
         this.separator = separator;
     }
 
     @Override
-    public void startFile(SmosFile smosfile) throws IOException {
+    public void startFile(SmosFile smosfile) {
         printWriter.println(smosfile.getFile().getName());
 
         printTypeHeader(smosfile.getGridPointType());
@@ -100,7 +100,7 @@ public class CsvExport implements GridPointFilterStream {
 
     private void writeCompound(CompoundData compoundData) throws IOException {
         int memberCount = compoundData.getMemberCount();
-        CompoundType gridPointType = compoundData.getCompoundType();
+        CompoundType gridPointType = compoundData.getType();
         for (int i = 0; i < memberCount; i++) {
             CompoundMember member = gridPointType.getMember(i);
             if (member.getType().isSimpleType()) {

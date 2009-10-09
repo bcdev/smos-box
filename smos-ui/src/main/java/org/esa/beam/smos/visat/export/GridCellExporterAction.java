@@ -150,14 +150,14 @@ public class GridCellExporterAction extends ExecCommand {
                 visatApp.showErrorDialog("Could not create CSV file :\n" + e.getMessage());
                 return;
             }
-            final CsvExport csvExport = new CsvExport(printWriter, ";");
+            final CsvExportStream csvExportStream = new CsvExportStream(printWriter, ";");
             ProgressMonitorSwingWorker<Void, Void> swingWorker = new ProgressMonitorSwingWorker<Void, Void>(
                     getJDialog(), "Exporting grid cells") {
 
                 @Override
                 protected Void doInBackground(ProgressMonitor pm) throws Exception {
                     Area area = getArea();
-                    GridPointFilterStreamHandler streamHandler = new GridPointFilterStreamHandler(csvExport, area);
+                    GridPointFilterStreamHandler streamHandler = new GridPointFilterStreamHandler(csvExportStream, area);
                     try {
                         if (model.useOpenProduct) {
                             streamHandler.processProduct(product, pm);
@@ -170,7 +170,7 @@ public class GridCellExporterAction extends ExecCommand {
                         return null;
                     } finally {
                         try {
-                            csvExport.close();
+                            csvExportStream.close();
                         } catch (IOException e) {
                             visatApp.showErrorDialog("An error occured while closing the CSV file:\n" + e.getMessage());
                         }

@@ -16,11 +16,10 @@
  */
 package org.esa.beam.smos.visat.export;
 
-import com.bc.ceres.binio.CompoundData;
-
 import org.esa.beam.dataio.smos.SmosFile;
 
 import java.io.IOException;
+import java.io.FileNotFoundException;
 
 /**
  * A filter stream that works on a SMOS grid points.
@@ -29,13 +28,11 @@ import java.io.IOException;
  * @version $Revision$ $Date$
  * @since SMOS 2.0
  */
-public interface GridPointFilterStream {
-    
-    void startFile(SmosFile smosfile) throws IOException;
-    
+interface GridPointFilterStream extends GridPointHandler {
+
+    void startFile(SmosFile smosfile) throws FileNotFoundException;
+
     void stopFile(SmosFile smosfile) throws IOException;
 
-    void handleGridPoint(int id, CompoundData gridPointData) throws IOException;
-    
     void close() throws IOException;
 }

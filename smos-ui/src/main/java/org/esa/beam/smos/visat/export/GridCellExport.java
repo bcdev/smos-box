@@ -35,7 +35,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Command line toll for grid cell export
+ * Command line tool for grid cell export
  *
  * @author Marco Zuehlke
  * @version $Revision$ $Date$
@@ -57,8 +57,8 @@ public class GridCellExport {
         } else {
             printWriter = new PrintWriter(System.out);
         }
-        CsvExport csvExport = new CsvExport(printWriter, ";");
-        GridPointFilterStreamHandler streamHandler = new GridPointFilterStreamHandler(csvExport, arguments.area);
+        CsvExportStream csvExportStream = new CsvExportStream(printWriter, ";");
+        GridPointFilterStreamHandler streamHandler = new GridPointFilterStreamHandler(csvExportStream, arguments.area);
         
         ProductReader smosProductReader = ProductIO.getProductReader("SMOS");
         ProductReaderPlugIn readerPlugIn = smosProductReader.getReaderPlugIn();

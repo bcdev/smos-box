@@ -20,7 +20,6 @@ import com.bc.ceres.binio.CompoundData;
 import com.bc.ceres.binio.CompoundType;
 import com.bc.ceres.core.ProgressMonitor;
 import com.bc.ceres.core.SubProgressMonitor;
-
 import org.esa.beam.dataio.smos.SmosFile;
 import org.esa.beam.dataio.smos.SmosFormats;
 import org.esa.beam.dataio.smos.SmosProductReader;
@@ -31,7 +30,7 @@ import org.esa.beam.framework.dataio.ProductReaderPlugIn;
 import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.util.io.FileUtils;
 
-import java.awt.geom.Area;
+import java.awt.Shape;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -42,26 +41,26 @@ import java.util.List;
  * @version $Revision$ $Date$
  * @since SMOS-Box 2.0
  */
-public class GridPointFilterStreamHandler {
+class GridPointFilterStreamHandler {
 
     private final GridPointFilterStream filterStream;
-    private final Area area;
+    private final Shape area;
 
-    public GridPointFilterStreamHandler(GridPointFilterStream filterStream, Area area) {
+    GridPointFilterStreamHandler(GridPointFilterStream filterStream, Shape area) {
         this.filterStream = filterStream;
         this.area = area;
     }
 
-    public void processProduct(Product product, ProgressMonitor pm) throws IOException {
+    void processProduct(Product product, ProgressMonitor pm) throws IOException {
         ProductReader productReader = product.getProductReader();
         if (productReader instanceof SmosProductReader) {
             SmosProductReader smosProductReader = (SmosProductReader) productReader;
             SmosFile smosFile = smosProductReader.getSmosFile();
-            handleSmosFile(smosFile, pm);
+            procesSmosFile(smosFile, pm);
         }
     }
 
-    public void processDirectory(File dir, boolean recursive, ProgressMonitor pm) throws IOException {
+    void processDirectory(File dir, boolean recursive, ProgressMonitor pm) throws IOException {
         List<File> fileList = new ArrayList<File>();
         scanDir(dir, recursive, fileList, 0);
 
@@ -112,7 +111,7 @@ public class GridPointFilterStreamHandler {
         }
     }
 
-    private void handleSmosFile(SmosFile smosFile, ProgressMonitor pm) throws IOException {
+    void procesSmosFile(SmosFile smosFile, ProgressMonitor pm) throws IOException {
         CompoundType gridPointType = smosFile.getGridPointType();
         final int latIndex = gridPointType.getMemberIndex(SmosFormats.GRID_POINT_LAT_NAME);
         final int lonIndex = gridPointType.getMemberIndex(SmosFormats.GRID_POINT_LON_NAME);
