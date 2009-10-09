@@ -14,7 +14,7 @@ import java.io.IOException;
 public class EEExporter {
 
     /**
-     * Example for exporting subsets of SMOS products to EE format.
+     * Example for exporting subsets of SMOS data to EE format.
      *
      * @param args the pathname of a SMOS DBL file as first element,
      *             the path of the target directory as second element.
