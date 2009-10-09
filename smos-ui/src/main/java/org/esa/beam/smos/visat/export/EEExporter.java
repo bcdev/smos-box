@@ -13,6 +13,8 @@ import java.io.IOException;
 
 public class EEExporter {
 
+    private static final Shape TARGET_REGION = new Rectangle2D.Double(92.0, 7.0, 2.0, 2.0);
+
     /**
      * Example for exporting subsets of SMOS data to EE format.
      *
@@ -41,14 +43,11 @@ public class EEExporter {
             return;
         }
 
-        // 3. create handler
-        final Shape region = new Rectangle2D.Double(92.0, 7.0, 2.0, 2.0);
-        final GridPointFilterStream exportStream = new EEExportStream(targetDirectory);
-        final GridPointFilterStreamHandler streamHandler = new GridPointFilterStreamHandler(exportStream, region);
-
-        // 4. process SMOS file
+        // 3. process SMOS file
         try {
-            streamHandler.procesSmosFile(smosFile, ProgressMonitor.NULL);
+            final EEExportStream exportStream = new EEExportStream(targetDirectory);
+            final SmosFileProcessor processor = new SmosFileProcessor(exportStream, TARGET_REGION);
+            processor.process(smosFile, ProgressMonitor.NULL);
         } catch (IOException e) {
             e.printStackTrace();
         }

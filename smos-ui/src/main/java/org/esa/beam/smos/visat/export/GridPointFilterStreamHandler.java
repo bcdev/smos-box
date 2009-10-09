@@ -16,12 +16,9 @@
  */
 package org.esa.beam.smos.visat.export;
 
-import com.bc.ceres.binio.CompoundData;
-import com.bc.ceres.binio.CompoundType;
 import com.bc.ceres.core.ProgressMonitor;
 import com.bc.ceres.core.SubProgressMonitor;
 import org.esa.beam.dataio.smos.SmosFile;
-import org.esa.beam.dataio.smos.SmosFormats;
 import org.esa.beam.dataio.smos.SmosProductReader;
 import org.esa.beam.framework.dataio.DecodeQualification;
 import org.esa.beam.framework.dataio.ProductIO;
@@ -45,10 +42,12 @@ class GridPointFilterStreamHandler {
 
     private final GridPointFilterStream filterStream;
     private final Shape area;
+    private final SmosFileProcessor smosFileProcessor;
 
     GridPointFilterStreamHandler(GridPointFilterStream filterStream, Shape area) {
         this.filterStream = filterStream;
         this.area = area;
+        smosFileProcessor = new SmosFileProcessor(filterStream, area);
     }
 
     void processProduct(Product product, ProgressMonitor pm) throws IOException {
@@ -56,7 +55,7 @@ class GridPointFilterStreamHandler {
         if (productReader instanceof SmosProductReader) {
             SmosProductReader smosProductReader = (SmosProductReader) productReader;
             SmosFile smosFile = smosProductReader.getSmosFile();
-            procesSmosFile(smosFile, pm);
+            smosFileProcessor.process(smosFile, pm);
         }
     }
 
@@ -94,8 +93,7 @@ class GridPointFilterStreamHandler {
         if (files == null) {
             return;
         }
-        for (int i = 0; i < files.length; i++) {
-            final File file = files[i];
+        for (final File file : files) {
             if (file.isDirectory()) {
                 if (recursive || depth < 1) {
                     scanDir(file, recursive, fileList, depth + 1);
@@ -111,34 +109,4 @@ class GridPointFilterStreamHandler {
         }
     }
 
-    void procesSmosFile(SmosFile smosFile, ProgressMonitor pm) throws IOException {
-        CompoundType gridPointType = smosFile.getGridPointType();
-        final int latIndex = gridPointType.getMemberIndex(SmosFormats.GRID_POINT_LAT_NAME);
-        final int lonIndex = gridPointType.getMemberIndex(SmosFormats.GRID_POINT_LON_NAME);
-
-        filterStream.startFile(smosFile);
-        final int gridPointCount = smosFile.getGridPointCount();
-        pm.beginTask("Export grid cells", gridPointCount);
-        try {
-            for (int i = 0; i < gridPointCount; i++) {
-                CompoundData gridPointData = smosFile.getGridPointData(i);
-                double lat = gridPointData.getDouble(latIndex);
-                double lon = gridPointData.getDouble(lonIndex);
-                // normalisation to [-180, 180] necessary for some L1c test products
-                if (lon > 180.0) {
-                    lon = lon - 360.0;
-                }
-                if (area.contains(lon, lat)) {
-                    filterStream.handleGridPoint(i, gridPointData);
-                }
-                pm.worked(1);
-                if (pm.isCanceled()) {
-                    throw new IOException("Export cancled");
-                }
-            }
-        } finally {
-            pm.done();
-        }
-        filterStream.stopFile(smosFile);
-    }
 }
