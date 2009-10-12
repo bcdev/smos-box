@@ -1,0 +1,14 @@
+1) understand file name pattern and modify subset file to follow convention
+
+Patch header:
+- <File_Name>
+- <Notes> - maybe add that fle was propcessed with SMOS-BOX version x.x.x
+- <Precise_Validity_Start>: acquisition period??
+- <Checksum> how is this calculated and_ do we need to recalculate and patch?
+- <Header_Size unit="bytes">011122</Header_Size>
+- <Datablock_Size unit="bytes">00000367475</Datablock_Size>
+- <Product_Location> recalculate and set
+- <Total_Num_Grid_Points>: adapt
+-  <Data_Set><DS_Size>
+-  <DS_Offset>
+-  <Num_DSR>
