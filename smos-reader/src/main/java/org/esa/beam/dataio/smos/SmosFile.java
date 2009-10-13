@@ -18,6 +18,7 @@ package org.esa.beam.dataio.smos;
 
 
 import com.bc.ceres.binio.*;
+import org.esa.beam.smos.dgg.SmosDgg;
 
 import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
@@ -26,22 +27,20 @@ import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.Arrays;
 
-import org.esa.beam.smos.dgg.SmosDgg;
-
 
 public class SmosFile implements GridPointDataProvider {
 
-    private final File file;
-    private final DataFormat format;
-    private final DataContext dataContext;
+    private File file;
+    private DataFormat format;
+    protected DataContext dataContext;
 
-    private final CompoundData dataBlock;
-    private final SequenceData gridPointList;
-    private final CompoundType gridPointType;
-    private final int gridPointIdIndex;
-    private final int[] gridPointIndexes;
+    protected CompoundData dataBlock;
+    protected SequenceData gridPointList;
+    protected CompoundType gridPointType;
+    protected int gridPointIdIndex;
+    protected int[] gridPointIndexes;
 
-    private final Area region;
+    private Area region;
     private int minSeqnum;
     private int maxSeqnum;
 
@@ -124,6 +123,9 @@ public class SmosFile implements GridPointDataProvider {
         dataContext.dispose();
     }
 
+    SmosFile() {
+    }
+
     private Area computeRegion() throws IOException {
         final int latIndex = getGridPointType().getMemberIndex(SmosFormats.GRID_POINT_LAT_NAME);
         final int lonIndex = getGridPointType().getMemberIndex(SmosFormats.GRID_POINT_LON_NAME);
@@ -170,7 +172,7 @@ public class SmosFile implements GridPointDataProvider {
         return region;
     }
 
-    private int[] createGridPointIndexes() throws IOException {
+    protected int[] createGridPointIndexes() throws IOException {
         minSeqnum = getGridPointSeqnum(0);
         maxSeqnum = minSeqnum;
 

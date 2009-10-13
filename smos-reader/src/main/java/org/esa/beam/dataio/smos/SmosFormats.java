@@ -40,6 +40,8 @@ public class SmosFormats {
     public static final String BT_INCIDENCE_ANGLE_NAME = "Incidence_Angle";
     public static final String BT_SNAPSHOT_ID_OF_PIXEL_NAME = "Snapshot_ID_of_Pixel";
 
+    public static final String DA_GRID_POINT_LIST_NAME = "SM_SWATH_ANALYSIS";
+
     public static final int L1C_POL_FLAGS_MASK = 3;
     public static final int L1C_POL_MODE_X = 0;
     public static final int L1C_POL_MODE_Y = 1;

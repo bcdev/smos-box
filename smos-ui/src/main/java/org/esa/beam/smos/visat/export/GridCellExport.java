@@ -74,7 +74,7 @@ public class GridCellExport {
                         handledProductNames.add(productName);
                     }
                 } catch (Exception e) {
-                    // ignore
+                    System.err.println(e.getMessage());
                 }
             } else {
                 System.err.println("Not a SMOS product: "+file.getAbsolutePath());
