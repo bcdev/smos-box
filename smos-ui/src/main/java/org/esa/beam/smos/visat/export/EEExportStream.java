@@ -45,11 +45,7 @@ class EEExportStream implements GridPointFilterStream {
 
     @Override
     public void handleGridPoint(int id, CompoundData gridPointData) throws IOException {
-        try {
-            targetGridPointHandler.handleGridPoint(id, gridPointData);
-        } finally {
-            dispose();
-        }
+        targetGridPointHandler.handleGridPoint(id, gridPointData);
     }
 
     @Override

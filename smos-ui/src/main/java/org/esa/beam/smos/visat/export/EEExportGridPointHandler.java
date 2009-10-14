@@ -3,14 +3,19 @@ package org.esa.beam.smos.visat.export;
 import com.bc.ceres.binio.CollectionData;
 import com.bc.ceres.binio.CompoundData;
 import com.bc.ceres.binio.DataContext;
+import com.bc.ceres.binio.SequenceData;
 import org.esa.beam.dataio.smos.SmosFormats;
+import org.esa.beam.dataio.smos.SmosFile;
 
 import java.io.IOException;
+import java.util.Date;
+import java.util.HashMap;
 
 class EEExportGridPointHandler implements GridPointHandler {
 
     private final DataContext targetContext;
     private final GridPointFilter targetFilter;
+    private final HashMap<Long, Date> snapshotIdTimeMap;
 
     private long gridPointCount;
     private long gridPointDataPosition;
@@ -27,6 +32,7 @@ class EEExportGridPointHandler implements GridPointHandler {
     EEExportGridPointHandler(DataContext targetContext, GridPointFilter targetFilter) {
         this.targetContext = targetContext;
         this.targetFilter = targetFilter;
+        snapshotIdTimeMap = new HashMap<Long, Date>();
     }
 
     @Override
@@ -53,6 +59,21 @@ class EEExportGridPointHandler implements GridPointHandler {
     private void init(CollectionData parent) throws IOException {
         final long parentPosition = parent.getPosition();
         copySnapshotData(parent, parentPosition);
+
+        final DataContext context = parent.getContext();
+        final SequenceData snapShotData = context.getData().getSequence(SmosFormats.SNAPSHOT_LIST_NAME);
+        final int numSnapshots = snapShotData.getElementCount();
+        for (int i = 0; i < numSnapshots; i++) {
+            final CompoundData snapShot = snapShotData.getCompound(i);
+            final CompoundData utcData = snapShot.getCompound(0);
+            final int days = utcData.getInt(0);
+            final long seconds = utcData.getUInt(1);
+            final long microSeconds = utcData.getUInt(2);
+            final Date snapShotTime = SmosFile.getCfiDateInUtc(days, seconds, microSeconds);
+            final long snapShotId = snapShot.getUInt(1);
+
+            snapshotIdTimeMap.put(snapShotId, snapShotTime);
+        }
 
         targetContext.getData().setLong(SmosFormats.GRID_POINT_COUNTER_NAME, 0);
         targetContext.getData().flush();
