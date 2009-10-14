@@ -31,6 +31,7 @@ class EEExportGridPointHandler implements GridPointHandler {
 
     @Override
     public void handleGridPoint(int id, CompoundData gridPointData) throws IOException {
+        // @todo 1 tb/tb track start and stop times - NOT POSSIBLE for BWSD1C, BWSF1C, BWLD1C and BWLF1C
         if (gridPointCount == 0) {
             init(gridPointData.getParent());
         }
@@ -51,12 +52,16 @@ class EEExportGridPointHandler implements GridPointHandler {
 
     private void init(CollectionData parent) throws IOException {
         final long parentPosition = parent.getPosition();
-        copyBytes(parent.getContext(), targetContext, 0, parentPosition);
+        copySnapshotData(parent, parentPosition);
 
         targetContext.getData().setLong(SmosFormats.GRID_POINT_COUNTER_NAME, 0);
         targetContext.getData().flush();
 
         gridPointDataPosition = parentPosition;
+    }
+
+    private void copySnapshotData(CollectionData parent, long parentPosition) throws IOException {
+        copyBytes(parent.getContext(), targetContext, 0, parentPosition);
     }
 
     private static void copyBytes(DataContext sourceContext,

@@ -74,6 +74,7 @@ public class GridCellExport {
                         handledProductNames.add(productName);
                     }
                 } catch (Exception e) {
+                    e.printStackTrace();
                     System.err.println(e.getMessage());
                 }
             } else {

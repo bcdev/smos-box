@@ -1,57 +1,5 @@
 package org.esa.beam.smos.visat;
 
-import org.esa.beam.dataio.smos.GridPointValueProvider;
-import org.esa.beam.dataio.smos.L1cFieldValueProvider;
-import org.esa.beam.dataio.smos.L1cScienceSmosFile;
-import org.esa.beam.dataio.smos.SmosFile;
-import org.esa.beam.dataio.smos.SmosMultiLevelSource;
-import org.esa.beam.dataio.smos.SnapshotProvider;
-import org.esa.beam.framework.datamodel.Band;
-import org.esa.beam.framework.datamodel.Product;
-import org.esa.beam.framework.datamodel.RasterDataNode;
-import org.esa.beam.framework.datamodel.VirtualBand;
-import org.esa.beam.framework.help.HelpSys;
-import org.esa.beam.framework.ui.product.ProductSceneView;
-import org.esa.beam.framework.ui.UIUtils;
-import org.esa.beam.framework.ui.tool.ToolButtonFactory;
-import org.esa.beam.glevel.TiledFileMultiLevelSource;
-import org.esa.beam.jai.ImageManager;
-import org.esa.beam.smos.visat.swing.SnapshotSelectorCombo;
-import org.esa.beam.smos.visat.swing.SnapshotSelectorComboModel;
-import org.esa.beam.visat.VisatApp;
-import org.jfree.layout.CenterLayout;
-
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.ComponentOrientation;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
-import java.awt.Shape;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
-import java.io.IOException;
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
-
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.TableModel;
-
 import com.bc.ceres.binio.CompoundData;
 import com.bc.ceres.binio.CompoundType;
 import com.bc.ceres.binio.Type;
@@ -64,6 +12,37 @@ import com.bc.ceres.glevel.MultiLevelImage;
 import com.bc.ceres.glevel.support.DefaultMultiLevelImage;
 import com.bc.ceres.glevel.support.FileMultiLevelSource;
 import com.bc.ceres.grender.Viewport;
+import org.esa.beam.dataio.smos.*;
+import org.esa.beam.framework.datamodel.Band;
+import org.esa.beam.framework.datamodel.Product;
+import org.esa.beam.framework.datamodel.RasterDataNode;
+import org.esa.beam.framework.datamodel.VirtualBand;
+import org.esa.beam.framework.help.HelpSys;
+import org.esa.beam.framework.ui.product.ProductSceneView;
+import org.esa.beam.glevel.TiledFileMultiLevelSource;
+import org.esa.beam.jai.ImageManager;
+import org.esa.beam.smos.visat.swing.SnapshotSelectorCombo;
+import org.esa.beam.smos.visat.swing.SnapshotSelectorComboModel;
+import org.esa.beam.visat.VisatApp;
+import org.jfree.layout.CenterLayout;
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableModel;
+import java.awt.*;
+import java.awt.event.*;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+import java.io.IOException;
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class SnapshotInfoToolView extends SmosToolView {
 
@@ -187,6 +166,19 @@ public class SnapshotInfoToolView extends SmosToolView {
                     entry[1] = "Failed reading data";
                 }
                 list.add(entry);
+            } else {
+                if ("Snapshot_Time".equals(compoundType.getMemberName(i))) {
+                    try {
+                        final CompoundData utcData = data.getCompound(0);
+                        final int days = utcData.getInt(0);
+                        final long seconds = utcData.getUInt(1);
+                        final long microSeconds = utcData.getUInt(2);
+                        entry[1] = SmosFile.getCfiDateInUtc(days, seconds, microSeconds);
+                    } catch (IOException e) {
+                        entry[1] = "Failed reading data";
+                    }
+                    list.add(entry);
+                }
             }
         }
 
@@ -219,7 +211,7 @@ public class SnapshotInfoToolView extends SmosToolView {
                 final Viewport vp = smosView.getLayerCanvas().getViewport();
                 final AffineTransform m2v = vp.getModelToViewTransform();
                 final Point2D.Double center = new Point2D.Double(snapshotRegion.getCenterX(),
-                                                                 snapshotRegion.getCenterY());
+                        snapshotRegion.getCenterY());
                 m2v.transform(center, center);
                 final Rectangle viewBounds = vp.getViewBounds();
                 final double vx = viewBounds.getCenterX();
@@ -233,7 +225,7 @@ public class SnapshotInfoToolView extends SmosToolView {
     }
 
     private class SnapshotIdListener implements ChangeListener {
-        
+
         private SnapshotRegionOverlay overlay = new SnapshotRegionOverlay();
         private boolean overlayAdded;
 
@@ -266,7 +258,7 @@ public class SnapshotInfoToolView extends SmosToolView {
             }
         }
     }
-    
+
     private class SnapshotRegionOverlay implements LayerCanvas.Overlay {
         private long snapshotId;
 
@@ -508,9 +500,9 @@ public class SnapshotInfoToolView extends SmosToolView {
             @Override
             public void actionPerformed(ActionEvent e) {
                 new TableModelExportRunner(getPaneWindow(),
-                                           getTitle(),
-                                           snapshotTable.getModel(),
-                                           snapshotTable.getColumnModel()).run();
+                        getTitle(),
+                        snapshotTable.getModel(),
+                        snapshotTable.getColumnModel()).run();
             }
         });
         tablePopup.add(exportItem);

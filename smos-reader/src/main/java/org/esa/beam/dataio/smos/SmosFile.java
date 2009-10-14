@@ -26,6 +26,9 @@ import java.io.File;
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 
 public class SmosFile implements GridPointDataProvider {
@@ -124,6 +127,23 @@ public class SmosFile implements GridPointDataProvider {
     }
 
     SmosFile() {
+    }
+
+    public static Date getCfiDateInUtc(int days, long seconds, long microseconds) {
+        final Calendar instance = GregorianCalendar.getInstance();
+        instance.set(Calendar.YEAR, 2000);
+        instance.set(Calendar.MONTH, 0);
+        instance.set(Calendar.DAY_OF_MONTH, 1);
+        instance.set(Calendar.HOUR_OF_DAY, 0);
+        instance.set(Calendar.MINUTE, 0);
+        instance.set(Calendar.SECOND, 0);
+        instance.set(Calendar.MILLISECOND, 0);
+
+        instance.add(Calendar.DATE, days);
+        instance.add(Calendar.SECOND, (int) seconds);
+        instance.add(Calendar.MILLISECOND,(int) (microseconds * 0.001));
+
+        return instance.getTime();
     }
 
     private Area computeRegion() throws IOException {
