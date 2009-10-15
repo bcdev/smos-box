@@ -1,9 +1,6 @@
 package org.esa.beam.smos.visat.export;
 
-import com.bc.ceres.binio.CollectionData;
-import com.bc.ceres.binio.CompoundData;
-import com.bc.ceres.binio.DataContext;
-import com.bc.ceres.binio.SequenceData;
+import com.bc.ceres.binio.*;
 import org.esa.beam.dataio.smos.SmosFile;
 import org.esa.beam.dataio.smos.SmosFormats;
 
@@ -61,22 +58,25 @@ class EEExportGridPointHandler implements GridPointHandler {
     }
 
     boolean hasValidPeriod() {
-        return timeTracker.hasValidPeriod();       
+        return timeTracker.hasValidPeriod();
     }
 
     Date getSensingStart() {
         return timeTracker.getIntervalStart();
     }
 
-    Date getSensingStop () {
+    Date getSensingStop() {
         return timeTracker.getIntervalStop();
     }
 
     private void trackSensingTime(CompoundData gridPointData) throws IOException {
         final SequenceData btDataList = gridPointData.getSequence("BT_Data_List");
         final CompoundData btData = btDataList.getCompound(0);
-        final long snapShotId = btData.getUInt(7);
-        timeTracker.track(snapshotIdTimeMap.get(snapShotId));
+        final int index = btData.getType().getMemberIndex("Snapshot_ID");
+        if (index >= 0) {
+            final long snapShotId = btData.getUInt(index);
+            timeTracker.track(snapshotIdTimeMap.get(snapShotId));
+        }
     }
 
     private void init(CollectionData parent) throws IOException {
@@ -93,9 +93,12 @@ class EEExportGridPointHandler implements GridPointHandler {
 
     private void createSnapshotIdMap(CollectionData parent) throws IOException {
         final DataContext context = parent.getContext();
-        final SequenceData snapShotData = context.getData().getSequence(SmosFormats.SNAPSHOT_LIST_NAME);
-        if (snapShotData == null) {
+        final SequenceData snapShotData;
+        try {
+            snapShotData = context.getData().getSequence(SmosFormats.SNAPSHOT_LIST_NAME);
+        } catch (DataAccessException e) {
             return; // we have a browse product
+            // but this procedure is not really cool, better ask if the seqzuence is present
         }
 
         final int numSnapshots = snapShotData.getElementCount();
