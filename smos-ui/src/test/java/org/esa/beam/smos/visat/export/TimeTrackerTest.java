@@ -47,6 +47,23 @@ public class TimeTrackerTest extends TestCase {
         assertEquals(date_1, timeTracker.getIntervalStop());
     }
 
+    public void testHasValidPeriod_noDates() {
+        assertFalse(timeTracker.hasValidPeriod());   
+    }
+
+    public void testHasValidPeriod_oneDate() {
+        timeTracker.track(new Date(2000));
+
+        assertTrue(timeTracker.hasValidPeriod());   
+    }
+
+    public void testHasValidPeriod_twoDate() {
+        timeTracker.track(new Date(2100));
+        timeTracker.track(new Date(2000));
+
+        assertTrue(timeTracker.hasValidPeriod());
+    }
+
     @Override
     protected void setUp() {
         timeTracker = new TimeTracker();

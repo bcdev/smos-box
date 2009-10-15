@@ -4,8 +4,8 @@ import com.bc.ceres.binio.CollectionData;
 import com.bc.ceres.binio.CompoundData;
 import com.bc.ceres.binio.DataContext;
 import com.bc.ceres.binio.SequenceData;
-import org.esa.beam.dataio.smos.SmosFormats;
 import org.esa.beam.dataio.smos.SmosFile;
+import org.esa.beam.dataio.smos.SmosFormats;
 
 import java.io.IOException;
 import java.util.Date;
@@ -16,6 +16,7 @@ class EEExportGridPointHandler implements GridPointHandler {
     private final DataContext targetContext;
     private final GridPointFilter targetFilter;
     private final HashMap<Long, Date> snapshotIdTimeMap;
+    private final TimeTracker timeTracker;
 
     private long gridPointCount;
     private long gridPointDataPosition;
@@ -33,6 +34,7 @@ class EEExportGridPointHandler implements GridPointHandler {
         this.targetContext = targetContext;
         this.targetFilter = targetFilter;
         snapshotIdTimeMap = new HashMap<Long, Date>();
+        timeTracker = new TimeTracker();
     }
 
     @Override
@@ -42,6 +44,8 @@ class EEExportGridPointHandler implements GridPointHandler {
             init(gridPointData.getParent());
         }
         if (targetFilter.accept(id, gridPointData)) {
+            trackSensingTime(gridPointData);
+
             targetContext.getData().setLong(SmosFormats.GRID_POINT_COUNTER_NAME, ++gridPointCount);
             // ATTENTION: flush must occur <em>before</em> grid point data is written (rq-20091008)
             targetContext.getData().flush();
@@ -56,12 +60,44 @@ class EEExportGridPointHandler implements GridPointHandler {
         }
     }
 
+    boolean hasValidPeriod() {
+        return timeTracker.hasValidPeriod();       
+    }
+
+    Date getSensingStart() {
+        return timeTracker.getIntervalStart();
+    }
+
+    Date getSensingStop () {
+        return timeTracker.getIntervalStop();
+    }
+
+    private void trackSensingTime(CompoundData gridPointData) throws IOException {
+        final SequenceData btDataList = gridPointData.getSequence("BT_Data_List");
+        final CompoundData btData = btDataList.getCompound(0);
+        final long snapShotId = btData.getUInt(7);
+        timeTracker.track(snapshotIdTimeMap.get(snapShotId));
+    }
+
     private void init(CollectionData parent) throws IOException {
         final long parentPosition = parent.getPosition();
         copySnapshotData(parent, parentPosition);
 
+        createSnapshotIdMap(parent);
+
+        targetContext.getData().setLong(SmosFormats.GRID_POINT_COUNTER_NAME, 0);
+        targetContext.getData().flush();
+
+        gridPointDataPosition = parentPosition;
+    }
+
+    private void createSnapshotIdMap(CollectionData parent) throws IOException {
         final DataContext context = parent.getContext();
         final SequenceData snapShotData = context.getData().getSequence(SmosFormats.SNAPSHOT_LIST_NAME);
+        if (snapShotData == null) {
+            return; // we have a browse product
+        }
+
         final int numSnapshots = snapShotData.getElementCount();
         for (int i = 0; i < numSnapshots; i++) {
             final CompoundData snapShot = snapShotData.getCompound(i);
@@ -74,11 +110,6 @@ class EEExportGridPointHandler implements GridPointHandler {
 
             snapshotIdTimeMap.put(snapShotId, snapShotTime);
         }
-
-        targetContext.getData().setLong(SmosFormats.GRID_POINT_COUNTER_NAME, 0);
-        targetContext.getData().flush();
-
-        gridPointDataPosition = parentPosition;
     }
 
     private void copySnapshotData(CollectionData parent, long parentPosition) throws IOException {

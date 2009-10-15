@@ -29,4 +29,8 @@ class TimeTracker {
             intervalStop = currentMillis;
         }
     }
+
+    boolean hasValidPeriod() {
+        return intervalStop >= intervalStart;
+    }
 }

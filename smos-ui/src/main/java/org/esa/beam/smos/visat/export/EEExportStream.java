@@ -15,7 +15,9 @@ class EEExportStream implements GridPointFilterStream {
     private final File targetDirectory;
 
     private DataContext targetContext;
-    private GridPointHandler targetGridPointHandler;
+    private EEExportGridPointHandler targetGridPointHandler;
+    private File targetDblFile;
+    private File targetHdrFile;
 
     public EEExportStream(File targetDirectory) {
         this.targetDirectory = targetDirectory;
@@ -24,7 +26,7 @@ class EEExportStream implements GridPointFilterStream {
     @Override
     public void startFile(SmosFile sourceFile) throws FileNotFoundException {
         final File sourceDblFile = sourceFile.getFile();
-        final File targetDblFile = getTargetDblFile(sourceDblFile);
+        targetDblFile = getTargetDblFile(sourceDblFile);
         final DataFormat targetFormat = sourceFile.getFormat();
 
         targetContext = targetFormat.createContext(targetDblFile, "rw");
@@ -35,9 +37,13 @@ class EEExportStream implements GridPointFilterStream {
     public void stopFile(SmosFile sourceFile) throws IOException {
         try {
             final File sourceHdrFile = getSourceHdrFile(sourceFile.getFile());
-            final File targetHdrFile = getTargetHdrFile(sourceHdrFile);
+            targetHdrFile = getTargetHdrFile(sourceHdrFile);
 
-            new EEHdrFilePatcher().patch(sourceHdrFile, targetHdrFile);
+            final EEHdrFilePatcher patcher = new EEHdrFilePatcher();
+            if (targetGridPointHandler.hasValidPeriod()) {
+                patcher.setSensingPeriod(targetGridPointHandler.getSensingStart(), targetGridPointHandler.getSensingStop());
+            }
+            patcher.patch(sourceHdrFile, targetHdrFile);
         } finally {
             dispose();
         }
@@ -54,15 +60,22 @@ class EEExportStream implements GridPointFilterStream {
     }
 
     private void dispose() {
-        targetGridPointHandler = null;
         if (targetContext != null) {
             targetContext.dispose();
         }
-    }
 
-    private String createTargetFileName(String sourceFileName) {
-        // @todo 1 : tb/tb return target file name according to file specs and subset
-        return sourceFileName;
+        final String filenameWOExtension = FileUtils.getFilenameWithoutExtension(targetDblFile);
+        final FileNamePatcher fileNamePatcher = new FileNamePatcher(filenameWOExtension);
+        if (targetGridPointHandler.hasValidPeriod()) {
+            fileNamePatcher.setStartDate(targetGridPointHandler.getSensingStart());
+            fileNamePatcher.setStopDate(targetGridPointHandler.getSensingStop());
+        }
+
+        targetGridPointHandler = null;
+        final File targetDir = targetHdrFile.getParentFile();
+        targetHdrFile.renameTo(new File(targetDir, fileNamePatcher.getHdrFileName()));
+        targetDblFile.renameTo(new File(targetDir, fileNamePatcher.getDblFileName()));
+
     }
 
     private File getSourceHdrFile(File sourceDblFile) {
@@ -70,11 +83,10 @@ class EEExportStream implements GridPointFilterStream {
     }
 
     private File getTargetDblFile(File sourceDblFile) {
-        return new File(targetDirectory, createTargetFileName(sourceDblFile.getName()));
+        return new File(targetDirectory, sourceDblFile.getName());
     }
 
     private File getTargetHdrFile(File sourceHdrFile) {
-        return new File(targetDirectory, createTargetFileName(sourceHdrFile.getName()));
+        return new File(targetDirectory, sourceHdrFile.getName());
     }
-
 }
