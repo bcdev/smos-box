@@ -36,7 +36,6 @@ class EEExportGridPointHandler implements GridPointHandler {
 
     @Override
     public void handleGridPoint(int id, CompoundData gridPointData) throws IOException {
-        // @todo 1 tb/tb track start and stop times - NOT POSSIBLE for BWSD1C, BWSF1C, BWLD1C and BWLF1C
         if (gridPointCount == 0) {
             init(gridPointData.getParent());
         }
