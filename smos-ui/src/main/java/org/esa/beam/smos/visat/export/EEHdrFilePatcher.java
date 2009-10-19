@@ -67,7 +67,7 @@ class EEHdrFilePatcher {
         }
 
         final Element variableHeader = element.getChild("Variable_Header", namespace);
-        // @todo 1 tb/tb only for L1C !!!!!!!!!!!!!!!!!!!!!!!!
+        // @todo 1 tb/tb check for L2
         final Element specificHeader = variableHeader.getChild("Specific_Product_Header", namespace);
         final Element mainInfo = specificHeader.getChild("Main_Info", namespace);
         final Element timeInfo = mainInfo.getChild("Time_Info", namespace);

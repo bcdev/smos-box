@@ -3,6 +3,7 @@ package org.esa.beam.smos.visat.export;
 import com.bc.ceres.binio.*;
 import org.esa.beam.dataio.smos.SmosFile;
 import org.esa.beam.dataio.smos.SmosFormats;
+import org.esa.beam.dataio.smos.SmosProductReader;
 
 import java.io.IOException;
 import java.util.Date;
@@ -14,6 +15,7 @@ class EEExportGridPointHandler implements GridPointHandler {
     private final GridPointFilter targetFilter;
     private final HashMap<Long, Date> snapshotIdTimeMap;
     private final TimeTracker timeTracker;
+    private boolean isL2File;
 
     private long gridPointCount;
     private long gridPointDataPosition;
@@ -32,6 +34,10 @@ class EEExportGridPointHandler implements GridPointHandler {
         this.targetFilter = targetFilter;
         snapshotIdTimeMap = new HashMap<Long, Date>();
         timeTracker = new TimeTracker();
+
+        final String fomatName = targetContext.getFormat().getName();
+        // @todo 2 tb/tb extend to L2 -DA products once they're supported
+        isL2File = SmosProductReader.is_L2_User_File(fomatName);
     }
 
     @Override
@@ -69,12 +75,23 @@ class EEExportGridPointHandler implements GridPointHandler {
     }
 
     private void trackSensingTime(CompoundData gridPointData) throws IOException {
-        final SequenceData btDataList = gridPointData.getSequence("BT_Data_List");
-        final CompoundData btData = btDataList.getCompound(0);
-        final int index = btData.getType().getMemberIndex("Snapshot_ID");
-        if (index >= 0) {
-            final long snapShotId = btData.getUInt(index);
-            timeTracker.track(snapshotIdTimeMap.get(snapShotId));
+        if (isL2File) {
+            throw new IllegalStateException("Currently not implemented - waiting for ESA input");
+//            int index = gridPointData.getType().getMemberIndex("Mean_acq_time");
+//            final CompoundData utcData = gridPointData.getCompound(index);
+//            final int days = utcData.getInt(0);
+//            final long seconds = utcData.getUInt(1);
+//            final long microSeconds = utcData.getUInt(2);
+//            timeTracker.track(SmosFile.getCfiDateInUtc(days, seconds, microSeconds));
+        } else {
+            int index = gridPointData.getType().getMemberIndex("BT_Data_List");
+            final SequenceData btDataList = gridPointData.getSequence(index);
+            final CompoundData btData = btDataList.getCompound(0);
+            index = btData.getType().getMemberIndex("Snapshot_ID");
+            if (index >= 0) {
+                final long snapShotId = btData.getUInt(index);
+                timeTracker.track(snapshotIdTimeMap.get(snapShotId));
+            }
         }
     }
 

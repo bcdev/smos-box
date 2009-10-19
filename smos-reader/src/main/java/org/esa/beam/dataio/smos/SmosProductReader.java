@@ -144,11 +144,11 @@ public class SmosProductReader extends AbstractProductReader {
             scienceSmosFile.startBackgroundInit();
             smosFile = scienceSmosFile;
             addFullPolScienceBands(product, ((L1cSmosFile) smosFile).getBtDataType());
-        } else if (formatName.contains("MIR_OSUDP2")) {
+        } else if (is_OSUDP_File(formatName)) {
             addL2OsFlagCodings(product);
             smosFile = new SmosFile(dblFile, format);
             addSmosL2OsBandsFromCompound(product, smosFile.getGridPointType());
-        } else if (formatName.contains("MIR_SMUDP2")) {
+        } else if (is_SMUDP_File(formatName)) {
             addL2SmFlagCodings(product);
             smosFile = new SmosFile(dblFile, format);
             addSmosL2SmBandsFromCompound(product, smosFile.getGridPointType());
@@ -170,6 +170,18 @@ public class SmosProductReader extends AbstractProductReader {
         }
 
         return product;
+    }
+
+    public static boolean is_OSUDP_File(String formatName) {
+        return formatName.contains("MIR_OSUDP2");
+    }
+
+    public static boolean is_SMUDP_File(String formatName) {
+        return formatName.contains("MIR_SMUDP2");
+    }
+
+    public static boolean is_L2_User_File(String formatName) {
+        return is_OSUDP_File(formatName) || is_SMUDP_File(formatName);
     }
 
     private void addDualPolBrowseBands(Product product, CompoundType compoundDataType) {
