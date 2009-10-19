@@ -17,6 +17,7 @@ class EEHdrFilePatcher {
 
     private Date sensingStart = null;
     private Date sensingStop = null;
+    private String fileName = null;
 
     final void patch(File sourceHdrFile, File targetHdrFile) throws IOException {
         patch(new FileInputStream(sourceHdrFile), new FileOutputStream(targetHdrFile));
@@ -44,30 +45,27 @@ class EEHdrFilePatcher {
         this.sensingStop = sensingStop;
     }
 
+    void setFileName(String fileName) {
+        this.fileName = fileName;   
+    }
+    
     final Format getFormat() {
         return Format.getRawFormat().setOmitEncoding(true).setLineSeparator("\n");
     }
 
     Document patchDocument(Document document) {
-        final SimpleDateFormat dateFormat = new SimpleDateFormat("'UTC='yyyy-MM-dd'T'hh:MM:ss");
-        final SimpleDateFormat dateFormatMicroSec = new SimpleDateFormat("'UTC='yyyy-MM-dd'T'hh:MM:ss.SSSSSS");
         final Element element = document.getRootElement();
         final Namespace namespace = element.getNamespace();
-        final Element fixedHeader = element.getChild("Fixed_Header", namespace);
-        final Element validityPeriod = fixedHeader.getChild("Validity_Period", namespace);
 
-        if (sensingStart != null) {
-            final Element validityStart = validityPeriod.getChild("Validity_Start", namespace);
-            validityStart.setText(dateFormat.format(sensingStart));
-        }
+        patchFixedHeader(element, namespace);
+        patchVariableHeader(element, namespace);
 
-        if (sensingStop != null) {
-            final Element validityStop = validityPeriod.getChild("Validity_Stop", namespace);
-            validityStop.setText(dateFormat.format(sensingStop));
-        }
+        return document;
+    }
 
+    private void patchVariableHeader(Element element, Namespace namespace) {
+        final SimpleDateFormat dateFormatMicroSec = new SimpleDateFormat("'UTC='yyyy-MM-dd'T'hh:MM:ss.SSSSSS");
         final Element variableHeader = element.getChild("Variable_Header", namespace);
-        // @todo 1 tb/tb check for L2
         final Element specificHeader = variableHeader.getChild("Specific_Product_Header", namespace);
         final Element mainInfo = specificHeader.getChild("Main_Info", namespace);
         final Element timeInfo = mainInfo.getChild("Time_Info", namespace);
@@ -80,7 +78,26 @@ class EEHdrFilePatcher {
             final Element validityStop = timeInfo.getChild("Precise_Validity_Stop", namespace);
             validityStop.setText(dateFormatMicroSec.format(sensingStop));
         }
+    }
 
-        return document;
+    private void patchFixedHeader(Element element, Namespace namespace) {
+        final Element fixedHeader = element.getChild("Fixed_Header", namespace);
+
+        if (fileName != null) {
+            final Element fileNameField = fixedHeader.getChild("File_Name", namespace);
+            fileNameField.setText(fileName);
+        }
+
+        final SimpleDateFormat dateFormat = new SimpleDateFormat("'UTC='yyyy-MM-dd'T'hh:MM:ss");
+        final Element validityPeriod = fixedHeader.getChild("Validity_Period", namespace);
+        if (sensingStart != null) {
+            final Element validityStart = validityPeriod.getChild("Validity_Start", namespace);
+            validityStart.setText(dateFormat.format(sensingStart));
+        }
+
+        if (sensingStop != null) {
+            final Element validityStop = validityPeriod.getChild("Validity_Stop", namespace);
+            validityStop.setText(dateFormat.format(sensingStop));
+        }
     }
 }

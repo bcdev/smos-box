@@ -29,18 +29,22 @@ public class FileNamePatcher {
     }
 
     public String getHdrFileName() {
-        final StringBuffer buffer = getFileNameWithoutExtension();
+        final StringBuffer buffer = getFileNameBufferWithoutExtension();
         buffer.append(".HDR");
         return buffer.toString();
     }
 
     public String getDblFileName() {
-        final StringBuffer buffer = getFileNameWithoutExtension();
+        final StringBuffer buffer = getFileNameBufferWithoutExtension();
         buffer.append(".DBL");
         return buffer.toString();
     }
 
-    private StringBuffer getFileNameWithoutExtension() {
+    public String getFileNameWithoutExtension() {
+        return getFileNameBufferWithoutExtension().toString();
+    }
+
+    private StringBuffer getFileNameBufferWithoutExtension() {
         final StringBuffer buffer = new StringBuffer(256);
         buffer.append(prefix);
         if (newStartDate != null) {

@@ -14,6 +14,7 @@ public class FileNamePatcherTest extends TestCase {
 
         assertEquals("SM_TEST_MIR_SCLD1C_19700101T011640_19700101T011650_141_000_0.HDR", patcher.getHdrFileName());
         assertEquals("SM_TEST_MIR_SCLD1C_19700101T011640_19700101T011650_141_000_0.DBL", patcher.getDblFileName());
+        assertEquals("SM_TEST_MIR_SCLD1C_19700101T011640_19700101T011650_141_000_0", patcher.getFileNameWithoutExtension());
     }
 
     public void testPatchNoDates() {
@@ -21,5 +22,6 @@ public class FileNamePatcherTest extends TestCase {
 
         assertEquals("SM_TEST_MIR_SCLD1C_20070223T061024_20070223T070437_141_000_0.HDR", patcher.getHdrFileName());
         assertEquals("SM_TEST_MIR_SCLD1C_20070223T061024_20070223T070437_141_000_0.DBL", patcher.getDblFileName());
+        assertEquals("SM_TEST_MIR_SCLD1C_20070223T061024_20070223T070437_141_000_0", patcher.getFileNameWithoutExtension());
     }
 }
