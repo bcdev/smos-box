@@ -105,10 +105,10 @@ class EEHdrFilePatcher {
 
             // @todo 3 tb/tb pure averaging is not really correct here
             final Element midLat = productLocation.getChild("Mid_Lat", namespace);
-            midLat.setText(numberFormat.format(0.5 * (area.getMaxY() - area.getMinY())));
+            midLat.setText(numberFormat.format(area.getMinY() + 0.5 * (area.getMaxY() - area.getMinY())));
 
             final Element midLon = productLocation.getChild("Mid_Lon", namespace);
-            midLon.setText(numberFormat.format(0.5 * (area.getMaxX() - area.getMinX())));
+            midLon.setText(numberFormat.format(area.getMinX() + 0.5 * (area.getMaxX() - area.getMinX())));
         }
     }
 

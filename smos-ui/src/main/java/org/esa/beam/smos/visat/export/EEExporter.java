@@ -16,7 +16,7 @@ import java.io.IOException;
  */
 public class EEExporter {
 
-    private static final Shape TARGET_REGION = new Rectangle2D.Double(-100, -28, 20, 20);
+    private static final Shape TARGET_REGION = new Rectangle2D.Double(-170, 60, 20, 20);
 
     /**
      * Example for exporting subsets of SMOS data to EE format.
