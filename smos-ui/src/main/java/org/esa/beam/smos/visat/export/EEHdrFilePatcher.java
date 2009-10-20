@@ -64,7 +64,7 @@ class EEHdrFilePatcher {
     }
 
     private void patchVariableHeader(Element element, Namespace namespace) {
-        final SimpleDateFormat dateFormatMicroSec = new SimpleDateFormat("'UTC='yyyy-MM-dd'T'hh:MM:ss.SSSSSS");
+        final SimpleDateFormat dateFormatMicroSec = new SimpleDateFormat("'UTC='yyyy-MM-dd'T'HH:mm:ss.SSSSSS");
         final Element variableHeader = element.getChild("Variable_Header", namespace);
         final Element specificHeader = variableHeader.getChild("Specific_Product_Header", namespace);
         final Element mainInfo = specificHeader.getChild("Main_Info", namespace);
@@ -74,7 +74,7 @@ class EEHdrFilePatcher {
             final Element validityStart = timeInfo.getChild("Precise_Validity_Start", namespace);
             validityStart.setText(dateFormatMicroSec.format(sensingStart));
         }
-        if (sensingStart != null) {
+        if (sensingStop != null) {
             final Element validityStop = timeInfo.getChild("Precise_Validity_Stop", namespace);
             validityStop.setText(dateFormatMicroSec.format(sensingStop));
         }
@@ -88,7 +88,7 @@ class EEHdrFilePatcher {
             fileNameField.setText(fileName);
         }
 
-        final SimpleDateFormat dateFormat = new SimpleDateFormat("'UTC='yyyy-MM-dd'T'hh:MM:ss");
+        final SimpleDateFormat dateFormat = new SimpleDateFormat("'UTC='yyyy-MM-dd'T'HH:mm:ss");
         final Element validityPeriod = fixedHeader.getChild("Validity_Period", namespace);
         if (sensingStart != null) {
             final Element validityStart = validityPeriod.getChild("Validity_Start", namespace);
