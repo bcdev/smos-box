@@ -6,6 +6,7 @@ import org.esa.beam.dataio.smos.SmosFormats;
 import org.esa.beam.dataio.smos.SmosProductReader;
 
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
@@ -78,6 +79,14 @@ class EEExportGridPointHandler implements GridPointHandler {
 
     Date getSensingStop() {
         return timeTracker.getIntervalStop();
+    }
+
+    boolean hasValidArea() {
+        return geometryTracker.hasValidArea();        
+    }
+
+    Rectangle2D getArea() {
+        return geometryTracker.getArea();
     }
 
     private void trackSensingTime(CompoundData gridPointData) throws IOException {

@@ -8,16 +8,19 @@ import org.jdom.input.SAXBuilder;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 
+import java.awt.geom.Rectangle2D;
 import java.io.*;
-import java.util.Date;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
-// @todo 1 tb/tb patch File_Name field
 class EEHdrFilePatcher {
 
     private Date sensingStart = null;
     private Date sensingStop = null;
     private String fileName = null;
+    private Rectangle2D area = null;
 
     final void patch(File sourceHdrFile, File targetHdrFile) throws IOException {
         patch(new FileInputStream(sourceHdrFile), new FileOutputStream(targetHdrFile));
@@ -46,9 +49,13 @@ class EEHdrFilePatcher {
     }
 
     void setFileName(String fileName) {
-        this.fileName = fileName;   
+        this.fileName = fileName;
     }
-    
+
+    void setArea(Rectangle2D area) {
+        this.area = area;
+    }
+
     final Format getFormat() {
         return Format.getRawFormat().setOmitEncoding(true).setLineSeparator("\n");
     }
@@ -78,6 +85,39 @@ class EEHdrFilePatcher {
             final Element validityStop = timeInfo.getChild("Precise_Validity_Stop", namespace);
             validityStop.setText(dateFormatMicroSec.format(sensingStop));
         }
+
+        if (area != null) {
+            final DecimalFormat numberFormat = createDecimalFormat();
+
+            // @todo 3 tb/tb check for orbit orientation - right now we always assume north-south direction
+            final Element productLocation = specificHeader.getChild("Product_Location", namespace);
+            final Element startLat = productLocation.getChild("Start_Lat", namespace);
+            startLat.setText(numberFormat.format(area.getMaxY()));
+
+            final Element startLon = productLocation.getChild("Start_Lon", namespace);
+            startLon.setText(numberFormat.format(area.getMinX()));
+
+            final Element stopLat = productLocation.getChild("Stop_Lat", namespace);
+            stopLat.setText(numberFormat.format(area.getMinY()));
+
+            final Element stopLon = productLocation.getChild("Stop_Lon", namespace);
+            stopLon.setText(numberFormat.format(area.getMaxX()));
+
+            // @todo 3 tb/tb pure averaging is not really correct here
+            final Element midLat = productLocation.getChild("Mid_Lat", namespace);
+            midLat.setText(numberFormat.format(0.5 * (area.getMaxY() - area.getMinY())));
+
+            final Element midLon = productLocation.getChild("Mid_Lon", namespace);
+            midLon.setText(numberFormat.format(0.5 * (area.getMaxX() - area.getMinX())));
+        }
+    }
+
+    private DecimalFormat createDecimalFormat() {
+        final DecimalFormat numberFormat = new DecimalFormat("+000.000000;-000.000000");
+        final DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+        symbols.setDecimalSeparator('.');
+        numberFormat.setDecimalFormatSymbols(symbols);
+        return numberFormat;
     }
 
     private void patchFixedHeader(Element element, Namespace namespace) {

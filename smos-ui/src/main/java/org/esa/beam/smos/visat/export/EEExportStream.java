@@ -45,6 +45,9 @@ class EEExportStream implements GridPointFilterStream {
                 patcher.setFileName(fileNamePatcher.getFileNameWithoutExtension());
                 patcher.setSensingPeriod(targetGridPointHandler.getSensingStart(), targetGridPointHandler.getSensingStop());
             }
+            if (targetGridPointHandler.hasValidArea()) {
+                patcher.setArea(targetGridPointHandler.getArea());
+            }
             patcher.patch(sourceHdrFile, targetHdrFile);
         } finally {
             dispose();
