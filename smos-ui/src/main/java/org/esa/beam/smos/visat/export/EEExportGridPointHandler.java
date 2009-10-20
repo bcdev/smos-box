@@ -8,6 +8,7 @@ import org.esa.beam.dataio.smos.SmosProductReader;
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
+import java.awt.geom.Point2D;
 
 class EEExportGridPointHandler implements GridPointHandler {
 
@@ -15,10 +16,13 @@ class EEExportGridPointHandler implements GridPointHandler {
     private final GridPointFilter targetFilter;
     private final HashMap<Long, Date> snapshotIdTimeMap;
     private final TimeTracker timeTracker;
+    private final GeometryTracker geometryTracker;
     private boolean isL2File;
 
     private long gridPointCount;
     private long gridPointDataPosition;
+    private int latIndex;
+    private int lonIndex;
 
     EEExportGridPointHandler(DataContext targetContext) {
         this(targetContext, new GridPointFilter() {
@@ -34,6 +38,7 @@ class EEExportGridPointHandler implements GridPointHandler {
         this.targetFilter = targetFilter;
         snapshotIdTimeMap = new HashMap<Long, Date>();
         timeTracker = new TimeTracker();
+        geometryTracker = new GeometryTracker();
 
         final String fomatName = targetContext.getFormat().getName();
         // @todo 2 tb/tb extend to L2 -DA products once they're supported
@@ -44,9 +49,13 @@ class EEExportGridPointHandler implements GridPointHandler {
     public void handleGridPoint(int id, CompoundData gridPointData) throws IOException {
         if (gridPointCount == 0) {
             init(gridPointData.getParent());
+            final CompoundType gridPointType = gridPointData.getType();
+            latIndex = gridPointType.getMemberIndex(SmosFormats.GRID_POINT_LAT_NAME);
+            lonIndex = gridPointType.getMemberIndex(SmosFormats.GRID_POINT_LON_NAME);
         }
         if (targetFilter.accept(id, gridPointData)) {
             trackSensingTime(gridPointData);
+            trackGeometry(gridPointData);
 
             targetContext.getData().setLong(SmosFormats.GRID_POINT_COUNTER_NAME, ++gridPointCount);
             // ATTENTION: flush must occur <em>before</em> grid point data is written (rq-20091008)
@@ -93,6 +102,17 @@ class EEExportGridPointHandler implements GridPointHandler {
                 timeTracker.track(snapshotIdTimeMap.get(snapShotId));
             }
         }
+    }
+
+    private void trackGeometry(CompoundData gridPointData) throws IOException {
+        double lat = gridPointData.getDouble(latIndex);
+        double lon = gridPointData.getDouble(lonIndex);
+        // normalisation to [-180, 180] necessary for some L1c test products
+        if (lon > 180.0) {
+            lon = lon - 360.0;
+        }
+
+        geometryTracker.add(new Point2D.Double(lon, lat));
     }
 
     private void init(CollectionData parent) throws IOException {
