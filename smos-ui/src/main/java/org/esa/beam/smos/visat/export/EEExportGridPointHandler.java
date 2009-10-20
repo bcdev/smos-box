@@ -5,10 +5,10 @@ import org.esa.beam.dataio.smos.SmosFile;
 import org.esa.beam.dataio.smos.SmosFormats;
 import org.esa.beam.dataio.smos.SmosProductReader;
 
+import java.awt.geom.Point2D;
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
-import java.awt.geom.Point2D;
 
 class EEExportGridPointHandler implements GridPointHandler {
 
@@ -48,10 +48,7 @@ class EEExportGridPointHandler implements GridPointHandler {
     @Override
     public void handleGridPoint(int id, CompoundData gridPointData) throws IOException {
         if (gridPointCount == 0) {
-            init(gridPointData.getParent());
-            final CompoundType gridPointType = gridPointData.getType();
-            latIndex = gridPointType.getMemberIndex(SmosFormats.GRID_POINT_LAT_NAME);
-            lonIndex = gridPointType.getMemberIndex(SmosFormats.GRID_POINT_LON_NAME);
+            init(gridPointData);
         }
         if (targetFilter.accept(id, gridPointData)) {
             trackSensingTime(gridPointData);
@@ -115,7 +112,12 @@ class EEExportGridPointHandler implements GridPointHandler {
         geometryTracker.add(new Point2D.Double(lon, lat));
     }
 
-    private void init(CollectionData parent) throws IOException {
+    private void init(CompoundData gridPointData) throws IOException {
+        final CompoundType gridPointType = gridPointData.getType();
+        latIndex = gridPointType.getMemberIndex(SmosFormats.GRID_POINT_LAT_NAME);
+        lonIndex = gridPointType.getMemberIndex(SmosFormats.GRID_POINT_LON_NAME);
+
+        final CollectionData parent = gridPointData.getParent();
         final long parentPosition = parent.getPosition();
         copySnapshotData(parent, parentPosition);
 
