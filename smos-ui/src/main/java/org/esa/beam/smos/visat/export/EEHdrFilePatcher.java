@@ -1,9 +1,6 @@
 package org.esa.beam.smos.visat.export;
 
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.JDOMException;
-import org.jdom.Namespace;
+import org.jdom.*;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
@@ -13,7 +10,10 @@ import java.io.*;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.SimpleDateFormat;
+import java.text.NumberFormat;
 import java.util.Date;
+import java.util.List;
+import java.util.Iterator;
 
 class EEHdrFilePatcher {
 
@@ -21,6 +21,7 @@ class EEHdrFilePatcher {
     private Date sensingStop = null;
     private String fileName = null;
     private Rectangle2D area = null;
+    private long gridPointCount = 0;
 
     final void patch(File sourceHdrFile, File targetHdrFile) throws IOException {
         patch(new FileInputStream(sourceHdrFile), new FileOutputStream(targetHdrFile));
@@ -54,6 +55,10 @@ class EEHdrFilePatcher {
 
     void setArea(Rectangle2D area) {
         this.area = area;
+    }
+
+    void setGridPointCount(long gridPointCount) {
+        this.gridPointCount = gridPointCount;
     }
 
     final Format getFormat() {
@@ -109,6 +114,38 @@ class EEHdrFilePatcher {
 
             final Element midLon = productLocation.getChild("Mid_Lon", namespace);
             midLon.setText(numberFormat.format(area.getMinX() + 0.5 * (area.getMaxX() - area.getMinX())));
+        }
+
+        if (gridPointCount > 0) {
+            final NumberFormat numberFormat = new DecimalFormat("0000000000");
+            final Element listOfDatasets = specificHeader.getChild("List_of_Data_Sets", namespace);
+            final List children = listOfDatasets.getChildren();
+            final Iterator dsIterator = children.iterator();
+            long offset = 0;
+            while (dsIterator.hasNext()) {
+                final Element dataSet = (Element) dsIterator.next();
+                final Element dsSizeElement = dataSet.getChild("DS_Size", namespace);
+                final String sizeString = dsSizeElement.getText();
+                final int size = Integer.parseInt(sizeString);
+                if (size == 0) {
+                    continue;
+                }
+
+                final String dsNameString = dataSet.getChildText("DS_Name", namespace);
+                if ("Swath_Snapshot_List".equalsIgnoreCase(dsNameString)) {
+                    offset += size;
+                    continue;
+                }
+
+                final String dsrSizeString = dataSet.getChildText("DSR_Size", namespace);
+                long dsrSize = Long.parseLong(dsrSizeString);
+                long dsSize = dsrSize * gridPointCount;
+                dsSizeElement.setText(numberFormat.format(dsSize));
+
+                final Element dsOffsetElement = dataSet.getChild("DS_Offset", namespace);
+                dsOffsetElement.setText(numberFormat.format(offset));
+                offset += dsSize;
+            }
         }
     }
 

@@ -89,6 +89,10 @@ class EEExportGridPointHandler implements GridPointHandler {
         return geometryTracker.getArea();
     }
 
+    long getGridPointCount() {
+        return gridPointCount;
+    }
+
     private void trackSensingTime(CompoundData gridPointData) throws IOException {
         if (isL2File) {
             throw new IllegalStateException("Currently not implemented - waiting for ESA input");
