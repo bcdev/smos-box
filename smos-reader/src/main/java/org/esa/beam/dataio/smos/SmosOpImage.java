@@ -14,7 +14,7 @@
  */
 package org.esa.beam.dataio.smos;
 
-import org.esa.beam.framework.datamodel.NoDataTile;
+import com.bc.ceres.jai.NoDataRaster;
 import org.esa.beam.framework.datamodel.RasterDataNode;
 import org.esa.beam.jai.ImageManager;
 import org.esa.beam.jai.ResolutionLevel;
@@ -24,7 +24,6 @@ import javax.media.jai.PixelAccessor;
 import javax.media.jai.PlanarImage;
 import javax.media.jai.UnpackedImageData;
 import java.awt.Rectangle;
-import java.awt.Shape;
 import java.awt.geom.Area;
 import java.awt.image.ColorModel;
 import java.awt.image.DataBuffer;
@@ -39,7 +38,7 @@ class SmosOpImage extends SingleBandedOpImage {
     private final double noDataValue;
     private final RenderedImage seqnumImage;
     private final Area region;
-    private volatile NoDataTile noDataTile;
+    private volatile NoDataRaster noDataTile;
 
     SmosOpImage(FieldValueProvider valueProvider, RasterDataNode rasterDataNode, RenderedImage seqnumImage,
                 ResolutionLevel level, Area region) {
@@ -65,7 +64,7 @@ class SmosOpImage extends SingleBandedOpImage {
         if (noDataTile == null) {
             synchronized (this) {
                 if (noDataTile == null) {
-                    noDataTile = createNoDataTile(noDataValue);
+                    noDataTile = createNoDataRaster(noDataValue);
                 }
             }
         }

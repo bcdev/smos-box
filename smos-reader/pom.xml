@@ -18,15 +18,19 @@
     <description>SMOS Product Reader</description>
 
     <dependencies>
-         <dependency>
+        <dependency>
             <groupId>com.bc.ceres</groupId>
             <artifactId>ceres-binio</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.bc.ceres</groupId>
+            <artifactId>ceres-jai</artifactId>
         </dependency>
         <dependency>
             <groupId>org.esa.beam.smos</groupId>
             <artifactId>smos-dgg</artifactId>
         </dependency>
     </dependencies>
-    
+
 </project>
 
