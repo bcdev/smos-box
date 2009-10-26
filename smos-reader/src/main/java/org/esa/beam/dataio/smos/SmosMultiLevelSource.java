@@ -5,25 +5,33 @@ import com.bc.ceres.glevel.support.AbstractMultiLevelSource;
 import org.esa.beam.framework.datamodel.RasterDataNode;
 import org.esa.beam.jai.ResolutionLevel;
 
-import javax.media.jai.ROI;
 import java.awt.geom.Area;
 import java.awt.image.RenderedImage;
 
-public class SmosMultiLevelSource extends AbstractMultiLevelSource {
-    private final GridPointValueProvider valueProvider;
-    private final MultiLevelSource dggridMultiLevelSource;
-    private final RasterDataNode node;
 
-    public SmosMultiLevelSource(GridPointValueProvider valueProvider, MultiLevelSource dggridMultiLevelSource,
-                                RasterDataNode node) {
-        super(dggridMultiLevelSource.getModel());
+/**
+ * Represents a SMOS DGG multi level source.
+ *
+ * @author Ralf Quast
+ * @version $Revision$ $Date$
+ * @since SMOS-Box 1.0
+ */
+public class SmosMultiLevelSource extends AbstractMultiLevelSource {
+
+    private final FieldValueProvider valueProvider;
+    private final MultiLevelSource seqnumMultiLevelSource;
+    private final RasterDataNode rasterDataNode;
+
+    public SmosMultiLevelSource(FieldValueProvider valueProvider, MultiLevelSource seqnumMultiLevelSource,
+                                RasterDataNode rasterDataNode) {
+        super(seqnumMultiLevelSource.getModel());
 
         this.valueProvider = valueProvider;
-        this.dggridMultiLevelSource = dggridMultiLevelSource;
-        this.node = node;
+        this.seqnumMultiLevelSource = seqnumMultiLevelSource;
+        this.rasterDataNode = rasterDataNode;
     }
 
-    public GridPointValueProvider getValueProvider() {
+    public FieldValueProvider getValueProvider() {
         return valueProvider;
     }
 
@@ -31,8 +39,9 @@ public class SmosMultiLevelSource extends AbstractMultiLevelSource {
     public RenderedImage createImage(int level) {
         final Area modelRegion = valueProvider.getRegion();
         final Area levelRegion = modelRegion.createTransformedArea(getModel().getModelToImageTransform(level));
-  
-        return new SmosOpImage(valueProvider, node, dggridMultiLevelSource.getImage(level),
-                               ResolutionLevel.create(getModel(), level), levelRegion);
+        final ResolutionLevel resolutionLevel = ResolutionLevel.create(getModel(), level);
+        final RenderedImage seqnumImage = seqnumMultiLevelSource.getImage(level);
+        
+        return new SmosOpImage(valueProvider, rasterDataNode, seqnumImage, resolutionLevel, levelRegion);
     }
 }

@@ -23,7 +23,7 @@ class GridPointBtDataset {
     static GridPointBtDataset read(L1cSmosFile smosFile, int gridPointIndex) throws IOException {
         SequenceData btDataList = smosFile.getBtDataList(gridPointIndex);
 
-        CompoundType type = (CompoundType) btDataList.getSequenceType().getElementType();
+        CompoundType type = (CompoundType) btDataList.getType().getElementType();
         int memberCount = type.getMemberCount();
 
         int btDataListCount = btDataList.getElementCount();
@@ -64,7 +64,7 @@ class GridPointBtDataset {
     // todo - move this to binio.utils (nf - 20081205)
     // todo - test this (nf - 20081205)
     public static Number getNumbericMember(CompoundData compoundData, int memberIndex) throws IOException {
-        Type memberType = compoundData.getCompoundType().getMemberType(memberIndex);
+        Type memberType = compoundData.getType().getMemberType(memberIndex);
         Number number;
         if (memberType == SimpleType.DOUBLE) {
             number = compoundData.getDouble(memberIndex);

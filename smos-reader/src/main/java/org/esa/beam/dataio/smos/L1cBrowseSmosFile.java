@@ -25,7 +25,7 @@ import java.io.IOException;
  *
  * @author Ralf Quast
  * @version $Revision$ $Date$
- * @since BEAM 4.5
+ * @since SMOS-Box 1.0
  */
 public class L1cBrowseSmosFile extends L1cSmosFile {
 

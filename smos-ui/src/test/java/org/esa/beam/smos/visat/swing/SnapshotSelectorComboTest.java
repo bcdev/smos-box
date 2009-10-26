@@ -14,38 +14,48 @@
  */
 package org.esa.beam.smos.visat.swing;
 
-import junit.framework.TestCase;
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertTrue;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
-import javax.swing.JFrame;
 import javax.swing.JComponent;
-import javax.swing.JSpinner;
 import javax.swing.JFormattedTextField;
+import javax.swing.JSpinner;
+import javax.swing.JFrame;
 import java.text.ParseException;
 
-import org.esa.beam.smos.visat.swing.SnapshotSelectorCombo;
+public class SnapshotSelectorComboTest {
 
-public class SnapshotSelectorComboTest extends TestCase {
     private SnapshotSelectorCombo selectorCombo;
 
-    @Override
-    protected void setUp() throws Exception {
+    @Before
+    public void before() throws Exception {
         selectorCombo = createSnapshotSelectorCombo();
     }
 
-    public void testInitialState() {
+    @After
+    public void after() throws Exception {
+        selectorCombo = null;
+    }
+
+    @Test
+    public void initialState() {
         assertEquals(1L, selectorCombo.getSpinner().getValue());
         assertEquals(0L, selectorCombo.getSlider().getValue());
         assertEquals("Any", selectorCombo.getComboBox().getSelectedItem());
     }
 
-    public void testSpinnerEditor() throws ParseException {
+    @Test
+    public void spinnerEditor() throws ParseException {
         final JSpinner spinner = selectorCombo.getSpinner();
         assertTrue(spinner != null);
+        
         final JComponent component = spinner.getEditor();
         assertTrue(component instanceof JSpinner.ListEditor);
 
         final JSpinner.ListEditor listEditor = (JSpinner.ListEditor) component;
-
         final JFormattedTextField textField = listEditor.getTextField();
         assertTrue(textField.isEditable());
 
@@ -64,4 +74,5 @@ public class SnapshotSelectorComboTest extends TestCase {
         frame.pack();
         frame.setVisible(true);
     }
+
 }

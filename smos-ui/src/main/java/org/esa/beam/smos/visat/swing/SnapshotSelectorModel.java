@@ -32,9 +32,9 @@ class SnapshotSelectorModel {
     private final BoundedRangeModel sliderModel;
     private final PlainDocument sliderInfoDocument;
 
-    SnapshotSelectorModel(Long[] snapshotIds) {
+    SnapshotSelectorModel(List<Long> snapshotIds) {
         spinnerModel = new SpinnerListModel(snapshotIds);
-        sliderModel = new DefaultBoundedRangeModel(0, 0, 0, snapshotIds.length - 1);
+        sliderModel = new DefaultBoundedRangeModel(0, 0, 0, snapshotIds.size() - 1);
         sliderInfoDocument = new PlainDocument();
 
         spinnerModel.addChangeListener(new ChangeListener() {

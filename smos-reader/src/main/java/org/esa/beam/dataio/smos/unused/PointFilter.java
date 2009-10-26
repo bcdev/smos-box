@@ -12,16 +12,16 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package org.esa.beam.dataio.smos;
+package org.esa.beam.dataio.smos.unused;
 
 /**
  * Point filter.
  *
  * @author Ralf Quast
  * @version $Revision: 3988 $ $Date: 2008-12-18 09:40:14 +0100 (Do, 18 Dez 2008) $
- * @since BEAM 4.6
+ * @since SMOS-Box 1.0
  */
-interface PointFilter {
+public interface PointFilter {
 
     PointFilter NULL = new PointFilter() {
         @Override

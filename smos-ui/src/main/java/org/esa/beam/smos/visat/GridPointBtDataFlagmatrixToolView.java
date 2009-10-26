@@ -87,7 +87,7 @@ public class GridPointBtDataFlagmatrixToolView extends GridPointBtDataToolView {
         int iq = ds.getColumnIndex(SmosFormats.BT_FLAGS_NAME);
         if (iq != -1) {
             final int m = ds.data.length;
-            final int n = SmosFormats.L1C_FLAGS.length;
+            final int n = FlagDescriptor.L1C_FLAGS.length;
             double[][] data = new double[3][n * m];
             for (int x = 0; x < m; x++) {
                 final int flags = ds.data[x][iq].intValue();
@@ -117,7 +117,7 @@ public class GridPointBtDataFlagmatrixToolView extends GridPointBtDataToolView {
     }
 
     private String[] createFlagNames() {
-        final FlagDescriptor[] flags = SmosFormats.L1C_FLAGS;
+        final FlagDescriptor[] flags = FlagDescriptor.L1C_FLAGS;
         String[] flagNames = new String[flags.length];
         for (int i = 0; i < flags.length; i++) {
             flagNames[i] = flags[i].getName();

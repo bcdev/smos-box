@@ -14,13 +14,26 @@
  */
 package org.esa.beam.dataio.smos;
 
-public interface SnapshotProvider {
+import java.awt.geom.Area;
 
-    Long[] getAllSnapshotIds();
+/**
+ * Interface providing access to the value of a certain field at each DGG point.
+ *
+ * @author Ralf Quast
+ * @version $Revision$ $Date$
+ * @since SMOS-Box 1.0
+ */
+public interface FieldValueProvider {
 
-    Long[] getXPolSnapshotIds();
+    Area getRegion();
 
-    Long[] getYPolSnapshotIds();
+    int getGridPointIndex(int seqnum);
 
-    Long[] getCrossPolSnapshotIds();
+    byte getValue(int gridPointIndex, byte noDataValue);
+
+    short getValue(int gridPointIndex, short noDataValue);
+
+    int getValue(int gridPointIndex, int noDataValue);
+
+    float getValue(int gridPointIndex, float noDataValue);
 }

@@ -13,21 +13,21 @@ import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 import java.awt.image.DataBufferInt;
 import java.awt.image.Raster;
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 public class DggridTilizer {
-    private File inputLevel0Dir;
-    private File outputDir;
 
     public static void main(String[] args) throws IOException {
-        new DggridTilizer().doit(new File(args[0]), new File(args[1]));
+        new DggridTilizer().doIt(new File(args[0]), new File(args[1]));
     }
 
-    private void doit(File inputLevel0Dir, File outputDir) throws IOException {
-        this.inputLevel0Dir = inputLevel0Dir;
-        this.outputDir = outputDir;
+    private void doIt(File inputLevel0Dir, File outputDir) throws IOException {
         outputDir.mkdir();
 
         final TiledFileOpImage opImage = TiledFileOpImage.create(inputLevel0Dir, null);
@@ -35,7 +35,8 @@ public class DggridTilizer {
         int tileWidth = 512;
         int tileHeight = 512;
         final int levelCount = 7;
-        final MultiLevelModel model = new DefaultMultiLevelModel(levelCount, new AffineTransform(), opImage.getWidth(), opImage.getHeight());
+        final MultiLevelModel model = new DefaultMultiLevelModel(levelCount, new AffineTransform(), opImage.getWidth(),
+                                                                 opImage.getHeight());
         final MultiLevelSource multiLevelSource = new DefaultMultiLevelSource(opImage, model);
 
         for (int level = 5; level < levelCount; level++) {
@@ -85,7 +86,8 @@ public class DggridTilizer {
         }
     }
 
-    private void writeTiles(File levelDir, PlanarImage image, int tileWidth, int tileHeight, int numXTiles, int numYTiles) throws IOException {
+    private void writeTiles(File levelDir, PlanarImage image, int tileWidth, int tileHeight, int numXTiles,
+                            int numYTiles) throws IOException {
         for (int tileY = 0; tileY < numYTiles; tileY++) {
             for (int tileX = 0; tileX < numXTiles; tileX++) {
                 final int x = tileX * tileWidth;
@@ -101,7 +103,8 @@ public class DggridTilizer {
         }
     }
 
-    private void writeImageProperties(int level, int dataType, int width, int height, int tileWidth, int tileHeight, int numXTiles, int numYTiles, PrintWriter printWriter) {
+    private void writeImageProperties(int level, int dataType, int width, int height, int tileWidth, int tileHeight,
+                                      int numXTiles, int numYTiles, PrintWriter printWriter) {
         printWriter.println("level      = " + level);
         printWriter.println("dataType   = " + dataType);
         printWriter.println("width      = " + width);

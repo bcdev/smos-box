@@ -34,7 +34,7 @@ public class SmosDgg {
                 dirPath = getDirPathFromModule();
             }
             try {
-                MultiLevelSource dggridMultiLevelSource = TiledFileMultiLevelSource.create(new File(dirPath), false);
+                MultiLevelSource dggridMultiLevelSource = TiledFileMultiLevelSource.create(new File(dirPath));
                 dggridMultiLevelImage = new DefaultMultiLevelImage(dggridMultiLevelSource);
             } catch (IOException e) {
                 throw new IOException(MessageFormat.format("Failed to load SMOS DDG ''{0}''", dirPath), e);

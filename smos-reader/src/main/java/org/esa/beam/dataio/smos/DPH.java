@@ -4,9 +4,9 @@ import org.esa.beam.framework.datamodel.Product;
 
 import java.util.Map;
 
-class DphGPVP extends DpGPVP {
+class DPH extends DP {
 
-    protected DphGPVP(Product product, Map<String, GridPointValueProvider> valueProviderMap, boolean accuracy) {
+    DPH(Product product, Map<String, FieldValueProvider> valueProviderMap, boolean accuracy) {
         super(product, valueProviderMap, accuracy);
     }
 

@@ -5,21 +5,25 @@ import org.esa.beam.framework.datamodel.Product;
 import java.awt.geom.Area;
 import java.util.Map;
 
-abstract class DpGPVP implements GridPointValueProvider {
+abstract class DP implements FieldValueProvider {
 
-    private final GridPointValueProvider frxProvider;
-    private final GridPointValueProvider fryProvider;
-    private final GridPointValueProvider grxProvider;
-    private final GridPointValueProvider gryProvider;
-    private final GridPointValueProvider btxProvider;
-    private final GridPointValueProvider btyProvider;
+    private final FieldValueProvider frxProvider;
+    private final FieldValueProvider fryProvider;
+    private final FieldValueProvider grxProvider;
+    private final FieldValueProvider gryProvider;
+    private final FieldValueProvider btxProvider;
+    private final FieldValueProvider btyProvider;
 
-    protected DpGPVP(Product product, Map<String, GridPointValueProvider> valueProviderMap, boolean accuracy) {
-        frxProvider = new ScalingGPVP(product, "Faraday_Rotation_Angle_X", valueProviderMap);
-        grxProvider = new ScalingGPVP(product, "Geometric_Rotation_Angle_X", valueProviderMap);
+    protected DP(Product product, Map<String, FieldValueProvider> valueProviderMap, boolean accuracy) {
+        frxProvider = new ScalingDecorator(valueProviderMap.get("Faraday_Rotation_Angle_X"),
+                                           product.getBand("Faraday_Rotation_Angle_X"));
+        grxProvider = new ScalingDecorator(valueProviderMap.get("Geometric_Rotation_Angle_X"),
+                                           product.getBand("Geometric_Rotation_Angle_X"));
 
-        fryProvider = new ScalingGPVP(product, "Faraday_Rotation_Angle_Y", valueProviderMap);
-        gryProvider = new ScalingGPVP(product, "Geometric_Rotation_Angle_Y", valueProviderMap);
+        fryProvider = new ScalingDecorator(valueProviderMap.get("Faraday_Rotation_Angle_Y"),
+                                           product.getBand("Faraday_Rotation_Angle_Y"));
+        gryProvider = new ScalingDecorator(valueProviderMap.get("Geometric_Rotation_Angle_Y"),
+                                           product.getBand("Geometric_Rotation_Angle_Y"));
 
         final String quantity;
         if (accuracy) {

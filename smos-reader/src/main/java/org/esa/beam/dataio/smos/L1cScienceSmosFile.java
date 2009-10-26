@@ -22,14 +22,12 @@ import com.bc.ceres.binio.SequenceData;
 import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.io.IOException;
-import java.text.MessageFormat;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.SortedSet;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
@@ -38,9 +36,9 @@ import java.util.concurrent.Future;
  *
  * @author Ralf Quast
  * @version $Revision$ $Date$
- * @since BEAM 4.2
+ * @since SMOS-Box 1.0
  */
-public class L1cScienceSmosFile extends L1cSmosFile implements SnapshotProvider {
+public class L1cScienceSmosFile extends L1cSmosFile {
 
     private static final float CENTER_BROWSE_INCIDENCE_ANGLE = 42.5f;
     private static final float MIN_BROWSE_INCIDENCE_ANGLE = 37.5f;
@@ -53,10 +51,9 @@ public class L1cScienceSmosFile extends L1cSmosFile implements SnapshotProvider 
     private final int incidenceAngleIndex;
     private final int snapshotIdOfPixelIndex;
     private final SequenceData snapshotList;
-
     private final CompoundType snapshotType;
-    private volatile Future<Void> backgroundTask;
-    private volatile SnapshotInfo snapshotInfo;
+
+    private volatile Future<SnapshotInfo> snapshotInfoFuture;
 
     public L1cScienceSmosFile(File file, DataFormat format, boolean fullPol) throws IOException {
         super(file, format);
@@ -70,126 +67,11 @@ public class L1cScienceSmosFile extends L1cSmosFile implements SnapshotProvider 
         if (snapshotList == null) {
             throw new IOException("Data block does not include snapshot list.");
         }
-        snapshotType = (CompoundType) snapshotList.getSequenceType().getElementType();
+        snapshotType = (CompoundType) snapshotList.getType().getElementType();
     }
 
     public boolean isFullPol() {
         return fullPol;
-    }
-
-    public void startBackgroundInit() {
-        if (!isBackgroundInitStarted()) {
-            Callable<Void> callable = new Callable<Void>() {
-                @Override
-                public Void call() throws IOException {
-                    tabulateSnapshotIds();
-                    return null;
-                }
-            };
-            backgroundTask = Executors.newSingleThreadExecutor().submit(callable);
-        }
-    }
-
-    public boolean isBackgroundInitStarted() {
-        return backgroundTask != null;
-    }
-
-    public boolean isBackgoundInitDone() {
-        return backgroundTask.isDone();
-    }
-
-    private void tabulateSnapshotIds() throws IOException {
-        final SortedSet<Long> any = new TreeSet<Long>();
-        final SortedSet<Long> x = new TreeSet<Long>();
-        final SortedSet<Long> y = new TreeSet<Long>();
-        final SortedSet<Long> xy = new TreeSet<Long>();
-
-        final Map<Long, Rectangle2D> snapshotRegionMap = new HashMap<Long, Rectangle2D>();
-        final int latIndex = getGridPointType().getMemberIndex("Grid_Point_Latitude");
-        final int lonIndex = getGridPointType().getMemberIndex("Grid_Point_Longitude");
-
-        final SequenceData gridPointList = getGridPointList();
-        final int gridPointCount = getGridPointCount();
-        for (int i = 0; i < gridPointCount; i++) {
-            final SequenceData btList = getBtDataList(i);
-
-            final int btCount = btList.getElementCount();
-            if (btCount > 0) {
-                final CompoundData gridData = gridPointList.getCompound(i);
-                double lon = gridData.getDouble(lonIndex);
-                double lat = gridData.getDouble(latIndex);
-                lon -= 0.02;
-                if (lon < -180.0) {
-                    lon = -180.0;
-                }
-                lat += 0.02;
-                if (lat > 90.0) {
-                    lat = 90.0;
-                }
-                // normalisation to [-180, 180] necessary for some L1c test products
-                if (lon > 180.0) {
-                    lon -= 360.0;
-                }
-                final Rectangle2D.Double rectangle = new Rectangle2D.Double(lon, lat, 0.04, 0.04);
-
-                long lastSid = -1;
-                for (int j = 0; j < btCount; j++) {
-                    final CompoundData btData = btList.getCompound(j);
-                    final long sid = btData.getLong(snapshotIdOfPixelIndex);
-
-                    if (lastSid != sid) { // snapshots are ordered
-                        any.add(sid);
-                        if (snapshotRegionMap.containsKey(sid)) {
-                            // TODO: snapshots on the anti-meridian (rq-20090610)
-                            snapshotRegionMap.get(sid).add(rectangle);
-                        } else {
-                            snapshotRegionMap.put(sid, rectangle);
-                        }
-                        lastSid = sid;
-                    }
-
-                    final int flags = btData.getInt(flagsIndex);
-                    switch (flags & SmosFormats.L1C_POL_FLAGS_MASK) {
-                    case SmosFormats.L1C_POL_MODE_X:
-                        x.add(sid);
-                        break;
-                    case SmosFormats.L1C_POL_MODE_Y:
-                        y.add(sid);
-                        break;
-                    case SmosFormats.L1C_POL_MODE_XY1:
-                        xy.add(sid);
-                        break;
-                    case SmosFormats.L1C_POL_MODE_XY2:
-                        xy.add(sid);
-                        break;
-                    }
-                }
-            }
-        }
-        final Long[] snapshotIds = any.toArray(new Long[any.size()]);
-        final Long[] xPolSnapshotIds = x.toArray(new Long[x.size()]);
-        final Long[] yPolSnapshotIds = y.toArray(new Long[y.size()]);
-        final Long[] xyPolSnapshotIds = xy.toArray(new Long[xy.size()]);
-
-        final Map<Long, Integer> snapshotIndexMap = new TreeMap<Long, Integer>();
-
-        final int snapshotIdIndex = snapshotType.getMemberIndex(SmosFormats.SNAPSHOT_ID_NAME);
-        final int snapshotCount = snapshotList.getElementCount();
-        for (int i = 0; i < snapshotCount; i++) {
-            final CompoundData snapshotData = getSnapshotData(i);
-            final long sid = snapshotData.getLong(snapshotIdIndex);
-
-            if (any.contains(sid)) {
-                snapshotIndexMap.put(sid, i);
-            }
-        }
-
-        snapshotInfo = new SnapshotInfo(snapshotIndexMap,
-                                        snapshotIds,
-                                        xPolSnapshotIds,
-                                        yPolSnapshotIds,
-                                        xyPolSnapshotIds,
-                                        snapshotRegionMap);
     }
 
     @Override
@@ -273,6 +155,28 @@ public class L1cScienceSmosFile extends L1cSmosFile implements SnapshotProvider 
         }
 
         return noDataValue;
+    }
+
+    public final SequenceData getSnapshotList() {
+        return snapshotList;
+    }
+
+    public final CompoundData getSnapshotData(int snapshotIndex) throws IOException {
+        return snapshotList.getCompound(snapshotIndex);
+    }
+
+    public boolean hasSnapshotInfo() {
+        return getSnapshotInfoFuture().isDone();
+    }
+
+    public SnapshotInfo getSnapshotInfo() {
+        try {
+            return getSnapshotInfoFuture().get();
+        } catch (InterruptedException e) {
+            throw new IllegalStateException(e);
+        } catch (ExecutionException e) {
+            throw new IllegalStateException(e.getCause());
+        }
     }
 
     private CompoundData getSnapshotBtData(int gridPointIndex, int polMode, long snapshotId) throws IOException {
@@ -383,72 +287,105 @@ public class L1cScienceSmosFile extends L1cSmosFile implements SnapshotProvider 
         return noDataValue;
     }
 
-    public final int getSnapshotIndex(long snapshotId) {
-        final Map<Long, Integer> snapshotIndexMap = snapshotInfo.snapshotIndexMap;
-        if (!snapshotIndexMap.containsKey(snapshotId)) {
-            throw new IllegalArgumentException(MessageFormat.format("Illegal snapshot ID: {0}", snapshotId));
+    private Future<SnapshotInfo> getSnapshotInfoFuture() {
+        if (snapshotInfoFuture == null) {
+            synchronized (this) {
+                if (snapshotInfoFuture == null) {
+                    snapshotInfoFuture = Executors.newSingleThreadExecutor().submit(new Callable<SnapshotInfo>() {
+                        @Override
+                        public SnapshotInfo call() throws IOException {
+                            return createSnapshotInfo();
+                        }
+                    });
+                }
+            }
         }
 
-        return snapshotIndexMap.get(snapshotId);
+        return snapshotInfoFuture;
     }
 
-    public final SequenceData getSnapshotList() {
-        return snapshotList;
-    }
+    private SnapshotInfo createSnapshotInfo() throws IOException {
+        final Set<Long> all = new TreeSet<Long>();
+        final Set<Long> x = new TreeSet<Long>();
+        final Set<Long> y = new TreeSet<Long>();
+        final Set<Long> xy = new TreeSet<Long>();
 
-    public final CompoundData getSnapshotData(int snapshotIndex) throws IOException {
-        return snapshotList.getCompound(snapshotIndex);
-    }
+        final Map<Long, Rectangle2D> snapshotRegionMap = new TreeMap<Long, Rectangle2D>();
+        final int latIndex = getGridPointType().getMemberIndex("Grid_Point_Latitude");
+        final int lonIndex = getGridPointType().getMemberIndex("Grid_Point_Longitude");
 
-    public final CompoundType getSnapshotType() {
-        return snapshotType;
-    }
+        final SequenceData gridPointList = getGridPointList();
+        final int gridPointCount = getGridPointCount();
+        for (int i = 0; i < gridPointCount; i++) {
+            final SequenceData btList = getBtDataList(i);
 
-    @Override
-    public final Long[] getAllSnapshotIds() {
-        return snapshotInfo.snapshotIds;
-    }
+            final int btCount = btList.getElementCount();
+            if (btCount > 0) {
+                final CompoundData gridData = gridPointList.getCompound(i);
+                double lon = gridData.getDouble(lonIndex);
+                double lat = gridData.getDouble(latIndex);
+                lon -= 0.02;
+                if (lon < -180.0) {
+                    lon = -180.0;
+                }
+                lat += 0.02;
+                if (lat > 90.0) {
+                    lat = 90.0;
+                }
+                // normalisation to [-180, 180] necessary for some L1c test products
+                if (lon > 180.0) {
+                    lon -= 360.0;
+                }
+                final Rectangle2D.Double rectangle = new Rectangle2D.Double(lon, lat, 0.04, 0.04);
 
-    @Override
-    public final Long[] getXPolSnapshotIds() {
-        return snapshotInfo.xPolSnapshotIds;
-    }
+                long lastSid = -1;
+                for (int j = 0; j < btCount; j++) {
+                    final CompoundData btData = btList.getCompound(j);
+                    final long sid = btData.getLong(snapshotIdOfPixelIndex);
 
-    @Override
-    public final Long[] getYPolSnapshotIds() {
-        return snapshotInfo.yPolSnapshotIds;
-    }
+                    if (lastSid != sid) { // snapshots are ordered
+                        all.add(sid);
+                        if (snapshotRegionMap.containsKey(sid)) {
+                            // todo: rq/rq - snapshots on the anti-meridian (2009-10-22)
+                            snapshotRegionMap.get(sid).add(rectangle);
+                        } else {
+                            snapshotRegionMap.put(sid, rectangle);
+                        }
+                        lastSid = sid;
+                    }
 
-    @Override
-    public final Long[] getCrossPolSnapshotIds() {
-        return snapshotInfo.xyPolSnapshotIds;
-    }
-
-    public final Rectangle2D getSnapshotRegion(long snapshotId) {
-        return snapshotInfo.regions.get(snapshotId);
-    }
-
-    private static class SnapshotInfo {
-
-        private final Map<Long, Integer> snapshotIndexMap;
-        private final Long[] snapshotIds;
-        private final Long[] xPolSnapshotIds;
-        private final Long[] yPolSnapshotIds;
-        private final Long[] xyPolSnapshotIds;
-        private final Map<Long, Rectangle2D> regions;
-
-        SnapshotInfo(Map<Long, Integer> snapshotIndexMap,
-                     Long[] snapshotIds,
-                     Long[] xPolSnapshotIds,
-                     Long[] yPolSnapshotIds,
-                     Long[] xyPolSnapshotIds,
-                     Map<Long, Rectangle2D> regions) {
-            this.snapshotIndexMap = Collections.unmodifiableMap(snapshotIndexMap);
-            this.snapshotIds = snapshotIds;
-            this.xPolSnapshotIds = xPolSnapshotIds;
-            this.yPolSnapshotIds = yPolSnapshotIds;
-            this.xyPolSnapshotIds = xyPolSnapshotIds;
-            this.regions = Collections.unmodifiableMap(regions);
+                    final int flags = btData.getInt(flagsIndex);
+                    switch (flags & SmosFormats.L1C_POL_FLAGS_MASK) {
+                    case SmosFormats.L1C_POL_MODE_X:
+                        x.add(sid);
+                        break;
+                    case SmosFormats.L1C_POL_MODE_Y:
+                        y.add(sid);
+                        break;
+                    case SmosFormats.L1C_POL_MODE_XY1:
+                        xy.add(sid);
+                        break;
+                    case SmosFormats.L1C_POL_MODE_XY2:
+                        xy.add(sid);
+                        break;
+                    }
+                }
+            }
         }
+        final Map<Long, Integer> snapshotIndexMap = new TreeMap<Long, Integer>();
+
+        final int snapshotIdIndex = snapshotType.getMemberIndex(SmosFormats.SNAPSHOT_ID_NAME);
+        final int snapshotCount = snapshotList.getElementCount();
+        for (int i = 0; i < snapshotCount; i++) {
+            final CompoundData snapshotData = getSnapshotData(i);
+            final long sid = snapshotData.getLong(snapshotIdIndex);
+
+            if (all.contains(sid)) {
+                snapshotIndexMap.put(sid, i);
+            }
+        }
+
+        return new SnapshotInfo(snapshotIndexMap, all, x, y, xy, snapshotRegionMap);
     }
+
 }

@@ -17,7 +17,7 @@ package org.esa.beam.dataio.smos;
 import java.awt.geom.Area;
 import java.io.IOException;
 
-public class L1cFieldValueProvider implements GridPointValueProvider {
+public class L1cFieldValueProvider implements FieldValueProvider {
     private final L1cSmosFile smosFile;
     private final int fieldIndex;
     private final int polMode;
@@ -41,8 +41,8 @@ public class L1cFieldValueProvider implements GridPointValueProvider {
     @Override
     public Area getRegion() {
         if (smosFile instanceof L1cScienceSmosFile && snapshotId != -1) {
-            L1cScienceSmosFile scienceSmosFile = (L1cScienceSmosFile) smosFile;
-            return new Area(scienceSmosFile.getSnapshotRegion(snapshotId));
+            final L1cScienceSmosFile scienceSmosFile = (L1cScienceSmosFile) smosFile;
+            return new Area(scienceSmosFile.getSnapshotInfo().getSnapshotRegion(snapshotId));
         } else {
             return smosFile.getRegion();
         }

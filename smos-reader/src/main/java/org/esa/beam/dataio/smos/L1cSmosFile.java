@@ -29,7 +29,7 @@ import java.text.MessageFormat;
  *
  * @author Ralf Quast
  * @version $Revision$ $Date$
- * @since BEAM 4.6
+ * @since SMOS-Box 1.0
  */
 public abstract class L1cSmosFile extends SmosFile {
 

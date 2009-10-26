@@ -14,7 +14,7 @@
  */
 package org.esa.beam.smos.visat.swing;
 
-import org.esa.beam.dataio.smos.SnapshotProvider;
+import org.esa.beam.dataio.smos.SnapshotInfo;
 
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
@@ -26,15 +26,15 @@ public class SnapshotSelectorComboModel implements ComboBoxModel {
     private final ComboBoxModel comboBoxModel;
     private final Map<Object, SnapshotSelectorModel> map;
 
-    public SnapshotSelectorComboModel(SnapshotProvider provider) {
+    public SnapshotSelectorComboModel(SnapshotInfo snapshotInfo) {
         map = new HashMap<Object, SnapshotSelectorModel>();
 
-        map.put("Any", new SnapshotSelectorModel(provider.getAllSnapshotIds()));
-        map.put("X", new SnapshotSelectorModel(provider.getXPolSnapshotIds()));
-        map.put("Y", new SnapshotSelectorModel(provider.getYPolSnapshotIds()));
+        map.put("Any", new SnapshotSelectorModel(snapshotInfo.getSnapshotIds()));
+        map.put("X", new SnapshotSelectorModel(snapshotInfo.getSnapshotIdsX()));
+        map.put("Y", new SnapshotSelectorModel(snapshotInfo.getSnapshotIdsY()));
 
-        if (provider.getCrossPolSnapshotIds().length != 0) {
-            map.put("XY", new SnapshotSelectorModel(provider.getCrossPolSnapshotIds()));
+        if (snapshotInfo.getSnapshotIdsXY().size() != 0) {
+            map.put("XY", new SnapshotSelectorModel(snapshotInfo.getSnapshotIdsXY()));
             comboBoxModel = new DefaultComboBoxModel(new String[]{"Any", "X", "Y", "XY"});
         } else {
             comboBoxModel = new DefaultComboBoxModel(new String[]{"Any", "X", "Y"});

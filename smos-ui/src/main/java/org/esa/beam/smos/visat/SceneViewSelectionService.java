@@ -65,14 +65,14 @@ public class SceneViewSelectionService {
     }
 
     public Product getSelectedSmosProduct() {
-        ProductSceneView sceneView = getSelectedSceneView();
+        final ProductSceneView sceneView = getSelectedSceneView();
         return sceneView != null ? sceneView.getProduct() : null;
     }
 
     public SmosFile getSelectedSmosFile() {
-        Product product = getSelectedSmosProduct();
+        final Product product = getSelectedSmosProduct();
         if (product != null) {
-            ProductReader productReader = product.getProductReader();
+            final ProductReader productReader = product.getProductReader();
             Assert.state(productReader instanceof SmosProductReader, "productReader instanceof SmosProductReader");
             return ((SmosProductReader) productReader).getSmosFile();
         } else {

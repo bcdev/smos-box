@@ -1,4 +1,4 @@
-package org.esa.beam.dataio.smos;
+package org.esa.beam.dataio.smos.unused;
 
 import java.awt.geom.Point2D;
 
@@ -8,9 +8,9 @@ import java.awt.geom.Point2D;
  *
  * @author Ralf Quast
  * @version $Revision: 3988 $ $Date: 2008-12-18 09:40:14 +0100 (Do, 18 Dez 2008) $
- * @since BEAM 4.6
+ * @since SMOS-Box 1.0
  */
-class SimpleLinearRegressor {
+public class SimpleLinearRegressor {
 
     final PointFilter pointFilter;
 

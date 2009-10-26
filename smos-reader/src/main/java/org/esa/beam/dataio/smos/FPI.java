@@ -4,14 +4,14 @@ import org.esa.beam.framework.datamodel.Product;
 
 import java.util.HashMap;
 
-class FpiGPVP extends FpGPVP {
+class FPI extends FP {
 
-    protected FpiGPVP(Product product, HashMap<String, GridPointValueProvider> valueProviderMap, boolean accuracy) {
-        super(product, valueProviderMap, accuracy, true);
+    FPI(Product product, HashMap<String, FieldValueProvider> valueProviderMap, boolean accuracy) {
+        super(product, valueProviderMap, accuracy, false);
     }
 
     @Override
     protected double compute(double btx, double bty, double btxy, double aa, double ab, double bb) {
-        return (aa + bb) * btxy;
+        return bb * btx + 2.0 * ab * btxy + aa * bty;
     }
 }

@@ -14,40 +14,51 @@
  */
 package org.esa.beam.dataio.smos;
 
+import com.bc.ceres.binio.CompoundData;
+
 import java.io.IOException;
 import java.awt.geom.Area;
 
 /**
- * Provides the value of a certain field in the grid point data record.
+ * Provides the value of a certain field in the grid point data records
+ * of a SMOS product file.
  *
  * @author Ralf Quast
  * @version $Revision$ $Date$
- * @since BEAM 4.6
+ * @since SMOS-Box 1.0
  */
-public class L2FieldValueProvider implements GridPointValueProvider {
+public class DefaultFieldValueProvider implements FieldValueProvider {
 
-    private final GridPointDataProvider provider;
+    private final SmosFile smosFile;
     private final int fieldIndex;
 
-    protected L2FieldValueProvider(GridPointDataProvider provider, int fieldIndex) {
-        this.provider = provider;
+    DefaultFieldValueProvider(SmosFile smosFile, int fieldIndex) {
+        this.smosFile = smosFile;
         this.fieldIndex = fieldIndex;
     }
 
+    public final SmosFile getSmosFile() {
+        return smosFile;
+    }
+
+    public final int getFieldIndex() {
+        return fieldIndex;
+    }
+
     @Override
-    public Area getRegion() {
-        return provider.getRegion();
+    public final Area getRegion() {
+        return smosFile.getRegion();
     }
 
     @Override
     public final int getGridPointIndex(int seqnum) {
-        return provider.getGridPointIndex(seqnum);
+        return smosFile.getGridPointIndex(seqnum);
     }
-
+    
     @Override
     public byte getValue(int gridPointIndex, byte noDataValue) {
         try {
-            return provider.getGridPointData(gridPointIndex).getByte(fieldIndex);
+            return getSmosFile().getGridPointData(gridPointIndex).getByte(getFieldIndex());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -56,7 +67,7 @@ public class L2FieldValueProvider implements GridPointValueProvider {
     @Override
     public short getValue(int gridPointIndex, short noDataValue) {
         try {
-            return provider.getGridPointData(gridPointIndex).getShort(fieldIndex);
+            return getSmosFile().getGridPointData(gridPointIndex).getShort(getFieldIndex());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -65,7 +76,7 @@ public class L2FieldValueProvider implements GridPointValueProvider {
     @Override
     public int getValue(int gridPointIndex, int noDataValue) {
         try {
-            return provider.getGridPointData(gridPointIndex).getInt(fieldIndex);
+            return getSmosFile().getGridPointData(gridPointIndex).getInt(getFieldIndex());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -74,7 +85,7 @@ public class L2FieldValueProvider implements GridPointValueProvider {
     @Override
     public float getValue(int gridPointIndex, float noDataValue) {
         try {
-            return provider.getGridPointData(gridPointIndex).getFloat(fieldIndex);
+            return getSmosFile().getGridPointData(gridPointIndex).getFloat(getFieldIndex());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

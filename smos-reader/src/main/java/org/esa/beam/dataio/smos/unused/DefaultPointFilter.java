@@ -12,7 +12,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package org.esa.beam.dataio.smos;
+package org.esa.beam.dataio.smos.unused;
 
 /**
  * Default point filter, rejecting any point (x, y) where x or y is
@@ -20,9 +20,9 @@ package org.esa.beam.dataio.smos;
  *
  * @author Ralf Quast
  * @version $Revision: 3871 $ $Date: 2008-12-04 19:42:05 +0100 (Do, 04 Dez 2008) $
- * @since BEAM 4.6
+ * @since SMOS-Box 1.0
  */
-class DefaultPointFilter implements PointFilter {
+public class DefaultPointFilter implements PointFilter {
 
     @Override
     public boolean accept(double x, double y) {

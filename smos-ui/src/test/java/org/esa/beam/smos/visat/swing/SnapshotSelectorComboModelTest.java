@@ -14,23 +14,33 @@
  */
 package org.esa.beam.smos.visat.swing;
 
-import junit.framework.TestCase;
-import org.esa.beam.dataio.smos.SnapshotProvider;
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNotSame;
+import org.esa.beam.dataio.smos.SnapshotInfo;
+import org.junit.Before;
+import org.junit.Test;
 
-public class SnapshotSelectorComboModelTest extends TestCase {
+import java.awt.geom.Rectangle2D;
+import java.util.Arrays;
+import java.util.Collections;
+
+public class SnapshotSelectorComboModelTest {
+
     private SnapshotSelectorComboModel selectorComboModel;
 
-    @Override
-    protected void setUp() throws Exception {
+    @Before
+    public void before() throws Exception {
         selectorComboModel = createSnapshotSelectorComboModel();
     }
 
-    public void testInitialState() {
+    @Test
+    public void initialState() {
         assertEquals(3, selectorComboModel.getSize());
         assertEquals("Any", selectorComboModel.getSelectedItem());
     }
 
-    public void testSnapshotSelectorModelSelection() {
+    @Test
+    public void snapshotSelectorModelSelection() {
         final SnapshotSelectorModel modelA = selectorComboModel.getSelectedModel();
         selectorComboModel.setSelectedItem("X");
         final SnapshotSelectorModel modelX = selectorComboModel.getSelectedModel();
@@ -42,7 +52,8 @@ public class SnapshotSelectorComboModelTest extends TestCase {
         assertNotSame(modelX, modelY);
     }
 
-    public void testSnapshotIdIsPreservedIfPossible() {
+    @Test
+    public void isSnapshotIdPreservedIfPossible() {
         final SnapshotSelectorModel modelA = selectorComboModel.getSelectedModel();
         modelA.setSnapshotId(3);
 
@@ -62,28 +73,12 @@ public class SnapshotSelectorComboModelTest extends TestCase {
     }
 
     static SnapshotSelectorComboModel createSnapshotSelectorComboModel() {
-        final SnapshotProvider provider = new SnapshotProvider() {
-            @Override
-            public Long[] getAllSnapshotIds() {
-                return new Long[]{1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L};
-            }
-
-            @Override
-            public Long[] getXPolSnapshotIds() {
-                return new Long[]{1L, 3L, 5L, 7L};
-            }
-
-            @Override
-            public Long[] getYPolSnapshotIds() {
-                return new Long[]{2L, 4L, 6L, 8L};
-            }
-
-            @Override
-            public Long[] getCrossPolSnapshotIds() {
-                return new Long[0];
-            }
-        };
-
-        return new SnapshotSelectorComboModel(provider);
+        return new SnapshotSelectorComboModel(new SnapshotInfo(
+                Collections.<Long, Integer>emptyMap(),
+                Arrays.asList(1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L),
+                Arrays.asList(1L, 3L, 5L, 7L),
+                Arrays.asList(2L, 4L, 6L, 8L),
+                Arrays.<Long>asList(),
+                Collections.<Long, Rectangle2D>emptyMap()));
     }
 }
