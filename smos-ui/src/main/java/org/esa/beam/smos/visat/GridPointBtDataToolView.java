@@ -1,7 +1,7 @@
 package org.esa.beam.smos.visat;
 
 import org.esa.beam.dataio.smos.L1cSmosFile;
-import org.esa.beam.dataio.smos.SmosFile;
+import org.esa.beam.dataio.smos.SmosDggFile;
 import org.esa.beam.dataio.smos.SmosProductReader;
 import org.esa.beam.framework.datamodel.Pin;
 import org.esa.beam.framework.datamodel.PixelPos;
@@ -11,8 +11,6 @@ import org.esa.beam.framework.datamodel.ProductNodeListener;
 import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.framework.datamodel.MetadataElement;
 import org.esa.beam.framework.dataio.ProductReader;
-import org.esa.beam.framework.ui.tool.ToolButtonFactory;
-import org.esa.beam.framework.ui.UIUtils;
 import org.esa.beam.framework.help.HelpSys;
 import org.esa.beam.visat.VisatApp;
 
@@ -84,7 +82,7 @@ public abstract class GridPointBtDataToolView extends SmosToolView {
     }
     
     protected L1cSmosFile getL1cSmosFile() {
-        SmosFile smosFile = getSelectedSmosFile();
+        SmosDggFile smosFile = getSelectedSmosFile();
         L1cSmosFile l1cSmosFile = null;
         if (smosFile instanceof L1cSmosFile) {
             l1cSmosFile = (L1cSmosFile) smosFile;
@@ -199,7 +197,7 @@ public abstract class GridPointBtDataToolView extends SmosToolView {
         for (final Product product : products) {
             final ProductReader productReader = product.getProductReader();
             if (productReader instanceof SmosProductReader) {
-                final SmosFile smosFile = ((SmosProductReader) productReader).getSmosFile();
+                final SmosDggFile smosFile = ((SmosProductReader) productReader).getSmosFile();
                 if (smosFile instanceof L1cSmosFile) {
                     String productName = product.getName();
                     String relevantProductname = getRelevantProductname(productName);

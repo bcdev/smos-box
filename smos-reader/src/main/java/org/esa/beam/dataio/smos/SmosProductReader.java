@@ -65,13 +65,13 @@ import java.util.Random;
 
 public class SmosProductReader extends AbstractProductReader {
 
-    private SmosFile smosFile;
+    private SmosDggFile smosFile;
 
     SmosProductReader(final SmosProductReaderPlugIn productReaderPlugIn) {
         super(productReaderPlugIn);
     }
 
-    public SmosFile getSmosFile() {
+    public SmosDggFile getSmosFile() {
         return smosFile;
     }
 
@@ -158,26 +158,26 @@ public class SmosProductReader extends AbstractProductReader {
             addFullPolScienceBands(product, ((L1cSmosFile) smosFile).getBtDataType());
         } else if (is_OSUDP_File(formatName)) {
             addL2OsFlagCodings(product);
-            smosFile = new SmosFile(dblFile, format);
+            smosFile = new SmosDggFile(dblFile, format);
             addL2OsBandsFromCompound(product, smosFile.getGridPointType());
         } else if (is_SMUDP_File(formatName)) {
             addL2SmFlagCodings(product);
-            smosFile = new SmosFile(dblFile, format);
+            smosFile = new SmosDggFile(dblFile, format);
             addL2SmBandsFromCompound(product, smosFile.getGridPointType());
         } else if (formatName.contains("MIR_OSDAP2")) {
             // todo: rq/rq flag codings
-            smosFile = new SmosFile(dblFile, format);
+            smosFile = new SmosDggFile(dblFile, format);
             final CompoundType type = smosFile.getGridPointType();
             // todo: rq/rq add bands
             System.out.println("count = " + type.getMemberCount());
         } else if (formatName.contains("MIR_SMDAP2")) {
             // todo: rq/rq flag codings
-            smosFile = new SmosFile(dblFile, format);
+            smosFile = new SmosDggFile(dblFile, format);
             final CompoundType type = smosFile.getGridPointType();
             // todo: rq/rq add bands
             System.out.println("count = " + type.getMemberCount());
         } else if (formatName.contains("AUX_ECMWF_")) {
-            smosFile = new SmosFile(dblFile, format);
+            smosFile = new SmosDggFile(dblFile, format);
             final CompoundType type = smosFile.getGridPointType();
             addL2EcmwfBandsFromCompound(product, smosFile.getGridPointType());
             System.out.println("count = " + type.getMemberCount());

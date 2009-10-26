@@ -31,7 +31,7 @@ import java.text.MessageFormat;
  * @version $Revision$ $Date$
  * @since SMOS-Box 1.0
  */
-public abstract class L1cSmosFile extends SmosFile {
+public abstract class L1cSmosFile extends SmosDggFile {
 
     protected final int btDataListIndex;
     protected final CompoundType btDataType;

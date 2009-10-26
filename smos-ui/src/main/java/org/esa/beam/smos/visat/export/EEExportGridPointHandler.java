@@ -1,7 +1,7 @@
 package org.esa.beam.smos.visat.export;
 
 import com.bc.ceres.binio.*;
-import org.esa.beam.dataio.smos.SmosFile;
+import org.esa.beam.dataio.smos.SmosDggFile;
 import org.esa.beam.dataio.smos.SmosFormats;
 import org.esa.beam.dataio.smos.SmosProductReader;
 
@@ -159,7 +159,7 @@ class EEExportGridPointHandler implements GridPointHandler {
             final int days = utcData.getInt(0);
             final long seconds = utcData.getUInt(1);
             final long microSeconds = utcData.getUInt(2);
-            final Date snapShotTime = SmosFile.getCfiDateInUtc(days, seconds, microSeconds);
+            final Date snapShotTime = SmosDggFile.cfiDateToUtc(days, seconds, microSeconds);
             final long snapShotId = snapShot.getUInt(1);
 
             snapshotIdTimeMap.put(snapShotId, snapShotTime);

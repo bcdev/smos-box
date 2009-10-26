@@ -14,8 +14,6 @@
  */
 package org.esa.beam.dataio.smos;
 
-import com.bc.ceres.binio.CompoundData;
-
 import java.io.IOException;
 import java.awt.geom.Area;
 
@@ -29,15 +27,15 @@ import java.awt.geom.Area;
  */
 public class DefaultFieldValueProvider implements FieldValueProvider {
 
-    private final SmosFile smosFile;
+    private final SmosDggFile smosFile;
     private final int fieldIndex;
 
-    DefaultFieldValueProvider(SmosFile smosFile, int fieldIndex) {
+    DefaultFieldValueProvider(SmosDggFile smosFile, int fieldIndex) {
         this.smosFile = smosFile;
         this.fieldIndex = fieldIndex;
     }
 
-    public final SmosFile getSmosFile() {
+    public final SmosDggFile getSmosFile() {
         return smosFile;
     }
 

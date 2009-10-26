@@ -16,7 +16,7 @@
  */
 package org.esa.beam.smos.visat.export;
 
-import org.esa.beam.dataio.smos.SmosFile;
+import org.esa.beam.dataio.smos.SmosDggFile;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -32,9 +32,9 @@ import java.io.IOException;
  */
 interface GridPointFilterStream extends GridPointHandler {
 
-    void startFile(SmosFile smosfile) throws FileNotFoundException;
+    void startFile(SmosDggFile smosfile) throws FileNotFoundException;
 
-    void stopFile(SmosFile smosfile) throws IOException;
+    void stopFile(SmosDggFile smosfile) throws IOException;
 
     void close() throws IOException;
 }

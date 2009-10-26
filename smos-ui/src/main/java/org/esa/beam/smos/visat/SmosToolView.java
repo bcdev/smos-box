@@ -4,7 +4,7 @@ import com.bc.ceres.binio.CompoundData;
 import com.bc.ceres.binio.CompoundType;
 import com.bc.ceres.binio.SimpleType;
 import com.bc.ceres.binio.Type;
-import org.esa.beam.dataio.smos.SmosFile;
+import org.esa.beam.dataio.smos.SmosDggFile;
 import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.framework.datamodel.RasterDataNode;
 import org.esa.beam.framework.help.HelpSys;
@@ -51,7 +51,7 @@ public abstract class SmosToolView extends AbstractToolView {
         return getSmosViewSelectionService().getSelectedSmosProduct();
     }
 
-    protected final SmosFile getSelectedSmosFile() {
+    protected final SmosDggFile getSelectedSmosFile() {
         return getSmosViewSelectionService().getSelectedSmosFile();
     }
 

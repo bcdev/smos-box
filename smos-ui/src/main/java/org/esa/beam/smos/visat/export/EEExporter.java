@@ -2,7 +2,7 @@ package org.esa.beam.smos.visat.export;
 
 import com.bc.ceres.binio.DataFormat;
 import com.bc.ceres.core.ProgressMonitor;
-import org.esa.beam.dataio.smos.SmosFile;
+import org.esa.beam.dataio.smos.SmosDggFile;
 import org.esa.beam.dataio.smos.SmosFormats;
 import org.esa.beam.util.io.FileUtils;
 
@@ -38,9 +38,9 @@ public class EEExporter {
             return;
         }
         // 2. create a SMOS file
-        final SmosFile smosFile;
+        final SmosDggFile smosFile;
         try {
-            smosFile = new SmosFile(sourceDblFile, sourceDblFormat);
+            smosFile = new SmosDggFile(sourceDblFile, sourceDblFormat);
         } catch (IOException e) {
             e.printStackTrace();
             return;

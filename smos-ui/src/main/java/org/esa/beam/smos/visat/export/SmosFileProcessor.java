@@ -3,7 +3,7 @@ package org.esa.beam.smos.visat.export;
 import com.bc.ceres.binio.CompoundData;
 import com.bc.ceres.binio.CompoundType;
 import com.bc.ceres.core.ProgressMonitor;
-import org.esa.beam.dataio.smos.SmosFile;
+import org.esa.beam.dataio.smos.SmosDggFile;
 import org.esa.beam.dataio.smos.SmosFormats;
 
 import java.awt.Shape;
@@ -19,7 +19,7 @@ class SmosFileProcessor {
         this.targetRegion = targetRegion;
     }
 
-    void process(SmosFile smosFile, ProgressMonitor pm) throws IOException {
+    void process(SmosDggFile smosFile, ProgressMonitor pm) throws IOException {
         final CompoundType gridPointType = smosFile.getGridPointType();
         final int latIndex = gridPointType.getMemberIndex(SmosFormats.GRID_POINT_LAT_NAME);
         final int lonIndex = gridPointType.getMemberIndex(SmosFormats.GRID_POINT_LON_NAME);

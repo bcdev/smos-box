@@ -6,19 +6,11 @@ import com.bc.ceres.binio.DataFormat;
 import com.bc.ceres.binio.SequenceData;
 import com.bc.ceres.binio.util.ByteArrayIOHandler;
 import com.bc.ceres.binio.util.DataPrinter;
-import com.bc.ceres.core.ProgressMonitor;
 import static junit.framework.Assert.assertEquals;
-import org.esa.beam.dataio.smos.SmosFile;
+import org.esa.beam.dataio.smos.SmosDggFile;
 import org.esa.beam.dataio.smos.SmosFormats;
-import org.esa.beam.framework.dataio.DecodeQualification;
-import org.esa.beam.framework.dataio.ProductIO;
-import org.esa.beam.framework.dataio.ProductReader;
-import org.esa.beam.framework.dataio.ProductReaderPlugIn;
-import org.esa.beam.framework.datamodel.Product;
 import org.junit.Test;
 
-import java.awt.geom.Area;
-import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -35,7 +27,7 @@ public class EEExportGridPointHandlerTest {
         final File dblFile = getResourceAsFile(SCENARIO_27_DBL_NAME);
         final File hdrFile = getResourceAsFile(SCENARIO_27_HDR_NAME);
         final DataFormat dblFormat = SmosFormats.getFormat(hdrFile);
-        final SmosFile sourceFile = new SmosFile(dblFile, dblFormat);
+        final SmosDggFile sourceFile = new SmosDggFile(dblFile, dblFormat);
 
         final SequenceData sourceGridPointList = sourceFile.getGridPointList();
         assertEquals(5533, sourceGridPointList.getElementCount());
