@@ -17,15 +17,16 @@ import java.text.MessageFormat;
  * the SMOS Discrete global grid.
  *
  * @author Marco Peters
+ * @author Ralf Quast
  * @version $Revision: $ $Date: $
  * @since SMOS-Box 1.0
  */
 public class SmosDgg {
 
     private static final String SMOS_DGG_DIR_PROPERTY_NAME = "org.esa.beam.smos.smosDggDir";
-    private static volatile MultiLevelImage dggMultiLevelImage;
-
     private static final SmosDgg uniqueInstance = new SmosDgg();
+
+    private static volatile MultiLevelImage dggMultiLevelImage;
 
     private SmosDgg() {
     }
@@ -41,18 +42,18 @@ public class SmosDgg {
         return gridPointId < a ? gridPointId : b * ((gridPointId - 1) / a) + ((gridPointId - 1) % a) + 2;
     }
 
-    public MultiLevelImage getDggMultiLevelImage() throws IOException {
+    public MultiLevelImage getDggMultiLevelImage() {
         if (dggMultiLevelImage == null) {
             synchronized (uniqueInstance) {
                 if (dggMultiLevelImage == null) {
-                    createDggMultiLevelImage();
+                    dggMultiLevelImage = createDggMultiLevelImage();
                 }
             }
         }
         return dggMultiLevelImage;
     }
 
-    private void createDggMultiLevelImage() throws IOException {
+    private MultiLevelImage createDggMultiLevelImage() {
         String dirPath;
         try {
             dirPath = getDirPathFromProperty();
@@ -61,34 +62,33 @@ public class SmosDgg {
             }
             final File dir = new File(dirPath);
             final MultiLevelSource dggMultiLevelSource = TiledFileMultiLevelSource.create(dir);
-            dggMultiLevelImage = new DefaultMultiLevelImage(dggMultiLevelSource);
-        } catch (IOException e) {
-            final String message = ""; //MessageFormat.format("Failed to load SMOS DDG.");
-            throw new IOException(message, e);
+
+            return new DefaultMultiLevelImage(dggMultiLevelSource);
+        } catch (Exception e) {
+            throw new IllegalStateException(MessageFormat.format(
+                    "Cannot create SMOS DDG multi-level image: {0}", e.getMessage()), e);
         }
     }
 
-    private static String getDirPathFromModule() throws IOException {
-        try {
-            final URL url = SmosDgg.class.getResource("image.properties");
-            final URI uri = url.toURI();
+    private static String getDirPathFromModule() throws URISyntaxException {
+        final URL url = SmosDgg.class.getResource("image.properties");
+        final URI uri = url.toURI();
 
-            return new File(uri).getParent();
-        } catch (URISyntaxException e) {
-            throw new IOException(e.getMessage(), e);
-        }
+        return new File(uri).getParent();
     }
 
     private static String getDirPathFromProperty() throws IOException {
         final String dirPath = System.getProperty(SMOS_DGG_DIR_PROPERTY_NAME);
+
         if (dirPath != null) {
             final File dir = new File(dirPath);
             if (!dir.canRead()) {
                 throw new IOException(MessageFormat.format(
-                        "Cannot read directory ''{0}''. Please set the property ''{0}'' to a readable directory.",
+                        "Cannot read directory ''{0}''. System property ''{0}'' must point to a readable directory.",
                         dir.getPath(), SMOS_DGG_DIR_PROPERTY_NAME));
             }
         }
+
         return dirPath;
     }
 

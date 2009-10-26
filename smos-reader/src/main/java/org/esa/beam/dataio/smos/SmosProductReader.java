@@ -630,12 +630,7 @@ public class SmosProductReader extends AbstractProductReader {
                                                "Unique identifier for Earth fixed grid point (ISEA4H9 DGG).");
         final Band band = product.addBand(bandInfo.getName(), ProductData.TYPE_UINT32);
         band.setDescription(bandInfo.getDescription());
-
-        try {
-            band.setSourceImage(SmosDgg.getInstance().getDggMultiLevelImage());
-        } catch (IOException e) {
-            // ignore
-        }
+        band.setSourceImage(SmosDgg.getInstance().getDggMultiLevelImage());
     }
 
     private Band addBand(Product product, String bandName, int bandType, BandInfo bandInfo,
@@ -707,12 +702,8 @@ public class SmosProductReader extends AbstractProductReader {
     }
 
     private MultiLevelImage createSourceImage(FieldValueProvider valueProvider, Band band) {
-        try {
-            final MultiLevelImage dggMultiLevelImage = SmosDgg.getInstance().getDggMultiLevelImage();
-            return new DefaultMultiLevelImage(new SmosMultiLevelSource(valueProvider, dggMultiLevelImage, band));
-        } catch (IOException e) {
-            return null;
-        }
+        final MultiLevelImage dggMultiLevelImage = SmosDgg.getInstance().getDggMultiLevelImage();
+        return new DefaultMultiLevelImage(new SmosMultiLevelSource(valueProvider, dggMultiLevelImage, band));
     }
 
     private static ImageInfo createDefaultImageInfo(BandInfo bandInfo) {
