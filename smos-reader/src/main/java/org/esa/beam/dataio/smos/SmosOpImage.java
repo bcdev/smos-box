@@ -38,7 +38,7 @@ class SmosOpImage extends SingleBandedOpImage {
     private final double noDataValue;
     private final RenderedImage seqnumImage;
     private final Area region;
-    private volatile NoDataRaster noDataTile;
+    private volatile NoDataRaster noDataRaster;
 
     SmosOpImage(FieldValueProvider valueProvider, RasterDataNode rasterDataNode, RenderedImage seqnumImage,
                 ResolutionLevel level, Area region) {
@@ -61,15 +61,15 @@ class SmosOpImage extends SingleBandedOpImage {
             return super.computeTile(tileX, tileY);
         }
 
-        if (noDataTile == null) {
+        if (noDataRaster == null) {
             synchronized (this) {
-                if (noDataTile == null) {
-                    noDataTile = createNoDataRaster(noDataValue);
+                if (noDataRaster == null) {
+                    noDataRaster = createNoDataRaster(noDataValue);
                 }
             }
         }
 
-        return noDataTile.createTranslatedChild(tileXToX(tileX), tileYToY(tileY));
+        return noDataRaster.createTranslatedChild(tileXToX(tileX), tileYToY(tileY));
     }
 
     @Override

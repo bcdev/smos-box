@@ -3,14 +3,14 @@ package org.esa.beam.smos.dgg;
 import com.bc.ceres.glevel.MultiLevelImage;
 import com.bc.ceres.glevel.MultiLevelSource;
 import com.bc.ceres.glevel.support.DefaultMultiLevelImage;
+import org.esa.beam.glevel.TiledFileMultiLevelSource;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.MessageFormat;
-import java.net.URL;
+import java.net.URI;
 import java.net.URISyntaxException;
-
-import org.esa.beam.glevel.TiledFileMultiLevelSource;
+import java.net.URL;
+import java.text.MessageFormat;
 
 /**
  * Providfes a {@link com.bc.ceres.glevel.MultiLevelImage multi level image} of
@@ -18,52 +18,76 @@ import org.esa.beam.glevel.TiledFileMultiLevelSource;
  *
  * @author Marco Peters
  * @version $Revision: $ $Date: $
- * @since BEAM 4.6
+ * @since SMOS-Box 1.0
  */
 public class SmosDgg {
 
-    private static final String SMOS_DGG_DIR_PROPERTY_NAME = "org.esa.beam.pview.smosDggDir";
-    private static MultiLevelImage dggridMultiLevelImage;
-    private static final int A = 1000000;
-    private static final int B = 262144;
+    private static final String SMOS_DGG_DIR_PROPERTY_NAME = "org.esa.beam.smos.smosDggDir";
+    private static volatile MultiLevelImage dggMultiLevelImage;
 
-    public static MultiLevelImage getDggridMultiLevelImage() throws IOException {
-        if (dggridMultiLevelImage == null) {
-            String dirPath = getDirPathFromProperty();
+    private static final SmosDgg uniqueInstance = new SmosDgg();
+
+    private SmosDgg() {
+    }
+
+    public static SmosDgg getInstance() {
+        return uniqueInstance;
+    }
+
+    public static int smosGridPointIdToDggSeqnum(int gridPointId) {
+        final int a = 1000000;
+        final int b = 262144;
+
+        return gridPointId < a ? gridPointId : b * ((gridPointId - 1) / a) + ((gridPointId - 1) % a) + 2;
+    }
+
+    public MultiLevelImage getDggMultiLevelImage() throws IOException {
+        if (dggMultiLevelImage == null) {
+            synchronized (uniqueInstance) {
+                if (dggMultiLevelImage == null) {
+                    createDggMultiLevelImage();
+                }
+            }
+        }
+        return dggMultiLevelImage;
+    }
+
+    private void createDggMultiLevelImage() throws IOException {
+        String dirPath;
+        try {
+            dirPath = getDirPathFromProperty();
             if (dirPath == null) {
                 dirPath = getDirPathFromModule();
             }
-            try {
-                MultiLevelSource dggridMultiLevelSource = TiledFileMultiLevelSource.create(new File(dirPath));
-                dggridMultiLevelImage = new DefaultMultiLevelImage(dggridMultiLevelSource);
-            } catch (IOException e) {
-                throw new IOException(MessageFormat.format("Failed to load SMOS DDG ''{0}''", dirPath), e);
-            }
+            final File dir = new File(dirPath);
+            final MultiLevelSource dggMultiLevelSource = TiledFileMultiLevelSource.create(dir);
+            dggMultiLevelImage = new DefaultMultiLevelImage(dggMultiLevelSource);
+        } catch (IOException e) {
+            final String message = ""; //MessageFormat.format("Failed to load SMOS DDG.");
+            throw new IOException(message, e);
         }
-        return dggridMultiLevelImage;
     }
 
-    public static int smosGridPointIdToDggridSeqnum(int smosId) {
-        return smosId < A ? smosId : B * ((smosId - 1) / A) + ((smosId - 1) % A) + 2;
-    }
-
-    private static String getDirPathFromModule() {
-        final URL resource = SmosDgg.class.getResource("image.properties");
+    private static String getDirPathFromModule() throws IOException {
         try {
-            return new File(resource.toURI()).getParent();
+            final URL url = SmosDgg.class.getResource("image.properties");
+            final URI uri = url.toURI();
+
+            return new File(uri).getParent();
         } catch (URISyntaxException e) {
-            e.printStackTrace();
+            throw new IOException(e.getMessage(), e);
         }
-        return null;
     }
 
     private static String getDirPathFromProperty() throws IOException {
-        String dirPath = System.getProperty(SMOS_DGG_DIR_PROPERTY_NAME);
-        if (dirPath != null && !new File(dirPath).exists()) {
-            throw new IOException(
-                    MessageFormat.format(
-                            "SMOS products require a DGG image.\nPlease set system property ''{0}''to a valid DGG image directory.",
-                            SMOS_DGG_DIR_PROPERTY_NAME));
+        final String dirPath = System.getProperty(SMOS_DGG_DIR_PROPERTY_NAME);
+        if (dirPath != null) {
+            final File dir = new File(dirPath);
+            if (!dir.canRead()) {
+                throw new IOException(MessageFormat.format(
+                        "Cannot read directory ''{0}''. Please set the property ''{0}'' to a readable directory.",
+                        dir.getPath(), SMOS_DGG_DIR_PROPERTY_NAME));
+            }
         }
         return dirPath;
     }

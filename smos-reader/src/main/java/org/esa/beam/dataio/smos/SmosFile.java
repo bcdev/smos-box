@@ -86,7 +86,7 @@ public class SmosFile {
     }
 
     public final int getGridPointSeqnum(int i) throws IOException {
-        return SmosDgg.smosGridPointIdToDggridSeqnum(getGridPointId(i));
+        return SmosDgg.smosGridPointIdToDggSeqnum(getGridPointId(i));
     }
 
     public final File getFile() {
