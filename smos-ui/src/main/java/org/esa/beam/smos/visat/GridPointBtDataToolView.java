@@ -3,6 +3,7 @@ package org.esa.beam.smos.visat;
 import org.esa.beam.dataio.smos.L1cSmosFile;
 import org.esa.beam.dataio.smos.SmosDggFile;
 import org.esa.beam.dataio.smos.SmosProductReader;
+import org.esa.beam.dataio.smos.SmosFile;
 import org.esa.beam.framework.datamodel.Pin;
 import org.esa.beam.framework.datamodel.PixelPos;
 import org.esa.beam.framework.datamodel.ProductNode;
@@ -197,7 +198,7 @@ public abstract class GridPointBtDataToolView extends SmosToolView {
         for (final Product product : products) {
             final ProductReader productReader = product.getProductReader();
             if (productReader instanceof SmosProductReader) {
-                final SmosDggFile smosFile = ((SmosProductReader) productReader).getSmosFile();
+                final SmosFile smosFile = ((SmosProductReader) productReader).getSmosFile();
                 if (smosFile instanceof L1cSmosFile) {
                     String productName = product.getName();
                     String relevantProductname = getRelevantProductname(productName);

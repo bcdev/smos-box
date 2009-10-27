@@ -26,7 +26,7 @@ public class SmosDgg {
     private static final String SMOS_DGG_DIR_PROPERTY_NAME = "org.esa.beam.smos.smosDggDir";
     private static final SmosDgg uniqueInstance = new SmosDgg();
 
-    private static volatile MultiLevelImage dggMultiLevelImage;
+    private volatile MultiLevelImage dggMultiLevelImage;
 
     private SmosDgg() {
     }

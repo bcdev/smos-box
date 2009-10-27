@@ -5,6 +5,7 @@ import com.bc.ceres.glayer.support.ImageLayer;
 import com.bc.ceres.glevel.MultiLevelImage;
 import org.esa.beam.dataio.smos.SmosDggFile;
 import org.esa.beam.dataio.smos.SmosProductReader;
+import org.esa.beam.dataio.smos.SmosFile;
 import org.esa.beam.framework.dataio.ProductReader;
 import org.esa.beam.framework.datamodel.Band;
 import org.esa.beam.framework.datamodel.Product;
@@ -74,10 +75,13 @@ public class SceneViewSelectionService {
         if (product != null) {
             final ProductReader productReader = product.getProductReader();
             Assert.state(productReader instanceof SmosProductReader, "productReader instanceof SmosProductReader");
-            return ((SmosProductReader) productReader).getSmosFile();
-        } else {
-            return null;
+            final SmosFile smosFile = ((SmosProductReader) productReader).getSmosFile();
+            if (smosFile instanceof SmosDggFile) {
+                return (SmosDggFile) smosFile;
+            }
         }
+        
+        return null;
     }
 
     public int getGridPointId(int pixelX, int pixelY) {

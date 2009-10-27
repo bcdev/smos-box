@@ -51,7 +51,7 @@ public class SmosFormats {
     public static final int L1C_POL_MODE_XY2 = 3;
     public static final int L1C_POL_MODE_ANY = 4;
 
-    private static final SmosFormats INSTANCE = new SmosFormats();
+    private static final SmosFormats uniqueInstance = new SmosFormats();
 
     private final ConcurrentMap<String, DataFormat> formatMap;
 
@@ -60,7 +60,7 @@ public class SmosFormats {
     }
 
     public static SmosFormats getInstance() {
-        return INSTANCE;
+        return uniqueInstance;
     }
 
     public String[] getFormatNames() {
