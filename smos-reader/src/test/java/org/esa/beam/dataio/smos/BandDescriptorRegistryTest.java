@@ -134,6 +134,7 @@ public class BandDescriptorRegistryTest {
 
     public static class BandDescriptor {
 
+        final boolean visible;
         final String bandName;
         final String memberName;
         final int sampleModel;
@@ -142,31 +143,36 @@ public class BandDescriptorRegistryTest {
         final double scalingFactor;
         final double typicalMin;
         final double typicalMax;
-        final double noDataValue;
+        final double fillValue;
         final String validPixelExpression;
         final String unit;
-        final boolean cyclicColorLegend;
+        final boolean cyclic;
         final String description;
 
         BandDescriptor(String[] tokens) {
-            bandName = getString(tokens[0]);
-            memberName = getString(tokens[1], bandName);
+            visible = getBoolean(tokens[0], true);
+            bandName = getString(tokens[1]);
+            memberName = getString(tokens[2], bandName);
 
-            sampleModel = getInt(tokens[2], 0);
-            dataType = getInt(tokens[3], 0);
+            sampleModel = getInt(tokens[3], 0);
+            dataType = getInt(tokens[4], 0);
 
-            scalingOffset = getDouble(tokens[4], 0.0);
-            scalingFactor = getDouble(tokens[5], 1.0);
+            scalingOffset = getDouble(tokens[5], 0.0);
+            scalingFactor = getDouble(tokens[6], 1.0);
 
-            typicalMin = getDouble(tokens[6], Double.NaN);
-            typicalMax = getDouble(tokens[7], Double.NaN);
+            typicalMin = getDouble(tokens[7], Double.NEGATIVE_INFINITY);
+            typicalMax = getDouble(tokens[8], Double.POSITIVE_INFINITY);
+            fillValue = getDouble(tokens[9], Double.NaN);
 
-            noDataValue = getDouble(tokens[8], Double.NaN);
-            validPixelExpression = getString(tokens[9], "");
+            validPixelExpression = getString(tokens[10], "");
+            cyclic = getBoolean(tokens[12], false);
 
-            unit = getString(tokens[10], "");
-            cyclicColorLegend = getBoolean(tokens[11], false);
-            description = getString(tokens[12], "");
+            unit = getString(tokens[11], "");
+            description = getString(tokens[13], "");
+        }
+
+        public boolean isVisible() {
+            return visible;
         }
 
         public String getBandName() {
@@ -194,11 +200,11 @@ public class BandDescriptorRegistryTest {
         }
 
         public boolean hasTypicalMin() {
-            return !Double.isNaN(typicalMin);
+            return !Double.isInfinite(typicalMin);
         }
 
         public boolean hasTypicalMax() {
-            return !Double.isNaN(typicalMax);
+            return !Double.isInfinite(typicalMax);
         }
 
         public double getTypicalMin() {
@@ -210,11 +216,11 @@ public class BandDescriptorRegistryTest {
         }
 
         public boolean hasNoDataValue() {
-            return !Double.isNaN(noDataValue);
+            return !Double.isNaN(fillValue);
         }
 
-        public double getNoDataValue() {
-            return noDataValue;
+        public double getFillValue() {
+            return fillValue;
         }
 
         public boolean hasValidPixelExpression() {
@@ -233,8 +239,8 @@ public class BandDescriptorRegistryTest {
             return unit;
         }
 
-        public boolean isCyclicColorLegend() {
-            return cyclicColorLegend;
+        public boolean isCyclic() {
+            return cyclic;
         }
 
         public boolean hasDescription() {
