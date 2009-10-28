@@ -52,7 +52,7 @@ public class SmosBox implements VisatPlugIn {
                         final Layer rootLayer = newView.getRootLayer();
                         final LayerType layerType = LayerType.getLayerType(BlueMarbleLayerType.class.getName());
                         if (!hasLayer(rootLayer, layerType)) {
-                            final ValueContainer configuration = layerType.getConfigurationTemplate();
+                            final ValueContainer configuration = layerType.createLayerConfig(null);
                             final Layer worldMapLayer = layerType.createLayer(null, configuration);
                             if (worldMapLayer != null) {
                                 rootLayer.getChildren().add(worldMapLayer);
