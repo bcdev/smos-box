@@ -32,7 +32,7 @@ public class BandInfo {
     private final double min;
     private final double max;
     private final String description;
-    private final boolean topologyCircular;
+    private final boolean circular;
 
     BandInfo(String name) {
         this(name, "", 0.0, 1.0, -999.0, 0.0, 1000.0, "");
@@ -44,7 +44,7 @@ public class BandInfo {
     }
 
     BandInfo(String name, String unit, double scaleOffset, double scaleFactor, Number noDataValue, double min,
-             double max, String description, boolean topologyCircular) {
+             double max, String description, boolean circular) {
         this.name = name;
         this.unit = unit;
         this.scaleOffset = scaleOffset;
@@ -53,7 +53,7 @@ public class BandInfo {
         this.min = min;
         this.max = max;
         this.description = description;
-        this.topologyCircular = topologyCircular;
+        this.circular = circular;
     }
 
     public String getName() {
@@ -88,7 +88,7 @@ public class BandInfo {
         return description;
     }
 
-    public boolean isTopologyCircular() {
-        return topologyCircular;
+    public boolean isCircular() {
+        return circular;
     }
 }

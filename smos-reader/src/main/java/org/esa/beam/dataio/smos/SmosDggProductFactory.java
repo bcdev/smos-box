@@ -21,6 +21,7 @@ import com.bc.ceres.binio.CompoundType;
 import com.bc.ceres.binio.SimpleType;
 import com.bc.ceres.binio.Type;
 import com.bc.ceres.glevel.MultiLevelImage;
+import com.bc.ceres.glevel.MultiLevelSource;
 import com.bc.ceres.glevel.support.DefaultMultiLevelImage;
 import com.bc.jexp.ParseException;
 import org.esa.beam.framework.datamodel.Band;
@@ -28,16 +29,11 @@ import org.esa.beam.framework.datamodel.BitmaskDef;
 import org.esa.beam.framework.datamodel.ColorPaletteDef;
 import org.esa.beam.framework.datamodel.FlagCoding;
 import org.esa.beam.framework.datamodel.ImageInfo;
-import org.esa.beam.framework.datamodel.MapGeoCoding;
 import org.esa.beam.framework.datamodel.MetadataAttribute;
 import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.framework.datamodel.ProductData;
 import org.esa.beam.framework.datamodel.VirtualBand;
 import org.esa.beam.framework.dataop.barithm.BandArithmetic;
-import org.esa.beam.framework.dataop.maptransf.Datum;
-import org.esa.beam.framework.dataop.maptransf.IdentityTransformDescriptor;
-import org.esa.beam.framework.dataop.maptransf.MapInfo;
-import org.esa.beam.framework.dataop.maptransf.MapProjectionRegistry;
 import org.esa.beam.smos.dgg.SmosDgg;
 
 import java.awt.Color;
@@ -45,20 +41,6 @@ import java.util.HashMap;
 import java.util.Random;
 
 public class SmosDggProductFactory extends SmosProductFactory {
-
-    @Override
-    protected void setGeoCoding(Product product) {
-        final MapInfo mapInfo = new MapInfo(MapProjectionRegistry.getProjection(IdentityTransformDescriptor.NAME),
-                                            0.0f, 0.0f,
-                                            -180.0f, +90.0f,
-                                            360.0f / product.getSceneRasterWidth(),
-                                            180.0f / product.getSceneRasterHeight(),
-                                            Datum.WGS_84);
-        mapInfo.setSceneWidth(product.getSceneRasterWidth());
-        mapInfo.setSceneHeight(product.getSceneRasterHeight());
-
-        product.setGeoCoding(new MapGeoCoding(mapInfo));
-    }
 
     @Override
     protected void addBands(Product product, SmosFile smosFile) {
@@ -104,6 +86,12 @@ public class SmosDggProductFactory extends SmosProductFactory {
         } else {
             throw new IllegalStateException("Illegal SMOS format: " + formatName);
         }
+    }
+
+    @Override
+    protected MultiLevelSource createMultiLevelSource(Band band, FieldValueProvider valueProvider) {
+        // todo: rq/rq - implement
+        return null;
     }
 
     @Override
@@ -440,7 +428,7 @@ public class SmosDggProductFactory extends SmosProductFactory {
     private void addL2OsBand(Product product, String bandName, int bandType, BandInfo bandInfo, int fieldIndex,
                              SmosDggFile smosFile) {
         final Band band = addBand(product, bandName, bandType, bandInfo,
-                                  new DefaultFieldValueProvider(smosFile, fieldIndex));
+                                  new DggValueProvider(smosFile, fieldIndex));
 
         final Random random = new Random(5489);
         if (bandName.startsWith("Control_Flags")) {
@@ -453,7 +441,7 @@ public class SmosDggProductFactory extends SmosProductFactory {
     private void addL2SmBand(Product product, String bandName, int bandType, BandInfo bandInfo, int fieldIndex,
                              SmosDggFile smosFile) {
         final Band band = addBand(product, bandName, bandType, bandInfo,
-                                  new DefaultFieldValueProvider(smosFile, fieldIndex));
+                                  new DggValueProvider(smosFile, fieldIndex));
 
         final Random random = new Random(5489);
         if (bandName.equals("Confidence_Flags")) {
@@ -470,7 +458,7 @@ public class SmosDggProductFactory extends SmosProductFactory {
     private void addL2EcmwfBand(Product product, String bandName, int bandType, BandInfo bandInfo, int fieldIndex,
                                 SmosDggFile smosFile) {
         addBand(product, bandName, bandType, bandInfo,
-                new DefaultFieldValueProvider(smosFile, fieldIndex));
+                new DggValueProvider(smosFile, fieldIndex));
     }
 
     private static void addL1cFlagCoding(Product product) {
@@ -574,31 +562,31 @@ public class SmosDggProductFactory extends SmosProductFactory {
         }
     }
 
-    private static int memberTypeToBandType(Type type) {
+    private static int memberTypeToBandType(Type memberType) {
         int bandType;
 
-        if (type.equals(SimpleType.BYTE)) {
+        if (memberType.equals(SimpleType.BYTE)) {
             bandType = ProductData.TYPE_INT8;
-        } else if (type.equals(SimpleType.UBYTE)) {
+        } else if (memberType.equals(SimpleType.UBYTE)) {
             bandType = ProductData.TYPE_UINT8;
-        } else if (type.equals(SimpleType.SHORT)) {
+        } else if (memberType.equals(SimpleType.SHORT)) {
             bandType = ProductData.TYPE_INT16;
-        } else if (type.equals(SimpleType.USHORT)) {
+        } else if (memberType.equals(SimpleType.USHORT)) {
             bandType = ProductData.TYPE_UINT16;
-        } else if (type.equals(SimpleType.INT)) {
+        } else if (memberType.equals(SimpleType.INT)) {
             bandType = ProductData.TYPE_INT32;
-        } else if (type.equals(SimpleType.UINT)) {
+        } else if (memberType.equals(SimpleType.UINT)) {
             bandType = ProductData.TYPE_UINT32;
-        } else if (type.equals(SimpleType.FLOAT)) {
+        } else if (memberType.equals(SimpleType.FLOAT)) {
             bandType = ProductData.TYPE_FLOAT32;
-        } else if (type.equals(SimpleType.DOUBLE)) {
+        } else if (memberType.equals(SimpleType.DOUBLE)) {
             bandType = ProductData.TYPE_FLOAT64;
-        } else if (type.equals(SimpleType.LONG)) {
+        } else if (memberType.equals(SimpleType.LONG)) {
             bandType = ProductData.TYPE_INT32;
-        } else if (type.equals(SimpleType.ULONG)) {
+        } else if (memberType.equals(SimpleType.ULONG)) {
             bandType = ProductData.TYPE_INT32;
         } else {
-            throw new IllegalStateException("type = " + type);
+            throw new IllegalStateException("type = " + memberType);
         }
 
         return bandType;
@@ -611,7 +599,7 @@ public class SmosDggProductFactory extends SmosProductFactory {
 
     private static ImageInfo createDefaultImageInfo(BandInfo bandInfo) {
         final Color[] colors;
-        if (bandInfo.isTopologyCircular()) {
+        if (bandInfo.isCircular()) {
             colors = new Color[]{
                     new Color(0, 0, 0),
                     new Color(85, 0, 136),

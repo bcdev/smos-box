@@ -2,7 +2,6 @@ package org.esa.beam.dataio.smos;
 
 import com.bc.ceres.binio.DataFormat;
 import com.bc.ceres.binio.binx.BinX;
-import com.bc.ceres.binio.binx.BinXException;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -13,13 +12,12 @@ import org.jdom.input.SAXBuilder;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.ByteOrder;
 import java.text.MessageFormat;
+import java.util.Iterator;
 import java.util.Properties;
 import java.util.Set;
-import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -68,31 +66,26 @@ public class SmosFormats {
         return names.toArray(new String[names.size()]);
     }
 
-    public DataFormat getFormat(String name) {
-        if (!formatMap.containsKey(name)) {
-            final URL schemaUrl = getSchemaResource(name);
+    public DataFormat getFormat(String formatName) {
+        if (!formatMap.containsKey(formatName)) {
+            final URL url = getSchemaResource(formatName);
 
-            if (schemaUrl != null) {
-                final BinX binX = createBinX(name);
+            if (url != null) {
+                final DataFormat format;
 
                 try {
-                    final DataFormat format = binX.readDataFormat(schemaUrl.toURI(), name);
-                    format.setByteOrder(ByteOrder.LITTLE_ENDIAN);
-                    formatMap.putIfAbsent(name, format);
-                } catch (BinXException e) {
+                    format = createBinX(formatName).readDataFormat(url.toURI(), formatName);
+                } catch (Throwable e) {
                     throw new IllegalStateException(
-                            MessageFormat.format("Schema resource ''{0}'': {1}", schemaUrl, e.getMessage()));
-                } catch (IOException e) {
-                    throw new IllegalStateException(
-                            MessageFormat.format("Schema resource ''{0}'': {1}", schemaUrl, e.getMessage()));
-                } catch (URISyntaxException e) {
-                    throw new IllegalStateException(
-                            MessageFormat.format("Schema resource ''{0}'': {1}", schemaUrl, e.getMessage()));
+                            MessageFormat.format("Schema resource ''{0}'': {1}", url, e.getMessage()));
                 }
+
+                format.setByteOrder(ByteOrder.LITTLE_ENDIAN);
+                formatMap.putIfAbsent(formatName, format);
             }
         }
 
-        return formatMap.get(name);
+        return formatMap.get(formatName);
     }
 
     public static DataFormat getFormat(File hdrFile) throws IOException {
@@ -109,7 +102,7 @@ public class SmosFormats {
             throw new IOException(MessageFormat.format(
                     "File ''{0}'': Missing namespace", hdrFile.getPath()));
         }
-        final Iterator descendants = document.getDescendants(new Filter(){
+        final Iterator descendants = document.getDescendants(new Filter() {
             @Override
             public boolean matches(Object o) {
                 if (o instanceof Element) {
@@ -124,27 +117,25 @@ public class SmosFormats {
         });
         if (descendants.hasNext()) {
             final Element e = (Element) descendants.next();
-            final String schema = e.getChildText("Datablock_Schema", namespace);
-            return getInstance().getFormat(schema);
+            final String formatName = e.getChildText("Datablock_Schema", namespace).substring(0, 27);
+            return getInstance().getFormat(formatName);
         } else {
             throw new IOException(MessageFormat.format("File ''{0}'': Missing datablock schema.", hdrFile.getPath()));
         }
     }
 
-    static URL getSchemaResource(String name) {
+    private static URL getSchemaResource(String formatName) {
         // Reference: SO-MA-IDR-GS-0004, SMOS DPGS, XML Schema Guidelines
-        if (name == null || !name.matches("DBL_\\w{2}_\\w{4}_\\w{10}_\\d{4}(\\.binXschema\\.xml)?")) {
+        if (formatName == null || !formatName.matches("DBL_\\w{2}_\\w{4}_\\w{10}_\\d{4}")) {
             return null;
         }
 
-        final String fc = name.substring(12, 16);
-        final String sd = name.substring(16, 22);
+        final String fc = formatName.substring(12, 16);
+        final String sd = formatName.substring(16, 22);
 
         final StringBuilder pathBuilder = new StringBuilder();
-        pathBuilder.append("schemas/").append(fc).append("/").append(sd).append("/").append(name);
-        if (!name.endsWith(".binXschema.xml")) {
-            pathBuilder.append(".binXschema.xml");
-        }
+        pathBuilder.append("schemas/").append(fc).append("/").append(sd).append("/").append(formatName);
+        pathBuilder.append(".binXschema.xml");
 
         return SmosFormats.class.getResource(pathBuilder.toString());
     }

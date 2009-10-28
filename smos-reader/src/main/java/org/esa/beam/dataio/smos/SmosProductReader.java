@@ -70,7 +70,7 @@ public class SmosProductReader extends AbstractProductReader {
                 factory = new SmosDggProductFactory();
             } else if (isEcmwfFormat(formatName)) {
                 smosFile = new SmosDggFile(dblFile, format);
-                factory = new SmosDggProductFactory();
+                factory = new EcmwfProductFactory();
             } else {
                 throw new IOException("Unknown SMOS format: " + formatName);
             }
@@ -165,4 +165,5 @@ public class SmosProductReader extends AbstractProductReader {
 
         throw new IllegalArgumentException(MessageFormat.format("Illegal input: {0}", input));
     }
+
 }

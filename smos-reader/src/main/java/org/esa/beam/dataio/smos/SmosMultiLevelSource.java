@@ -19,15 +19,15 @@ import java.awt.image.RenderedImage;
 public class SmosMultiLevelSource extends AbstractMultiLevelSource {
 
     private final FieldValueProvider valueProvider;
-    private final MultiLevelSource seqnumMultiLevelSource;
+    private final MultiLevelSource dggMultiLevelSource;
     private final RasterDataNode rasterDataNode;
 
-    public SmosMultiLevelSource(FieldValueProvider valueProvider, MultiLevelSource seqnumMultiLevelSource,
+    public SmosMultiLevelSource(FieldValueProvider valueProvider, MultiLevelSource dggMultiLevelSource,
                                 RasterDataNode rasterDataNode) {
-        super(seqnumMultiLevelSource.getModel());
+        super(dggMultiLevelSource.getModel());
 
         this.valueProvider = valueProvider;
-        this.seqnumMultiLevelSource = seqnumMultiLevelSource;
+        this.dggMultiLevelSource = dggMultiLevelSource;
         this.rasterDataNode = rasterDataNode;
     }
 
@@ -40,8 +40,8 @@ public class SmosMultiLevelSource extends AbstractMultiLevelSource {
         final Area modelRegion = valueProvider.getRegion();
         final Area levelRegion = modelRegion.createTransformedArea(getModel().getModelToImageTransform(level));
         final ResolutionLevel resolutionLevel = ResolutionLevel.create(getModel(), level);
-        final RenderedImage seqnumImage = seqnumMultiLevelSource.getImage(level);
-        
+        final RenderedImage seqnumImage = dggMultiLevelSource.getImage(level);
+
         return new SmosOpImage(valueProvider, rasterDataNode, seqnumImage, resolutionLevel, levelRegion);
     }
 }

@@ -25,22 +25,27 @@ import java.awt.geom.Area;
  * @version $Revision$ $Date$
  * @since SMOS-Box 1.0
  */
-public class DefaultFieldValueProvider implements FieldValueProvider {
+public class DggValueProvider implements FieldValueProvider {
 
     private final SmosDggFile smosFile;
-    private final int fieldIndex;
+    private final int memberIndex;
 
-    DefaultFieldValueProvider(SmosDggFile smosFile, int fieldIndex) {
+    DggValueProvider(SmosDggFile smosFile, int memberIndex) {
         this.smosFile = smosFile;
-        this.fieldIndex = fieldIndex;
+        this.memberIndex = memberIndex;
+    }
+
+    DggValueProvider(SmosDggFile smosFile, String memberName) {
+        this.smosFile = smosFile;
+        this.memberIndex = smosFile.getGridPointType().getMemberIndex(memberName);
     }
 
     public final SmosDggFile getSmosFile() {
         return smosFile;
     }
 
-    public final int getFieldIndex() {
-        return fieldIndex;
+    public final int getMemberIndex() {
+        return memberIndex;
     }
 
     @Override
@@ -56,7 +61,7 @@ public class DefaultFieldValueProvider implements FieldValueProvider {
     @Override
     public byte getValue(int gridPointIndex, byte noDataValue) {
         try {
-            return getSmosFile().getGridPointData(gridPointIndex).getByte(getFieldIndex());
+            return smosFile.getGridPointData(gridPointIndex).getByte(getMemberIndex());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -65,7 +70,7 @@ public class DefaultFieldValueProvider implements FieldValueProvider {
     @Override
     public short getValue(int gridPointIndex, short noDataValue) {
         try {
-            return getSmosFile().getGridPointData(gridPointIndex).getShort(getFieldIndex());
+            return smosFile.getGridPointData(gridPointIndex).getShort(getMemberIndex());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -74,7 +79,7 @@ public class DefaultFieldValueProvider implements FieldValueProvider {
     @Override
     public int getValue(int gridPointIndex, int noDataValue) {
         try {
-            return getSmosFile().getGridPointData(gridPointIndex).getInt(getFieldIndex());
+            return smosFile.getGridPointData(gridPointIndex).getInt(getMemberIndex());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -83,7 +88,7 @@ public class DefaultFieldValueProvider implements FieldValueProvider {
     @Override
     public float getValue(int gridPointIndex, float noDataValue) {
         try {
-            return getSmosFile().getGridPointData(gridPointIndex).getFloat(getFieldIndex());
+            return smosFile.getGridPointData(gridPointIndex).getFloat(getMemberIndex());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
