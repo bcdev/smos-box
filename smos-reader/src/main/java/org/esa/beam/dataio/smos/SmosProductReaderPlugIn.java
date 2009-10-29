@@ -45,7 +45,7 @@ public class SmosProductReaderPlugIn implements ProductReaderPlugIn {
 
             if (hdrFile.exists() && dblFile.exists()) {
                 try {
-                    if (SmosFormats.getFormat(hdrFile) != null) {
+                    if (DataFormatRegistry.getDataFormat(hdrFile) != null) {
                         return DecodeQualification.INTENDED;
                     }
                 } catch (Exception e) {

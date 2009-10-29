@@ -39,7 +39,7 @@ public abstract class L1cSmosFile extends SmosDggFile {
     public L1cSmosFile(File file, DataFormat format) throws IOException {
         super(file, format);
 
-        btDataListIndex = getGridPointType().getMemberIndex(SmosFormats.BT_DATA_LIST_NAME);
+        btDataListIndex = getGridPointType().getMemberIndex(SmosConstants.BT_DATA_LIST_NAME);
         if (btDataListIndex == -1) {
             throw new IOException("Grid point type does not include BT data list.");
         }

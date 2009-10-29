@@ -131,14 +131,14 @@ public class SmosDggProductFactory extends SmosProductFactory {
                     // flags do not depend on polarisation mode, so there is a single flag band only
                     addL1cBand(product, memberName,
                                memberTypeToBandType(member.getType()), bandInfo, fieldIndex,
-                               SmosFormats.L1C_POL_MODE_X, valueProviderMap, smosFile);
+                               SmosConstants.L1C_POL_MODE_X, valueProviderMap, smosFile);
                 } else {
                     addL1cBand(product, memberName + "_X",
                                memberTypeToBandType(member.getType()), bandInfo, fieldIndex,
-                               SmosFormats.L1C_POL_MODE_X, valueProviderMap, smosFile);
+                               SmosConstants.L1C_POL_MODE_X, valueProviderMap, smosFile);
                     addL1cBand(product, memberName + "_Y",
                                memberTypeToBandType(member.getType()), bandInfo, fieldIndex,
-                               SmosFormats.L1C_POL_MODE_Y, valueProviderMap, smosFile);
+                               SmosConstants.L1C_POL_MODE_Y, valueProviderMap, smosFile);
                 }
             }
         }
@@ -158,14 +158,14 @@ public class SmosDggProductFactory extends SmosProductFactory {
                     // flags do not depend on polarisation mode, so there is a single flag band only
                     addL1cBand(product, memberName,
                                memberTypeToBandType(member.getType()), bandInfo, fieldIndex,
-                               SmosFormats.L1C_POL_MODE_X, valueProviderMap, smosFile);
+                               SmosConstants.L1C_POL_MODE_X, valueProviderMap, smosFile);
                 } else if ("BT_Value".equals(memberName)) {
                     addL1cBand(product, memberName + "_X",
                                memberTypeToBandType(member.getType()), bandInfo, fieldIndex,
-                               SmosFormats.L1C_POL_MODE_X, valueProviderMap, smosFile);
+                               SmosConstants.L1C_POL_MODE_X, valueProviderMap, smosFile);
                     addL1cBand(product, memberName + "_Y",
                                memberTypeToBandType(member.getType()), bandInfo, fieldIndex,
-                               SmosFormats.L1C_POL_MODE_Y, valueProviderMap, smosFile);
+                               SmosConstants.L1C_POL_MODE_Y, valueProviderMap, smosFile);
                     final BandInfo bandInfoCrossPol = new BandInfo(bandInfo.getName(),
                                                                    bandInfo.getUnit(),
                                                                    bandInfo.getScaleOffset(),
@@ -175,20 +175,20 @@ public class SmosDggProductFactory extends SmosProductFactory {
                                                                    bandInfo.getDescription());
                     addL1cBand(product, memberName + "_XY_Real",
                                memberTypeToBandType(member.getType()), bandInfoCrossPol, fieldIndex,
-                               SmosFormats.L1C_POL_MODE_XY1, valueProviderMap, smosFile);
+                               SmosConstants.L1C_POL_MODE_XY1, valueProviderMap, smosFile);
                     addL1cBand(product, memberName + "_XY_Imag",
                                memberTypeToBandType(member.getType()), bandInfoCrossPol, fieldIndex,
-                               SmosFormats.L1C_POL_MODE_XY2, valueProviderMap, smosFile);
+                               SmosConstants.L1C_POL_MODE_XY2, valueProviderMap, smosFile);
                 } else {
                     addL1cBand(product, memberName + "_X",
                                memberTypeToBandType(member.getType()), bandInfo, fieldIndex,
-                               SmosFormats.L1C_POL_MODE_X, valueProviderMap, smosFile);
+                               SmosConstants.L1C_POL_MODE_X, valueProviderMap, smosFile);
                     addL1cBand(product, memberName + "_Y",
                                memberTypeToBandType(member.getType()), bandInfo, fieldIndex,
-                               SmosFormats.L1C_POL_MODE_Y, valueProviderMap, smosFile);
+                               SmosConstants.L1C_POL_MODE_Y, valueProviderMap, smosFile);
                     addL1cBand(product, memberName + "_XY",
                                memberTypeToBandType(member.getType()), bandInfo, fieldIndex,
-                               SmosFormats.L1C_POL_MODE_XY1, valueProviderMap, smosFile);
+                               SmosConstants.L1C_POL_MODE_XY1, valueProviderMap, smosFile);
                 }
             }
         }
@@ -208,14 +208,14 @@ public class SmosDggProductFactory extends SmosProductFactory {
                     // flags do not depend on polarisation mode, so there is a single flag band only
                     addL1cBand(product, memberName,
                                memberTypeToBandType(member.getType()), bandInfo, fieldIndex,
-                               SmosFormats.L1C_POL_MODE_ANY, valueProviderMap, smosFile);
+                               SmosConstants.L1C_POL_MODE_ANY, valueProviderMap, smosFile);
                 } else {
                     addL1cBand(product, memberName + "_X",
                                memberTypeToBandType(member.getType()), bandInfo, fieldIndex,
-                               SmosFormats.L1C_POL_MODE_X, valueProviderMap, smosFile);
+                               SmosConstants.L1C_POL_MODE_X, valueProviderMap, smosFile);
                     addL1cBand(product, memberName + "_Y",
                                memberTypeToBandType(member.getType()), bandInfo, fieldIndex,
-                               SmosFormats.L1C_POL_MODE_Y, valueProviderMap, smosFile);
+                               SmosConstants.L1C_POL_MODE_Y, valueProviderMap, smosFile);
                 }
             }
         }
@@ -237,14 +237,14 @@ public class SmosDggProductFactory extends SmosProductFactory {
                     // flags do not depend on polarisation mode, so there is a single flag band only
                     addL1cBand(product, memberName,
                                memberTypeToBandType(member.getType()), bandInfo, fieldIndex,
-                               SmosFormats.L1C_POL_MODE_ANY, valueProviderMap, smosFile);
+                               SmosConstants.L1C_POL_MODE_ANY, valueProviderMap, smosFile);
                 } else if ("BT_Value_Real".equals(memberName)) {
                     addL1cBand(product, "BT_Value_X",
                                memberTypeToBandType(member.getType()), bandInfo, fieldIndex,
-                               SmosFormats.L1C_POL_MODE_X, valueProviderMap, smosFile);
+                               SmosConstants.L1C_POL_MODE_X, valueProviderMap, smosFile);
                     addL1cBand(product, "BT_Value_Y",
                                memberTypeToBandType(member.getType()), bandInfo, fieldIndex,
-                               SmosFormats.L1C_POL_MODE_Y, valueProviderMap, smosFile);
+                               SmosConstants.L1C_POL_MODE_Y, valueProviderMap, smosFile);
                     final BandInfo bandInfoCrossPol = new BandInfo(bandInfo.getName(),
                                                                    bandInfo.getUnit(),
                                                                    bandInfo.getScaleOffset(),
@@ -253,21 +253,21 @@ public class SmosDggProductFactory extends SmosProductFactory {
                                                                    bandInfo.getDescription());
                     addL1cBand(product, "BT_Value_XY_Real",
                                memberTypeToBandType(member.getType()), bandInfoCrossPol, fieldIndex,
-                               SmosFormats.L1C_POL_MODE_XY1, valueProviderMap, smosFile);
+                               SmosConstants.L1C_POL_MODE_XY1, valueProviderMap, smosFile);
                 } else if ("BT_Value_Imag".equals(memberName)) {
                     addL1cBand(product, "BT_Value_XY_Imag",
                                memberTypeToBandType(member.getType()), bandInfo, fieldIndex,
-                               SmosFormats.L1C_POL_MODE_XY1, valueProviderMap, smosFile);
+                               SmosConstants.L1C_POL_MODE_XY1, valueProviderMap, smosFile);
                 } else {
                     addL1cBand(product, memberName + "_X",
                                memberTypeToBandType(member.getType()), bandInfo, fieldIndex,
-                               SmosFormats.L1C_POL_MODE_X, valueProviderMap, smosFile);
+                               SmosConstants.L1C_POL_MODE_X, valueProviderMap, smosFile);
                     addL1cBand(product, memberName + "_Y",
                                memberTypeToBandType(member.getType()), bandInfo, fieldIndex,
-                               SmosFormats.L1C_POL_MODE_Y, valueProviderMap, smosFile);
+                               SmosConstants.L1C_POL_MODE_Y, valueProviderMap, smosFile);
                     addL1cBand(product, memberName + "_XY",
                                memberTypeToBandType(member.getType()), bandInfo, fieldIndex,
-                               SmosFormats.L1C_POL_MODE_XY1, valueProviderMap, smosFile);
+                               SmosConstants.L1C_POL_MODE_XY1, valueProviderMap, smosFile);
                 }
             }
         }
@@ -466,7 +466,7 @@ public class SmosDggProductFactory extends SmosProductFactory {
 
         for (final FlagDescriptor descriptor : FlagDescriptor.L1C_FLAGS) {
             // skip polarisation flags since they are not meaningful
-            if ((descriptor.getMask() & SmosFormats.L1C_POL_FLAGS_MASK) == 0) {
+            if ((descriptor.getMask() & SmosConstants.L1C_POL_FLAGS_MASK) == 0) {
                 flagCoding.addFlag(descriptor.getFlagName(), descriptor.getMask(), descriptor.getDescription());
             }
         }

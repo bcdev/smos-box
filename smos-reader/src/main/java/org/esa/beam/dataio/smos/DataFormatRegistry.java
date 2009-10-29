@@ -17,55 +17,26 @@ import java.nio.ByteOrder;
 import java.text.MessageFormat;
 import java.util.Iterator;
 import java.util.Properties;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 /**
- * Registry for all supported SMOS product formats.
+ * Registry for SMOS data formats.
  */
-public class SmosFormats {
+public class DataFormatRegistry {
 
-    public static final String GRID_POINT_COUNTER_NAME = "Grid_Point_Counter";
-    public static final String GRID_POINT_LIST_NAME = "Grid_Point_List";
-    public static final String GRID_POINT_ID_NAME = "Grid_Point_ID";
-    public static final String GRID_POINT_LAT_NAME = "Grid_Point_Latitude";
-    public static final String GRID_POINT_LON_NAME = "Grid_Point_Longitude";
+    private final ConcurrentMap<String, DataFormat> dataFormatMap;
 
-    public static final String SNAPSHOT_LIST_NAME = "Snapshot_List";
-    public static final String SNAPSHOT_ID_NAME = "Snapshot_ID";
-
-    public static final String BT_DATA_LIST_NAME = "BT_Data_List";
-    public static final String BT_FLAGS_NAME = "Flags";
-    public static final String BT_INCIDENCE_ANGLE_NAME = "Incidence_Angle";
-    public static final String BT_SNAPSHOT_ID_OF_PIXEL_NAME = "Snapshot_ID_of_Pixel";
-
-    public static final String DA_GRID_POINT_LIST_NAME = "SM_SWATH_ANALYSIS";
-
-    public static final int L1C_POL_FLAGS_MASK = 3;
-    public static final int L1C_POL_MODE_X = 0;
-    public static final int L1C_POL_MODE_Y = 1;
-    public static final int L1C_POL_MODE_XY1 = 2;
-    public static final int L1C_POL_MODE_XY2 = 3;
-    public static final int L1C_POL_MODE_ANY = 4;
-
-    private final ConcurrentMap<String, DataFormat> formatMap;
-
-    private SmosFormats() {
-        formatMap = new ConcurrentHashMap<String, DataFormat>(17);
+    private DataFormatRegistry() {
+        dataFormatMap = new ConcurrentHashMap<String, DataFormat>(17);
     }
 
-    public static SmosFormats getInstance() {
-        return Holder.instance;
+    public static DataFormatRegistry getInstance() {
+        return Holder.INSTANCE;
     }
 
-    public String[] getFormatNames() {
-        final Set<String> names = formatMap.keySet();
-        return names.toArray(new String[names.size()]);
-    }
-
-    public DataFormat getFormat(String formatName) {
-        if (!formatMap.containsKey(formatName)) {
+    public DataFormat getDataFormat(String formatName) {
+        if (!dataFormatMap.containsKey(formatName)) {
             final URL url = getSchemaResource(formatName);
 
             if (url != null) {
@@ -79,14 +50,14 @@ public class SmosFormats {
                 }
 
                 format.setByteOrder(ByteOrder.LITTLE_ENDIAN);
-                formatMap.putIfAbsent(formatName, format);
+                dataFormatMap.putIfAbsent(formatName, format);
             }
         }
 
-        return formatMap.get(formatName);
+        return dataFormatMap.get(formatName);
     }
 
-    public static DataFormat getFormat(File hdrFile) throws IOException {
+    public static DataFormat getDataFormat(File hdrFile) throws IOException {
         final Document document;
 
         try {
@@ -116,7 +87,7 @@ public class SmosFormats {
         if (descendants.hasNext()) {
             final Element e = (Element) descendants.next();
             final String formatName = e.getChildText("Datablock_Schema", namespace).substring(0, 27);
-            return getInstance().getFormat(formatName);
+            return getInstance().getDataFormat(formatName);
         } else {
             throw new IOException(MessageFormat.format("File ''{0}'': Missing datablock schema.", hdrFile.getPath()));
         }
@@ -135,7 +106,7 @@ public class SmosFormats {
         pathBuilder.append("schemas/").append(fc).append("/").append(sd).append("/").append(formatName);
         pathBuilder.append(".binXschema.xml");
 
-        return SmosFormats.class.getResource(pathBuilder.toString());
+        return DataFormatRegistry.class.getResource(pathBuilder.toString());
     }
 
     private static BinX createBinX(String name) {
@@ -167,7 +138,7 @@ public class SmosFormats {
 
     private static Properties getResourceAsProperties(String name) throws IOException {
         final Properties properties = new Properties();
-        final InputStream is = SmosFormats.class.getResourceAsStream(name);
+        final InputStream is = DataFormatRegistry.class.getResourceAsStream(name);
 
         if (is != null) {
             properties.load(is);
@@ -175,9 +146,10 @@ public class SmosFormats {
 
         return properties;
     }
-    
+
     // Initialization on demand holder idiom
     private static class Holder {
-        private static final SmosFormats instance = new SmosFormats();
+
+        private static final DataFormatRegistry INSTANCE = new DataFormatRegistry();
     }
 }

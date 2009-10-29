@@ -1,8 +1,8 @@
 package org.esa.beam.smos.visat;
 
 import org.esa.beam.dataio.smos.L1cSmosFile;
-import org.esa.beam.dataio.smos.SmosFormats;
 import org.esa.beam.dataio.smos.L1cScienceSmosFile;
+import org.esa.beam.dataio.smos.SmosConstants;
 import org.esa.beam.framework.ui.product.ProductSceneView;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -125,13 +125,13 @@ public class GridPointBtDataChartToolView extends GridPointBtDataToolView {
                 boolean m2 = modeCheckers[1].isSelected();
                 int length = ds.data.length;
                 for (int i = 0; i < length; i++) {
-                    int polMode = ds.data[i][iq].intValue() & SmosFormats.L1C_POL_FLAGS_MASK;
+                    int polMode = ds.data[i][iq].intValue() & SmosConstants.L1C_POL_FLAGS_MASK;
                     double x = ds.data[i][ix].doubleValue();
                     double y = ds.data[i][iy1].doubleValue();
                     double dev = ds.data[i][id].doubleValue();
-                     if (m1 && polMode == SmosFormats.L1C_POL_MODE_X) {
+                     if (m1 && polMode == SmosConstants.L1C_POL_MODE_X) {
                         series1.add(x, y, y - dev, y + dev);
-                    } else if (m2 && polMode == SmosFormats.L1C_POL_MODE_Y) {
+                    } else if (m2 && polMode == SmosConstants.L1C_POL_MODE_Y) {
                         series2.add(x, y, y - dev, y + dev);
                     }
                 }
@@ -151,15 +151,15 @@ public class GridPointBtDataChartToolView extends GridPointBtDataToolView {
                     boolean m3 = modeCheckers[2].isSelected();
                     int length = ds.data.length;
                     for (int i = 0; i < length; i++) {
-                        int polMode = ds.data[i][iq].intValue() & SmosFormats.L1C_POL_FLAGS_MASK;
+                        int polMode = ds.data[i][iq].intValue() & SmosConstants.L1C_POL_FLAGS_MASK;
                         double dev = ds.data[i][id].doubleValue();
                         double x = ds.data[i][ix].doubleValue();
                         double y1 = ds.data[i][iy1].doubleValue();
-                        if (m1 && polMode == SmosFormats.L1C_POL_MODE_X) {
+                        if (m1 && polMode == SmosConstants.L1C_POL_MODE_X) {
                             series1.add(x, y1, y1 - dev, y1 + dev);
-                        } else if (m2 && polMode == SmosFormats.L1C_POL_MODE_Y) {
+                        } else if (m2 && polMode == SmosConstants.L1C_POL_MODE_Y) {
                             series2.add(x, y1, y1 - dev, y1 + dev);
-                        } else if (m3 && (polMode == SmosFormats.L1C_POL_MODE_XY1 || polMode == SmosFormats.L1C_POL_MODE_XY2)) {
+                        } else if (m3 && (polMode == SmosConstants.L1C_POL_MODE_XY1 || polMode == SmosConstants.L1C_POL_MODE_XY2)) {
                             double y2 = ds.data[i][iy2].doubleValue();
                             series3.add(x, y1, y1 - dev, y1 + dev);
                             series4.add(x, y2, y2 - dev, y2 + dev);

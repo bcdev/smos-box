@@ -113,7 +113,7 @@ public class DDDB {
         pathBuilder.append("bands/").append(fc).append("/").append(sd).append("/").append(identifier);
         pathBuilder.append(".csv");
 
-        return SmosFormats.class.getResourceAsStream(pathBuilder.toString());
+        return DataFormatRegistry.class.getResourceAsStream(pathBuilder.toString());
     }
 
     private static InputStream getFlagDescriptorResource(String identifier) {
@@ -129,7 +129,7 @@ public class DDDB {
         pathBuilder.append("flags/").append(fc).append("/").append(sd).append("/").append(identifier);
         pathBuilder.append(".csv");
 
-        return SmosFormats.class.getResourceAsStream(pathBuilder.toString());
+        return DataFormatRegistry.class.getResourceAsStream(pathBuilder.toString());
     }
 
     // Initialization on demand holder idiom

@@ -4,7 +4,7 @@ import com.bc.ceres.binio.CompoundData;
 import com.bc.ceres.binio.CompoundType;
 import com.bc.ceres.core.ProgressMonitor;
 import org.esa.beam.dataio.smos.SmosDggFile;
-import org.esa.beam.dataio.smos.SmosFormats;
+import org.esa.beam.dataio.smos.SmosConstants;
 
 import java.awt.Shape;
 import java.io.IOException;
@@ -21,8 +21,8 @@ class SmosFileProcessor {
 
     void process(SmosDggFile smosFile, ProgressMonitor pm) throws IOException {
         final CompoundType gridPointType = smosFile.getGridPointType();
-        final int latIndex = gridPointType.getMemberIndex(SmosFormats.GRID_POINT_LAT_NAME);
-        final int lonIndex = gridPointType.getMemberIndex(SmosFormats.GRID_POINT_LON_NAME);
+        final int latIndex = gridPointType.getMemberIndex(SmosConstants.GRID_POINT_LAT_NAME);
+        final int lonIndex = gridPointType.getMemberIndex(SmosConstants.GRID_POINT_LON_NAME);
 
         filterStream.startFile(smosFile);
         final int gridPointCount = smosFile.getGridPointCount();

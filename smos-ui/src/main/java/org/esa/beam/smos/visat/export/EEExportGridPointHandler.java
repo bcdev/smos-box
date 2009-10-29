@@ -2,8 +2,8 @@ package org.esa.beam.smos.visat.export;
 
 import com.bc.ceres.binio.*;
 import org.esa.beam.dataio.smos.SmosDggFile;
-import org.esa.beam.dataio.smos.SmosFormats;
 import org.esa.beam.dataio.smos.SmosDggProductFactory;
+import org.esa.beam.dataio.smos.SmosConstants;
 
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
@@ -55,7 +55,7 @@ class EEExportGridPointHandler implements GridPointHandler {
             trackSensingTime(gridPointData);
             trackGeometry(gridPointData);
 
-            targetContext.getData().setLong(SmosFormats.GRID_POINT_COUNTER_NAME, ++gridPointCount);
+            targetContext.getData().setLong(SmosConstants.GRID_POINT_COUNTER_NAME, ++gridPointCount);
             // ATTENTION: flush must occur <em>before</em> grid point data is written (rq-20091008)
             targetContext.getData().flush();
 
@@ -127,8 +127,8 @@ class EEExportGridPointHandler implements GridPointHandler {
 
     private void init(CompoundData gridPointData) throws IOException {
         final CompoundType gridPointType = gridPointData.getType();
-        latIndex = gridPointType.getMemberIndex(SmosFormats.GRID_POINT_LAT_NAME);
-        lonIndex = gridPointType.getMemberIndex(SmosFormats.GRID_POINT_LON_NAME);
+        latIndex = gridPointType.getMemberIndex(SmosConstants.GRID_POINT_LAT_NAME);
+        lonIndex = gridPointType.getMemberIndex(SmosConstants.GRID_POINT_LON_NAME);
 
         final CollectionData parent = gridPointData.getParent();
         final long parentPosition = parent.getPosition();
@@ -136,7 +136,7 @@ class EEExportGridPointHandler implements GridPointHandler {
 
         createSnapshotIdMap(parent);
 
-        targetContext.getData().setLong(SmosFormats.GRID_POINT_COUNTER_NAME, 0);
+        targetContext.getData().setLong(SmosConstants.GRID_POINT_COUNTER_NAME, 0);
         targetContext.getData().flush();
 
         gridPointDataPosition = parentPosition;
@@ -146,7 +146,7 @@ class EEExportGridPointHandler implements GridPointHandler {
         final DataContext context = parent.getContext();
         final SequenceData snapShotData;
         try {
-            snapShotData = context.getData().getSequence(SmosFormats.SNAPSHOT_LIST_NAME);
+            snapShotData = context.getData().getSequence(SmosConstants.SNAPSHOT_LIST_NAME);
         } catch (DataAccessException e) {
             return; // we have a browse product
             // but this procedure is not really cool, better ask if the seqzuence is present

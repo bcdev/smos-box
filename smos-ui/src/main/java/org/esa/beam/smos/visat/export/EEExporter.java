@@ -3,7 +3,7 @@ package org.esa.beam.smos.visat.export;
 import com.bc.ceres.binio.DataFormat;
 import com.bc.ceres.core.ProgressMonitor;
 import org.esa.beam.dataio.smos.SmosDggFile;
-import org.esa.beam.dataio.smos.SmosFormats;
+import org.esa.beam.dataio.smos.DataFormatRegistry;
 import org.esa.beam.util.io.FileUtils;
 
 import java.awt.Shape;
@@ -32,7 +32,7 @@ public class EEExporter {
         // 1. get the format of the SMOS DBL file
         final DataFormat sourceDblFormat;
         try {
-            sourceDblFormat = SmosFormats.getFormat(sourceHdrFile);
+            sourceDblFormat = DataFormatRegistry.getDataFormat(sourceHdrFile);
         } catch (IOException e) {
             e.printStackTrace();
             return;

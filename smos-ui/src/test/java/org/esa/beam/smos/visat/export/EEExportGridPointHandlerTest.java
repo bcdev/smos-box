@@ -8,7 +8,8 @@ import com.bc.ceres.binio.util.ByteArrayIOHandler;
 import com.bc.ceres.binio.util.DataPrinter;
 import static junit.framework.Assert.assertEquals;
 import org.esa.beam.dataio.smos.SmosDggFile;
-import org.esa.beam.dataio.smos.SmosFormats;
+import org.esa.beam.dataio.smos.DataFormatRegistry;
+import org.esa.beam.dataio.smos.SmosConstants;
 import org.junit.Test;
 
 import java.io.File;
@@ -26,7 +27,7 @@ public class EEExportGridPointHandlerTest {
     public void handleGridPointsForScenario27() throws URISyntaxException, IOException {
         final File dblFile = getResourceAsFile(SCENARIO_27_DBL_NAME);
         final File hdrFile = getResourceAsFile(SCENARIO_27_HDR_NAME);
-        final DataFormat dblFormat = SmosFormats.getFormat(hdrFile);
+        final DataFormat dblFormat = DataFormatRegistry.getDataFormat(hdrFile);
         final SmosDggFile sourceFile = new SmosDggFile(dblFile, dblFormat);
 
         final SequenceData sourceGridPointList = sourceFile.getGridPointList();
@@ -52,12 +53,12 @@ public class EEExportGridPointHandlerTest {
         final DataPrinter dataPrinter = new DataPrinter();
         dataPrinter.print(targetData);
 
-        final SequenceData targetSnapshotList = targetData.getSequence(SmosFormats.SNAPSHOT_LIST_NAME);
+        final SequenceData targetSnapshotList = targetData.getSequence(SmosConstants.SNAPSHOT_LIST_NAME);
         assertEquals(2, targetSnapshotList.getElementCount());
         assertEquals(60046, targetSnapshotList.getCompound(0).getInt("Snapshot_ID"));
         assertEquals(60047, targetSnapshotList.getCompound(1).getInt("Snapshot_ID"));
 
-        final SequenceData targetGridPointList = targetData.getSequence(SmosFormats.GRID_POINT_LIST_NAME);
+        final SequenceData targetGridPointList = targetData.getSequence(SmosConstants.GRID_POINT_LIST_NAME);
         assertEquals(2, targetGridPointList.getElementCount());
 
         assertGridPointData(targetGridPointList.getCompound(0), 233545, 70.169426F, 173.99301F);
@@ -67,7 +68,7 @@ public class EEExportGridPointHandlerTest {
     private static void assertGridPointData(CompoundData gridPointData, int id, float... bt) throws IOException {
         assertEquals(id, gridPointData.getInt("Grid_Point_ID"));
 
-        final SequenceData btDataSequence = gridPointData.getSequence(SmosFormats.BT_DATA_LIST_NAME);
+        final SequenceData btDataSequence = gridPointData.getSequence(SmosConstants.BT_DATA_LIST_NAME);
         assertEquals(bt.length, btDataSequence.getElementCount());
 
         for (int i = 0; i < bt.length; i++) {

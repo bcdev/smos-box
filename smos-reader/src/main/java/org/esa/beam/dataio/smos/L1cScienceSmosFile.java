@@ -59,11 +59,11 @@ public class L1cScienceSmosFile extends L1cSmosFile {
         super(file, format);
         this.fullPol = fullPol;
 
-        flagsIndex = getBtDataType().getMemberIndex(SmosFormats.BT_FLAGS_NAME);
-        incidenceAngleIndex = this.btDataType.getMemberIndex(SmosFormats.BT_INCIDENCE_ANGLE_NAME);
-        snapshotIdOfPixelIndex = btDataType.getMemberIndex(SmosFormats.BT_SNAPSHOT_ID_OF_PIXEL_NAME);
+        flagsIndex = getBtDataType().getMemberIndex(SmosConstants.BT_FLAGS_NAME);
+        incidenceAngleIndex = this.btDataType.getMemberIndex(SmosConstants.BT_INCIDENCE_ANGLE_NAME);
+        snapshotIdOfPixelIndex = btDataType.getMemberIndex(SmosConstants.BT_SNAPSHOT_ID_OF_PIXEL_NAME);
 
-        snapshotList = getDataBlock().getSequence(SmosFormats.SNAPSHOT_LIST_NAME);
+        snapshotList = getDataBlock().getSequence(SmosConstants.SNAPSHOT_LIST_NAME);
         if (snapshotList == null) {
             throw new IOException("Data block does not include snapshot list.");
         }
@@ -195,7 +195,7 @@ public class L1cScienceSmosFile extends L1cSmosFile {
             btData = btDataList.getCompound(i);
             if (btData.getLong(snapshotIdOfPixelIndex) == snapshotId) {
                 final int flags = btData.getInt(flagsIndex);
-                if (polMode == SmosFormats.L1C_POL_MODE_ANY || polMode == (flags & 3) || (polMode & flags & 2) != 0) {
+                if (polMode == SmosConstants.L1C_POL_MODE_ANY || polMode == (flags & 3) || (polMode & flags & 2) != 0) {
                     return btData;
                 }
             }
@@ -217,7 +217,7 @@ public class L1cScienceSmosFile extends L1cSmosFile {
             final CompoundData btData = btDataList.getCompound(i);
             final int flags = btData.getInt(flagsIndex);
 
-            if (polMode == SmosFormats.L1C_POL_MODE_ANY || polMode == (flags & 3) || (polMode & flags & 2) != 0) {
+            if (polMode == SmosConstants.L1C_POL_MODE_ANY || polMode == (flags & 3) || (polMode & flags & 2) != 0) {
                 final float incidenceAngle = INCIDENCE_ANGLE_FACTOR * btData.getInt(incidenceAngleIndex);
 
                 if (incidenceAngle >= MIN_BROWSE_INCIDENCE_ANGLE && incidenceAngle <= MAX_BROWSE_INCIDENCE_ANGLE) {
@@ -257,7 +257,7 @@ public class L1cScienceSmosFile extends L1cSmosFile {
             final CompoundData btData = btDataList.getCompound(i);
             final int flags = btData.getInt(flagsIndex);
 
-            if (polMode == SmosFormats.L1C_POL_MODE_ANY || polMode == (flags & 3) || (polMode & flags & 2) != 0) {
+            if (polMode == SmosConstants.L1C_POL_MODE_ANY || polMode == (flags & 3) || (polMode & flags & 2) != 0) {
                 final float incidenceAngle = INCIDENCE_ANGLE_FACTOR * btData.getInt(incidenceAngleIndex);
 
                 if (incidenceAngle >= MIN_BROWSE_INCIDENCE_ANGLE && incidenceAngle <= MAX_BROWSE_INCIDENCE_ANGLE) {
@@ -355,17 +355,17 @@ public class L1cScienceSmosFile extends L1cSmosFile {
                     }
 
                     final int flags = btData.getInt(flagsIndex);
-                    switch (flags & SmosFormats.L1C_POL_FLAGS_MASK) {
-                    case SmosFormats.L1C_POL_MODE_X:
+                    switch (flags & SmosConstants.L1C_POL_FLAGS_MASK) {
+                    case SmosConstants.L1C_POL_MODE_X:
                         x.add(sid);
                         break;
-                    case SmosFormats.L1C_POL_MODE_Y:
+                    case SmosConstants.L1C_POL_MODE_Y:
                         y.add(sid);
                         break;
-                    case SmosFormats.L1C_POL_MODE_XY1:
+                    case SmosConstants.L1C_POL_MODE_XY1:
                         xy.add(sid);
                         break;
-                    case SmosFormats.L1C_POL_MODE_XY2:
+                    case SmosConstants.L1C_POL_MODE_XY2:
                         xy.add(sid);
                         break;
                     }
@@ -374,7 +374,7 @@ public class L1cScienceSmosFile extends L1cSmosFile {
         }
         final Map<Long, Integer> snapshotIndexMap = new TreeMap<Long, Integer>();
 
-        final int snapshotIdIndex = snapshotType.getMemberIndex(SmosFormats.SNAPSHOT_ID_NAME);
+        final int snapshotIdIndex = snapshotType.getMemberIndex(SmosConstants.SNAPSHOT_ID_NAME);
         final int snapshotCount = snapshotList.getElementCount();
         for (int i = 0; i < snapshotCount; i++) {
             final CompoundData snapshotData = getSnapshotData(i);

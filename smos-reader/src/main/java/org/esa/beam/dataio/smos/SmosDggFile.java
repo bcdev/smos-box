@@ -51,14 +51,14 @@ public class SmosDggFile extends SmosFile {
     public SmosDggFile(File file, DataFormat format) throws IOException {
         super(file, format);
 
-        gridPointList = getDataBlock().getSequence(SmosFormats.GRID_POINT_LIST_NAME);
+        gridPointList = getDataBlock().getSequence(SmosConstants.GRID_POINT_LIST_NAME);
         if (gridPointList == null) {
             throw new IllegalStateException(MessageFormat.format(
                     "SMOS File ''{0}'': Missing grid point list.", file.getPath()));
         }
 
         gridPointType = (CompoundType) gridPointList.getType().getElementType();
-        gridPointIdIndex = gridPointType.getMemberIndex(SmosFormats.GRID_POINT_ID_NAME);
+        gridPointIdIndex = gridPointType.getMemberIndex(SmosConstants.GRID_POINT_ID_NAME);
         gridPointIndexes = createGridPointIndexes();
         region = computeRegion();
     }
@@ -101,8 +101,8 @@ public class SmosDggFile extends SmosFile {
     }
 
     protected Area computeRegion() throws IOException {
-        final int latIndex = getGridPointType().getMemberIndex(SmosFormats.GRID_POINT_LAT_NAME);
-        final int lonIndex = getGridPointType().getMemberIndex(SmosFormats.GRID_POINT_LON_NAME);
+        final int latIndex = getGridPointType().getMemberIndex(SmosConstants.GRID_POINT_LAT_NAME);
+        final int lonIndex = getGridPointType().getMemberIndex(SmosConstants.GRID_POINT_LON_NAME);
         final SequenceData gridPointList = getGridPointList();
 
         final Rectangle2D[] tileRects = new Rectangle2D[512];
