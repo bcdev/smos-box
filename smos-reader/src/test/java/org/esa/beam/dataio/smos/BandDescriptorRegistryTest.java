@@ -25,7 +25,7 @@ public class BandDescriptorRegistryTest {
         assertFalse(descriptor.getUnit().isEmpty());
         assertFalse(descriptor.getDescription().isEmpty());
         assertEquals(0.0, descriptor.getTypicalMin(), 0.0);
-        assertEquals("mm h-1", descriptor.getUnit());
+        assertEquals("m 3h-1", descriptor.getUnit());
 
         final FlagDescriptors flagDescriptors = descriptors.getDescriptor("F1").getFlagDescriptors();
         assertNotNull(flagDescriptors);
