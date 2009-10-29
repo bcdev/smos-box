@@ -1,4 +1,4 @@
-package org.esa.beam.dataio.smos;
+package org.esa.beam.smos.dgg;
 
 import com.bc.ceres.glevel.MultiLevelModel;
 import com.bc.ceres.glevel.MultiLevelSource;
@@ -21,13 +21,14 @@ import java.io.PrintWriter;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-public class DggridTilizer {
+public class SmosDggTilizer {
 
     public static void main(String[] args) throws IOException {
-        new DggridTilizer().doIt(new File(args[0]), new File(args[1]));
+        new SmosDggTilizer().doIt(new File(args[0]), new File(args[1]));
     }
 
     private void doIt(File inputLevel0Dir, File outputDir) throws IOException {
+        //noinspection ResultOfMethodCallIgnored
         outputDir.mkdir();
 
         final TiledFileOpImage opImage = TiledFileOpImage.create(inputLevel0Dir, null);
@@ -71,7 +72,9 @@ public class DggridTilizer {
             }
 
             final File outputLevelDir = new File(outputDir, "" + level);
+            //noinspection ResultOfMethodCallIgnored
             outputLevelDir.mkdir();
+
             final File imagePropertiesFile = new File(outputLevelDir, "image.properties");
             System.out.println("Writing " + imagePropertiesFile + "...");
             final PrintWriter printWriter = new PrintWriter(new FileWriter(imagePropertiesFile));

@@ -1,0 +1,56 @@
+package org.esa.beam.dataio.smos;
+
+import static junit.framework.Assert.*;
+import org.junit.Test;
+
+public class DDDBTest {
+
+    private static final String FORMAT_NAME = "DBL_SM_XXXX_AUX_ECMWF__0200";
+
+    @Test
+    public void getBandDescriptors() {
+        final Family<BandDescriptor> descriptors = DDDB.getInstance().getBandDescriptors(FORMAT_NAME);
+        assertEquals(38, descriptors.asList().size());
+
+        final BandDescriptor descriptor = descriptors.getMember("RR");
+        assertNotNull(descriptor);
+
+        assertEquals("RR", descriptor.getBandName());
+        assertEquals("Rain_Rate", descriptor.getMemberName());
+        assertTrue(descriptor.hasTypicalMin());
+        assertTrue(descriptor.hasTypicalMax());
+        assertFalse(descriptor.isCyclic());
+        assertTrue(descriptor.hasFillValue());
+        assertFalse(descriptor.getValidPixelExpression().isEmpty());
+        assertEquals("RR.raw != -99999.0 && RR.raw != -99998.0", descriptor.getValidPixelExpression());
+        assertFalse(descriptor.getUnit().isEmpty());
+        assertFalse(descriptor.getDescription().isEmpty());
+        assertEquals(0.0, descriptor.getTypicalMin(), 0.0);
+        assertEquals("m 3h-1", descriptor.getUnit());
+    }
+
+    @Test
+    public void getFlagDescriptors() {
+        final Family<FlagDescriptor> descriptors = DDDB.getInstance().getFlagDescriptors(FORMAT_NAME + "_F1.txt");
+        assertEquals(21, descriptors.asList().size());
+
+        FlagDescriptor descriptor;
+        descriptor = descriptors.getMember("RR_FLAG");
+        assertNotNull(descriptor);
+
+        assertEquals("RR_FLAG", descriptor.getFlagName());
+        assertEquals(0x00000080, descriptor.getMask());
+        assertNull(descriptor.getColor());
+        assertEquals(0.5, descriptor.getTransparency(), 0.0);
+        assertFalse(descriptor.getDescription().isEmpty());
+    }
+
+    @Test
+    public void getFlagDescriptorsFromBandDescriptor() {
+        final DDDB dddb = DDDB.getInstance();
+        final Family<FlagDescriptor> flagDescriptors = dddb.getBandDescriptors(FORMAT_NAME).getMember(
+                "F1").getFlagDescriptors();
+        assertNotNull(flagDescriptors);
+        assertSame(dddb.getFlagDescriptors(FORMAT_NAME + "_F1.txt"), flagDescriptors);
+    }
+}

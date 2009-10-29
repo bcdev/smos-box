@@ -27,7 +27,7 @@ class EcmwfProductFactory extends SmosProductFactory {
         }
 
         final String formatName = smosFile.getFormat().getName();
-        final BandDescriptors descriptors = BandDescriptorRegistry.getInstance().getDescriptors(formatName);
+        final Family<BandDescriptor> descriptors = DDDB.getInstance().getBandDescriptors(formatName);
 
         for (final BandDescriptor descriptor : descriptors.asList()) {
             addBand(product, (SmosDggFile) smosFile, descriptor);
@@ -162,7 +162,7 @@ class EcmwfProductFactory extends SmosProductFactory {
 
     private static void addFlagsAndMasks(Product product, Band band,
                                          String flagCodingName,
-                                         FlagDescriptors flagDescriptors) {
+                                         Family<FlagDescriptor> flagDescriptors) {
         FlagCoding flagCoding = product.getFlagCodingGroup().get(flagCodingName);
         if (flagCoding == null) {
             flagCoding = new FlagCoding(flagCodingName);
@@ -197,5 +197,4 @@ class EcmwfProductFactory extends SmosProductFactory {
             }
         }
     }
-
 }

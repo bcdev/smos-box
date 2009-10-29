@@ -205,7 +205,7 @@ public final class FlagDescriptor {
     private final String description;
 
 
-    FlagDescriptor(String flagName, int mask, String description) {
+    private FlagDescriptor(String flagName, int mask, String description) {
         this.flagName = flagName;
         this.mask = mask;
         this.color = null;
