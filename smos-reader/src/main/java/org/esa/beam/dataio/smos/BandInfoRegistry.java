@@ -24,6 +24,7 @@ import java.util.concurrent.ConcurrentMap;
  * @version $Revision$ $Date$
  * @since SMOS-Box 1.0
  */
+@Deprecated
 public class BandInfoRegistry {
 
     private final ConcurrentMap<String, BandInfo> bandInfoMap;

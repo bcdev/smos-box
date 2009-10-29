@@ -21,6 +21,7 @@ package org.esa.beam.dataio.smos;
  * @version $Revision$ $Date$
  * @since SMOS-Box 1.0
  */
+@Deprecated
 public class BandInfo {
 
     private final String name;
