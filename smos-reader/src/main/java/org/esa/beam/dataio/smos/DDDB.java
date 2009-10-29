@@ -32,9 +32,9 @@ public class DDDB {
         return Holder.INSTANCE;
     }
 
-    public Family<BandDescriptor> getBandDescriptors(String formatName) {
-        if (!bandDescriptorMap.containsKey(formatName)) {
-            final InputStream inputStream = getBandDescriptorResource(formatName);
+    public Family<BandDescriptor> getBandDescriptors(String identifier) {
+        if (!bandDescriptorMap.containsKey(identifier)) {
+            final InputStream inputStream = getBandDescriptorResource(identifier);
 
             if (inputStream != null) {
                 final BandDescriptors descriptors;
@@ -43,7 +43,7 @@ public class DDDB {
                     descriptors = readBandDescriptors(inputStream);
                 } catch (Throwable e) {
                     throw new IllegalStateException(MessageFormat.format(
-                            "Band descriptors resource for format ''{0}'': {1}", formatName, e.getMessage()));
+                            "Band descriptors resource for identifier ''{0}'': {1}", identifier, e.getMessage()));
                 } finally {
                     try {
                         inputStream.close();
@@ -52,16 +52,16 @@ public class DDDB {
                     }
                 }
 
-                bandDescriptorMap.putIfAbsent(formatName, descriptors);
+                bandDescriptorMap.putIfAbsent(identifier, descriptors);
             }
         }
 
-        return bandDescriptorMap.get(formatName);
+        return bandDescriptorMap.get(identifier);
     }
 
-    Family<FlagDescriptor> getFlagDescriptors(String name) {
-        if (!flagDescriptorMap.containsKey(name)) {
-            final InputStream inputStream = getFlagDescriptorResource(name);
+    public Family<FlagDescriptor> getFlagDescriptors(String identifier) {
+        if (!flagDescriptorMap.containsKey(identifier)) {
+            final InputStream inputStream = getFlagDescriptorResource(identifier);
 
             if (inputStream != null) {
                 final FlagDescriptors descriptors;
@@ -70,7 +70,7 @@ public class DDDB {
                     descriptors = readFlagDescriptors(inputStream);
                 } catch (Throwable e) {
                     throw new IllegalStateException(MessageFormat.format(
-                            "Flag descriptor resource for format ''{0}'': {1}", name, e.getMessage()));
+                            "Flag descriptor resource for identifier ''{0}'': {1}", identifier, e.getMessage()));
                 } finally {
                     try {
                         inputStream.close();
@@ -79,11 +79,11 @@ public class DDDB {
                     }
                 }
 
-                flagDescriptorMap.putIfAbsent(name, descriptors);
+                flagDescriptorMap.putIfAbsent(identifier, descriptors);
             }
         }
 
-        return flagDescriptorMap.get(name);
+        return flagDescriptorMap.get(identifier);
     }
 
     private static BandDescriptors readBandDescriptors(InputStream inputStream) throws IOException {
@@ -100,33 +100,34 @@ public class DDDB {
         return new FlagDescriptors(recordList);
     }
 
-    private static InputStream getBandDescriptorResource(String formatName) {
+    private static InputStream getBandDescriptorResource(String identifier) {
         // Reference: SO-MA-IDR-GS-0004, SMOS DPGS, XML Schema Guidelines
-        if (formatName == null || !formatName.matches("DBL_\\w{2}_\\w{4}_\\w{10}_\\d{4}")) {
+        if (identifier == null || !identifier.matches("DBL_\\w{2}_\\w{4}_\\w{10}_\\d{4}")) {
             return null;
         }
 
-        final String fc = formatName.substring(12, 16);
-        final String sd = formatName.substring(16, 22);
+        final String fc = identifier.substring(12, 16);
+        final String sd = identifier.substring(16, 22);
 
         final StringBuilder pathBuilder = new StringBuilder();
-        pathBuilder.append("bands/").append(fc).append("/").append(sd).append("/").append(formatName);
-        pathBuilder.append(".txt");
+        pathBuilder.append("bands/").append(fc).append("/").append(sd).append("/").append(identifier);
+        pathBuilder.append(".csv");
 
         return SmosFormats.class.getResourceAsStream(pathBuilder.toString());
     }
 
-    private static InputStream getFlagDescriptorResource(String name) {
+    private static InputStream getFlagDescriptorResource(String identifier) {
         // Reference: SO-MA-IDR-GS-0004, SMOS DPGS, XML Schema Guidelines
-        if (name == null || !name.matches("DBL_\\w{2}_\\w{4}_\\w{10}_\\d{4}_.*")) {
+        if (identifier == null || !identifier.matches("DBL_\\w{2}_\\w{4}_\\w{10}_\\d{4}_.*")) {
             return null;
         }
 
-        final String fc = name.substring(12, 16);
-        final String sd = name.substring(16, 22);
+        final String fc = identifier.substring(12, 16);
+        final String sd = identifier.substring(16, 22);
 
         final StringBuilder pathBuilder = new StringBuilder();
-        pathBuilder.append("flags/").append(fc).append("/").append(sd).append("/").append(name);
+        pathBuilder.append("flags/").append(fc).append("/").append(sd).append("/").append(identifier);
+        pathBuilder.append(".csv");
 
         return SmosFormats.class.getResourceAsStream(pathBuilder.toString());
     }

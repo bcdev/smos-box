@@ -5,11 +5,11 @@ import org.junit.Test;
 
 public class DDDBTest {
 
-    private static final String FORMAT_NAME = "DBL_SM_XXXX_AUX_ECMWF__0200";
+    private static final String IDENTIFIER = "DBL_SM_XXXX_AUX_ECMWF__0200";
 
     @Test
     public void getBandDescriptors() {
-        final Family<BandDescriptor> descriptors = DDDB.getInstance().getBandDescriptors(FORMAT_NAME);
+        final Family<BandDescriptor> descriptors = DDDB.getInstance().getBandDescriptors(IDENTIFIER);
         assertEquals(38, descriptors.asList().size());
 
         final BandDescriptor descriptor = descriptors.getMember("RR");
@@ -31,7 +31,7 @@ public class DDDBTest {
 
     @Test
     public void getFlagDescriptors() {
-        final Family<FlagDescriptor> descriptors = DDDB.getInstance().getFlagDescriptors(FORMAT_NAME + "_F1.txt");
+        final Family<FlagDescriptor> descriptors = DDDB.getInstance().getFlagDescriptors(IDENTIFIER + "_F1");
         assertEquals(21, descriptors.asList().size());
 
         FlagDescriptor descriptor;
@@ -48,9 +48,10 @@ public class DDDBTest {
     @Test
     public void getFlagDescriptorsFromBandDescriptor() {
         final DDDB dddb = DDDB.getInstance();
-        final Family<FlagDescriptor> flagDescriptors = dddb.getBandDescriptors(FORMAT_NAME).getMember(
+        final Family<FlagDescriptor> flagDescriptors = dddb.getBandDescriptors(IDENTIFIER).getMember(
                 "F1").getFlagDescriptors();
         assertNotNull(flagDescriptors);
-        assertSame(dddb.getFlagDescriptors(FORMAT_NAME + "_F1.txt"), flagDescriptors);
+        assertNotNull(dddb.getFlagDescriptors(IDENTIFIER + "_F1"));
+        assertSame(dddb.getFlagDescriptors(IDENTIFIER + "_F1"), flagDescriptors);
     }
 }
