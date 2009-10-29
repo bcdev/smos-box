@@ -16,7 +16,6 @@ public class BandDescriptorRegistry {
     private static final Charset CHARSET = Charset.forName("US-ASCII");
     private static final char[] SEPARATORS = new char[]{'|'};
 
-    private static final BandDescriptorRegistry uniqueInstance = new BandDescriptorRegistry();
     private final ConcurrentMap<String, BandDescriptors> map;
 
     private BandDescriptorRegistry() {
@@ -24,7 +23,7 @@ public class BandDescriptorRegistry {
     }
 
     public static BandDescriptorRegistry getInstance() {
-        return uniqueInstance;
+        return Holder.instance;
     }
 
     public BandDescriptors getDescriptors(String formatName) {
@@ -69,5 +68,10 @@ public class BandDescriptorRegistry {
         pathBuilder.append(".txt");
 
         return SmosFormats.class.getResourceAsStream(pathBuilder.toString());
+    }
+    
+    // Initialization on demand holder idiom
+    private static class Holder {
+        private static final BandDescriptorRegistry instance = new BandDescriptorRegistry();
     }
 }

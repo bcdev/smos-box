@@ -24,7 +24,6 @@ import java.text.MessageFormat;
 public class SmosDgg {
 
     private static final String SMOS_DGG_DIR_PROPERTY_NAME = "org.esa.beam.smos.smosDggDir";
-    private static final SmosDgg uniqueInstance = new SmosDgg();
 
     private volatile MultiLevelImage dggMultiLevelImage;
 
@@ -32,7 +31,7 @@ public class SmosDgg {
     }
 
     public static SmosDgg getInstance() {
-        return uniqueInstance;
+        return Holder.instance;
     }
 
     public static int smosGridPointIdToDggSeqnum(int gridPointId) {
@@ -44,7 +43,7 @@ public class SmosDgg {
 
     public MultiLevelImage getDggMultiLevelImage() {
         if (dggMultiLevelImage == null) {
-            synchronized (uniqueInstance) {
+            synchronized (getInstance()) {
                 if (dggMultiLevelImage == null) {
                     dggMultiLevelImage = createDggMultiLevelImage();
                 }
@@ -92,4 +91,8 @@ public class SmosDgg {
         return dirPath;
     }
 
+    // Initialization on demand holder idiom
+    private static class Holder {
+        private static final SmosDgg instance = new SmosDgg();
+    }
 }

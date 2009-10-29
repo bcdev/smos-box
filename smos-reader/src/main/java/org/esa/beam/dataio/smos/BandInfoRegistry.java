@@ -26,8 +26,6 @@ import java.util.concurrent.ConcurrentMap;
  */
 public class BandInfoRegistry {
 
-    private static final BandInfoRegistry uniqueInstance = new BandInfoRegistry();
-
     private final ConcurrentMap<String, BandInfo> bandInfoMap;
 
     /* For registering a new band, call:
@@ -448,7 +446,7 @@ public class BandInfoRegistry {
     }
 
     public static BandInfoRegistry getInstance() {
-        return uniqueInstance;
+        return Holder.instance;
     }
 
     public BandInfo getBandInfo(String name) {
@@ -479,5 +477,10 @@ public class BandInfoRegistry {
 
     private void registerBandInfo(String name, BandInfo bandInfo) {
         bandInfoMap.putIfAbsent(name, bandInfo);
+    }
+    
+    // Initialization on demand holder idiom
+    private static class Holder {
+        private static final BandInfoRegistry instance = new BandInfoRegistry();
     }
 }

@@ -49,8 +49,6 @@ public class SmosFormats {
     public static final int L1C_POL_MODE_XY2 = 3;
     public static final int L1C_POL_MODE_ANY = 4;
 
-    private static final SmosFormats uniqueInstance = new SmosFormats();
-
     private final ConcurrentMap<String, DataFormat> formatMap;
 
     private SmosFormats() {
@@ -58,7 +56,7 @@ public class SmosFormats {
     }
 
     public static SmosFormats getInstance() {
-        return uniqueInstance;
+        return Holder.instance;
     }
 
     public String[] getFormatNames() {
@@ -176,5 +174,10 @@ public class SmosFormats {
         }
 
         return properties;
+    }
+    
+    // Initialization on demand holder idiom
+    private static class Holder {
+        private static final SmosFormats instance = new SmosFormats();
     }
 }
