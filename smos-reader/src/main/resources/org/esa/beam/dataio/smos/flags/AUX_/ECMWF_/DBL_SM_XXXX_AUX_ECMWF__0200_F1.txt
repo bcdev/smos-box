@@ -1,0 +1,33 @@
+# visible | name       | mask     | color | transparency | description
+  *       | CI_FLAG    | 00000001 | *     | *            | Quality flag: sea ice cover
+  *       | SP_FLAG    | 00000002 | *     | *            | Quality flag: surface pressure
+  *       | 2T_FLAG    | 00000004 | *     | *            | Quality flag: air temperature 2m
+  *       | SSTK_FLAG  | 00000008 | *     | *            | Quality flag: sea surface temperature
+  *       | TCWV_FLAG  | 00000010 | *     | *            | Quality flag: total column water vapour
+# *       | LSP_FLAG   | 00000020 | *     | *            | Quality flag: large scale precipitation
+# *       | CP_FLAG    | 00000040 | *     | *            | Quality flag: convective precipitation
+  *       | RR_FLAG    | 00000080 | *     | *            | Quality flag: rain rate
+  *       | SWVL1_FLAG | 00000100 | *     | *            | Quality flag: volumetric soil water L1
+  *       | SWVL2_FLAG | 00000200 | *     | *            | Quality flag: volumetric soil water L2
+  *       | SRC_FLAG   | 00000400 | *     | *            | Quality flag: skin reservoir content
+  *       | STL1_FLAG  | 00000800 | *     | *            | Quality flag: soil temperature L1
+  *       | STL2_FLAG  | 00001000 | *     | *            | Quality flag: soil temperature L2
+  *       | STL3_FLAG  | 00002000 | *     | *            | Quality flag: soil temperature L3
+  *       | STL4_FLAG  | 00004000 | *     | *            | Quality flag: soil temperature L4
+  *       | SKT_FLAG   | 00008000 | *     | *            | Quality flag: skin temperature
+  *       | TSN_FLAG   | 00010000 | *     | *            | Quality flag: temperature snow layer
+  *       | ISTL1_FLAG | 00020000 | *     | *            | Quality flag: ice surface temperature
+  *       | SD_FLAG    | 00040000 | *     | *            | Quality flag: snow depth
+  *       | SMLT_FLAG  | 00080000 | *     | *            | Quality flag: accumulated water
+  *       | RSN_FLAG   | 00100000 | *     | *            | Quality flag: Snow density
+  *       | U_FLAG     | 00200000 | *     | *            | Quality flag: wind zonal lowest level
+  *       | V_FLAG     | 00400000 | *     | *            | Quality flag: wind meridional lowest level
+# *       | T_FLAG     | 00800000 | *     | *            | Quality flag: temperature lowest level
+# *       | Q_FLAG     | 01000000 | *     | *            | Quality flag: specific humidity lowest level
+# *       | CHNK_FLAG  | 02000000 | *     | *            | Quality flag: Charnock parameter
+# *       | 2D_FLAG    | 04000000 | *     | *            | Quality flag: dewpoint 2m
+# *       | MSL_FLAG   | 08000000 | *     | *            | Quality flag: sea level pressure
+# *       | NSSS_FLAG  | 10000000 | *     | *            | Quality flag: northward surface stress rate
+# *       | EWSS_FLAG  | 20000000 | *     | *            | Quality flag: eastward surface stress rate
+# *       | SSR_FLAG   | 40000000 | *     | *            | Quality flag: surface shortwave radiation rate
+# *       | STR_FLAG   | 80000000 | *     | *            | Quality flag: surface thermal radiative flux rate

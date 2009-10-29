@@ -1,0 +1,19 @@
+# visible | name       | mask     | color | transparency | description
+# *       | SSHF_FLAG  | 00000001 | *     | *            | Degradation flag: surface sensible heat flux rate
+# *       | SLHF_FLAG  | 00000002 | *     | *            | Degradation flag: surface latent heat flux rate
+  *       | CDWW_FLAG  | 00000004 | *     | *            | Degradation flag: drag coefficient with waves
+  *       | WIND_FLAG  | 00000008 | *     | *            | Degradation flag: wind 10m wave model
+  *       | PP1D_FLAG  | 00000010 | *     | *            | Degradation flag: peak period 1d
+  *       | SWH_FLAG   | 00000020 | *     | *            | Degradation flag: significant wave height
+  *       | MSQS_FLAG  | 00000040 | *     | *            | Degradation flag: mean square slope
+  *       | MPWW_FLAG  | 00000080 | *     | *            | Degradation flag: mean period wind waves
+  *       | SHWW_FLAG  | 00000100 | *     | *            | Degradation flag: significant height wind waves
+  *       | UN10_FLAG  | 00000200 | *     | *            | Degradation flag: 10 m neutral equivalent wind  zonal
+  *       | VN10_FLAG  | 00000400 | *     | *            | Degradation flag: 10 m neutral equivalent wind  meridional
+  *       | ZNT_FLAG   | 00000800 | *     | *            | Degradation flag: roughness length
+  *       | UST_FLAG   | 00001000 | *     | *            | Degradation flag: friction velocity from surface model
+  *       | UWAV_FLAG  | 00002000 | *     | *            | Degradation flag: friction velocity from wave model
+  *       | OMEGA_FLAG | 00004000 | *     | *            | Degradation flag: inverse wave age
+# *       | HLL_FLAG   | 00008000 | *     | *            | Degradation flag: height lowest model level
+# *       | VTLL_FLAG  | 00010000 | *     | *            | Degradation flag: virtual temperature lowest model level
+# *       | spare      | 00020000 | *     | *            | this flag is never raised
