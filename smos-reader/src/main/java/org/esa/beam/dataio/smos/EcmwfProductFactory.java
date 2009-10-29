@@ -5,12 +5,15 @@ import com.bc.ceres.binio.CompoundType;
 import com.bc.ceres.glevel.MultiLevelSource;
 import org.esa.beam.framework.datamodel.Band;
 import org.esa.beam.framework.datamodel.ColorPaletteDef;
+import org.esa.beam.framework.datamodel.FlagCoding;
 import org.esa.beam.framework.datamodel.ImageInfo;
+import org.esa.beam.framework.datamodel.Mask;
 import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.smos.dgg.SmosDgg;
 
 import java.awt.Color;
 import java.io.IOException;
+import java.util.Random;
 
 class EcmwfProductFactory extends SmosProductFactory {
 
@@ -90,6 +93,9 @@ class EcmwfProductFactory extends SmosProductFactory {
         if (!descriptor.getDescription().isEmpty()) {
             band.setDescription(descriptor.getDescription());
         }
+        if (descriptor.getFlagDescriptors() != null) {
+            addFlagsAndMasks(product, band, descriptor.getFlagCodingName(), descriptor.getFlagDescriptors());
+        }
 
         final FieldValueProvider valueProvider = createValueProvider(smosFile, descriptor);
 
@@ -152,6 +158,44 @@ class EcmwfProductFactory extends SmosProductFactory {
         }
 
         return new ImageInfo(new ColorPaletteDef(points));
+    }
+
+    private static void addFlagsAndMasks(Product product, Band band,
+                                         String flagCodingName,
+                                         FlagDescriptors flagDescriptors) {
+        FlagCoding flagCoding = product.getFlagCodingGroup().get(flagCodingName);
+        if (flagCoding == null) {
+            flagCoding = new FlagCoding(flagCodingName);
+            for (final FlagDescriptor flagDescriptor : flagDescriptors.asList()) {
+                flagCoding.addFlag(flagDescriptor.getFlagName(),
+                                   flagDescriptor.getMask(),
+                                   flagDescriptor.getDescription());
+            }
+            product.getFlagCodingGroup().add(flagCoding);
+        }
+        band.setSampleCoding(flagCoding);
+
+        final Random random = new Random(5489); // for creating random colours
+        for (final FlagDescriptor flagDescriptor : flagDescriptors.asList()) {
+            final String maskName = band.getName() + "_" + flagDescriptor.getFlagName();
+            Mask mask = product.getMaskGroup().get(maskName);
+            if (mask == null) {
+                mask = new Mask(maskName,
+                                product.getSceneRasterWidth(),
+                                product.getSceneRasterHeight(),
+                                new Mask.BandMathType());
+                mask.setDescription(flagDescriptor.getDescription());
+                Color color = flagDescriptor.getColor();
+                if (color == null) {
+                    color = new Color(random.nextInt(255), random.nextInt(255), random.nextInt(255));
+                }
+                mask.setImageColor(color);
+                mask.setImageTransparency(flagDescriptor.getTransparency());
+                final String imageExpression = band.getName() + "." + flagDescriptor.getFlagName();
+                mask.getImageConfig().setValue("expression", imageExpression);
+                product.getMaskGroup().add(mask);
+            }
+        }
     }
 
 }

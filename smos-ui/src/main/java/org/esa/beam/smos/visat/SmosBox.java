@@ -1,13 +1,12 @@
 package org.esa.beam.smos.visat;
 
-import com.bc.ceres.binding.ValueContainer;
+import com.bc.ceres.binding.PropertyContainer;
 import com.bc.ceres.glayer.Layer;
 import com.bc.ceres.glayer.LayerType;
 import com.bc.ceres.glayer.LayerTypeRegistry;
-
 import org.esa.beam.dataio.smos.L1cScienceSmosFile;
-import org.esa.beam.dataio.smos.SmosProductReader;
 import org.esa.beam.dataio.smos.SmosFile;
+import org.esa.beam.dataio.smos.SmosProductReader;
 import org.esa.beam.framework.dataio.ProductReader;
 import org.esa.beam.framework.datamodel.RasterDataNode;
 import org.esa.beam.framework.ui.product.ProductSceneView;
@@ -54,7 +53,7 @@ public class SmosBox implements VisatPlugIn {
                         final Layer rootLayer = newView.getRootLayer();
                         final LayerType layerType = LayerTypeRegistry.getLayerType(BlueMarbleLayerType.class.getName());
                         if (!hasLayer(rootLayer, layerType)) {
-                            final ValueContainer configuration = layerType.createLayerConfig(null);
+                            final PropertyContainer configuration = layerType.createLayerConfig(null);
                             final Layer worldMapLayer = layerType.createLayer(null, configuration);
                             if (worldMapLayer != null) {
                                 rootLayer.getChildren().add(worldMapLayer);

@@ -467,7 +467,7 @@ public class SmosDggProductFactory extends SmosProductFactory {
         for (final FlagDescriptor descriptor : FlagDescriptor.L1C_FLAGS) {
             // skip polarisation flags since they are not meaningful
             if ((descriptor.getMask() & SmosFormats.L1C_POL_FLAGS_MASK) == 0) {
-                flagCoding.addFlag(descriptor.getName(), descriptor.getMask(), descriptor.getDescription());
+                flagCoding.addFlag(descriptor.getFlagName(), descriptor.getMask(), descriptor.getDescription());
             }
         }
 
@@ -477,22 +477,22 @@ public class SmosDggProductFactory extends SmosProductFactory {
     private static void addL2SmFlagCodings(Product product) {
         final FlagCoding confidenceFlagCoding = new FlagCoding("SMOS_L2_SM_CONFIDENCE");
         for (final FlagDescriptor descriptor : FlagDescriptor.L2_SM_CONFIDENCE_FLAGS) {
-            confidenceFlagCoding.addFlag(descriptor.getName(), descriptor.getMask(), descriptor.getDescription());
+            confidenceFlagCoding.addFlag(descriptor.getFlagName(), descriptor.getMask(), descriptor.getDescription());
         }
 
         final FlagCoding scienceFlagCoding = new FlagCoding("SMOS_L2_SM_SCIENCE");
         for (final FlagDescriptor descriptor : FlagDescriptor.L2_SM_SCIENCE_FLAGS) {
-            scienceFlagCoding.addFlag(descriptor.getName(), descriptor.getMask(), descriptor.getDescription());
+            scienceFlagCoding.addFlag(descriptor.getFlagName(), descriptor.getMask(), descriptor.getDescription());
         }
 
         final FlagCoding processingFlagCoding = new FlagCoding("SMOS_L2_SM_PROCESSING");
         for (final FlagDescriptor descriptor : FlagDescriptor.L2_SM_PROCESSING_FLAGS) {
-            processingFlagCoding.addFlag(descriptor.getName(), descriptor.getMask(), descriptor.getDescription());
+            processingFlagCoding.addFlag(descriptor.getFlagName(), descriptor.getMask(), descriptor.getDescription());
         }
 
         final FlagCoding dggCurrentFlagCoding = new FlagCoding("SMOS_L2_SM_DGG_CURRENT");
         for (final FlagDescriptor descriptor : FlagDescriptor.L2_SM_DGG_CURRENT_FLAGS) {
-            dggCurrentFlagCoding.addFlag(descriptor.getName(), descriptor.getMask(), descriptor.getDescription());
+            dggCurrentFlagCoding.addFlag(descriptor.getFlagName(), descriptor.getMask(), descriptor.getDescription());
         }
 
         product.getFlagCodingGroup().add(confidenceFlagCoding);
@@ -504,12 +504,12 @@ public class SmosDggProductFactory extends SmosProductFactory {
     private static void addL2OsFlagCodings(Product product) {
         final FlagCoding controlFlagCoding = new FlagCoding("SMOS_L2_OS_CONTROL");
         for (final FlagDescriptor descriptor : FlagDescriptor.L2_OS_CONTROL_FLAGS) {
-            controlFlagCoding.addFlag(descriptor.getName(), descriptor.getMask(), descriptor.getDescription());
+            controlFlagCoding.addFlag(descriptor.getFlagName(), descriptor.getMask(), descriptor.getDescription());
         }
 
         final FlagCoding scienceFlagCoding = new FlagCoding("SMOS_L2_OS_SCIENCE");
         for (final FlagDescriptor descriptor : FlagDescriptor.L2_OS_SCIENCE_FLAGS) {
-            scienceFlagCoding.addFlag(descriptor.getName(), descriptor.getMask(), descriptor.getDescription());
+            scienceFlagCoding.addFlag(descriptor.getFlagName(), descriptor.getMask(), descriptor.getDescription());
         }
 
         product.getFlagCodingGroup().add(controlFlagCoding);

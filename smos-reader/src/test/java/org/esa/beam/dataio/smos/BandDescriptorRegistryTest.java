@@ -13,20 +13,26 @@ public class BandDescriptorRegistryTest {
 
         final BandDescriptor descriptor = descriptors.getDescriptor("RR");
         assertNotNull(descriptor);
+
         assertEquals("RR", descriptor.getBandName());
         assertEquals("Rain_Rate", descriptor.getMemberName());
-        assertTrue(descriptor.isVisible());
         assertTrue(descriptor.hasTypicalMin());
         assertTrue(descriptor.hasTypicalMax());
         assertFalse(descriptor.isCyclic());
         assertTrue(descriptor.hasFillValue());
-        assertTrue(!descriptor.getValidPixelExpression().isEmpty());
+        assertFalse(descriptor.getValidPixelExpression().isEmpty());
         assertEquals("RR.raw != -99999.0 && RR.raw != -99998.0", descriptor.getValidPixelExpression());
-        assertTrue(!descriptor.getUnit().isEmpty());
-        assertTrue(!descriptor.getDescription().isEmpty());
-
+        assertFalse(descriptor.getUnit().isEmpty());
+        assertFalse(descriptor.getDescription().isEmpty());
         assertEquals(0.0, descriptor.getTypicalMin(), 0.0);
         assertEquals("mm h-1", descriptor.getUnit());
+
+        final FlagDescriptors flagDescriptors = descriptors.getDescriptor("F1").getFlagDescriptors();
+        assertNotNull(flagDescriptors);
+        assertSame(FlagDescriptorRegistry.getInstance().getDescriptors("DBL_SM_XXXX_AUX_ECMWF__0200_F1.txt"),
+                   flagDescriptors);
+
+        descriptor.getFlagDescriptors();
     }
 
 }

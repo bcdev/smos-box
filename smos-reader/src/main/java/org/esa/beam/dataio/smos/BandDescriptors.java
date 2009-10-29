@@ -8,25 +8,25 @@ import java.util.Map;
 
 public class BandDescriptors {
 
-    private final List<BandDescriptor> recordList;
-    private final Map<String, BandDescriptor> recordMap;
+    private final List<BandDescriptor> descriptorList;
+    private final Map<String, BandDescriptor> descriptorMap;
 
-    BandDescriptors(List<String[]> stringRecordList) {
-        recordList = new ArrayList<BandDescriptor>(stringRecordList.size());
-        recordMap = new HashMap<String, BandDescriptor>(stringRecordList.size());
+    BandDescriptors(List<String[]> recordList) {
+        descriptorList = new ArrayList<BandDescriptor>(recordList.size());
+        descriptorMap = new HashMap<String, BandDescriptor>(recordList.size());
 
-        for (String[] strings : stringRecordList) {
-            final BandDescriptor record = new BandDescriptor(strings);
-            recordList.add(record);
-            recordMap.put(record.getBandName(), record);
+        for (String[] tokens : recordList) {
+            final BandDescriptor descriptor = new BandDescriptor(tokens);
+            descriptorList.add(descriptor);
+            descriptorMap.put(descriptor.getBandName(), descriptor);
         }
     }
 
     public final List<BandDescriptor> asList() {
-        return Collections.unmodifiableList(recordList);
+        return Collections.unmodifiableList(descriptorList);
     }
 
     public final BandDescriptor getDescriptor(String bandName) {
-        return recordMap.get(bandName);
+        return descriptorMap.get(bandName);
     }
 }

@@ -2,7 +2,6 @@ package org.esa.beam.dataio.smos;
 
 public class BandDescriptor {
 
-    private final boolean visible;
     private final String bandName;
     private final String memberName;
     private final int sampleModel;
@@ -15,9 +14,10 @@ public class BandDescriptor {
     private final String validPixelExpression;
     private final String unit;
     private final String description;
+    private final String flagCodingName;
+    private final FlagDescriptors flagDescriptors;
 
     BandDescriptor(String[] tokens) {
-        visible = getBoolean(tokens[0], true);
         bandName = getString(tokens[1]);
         memberName = getString(tokens[2], bandName);
         sampleModel = getInt(tokens[3], 0);
@@ -34,10 +34,15 @@ public class BandDescriptor {
 
         unit = getString(tokens[11], "");
         description = getString(tokens[12], "");
+        flagCodingName = getString(tokens[13], "");
+        flagDescriptors = getFlagDescriptors(tokens[14]);
     }
 
-    public final boolean isVisible() {
-        return visible;
+    private FlagDescriptors getFlagDescriptors(String token) {
+        if (flagCodingName.isEmpty()) {
+            return null;
+        }
+        return FlagDescriptorRegistry.getInstance().getDescriptors(getString(token));
     }
 
     public final String getBandName() {
@@ -100,15 +105,12 @@ public class BandDescriptor {
         return description;
     }
 
-    private static String getString(String token) {
-        return token.trim();
+    public final String getFlagCodingName() {
+        return flagCodingName;
     }
 
-    private static String getString(String token, String defaultValue) {
-        if ("*".equals(token.trim())) {
-            return defaultValue;
-        }
-        return token.trim();
+    public final FlagDescriptors getFlagDescriptors() {
+        return flagDescriptors;
     }
 
     @SuppressWarnings({"SimplifiableIfStatement"})
@@ -131,5 +133,16 @@ public class BandDescriptor {
             return defaultValue;
         }
         return Integer.parseInt(token);
+    }
+
+    private static String getString(String token) {
+        return token.trim();
+    }
+
+    private static String getString(String token, String defaultValue) {
+        if ("*".equals(token.trim())) {
+            return defaultValue;
+        }
+        return token.trim();
     }
 }

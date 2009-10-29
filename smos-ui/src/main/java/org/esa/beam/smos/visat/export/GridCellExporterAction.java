@@ -16,10 +16,10 @@
  */
 package org.esa.beam.smos.visat.export;
 
+import com.bc.ceres.binding.Property;
+import com.bc.ceres.binding.PropertyContainer;
+import com.bc.ceres.binding.PropertyDescriptor;
 import com.bc.ceres.binding.ValidationException;
-import com.bc.ceres.binding.ValueContainer;
-import com.bc.ceres.binding.ValueDescriptor;
-import com.bc.ceres.binding.ValueModel;
 import com.bc.ceres.binding.ValueRange;
 import com.bc.ceres.binding.ValueSet;
 import com.bc.ceres.binding.swing.Binding;
@@ -47,7 +47,22 @@ import org.esa.beam.util.ProductUtils;
 import org.esa.beam.util.SystemUtils;
 import org.esa.beam.visat.VisatApp;
 
-import javax.swing.*;
+import javax.swing.AbstractButton;
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JTextField;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.FlowLayout;
@@ -94,7 +109,7 @@ public class GridCellExporterAction extends ExecCommand {
 
         private final VisatApp visatApp;
         private final Product product;
-        private final ValueContainer vc;
+        private final PropertyContainer vc;
         private final BindingContext bindingContext;
         private final GridCellExportModel model;
 
@@ -109,7 +124,7 @@ public class GridCellExporterAction extends ExecCommand {
             model.scanDirectory = new File(smosDirPath);
             model.output = new File(SystemUtils.getUserHomeDir(), "grid_cell_export.csv");
 
-            vc = ValueContainer.createObjectBacked(model);
+            vc = PropertyContainer.createObjectBacked(model);
             bindingContext = new BindingContext(vc);
             try {
                 prepareBinding();
@@ -157,7 +172,8 @@ public class GridCellExporterAction extends ExecCommand {
                 @Override
                 protected Void doInBackground(ProgressMonitor pm) throws Exception {
                     Area area = getArea();
-                    GridPointFilterStreamHandler streamHandler = new GridPointFilterStreamHandler(csvExportStream, area);
+                    GridPointFilterStreamHandler streamHandler = new GridPointFilterStreamHandler(csvExportStream,
+                                                                                                  area);
                     try {
                         if (model.useOpenProduct) {
                             streamHandler.processProduct(product, pm);
@@ -222,7 +238,7 @@ public class GridCellExporterAction extends ExecCommand {
         }
 
         private void prepareBinding() throws ValidationException {
-            ValueModel roiSourceModel = vc.getModel("roiSource");
+            Property roiSourceModel = vc.getProperty("roiSource");
             roiSourceModel.setValue(2);
             if (product != null) {
                 List<Band> roiRdns = new ArrayList<Band>();
@@ -239,13 +255,13 @@ public class GridCellExporterAction extends ExecCommand {
                     roiSourceModel.setValue(1);
                 }
                 if (!roiRdns.isEmpty()) {
-                    ValueDescriptor roiRasterDesc = vc.getDescriptor("roiRaster");
+                    PropertyDescriptor roiRasterDesc = vc.getDescriptor("roiRaster");
                     roiRasterDesc.setNotNull(true);
                     roiRasterDesc.setNotEmpty(true);
                     roiRasterDesc.setValueSet(new ValueSet(roiRdns.toArray()));
 
                     roiSourceModel.setValue(0);
-                    vc.getModel("roiRaster").setValue(roiRdns.get(0));
+                    vc.getProperty("roiRaster").setValue(roiRdns.get(0));
                 }
             }
             ValueRange northSouthRange = new ValueRange(-90, 90);
@@ -254,10 +270,10 @@ public class GridCellExporterAction extends ExecCommand {
             ValueRange eastWestRange = new ValueRange(-180, 180);
             vc.getDescriptor("east").setValueRange(eastWestRange);
             vc.getDescriptor("west").setValueRange(eastWestRange);
-            ValueDescriptor outputdesc = vc.getDescriptor("output");
+            PropertyDescriptor outputdesc = vc.getDescriptor("output");
             outputdesc.setNotEmpty(true);
             outputdesc.setNotNull(true);
-            ValueModel useOpenModel = vc.getModel("useOpenProduct");
+            Property useOpenModel = vc.getProperty("useOpenProduct");
             useOpenModel.setValue((product != null));
 
             bindingContext.bindEnabledState("roiRaster", true, "roiSource", 0);
@@ -316,10 +332,11 @@ public class GridCellExporterAction extends ExecCommand {
             textField.setColumns(30);
         }
 
-        private JComponent createFileSelectorComponent(ValueDescriptor valueDescriptor, BindingContext bindingContext) {
+        private JComponent createFileSelectorComponent(PropertyDescriptor propertyDescriptor,
+                                                       BindingContext bindingContext) {
             JTextField textField = new JTextField();
             ComponentAdapter adapter = new TextComponentAdapter(textField);
-            final Binding binding = bindingContext.bind(valueDescriptor.getName(), adapter);
+            final Binding binding = bindingContext.bind(propertyDescriptor.getName(), adapter);
             final JPanel subPanel = new JPanel(new BorderLayout(2, 2));
             subPanel.add(textField, BorderLayout.CENTER);
             JButton etcButton = new JButton("...");

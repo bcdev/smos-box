@@ -120,7 +120,7 @@ public class GridPointBtDataFlagmatrixToolView extends GridPointBtDataToolView {
         final FlagDescriptor[] flags = FlagDescriptor.L1C_FLAGS;
         String[] flagNames = new String[flags.length];
         for (int i = 0; i < flags.length; i++) {
-            flagNames[i] = flags[i].getName();
+            flagNames[i] = flags[i].getFlagName();
         }
         return flagNames;
     }
