@@ -76,7 +76,7 @@ public abstract class SmosToolView extends AbstractToolView {
     @Override
     protected JComponent createControl() {
         panel = new JPanel(new BorderLayout());
-        URL resource = getClass().getResource("smos-icon.png");
+        URL resource = SmosToolView.class.getResource("smos-icon.png");
         if (resource != null) {
             defaultComponent = new JLabel(new ImageIcon(resource));
         } else {
