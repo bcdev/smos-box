@@ -27,8 +27,8 @@ public class EEExportGridPointHandlerTest {
     public void handleGridPointsForScenario27() throws URISyntaxException, IOException {
         final File dblFile = getResourceAsFile(SCENARIO_27_DBL_NAME);
         final File hdrFile = getResourceAsFile(SCENARIO_27_HDR_NAME);
-        final DataFormat dblFormat = DataFormatRegistry.getDataFormat(hdrFile);
-        final SmosDggFile sourceFile = new SmosDggFile(dblFile, dblFormat);
+        final DataFormat dblFormat = DataFormatRegistry.getInstance().getDataFormat(hdrFile);
+        final SmosDggFile sourceFile = new SmosDggFile(dblFile, dblFormat, SmosConstants.GRID_POINT_LIST_NAME);
 
         final SequenceData sourceGridPointList = sourceFile.getGridPointList();
         assertEquals(5533, sourceGridPointList.getElementCount());

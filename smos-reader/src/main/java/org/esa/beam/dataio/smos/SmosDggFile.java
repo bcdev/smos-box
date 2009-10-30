@@ -48,10 +48,10 @@ public class SmosDggFile extends SmosFile {
     private int minSeqnum;
     private int maxSeqnum;
 
-    public SmosDggFile(File file, DataFormat format) throws IOException {
+    public SmosDggFile(File file, DataFormat format, String gridPointListName) throws IOException {
         super(file, format);
 
-        gridPointList = getDataBlock().getSequence(SmosConstants.GRID_POINT_LIST_NAME);
+        gridPointList = getDataBlock().getSequence(gridPointListName);
         if (gridPointList == null) {
             throw new IllegalStateException(MessageFormat.format(
                     "SMOS File ''{0}'': Missing grid point list.", file.getPath()));

@@ -25,9 +25,11 @@ import java.util.concurrent.ConcurrentMap;
  */
 public class DataFormatRegistry {
 
+    private final ResourcePathBuilder pathBuilder;
     private final ConcurrentMap<String, DataFormat> dataFormatMap;
 
     private DataFormatRegistry() {
+        pathBuilder = new ResourcePathBuilder();
         dataFormatMap = new ConcurrentHashMap<String, DataFormat>(17);
     }
 
@@ -57,7 +59,7 @@ public class DataFormatRegistry {
         return dataFormatMap.get(formatName);
     }
 
-    public static DataFormat getDataFormat(File hdrFile) throws IOException {
+    public DataFormat getDataFormat(File hdrFile) throws IOException {
         final Document document;
 
         try {
@@ -87,47 +89,48 @@ public class DataFormatRegistry {
         if (descendants.hasNext()) {
             final Element e = (Element) descendants.next();
             final String formatName = e.getChildText("Datablock_Schema", namespace).substring(0, 27);
-            return getInstance().getDataFormat(formatName);
+
+            return getDataFormat(formatName);
         } else {
             throw new IOException(MessageFormat.format("File ''{0}'': Missing datablock schema.", hdrFile.getPath()));
         }
     }
 
-    private static URL getSchemaResource(String formatName) {
-        // Reference: SO-MA-IDR-GS-0004, SMOS DPGS, XML Schema Guidelines
-        if (formatName == null || !formatName.matches("DBL_\\w{2}_\\w{4}_\\w{10}_\\d{4}")) {
+    private URL getSchemaResource(String formatName) {
+        if (formatName == null || !formatName.matches(SmosConstants.SCHEMA_NAMING_CONVENTION)) {
             return null;
         }
 
-        final String fc = formatName.substring(12, 16);
-        final String sd = formatName.substring(16, 22);
-
-        final StringBuilder pathBuilder = new StringBuilder();
-        pathBuilder.append("schemas/").append(fc).append("/").append(sd).append("/").append(formatName);
-        pathBuilder.append(".binXschema.xml");
-
-        return DataFormatRegistry.class.getResource(pathBuilder.toString());
+        return DataFormatRegistry.class.getResource(pathBuilder.buildPath(formatName, "schemas", ".binXschema.xml"));
     }
 
-    private static BinX createBinX(String name) {
+    private BinX createBinX(String name) {
         final BinX binX = new BinX();
         binX.setSingleDatasetStructInlined(true);
         binX.setArrayVariableInlined(true);
 
         try {
-            binX.setVarNameMappings(getResourceAsProperties("binx_var_name_mappings.properties"));
-
+            if (name.contains("AUX_ECMWF_")) {
+                binX.setVarNameMappings(getResourceAsProperties("mappings_AUX_ECMWF_.properties"));
+            }
+            if (name.matches("DBL_\\w{2}_\\w{4}_MIR_\\w{4}1C_\\d{4}")) { 
+                binX.setVarNameMappings(getResourceAsProperties("mappings_MIR_XXXX1C.properties"));
+            }
             if (name.contains("MIR_OSDAP2")) {
-                binX.setTypeMembersInlined(getResourceAsProperties("binx_inlined_structs_MIR_OSDAP2.properties"));
+                binX.setVarNameMappings(getResourceAsProperties("mappings_MIR_OSDAP2.properties"));
+                binX.setTypeMembersInlined(getResourceAsProperties("structs_MIR_OSDAP2.properties"));
             }
             if (name.contains("MIR_OSUDP2")) {
-                binX.setTypeMembersInlined(getResourceAsProperties("binx_inlined_structs_MIR_OSUDP2.properties"));
+                binX.setVarNameMappings(getResourceAsProperties("mappings_MIR_OSUDP2.properties"));
+                binX.setTypeMembersInlined(getResourceAsProperties("structs_MIR_OSUDP2.properties"));
             }
             if (name.contains("MIR_SMDAP2")) {
-                binX.setTypeMembersInlined(getResourceAsProperties("binx_inlined_structs_MIR_SMDAP2.properties"));
+                binX.setVarNameMappings(getResourceAsProperties("mappings_MIR_SMDAP2.properties"));
+                binX.setTypeMembersInlined(getResourceAsProperties("structs_MIR_SMDAP2.properties"));
             }
             if (name.contains("MIR_SMUDP2")) {
-                binX.setTypeMembersInlined(getResourceAsProperties("binx_inlined_structs_MIR_SMUDP2.properties"));
+                binX.setVarNameMappings(getResourceAsProperties("mappings_MIR_SMUDP2.properties"));
+                binX.setTypeMembersInlined(getResourceAsProperties("structs_MIR_SMUDP2.properties"));
             }
         } catch (IOException e) {
             throw new IllegalStateException(e.getMessage());
@@ -136,7 +139,7 @@ public class DataFormatRegistry {
         return binX;
     }
 
-    private static Properties getResourceAsProperties(String name) throws IOException {
+    private Properties getResourceAsProperties(String name) throws IOException {
         final Properties properties = new Properties();
         final InputStream is = DataFormatRegistry.class.getResourceAsStream(name);
 

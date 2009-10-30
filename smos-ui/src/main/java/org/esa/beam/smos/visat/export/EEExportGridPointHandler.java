@@ -103,7 +103,7 @@ class EEExportGridPointHandler implements GridPointHandler {
 //            final long microSeconds = utcData.getUInt(2);
 //            timeTracker.track(SmosFile.getCfiDateInUtc(days, seconds, microSeconds));
         } else {
-            int index = gridPointData.getType().getMemberIndex("BT_Data_List");
+            int index = gridPointData.getType().getMemberIndex(SmosConstants.BT_DATA_LIST_NAME);
             final SequenceData btDataList = gridPointData.getSequence(index);
             final CompoundData btData = btDataList.getCompound(0);
             index = btData.getType().getMemberIndex("Snapshot_ID");

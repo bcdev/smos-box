@@ -17,8 +17,9 @@ import java.util.concurrent.ConcurrentMap;
 
 public class DDDB {
 
-    private static final Charset CHARSET = Charset.forName("US-ASCII");
-    private static final char[] SEPARATORS = new char[]{'|'};
+    private final Charset charset = Charset.forName("US-ASCII");
+    private final char[] separators = new char[]{'|'};
+    private final ResourcePathBuilder pathBuilder = new ResourcePathBuilder();
 
     private final ConcurrentMap<String, BandDescriptors> bandDescriptorMap;
     private final ConcurrentMap<String, FlagDescriptors> flagDescriptorMap;
@@ -86,50 +87,34 @@ public class DDDB {
         return flagDescriptorMap.get(identifier);
     }
 
-    private static BandDescriptors readBandDescriptors(InputStream inputStream) throws IOException {
-        final CsvReader reader = new CsvReader(new InputStreamReader(inputStream, CHARSET), SEPARATORS, true, "#");
+    private BandDescriptors readBandDescriptors(InputStream inputStream) throws IOException {
+        final CsvReader reader = new CsvReader(new InputStreamReader(inputStream, charset), separators, true, "#");
         final List<String[]> recordList = reader.readStringRecords();
 
         return new BandDescriptors(recordList);
     }
 
-    private static FlagDescriptors readFlagDescriptors(InputStream inputStream) throws IOException {
-        final CsvReader reader = new CsvReader(new InputStreamReader(inputStream, CHARSET), SEPARATORS, true, "#");
+    private FlagDescriptors readFlagDescriptors(InputStream inputStream) throws IOException {
+        final CsvReader reader = new CsvReader(new InputStreamReader(inputStream, charset), separators, true, "#");
         final List<String[]> recordList = reader.readStringRecords();
 
         return new FlagDescriptors(recordList);
     }
 
-    private static InputStream getBandDescriptorResource(String identifier) {
-        // Reference: SO-MA-IDR-GS-0004, SMOS DPGS, XML Schema Guidelines
-        if (identifier == null || !identifier.matches("DBL_\\w{2}_\\w{4}_\\w{10}_\\d{4}")) {
+    private InputStream getBandDescriptorResource(String identifier) {
+        if (identifier == null || !identifier.matches(SmosConstants.SCHEMA_NAMING_CONVENTION)) {
             return null;
         }
 
-        final String fc = identifier.substring(12, 16);
-        final String sd = identifier.substring(16, 22);
-
-        final StringBuilder pathBuilder = new StringBuilder();
-        pathBuilder.append("bands/").append(fc).append("/").append(sd).append("/").append(identifier);
-        pathBuilder.append(".csv");
-
-        return DataFormatRegistry.class.getResourceAsStream(pathBuilder.toString());
+        return DataFormatRegistry.class.getResourceAsStream(pathBuilder.buildPath(identifier, "bands", ".csv"));
     }
 
-    private static InputStream getFlagDescriptorResource(String identifier) {
-        // Reference: SO-MA-IDR-GS-0004, SMOS DPGS, XML Schema Guidelines
-        if (identifier == null || !identifier.matches("DBL_\\w{2}_\\w{4}_\\w{10}_\\d{4}_.*")) {
+    private InputStream getFlagDescriptorResource(String identifier) {
+        if (identifier == null || !identifier.matches(SmosConstants.SCHEMA_NAMING_CONVENTION + "_.*")) {
             return null;
         }
 
-        final String fc = identifier.substring(12, 16);
-        final String sd = identifier.substring(16, 22);
-
-        final StringBuilder pathBuilder = new StringBuilder();
-        pathBuilder.append("flags/").append(fc).append("/").append(sd).append("/").append(identifier);
-        pathBuilder.append(".csv");
-
-        return DataFormatRegistry.class.getResourceAsStream(pathBuilder.toString());
+        return DataFormatRegistry.class.getResourceAsStream(pathBuilder.buildPath(identifier, "flags", ".csv"));
     }
 
     // Initialization on demand holder idiom

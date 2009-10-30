@@ -40,6 +40,7 @@ import java.awt.Color;
 import java.util.HashMap;
 import java.util.Random;
 
+@Deprecated
 public class SmosDggProductFactory extends SmosProductFactory {
 
     @Override
