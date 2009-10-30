@@ -57,19 +57,19 @@ public class SmosProductReader extends AbstractProductReader {
                 smosFile = new L1cScienceSmosFile(dblFile, format, true);
                 factory = new SmosDggProductFactory();
             } else if (isOsUserFormat(formatName)) {
-                smosFile = new SmosDggFile(dblFile, format, SmosConstants.GRID_POINT_LIST_NAME);
+                smosFile = new SmosDggFile(dblFile, format);
                 factory = new SmosDggProductFactory();
             } else if (isSmUserFormat(formatName)) {
-                smosFile = new SmosDggFile(dblFile, format, SmosConstants.GRID_POINT_LIST_NAME);
+                smosFile = new SmosDggFile(dblFile, format);
                 factory = new SmosDggProductFactory();
             } else if (isOsAnalysisFormat(formatName)) {
-                smosFile = new SmosDggFile(dblFile, format, SmosConstants.GRID_POINT_LIST_NAME);
+                smosFile = new SmosDggFile(dblFile, format);
                 factory = new SmosDggProductFactory();
             } else if (isSmAnalysisFormat(formatName)) {
-                smosFile = new SmosDggFile(dblFile, format, SmosConstants.GRID_POINT_LIST_NAME);
+                smosFile = new SmosDggFile(dblFile, format);
                 factory = new SmosDggProductFactory();
             } else if (isEcmwfFormat(formatName)) {
-                smosFile = new SmosDggFile(dblFile, format, SmosConstants.GRID_POINT_LIST_NAME);
+                smosFile = new SmosDggFile(dblFile, format);
                 factory = new EcmwfProductFactory();
             } else {
                 throw new IOException("Unknown SMOS format: " + formatName);

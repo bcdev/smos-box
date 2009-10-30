@@ -4,7 +4,6 @@ import com.bc.ceres.binio.DataFormat;
 import com.bc.ceres.core.ProgressMonitor;
 import org.esa.beam.dataio.smos.SmosDggFile;
 import org.esa.beam.dataio.smos.DataFormatRegistry;
-import org.esa.beam.dataio.smos.SmosConstants;
 import org.esa.beam.util.io.FileUtils;
 
 import java.awt.Shape;
@@ -41,7 +40,7 @@ public class EEExporter {
         // 2. create a SMOS file
         final SmosDggFile smosFile;
         try {
-            smosFile = new SmosDggFile(sourceDblFile, sourceDblFormat, SmosConstants.GRID_POINT_LIST_NAME);
+            smosFile = new SmosDggFile(sourceDblFile, sourceDblFormat);
         } catch (IOException e) {
             e.printStackTrace();
             return;

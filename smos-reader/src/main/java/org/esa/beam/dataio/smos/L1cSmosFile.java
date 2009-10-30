@@ -37,7 +37,7 @@ public abstract class L1cSmosFile extends SmosDggFile {
     protected final CompoundType btDataType;
 
     public L1cSmosFile(File file, DataFormat format) throws IOException {
-        super(file, format, SmosConstants.GRID_POINT_LIST_NAME);
+        super(file, format);
 
         btDataListIndex = getGridPointType().getMemberIndex(SmosConstants.BT_DATA_LIST_NAME);
         if (btDataListIndex == -1) {
