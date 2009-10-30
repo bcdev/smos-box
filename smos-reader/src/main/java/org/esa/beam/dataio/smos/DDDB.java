@@ -44,7 +44,7 @@ public class DDDB {
                     descriptors = readBandDescriptors(inputStream);
                 } catch (Throwable e) {
                     throw new IllegalStateException(MessageFormat.format(
-                            "Band descriptors resource for identifier ''{0}'': {1}", identifier, e.getMessage()));
+                            "Band descriptor resource for identifier ''{0}'': {1}", identifier, e.getMessage()));
                 } finally {
                     try {
                         inputStream.close();

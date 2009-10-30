@@ -46,31 +46,31 @@ public class SmosProductReader extends AbstractProductReader {
 
             if (isDualPolBrowseFormat(formatName)) {
                 smosFile = new L1cBrowseSmosFile(dblFile, format);
-                factory = new SmosDggProductFactory();
+                factory = new SmosL1cProductFactory();
             } else if (isFullPolBrowseFormat(formatName)) {
                 smosFile = new L1cBrowseSmosFile(dblFile, format);
-                factory = new SmosDggProductFactory();
+                factory = new SmosL1cProductFactory();
             } else if (isDualPolScienceFormat(formatName)) {
                 smosFile = new L1cScienceSmosFile(dblFile, format, false);
-                factory = new SmosDggProductFactory();
+                factory = new SmosL1cProductFactory();
             } else if (isFullPolScienceFormat(formatName)) {
                 smosFile = new L1cScienceSmosFile(dblFile, format, true);
-                factory = new SmosDggProductFactory();
+                factory = new SmosL1cProductFactory();
             } else if (isOsUserFormat(formatName)) {
                 smosFile = new SmosDggFile(dblFile, format);
                 factory = new SmosDggProductFactory();
             } else if (isSmUserFormat(formatName)) {
                 smosFile = new SmosDggFile(dblFile, format);
-                factory = new SmosDggProductFactory();
+                factory = new SmosL1cProductFactory();
             } else if (isOsAnalysisFormat(formatName)) {
                 smosFile = new SmosDggFile(dblFile, format);
-                factory = new SmosDggProductFactory();
+                factory = new SmosL1cProductFactory();
             } else if (isSmAnalysisFormat(formatName)) {
                 smosFile = new SmosDggFile(dblFile, format);
-                factory = new SmosDggProductFactory();
+                factory = new SmosL1cProductFactory();
             } else if (isEcmwfFormat(formatName)) {
                 smosFile = new SmosDggFile(dblFile, format);
-                factory = new EcmwfProductFactory();
+                factory = new SmosDggProductFactory();
             } else {
                 throw new IOException("Unknown SMOS format: " + formatName);
             }

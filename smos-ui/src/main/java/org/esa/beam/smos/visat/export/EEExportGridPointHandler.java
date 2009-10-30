@@ -2,7 +2,7 @@ package org.esa.beam.smos.visat.export;
 
 import com.bc.ceres.binio.*;
 import org.esa.beam.dataio.smos.SmosDggFile;
-import org.esa.beam.dataio.smos.SmosDggProductFactory;
+import org.esa.beam.dataio.smos.SmosL1cProductFactory;
 import org.esa.beam.dataio.smos.SmosConstants;
 
 import java.awt.geom.Point2D;
@@ -43,7 +43,7 @@ class EEExportGridPointHandler implements GridPointHandler {
 
         final String fomatName = targetContext.getFormat().getName();
         // @todo 2 tb/tb extend to L2 -DA products once they're supported
-        isL2File = SmosDggProductFactory.is_L2_User_File(fomatName);
+        isL2File = SmosL1cProductFactory.is_L2_User_File(fomatName);
     }
 
     @Override

@@ -1,0 +1,2 @@
+# visible | name       | mask     | color | transparency | description
+  *       | spare      | 00000001 | *     | *            | this flag is never raised
