@@ -72,8 +72,9 @@ public class SmosDggTilizer {
             }
 
             final File outputLevelDir = new File(outputDir, "" + level);
-            //noinspection ResultOfMethodCallIgnored
-            outputLevelDir.mkdir();
+            if (!outputLevelDir.mkdir()) {
+                throw new IOException("Failed to create directory: "+outputDir.getAbsolutePath());
+            }
 
             final File imagePropertiesFile = new File(outputLevelDir, "image.properties");
             System.out.println("Writing " + imagePropertiesFile + "...");

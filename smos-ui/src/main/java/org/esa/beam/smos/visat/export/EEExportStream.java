@@ -65,7 +65,7 @@ class EEExportStream implements GridPointFilterStream {
         dispose();
     }
 
-    private void dispose() {
+    private void dispose() throws IOException {
         if (targetContext != null) {
             targetContext.dispose();
         }
@@ -73,9 +73,15 @@ class EEExportStream implements GridPointFilterStream {
         final FileNamePatcher fileNamePatcher = createFileNamePatcher();
         targetGridPointHandler = null;
         final File targetDir = targetHdrFile.getParentFile();
-        targetHdrFile.renameTo(new File(targetDir, fileNamePatcher.getHdrFileName()));
-        targetDblFile.renameTo(new File(targetDir, fileNamePatcher.getDblFileName()));
-
+        renameFile(targetHdrFile, new File(targetDir, fileNamePatcher.getHdrFileName()));
+        renameFile(targetDblFile, new File(targetDir, fileNamePatcher.getDblFileName()));
+    }
+    
+    private void renameFile(File oldFile, File newFile) throws IOException {
+        if (!oldFile.renameTo(newFile)) {
+            String msg = String.format("Failed to rename file from: '%s' to '%s'.", oldFile.getAbsolutePath(), newFile.getAbsolutePath());
+            throw new IOException(msg);
+        }
     }
 
     private FileNamePatcher createFileNamePatcher() {
