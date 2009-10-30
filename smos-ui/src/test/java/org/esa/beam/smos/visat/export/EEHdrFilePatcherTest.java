@@ -26,9 +26,16 @@ public class EEHdrFilePatcherTest {
         patcher.patch(getClass().getResourceAsStream(SCENARIO_27_HDR_NAME), os);
 
         final byte[] bytes = os.toByteArray();
-        final InputStream source = getClass().getResourceAsStream(SCENARIO_27_HDR_NAME);
-        for (final byte target : bytes) {
-            assertEquals(source.read(), target);
+        InputStream source = null;
+        try {
+            source = getClass().getResourceAsStream(SCENARIO_27_HDR_NAME);
+            for (final byte target : bytes) {
+                assertEquals(source.read(), target);
+            }
+        } finally {
+            if (source != null) {
+                source.close();
+            }
         }
 
         System.out.println(new String(bytes));
