@@ -594,7 +594,6 @@ public class SmosDggProductFactory extends SmosProductFactory {
     }
 
     private MultiLevelImage createSourceImage(FieldValueProvider valueProvider, Band band) {
-        final MultiLevelImage dggMultiLevelImage = SmosDgg.getInstance().getDggMultiLevelImage();
         return new DefaultMultiLevelImage(new SmosMultiLevelSource(band, valueProvider));
     }
 
