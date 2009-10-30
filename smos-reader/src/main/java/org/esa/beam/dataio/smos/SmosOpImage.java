@@ -14,11 +14,13 @@
  */
 package org.esa.beam.dataio.smos;
 
+import com.bc.ceres.glevel.MultiLevelModel;
 import com.bc.ceres.jai.NoDataRaster;
 import org.esa.beam.framework.datamodel.RasterDataNode;
 import org.esa.beam.jai.ImageManager;
 import org.esa.beam.jai.ResolutionLevel;
 import org.esa.beam.jai.SingleBandedOpImage;
+import org.esa.beam.smos.dgg.SmosDgg;
 
 import javax.media.jai.PixelAccessor;
 import javax.media.jai.PlanarImage;
@@ -35,13 +37,14 @@ import java.util.Arrays;
 class SmosOpImage extends SingleBandedOpImage {
 
     private final FieldValueProvider valueProvider;
+    private final MultiLevelModel model;
     private final double noDataValue;
-    private final RenderedImage seqnumImage;
-    private final Area region;
+
+    private volatile Area region;
     private volatile NoDataRaster noDataRaster;
 
-    SmosOpImage(FieldValueProvider valueProvider, RasterDataNode rasterDataNode, RenderedImage seqnumImage,
-                ResolutionLevel level, Area region) {
+    SmosOpImage(FieldValueProvider valueProvider, RasterDataNode rasterDataNode, MultiLevelModel model,
+                ResolutionLevel level) {
         super(ImageManager.getDataBufferType(rasterDataNode.getDataType()),
               rasterDataNode.getSceneRasterWidth(),
               rasterDataNode.getSceneRasterHeight(),
@@ -49,15 +52,27 @@ class SmosOpImage extends SingleBandedOpImage {
               null, // no configuration
               level);
 
+
         this.valueProvider = valueProvider;
+        this.model = model;
         this.noDataValue = rasterDataNode.getNoDataValue();
-        this.seqnumImage = seqnumImage;
-        this.region = region;
+    }
+
+    private Area getRegion() {
+        if (region == null) {
+            synchronized (this) {
+                if (region == null) {
+                    final Area modelRegion = valueProvider.getRegion();
+                    region = modelRegion.createTransformedArea(model.getModelToImageTransform(getLevel()));
+                }
+            }
+        }
+        return region;
     }
 
     @Override
     public Raster computeTile(int tileX, int tileY) {
-        if (region.intersects(getTileRect(tileX, tileY))) {
+        if (getRegion().intersects(getTileRect(tileX, tileY))) {
             return super.computeTile(tileX, tileY);
         }
 
@@ -74,8 +89,9 @@ class SmosOpImage extends SingleBandedOpImage {
 
     @Override
     protected final void computeRect(PlanarImage[] planarImages, WritableRaster targetRaster, Rectangle rectangle) {
+        final RenderedImage seqnumImage = SmosDgg.getInstance().getDggMultiLevelImage().getImage(getLevel());
         final Raster seqnumRaster = seqnumImage.getData(rectangle);
-        final ColorModel cm = seqnumImage.getColorModel();
+        final ColorModel cm = getColorModel();
 
         final PixelAccessor seqnumAccessor = new PixelAccessor(seqnumRaster.getSampleModel(), cm);
         final PixelAccessor targetAccessor = new PixelAccessor(targetRaster.getSampleModel(), null);
@@ -84,10 +100,7 @@ class SmosOpImage extends SingleBandedOpImage {
                 seqnumRaster, rectangle, seqnumRaster.getSampleModel().getTransferType(), false);
         final UnpackedImageData targetData = targetAccessor.getPixels(
                 targetRaster, rectangle, targetRaster.getSampleModel().getTransferType(), true);
-
-        final Area sourceRegion = new Area(rectangle);
-        sourceRegion.intersect(region);
-        final PixelCounter pixelCounter = new PixelCounter(rectangle, region);
+        final PixelCounter pixelCounter = new PixelCounter(rectangle, getRegion());
 
         switch (targetData.type) {
         case DataBuffer.TYPE_BYTE:

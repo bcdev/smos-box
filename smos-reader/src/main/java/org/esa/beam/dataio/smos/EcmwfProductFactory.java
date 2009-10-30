@@ -9,7 +9,6 @@ import org.esa.beam.framework.datamodel.FlagCoding;
 import org.esa.beam.framework.datamodel.ImageInfo;
 import org.esa.beam.framework.datamodel.Mask;
 import org.esa.beam.framework.datamodel.Product;
-import org.esa.beam.smos.dgg.SmosDgg;
 
 import java.awt.Color;
 import java.io.IOException;
@@ -34,7 +33,7 @@ class EcmwfProductFactory extends SmosProductFactory {
         }
     }
 
-    protected FieldValueProvider createValueProvider(SmosDggFile smosFile, BandDescriptor descriptor) {
+    private FieldValueProvider createValueProvider(SmosDggFile smosFile, BandDescriptor descriptor) {
         switch (descriptor.getSampleModel()) {
         case LOWER_4_OF_8:
             return new DggValueProvider(smosFile, descriptor.getMemberName()) {
@@ -67,7 +66,7 @@ class EcmwfProductFactory extends SmosProductFactory {
 
     @Override
     protected MultiLevelSource createMultiLevelSource(Band band, FieldValueProvider valueProvider) {
-        return new SmosMultiLevelSource(valueProvider, SmosDgg.getInstance().getDggMultiLevelImage(), band);
+        return new SmosMultiLevelSource(band, valueProvider);
     }
 
     protected Band addBand(Product product, SmosDggFile smosFile, BandDescriptor descriptor) {

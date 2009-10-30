@@ -29,6 +29,10 @@ import java.io.File;
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.Arrays;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 /**
  * Represents a SMOS product file providing data on the DGG.
@@ -42,11 +46,9 @@ public class SmosDggFile extends SmosFile {
     private final SequenceData gridPointList;
     private final CompoundType gridPointType;
     private final int gridPointIdIndex;
-    private final int[] gridPointIndexes;
-    private final Area region;
 
-    private int minSeqnum;
-    private int maxSeqnum;
+    private volatile Future<GridPointInfo> gridPointInfoFuture;
+    private volatile Future<Area> regionFuture;
 
     public SmosDggFile(File file, DataFormat format) throws IOException {
         super(file, format);
@@ -59,8 +61,6 @@ public class SmosDggFile extends SmosFile {
 
         gridPointType = (CompoundType) gridPointList.getType().getElementType();
         gridPointIdIndex = gridPointType.getMemberIndex(SmosConstants.GRID_POINT_ID_NAME);
-        gridPointIndexes = createGridPointIndexes();
-        region = computeRegion();
     }
 
     public final int getGridPointCount() {
@@ -79,12 +79,31 @@ public class SmosDggFile extends SmosFile {
         return gridPointList;
     }
 
-    public int getGridPointIndex(int seqnum) {
-        if (seqnum < minSeqnum || seqnum > maxSeqnum) {
-            return -1;
+    public final int getGridPointIndex(int seqnum) {
+        try {
+            return getGridPointInfoFuture().get().getGridPointIndex(seqnum);
+        } catch (InterruptedException e) {
+            throw new IllegalStateException(e);
+        } catch (ExecutionException e) {
+            throw new IllegalStateException(e.getCause());
+        }
+    }
+
+    private Future<GridPointInfo> getGridPointInfoFuture() {
+        if (gridPointInfoFuture == null) {
+            synchronized (this) {
+                if (gridPointInfoFuture == null) {
+                    gridPointInfoFuture = Executors.newSingleThreadExecutor().submit(new Callable<GridPointInfo>() {
+                        @Override
+                        public GridPointInfo call() throws IOException {
+                            return createGridPointInfo();
+                        }
+                    });
+                }
+            }
         }
 
-        return gridPointIndexes[seqnum - minSeqnum];
+        return gridPointInfoFuture;
     }
 
     public CompoundType getGridPointType() {
@@ -96,8 +115,31 @@ public class SmosDggFile extends SmosFile {
     }
 
     @Override
-    public Area getRegion() {
-        return region;
+    public final Area getRegion() {
+        try {
+            return getRegionFuture().get();
+        } catch (InterruptedException e) {
+            throw new IllegalStateException(e);
+        } catch (ExecutionException e) {
+            throw new IllegalStateException(e.getCause());
+        }
+    }
+
+    private Future<Area> getRegionFuture() {
+        if (regionFuture == null) {
+            synchronized (this) {
+                if (regionFuture == null) {
+                    regionFuture = Executors.newSingleThreadExecutor().submit(new Callable<Area>() {
+                        @Override
+                        public Area call() throws IOException {
+                            return computeRegion();
+                        }
+                    });
+                }
+            }
+        }
+
+        return regionFuture;
     }
 
     protected Area computeRegion() throws IOException {
@@ -113,7 +155,6 @@ public class SmosDggFile extends SmosFile {
         }
 
         final Area region = new Area();
-
         for (int i = 0; i < gridPointList.getElementCount(); i++) {
             CompoundData compound = gridPointList.getCompound(i);
             double lon = compound.getFloat(lonIndex);
@@ -146,9 +187,9 @@ public class SmosDggFile extends SmosFile {
         return region;
     }
 
-    private int[] createGridPointIndexes() throws IOException {
-        minSeqnum = getGridPointSeqnum(0);
-        maxSeqnum = minSeqnum;
+    private GridPointInfo createGridPointInfo() throws IOException {
+        int minSeqnum = getGridPointSeqnum(0);
+        int maxSeqnum = minSeqnum;
 
         final int gridPointCount = getGridPointCount();
         for (int i = 1; i < gridPointCount; i++) {
@@ -163,14 +204,14 @@ public class SmosDggFile extends SmosFile {
             }
         }
 
-        final int[] gridPointIndexes = new int[maxSeqnum - minSeqnum + 1];
-        Arrays.fill(gridPointIndexes, -1);
+        final GridPointInfo gridPointInfo = new GridPointInfo(minSeqnum, maxSeqnum);
+        Arrays.fill(gridPointInfo.indexes, -1);
 
         for (int i = 0; i < gridPointCount; i++) {
-            gridPointIndexes[getGridPointSeqnum(i) - minSeqnum] = i;
+            gridPointInfo.indexes[getGridPointSeqnum(i) - minSeqnum] = i;
         }
 
-        return gridPointIndexes;
+        return gridPointInfo;
     }
 
     private static Rectangle2D createTileRectangle(int i, int j) {
@@ -182,4 +223,24 @@ public class SmosDggFile extends SmosFile {
         return new Rectangle2D.Double(x, y, w, w);
     }
 
+    private static class GridPointInfo {
+
+        final int minSeqnum;
+        final int maxSeqnum;
+        final int[] indexes;
+
+        GridPointInfo(int minSeqnum, int maxSeqnum) {
+            this.minSeqnum = minSeqnum;
+            this.maxSeqnum = maxSeqnum;
+            indexes = new int[maxSeqnum - minSeqnum + 1];
+        }
+
+        final int getGridPointIndex(int seqnum) {
+            if (seqnum < minSeqnum || seqnum > maxSeqnum) {
+                return -1;
+            }
+
+            return indexes[seqnum - minSeqnum];
+        }
+    }
 }
