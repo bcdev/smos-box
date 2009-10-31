@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * An immutable index of SMOS L1c Science snapshots.
+ * An immutable index of SMOS L1c Science snapshot IDs.
  *
  * @author Ralf Quast
  * @version $Revision$ $Date$
