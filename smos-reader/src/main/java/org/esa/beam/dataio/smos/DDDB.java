@@ -1,34 +1,40 @@
 package org.esa.beam.dataio.smos;
 
+import com.bc.ceres.binio.DataFormat;
+import com.bc.ceres.binio.binx.BinX;
 import org.esa.beam.util.io.CsvReader;
 import org.jdom.Document;
+import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.Namespace;
-import org.jdom.Element;
 import org.jdom.filter.Filter;
 import org.jdom.input.SAXBuilder;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.File;
-import java.nio.charset.Charset;
+import java.net.URL;
 import java.nio.ByteOrder;
+import java.nio.charset.Charset;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Iterator;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.net.URL;
 
-import com.bc.ceres.binio.DataFormat;
-import com.bc.ceres.binio.binx.BinX;
-
+/**
+ * Data descriptor data base for SMOS product files.
+ *
+ * @author Ralf Quast
+ * @version $Revision$ $Date$
+ * @since SMOS-Box 2.0
+ */
 public class DDDB {
 
     private final Charset charset = Charset.forName("US-ASCII");
