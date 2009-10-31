@@ -2,8 +2,8 @@ package org.esa.beam.smos.visat.export;
 
 import com.bc.ceres.binio.DataFormat;
 import com.bc.ceres.core.ProgressMonitor;
+import org.esa.beam.dataio.smos.DDDB;
 import org.esa.beam.dataio.smos.SmosFile;
-import org.esa.beam.dataio.smos.DataFormatRegistry;
 import org.esa.beam.util.io.FileUtils;
 
 import java.awt.Shape;
@@ -32,7 +32,7 @@ public class EEExporter {
         // 1. get the format of the SMOS DBL file
         final DataFormat sourceDblFormat;
         try {
-            sourceDblFormat = DataFormatRegistry.getInstance().getDataFormat(sourceHdrFile);
+            sourceDblFormat = DDDB.getInstance().getDataFormat(sourceHdrFile);
         } catch (IOException e) {
             e.printStackTrace();
             return;

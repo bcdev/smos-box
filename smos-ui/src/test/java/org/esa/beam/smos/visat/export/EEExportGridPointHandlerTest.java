@@ -7,9 +7,9 @@ import com.bc.ceres.binio.SequenceData;
 import com.bc.ceres.binio.util.ByteArrayIOHandler;
 import com.bc.ceres.binio.util.DataPrinter;
 import static junit.framework.Assert.assertEquals;
-import org.esa.beam.dataio.smos.SmosFile;
-import org.esa.beam.dataio.smos.DataFormatRegistry;
+import org.esa.beam.dataio.smos.DDDB;
 import org.esa.beam.dataio.smos.SmosConstants;
+import org.esa.beam.dataio.smos.SmosFile;
 import org.junit.Test;
 
 import java.io.File;
@@ -27,7 +27,7 @@ public class EEExportGridPointHandlerTest {
     public void handleGridPointsForScenario27() throws URISyntaxException, IOException {
         final File dblFile = getResourceAsFile(SCENARIO_27_DBL_NAME);
         final File hdrFile = getResourceAsFile(SCENARIO_27_HDR_NAME);
-        final DataFormat dblFormat = DataFormatRegistry.getInstance().getDataFormat(hdrFile);
+        final DataFormat dblFormat = DDDB.getInstance().getDataFormat(hdrFile);
         final SmosFile sourceFile = new SmosFile(hdrFile, dblFile, dblFormat);
 
         final SequenceData sourceGridPointList = sourceFile.getGridPointList();
