@@ -563,14 +563,14 @@ public class ProductFactory {
     public final Product createProduct(ExplorerFile explorerFile) throws IOException {
         final String productName = FileUtils.getFilenameWithoutExtension(explorerFile.getHdrFile());
         final String productType = explorerFile.getFormat().getName().substring(12, 22);
-        final Dimension dimension = ProductFactoryHelper.getSceneRasterDimension();
+        final Dimension dimension = ProductHelper.getSceneRasterDimension();
         final Product product = new Product(productName, productType, dimension.width, dimension.height);
 
         product.setFileLocation(explorerFile.getDblFile());
         product.setPreferredTileSize(512, 512);
-        ProductFactoryHelper.addMetadata(product.getMetadataRoot(), explorerFile);
+        ProductHelper.addMetadata(product.getMetadataRoot(), explorerFile);
 
-        final MapInfo mapInfo = ProductFactoryHelper.createMapInfo(ProductFactoryHelper.getSceneRasterDimension());
+        final MapInfo mapInfo = ProductHelper.createMapInfo(ProductHelper.getSceneRasterDimension());
         product.setGeoCoding(new MapGeoCoding(mapInfo));
 
         addBands(product, explorerFile);

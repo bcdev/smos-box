@@ -168,12 +168,12 @@ public class DDDB {
         return flagDescriptorMap.get(identifier);
     }
 
-    private URL getSchemaResource(String formatName) {
-        if (formatName == null || !formatName.matches(SmosConstants.SCHEMA_NAMING_CONVENTION)) {
+    private URL getSchemaResource(String schemaName) {
+        if (schemaName == null || !schemaName.matches(SmosConstants.SCHEMA_NAMING_CONVENTION)) {
             return null;
         }
 
-        return getClass().getResource(pathBuilder.buildPath(formatName, "schemas", ".binXschema.xml"));
+        return getClass().getResource(pathBuilder.buildPath(schemaName, "schemas", ".binXschema.xml"));
     }
 
     private BinX createBinX(String name) {

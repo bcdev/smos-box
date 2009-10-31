@@ -30,9 +30,9 @@ import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.Random;
 
-class ProductFactoryHelper {
+class ProductHelper {
 
-    private ProductFactoryHelper() {
+    private ProductHelper() {
     }
 
     static ImageInfo createImageInfo(Band band, BandDescriptor descriptor) {

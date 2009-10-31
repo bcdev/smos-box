@@ -28,10 +28,10 @@ public abstract class ExplorerFile {
     private final CompoundData dataBlock;
     private volatile Future<Area> envelopeFuture;
 
-    protected ExplorerFile(File hdrFile, File dblFile, DataFormat format) throws FileNotFoundException {
+    protected ExplorerFile(File hdrFile, File dblFile, DataFormat format) throws IOException {
         this.hdrFile = hdrFile;
         this.dblFile = dblFile;
-        this.format = format;
+        this.format = DDDB.getInstance().getDataFormat(hdrFile);
         dataContext = format.createContext(dblFile, "r");
         dataBlock = dataContext.getData();
     }

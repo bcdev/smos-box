@@ -45,7 +45,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 /**
- * Represents a SMOS product file providing data on the DGG.
+ * Represents a SMOS DGG product file.
  *
  * @author Ralf Quast
  * @version $Revision$ $Date$
@@ -173,72 +173,71 @@ public class SmosFile extends ExplorerFile {
     protected Product createProduct() throws IOException {
         final String productName = FileUtils.getFilenameWithoutExtension(getHdrFile());
         final String productType = getFormat().getName().substring(12, 22);
-        final Dimension dimension = ProductFactoryHelper.getSceneRasterDimension();
+        final Dimension dimension = ProductHelper.getSceneRasterDimension();
         final Product product = new Product(productName, productType, dimension.width, dimension.height);
 
         product.setFileLocation(getDblFile());
         product.setPreferredTileSize(512, 512);
-        ProductFactoryHelper.addMetadata(product.getMetadataRoot(), this);
+        ProductHelper.addMetadata(product.getMetadataRoot(), this);
 
-        final MapInfo mapInfo = ProductFactoryHelper.createMapInfo(ProductFactoryHelper.getSceneRasterDimension());
+        final MapInfo mapInfo = ProductHelper.createMapInfo(ProductHelper.getSceneRasterDimension());
         product.setGeoCoding(new MapGeoCoding(mapInfo));
-        addBands(product, this);
+        addBands(product);
 
         return product;
     }
 
-    private void addBands(Product product, ExplorerFile explorerFile) {
-        if (!(explorerFile instanceof SmosFile)) {
-            throw new IllegalArgumentException("SMOS DGG file expected.");
-        }
-
-        final String formatName = explorerFile.getFormat().getName();
+    private void addBands(Product product) {
+        final String formatName = getFormat().getName();
         final Family<BandDescriptor> descriptors = DDDB.getInstance().getBandDescriptors(formatName);
 
-        for (final BandDescriptor descriptor : descriptors.asList()) {
-            addBand(product, (SmosFile) explorerFile, descriptor);
+        if (descriptors != null) {
+            for (final BandDescriptor descriptor : descriptors.asList()) {
+                addBand(product, descriptor);
+            }
         }
     }
 
-    private Band addBand(Product product, SmosFile smosFile, BandDescriptor descriptor) {
-        final CompoundType compoundDataType = smosFile.getGridPointType();
+    private void addBand(Product product, BandDescriptor descriptor) {
+        final CompoundType compoundDataType = getGridPointType();
         final int memberIndex = compoundDataType.getMemberIndex(descriptor.getMemberName());
-        final CompoundMember member = compoundDataType.getMember(memberIndex);
 
-        final int dataType = ProductFactoryHelper.getDataType(member.getType());
-        final Band band = product.addBand(descriptor.getBandName(), dataType);
+        if (memberIndex >= 0) {
+            final CompoundMember member = compoundDataType.getMember(memberIndex);
 
-        band.setScalingOffset(descriptor.getScalingOffset());
-        band.setScalingFactor(descriptor.getScalingFactor());
-        if (descriptor.hasFillValue()) {
-            band.setNoDataValueUsed(true);
-            band.setNoDataValue(descriptor.getFillValue());
-        }
-        if (!descriptor.getValidPixelExpression().isEmpty()) {
-            band.setValidPixelExpression(descriptor.getValidPixelExpression());
-        }
-        if (!descriptor.getUnit().isEmpty()) {
-            band.setUnit(descriptor.getUnit());
-        }
-        if (!descriptor.getDescription().isEmpty()) {
-            band.setDescription(descriptor.getDescription());
-        }
-        if (descriptor.getFlagDescriptors() != null) {
-            ProductFactoryHelper.addFlagsAndMasks(product, band, descriptor.getFlagCodingName(),
-                                                  descriptor.getFlagDescriptors());
-        }
+            final int dataType = ProductHelper.getDataType(member.getType());
+            final Band band = product.addBand(descriptor.getBandName(), dataType);
 
-        final FieldValueProvider valueProvider = createValueProvider(smosFile, descriptor);
-        band.setSourceImage(createSourceImage(band, valueProvider));
-        band.setImageInfo(ProductFactoryHelper.createImageInfo(band, descriptor));
+            band.setScalingOffset(descriptor.getScalingOffset());
+            band.setScalingFactor(descriptor.getScalingFactor());
+            if (descriptor.hasFillValue()) {
+                band.setNoDataValueUsed(true);
+                band.setNoDataValue(descriptor.getFillValue());
+            }
+            if (!descriptor.getValidPixelExpression().isEmpty()) {
+                band.setValidPixelExpression(descriptor.getValidPixelExpression());
+            }
+            if (!descriptor.getUnit().isEmpty()) {
+                band.setUnit(descriptor.getUnit());
+            }
+            if (!descriptor.getDescription().isEmpty()) {
+                band.setDescription(descriptor.getDescription());
+            }
+            if (descriptor.getFlagDescriptors() != null) {
+                ProductHelper.addFlagsAndMasks(product, band, descriptor.getFlagCodingName(),
+                                               descriptor.getFlagDescriptors());
+            }
 
-        return band;
+            final FieldValueProvider valueProvider = createValueProvider(descriptor);
+            band.setSourceImage(createSourceImage(band, valueProvider));
+            band.setImageInfo(ProductHelper.createImageInfo(band, descriptor));
+        }
     }
 
-    private FieldValueProvider createValueProvider(SmosFile smosFile, BandDescriptor descriptor) {
+    private FieldValueProvider createValueProvider(BandDescriptor descriptor) {
         switch (descriptor.getSampleModel()) {
         case 1:
-            return new DggFieldValueProvider(smosFile, descriptor.getMemberName()) {
+            return new DggFieldValueProvider(this, descriptor.getMemberName()) {
                 @Override
                 public int getValue(int gridPointIndex, int noDataValue) {
                     try {
@@ -250,7 +249,7 @@ public class SmosFile extends ExplorerFile {
                 }
             };
         case 2:
-            return new DggFieldValueProvider(smosFile, descriptor.getMemberName()) {
+            return new DggFieldValueProvider(this, descriptor.getMemberName()) {
                 @Override
                 public int getValue(int gridPointIndex, int noDataValue) {
                     try {
@@ -262,7 +261,7 @@ public class SmosFile extends ExplorerFile {
                 }
             };
         default:
-            return new DggFieldValueProvider(smosFile, descriptor.getMemberName());
+            return new DggFieldValueProvider(this, descriptor.getMemberName());
         }
     }
 

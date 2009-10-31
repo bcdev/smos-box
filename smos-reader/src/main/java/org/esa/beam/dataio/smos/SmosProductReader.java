@@ -18,7 +18,7 @@ import java.text.MessageFormat;
 
 public class SmosProductReader extends AbstractProductReader {
 
-    private ExplorerFile smosFile;
+    private SmosFile smosFile;
 
     public SmosProductReader(ProductReaderPlugIn readerPlugIn) {
         super(readerPlugIn);
