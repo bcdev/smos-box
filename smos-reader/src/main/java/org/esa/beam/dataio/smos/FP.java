@@ -19,14 +19,14 @@ abstract class FP implements FieldValueProvider {
     protected FP(Product product, Map<String, FieldValueProvider> valueProviderMap,
                  boolean accuracy, boolean imaginary) {
         this.imaginary = imaginary;
-        frxProvider = new ScalingDecorator(valueProviderMap.get("Faraday_Rotation_Angle_X"),
+        frxProvider = new Scaler(valueProviderMap.get("Faraday_Rotation_Angle_X"),
                                            product.getBand("Faraday_Rotation_Angle_X"));
-        grxProvider = new ScalingDecorator(valueProviderMap.get("Geometric_Rotation_Angle_X"),
+        grxProvider = new Scaler(valueProviderMap.get("Geometric_Rotation_Angle_X"),
                                            product.getBand("Geometric_Rotation_Angle_X"));
 
-        fryProvider = new ScalingDecorator(valueProviderMap.get("Faraday_Rotation_Angle_Y"),
+        fryProvider = new Scaler(valueProviderMap.get("Faraday_Rotation_Angle_Y"),
                                            product.getBand("Faraday_Rotation_Angle_Y"));
-        gryProvider = new ScalingDecorator(valueProviderMap.get("Geometric_Rotation_Angle_Y"),
+        gryProvider = new Scaler(valueProviderMap.get("Geometric_Rotation_Angle_Y"),
                                            product.getBand("Geometric_Rotation_Angle_Y"));
 
         final String quantity;

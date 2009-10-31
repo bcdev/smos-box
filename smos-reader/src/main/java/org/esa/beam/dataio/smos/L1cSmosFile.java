@@ -31,13 +31,13 @@ import java.text.MessageFormat;
  * @version $Revision$ $Date$
  * @since SMOS-Box 1.0
  */
-public abstract class L1cSmosFile extends SmosDggFile {
+public abstract class L1cSmosFile extends SmosFile {
 
     protected final int btDataListIndex;
     protected final CompoundType btDataType;
 
-    public L1cSmosFile(File file, DataFormat format) throws IOException {
-        super(file, format);
+    public L1cSmosFile(File hdrFile, File dblFile, DataFormat format) throws IOException {
+        super(hdrFile, dblFile, format);
 
         btDataListIndex = getGridPointType().getMemberIndex(SmosConstants.BT_DATA_LIST_NAME);
         if (btDataListIndex == -1) {

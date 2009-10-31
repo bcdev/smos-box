@@ -14,33 +14,33 @@
  */
 package org.esa.beam.dataio.smos;
 
-import java.io.IOException;
 import java.awt.geom.Area;
+import java.io.IOException;
 
 /**
  * Provides the value of a certain field in the grid point data records
- * of a SMOS product file.
+ * of a SMOS DGG product file.
  *
  * @author Ralf Quast
  * @version $Revision$ $Date$
  * @since SMOS-Box 1.0
  */
-public class DggValueProvider implements FieldValueProvider {
+public class DggFieldValueProvider implements FieldValueProvider {
 
-    private final SmosDggFile smosFile;
+    private final SmosFile smosFile;
     private final int memberIndex;
 
-    DggValueProvider(SmosDggFile smosFile, int memberIndex) {
+    DggFieldValueProvider(SmosFile smosFile, int memberIndex) {
         this.smosFile = smosFile;
         this.memberIndex = memberIndex;
     }
 
-    DggValueProvider(SmosDggFile smosFile, String memberName) {
+    DggFieldValueProvider(SmosFile smosFile, String memberName) {
         this.smosFile = smosFile;
         this.memberIndex = smosFile.getGridPointType().getMemberIndex(memberName);
     }
 
-    public final SmosDggFile getSmosFile() {
+    public final SmosFile getSmosFile() {
         return smosFile;
     }
 
@@ -50,14 +50,14 @@ public class DggValueProvider implements FieldValueProvider {
 
     @Override
     public final Area getRegion() {
-        return smosFile.getRegion();
+        return smosFile.getEnvelope();
     }
 
     @Override
     public final int getGridPointIndex(int seqnum) {
         return smosFile.getGridPointIndex(seqnum);
     }
-    
+
     @Override
     public byte getValue(int gridPointIndex, byte noDataValue) {
         try {

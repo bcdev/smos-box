@@ -3,7 +3,7 @@ package org.esa.beam.smos.visat.export;
 import com.bc.ceres.binio.CompoundData;
 import com.bc.ceres.binio.DataContext;
 import com.bc.ceres.binio.DataFormat;
-import org.esa.beam.dataio.smos.SmosDggFile;
+import org.esa.beam.dataio.smos.SmosFile;
 import org.esa.beam.util.io.FileUtils;
 
 import java.io.File;
@@ -24,8 +24,8 @@ class EEExportStream implements GridPointFilterStream {
     }
 
     @Override
-    public void startFile(SmosDggFile sourceFile) throws FileNotFoundException {
-        final File sourceDblFile = sourceFile.getFile();
+    public void startFile(SmosFile sourceFile) throws FileNotFoundException {
+        final File sourceDblFile = sourceFile.getDblFile();
         targetDblFile = getTargetDblFile(sourceDblFile);
         final DataFormat targetFormat = sourceFile.getFormat();
 
@@ -34,9 +34,9 @@ class EEExportStream implements GridPointFilterStream {
     }
 
     @Override
-    public void stopFile(SmosDggFile sourceFile) throws IOException {
+    public void stopFile(SmosFile sourceFile) throws IOException {
         try {
-            final File sourceHdrFile = getSourceHdrFile(sourceFile.getFile());
+            final File sourceHdrFile = getSourceHdrFile(sourceFile.getDblFile());
             targetHdrFile = getTargetHdrFile(sourceHdrFile);
 
             final EEHdrFilePatcher patcher = new EEHdrFilePatcher();

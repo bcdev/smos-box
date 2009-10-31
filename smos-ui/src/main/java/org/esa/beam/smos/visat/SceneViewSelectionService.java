@@ -3,9 +3,9 @@ package org.esa.beam.smos.visat;
 import com.bc.ceres.core.Assert;
 import com.bc.ceres.glayer.support.ImageLayer;
 import com.bc.ceres.glevel.MultiLevelImage;
-import org.esa.beam.dataio.smos.SmosDggFile;
-import org.esa.beam.dataio.smos.SmosProductReader;
 import org.esa.beam.dataio.smos.SmosFile;
+import org.esa.beam.dataio.smos.SmosProductReader;
+import org.esa.beam.dataio.smos.ExplorerFile;
 import org.esa.beam.framework.dataio.ProductReader;
 import org.esa.beam.framework.datamodel.Band;
 import org.esa.beam.framework.datamodel.Product;
@@ -70,14 +70,14 @@ public class SceneViewSelectionService {
         return sceneView != null ? sceneView.getProduct() : null;
     }
 
-    public SmosDggFile getSelectedSmosFile() {
+    public SmosFile getSelectedSmosFile() {
         final Product product = getSelectedSmosProduct();
         if (product != null) {
             final ProductReader productReader = product.getProductReader();
             Assert.state(productReader instanceof SmosProductReader, "productReader instanceof SmosProductReader");
-            final SmosFile smosFile = ((SmosProductReader) productReader).getSmosFile();
-            if (smosFile instanceof SmosDggFile) {
-                return (SmosDggFile) smosFile;
+            final ExplorerFile smosFile = ((SmosProductReader) productReader).getSmosFile();
+            if (smosFile instanceof SmosFile) {
+                return (SmosFile) smosFile;
             }
         }
         

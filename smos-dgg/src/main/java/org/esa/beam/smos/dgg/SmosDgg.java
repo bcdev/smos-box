@@ -34,7 +34,7 @@ public class SmosDgg {
         return Holder.instance;
     }
 
-    public static int smosGridPointIdToDggSeqnum(int gridPointId) {
+    public static int gridPointIdToDggSeqnum(int gridPointId) {
         final int a = 1000000;
         final int b = 262144;
 

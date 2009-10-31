@@ -44,7 +44,7 @@ public class L1cFieldValueProvider implements FieldValueProvider {
             final L1cScienceSmosFile scienceSmosFile = (L1cScienceSmosFile) smosFile;
             return new Area(scienceSmosFile.getSnapshotInfo().getSnapshotRegion(snapshotId));
         } else {
-            return smosFile.getRegion();
+            return smosFile.getEnvelope();
         }
     }
 

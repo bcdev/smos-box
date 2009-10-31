@@ -7,7 +7,7 @@ import com.bc.ceres.binio.SequenceData;
 import com.bc.ceres.binio.util.ByteArrayIOHandler;
 import com.bc.ceres.binio.util.DataPrinter;
 import static junit.framework.Assert.assertEquals;
-import org.esa.beam.dataio.smos.SmosDggFile;
+import org.esa.beam.dataio.smos.SmosFile;
 import org.esa.beam.dataio.smos.DataFormatRegistry;
 import org.esa.beam.dataio.smos.SmosConstants;
 import org.junit.Test;
@@ -28,7 +28,7 @@ public class EEExportGridPointHandlerTest {
         final File dblFile = getResourceAsFile(SCENARIO_27_DBL_NAME);
         final File hdrFile = getResourceAsFile(SCENARIO_27_HDR_NAME);
         final DataFormat dblFormat = DataFormatRegistry.getInstance().getDataFormat(hdrFile);
-        final SmosDggFile sourceFile = new SmosDggFile(dblFile, dblFormat);
+        final SmosFile sourceFile = new SmosFile(hdrFile, dblFile, dblFormat);
 
         final SequenceData sourceGridPointList = sourceFile.getGridPointList();
         assertEquals(5533, sourceGridPointList.getElementCount());

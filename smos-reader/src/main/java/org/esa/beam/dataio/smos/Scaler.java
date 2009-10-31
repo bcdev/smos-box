@@ -4,12 +4,12 @@ import org.esa.beam.framework.datamodel.Scaling;
 
 import java.awt.geom.Area;
 
-class ScalingDecorator implements FieldValueProvider {
+class Scaler implements FieldValueProvider {
 
     private final FieldValueProvider provider;
     private final Scaling scaling;
 
-    ScalingDecorator(FieldValueProvider provider, Scaling scaling) {
+    Scaler(FieldValueProvider provider, Scaling scaling) {
         this.provider = provider;
         this.scaling = scaling;
     }

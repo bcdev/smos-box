@@ -1,8 +1,8 @@
 package org.esa.beam.smos.visat.export;
 
 import com.bc.ceres.binio.*;
-import org.esa.beam.dataio.smos.SmosDggFile;
-import org.esa.beam.dataio.smos.SmosL1cProductFactory;
+import org.esa.beam.dataio.smos.SmosFile;
+import org.esa.beam.dataio.smos.ProductFactory;
 import org.esa.beam.dataio.smos.SmosConstants;
 
 import java.awt.geom.Point2D;
@@ -43,7 +43,7 @@ class EEExportGridPointHandler implements GridPointHandler {
 
         final String fomatName = targetContext.getFormat().getName();
         // @todo 2 tb/tb extend to L2 -DA products once they're supported
-        isL2File = SmosL1cProductFactory.is_L2_User_File(fomatName);
+        isL2File = ProductFactory.is_L2_User_File(fomatName);
     }
 
     @Override
@@ -101,7 +101,7 @@ class EEExportGridPointHandler implements GridPointHandler {
 //            final int days = utcData.getInt(0);
 //            final long seconds = utcData.getUInt(1);
 //            final long microSeconds = utcData.getUInt(2);
-//            timeTracker.track(SmosFile.getCfiDateInUtc(days, seconds, microSeconds));
+//            timeTracker.track(ExplorerFile.getCfiDateInUtc(days, seconds, microSeconds));
         } else {
             int index = gridPointData.getType().getMemberIndex(SmosConstants.BT_DATA_LIST_NAME);
             final SequenceData btDataList = gridPointData.getSequence(index);
@@ -159,7 +159,7 @@ class EEExportGridPointHandler implements GridPointHandler {
             final int days = utcData.getInt(0);
             final long seconds = utcData.getUInt(1);
             final long microSeconds = utcData.getUInt(2);
-            final Date snapShotTime = SmosDggFile.cfiDateToUtc(days, seconds, microSeconds);
+            final Date snapShotTime = SmosFile.cfiDateToUtc(days, seconds, microSeconds);
             final long snapShotId = snapShot.getUInt(1);
 
             snapshotIdTimeMap.put(snapShotId, snapShotTime);

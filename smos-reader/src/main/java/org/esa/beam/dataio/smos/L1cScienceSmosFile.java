@@ -55,8 +55,8 @@ public class L1cScienceSmosFile extends L1cSmosFile {
 
     private volatile Future<SnapshotInfo> snapshotInfoFuture;
 
-    public L1cScienceSmosFile(File file, DataFormat format, boolean fullPol) throws IOException {
-        super(file, format);
+    public L1cScienceSmosFile(File hdrFile, File dblFile, DataFormat format, boolean fullPol) throws IOException {
+        super(hdrFile, dblFile, format);
         this.fullPol = fullPol;
 
         flagsIndex = getBtDataType().getMemberIndex(SmosConstants.BT_FLAGS_NAME);

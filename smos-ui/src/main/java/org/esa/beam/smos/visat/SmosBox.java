@@ -5,7 +5,7 @@ import com.bc.ceres.glayer.Layer;
 import com.bc.ceres.glayer.LayerType;
 import com.bc.ceres.glayer.LayerTypeRegistry;
 import org.esa.beam.dataio.smos.L1cScienceSmosFile;
-import org.esa.beam.dataio.smos.SmosFile;
+import org.esa.beam.dataio.smos.ExplorerFile;
 import org.esa.beam.dataio.smos.SmosProductReader;
 import org.esa.beam.framework.dataio.ProductReader;
 import org.esa.beam.framework.datamodel.RasterDataNode;
@@ -95,7 +95,7 @@ public class SmosBox implements VisatPlugIn {
         if (raster != null) {
             final ProductReader productReader = raster.getProductReader();
             if (productReader instanceof SmosProductReader) {
-                final SmosFile smosFile = ((SmosProductReader) productReader).getSmosFile();
+                final ExplorerFile smosFile = ((SmosProductReader) productReader).getSmosFile();
                 if (smosFile instanceof L1cScienceSmosFile) {
                     return (L1cScienceSmosFile) smosFile;
                 }

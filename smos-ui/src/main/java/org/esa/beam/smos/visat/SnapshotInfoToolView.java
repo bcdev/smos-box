@@ -15,7 +15,7 @@ import com.bc.ceres.grender.Viewport;
 import org.esa.beam.dataio.smos.FieldValueProvider;
 import org.esa.beam.dataio.smos.L1cFieldValueProvider;
 import org.esa.beam.dataio.smos.L1cScienceSmosFile;
-import org.esa.beam.dataio.smos.SmosDggFile;
+import org.esa.beam.dataio.smos.SmosFile;
 import org.esa.beam.dataio.smos.SmosMultiLevelSource;
 import org.esa.beam.framework.datamodel.Band;
 import org.esa.beam.framework.datamodel.Product;
@@ -148,7 +148,7 @@ public class SnapshotInfoToolView extends SmosToolView {
     }
 
     private void updateTable(long snapshotId) {
-        final SmosDggFile selectedSmosFile = getSelectedSmosFile();
+        final SmosFile selectedSmosFile = getSelectedSmosFile();
         if (selectedSmosFile != null && selectedSmosFile instanceof L1cScienceSmosFile) {
             final L1cScienceSmosFile l1cScienceSmosFile = (L1cScienceSmosFile) selectedSmosFile;
             final int snapshotIndex = l1cScienceSmosFile.getSnapshotInfo().getSnapshotIndex(snapshotId);
@@ -203,7 +203,7 @@ public class SnapshotInfoToolView extends SmosToolView {
                         final int days = utcData.getInt(0);
                         final long seconds = utcData.getUInt(1);
                         final long microSeconds = utcData.getUInt(2);
-                        entry[1] = SmosDggFile.cfiDateToUtc(days, seconds, microSeconds);
+                        entry[1] = SmosFile.cfiDateToUtc(days, seconds, microSeconds);
                     } catch (IOException e) {
                         entry[1] = "Failed reading data";
                     }

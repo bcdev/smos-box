@@ -29,8 +29,8 @@ import java.io.IOException;
  */
 public class L1cBrowseSmosFile extends L1cSmosFile {
 
-    public L1cBrowseSmosFile(File file, DataFormat format) throws IOException {
-        super(file, format);
+    public L1cBrowseSmosFile(File hdrFile, File dblFile, DataFormat format) throws IOException {
+        super(hdrFile, dblFile, format);
     }
 
     @Override

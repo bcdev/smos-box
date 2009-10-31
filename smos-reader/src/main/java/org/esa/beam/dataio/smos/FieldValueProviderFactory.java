@@ -8,7 +8,7 @@ import java.io.IOException;
 
 class FieldValueProviderFactory {
 
-    static FieldValueProvider createProvider(SmosDggFile smosFile, int fieldIndex, Type type) {
+    static FieldValueProvider createProvider(SmosFile smosFile, int fieldIndex, Type type) {
         if (type.equals(SimpleType.BYTE)) {
             return new DefaultValueProvider(smosFile, fieldIndex);
         }
@@ -43,11 +43,11 @@ class FieldValueProviderFactory {
         throw new IllegalArgumentException("type = " + type);
     }
 
-    static FieldValueProvider createProviderForLoDWordOfLongField(final SmosDggFile smosFile, final int fieldIndex) {
+    static FieldValueProvider createProviderForLoDWordOfLongField(final SmosFile smosFile, final int fieldIndex) {
         return new LongValueProvider(smosFile, fieldIndex);
     }
 
-    static FieldValueProvider createProviderForHiDWordOfLongField(final SmosDggFile smosFile, final int fieldIndex) {
+    static FieldValueProvider createProviderForHiDWordOfLongField(final SmosFile smosFile, final int fieldIndex) {
         return new DefaultValueProvider(smosFile, fieldIndex) {
             @Override
             public int getValue(int gridPointIndex, int noDataValue) {
@@ -63,7 +63,7 @@ class FieldValueProviderFactory {
 
     private static class ValueProviderByte extends DefaultValueProvider {
 
-        ValueProviderByte(SmosDggFile smosFile, int fieldIndex) {
+        ValueProviderByte(SmosFile smosFile, int fieldIndex) {
             super(smosFile, fieldIndex);
         }
 
@@ -79,7 +79,7 @@ class FieldValueProviderFactory {
 
     private static class ValueProviderShort extends DefaultValueProvider {
 
-        ValueProviderShort(SmosDggFile smosFile, int fieldIndex) {
+        ValueProviderShort(SmosFile smosFile, int fieldIndex) {
             super(smosFile, fieldIndex);
         }
 
@@ -95,7 +95,7 @@ class FieldValueProviderFactory {
 
     private static class ValueProviderInt extends DefaultValueProvider {
 
-        ValueProviderInt(SmosDggFile smosFile, int fieldIndex) {
+        ValueProviderInt(SmosFile smosFile, int fieldIndex) {
             super(smosFile, fieldIndex);
         }
 
@@ -111,7 +111,7 @@ class FieldValueProviderFactory {
 
     private static class ValueProviderFloat extends DefaultValueProvider {
 
-        ValueProviderFloat(SmosDggFile smosFile, int fieldIndex) {
+        ValueProviderFloat(SmosFile smosFile, int fieldIndex) {
             super(smosFile, fieldIndex);
         }
 
@@ -127,7 +127,7 @@ class FieldValueProviderFactory {
 
     private static class DoubleValueProvider extends DefaultValueProvider {
 
-        DoubleValueProvider(SmosDggFile smosFile, int fieldIndex) {
+        DoubleValueProvider(SmosFile smosFile, int fieldIndex) {
             super(smosFile, fieldIndex);
         }
 
@@ -158,7 +158,7 @@ class FieldValueProviderFactory {
 
     private static class LongValueProvider extends DefaultValueProvider {
 
-        LongValueProvider(SmosDggFile smosFile, int fieldIndex) {
+        LongValueProvider(SmosFile smosFile, int fieldIndex) {
             super(smosFile, fieldIndex);
         }
 
@@ -174,15 +174,15 @@ class FieldValueProviderFactory {
 
     private static class DefaultValueProvider implements FieldValueProvider {
 
-        private final SmosDggFile smosFile;
+        private final SmosFile smosFile;
         private final int fieldIndex;
 
-        protected DefaultValueProvider(SmosDggFile smosFile, int fieldIndex) {
+        protected DefaultValueProvider(SmosFile smosFile, int fieldIndex) {
             this.smosFile = smosFile;
             this.fieldIndex = fieldIndex;
         }
 
-        public final SmosDggFile getSmosFile() {
+        public final SmosFile getSmosFile() {
             return smosFile;
         }
 
@@ -192,7 +192,7 @@ class FieldValueProviderFactory {
 
         @Override
         public final Area getRegion() {
-            return smosFile.getRegion();
+            return smosFile.getEnvelope();
         }
 
         @Override

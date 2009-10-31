@@ -21,7 +21,6 @@ import com.bc.ceres.binio.CompoundType;
 import com.bc.ceres.binio.SimpleType;
 import com.bc.ceres.binio.Type;
 import com.bc.ceres.glevel.MultiLevelImage;
-import com.bc.ceres.glevel.MultiLevelSource;
 import com.bc.ceres.glevel.support.DefaultMultiLevelImage;
 import com.bc.jexp.ParseException;
 import org.esa.beam.framework.datamodel.Band;
@@ -29,22 +28,26 @@ import org.esa.beam.framework.datamodel.BitmaskDef;
 import org.esa.beam.framework.datamodel.ColorPaletteDef;
 import org.esa.beam.framework.datamodel.FlagCoding;
 import org.esa.beam.framework.datamodel.ImageInfo;
+import org.esa.beam.framework.datamodel.MapGeoCoding;
 import org.esa.beam.framework.datamodel.MetadataAttribute;
 import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.framework.datamodel.ProductData;
 import org.esa.beam.framework.datamodel.VirtualBand;
 import org.esa.beam.framework.dataop.barithm.BandArithmetic;
+import org.esa.beam.framework.dataop.maptransf.MapInfo;
 import org.esa.beam.smos.dgg.SmosDgg;
+import org.esa.beam.util.io.FileUtils;
 
 import java.awt.Color;
+import java.awt.Dimension;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Random;
 
 @Deprecated
-public class SmosL1cProductFactory extends SmosProductFactory {
+public class ProductFactory {
 
-    @Override
-    protected void addBands(Product product, SmosFile smosFile) {
+    protected void addBands(Product product, ExplorerFile smosFile) {
         final String formatName = smosFile.getFormat().getName();
 
         addGridPointSequentialNumberBand(product);
@@ -68,15 +71,15 @@ public class SmosL1cProductFactory extends SmosProductFactory {
             addFullPolScienceBands(product, ((L1cSmosFile) smosFile).getBtDataType(), (L1cScienceSmosFile) smosFile);
         } else if (is_SMUDP_File(formatName)) {
             addL2SmFlagCodings(product);
-            addL2SmBandsFromCompound(product, ((SmosDggFile) smosFile).getGridPointType(), (SmosDggFile) smosFile);
+            addL2SmBandsFromCompound(product, ((SmosFile) smosFile).getGridPointType(), (SmosFile) smosFile);
         } else if (formatName.contains("MIR_OSDAP2")) {
             // todo: rq/rq flag codings
-            final CompoundType type = ((SmosDggFile) smosFile).getGridPointType();
+            final CompoundType type = ((SmosFile) smosFile).getGridPointType();
             // todo: rq/rq add bands
             System.out.println("count = " + type.getMemberCount());
         } else if (formatName.contains("MIR_SMDAP2")) {
             // todo: rq/rq flag codings
-            final CompoundType type = ((SmosDggFile) smosFile).getGridPointType();
+            final CompoundType type = ((SmosFile) smosFile).getGridPointType();
             // todo: rq/rq add bands
             System.out.println("count = " + type.getMemberCount());
         } else {
@@ -84,13 +87,6 @@ public class SmosL1cProductFactory extends SmosProductFactory {
         }
     }
 
-    @Override
-    protected MultiLevelSource createMultiLevelSource(Band band, FieldValueProvider valueProvider) {
-        // todo: rq/rq - implement
-        return null;
-    }
-
-    @Override
     protected void setQuicklookBandName(Product product) {
         // set quicklook band name to first BT band
         for (Band band : product.getBands()) {
@@ -113,7 +109,7 @@ public class SmosL1cProductFactory extends SmosProductFactory {
         return is_OSUDP_File(formatName) || is_SMUDP_File(formatName);
     }
 
-    private void addDualPolBrowseBands(Product product, CompoundType compoundDataType, SmosFile smosFile) {
+    private void addDualPolBrowseBands(Product product, CompoundType compoundDataType, ExplorerFile smosFile) {
         final CompoundMember[] members = compoundDataType.getMembers();
         final HashMap<String, FieldValueProvider> valueProviderMap = new HashMap<String, FieldValueProvider>();
 
@@ -351,7 +347,7 @@ public class SmosL1cProductFactory extends SmosProductFactory {
         }
     }
 
-    private void addL2SmBandsFromCompound(Product product, CompoundType compoundDataType, SmosDggFile smosFile) {
+    private void addL2SmBandsFromCompound(Product product, CompoundType compoundDataType, SmosFile smosFile) {
         final CompoundMember[] members = compoundDataType.getMembers();
 
         for (int fieldIndex = 0; fieldIndex < members.length; fieldIndex++) {
@@ -370,7 +366,7 @@ public class SmosL1cProductFactory extends SmosProductFactory {
     }
 
     private void addL1cBand(Product product, String bandName, int bandType, BandInfo bandInfo, int fieldIndex,
-                            int polMode, HashMap<String, FieldValueProvider> valueProviderMap, SmosFile smosFile) {
+                            int polMode, HashMap<String, FieldValueProvider> valueProviderMap, ExplorerFile smosFile) {
         final FieldValueProvider valueProvider =
                 new L1cFieldValueProvider((L1cSmosFile) smosFile, fieldIndex, polMode);
         final Band band = addBand(product, bandName, bandType, bandInfo, valueProvider);
@@ -384,9 +380,9 @@ public class SmosL1cProductFactory extends SmosProductFactory {
     }
 
     private void addL2SmBand(Product product, String bandName, int bandType, BandInfo bandInfo, int fieldIndex,
-                             SmosDggFile smosFile) {
+                             SmosFile smosFile) {
         final Band band = addBand(product, bandName, bandType, bandInfo,
-                                  new DggValueProvider(smosFile, fieldIndex));
+                                  new DggFieldValueProvider(smosFile, fieldIndex));
 
         final Random random = new Random(5489);
         if (bandName.equals("Confidence_Flags")) {
@@ -564,4 +560,22 @@ public class SmosL1cProductFactory extends SmosProductFactory {
         return new ImageInfo(new ColorPaletteDef(points));
     }
 
+    public final Product createProduct(ExplorerFile explorerFile) throws IOException {
+        final String productName = FileUtils.getFilenameWithoutExtension(explorerFile.getHdrFile());
+        final String productType = explorerFile.getFormat().getName().substring(12, 22);
+        final Dimension dimension = ProductFactoryHelper.getSceneRasterDimension();
+        final Product product = new Product(productName, productType, dimension.width, dimension.height);
+
+        product.setFileLocation(explorerFile.getDblFile());
+        product.setPreferredTileSize(512, 512);
+        ProductFactoryHelper.addMetadata(product.getMetadataRoot(), explorerFile);
+
+        final MapInfo mapInfo = ProductFactoryHelper.createMapInfo(ProductFactoryHelper.getSceneRasterDimension());
+        product.setGeoCoding(new MapGeoCoding(mapInfo));
+
+        addBands(product, explorerFile);
+        setQuicklookBandName(product);
+
+        return product;
+    }
 }

@@ -18,13 +18,13 @@ import java.text.MessageFormat;
 
 public class SmosProductReader extends AbstractProductReader {
 
-    private SmosFile smosFile;
+    private ExplorerFile smosFile;
 
     public SmosProductReader(ProductReaderPlugIn readerPlugIn) {
         super(readerPlugIn);
     }
 
-    public SmosFile getSmosFile() {
+    public ExplorerFile getSmosFile() {
         synchronized (this) {
             return smosFile;
         }
@@ -42,40 +42,40 @@ public class SmosProductReader extends AbstractProductReader {
                 throw new IOException(MessageFormat.format("File ''{0}'': Unknown SMOS data format", inputFile));
             }
             final String formatName = format.getName();
-            final SmosProductFactory factory;
+            final ProductFactory factory;
 
             if (isDualPolBrowseFormat(formatName)) {
-                smosFile = new L1cBrowseSmosFile(dblFile, format);
-                factory = new SmosL1cProductFactory();
+                smosFile = new L1cBrowseSmosFile(hdrFile, dblFile, format);
+                factory = new ProductFactory();
             } else if (isFullPolBrowseFormat(formatName)) {
-                smosFile = new L1cBrowseSmosFile(dblFile, format);
-                factory = new SmosL1cProductFactory();
+                smosFile = new L1cBrowseSmosFile(hdrFile, dblFile, format);
+                factory = new ProductFactory();
             } else if (isDualPolScienceFormat(formatName)) {
-                smosFile = new L1cScienceSmosFile(dblFile, format, false);
-                factory = new SmosL1cProductFactory();
+                smosFile = new L1cScienceSmosFile(hdrFile, dblFile, format, false);
+                factory = new ProductFactory();
             } else if (isFullPolScienceFormat(formatName)) {
-                smosFile = new L1cScienceSmosFile(dblFile, format, true);
-                factory = new SmosL1cProductFactory();
+                smosFile = new L1cScienceSmosFile(hdrFile, dblFile, format, true);
+                factory = new ProductFactory();
             } else if (isOsUserFormat(formatName)) {
-                smosFile = new SmosDggFile(dblFile, format);
-                factory = new SmosDggProductFactory();
+                smosFile = new SmosFile(hdrFile, dblFile, format);
+                return smosFile.createProduct();
             } else if (isSmUserFormat(formatName)) {
-                smosFile = new SmosDggFile(dblFile, format);
-                factory = new SmosL1cProductFactory();
+                smosFile = new SmosFile(hdrFile, dblFile, format);
+                factory = new ProductFactory();
             } else if (isOsAnalysisFormat(formatName)) {
-                smosFile = new SmosDggFile(dblFile, format);
-                factory = new SmosL1cProductFactory();
+                smosFile = new SmosFile(hdrFile, dblFile, format);
+                factory = new ProductFactory();
             } else if (isSmAnalysisFormat(formatName)) {
-                smosFile = new SmosDggFile(dblFile, format);
-                factory = new SmosL1cProductFactory();
+                smosFile = new SmosFile(hdrFile, dblFile, format);
+                factory = new ProductFactory();
             } else if (isEcmwfFormat(formatName)) {
-                smosFile = new SmosDggFile(dblFile, format);
-                factory = new SmosDggProductFactory();
+                smosFile = new SmosFile(hdrFile, dblFile, format);
+                return smosFile.createProduct();
             } else {
                 throw new IOException("Unknown SMOS format: " + formatName);
             }
 
-            return factory.createProduct(hdrFile, smosFile);
+            return factory.createProduct(smosFile);
         }
     }
 

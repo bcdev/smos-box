@@ -18,9 +18,9 @@ package org.esa.beam.smos.visat.export;
 
 import com.bc.ceres.core.ProgressMonitor;
 import com.bc.ceres.core.SubProgressMonitor;
-import org.esa.beam.dataio.smos.SmosDggFile;
-import org.esa.beam.dataio.smos.SmosProductReader;
 import org.esa.beam.dataio.smos.SmosFile;
+import org.esa.beam.dataio.smos.SmosProductReader;
+import org.esa.beam.dataio.smos.ExplorerFile;
 import org.esa.beam.framework.dataio.DecodeQualification;
 import org.esa.beam.framework.dataio.ProductIO;
 import org.esa.beam.framework.dataio.ProductReader;
@@ -55,9 +55,9 @@ class GridPointFilterStreamHandler {
         ProductReader productReader = product.getProductReader();
         if (productReader instanceof SmosProductReader) {
             SmosProductReader smosProductReader = (SmosProductReader) productReader;
-            SmosFile smosFile = smosProductReader.getSmosFile();
-            if (smosFile instanceof SmosDggFile) {
-                smosFileProcessor.process((SmosDggFile) smosFile, pm);
+            ExplorerFile smosFile = smosProductReader.getSmosFile();
+            if (smosFile instanceof SmosFile) {
+                smosFileProcessor.process((SmosFile) smosFile, pm);
             }
         }
     }

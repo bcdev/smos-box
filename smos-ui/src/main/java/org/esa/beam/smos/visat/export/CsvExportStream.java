@@ -25,7 +25,7 @@ import com.bc.ceres.binio.SimpleType;
 import com.bc.ceres.binio.Type;
 import org.esa.beam.dataio.smos.BandInfo;
 import org.esa.beam.dataio.smos.BandInfoRegistry;
-import org.esa.beam.dataio.smos.SmosDggFile;
+import org.esa.beam.dataio.smos.SmosFile;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -48,8 +48,8 @@ class CsvExportStream implements GridPointFilterStream {
     }
 
     @Override
-    public void startFile(SmosDggFile smosfile) {
-        printWriter.println(smosfile.getFile().getName());
+    public void startFile(SmosFile smosfile) {
+        printWriter.println(smosfile.getDblFile().getName());
 
         printTypeHeader(smosfile.getGridPointType());
         printWriter.println();
@@ -78,7 +78,7 @@ class CsvExportStream implements GridPointFilterStream {
     }
 
     @Override
-    public void stopFile(SmosDggFile smosfile) {
+    public void stopFile(SmosFile smosfile) {
         printWriter.println("-----------------------------------------------");
     }
 
