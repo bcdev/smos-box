@@ -10,6 +10,7 @@ import org.jdom.Namespace;
 import org.jdom.filter.Filter;
 import org.jdom.input.SAXBuilder;
 
+import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,7 +28,6 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.awt.Color;
 
 /**
  * Data descriptor data base for SMOS product files.
@@ -465,7 +465,8 @@ public class DDDB {
         }
     }
 
-    static class FlagDescriptorImpl implements FlagDescriptor {
+    private static class FlagDescriptorImpl implements FlagDescriptor {
+
         private final boolean visible;
         private final String flagName;
         private final int mask;
@@ -492,7 +493,6 @@ public class DDDB {
             return mask;
         }
 
-        
         @Override
         public final boolean isVisible() {
             return visible;

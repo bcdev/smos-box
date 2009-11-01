@@ -83,5 +83,4 @@ abstract class DP implements FieldValueProvider {
     }
 
     protected abstract double compute(double btx, double bty, double aa, double bb);
-
 }
