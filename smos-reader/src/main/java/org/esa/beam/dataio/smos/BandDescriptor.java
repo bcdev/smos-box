@@ -6,6 +6,8 @@ public interface BandDescriptor {
 
     String getMemberName();
 
+    boolean isVisible();
+
     int getSampleModel();
 
     double getScalingOffset();
@@ -34,5 +36,5 @@ public interface BandDescriptor {
 
     String getFlagCodingName();
 
-    Family<FlagDescriptor> getFlagDescriptors();
+    Family<FlagDescriptorI> getFlagDescriptors();
 }

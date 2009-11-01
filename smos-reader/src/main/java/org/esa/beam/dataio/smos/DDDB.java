@@ -27,6 +27,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.awt.Color;
 
 /**
  * Data descriptor data base for SMOS product files.
@@ -141,7 +142,7 @@ public class DDDB {
         return bandDescriptorMap.get(identifier);
     }
 
-    public Family<FlagDescriptor> getFlagDescriptors(String identifier) {
+    public Family<FlagDescriptorI> getFlagDescriptors(String identifier) {
         if (!flagDescriptorMap.containsKey(identifier)) {
             final InputStream inputStream = getFlagDescriptorResource(identifier);
 
@@ -252,6 +253,20 @@ public class DDDB {
         return getClass().getResourceAsStream(pathBuilder.buildPath(identifier, "flags", ".csv"));
     }
 
+    private static class ResourcePathBuilder {
+
+        String buildPath(String identifier, String root, String appendix) {
+            final String fc = identifier.substring(12, 16);
+            final String sd = identifier.substring(16, 22);
+
+            final StringBuilder pathBuilder = new StringBuilder();
+            pathBuilder.append(root).append("/").append(fc).append("/").append(sd).append("/").append(identifier);
+            pathBuilder.append(appendix);
+
+            return pathBuilder.toString();
+        }
+    }
+
     // Initialization on demand holder idiom
     private static class Holder {
 
@@ -263,7 +278,7 @@ public class DDDB {
         private final List<BandDescriptor> descriptorList;
         private final Map<String, BandDescriptor> descriptorMap;
 
-        private BandDescriptors(List<String[]> recordList) {
+        BandDescriptors(List<String[]> recordList) {
             descriptorList = new ArrayList<BandDescriptor>(recordList.size());
             descriptorMap = new HashMap<String, BandDescriptor>(recordList.size());
 
@@ -285,35 +300,36 @@ public class DDDB {
         }
     }
 
-    private static class FlagDescriptors implements Family<FlagDescriptor> {
+    private static class FlagDescriptors implements Family<FlagDescriptorI> {
 
-        private final List<FlagDescriptor> descriptorList;
-        private final Map<String, FlagDescriptor> descriptorMap;
+        private final List<FlagDescriptorI> descriptorList;
+        private final Map<String, FlagDescriptorI> descriptorMap;
 
-        private FlagDescriptors(List<String[]> recordList) {
-            descriptorList = new ArrayList<FlagDescriptor>(recordList.size());
-            descriptorMap = new HashMap<String, FlagDescriptor>(recordList.size());
+        FlagDescriptors(List<String[]> recordList) {
+            descriptorList = new ArrayList<FlagDescriptorI>(recordList.size());
+            descriptorMap = new HashMap<String, FlagDescriptorI>(recordList.size());
 
             for (final String[] tokens : recordList) {
-                final FlagDescriptor record = new FlagDescriptor(tokens);
+                final FlagDescriptorImpl record = new FlagDescriptorImpl(tokens);
                 descriptorList.add(record);
                 descriptorMap.put(record.getFlagName(), record);
             }
         }
 
         @Override
-        public final List<FlagDescriptor> asList() {
+        public final List<FlagDescriptorI> asList() {
             return Collections.unmodifiableList(descriptorList);
         }
 
         @Override
-        public final FlagDescriptor getMember(String flagName) {
+        public final FlagDescriptorI getMember(String flagName) {
             return descriptorMap.get(flagName);
         }
     }
 
     private static class BandDescriptorImpl implements BandDescriptor {
 
+        private final boolean visible;
         private final String bandName;
         private final String memberName;
         private final int sampleModel;
@@ -327,34 +343,35 @@ public class DDDB {
         private final String unit;
         private final String description;
         private final String flagCodingName;
-        private final Family<FlagDescriptor> flagDescriptors;
+        private final Family<FlagDescriptorI> flagDescriptors;
 
         private BandDescriptorImpl(String[] tokens) {
-            bandName = getString(tokens[1]);
-            memberName = getString(tokens[2], bandName);
-            sampleModel = getInt(tokens[3], 0);
+            visible = parseBoolean(tokens[0], true);
+            bandName = parseString(tokens[1]);
+            memberName = parseString(tokens[2], bandName);
+            sampleModel = parseInt(tokens[3], 0);
 
-            scalingOffset = getDouble(tokens[4], 0.0);
-            scalingFactor = getDouble(tokens[5], 1.0);
+            scalingOffset = parseDouble(tokens[4], 0.0);
+            scalingFactor = parseDouble(tokens[5], 1.0);
 
-            typicalMin = getDouble(tokens[6], Double.NEGATIVE_INFINITY);
-            typicalMax = getDouble(tokens[7], Double.POSITIVE_INFINITY);
-            cyclic = getBoolean(tokens[8], false);
+            typicalMin = parseDouble(tokens[6], Double.NEGATIVE_INFINITY);
+            typicalMax = parseDouble(tokens[7], Double.POSITIVE_INFINITY);
+            cyclic = parseBoolean(tokens[8], false);
 
-            fillValue = getDouble(tokens[9], Double.NaN);
-            validPixelExpression = getString(tokens[10], "").replaceAll("x", bandName);
+            fillValue = parseDouble(tokens[9], Double.NaN);
+            validPixelExpression = parseString(tokens[10], "").replaceAll("x", bandName);
 
-            unit = getString(tokens[11], "");
-            description = getString(tokens[12], "");
-            flagCodingName = getString(tokens[13], "");
+            unit = parseString(tokens[11], "");
+            description = parseString(tokens[12], "");
+            flagCodingName = parseString(tokens[13], "");
             flagDescriptors = getFlagDescriptors(tokens[14]);
         }
 
-        private Family<FlagDescriptor> getFlagDescriptors(String token) {
+        private Family<FlagDescriptorI> getFlagDescriptors(String token) {
             if (flagCodingName.isEmpty()) {
                 return null;
             }
-            return getInstance().getFlagDescriptors(getString(token));
+            return getInstance().getFlagDescriptors(parseString(token));
         }
 
         @Override
@@ -365,6 +382,11 @@ public class DDDB {
         @Override
         public final String getMemberName() {
             return memberName;
+        }
+
+        @Override
+        public boolean isVisible() {
+            return visible;
         }
 
         @Override
@@ -438,55 +460,105 @@ public class DDDB {
         }
 
         @Override
-        public final Family<FlagDescriptor> getFlagDescriptors() {
+        public final Family<FlagDescriptorI> getFlagDescriptors() {
             return flagDescriptors;
-        }
-
-        @SuppressWarnings({"SimplifiableIfStatement"})
-        private static boolean getBoolean(String token, boolean defaultValue) {
-            if ("*".equals(token.trim())) {
-                return defaultValue;
-            }
-            return Boolean.parseBoolean(token);
-        }
-
-        private static double getDouble(String token, double defaultValue) {
-            if ("*".equals(token.trim())) {
-                return defaultValue;
-            }
-            return Double.parseDouble(token);
-        }
-
-        private static int getInt(String token, int defaultValue) {
-            if ("*".equals(token.trim())) {
-                return defaultValue;
-            }
-            return Integer.parseInt(token);
-        }
-
-        private static String getString(String token) {
-            return token.trim();
-        }
-
-        private static String getString(String token, String defaultValue) {
-            if ("*".equals(token.trim())) {
-                return defaultValue;
-            }
-            return token.trim();
         }
     }
 
-    static class ResourcePathBuilder {
+    static class FlagDescriptorImpl implements FlagDescriptorI {
+        private final boolean visible;
+        private final String flagName;
+        private final int mask;
+        private final Color color;
+        private final double transparency;
+        private final String description;
 
-        String buildPath(String identifier, String root, String appendix) {
-            final String fc = identifier.substring(12, 16);
-            final String sd = identifier.substring(16, 22);
-
-            final StringBuilder pathBuilder = new StringBuilder();
-            pathBuilder.append(root).append("/").append(fc).append("/").append(sd).append("/").append(identifier);
-            pathBuilder.append(appendix);
-
-            return pathBuilder.toString();
+        FlagDescriptorImpl(String[] tokens) {
+            visible = parseBoolean(tokens[1], false);
+            flagName = parseString(tokens[1]);
+            mask = parseHex(tokens[2], 0);
+            color = parseColor(tokens[3], null);
+            transparency = parseDouble(tokens[4], 0.5);
+            description = parseString(tokens[5], "");
         }
+
+        @Override
+        public final String getFlagName() {
+            return flagName;
+        }
+
+        @Override
+        public final int getMask() {
+            return mask;
+        }
+
+        
+        @Override
+        public final boolean isVisible() {
+            return visible;
+        }
+
+        @Override
+        public final Color getColor() {
+            return color;
+        }
+
+        @Override
+        public final double getTransparency() {
+            return transparency;
+        }
+
+        @Override
+        public final String getDescription() {
+            return description;
+        }
+    }
+
+    @SuppressWarnings({"SimplifiableIfStatement"})
+    private static boolean parseBoolean(String token, boolean defaultValue) {
+        if ("*".equals(token.trim())) {
+            return defaultValue;
+        }
+        return Boolean.parseBoolean(token);
+    }
+
+    private static Color parseColor(String token, Color defaultColor) {
+        if ("*".equals(token.trim())) {
+            return defaultColor;
+        }
+
+        return new Color(Integer.parseInt(token, 16));
+    }
+
+    private static double parseDouble(String token, double defaultValue) {
+        if ("*".equals(token.trim())) {
+            return defaultValue;
+        }
+        return Double.parseDouble(token);
+    }
+
+    private static int parseHex(String token, int defaultValue) {
+        if ("*".equals(token.trim())) {
+            return defaultValue;
+        }
+        return Integer.parseInt(token, 16);
+    }
+
+    private static int parseInt(String token, int defaultValue) {
+        if ("*".equals(token.trim())) {
+            return defaultValue;
+        }
+        return Integer.parseInt(token);
+    }
+
+    private static String parseString(String token) {
+        return token.trim();
+    }
+
+    private static String parseString(String token, String defaultValue) {
+        if ("*".equals(token.trim())) {
+            return defaultValue;
+        }
+        return token.trim();
     }
 }
