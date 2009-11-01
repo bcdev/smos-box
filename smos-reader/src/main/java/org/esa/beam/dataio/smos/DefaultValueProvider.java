@@ -18,24 +18,24 @@ import java.awt.geom.Area;
 import java.io.IOException;
 
 /**
- * Provides the value of a certain field in the grid point data records
- * of a SMOS DGG product file.
+ * Provides the value of a certain member in the grid point data records
+ * of a SMOS file. Suitable for SMOS L2 and ECMWF data.
  *
  * @author Ralf Quast
  * @version $Revision$ $Date$
  * @since SMOS-Box 1.0
  */
-public class DggFieldValueProvider implements FieldValueProvider {
+class DefaultValueProvider implements ValueProvider {
 
     private final SmosFile smosFile;
     private final int memberIndex;
 
-    DggFieldValueProvider(SmosFile smosFile, int memberIndex) {
+    DefaultValueProvider(SmosFile smosFile, int memberIndex) {
         this.smosFile = smosFile;
         this.memberIndex = memberIndex;
     }
 
-    DggFieldValueProvider(SmosFile smosFile, String memberName) {
+    DefaultValueProvider(SmosFile smosFile, String memberName) {
         this.smosFile = smosFile;
         this.memberIndex = smosFile.getGridPointType().getMemberIndex(memberName);
     }
@@ -49,7 +49,7 @@ public class DggFieldValueProvider implements FieldValueProvider {
     }
 
     @Override
-    public final Area getRegion() {
+    public final Area getDomain() {
         return smosFile.getEnvelope();
     }
 

@@ -38,7 +38,7 @@ import java.util.concurrent.ConcurrentMap;
  */
 public class DDDB {
 
-    private final Charset charset = Charset.forName("US-ASCII");
+    private final Charset charset = Charset.forName("UTF-8");
     private final char[] separators = new char[]{'|'};
     private final ResourcePathBuilder pathBuilder = new ResourcePathBuilder();
 

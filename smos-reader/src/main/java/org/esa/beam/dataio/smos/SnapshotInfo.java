@@ -21,20 +21,20 @@ public class SnapshotInfo {
     private final List<Long> snapshotIdsX;
     private final List<Long> snapshotIdsY;
     private final List<Long> snapshotIdsXY;
-    private final Map<Long, Rectangle2D> snapshotRegionMap;
+    private final Map<Long, Rectangle2D> snapshotEnvelopeMap;
 
     public SnapshotInfo(Map<Long, Integer> snapshotIndexMap,
                         Collection<Long> snapshotIds,
                         Collection<Long> snapshotIdsX,
                         Collection<Long> snapshotIdsY,
                         Collection<Long> snapshotIdsXY,
-                        Map<Long, Rectangle2D> snapshotRegionMap) {
+                        Map<Long, Rectangle2D> snapshotEnvelopeMap) {
         this.snapshotIndexMap = Collections.unmodifiableMap(snapshotIndexMap);
         this.snapshotIds = Collections.unmodifiableList(new ArrayList<Long>(snapshotIds));
         this.snapshotIdsX = Collections.unmodifiableList(new ArrayList<Long>(snapshotIdsX));
         this.snapshotIdsY = Collections.unmodifiableList(new ArrayList<Long>(snapshotIdsY));
         this.snapshotIdsXY = Collections.unmodifiableList(new ArrayList<Long>(snapshotIdsXY));
-        this.snapshotRegionMap = Collections.unmodifiableMap(snapshotRegionMap);
+        this.snapshotEnvelopeMap = Collections.unmodifiableMap(snapshotEnvelopeMap);
     }
 
     public int getSnapshotIndex(long snapshotId) {
@@ -60,7 +60,7 @@ public class SnapshotInfo {
         return snapshotIdsXY;
     }
 
-    public Rectangle2D getSnapshotRegion(long snapshotId) {
-        return snapshotRegionMap.get(snapshotId);
+    public Rectangle2D getSnapshotEnvelope(long snapshotId) {
+        return snapshotEnvelopeMap.get(snapshotId);
     }
 }

@@ -6,7 +6,7 @@ import java.util.Map;
 
 class DPH extends DP {
 
-    DPH(Product product, Map<String, FieldValueProvider> valueProviderMap, boolean accuracy) {
+    DPH(Product product, Map<String, ValueProvider> valueProviderMap, boolean accuracy) {
         super(product, valueProviderMap, accuracy);
     }
 

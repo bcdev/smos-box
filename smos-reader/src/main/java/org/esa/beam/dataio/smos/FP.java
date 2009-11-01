@@ -5,28 +5,28 @@ import org.esa.beam.framework.datamodel.Product;
 import java.awt.geom.Area;
 import java.util.Map;
 
-abstract class FP implements FieldValueProvider {
+abstract class FP implements ValueProvider {
 
-    private final FieldValueProvider frxProvider;
-    private final FieldValueProvider fryProvider;
-    private final FieldValueProvider grxProvider;
-    private final FieldValueProvider gryProvider;
-    private final FieldValueProvider btxProvider;
-    private final FieldValueProvider btyProvider;
-    private final FieldValueProvider btxyProvider;
+    private final ValueProvider frxProvider;
+    private final ValueProvider fryProvider;
+    private final ValueProvider grxProvider;
+    private final ValueProvider gryProvider;
+    private final ValueProvider btxProvider;
+    private final ValueProvider btyProvider;
+    private final ValueProvider btxyProvider;
     private final boolean imaginary;
 
-    protected FP(Product product, Map<String, FieldValueProvider> valueProviderMap,
+    protected FP(Product product, Map<String, ValueProvider> valueProviderMap,
                  boolean accuracy, boolean imaginary) {
         this.imaginary = imaginary;
-        frxProvider = new Scaler(valueProviderMap.get("Faraday_Rotation_Angle_X"),
+        frxProvider = new ValueScaler(valueProviderMap.get("Faraday_Rotation_Angle_X"),
                                            product.getBand("Faraday_Rotation_Angle_X"));
-        grxProvider = new Scaler(valueProviderMap.get("Geometric_Rotation_Angle_X"),
+        grxProvider = new ValueScaler(valueProviderMap.get("Geometric_Rotation_Angle_X"),
                                            product.getBand("Geometric_Rotation_Angle_X"));
 
-        fryProvider = new Scaler(valueProviderMap.get("Faraday_Rotation_Angle_Y"),
+        fryProvider = new ValueScaler(valueProviderMap.get("Faraday_Rotation_Angle_Y"),
                                            product.getBand("Faraday_Rotation_Angle_Y"));
-        gryProvider = new Scaler(valueProviderMap.get("Geometric_Rotation_Angle_Y"),
+        gryProvider = new ValueScaler(valueProviderMap.get("Geometric_Rotation_Angle_Y"),
                                            product.getBand("Geometric_Rotation_Angle_Y"));
 
         final String quantity;
@@ -56,8 +56,8 @@ abstract class FP implements FieldValueProvider {
     }
 
     @Override
-    public final Area getRegion() {
-        return frxProvider.getRegion();
+    public final Area getDomain() {
+        return frxProvider.getDomain();
     }
 
     @Override

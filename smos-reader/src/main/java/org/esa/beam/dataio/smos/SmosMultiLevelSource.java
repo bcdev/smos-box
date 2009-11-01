@@ -18,16 +18,16 @@ import java.awt.image.RenderedImage;
 public class SmosMultiLevelSource extends AbstractMultiLevelSource {
 
     private final RasterDataNode rasterDataNode;
-    private final FieldValueProvider valueProvider;
+    private final ValueProvider valueProvider;
 
-    public SmosMultiLevelSource(RasterDataNode rasterDataNode, FieldValueProvider valueProvider) {
+    public SmosMultiLevelSource(RasterDataNode rasterDataNode, ValueProvider valueProvider) {
         super(SmosDgg.getInstance().getDggMultiLevelImage().getModel());
 
         this.valueProvider = valueProvider;
         this.rasterDataNode = rasterDataNode;
     }
 
-    public FieldValueProvider getValueProvider() {
+    public ValueProvider getValueProvider() {
         return valueProvider;
     }
 

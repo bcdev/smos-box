@@ -111,7 +111,7 @@ public class ProductFactory {
 
     private void addDualPolBrowseBands(Product product, CompoundType compoundDataType, ExplorerFile smosFile) {
         final CompoundMember[] members = compoundDataType.getMembers();
-        final HashMap<String, FieldValueProvider> valueProviderMap = new HashMap<String, FieldValueProvider>();
+        final HashMap<String, ValueProvider> valueProviderMap = new HashMap<String, ValueProvider>();
 
         for (int fieldIndex = 0; fieldIndex < members.length; fieldIndex++) {
             final CompoundMember member = members[fieldIndex];
@@ -138,7 +138,7 @@ public class ProductFactory {
 
     private void addFullPolBrowseBands(Product product, CompoundType compoundDataType, L1cSmosFile smosFile) {
         final CompoundMember[] members = compoundDataType.getMembers();
-        final HashMap<String, FieldValueProvider> valueProviderMap = new HashMap<String, FieldValueProvider>();
+        final HashMap<String, ValueProvider> valueProviderMap = new HashMap<String, ValueProvider>();
 
         for (int fieldIndex = 0; fieldIndex < members.length; fieldIndex++) {
             final CompoundMember member = members[fieldIndex];
@@ -188,7 +188,7 @@ public class ProductFactory {
 
     private void addDualPolScienceBands(Product product, CompoundType compoundDataType, L1cScienceSmosFile smosFile) {
         final CompoundMember[] members = compoundDataType.getMembers();
-        final HashMap<String, FieldValueProvider> valueProviderMap = new HashMap<String, FieldValueProvider>();
+        final HashMap<String, ValueProvider> valueProviderMap = new HashMap<String, ValueProvider>();
 
         for (int fieldIndex = 0; fieldIndex < members.length; fieldIndex++) {
             final CompoundMember member = members[fieldIndex];
@@ -217,7 +217,7 @@ public class ProductFactory {
 
     private void addFullPolScienceBands(Product product, CompoundType compoundDataType, L1cScienceSmosFile smosFile) {
         final CompoundMember[] members = compoundDataType.getMembers();
-        final HashMap<String, FieldValueProvider> valueProviderMap = new HashMap<String, FieldValueProvider>();
+        final HashMap<String, ValueProvider> valueProviderMap = new HashMap<String, ValueProvider>();
 
         for (int fieldIndex = 0; fieldIndex < members.length; fieldIndex++) {
             final CompoundMember member = members[fieldIndex];
@@ -267,7 +267,7 @@ public class ProductFactory {
         addRotatedFullPolBands(product, valueProviderMap);
     }
 
-    private void addRotatedDualPolBands(Product product, HashMap<String, FieldValueProvider> valueProviderMap) {
+    private void addRotatedDualPolBands(Product product, HashMap<String, ValueProvider> valueProviderMap) {
         DP provider;
         BandInfo bandInfo;
 
@@ -291,7 +291,7 @@ public class ProductFactory {
         addVirtualBand(product, "Stokes_2", "(BT_Value_H - BT_Value_V) / 2.0");
     }
 
-    private void addRotatedFullPolBands(Product product, HashMap<String, FieldValueProvider> valueProviderMap) {
+    private void addRotatedFullPolBands(Product product, HashMap<String, ValueProvider> valueProviderMap) {
         FP provider;
         BandInfo bandInfo;
 
@@ -366,9 +366,9 @@ public class ProductFactory {
     }
 
     private void addL1cBand(Product product, String bandName, int bandType, BandInfo bandInfo, int fieldIndex,
-                            int polMode, HashMap<String, FieldValueProvider> valueProviderMap, ExplorerFile smosFile) {
-        final FieldValueProvider valueProvider =
-                new L1cFieldValueProvider((L1cSmosFile) smosFile, fieldIndex, polMode);
+                            int polMode, HashMap<String, ValueProvider> valueProviderMap, ExplorerFile smosFile) {
+        final ValueProvider valueProvider =
+                new BtDataValueProvider((L1cSmosFile) smosFile, fieldIndex, polMode);
         final Band band = addBand(product, bandName, bandType, bandInfo, valueProvider);
 
         if (bandName.equals("Flags")) {
@@ -382,7 +382,7 @@ public class ProductFactory {
     private void addL2SmBand(Product product, String bandName, int bandType, BandInfo bandInfo, int fieldIndex,
                              SmosFile smosFile) {
         final Band band = addBand(product, bandName, bandType, bandInfo,
-                                  new DggFieldValueProvider(smosFile, fieldIndex));
+                                  new DefaultValueProvider(smosFile, fieldIndex));
 
         final Random random = new Random(5489);
         if (bandName.equals("Confidence_Flags")) {
@@ -445,7 +445,7 @@ public class ProductFactory {
     }
 
     private Band addBand(Product product, String bandName, int bandType, BandInfo bandInfo,
-                         FieldValueProvider valueProvider) {
+                         ValueProvider valueProvider) {
         final Band band = product.addBand(bandName, bandType);
 
         if (bandInfo != null) {
@@ -512,7 +512,7 @@ public class ProductFactory {
         return bandType;
     }
 
-    private MultiLevelImage createSourceImage(FieldValueProvider valueProvider, Band band) {
+    private MultiLevelImage createSourceImage(ValueProvider valueProvider, Band band) {
         return new DefaultMultiLevelImage(new SmosMultiLevelSource(band, valueProvider));
     }
 

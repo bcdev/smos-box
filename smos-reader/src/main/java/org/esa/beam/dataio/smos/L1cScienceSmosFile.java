@@ -55,7 +55,7 @@ public class L1cScienceSmosFile extends L1cSmosFile {
 
     private volatile Future<SnapshotInfo> snapshotInfoFuture;
 
-    public L1cScienceSmosFile(File hdrFile, File dblFile, DataFormat format, boolean fullPol) throws IOException {
+    L1cScienceSmosFile(File hdrFile, File dblFile, DataFormat format, boolean fullPol) throws IOException {
         super(hdrFile, dblFile, format);
         this.fullPol = fullPol;
 
@@ -310,16 +310,17 @@ public class L1cScienceSmosFile extends L1cSmosFile {
         final Set<Long> y = new TreeSet<Long>();
         final Set<Long> xy = new TreeSet<Long>();
 
-        final Map<Long, Rectangle2D> snapshotRegionMap = new TreeMap<Long, Rectangle2D>();
+        final Map<Long, Rectangle2D> snapshotEnvelopeMap = new TreeMap<Long, Rectangle2D>();
         final int latIndex = getGridPointType().getMemberIndex("Grid_Point_Latitude");
         final int lonIndex = getGridPointType().getMemberIndex("Grid_Point_Longitude");
 
         final SequenceData gridPointList = getGridPointList();
         final int gridPointCount = getGridPointCount();
+
         for (int i = 0; i < gridPointCount; i++) {
             final SequenceData btList = getBtDataList(i);
-
             final int btCount = btList.getElementCount();
+
             if (btCount > 0) {
                 final CompoundData gridData = gridPointList.getCompound(i);
                 double lon = gridData.getDouble(lonIndex);
@@ -338,54 +339,51 @@ public class L1cScienceSmosFile extends L1cSmosFile {
                 }
                 final Rectangle2D.Double rectangle = new Rectangle2D.Double(lon, lat, 0.04, 0.04);
 
-                long lastSid = -1;
+                long lastId = -1;
                 for (int j = 0; j < btCount; j++) {
                     final CompoundData btData = btList.getCompound(j);
-                    final long sid = btData.getLong(snapshotIdOfPixelIndex);
+                    final long id = btData.getLong(snapshotIdOfPixelIndex);
 
-                    if (lastSid != sid) { // snapshots are ordered
-                        all.add(sid);
-                        if (snapshotRegionMap.containsKey(sid)) {
+                    if (lastId != id) { // snapshots are ordered
+                        all.add(id);
+                        if (snapshotEnvelopeMap.containsKey(id)) {
                             // todo: rq/rq - snapshots on the anti-meridian (2009-10-22)
-                            snapshotRegionMap.get(sid).add(rectangle);
+                            snapshotEnvelopeMap.get(id).add(rectangle);
                         } else {
-                            snapshotRegionMap.put(sid, rectangle);
+                            snapshotEnvelopeMap.put(id, rectangle);
                         }
-                        lastSid = sid;
+                        lastId = id;
                     }
 
                     final int flags = btData.getInt(flagsIndex);
                     switch (flags & SmosConstants.L1C_POL_FLAGS_MASK) {
                     case SmosConstants.L1C_POL_MODE_X:
-                        x.add(sid);
+                        x.add(id);
                         break;
                     case SmosConstants.L1C_POL_MODE_Y:
-                        y.add(sid);
+                        y.add(id);
                         break;
                     case SmosConstants.L1C_POL_MODE_XY1:
-                        xy.add(sid);
-                        break;
                     case SmosConstants.L1C_POL_MODE_XY2:
-                        xy.add(sid);
+                        xy.add(id);
                         break;
                     }
                 }
             }
         }
-        final Map<Long, Integer> snapshotIndexMap = new TreeMap<Long, Integer>();
 
+        final Map<Long, Integer> snapshotIndexMap = new TreeMap<Long, Integer>();
         final int snapshotIdIndex = snapshotType.getMemberIndex(SmosConstants.SNAPSHOT_ID_NAME);
         final int snapshotCount = snapshotList.getElementCount();
-        for (int i = 0; i < snapshotCount; i++) {
-            final CompoundData snapshotData = getSnapshotData(i);
-            final long sid = snapshotData.getLong(snapshotIdIndex);
 
-            if (all.contains(sid)) {
-                snapshotIndexMap.put(sid, i);
+        for (int i = 0; i < snapshotCount; i++) {
+            final long id = getSnapshotData(i).getLong(snapshotIdIndex);
+            if (all.contains(id)) {
+                snapshotIndexMap.put(id, i);
             }
         }
 
-        return new SnapshotInfo(snapshotIndexMap, all, x, y, xy, snapshotRegionMap);
+        return new SnapshotInfo(snapshotIndexMap, all, x, y, xy, snapshotEnvelopeMap);
     }
 
 }

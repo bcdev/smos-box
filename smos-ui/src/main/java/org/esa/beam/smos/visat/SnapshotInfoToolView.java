@@ -12,8 +12,8 @@ import com.bc.ceres.glevel.MultiLevelImage;
 import com.bc.ceres.glevel.support.DefaultMultiLevelImage;
 import com.bc.ceres.glevel.support.FileMultiLevelSource;
 import com.bc.ceres.grender.Viewport;
-import org.esa.beam.dataio.smos.FieldValueProvider;
-import org.esa.beam.dataio.smos.L1cFieldValueProvider;
+import org.esa.beam.dataio.smos.ValueProvider;
+import org.esa.beam.dataio.smos.BtDataValueProvider;
 import org.esa.beam.dataio.smos.L1cScienceSmosFile;
 import org.esa.beam.dataio.smos.SmosFile;
 import org.esa.beam.dataio.smos.SmosMultiLevelSource;
@@ -221,11 +221,11 @@ public class SnapshotInfoToolView extends SmosToolView {
             final DefaultMultiLevelImage multiLevelImage = (DefaultMultiLevelImage) sourceImage;
             if (multiLevelImage.getSource() instanceof SmosMultiLevelSource) {
                 final SmosMultiLevelSource smosMultiLevelSource = (SmosMultiLevelSource) multiLevelImage.getSource();
-                final FieldValueProvider valueProvider = smosMultiLevelSource.getValueProvider();
-                if (valueProvider instanceof L1cFieldValueProvider) {
-                    final L1cFieldValueProvider l1cFieldValueProvider = (L1cFieldValueProvider) valueProvider;
-                    if (l1cFieldValueProvider.getSnapshotId() != snapshotId) {
-                        l1cFieldValueProvider.setSnapshotId(snapshotId);
+                final ValueProvider valueProvider = smosMultiLevelSource.getValueProvider();
+                if (valueProvider instanceof BtDataValueProvider) {
+                    final BtDataValueProvider btDataValueProvider = (BtDataValueProvider) valueProvider;
+                    if (btDataValueProvider.getSnapshotId() != snapshotId) {
+                        btDataValueProvider.setSnapshotId(snapshotId);
                         resetRasterImages(raster);
                     }
                 }
@@ -236,7 +236,7 @@ public class SnapshotInfoToolView extends SmosToolView {
     private void locateSnapshotId(final ProductSceneView smosView, final long id) {
         final L1cScienceSmosFile smosFile = SmosBox.getL1cScienceSmosFile(smosView);
         if (smosFile != null) {
-            final Rectangle2D snapshotRegion = smosFile.getSnapshotInfo().getSnapshotRegion(id);
+            final Rectangle2D snapshotRegion = smosFile.getSnapshotInfo().getSnapshotEnvelope(id);
             if (snapshotRegion != null) {
                 final Viewport vp = smosView.getLayerCanvas().getViewport();
                 final AffineTransform m2v = vp.getModelToViewTransform();
@@ -298,7 +298,7 @@ public class SnapshotInfoToolView extends SmosToolView {
             ProductSceneView view = getSelectedSmosView();
             L1cScienceSmosFile scienceSmosFile = SmosBox.getL1cScienceSmosFile(view);
             if (scienceSmosFile != null) {
-                final Rectangle2D snapshotRegion = scienceSmosFile.getSnapshotInfo().getSnapshotRegion(snapshotId);
+                final Rectangle2D snapshotRegion = scienceSmosFile.getSnapshotInfo().getSnapshotEnvelope(snapshotId);
                 if (snapshotRegion != null) {
                     final Viewport vp = view.getLayerCanvas().getViewport();
                     final AffineTransform m2v = vp.getModelToViewTransform();

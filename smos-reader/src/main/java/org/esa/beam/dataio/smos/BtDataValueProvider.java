@@ -17,13 +17,13 @@ package org.esa.beam.dataio.smos;
 import java.awt.geom.Area;
 import java.io.IOException;
 
-public class L1cFieldValueProvider implements FieldValueProvider {
+public class BtDataValueProvider implements ValueProvider {
     private final L1cSmosFile smosFile;
     private final int fieldIndex;
     private final int polMode;
     private volatile long snapshotId;
 
-    public L1cFieldValueProvider(L1cSmosFile smosFile, int fieldIndex, int polMode) {
+    BtDataValueProvider(L1cSmosFile smosFile, int fieldIndex, int polMode) {
         this.smosFile = smosFile;
         this.fieldIndex = fieldIndex;
         this.polMode = polMode;
@@ -39,10 +39,10 @@ public class L1cFieldValueProvider implements FieldValueProvider {
     }
 
     @Override
-    public Area getRegion() {
+    public Area getDomain() {
         if (smosFile instanceof L1cScienceSmosFile && snapshotId != -1) {
             final L1cScienceSmosFile scienceSmosFile = (L1cScienceSmosFile) smosFile;
-            return new Area(scienceSmosFile.getSnapshotInfo().getSnapshotRegion(snapshotId));
+            return new Area(scienceSmosFile.getSnapshotInfo().getSnapshotEnvelope(snapshotId));
         } else {
             return smosFile.getEnvelope();
         }

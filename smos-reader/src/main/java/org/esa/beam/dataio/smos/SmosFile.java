@@ -228,16 +228,16 @@ public class SmosFile extends ExplorerFile {
                                                descriptor.getFlagDescriptors());
             }
 
-            final FieldValueProvider valueProvider = createValueProvider(descriptor);
+            final ValueProvider valueProvider = createValueProvider(descriptor);
             band.setSourceImage(createSourceImage(band, valueProvider));
             band.setImageInfo(ProductHelper.createImageInfo(band, descriptor));
         }
     }
 
-    private FieldValueProvider createValueProvider(BandDescriptor descriptor) {
+    private ValueProvider createValueProvider(BandDescriptor descriptor) {
         switch (descriptor.getSampleModel()) {
         case 1:
-            return new DggFieldValueProvider(this, descriptor.getMemberName()) {
+            return new DefaultValueProvider(this, descriptor.getMemberName()) {
                 @Override
                 public int getValue(int gridPointIndex, int noDataValue) {
                     try {
@@ -249,7 +249,7 @@ public class SmosFile extends ExplorerFile {
                 }
             };
         case 2:
-            return new DggFieldValueProvider(this, descriptor.getMemberName()) {
+            return new DefaultValueProvider(this, descriptor.getMemberName()) {
                 @Override
                 public int getValue(int gridPointIndex, int noDataValue) {
                     try {
@@ -261,15 +261,15 @@ public class SmosFile extends ExplorerFile {
                 }
             };
         default:
-            return new DggFieldValueProvider(this, descriptor.getMemberName());
+            return new DefaultValueProvider(this, descriptor.getMemberName());
         }
     }
 
-    private MultiLevelImage createSourceImage(Band band, FieldValueProvider valueProvider) {
+    private MultiLevelImage createSourceImage(Band band, ValueProvider valueProvider) {
         return new DefaultMultiLevelImage(createMultiLevelSource(band, valueProvider));
     }
 
-    private MultiLevelSource createMultiLevelSource(Band band, FieldValueProvider valueProvider) {
+    private MultiLevelSource createMultiLevelSource(Band band, ValueProvider valueProvider) {
         return new SmosMultiLevelSource(band, valueProvider);
     }
 

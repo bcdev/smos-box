@@ -36,14 +36,14 @@ import java.util.Arrays;
 
 class SmosOpImage extends SingleBandedOpImage {
 
-    private final FieldValueProvider valueProvider;
+    private final ValueProvider valueProvider;
     private final MultiLevelModel model;
     private final double noDataValue;
 
-    private volatile Area region;
+    private volatile Area envelope;
     private volatile NoDataRaster noDataRaster;
 
-    SmosOpImage(FieldValueProvider valueProvider, RasterDataNode rasterDataNode, MultiLevelModel model,
+    SmosOpImage(ValueProvider valueProvider, RasterDataNode rasterDataNode, MultiLevelModel model,
                 ResolutionLevel level) {
         super(ImageManager.getDataBufferType(rasterDataNode.getDataType()),
               rasterDataNode.getSceneRasterWidth(),
@@ -58,21 +58,21 @@ class SmosOpImage extends SingleBandedOpImage {
         this.noDataValue = rasterDataNode.getNoDataValue();
     }
 
-    private Area getRegion() {
-        if (region == null) {
+    private Area getEnvelope() {
+        if (envelope == null) {
             synchronized (this) {
-                if (region == null) {
-                    final Area modelRegion = valueProvider.getRegion();
-                    region = modelRegion.createTransformedArea(model.getModelToImageTransform(getLevel()));
+                if (envelope == null) {
+                    final Area modeldomain = valueProvider.getDomain();
+                    envelope = modeldomain.createTransformedArea(model.getModelToImageTransform(getLevel()));
                 }
             }
         }
-        return region;
+        return envelope;
     }
 
     @Override
     public Raster computeTile(int tileX, int tileY) {
-        if (getRegion().intersects(getTileRect(tileX, tileY))) {
+        if (getEnvelope().intersects(getTileRect(tileX, tileY))) {
             return super.computeTile(tileX, tileY);
         }
 
@@ -100,7 +100,7 @@ class SmosOpImage extends SingleBandedOpImage {
                 seqnumRaster, rectangle, seqnumRaster.getSampleModel().getTransferType(), false);
         final UnpackedImageData targetData = targetAccessor.getPixels(
                 targetRaster, rectangle, targetRaster.getSampleModel().getTransferType(), true);
-        final PixelCounter pixelCounter = new PixelCounter(rectangle, getRegion());
+        final PixelCounter pixelCounter = new PixelCounter(rectangle, getEnvelope());
 
         switch (targetData.type) {
         case DataBuffer.TYPE_BYTE:
@@ -386,29 +386,29 @@ class SmosOpImage extends SingleBandedOpImage {
 
     private static class PixelCounter {
 
-        private final Rectangle bounds;
+        private final Rectangle effectiveBounds;
         private final Rectangle targetRectangle;
 
         private int leading;
         private int valid;
         private int trailing;
 
-        PixelCounter(Rectangle targetRectangle, Area roi) {
-            final Area effectiveRoi = new Area(targetRectangle);
-            effectiveRoi.intersect(roi);
+        PixelCounter(Rectangle targetRectangle, Area envelope) {
+            final Area effectiveEnvelope = new Area(targetRectangle);
+            effectiveEnvelope.intersect(envelope);
 
-            this.bounds = effectiveRoi.getBounds();
+            this.effectiveBounds = effectiveEnvelope.getBounds();
             this.targetRectangle = targetRectangle;
         }
 
         void countPixels(int y) {
-            if (y < bounds.y || y > bounds.y + bounds.height) {
+            if (y < effectiveBounds.y || y > effectiveBounds.y + effectiveBounds.height) {
                 leading = targetRectangle.width;
                 valid = 0;
                 trailing = 0;
             } else {
-                leading = bounds.x - targetRectangle.x;
-                valid = bounds.width;
+                leading = effectiveBounds.x - targetRectangle.x;
+                valid = effectiveBounds.width;
                 trailing = targetRectangle.width - leading - valid;
             }
         }

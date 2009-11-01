@@ -6,7 +6,7 @@ import java.util.Map;
 
 class DPV extends DP {
 
-    DPV(Product product, Map<String, FieldValueProvider> valueProviderMap, boolean accuracy) {
+    DPV(Product product, Map<String, ValueProvider> valueProviderMap, boolean accuracy) {
         super(product, valueProviderMap, accuracy);
     }
 

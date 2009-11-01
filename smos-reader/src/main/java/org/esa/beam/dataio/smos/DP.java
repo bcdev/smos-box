@@ -5,24 +5,24 @@ import org.esa.beam.framework.datamodel.Product;
 import java.awt.geom.Area;
 import java.util.Map;
 
-abstract class DP implements FieldValueProvider {
+abstract class DP implements ValueProvider {
 
-    private final FieldValueProvider frxProvider;
-    private final FieldValueProvider fryProvider;
-    private final FieldValueProvider grxProvider;
-    private final FieldValueProvider gryProvider;
-    private final FieldValueProvider btxProvider;
-    private final FieldValueProvider btyProvider;
+    private final ValueProvider frxProvider;
+    private final ValueProvider fryProvider;
+    private final ValueProvider grxProvider;
+    private final ValueProvider gryProvider;
+    private final ValueProvider btxProvider;
+    private final ValueProvider btyProvider;
 
-    protected DP(Product product, Map<String, FieldValueProvider> valueProviderMap, boolean accuracy) {
-        frxProvider = new Scaler(valueProviderMap.get("Faraday_Rotation_Angle_X"),
+    protected DP(Product product, Map<String, ValueProvider> valueProviderMap, boolean accuracy) {
+        frxProvider = new ValueScaler(valueProviderMap.get("Faraday_Rotation_Angle_X"),
                                            product.getBand("Faraday_Rotation_Angle_X"));
-        grxProvider = new Scaler(valueProviderMap.get("Geometric_Rotation_Angle_X"),
+        grxProvider = new ValueScaler(valueProviderMap.get("Geometric_Rotation_Angle_X"),
                                            product.getBand("Geometric_Rotation_Angle_X"));
 
-        fryProvider = new Scaler(valueProviderMap.get("Faraday_Rotation_Angle_Y"),
+        fryProvider = new ValueScaler(valueProviderMap.get("Faraday_Rotation_Angle_Y"),
                                            product.getBand("Faraday_Rotation_Angle_Y"));
-        gryProvider = new Scaler(valueProviderMap.get("Geometric_Rotation_Angle_Y"),
+        gryProvider = new ValueScaler(valueProviderMap.get("Geometric_Rotation_Angle_Y"),
                                            product.getBand("Geometric_Rotation_Angle_Y"));
 
         final String quantity;
@@ -37,8 +37,8 @@ abstract class DP implements FieldValueProvider {
     }
 
     @Override
-    public final Area getRegion() {
-        return frxProvider.getRegion();
+    public final Area getDomain() {
+        return frxProvider.getDomain();
     }
 
     @Override

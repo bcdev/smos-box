@@ -6,7 +6,7 @@ import java.util.HashMap;
 
 class FPI extends FP {
 
-    FPI(Product product, HashMap<String, FieldValueProvider> valueProviderMap, boolean accuracy) {
+    FPI(Product product, HashMap<String, ValueProvider> valueProviderMap, boolean accuracy) {
         super(product, valueProviderMap, accuracy, false);
     }
 
