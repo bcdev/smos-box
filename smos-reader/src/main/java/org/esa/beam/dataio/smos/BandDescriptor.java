@@ -36,5 +36,5 @@ public interface BandDescriptor {
 
     String getFlagCodingName();
 
-    Family<FlagDescriptorI> getFlagDescriptors();
+    Family<FlagDescriptor> getFlagDescriptors();
 }

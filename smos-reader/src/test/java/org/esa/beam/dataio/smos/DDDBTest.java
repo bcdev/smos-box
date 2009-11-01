@@ -31,10 +31,10 @@ public class DDDBTest {
 
     @Test
     public void getFlagDescriptors() {
-        final Family<FlagDescriptorI> descriptors = DDDB.getInstance().getFlagDescriptors(IDENTIFIER + "_F1");
+        final Family<FlagDescriptor> descriptors = DDDB.getInstance().getFlagDescriptors(IDENTIFIER + "_F1");
         assertEquals(21, descriptors.asList().size());
 
-        FlagDescriptorI descriptor;
+        FlagDescriptor descriptor;
         descriptor = descriptors.getMember("RR_FLAG");
         assertNotNull(descriptor);
 
@@ -49,7 +49,7 @@ public class DDDBTest {
     public void getFlagDescriptorsFromBandDescriptor() {
         final DDDB dddb = DDDB.getInstance();
         final Family<BandDescriptor> bandDescriptor = dddb.getBandDescriptors(IDENTIFIER);
-        final Family<FlagDescriptorI> flagDescriptors = bandDescriptor.getMember("F1").getFlagDescriptors();
+        final Family<FlagDescriptor> flagDescriptors = bandDescriptor.getMember("F1").getFlagDescriptors();
         assertNotNull(flagDescriptors);
         
         assertNotNull(dddb.getFlagDescriptors(IDENTIFIER + "_F1"));

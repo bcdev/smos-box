@@ -180,11 +180,11 @@ class ProductHelper {
     }
 
     static void addFlagsAndMasks(Product product, Band band,
-                                 String flagCodingName, Family<FlagDescriptorI> flagDescriptors) {
+                                 String flagCodingName, Family<FlagDescriptor> flagDescriptors) {
         FlagCoding flagCoding = product.getFlagCodingGroup().get(flagCodingName);
         if (flagCoding == null) {
             flagCoding = new FlagCoding(flagCodingName);
-            for (final FlagDescriptorI flagDescriptor : flagDescriptors.asList()) {
+            for (final FlagDescriptor flagDescriptor : flagDescriptors.asList()) {
                 flagCoding.addFlag(flagDescriptor.getFlagName(),
                                    flagDescriptor.getMask(),
                                    flagDescriptor.getDescription());
@@ -194,7 +194,7 @@ class ProductHelper {
         band.setSampleCoding(flagCoding);
 
         final Random random = new Random(5489); // for creating random colours
-        for (final FlagDescriptorI flagDescriptor : flagDescriptors.asList()) {
+        for (final FlagDescriptor flagDescriptor : flagDescriptors.asList()) {
             final String maskName = band.getName() + "_" + flagDescriptor.getFlagName();
             Mask mask = product.getMaskGroup().get(maskName);
             if (mask == null) {

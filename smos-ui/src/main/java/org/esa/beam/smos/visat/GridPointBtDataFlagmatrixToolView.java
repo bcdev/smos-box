@@ -2,6 +2,7 @@ package org.esa.beam.smos.visat;
 
 import org.esa.beam.dataio.smos.FlagDescriptors;
 import org.esa.beam.dataio.smos.SmosConstants;
+import org.esa.beam.dataio.smos.FlagDescriptor;
 import org.esa.beam.framework.ui.product.ProductSceneView;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -117,7 +118,7 @@ public class GridPointBtDataFlagmatrixToolView extends GridPointBtDataToolView {
     }
 
     private String[] createFlagNames() {
-        final FlagDescriptors[] flags = FlagDescriptors.L1C_FLAGS;
+        final FlagDescriptor[] flags = FlagDescriptors.L1C_FLAGS;
         String[] flagNames = new String[flags.length];
         for (int i = 0; i < flags.length; i++) {
             flagNames[i] = flags[i].getFlagName();

@@ -142,7 +142,7 @@ public class DDDB {
         return bandDescriptorMap.get(identifier);
     }
 
-    public Family<FlagDescriptorI> getFlagDescriptors(String identifier) {
+    public Family<FlagDescriptor> getFlagDescriptors(String identifier) {
         if (!flagDescriptorMap.containsKey(identifier)) {
             final InputStream inputStream = getFlagDescriptorResource(identifier);
 
@@ -300,14 +300,14 @@ public class DDDB {
         }
     }
 
-    private static class FlagDescriptors implements Family<FlagDescriptorI> {
+    private static class FlagDescriptors implements Family<FlagDescriptor> {
 
-        private final List<FlagDescriptorI> descriptorList;
-        private final Map<String, FlagDescriptorI> descriptorMap;
+        private final List<FlagDescriptor> descriptorList;
+        private final Map<String, FlagDescriptor> descriptorMap;
 
         FlagDescriptors(List<String[]> recordList) {
-            descriptorList = new ArrayList<FlagDescriptorI>(recordList.size());
-            descriptorMap = new HashMap<String, FlagDescriptorI>(recordList.size());
+            descriptorList = new ArrayList<FlagDescriptor>(recordList.size());
+            descriptorMap = new HashMap<String, FlagDescriptor>(recordList.size());
 
             for (final String[] tokens : recordList) {
                 final FlagDescriptorImpl record = new FlagDescriptorImpl(tokens);
@@ -317,12 +317,12 @@ public class DDDB {
         }
 
         @Override
-        public final List<FlagDescriptorI> asList() {
+        public final List<FlagDescriptor> asList() {
             return Collections.unmodifiableList(descriptorList);
         }
 
         @Override
-        public final FlagDescriptorI getMember(String flagName) {
+        public final FlagDescriptor getMember(String flagName) {
             return descriptorMap.get(flagName);
         }
     }
@@ -343,7 +343,7 @@ public class DDDB {
         private final String unit;
         private final String description;
         private final String flagCodingName;
-        private final Family<FlagDescriptorI> flagDescriptors;
+        private final Family<FlagDescriptor> flagDescriptors;
 
         private BandDescriptorImpl(String[] tokens) {
             visible = parseBoolean(tokens[0], true);
@@ -367,7 +367,7 @@ public class DDDB {
             flagDescriptors = getFlagDescriptors(tokens[14]);
         }
 
-        private Family<FlagDescriptorI> getFlagDescriptors(String token) {
+        private Family<FlagDescriptor> getFlagDescriptors(String token) {
             if (flagCodingName.isEmpty()) {
                 return null;
             }
@@ -460,12 +460,12 @@ public class DDDB {
         }
 
         @Override
-        public final Family<FlagDescriptorI> getFlagDescriptors() {
+        public final Family<FlagDescriptor> getFlagDescriptors() {
             return flagDescriptors;
         }
     }
 
-    static class FlagDescriptorImpl implements FlagDescriptorI {
+    static class FlagDescriptorImpl implements FlagDescriptor {
         private final boolean visible;
         private final String flagName;
         private final int mask;

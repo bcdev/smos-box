@@ -2,7 +2,7 @@ package org.esa.beam.dataio.smos;
 
 import java.awt.Color;
 
-public interface FlagDescriptorI {
+public interface FlagDescriptor {
 
     String getFlagName();
 
