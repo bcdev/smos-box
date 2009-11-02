@@ -1,7 +1,32 @@
-# visible | band     | member                                 | sampleModel | scalingOffset | scalingFactor | typicaMin | typicalMax | cyclic | fillValue | validExpr                                  | unit      | decription                                                                                                                 | flagCoding | flags
+#############################################################################
+# Properties
+#
+# visible:       should the band appear in the BEAM product tree?
+# band:          band name used in BEAM
+# dataset:       BinX dataset name
+# sampleModel:   0, 1, 2
+# scalingOffset: scaling offset applied to the raw data
+# scalingFactor: scaling factor applied to the raw data
+# typicalMin:    typical (scaled) minimum value
+# typicalMax:    typical (scaled) maximum value
+# cyclic:        is the value range cyclic?
+# fillValue:     value indicating no-data in BEAM
+# validExpr:     valid-pixel expression used in BEAM
+# unit:          unit
+# description:   description
+# flagCoding:    for flag bands only: name of the flag coding
+# flags:         for flag bands only: name of the flag descriptor resource
+#
+# Values
+#
+# An asterisk '*' indicates: Do not care, just use the default
+#############################################################################
+
+# visible | band     | dataset                                | sampleModel | scalingOffset | scalingFactor | typicaMin | typicalMax | cyclic | fillValue | validExpr                                  | unit      | decription                                                                                                                 | flagCoding | flags
 # *       | GID      | Grid_Point_ID                          | *           | *             | *             | *         | *          | *      | *         | *                                          | *         | Grid point ID                                                                                                              | *          | *
 # *       | LAT      | Latitude                               | *           | *             | *             | -90.0     | 90.0       | *      | *         | *                                          | deg       | Latitude (-90, 90)                                                                                                         | *          | *
 # *       | LON      | Longitude                              | *           | *             | *             | -180.0    | 180.0      | *      | *         | *                                          | deg       | Longitude (-180, 180)                                                                                                      | *          | *
+# geophysical parameters
   *       | CI       | Sea_Ice_Cover                          | *           | *             | *             | 0.0       | 1.0        | *      | 0.0       | x.raw != -99999.0 && x.raw != -99998.0     | *         | Sea ice cover (0, 1)                                                                                                       | *          | *
   *       | SSTK     | Sea_Surface_Temperature                | *           | *             | *             | 265.0     | 305.0      | *      | 0.0       | x.raw != -99999.0 && x.raw != -99998.0     | K         | Sea surface temperature (K)                                                                                                | *          | *
 # *       | LSM      | Land_Sea_Mask                          | *           | *             | *             | *         | *          | *      | *         | *                                          | *         | Land sea mask for atmospheric model (0-1)                                                                                  | *          | *
@@ -52,6 +77,7 @@
   *       | RSN      | Snow_Density                           | *           | *             | *             | 100.0     | 300.0      | *      | 0.0       | x.raw != -99999.0 && x.raw != -99998.0     | kg m-3    | Snow density (kg m-3)                                                                                                      | *          | *
 # *       | HLL      | Height_Lowest_Model_Level              | *           | *             | *             | *         | *          | *      | 0.0       | x.raw != -99999.0 && x.raw != -99998.0     | *         | *                                                                                                                          | *          | *
 # *       | VTLL     | Virtual_Temperature_Lowest_Model_Level | *           | *             | *             | *         | *          | *      | 0.0       | x.raw != -99999.0 && x.raw != -99998.0     | *         | *                                                                                                                          | *          | *
+# flags
   *       | F1       | Flags                                  | 1           | *             | *             | *         | *          | *      | *         | *                                          | *         | Flags indicating the quality of the ECMWF data                                                                             | F1         | DBL_SM_XXXX_AUX_ECMWF__0200_F1
   *       | F2       | Flags                                  | 2           | *             | *             | *         | *          | *      | *         | *                                          | *         | Flags indicating the quality of the ECMWF data                                                                             | F2         | DBL_SM_XXXX_AUX_ECMWF__0200_F2
   *       | D1       | Degradation_Flags                      | 1           | *             | *             | *         | *          | *      | *         | *                                          | *         | Flags indicating degradation of the ECMWF data (use of the backup instead of the nominal interpolation method)             | D1         | DBL_SM_XXXX_AUX_ECMWF__0200_D1
