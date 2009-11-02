@@ -69,9 +69,6 @@ public class ProductFactory {
                    || formatName.contains("MIR_SCSF1C")) {
             addL1cFlagCoding(product);
             addFullPolScienceBands(product, ((L1cSmosFile) smosFile).getBtDataType(), (L1cScienceSmosFile) smosFile);
-        } else if (is_SMUDP_File(formatName)) {
-            addL2SmFlagCodings(product);
-            addL2SmBandsFromCompound(product, ((SmosFile) smosFile).getGridPointType(), (SmosFile) smosFile);
         } else if (formatName.contains("MIR_OSDAP2")) {
             // todo: rq/rq flag codings
             final CompoundType type = ((SmosFile) smosFile).getGridPointType();
@@ -347,24 +344,6 @@ public class ProductFactory {
         }
     }
 
-    private void addL2SmBandsFromCompound(Product product, CompoundType compoundDataType, SmosFile smosFile) {
-        final CompoundMember[] members = compoundDataType.getMembers();
-
-        for (int fieldIndex = 0; fieldIndex < members.length; fieldIndex++) {
-            final CompoundMember member = members[fieldIndex];
-            if (member.getType().isSimpleType()) {
-                final String memberName = member.getName();
-                final BandInfo bandInfo = BandInfoRegistry.getInstance().getBandInfo(memberName);
-                if (bandInfo != null) {
-                    addL2SmBand(product, memberName, memberTypeToBandType(member.getType()), bandInfo, fieldIndex,
-                                smosFile);
-                } else {
-                    System.out.println("No band info available for memberName: " + memberName);
-                }
-            }
-        }
-    }
-
     private void addL1cBand(Product product, String bandName, int bandType, BandInfo bandInfo, int fieldIndex,
                             int polMode, HashMap<String, ValueProvider> valueProviderMap, ExplorerFile smosFile) {
         final ValueProvider valueProvider =
@@ -379,23 +358,6 @@ public class ProductFactory {
         valueProviderMap.put(bandName, valueProvider);
     }
 
-    private void addL2SmBand(Product product, String bandName, int bandType, BandInfo bandInfo, int fieldIndex,
-                             SmosFile smosFile) {
-        final Band band = addBand(product, bandName, bandType, bandInfo,
-                                  new DefaultValueProvider(smosFile, fieldIndex));
-
-        final Random random = new Random(5489);
-        if (bandName.equals("Confidence_Flags")) {
-            addFlagCodingAndBitmaskDefs(band, product, product.getFlagCodingGroup().get(0), random);
-        } else if (bandName.equals("Science_Flags")) {
-            addFlagCodingAndBitmaskDefs(band, product, product.getFlagCodingGroup().get(1), random);
-        } else if (bandName.equals("Processing_Flags")) {
-            addFlagCodingAndBitmaskDefs(band, product, product.getFlagCodingGroup().get(2), random);
-        } else if (bandName.equals("DGG_Current_Flags")) {
-            addFlagCodingAndBitmaskDefs(band, product, product.getFlagCodingGroup().get(3), random);
-        }
-    }
-
     private static void addL1cFlagCoding(Product product) {
         final FlagCoding flagCoding = new FlagCoding("SMOS_L1C");
 
@@ -407,33 +369,6 @@ public class ProductFactory {
         }
 
         product.getFlagCodingGroup().add(flagCoding);
-    }
-
-    private static void addL2SmFlagCodings(Product product) {
-        final FlagCoding confidenceFlagCoding = new FlagCoding("SMOS_L2_SM_CONFIDENCE");
-        for (final FlagDescriptor descriptor : FlagDescriptors.L2_SM_CONFIDENCE_FLAGS) {
-            confidenceFlagCoding.addFlag(descriptor.getFlagName(), descriptor.getMask(), descriptor.getDescription());
-        }
-
-        final FlagCoding scienceFlagCoding = new FlagCoding("SMOS_L2_SM_SCIENCE");
-        for (final FlagDescriptor descriptor : FlagDescriptors.L2_SM_SCIENCE_FLAGS) {
-            scienceFlagCoding.addFlag(descriptor.getFlagName(), descriptor.getMask(), descriptor.getDescription());
-        }
-
-        final FlagCoding processingFlagCoding = new FlagCoding("SMOS_L2_SM_PROCESSING");
-        for (final FlagDescriptor descriptor : FlagDescriptors.L2_SM_PROCESSING_FLAGS) {
-            processingFlagCoding.addFlag(descriptor.getFlagName(), descriptor.getMask(), descriptor.getDescription());
-        }
-
-        final FlagCoding dggCurrentFlagCoding = new FlagCoding("SMOS_L2_SM_DGG_CURRENT");
-        for (final FlagDescriptor descriptor : FlagDescriptors.L2_SM_DGG_CURRENT_FLAGS) {
-            dggCurrentFlagCoding.addFlag(descriptor.getFlagName(), descriptor.getMask(), descriptor.getDescription());
-        }
-
-        product.getFlagCodingGroup().add(confidenceFlagCoding);
-        product.getFlagCodingGroup().add(scienceFlagCoding);
-        product.getFlagCodingGroup().add(processingFlagCoding);
-        product.getFlagCodingGroup().add(dggCurrentFlagCoding);
     }
 
     private static void addGridPointSequentialNumberBand(Product product) {
