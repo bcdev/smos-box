@@ -1,0 +1,9 @@
+# visible | name                  | mask     | color | transparency | description
+# *       | spare                 | 00000001 | *     | *            | not used
+  *       | FL_RFI_PRONE_H        | 00000002 | *     | *            | DGG Current RFI for H pol above threshold
+  *       | FL_RFI_PRONE_V        | 00000004 | *     | *            | DGG Current RFI for V pol above threshold
+# *       | spare                 | 00000008 | *     | *            | not used
+  *       | FL_NO_PROD            | 00000010 | *     | *            | No products are generated
+  *       | FL_RANGE              | 00000020 | *     | *            | Retrieval values out off range
+  *       | FL_DQX                | 00000040 | *     | *            | High retrieval DQX
+  *       | FL_CHI2_P             | 00000080 | *     | *            | Poor fit quality

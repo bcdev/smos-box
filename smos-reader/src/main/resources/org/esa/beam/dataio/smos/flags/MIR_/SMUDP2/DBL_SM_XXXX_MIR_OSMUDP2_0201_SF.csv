@@ -1,0 +1,31 @@
+# visible | name                  | mask     | color | transparency | description
+  *       | FL_NON_NOM            | 00000001 | *     | *            | Presence of other than nominal soil
+  *       | FL_SCENE_T            | 00000002 | *     | *            | True (1) if any of scene flags is set (1)
+  *       | FL_BARREN             | 00000004 | *     | *            | Scene flag indicating presence of rocks
+  *       | FL_TOPO_S             | 00000008 | *     | *            | Scene flag indicating presence of strong topography
+  *       | FL_TOPO_M             | 00000010 | *     | *            | Scene flag indicating presence of moderate topography
+  *       | FL_OW                 | 00000020 | *     | *            | Scene flag indicating presence of open water
+  *       | FL_SNOW_MIX           | 00000040 | *     | *            | Scene flag indicating presence of mixed snow
+  *       | FL_SNOW_WET           | 00000080 | *     | *            | Scene flag indicating presence of wet snow
+  *       | FL_SNOW_DRY           | 00000100 | *     | *            | Scene flag indicating presence of significant dry snow
+  *       | FL_FOREST             | 00000200 | *     | *            | Scene flag indicating presence of forest
+  *       | FL_NOMINAL            | 00000400 | *     | *            | Scene flag indicating presence of nominal soil
+  *       | FL_FROST              | 00000800 | *     | *            | Scene flag indicating presence of frost
+  *       | FL_ICE                | 00001000 | *     | *            | Scene flag indicating presence of permanent ice/snow
+  *       | FL_WETLANDS           | 00002000 | *     | *            | Scene flag indicating presence of wetlands
+  *       | FL_FLOOD_PROB         | 00004000 | *     | *            | Scene flag indicating probable flooding risk
+  *       | FL_URBAN_LOW          | 00008000 | *     | *            | Scene flag indicating presence of limited urban area
+  *       | FL_URBAN_HIGH         | 00010000 | *     | *            | Scene flag indicating presence of large urban area
+  *       | FL_SAND               | 00020000 | *     | *            | Scene flag indicating presence of high sand fraction
+  *       | FL_SEA_ICE            | 00040000 | *     | *            | Scene flag indicating presence of sea ice
+  *       | FL_COAST              | 00080000 | *     | *            | Scene flag indicating presence of large tidal flag
+  *       | FL_OCCUR_T            | 00100000 | *     | *            | True (1) if any of occur flags is set (1)
+  *       | FL_LITTER             | 00200000 | *     | *            | Occur flag indicating litter suspected
+  *       | FL_PR                 | 00400000 | *     | *            | Occur flag indicating interception suspected (polarisation ratio)
+  *       | FL_INTERCEP           | 00800000 | *     | *            | Occur flag - ECMWF indicates interception)
+  *       | FL_EXTERNAL           | 01000000 | *     | *            | Any of the external flags on, or N_SKY counter not equal to zero
+  *       | FL_RAIN               | 02000000 | *     | *            | External flag indicating heavy rain suspected
+  *       | FL_TEC                | 04000000 | *     | *            | External flag indicating high ionospheric contributions
+  *       | FL_TAU_FO             | 08000000 | *     | *            | Scene flag indicating presence of thick forest
+  *       | FL_WINTER_FOREST      | 10000000 | *     | *            | Flag indicating that the winter forest case has been selected by the decision tree
+  *       | FL_DUAL_RETR_FNO_FFO  | 20000000 | *     | *            | Flag indicating dual retrieval is performed on the FNO and FFO fractions

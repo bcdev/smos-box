@@ -1,0 +1,6 @@
+# visible | name                    | mask     | color | transparency | description
+  *       | FL_CURRENT_TAU_NADIR_LV | 00000001 | *     | *            | Flag driving request for updating the DGG_Current_Tau_Nadir_LV map after processing
+  *       | FL_CURRENT_TAU_NADIR_FO | 00000002 | *     | *            | Flag driving request for updating the DGG_Current_Tau_Nadir_FO map after processing
+  *       | FL_CURRENT_HR           | 00000004 | *     | *            | Flag driving request for updating the DGG_Current_HR map after processing
+  *       | FL_CURRENT_RFI          | 00000008 | *     | *            | Flag driving request for updating the DGG_Current_RFI map after processing
+  *       | FL_CURRENT_FLOOD        | 00000010 | *     | *            | Flag driving request for updating the DGG_Current_Flood map after processing
