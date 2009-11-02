@@ -18,6 +18,6 @@
   *       | FG_SC_SEA_STATE_4     | 00010000 | *     | *            | Sea state class 4
   *       | FG_SC_SEA_STATE_5     | 00020000 | *     | *            | Sea state class 5
   *       | FG_SC_SEA_STATE_6     | 00040000 | *     | *            | Sea state class 6
-  *       | FG_SC_SST_FRONT       | 00080000 | *     | *            |
-  *       | FG_SC_SSS_FRONT       | 00100000 | *     | *            |
+  *       | FG_SC_SST_FRONT       | 00080000 | *     | *            | *
+  *       | FG_SC_SSS_FRONT       | 00100000 | *     | *            | *
   *       | FG_SC_ICE_ACARD       | 00200000 | *     | *            | Ice flag from cardioid
