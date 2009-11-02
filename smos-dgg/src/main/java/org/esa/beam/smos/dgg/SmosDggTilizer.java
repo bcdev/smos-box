@@ -28,8 +28,9 @@ public class SmosDggTilizer {
     }
 
     private void doIt(File inputLevel0Dir, File outputDir) throws IOException {
-        //noinspection ResultOfMethodCallIgnored
-        outputDir.mkdir();
+        if (!outputDir.exists() && !outputDir.mkdir()) {
+            throw new IOException("Failed to create directory: "+outputDir.getAbsolutePath());
+        }
 
         final TiledFileOpImage opImage = TiledFileOpImage.create(inputLevel0Dir, null);
         final int dataType = opImage.getSampleModel().getDataType();
@@ -72,8 +73,8 @@ public class SmosDggTilizer {
             }
 
             final File outputLevelDir = new File(outputDir, "" + level);
-            if (!outputLevelDir.mkdir()) {
-                throw new IOException("Failed to create directory: "+outputDir.getAbsolutePath());
+            if (!outputLevelDir.exists() && !outputLevelDir.mkdir()) {
+                throw new IOException("Failed to create directory: "+outputLevelDir.getAbsolutePath());
             }
 
             final File imagePropertiesFile = new File(outputLevelDir, "image.properties");
