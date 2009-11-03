@@ -45,7 +45,6 @@ public class L1cScienceSmosFile extends L1cSmosFile {
     private static final float MAX_BROWSE_INCIDENCE_ANGLE = 52.5f;
     private static final float INCIDENCE_ANGLE_FACTOR = 0.001373291f; // 90.0 / 2^16
 
-    private final boolean fullPol;
     private final int flagsIndex;
 
     private final int incidenceAngleIndex;
@@ -55,9 +54,8 @@ public class L1cScienceSmosFile extends L1cSmosFile {
 
     private volatile Future<SnapshotInfo> snapshotInfoFuture;
 
-    L1cScienceSmosFile(File hdrFile, File dblFile, DataFormat format, boolean fullPol) throws IOException {
+    L1cScienceSmosFile(File hdrFile, File dblFile, DataFormat format) throws IOException {
         super(hdrFile, dblFile, format);
-        this.fullPol = fullPol;
 
         flagsIndex = getBtDataType().getMemberIndex(SmosConstants.BT_FLAGS_NAME);
         incidenceAngleIndex = this.btDataType.getMemberIndex(SmosConstants.BT_INCIDENCE_ANGLE_NAME);
@@ -70,10 +68,7 @@ public class L1cScienceSmosFile extends L1cSmosFile {
         snapshotType = (CompoundType) snapshotList.getType().getElementType();
     }
 
-    public boolean isFullPol() {
-        return fullPol;
-    }
-
+    @Deprecated
     @Override
     public byte getBrowseBtData(int gridPointIndex, int fieldIndex, int polMode, byte noDataValue) throws IOException {
         if (fieldIndex == flagsIndex) {
@@ -83,6 +78,7 @@ public class L1cScienceSmosFile extends L1cSmosFile {
         }
     }
 
+    @Deprecated
     @Override
     public short getBrowseBtData(int gridPointIndex, int fieldIndex, int polMode,
                                  short noDataValue) throws IOException {
@@ -93,6 +89,7 @@ public class L1cScienceSmosFile extends L1cSmosFile {
         }
     }
 
+    @Deprecated
     @Override
     public int getBrowseBtData(int gridPointIndex, int fieldIndex, int polMode,
                                int noDataValue) throws IOException {
@@ -103,12 +100,14 @@ public class L1cScienceSmosFile extends L1cSmosFile {
         }
     }
 
+    @Deprecated
     @Override
     public float getBrowseBtData(int gridPointIndex, int fieldIndex, int polMode,
                                  float noDataValue) throws IOException {
         return getInterpolatedBtData(gridPointIndex, fieldIndex, polMode, noDataValue);
     }
 
+    @Deprecated
     @Override
     public byte getSnapshotBtData(int gridPointIndex, int fieldIndex, int polMode, long snapshotId,
                                   byte noDataValue) throws IOException {
@@ -121,6 +120,7 @@ public class L1cScienceSmosFile extends L1cSmosFile {
         return noDataValue;
     }
 
+    @Deprecated
     @Override
     public short getSnapshotBtData(int gridPointIndex, int fieldIndex, int polMode, long snapshotId,
                                    short noDataValue) throws IOException {
@@ -133,6 +133,7 @@ public class L1cScienceSmosFile extends L1cSmosFile {
         return noDataValue;
     }
 
+    @Deprecated
     @Override
     public int getSnapshotBtData(int gridPointIndex, int fieldIndex, int polMode, long snapshotId,
                                  int noDataValue) throws IOException {
@@ -145,6 +146,7 @@ public class L1cScienceSmosFile extends L1cSmosFile {
         return noDataValue;
     }
 
+    @Deprecated
     @Override
     public float getSnapshotBtData(int gridPointIndex, int fieldIndex, int polMode, long snapshotId,
                                    float noDataValue) throws IOException {

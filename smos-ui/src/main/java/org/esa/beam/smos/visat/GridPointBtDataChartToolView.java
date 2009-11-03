@@ -3,6 +3,7 @@ package org.esa.beam.smos.visat;
 import org.esa.beam.dataio.smos.L1cSmosFile;
 import org.esa.beam.dataio.smos.L1cScienceSmosFile;
 import org.esa.beam.dataio.smos.SmosConstants;
+import org.esa.beam.dataio.smos.SmosProductReader;
 import org.esa.beam.framework.ui.product.ProductSceneView;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -84,7 +85,7 @@ public class GridPointBtDataChartToolView extends GridPointBtDataToolView {
             final L1cScienceSmosFile smosFile = (L1cScienceSmosFile) l1cSmosFile;
             modeCheckers[0].setEnabled(true);
             modeCheckers[1].setEnabled(true);
-            modeCheckers[2].setEnabled(smosFile.isFullPol());
+            modeCheckers[2].setEnabled(SmosProductReader.isFullPolScienceFormat(smosFile.getFormat().getName()));
         }
     }
 

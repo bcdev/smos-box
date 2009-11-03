@@ -51,10 +51,10 @@ public class SmosProductReader extends AbstractProductReader {
                 smosFile = new L1cBrowseSmosFile(hdrFile, dblFile, format);
                 return smosFile.createProduct();
             } else if (isDualPolScienceFormat(formatName)) {
-                smosFile = new L1cScienceSmosFile(hdrFile, dblFile, format, false);
+                smosFile = new L1cScienceSmosFile(hdrFile, dblFile, format);
                 factory = new ProductFactory();
             } else if (isFullPolScienceFormat(formatName)) {
-                smosFile = new L1cScienceSmosFile(hdrFile, dblFile, format, true);
+                smosFile = new L1cScienceSmosFile(hdrFile, dblFile, format);
                 factory = new ProductFactory();
             } else if (isOsUserFormat(formatName)) {
                 smosFile = new SmosFile(hdrFile, dblFile, format);
