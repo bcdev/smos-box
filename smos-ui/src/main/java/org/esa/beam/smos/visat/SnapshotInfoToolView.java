@@ -13,7 +13,6 @@ import com.bc.ceres.glevel.support.DefaultMultiLevelImage;
 import com.bc.ceres.glevel.support.FileMultiLevelSource;
 import com.bc.ceres.grender.Viewport;
 import org.esa.beam.dataio.smos.ValueProvider;
-import org.esa.beam.dataio.smos.BtDataValueProvider;
 import org.esa.beam.dataio.smos.L1cScienceSmosFile;
 import org.esa.beam.dataio.smos.SmosFile;
 import org.esa.beam.dataio.smos.SmosMultiLevelSource;

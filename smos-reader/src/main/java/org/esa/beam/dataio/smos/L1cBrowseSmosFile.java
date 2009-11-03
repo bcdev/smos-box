@@ -53,61 +53,6 @@ public class L1cBrowseSmosFile extends L1cSmosFile {
                                               polarization);
     }
 
-    @Override
-    @Deprecated
-    public byte getBrowseBtData(int gridPointIndex, int fieldIndex, int polMode, byte noDataValue) throws IOException {
-        return getBtData(gridPointIndex, polMode).getByte(fieldIndex);
-    }
-
-    @Override
-    @Deprecated
-    public short getBrowseBtData(int gridPointIndex, int fieldIndex, int polMode,
-                                 short noDataValue) throws IOException {
-        return getBtData(gridPointIndex, polMode).getShort(fieldIndex);
-    }
-
-    @Override
-    @Deprecated
-    public int getBrowseBtData(int gridPointIndex, int fieldIndex, int polMode,
-                               int noDataValue) throws IOException {
-        return getBtData(gridPointIndex, polMode).getInt(fieldIndex);
-    }
-
-    @Override
-    @Deprecated
-    public float getBrowseBtData(int gridPointIndex, int fieldIndex, int polMode,
-                                 float noDataValue) throws IOException {
-        return getBtData(gridPointIndex, polMode).getFloat(fieldIndex);
-    }
-
-    @Override
-    @Deprecated
-    public byte getSnapshotBtData(int gridPointIndex, int fieldIndex, int polMode, long snapshotId,
-                                  byte noDataValue) throws IOException {
-        return getBtData(gridPointIndex, polMode).getByte(fieldIndex);
-    }
-
-    @Override
-    @Deprecated
-    public short getSnapshotBtData(int gridPointIndex, int fieldIndex, int polMode,
-                                   long snapshotId, short noDataValue) throws IOException {
-        return getBtData(gridPointIndex, polMode).getShort(fieldIndex);
-    }
-
-    @Override
-    @Deprecated
-    public int getSnapshotBtData(int gridPointIndex, int fieldIndex, int polMode,
-                                 long snapshotId, int noDataValue) throws IOException {
-        return getBtData(gridPointIndex, polMode).getInt(fieldIndex);
-    }
-
-    @Override
-    @Deprecated
-    public float getSnapshotBtData(int gridPointIndex, int fieldIndex, int polMode,
-                                   long snapshotId, float noDataValue) throws IOException {
-        return getBtData(gridPointIndex, polMode).getFloat(fieldIndex);
-    }
-
     private CompoundData getBtData(int gridPointIndex, int polMode) throws IOException {
         return getBtDataList(gridPointIndex).getCompound(polMode);
     }
