@@ -64,10 +64,10 @@ public class SmosProductReader extends AbstractProductReader {
                 return smosFile.createProduct();
             } else if (isOsAnalysisFormat(formatName)) {
                 smosFile = new SmosFile(hdrFile, dblFile, format);
-                factory = new ProductFactory();
+                return smosFile.createProduct();
             } else if (isSmAnalysisFormat(formatName)) {
                 smosFile = new SmosFile(hdrFile, dblFile, format);
-                factory = new ProductFactory();
+                return smosFile.createProduct();
             } else if (isEcmwfFormat(formatName)) {
                 smosFile = new SmosFile(hdrFile, dblFile, format);
                 return smosFile.createProduct();

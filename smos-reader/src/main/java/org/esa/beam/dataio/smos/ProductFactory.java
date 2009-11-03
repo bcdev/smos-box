@@ -346,8 +346,7 @@ public class ProductFactory {
 
     private void addL1cBand(Product product, String bandName, int bandType, BandInfo bandInfo, int fieldIndex,
                             int polMode, HashMap<String, ValueProvider> valueProviderMap, ExplorerFile smosFile) {
-        final ValueProvider valueProvider =
-                new BtDataValueProvider((L1cSmosFile) smosFile, fieldIndex, polMode);
+        final ValueProvider valueProvider = new BtDataValueProvider((L1cSmosFile) smosFile, fieldIndex, polMode);
         final Band band = addBand(product, bandName, bandType, bandInfo, valueProvider);
 
         if (bandName.equals("Flags")) {

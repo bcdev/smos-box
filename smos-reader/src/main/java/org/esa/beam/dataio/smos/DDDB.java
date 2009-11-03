@@ -332,6 +332,7 @@ public class DDDB {
         private final boolean visible;
         private final String bandName;
         private final String memberName;
+        private final int index;
         private final int sampleModel;
         private final double scalingOffset;
         private final double scalingFactor;
@@ -349,22 +350,23 @@ public class DDDB {
             visible = parseBoolean(tokens[0], true);
             bandName = parseString(tokens[1]);
             memberName = parseString(tokens[2], bandName);
-            sampleModel = parseInt(tokens[3], 0);
+            index = parseInt(tokens[3], -1);
+            sampleModel = parseInt(tokens[4], 0);
 
-            scalingOffset = parseDouble(tokens[4], 0.0);
-            scalingFactor = parseDouble(tokens[5], 1.0);
+            scalingOffset = parseDouble(tokens[5], 0.0);
+            scalingFactor = parseDouble(tokens[6], 1.0);
 
-            typicalMin = parseDouble(tokens[6], Double.NEGATIVE_INFINITY);
-            typicalMax = parseDouble(tokens[7], Double.POSITIVE_INFINITY);
-            cyclic = parseBoolean(tokens[8], false);
+            typicalMin = parseDouble(tokens[7], Double.NEGATIVE_INFINITY);
+            typicalMax = parseDouble(tokens[8], Double.POSITIVE_INFINITY);
+            cyclic = parseBoolean(tokens[9], false);
 
-            fillValue = parseDouble(tokens[9], Double.NaN);
-            validPixelExpression = parseString(tokens[10], "").replaceAll("x", bandName);
+            fillValue = parseDouble(tokens[10], Double.NaN);
+            validPixelExpression = parseString(tokens[11], "").replaceAll("x", bandName);
 
-            unit = parseString(tokens[11], "");
-            description = parseString(tokens[12], "");
-            flagCodingName = parseString(tokens[13], "");
-            flagDescriptors = getFlagDescriptors(tokens[14]);
+            unit = parseString(tokens[12], "");
+            description = parseString(tokens[13], "");
+            flagCodingName = parseString(tokens[14], "");
+            flagDescriptors = getFlagDescriptors(tokens[15]);
         }
 
         private Family<FlagDescriptor> getFlagDescriptors(String token) {
@@ -382,6 +384,11 @@ public class DDDB {
         @Override
         public final String getMemberName() {
             return memberName;
+        }
+
+        @Override
+        public int getIndex() {
+            return index;
         }
 
         @Override

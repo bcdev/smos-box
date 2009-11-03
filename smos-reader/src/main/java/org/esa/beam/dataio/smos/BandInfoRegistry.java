@@ -73,7 +73,7 @@ public class BandInfoRegistry {
                          "temperature measurement over current " +
                          "Earth fixed grid point, obtained by DFT " +
                          "interpolation from L1b data.");
-        registerBandInfo("Pixel_Radiometric_Accuracy", "K", 0.0, 50.0 / (1 << 16), 0, 0.0, 5.0,
+        registerBandInfo("Pixel_Radiometric_Accuracy", "K", 0.0, 7.62939453125E-4, 0, 0.0, 5.0,
                          "Error accuracy measurement in the Brightness " +
                          "Temperature presented in the previous field, " +
                          "extracted in the direction of the pixel.");
@@ -83,7 +83,7 @@ public class BandInfoRegistry {
                          "grid point. Measured as angle from pixel to " +
                          "S/C with respect to the pixel local normal (0° " +
                          "if vertical)");
-        registerBandInfo("Azimuth_Angle", "deg", 0.0, 360.0 / (1 << 16), 0, 0.0, 360.0,
+        registerBandInfo("Azimuth_Angle", "deg", 0.0, 0.0054931640625, 0, 0.0, 360.0,
                          "Azimuth angle value corresponding to the " +
                          "measured BT value over current Earth fixed " +
                          "grid point. Measured as angle in pixel local " +
@@ -101,7 +101,7 @@ public class BandInfoRegistry {
                          "over current Earth fixed grid point. It is " +
                          "computed as the rotation from surface to " +
                          "antenna (i.e. direct angle).", true);
-        registerBandInfo("Footprint_Axis1", "km", 0.0, 100.0 / (1 << 16), 0, 20.0, 35.0,
+        registerBandInfo("Footprint_Axis1", "km", 0.0, 0.00152587890625, 0, 20.0, 35.0,
                          "Elliptical footprint major semi-axis value.");
         registerBandInfo("Footprint_Axis2", "km", 0.0, 100.0 / (1 << 16), 0, 20.0, 35.0,
                          "Elliptical footprint minor semi-axis value.");

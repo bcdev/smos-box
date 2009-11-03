@@ -6,6 +6,8 @@ public interface BandDescriptor {
 
     String getMemberName();
 
+    int getIndex();
+
     boolean isVisible();
 
     int getSampleModel();
