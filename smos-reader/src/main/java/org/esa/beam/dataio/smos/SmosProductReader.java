@@ -46,36 +46,27 @@ public class SmosProductReader extends AbstractProductReader {
 
             if (isDualPolBrowseFormat(formatName)) {
                 smosFile = new L1cBrowseSmosFile(hdrFile, dblFile, format);
-                return smosFile.createProduct();
             } else if (isFullPolBrowseFormat(formatName)) {
                 smosFile = new L1cBrowseSmosFile(hdrFile, dblFile, format);
-                return smosFile.createProduct();
             } else if (isDualPolScienceFormat(formatName)) {
                 smosFile = new L1cScienceSmosFile(hdrFile, dblFile, format);
-                return smosFile.createProduct();
             } else if (isFullPolScienceFormat(formatName)) {
                 smosFile = new L1cScienceSmosFile(hdrFile, dblFile, format);
-                factory = new ProductFactory();
             } else if (isOsUserFormat(formatName)) {
                 smosFile = new SmosFile(hdrFile, dblFile, format);
-                return smosFile.createProduct();
             } else if (isSmUserFormat(formatName)) {
                 smosFile = new SmosFile(hdrFile, dblFile, format);
-                return smosFile.createProduct();
             } else if (isOsAnalysisFormat(formatName)) {
                 smosFile = new SmosFile(hdrFile, dblFile, format);
-                return smosFile.createProduct();
             } else if (isSmAnalysisFormat(formatName)) {
                 smosFile = new SmosFile(hdrFile, dblFile, format);
-                return smosFile.createProduct();
             } else if (isEcmwfFormat(formatName)) {
                 smosFile = new SmosFile(hdrFile, dblFile, format);
-                return smosFile.createProduct();
             } else {
                 throw new IOException("Unknown SMOS format: " + formatName);
             }
 
-            return factory.createProduct(smosFile);
+            return smosFile.createProduct();
         }
     }
 

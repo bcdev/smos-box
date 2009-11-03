@@ -10,7 +10,7 @@ public class L1cScienceDataValueProvider implements ValueProvider {
     private final L1cScienceSmosFile smosFile;
     private final int memberIndex;
     private final int polarisation;
-    private long snapshotId;
+    private volatile long snapshotId;
 
     L1cScienceDataValueProvider(L1cScienceSmosFile smosFile, int memberIndex, int polarization) {
         this.smosFile = smosFile;
@@ -20,15 +20,11 @@ public class L1cScienceDataValueProvider implements ValueProvider {
     }
 
     public long getSnapshotId() {
-        synchronized (this) {
-            return snapshotId;
-        }
+        return snapshotId;
     }
 
     public void setSnapshotId(long snapshotId) {
-        synchronized (this) {
-            this.snapshotId = snapshotId;
-        }
+        this.snapshotId = snapshotId;
     }
 
     @Override

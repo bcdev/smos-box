@@ -17,6 +17,7 @@ package org.esa.beam.dataio.smos;
 import java.awt.geom.Area;
 import java.io.IOException;
 
+@Deprecated
 public class BtDataValueProvider implements ValueProvider {
     private final L1cSmosFile smosFile;
     private final int fieldIndex;
