@@ -16,6 +16,7 @@ package org.esa.beam.dataio.smos;
 
 import com.bc.ceres.binio.CompoundData;
 import com.bc.ceres.binio.DataFormat;
+import org.esa.beam.framework.datamodel.Product;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,47 +35,73 @@ public class L1cBrowseSmosFile extends L1cSmosFile {
     }
 
     @Override
+    protected void addBand(Product product, BandDescriptor descriptor) {
+        if (descriptor.getIndexInCollection() < 0) {
+            super.addBand(product, descriptor);
+        } else {
+            addBand(product, descriptor, getBtDataType());
+        }
+    }
+
+    @Override
+    protected ValueProvider createValueProvider(BandDescriptor descriptor) {
+        if (descriptor.getIndexInCollection() < 0) {
+            return super.createValueProvider(descriptor);
+        }
+        return new BrowseDataValueProvider(this, getBtDataType().getMemberIndex(descriptor.getMemberName()),
+                                           descriptor.getIndexInCollection());
+    }
+
+    @Override
+    @Deprecated
     public byte getBrowseBtData(int gridPointIndex, int fieldIndex, int polMode, byte noDataValue) throws IOException {
         return getBtData(gridPointIndex, polMode).getByte(fieldIndex);
     }
 
     @Override
+    @Deprecated
     public short getBrowseBtData(int gridPointIndex, int fieldIndex, int polMode,
                                  short noDataValue) throws IOException {
         return getBtData(gridPointIndex, polMode).getShort(fieldIndex);
     }
 
     @Override
+    @Deprecated
     public int getBrowseBtData(int gridPointIndex, int fieldIndex, int polMode,
                                int noDataValue) throws IOException {
         return getBtData(gridPointIndex, polMode).getInt(fieldIndex);
     }
 
     @Override
+    @Deprecated
     public float getBrowseBtData(int gridPointIndex, int fieldIndex, int polMode,
                                  float noDataValue) throws IOException {
         return getBtData(gridPointIndex, polMode).getFloat(fieldIndex);
     }
 
     @Override
+    @Deprecated
     public byte getSnapshotBtData(int gridPointIndex, int fieldIndex, int polMode, long snapshotId,
                                   byte noDataValue) throws IOException {
         return getBtData(gridPointIndex, polMode).getByte(fieldIndex);
     }
 
     @Override
+    @Deprecated
     public short getSnapshotBtData(int gridPointIndex, int fieldIndex, int polMode,
                                    long snapshotId, short noDataValue) throws IOException {
         return getBtData(gridPointIndex, polMode).getShort(fieldIndex);
     }
 
     @Override
+    @Deprecated
     public int getSnapshotBtData(int gridPointIndex, int fieldIndex, int polMode,
                                  long snapshotId, int noDataValue) throws IOException {
         return getBtData(gridPointIndex, polMode).getInt(fieldIndex);
     }
 
     @Override
+    @Deprecated
     public float getSnapshotBtData(int gridPointIndex, int fieldIndex, int polMode,
                                    long snapshotId, float noDataValue) throws IOException {
         return getBtData(gridPointIndex, polMode).getFloat(fieldIndex);

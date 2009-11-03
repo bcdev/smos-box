@@ -1,28 +1,3 @@
-#############################################################################
-# Properties
-#
-# visible:       should the band appear in the BEAM product tree?
-# band:          band name used in BEAM
-# dataset:       dataset name
-# index:         index in sequence
-# sampleModel:   0, 1, 2
-# scalingOffset: scaling offset applied to the raw data
-# scalingFactor: scaling factor applied to the raw data
-# typicalMin:    typical (scaled) minimum value
-# typicalMax:    typical (scaled) maximum value
-# cyclic:        is the value range cyclic?
-# fillValue:     value indicating no-data in BEAM
-# validExpr:     valid-pixel expression used in BEAM
-# unit:          unit
-# description:   description
-# flagCoding:    for flag bands only: name of the flag coding
-# flags:         for flag bands only: name of the flag descriptor resource
-#
-# Values
-#
-# An asterisk '*' indicates: Do not care, just use the default
-#############################################################################
-
 # visible | band                    | dataset                 | index | sampleModel | scalingOffset | scalingFactor | typicaMin | typicalMax | cyclic | fillValue | validExpr           | unit      | decription                                                                                                                                | flagCoding    | flags
 # *       | GID                     | Grid_Point_ID           | *     | *           | *             | *             | *         | *          | *      | *         | *                   | *         | Grid point ID                                                                                                                             | *             | *
 # *       | LAT                     | Latitude                | *     | *           | *             | *             | -90.0     | 90.0       | *      | *         | x.raw != -999.0     | deg       | Latitude (-90, 90)                                                                                                                        | *             | *
@@ -51,10 +26,10 @@
   *       | TBY                     | Tb_42.5Y                | *     | *           | *             | *             | 70.0      | 130.0      | *      | 0.0       | x.raw != -999.0     | K         | Brightness temperature at antenna level derived with default forward model and retrieved geophysical parameters, Y polarisation direction | *             | *
   *       | Sigma_TBY               | Sigma_Tb_42.5Y          | *     | *           | *             | *             | 0.1       | 0.8        | *      | 0.0       | x.raw != -999.0     | K         | Theoretical uncertainty computed for TBY                                                                                                  | *             | *
 # control flags
-  *       | Control_Flags_1         | Control_Flags_1         | *     | *           | *             | *             | *         | *          | *      | 0.0       | x.raw != 2147483647 | *         | Control Flags for SSS retrieval with Forward Model 1                                                                                      | Control Flags | DBL_SM_XXXX_MIR_OSUDP2_0200_CF
-  *       | Control_Flags_2         | Control_Flags_2         | *     | *           | *             | *             | *         | *          | *      | 0.0       | x.raw != 2147483647 | *         | Control Flags for SSS retrieval with Forward Model 2                                                                                      | Control Flags | DBL_SM_XXXX_MIR_OSUDP2_0200_CF
-  *       | Control_Flags_3         | Control_Flags_3         | *     | *           | *             | *             | *         | *          | *      | 0.0       | x.raw != 2147483647 | *         | Control Flags for SSS retrieval with Forward Model 3                                                                                      | Control Flags | DBL_SM_XXXX_MIR_OSUDP2_0200_CF
-  *       | Control_Flags_4         | Control_Flags_4         | *     | *           | *             | *             | *         | *          | *      | 0.0       | x.raw != 2147483647 | *         | Control Flags for SSS retrieval with Cardioid Model                                                                                       | Control Flags | DBL_SM_XXXX_MIR_OSUDP2_0200_CF
+  *       | Control_Flags_1         | Control_Flags_1         | *     | *           | *             | *             | *         | *          | *      | 0.0       | x.raw != 2147483647 | *         | Control Flags for SSS retrieval with Forward Model 1                                                                                      | Control flags | DBL_SM_XXXX_MIR_OSUDP2_0200_CF
+  *       | Control_Flags_2         | Control_Flags_2         | *     | *           | *             | *             | *         | *          | *      | 0.0       | x.raw != 2147483647 | *         | Control Flags for SSS retrieval with Forward Model 2                                                                                      | Control flags | DBL_SM_XXXX_MIR_OSUDP2_0200_CF
+  *       | Control_Flags_3         | Control_Flags_3         | *     | *           | *             | *             | *         | *          | *      | 0.0       | x.raw != 2147483647 | *         | Control Flags for SSS retrieval with Forward Model 3                                                                                      | Control flags | DBL_SM_XXXX_MIR_OSUDP2_0200_CF
+  *       | Control_Flags_4         | Control_Flags_4         | *     | *           | *             | *             | *         | *          | *      | 0.0       | x.raw != 2147483647 | *         | Control Flags for SSS retrieval with Cardioid Model                                                                                       | Control flags | DBL_SM_XXXX_MIR_OSUDP2_0200_CF
 # confidence descriptors
   *       | Dg_chi2_1               | Dg_chi2_1               | *     | *           | *             | *             | 1.0       | 1000.0     | *      | 0.0       | *                   | *         | Retrieval fit quality index with Forward Model 1                                                                                          | *             | *
   *       | Dg_chi2_2               | Dg_chi2_2               | *     | *           | *             | *             | 1.0       | 1000.0     | *      | 0.0       | *                   | *         | Retrieval fit quality index with Forward Model 2                                                                                          | *             | *
@@ -86,9 +61,9 @@
   *       | Dg_galactic_Noise_Pol   | Dg_galactic_Noise_Pol   | *     | *           | *             | *             | 1.0       | 300.0      | *      | 0.0       | *                   | *         | Number of measurements with Fm_gal_noise_pol flag raised                                                                                  | *             | *
   *       | Dg_moonglint            | Dg_moonglint            | *     | *           | *             | *             | 1.0       | 300.0      | *      | 0.0       | *                   | *         | Number of measurements with L2 moonglint raised                                                                                           | *             | *
 # science flags
-  *       | Science_Flags_1         | Science_Flags_1         | *     | *           | *             | *             | *         | *          | *      | 0.0       | x.raw != 2147483647 | *         | Science Flags for SSS retrieval with Forward Model 1                                                                                      | Science Flags | DBL_SM_XXXX_MIR_OSUDP2_0200_SF
-  *       | Science_Flags_2         | Science_Flags_2         | *     | *           | *             | *             | *         | *          | *      | 0.0       | x.raw != 2147483647 | *         | Science Flags for SSS retrieval with Forward Model 2                                                                                      | Science Flags | DBL_SM_XXXX_MIR_OSUDP2_0200_SF
-  *       | Science_Flags_3         | Science_Flags_3         | *     | *           | *             | *             | *         | *          | *      | 0.0       | x.raw != 2147483647 | *         | Science Flags for SSS retrieval with Forward Model 3                                                                                      | Science Flags | DBL_SM_XXXX_MIR_OSUDP2_0200_SF
-  *       | Science_Flags_4         | Science_Flags_4         | *     | *           | *             | *             | *         | *          | *      | 0.0       | x.raw != 2147483647 | *         | Science Flags for SSS retrieval with Cardioid Model                                                                                       | Science Flags | DBL_SM_XXXX_MIR_OSUDP2_0200_SF
+  *       | Science_Flags_1         | Science_Flags_1         | *     | *           | *             | *             | *         | *          | *      | 0.0       | x.raw != 2147483647 | *         | Science Flags for SSS retrieval with Forward Model 1                                                                                      | Science flags | DBL_SM_XXXX_MIR_OSUDP2_0200_SF
+  *       | Science_Flags_2         | Science_Flags_2         | *     | *           | *             | *             | *         | *          | *      | 0.0       | x.raw != 2147483647 | *         | Science Flags for SSS retrieval with Forward Model 2                                                                                      | Science flags | DBL_SM_XXXX_MIR_OSUDP2_0200_SF
+  *       | Science_Flags_3         | Science_Flags_3         | *     | *           | *             | *             | *         | *          | *      | 0.0       | x.raw != 2147483647 | *         | Science Flags for SSS retrieval with Forward Model 3                                                                                      | Science flags | DBL_SM_XXXX_MIR_OSUDP2_0200_SF
+  *       | Science_Flags_4         | Science_Flags_4         | *     | *           | *             | *             | *         | *          | *      | 0.0       | x.raw != 2147483647 | *         | Science Flags for SSS retrieval with Cardioid Model                                                                                       | Science flags | DBL_SM_XXXX_MIR_OSUDP2_0200_SF
 # science descriptors
   *       | Dg_sky                  | Dg_sky                  | *     | *           | *             | *             | 1.0       | 300.0      | *      | 0.0       | *                   | *         | Count measurements with specular direction toward a strong galactic source                                                                | *             | *

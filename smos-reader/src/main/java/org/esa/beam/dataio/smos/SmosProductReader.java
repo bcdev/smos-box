@@ -46,10 +46,10 @@ public class SmosProductReader extends AbstractProductReader {
 
             if (isDualPolBrowseFormat(formatName)) {
                 smosFile = new L1cBrowseSmosFile(hdrFile, dblFile, format);
-                factory = new ProductFactory();
+                return smosFile.createProduct();
             } else if (isFullPolBrowseFormat(formatName)) {
                 smosFile = new L1cBrowseSmosFile(hdrFile, dblFile, format);
-                factory = new ProductFactory();
+                return smosFile.createProduct();
             } else if (isDualPolScienceFormat(formatName)) {
                 smosFile = new L1cScienceSmosFile(hdrFile, dblFile, format, false);
                 factory = new ProductFactory();

@@ -1,0 +1,16 @@
+# visible | name                  | mask     | color | transparency | description
+  *       | POL_FLAG_1            | 00000001 | *     | *            | Flag indicating antenna X (0) or Y (1) polarisation
+  *       | POL_FLAG_2            | 00000002 | *     | *            | Always False (0).
+  *       | SUN_FOV               | 00000004 | *     | *            | Direct  Sun  correction  has  been  performed  during  image reconstruction of this pixel
+  *       | SUN_GLINT_FOV         | 00000008 | *     | *            | Reflected  Sun  correction  has  been  performed  during  image reconstruction of this pixel
+  *       | MOON_GLINT_FOV        | 00000010 | *     | *            | Direct  Moon  correction  has  been  performed  during  image reconstruction of this pixel
+  *       | SINGLE_SNAPSHOT       | 00000020 | *     | *            | *
+  *       | FTT                   | 00000040 | *     | *            | Flat Target  Transformation  has  been  performed  during  image reconstruction of this pixel
+  *       | SUN_POINT             | 00000080 | *     | *            | Pixel is located in a zone where a Sun alias was reconstructed (after Sun removal, measurement may be degraded)
+  *       | SUN_GLINT_AREA        | 00000100 | *     | *            | Pixel is located in a zone where Sun reflection has been detected
+  *       | MOON_POINT            | 00000200 | *     | *            | Pixel  is  located  in a zone where a Moon alias was reconstructed (after Moon removal, measurement may be degraded)
+  *       | AF_FOV                | 00000400 | *     | *            | Pixel is inside the exclusive zone of Alias free (delimited by the six aliased unit circles)
+  *       | EAF_FOV               | 00000800 | *     | *            | Pixel is inside the Extended Alias free zone (obtained after removing sky aliases)
+  *       | BORDER_FOV            | 00001000 | *     | *            | Pixel is close to the border delimiting the Extended Alias free zone
+  *       | SUN_TAILS             | 00002000 | *     | *            | Pixel is located in the hexagonal alias directions centred on a Sun alias (if Sun is not removed, measurement may be degraded in these directions)
+  *       | RFI                   | 00004000 | *     | *            | Pixel is affected by RFI effects (as identified in static ADF file)

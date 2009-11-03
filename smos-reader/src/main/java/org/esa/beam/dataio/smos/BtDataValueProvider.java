@@ -23,10 +23,10 @@ public class BtDataValueProvider implements ValueProvider {
     private final int polMode;
     private volatile long snapshotId;
 
-    BtDataValueProvider(L1cSmosFile smosFile, int fieldIndex, int polMode) {
+    BtDataValueProvider(L1cSmosFile smosFile, int memberIndex, int polarisation) {
         this.smosFile = smosFile;
-        this.fieldIndex = fieldIndex;
-        this.polMode = polMode;
+        this.fieldIndex = memberIndex;
+        this.polMode = polarisation;
         this.snapshotId = -1;
     }
 

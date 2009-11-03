@@ -36,7 +36,7 @@ public abstract class L1cSmosFile extends SmosFile {
     protected final int btDataListIndex;
     protected final CompoundType btDataType;
 
-    public L1cSmosFile(File hdrFile, File dblFile, DataFormat format) throws IOException {
+    protected L1cSmosFile(File hdrFile, File dblFile, DataFormat format) throws IOException {
         super(hdrFile, dblFile, format);
 
         btDataListIndex = getGridPointType().getMemberIndex(SmosConstants.BT_DATA_LIST_NAME);
@@ -67,27 +67,35 @@ public abstract class L1cSmosFile extends SmosFile {
         return getGridPointData(gridPointIndex).getSequence(btDataListIndex);
     }
 
+    @Deprecated
     public abstract byte getBrowseBtData(int gridPointIndex, int fieldIndex, int polMode,
                                          byte noDataValue) throws IOException;
 
+    @Deprecated
     public abstract short getBrowseBtData(int gridPointIndex, int fieldIndex, int polMode,
                                           short noDataValue) throws IOException;
 
+    @Deprecated
     public abstract int getBrowseBtData(int gridPointIndex, int fieldIndex, int polMode,
                                         int noDataValue) throws IOException;
 
+    @Deprecated
     public abstract float getBrowseBtData(int gridPointIndex, int fieldIndex, int polMode,
                                           float noDataValue) throws IOException;
 
+    @Deprecated
     public abstract byte getSnapshotBtData(int gridPointIndex, int fieldIndex, int polMode,
                                            long snapshotId, byte noDataValue) throws IOException;
 
+    @Deprecated
     public abstract short getSnapshotBtData(int gridPointIndex, int fieldIndex, int polMode,
                                             long snapshotId, short noDataValue) throws IOException;
 
+    @Deprecated
     public abstract int getSnapshotBtData(int gridPointIndex, int fieldIndex, int polMode,
                                           long snapshotId, int noDataValue) throws IOException;
 
+    @Deprecated
     public abstract float getSnapshotBtData(int gridPointIndex, int fieldIndex, int polMode,
                                             long snapshotId, float noDataValue) throws IOException;
 }

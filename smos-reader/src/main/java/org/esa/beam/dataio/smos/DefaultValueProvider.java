@@ -63,7 +63,7 @@ class DefaultValueProvider implements ValueProvider {
         try {
             return smosFile.getGridPointData(gridPointIndex).getByte(getMemberIndex());
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            return noDataValue;
         }
     }
 
@@ -72,7 +72,7 @@ class DefaultValueProvider implements ValueProvider {
         try {
             return smosFile.getGridPointData(gridPointIndex).getShort(getMemberIndex());
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            return noDataValue;
         }
     }
 
@@ -81,7 +81,7 @@ class DefaultValueProvider implements ValueProvider {
         try {
             return smosFile.getGridPointData(gridPointIndex).getInt(getMemberIndex());
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            return noDataValue;
         }
     }
 
@@ -90,7 +90,7 @@ class DefaultValueProvider implements ValueProvider {
         try {
             return smosFile.getGridPointData(gridPointIndex).getFloat(getMemberIndex());
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            return noDataValue;
         }
     }
 }

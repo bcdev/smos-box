@@ -198,12 +198,15 @@ public class SmosFile extends ExplorerFile {
         }
     }
 
-    private void addBand(Product product, BandDescriptor descriptor) {
-        final CompoundType compoundDataType = getGridPointType();
-        final int memberIndex = compoundDataType.getMemberIndex(descriptor.getMemberName());
+    protected void addBand(Product product, BandDescriptor descriptor) {
+        addBand(product, descriptor, getGridPointType());
+    }
+
+    protected final void addBand(Product product, BandDescriptor descriptor, CompoundType compoundType) {
+        final int memberIndex = compoundType.getMemberIndex(descriptor.getMemberName());
 
         if (memberIndex >= 0) {
-            final CompoundMember member = compoundDataType.getMember(memberIndex);
+            final CompoundMember member = compoundType.getMember(memberIndex);
 
             final int dataType = ProductHelper.getDataType(member.getType());
             final Band band = product.addBand(descriptor.getBandName(), dataType);
@@ -234,7 +237,7 @@ public class SmosFile extends ExplorerFile {
         }
     }
 
-    private ValueProvider createValueProvider(BandDescriptor descriptor) {
+    protected ValueProvider createValueProvider(BandDescriptor descriptor) {
         switch (descriptor.getSampleModel()) {
         case 1:
             return new DefaultValueProvider(this, descriptor.getMemberName()) {
