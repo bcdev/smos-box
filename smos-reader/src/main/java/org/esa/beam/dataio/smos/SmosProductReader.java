@@ -42,8 +42,6 @@ public class SmosProductReader extends AbstractProductReader {
                 throw new IOException(MessageFormat.format("File ''{0}'': Unknown SMOS data format", inputFile));
             }
             final String formatName = format.getName();
-            final ProductFactory factory;
-
             if (isDualPolBrowseFormat(formatName)) {
                 smosFile = new L1cBrowseSmosFile(hdrFile, dblFile, format);
             } else if (isFullPolBrowseFormat(formatName)) {

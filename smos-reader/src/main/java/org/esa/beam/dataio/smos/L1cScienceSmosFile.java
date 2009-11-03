@@ -18,11 +18,14 @@ import com.bc.ceres.binio.CompoundData;
 import com.bc.ceres.binio.CompoundType;
 import com.bc.ceres.binio.DataFormat;
 import com.bc.ceres.binio.SequenceData;
+import org.esa.beam.framework.datamodel.Band;
 import org.esa.beam.framework.datamodel.Product;
+import org.esa.beam.framework.datamodel.ProductData;
 
 import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -45,6 +48,7 @@ public class L1cScienceSmosFile extends L1cSmosFile {
     private static final double MIN_BROWSE_INCIDENCE_ANGLE = 37.5;
     private static final double MAX_BROWSE_INCIDENCE_ANGLE = 52.5;
 
+    private final Map<String, ValueProvider> valueProviderMap = new HashMap<String, ValueProvider>(17);
     private final int flagsIndex;
     private final int incidenceAngleIndex;
     private final int snapshotIdOfPixelIndex;
@@ -80,6 +84,24 @@ public class L1cScienceSmosFile extends L1cSmosFile {
     }
 
     @Override
+    public void close() {
+        snapshotInfoFuture = null;
+        valueProviderMap.clear();
+        super.close();
+    }
+
+    @Override
+    protected void addBands(Product product) {
+        super.addBands(product);
+
+        if (SmosProductReader.isDualPolScienceFormat(getFormat().getName())) {
+            addRotatedDualPolBands(product, valueProviderMap);
+        } else {
+            addRotatedFullPolBands(product, valueProviderMap);
+        }
+    }
+
+    @Override
     protected final void addBand(Product product, BandDescriptor descriptor) {
         if (descriptor.getPolarization() < 0) {
             super.addBand(product, descriptor);
@@ -90,11 +112,15 @@ public class L1cScienceSmosFile extends L1cSmosFile {
 
     @Override
     protected final ValueProvider createValueProvider(BandDescriptor descriptor) {
-        if (descriptor.getPolarization() < 0) {
+        final int polarization = descriptor.getPolarization();
+        if (polarization < 0) {
             return super.createValueProvider(descriptor);
         }
-        return new L1cScienceDataValueProvider(this, getBtDataType().getMemberIndex(descriptor.getMemberName()),
-                                               descriptor.getPolarization());
+        final int memberIndex = getBtDataType().getMemberIndex(descriptor.getMemberName());
+        final ValueProvider valueProvider = new L1cScienceDataValueProvider(this, memberIndex, polarization);
+        valueProviderMap.put(descriptor.getBandName(), valueProvider);
+
+        return valueProvider;
     }
 
     @Deprecated
@@ -447,5 +473,89 @@ public class L1cScienceSmosFile extends L1cSmosFile {
         }
 
         return new SnapshotInfo(snapshotIndexMap, all, x, y, xy, snapshotEnvelopeMap);
+    }
+
+    private void addRotatedDualPolBands(Product product, Map<String, ValueProvider> valueProviderMap) {
+        final Family<BandDescriptor> descriptors = DDDB.getInstance().getBandDescriptors(getFormat().getName());
+
+        DP vp;
+        BandDescriptor descriptor;
+
+        vp = new DPH(product, valueProviderMap, false);
+        descriptor = descriptors.getMember("BT_Value_H");
+        addRotatedBand(product, descriptor, vp);
+
+        vp = new DPV(product, valueProviderMap, false);
+        descriptor = descriptors.getMember("BT_Value_V");
+        addRotatedBand(product, descriptor, vp);
+
+        vp = new DPH(product, valueProviderMap, true);
+        descriptor = descriptors.getMember("Pixel_Radiometric_Accuracy_H");
+        addRotatedBand(product, descriptor, vp);
+
+        vp = new DPV(product, valueProviderMap, true);
+        descriptor = descriptors.getMember("Pixel_Radiometric_Accuracy_V");
+        addRotatedBand(product, descriptor, vp);
+
+        ProductHelper.addVirtualBand(product, "Stokes_1", "(BT_Value_H + BT_Value_V) / 2.0");
+        ProductHelper.addVirtualBand(product, "Stokes_2", "(BT_Value_H - BT_Value_V) / 2.0");
+    }
+
+    private void addRotatedFullPolBands(Product product, Map<String, ValueProvider> valueProviderMap) {
+        final Family<BandDescriptor> descriptors = DDDB.getInstance().getBandDescriptors(getFormat().getName());
+
+        FP vp;
+        BandDescriptor descriptor;
+
+        vp = new FPH(product, valueProviderMap, false);
+        descriptor = descriptors.getMember("BT_Value_H");
+        if (descriptor != null) {
+            addRotatedBand(product, descriptor, vp);
+        }
+
+        vp = new FPV(product, valueProviderMap, false);
+        descriptor = descriptors.getMember("BT_Value_V");
+        addRotatedBand(product, descriptor, vp);
+
+        vp = new FPR(product, valueProviderMap, false);
+        descriptor = descriptors.getMember("BT_Value_HV_Real");
+        addRotatedBand(product, descriptor, vp);
+
+        vp = new FPI(product, valueProviderMap, false);
+        descriptor = descriptors.getMember("BT_Value_HV_Imag");
+        addRotatedBand(product, descriptor, vp);
+
+        vp = new FPH(product, valueProviderMap, true);
+        descriptor = descriptors.getMember("Pixel_Radiometric_Accuracy_H");
+        addRotatedBand(product, descriptor, vp);
+
+        vp = new FPV(product, valueProviderMap, true);
+        descriptor = descriptors.getMember("Pixel_Radiometric_Accuracy_V");
+        addRotatedBand(product, descriptor, vp);
+
+        vp = new FPR(product, valueProviderMap, true);
+        descriptor = descriptors.getMember("Pixel_Radiometric_Accuracy_HV");
+        addRotatedBand(product, descriptor, vp);
+
+        ProductHelper.addVirtualBand(product, "Stokes_1", "(BT_Value_H + BT_Value_V) / 2.0");
+        ProductHelper.addVirtualBand(product, "Stokes_2", "(BT_Value_H - BT_Value_V) / 2.0");
+        ProductHelper.addVirtualBand(product, "Stokes_3", "BT_Value_HV_Real");
+        ProductHelper.addVirtualBand(product, "Stokes_4", "BT_Value_HV_Imag");
+    }
+
+    private Band addRotatedBand(Product product, BandDescriptor descriptor, ValueProvider valueProvider) {
+        final Band band = product.addBand(descriptor.getBandName(), ProductData.TYPE_FLOAT32);
+
+        band.setUnit(descriptor.getUnit());
+        band.setDescription(descriptor.getDescription());
+
+        if (descriptor.hasFillValue()) {
+            band.setNoDataValueUsed(true);
+            band.setNoDataValue(descriptor.getFillValue());
+        }
+        band.setSourceImage(createSourceImage(band, valueProvider));
+        band.setImageInfo(ProductHelper.createImageInfo(band, descriptor));
+
+        return band;
     }
 }

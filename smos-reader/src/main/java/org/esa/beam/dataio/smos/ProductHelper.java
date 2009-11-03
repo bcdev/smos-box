@@ -3,6 +3,7 @@ package org.esa.beam.dataio.smos;
 import com.bc.ceres.binio.SimpleType;
 import com.bc.ceres.binio.Type;
 import com.bc.ceres.glevel.MultiLevelImage;
+import com.bc.jexp.ParseException;
 import org.esa.beam.framework.datamodel.Band;
 import org.esa.beam.framework.datamodel.ColorPaletteDef;
 import org.esa.beam.framework.datamodel.FlagCoding;
@@ -12,6 +13,8 @@ import org.esa.beam.framework.datamodel.MetadataAttribute;
 import org.esa.beam.framework.datamodel.MetadataElement;
 import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.framework.datamodel.ProductData;
+import org.esa.beam.framework.datamodel.VirtualBand;
+import org.esa.beam.framework.dataop.barithm.BandArithmetic;
 import org.esa.beam.framework.dataop.maptransf.Datum;
 import org.esa.beam.framework.dataop.maptransf.IdentityTransformDescriptor;
 import org.esa.beam.framework.dataop.maptransf.MapInfo;
@@ -213,6 +216,25 @@ class ProductHelper {
                 mask.getImageConfig().setValue("expression", imageExpression);
                 product.getMaskGroup().add(mask);
             }
+        }
+    }
+
+    static void addVirtualBand(Product product, String name, String bandExpression) {
+        final VirtualBand band = new VirtualBand(name, ProductData.TYPE_FLOAT32,
+                                                 product.getSceneRasterWidth(),
+                                                 product.getSceneRasterHeight(),
+                                                 bandExpression);
+
+        final String validPixelExpression = createValidPixelExpression(product, bandExpression);
+        band.setValidPixelExpression(validPixelExpression);
+        product.addBand(band);
+    }
+
+    static String createValidPixelExpression(Product product, String expression) {
+        try {
+            return BandArithmetic.getValidMaskExpression(expression, new Product[]{product}, 0, null);
+        } catch (ParseException e) {
+            return null;
         }
     }
 }

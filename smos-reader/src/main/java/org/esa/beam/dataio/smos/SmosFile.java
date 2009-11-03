@@ -72,6 +72,12 @@ public class SmosFile extends ExplorerFile {
         gridPointIdIndex = gridPointType.getMemberIndex(SmosConstants.GRID_POINT_ID_NAME);
     }
 
+    @Override
+    public void close() {
+        gridPointInfoFuture = null;
+        super.close();
+    }
+
     public final int getGridPointCount() {
         return gridPointList.getElementCount();
     }
@@ -187,7 +193,7 @@ public class SmosFile extends ExplorerFile {
         return product;
     }
 
-    private void addBands(Product product) {
+    protected void addBands(Product product) {
         final String formatName = getFormat().getName();
         final Family<BandDescriptor> descriptors = DDDB.getInstance().getBandDescriptors(formatName);
 
@@ -268,7 +274,7 @@ public class SmosFile extends ExplorerFile {
         }
     }
 
-    private MultiLevelImage createSourceImage(Band band, ValueProvider valueProvider) {
+    protected MultiLevelImage createSourceImage(Band band, ValueProvider valueProvider) {
         return new DefaultMultiLevelImage(createMultiLevelSource(band, valueProvider));
     }
 

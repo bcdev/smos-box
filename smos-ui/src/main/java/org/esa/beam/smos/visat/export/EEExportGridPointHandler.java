@@ -1,9 +1,14 @@
 package org.esa.beam.smos.visat.export;
 
-import com.bc.ceres.binio.*;
-import org.esa.beam.dataio.smos.SmosFile;
-import org.esa.beam.dataio.smos.ProductFactory;
+import com.bc.ceres.binio.CollectionData;
+import com.bc.ceres.binio.CompoundData;
+import com.bc.ceres.binio.CompoundType;
+import com.bc.ceres.binio.DataAccessException;
+import com.bc.ceres.binio.DataContext;
+import com.bc.ceres.binio.SequenceData;
 import org.esa.beam.dataio.smos.SmosConstants;
+import org.esa.beam.dataio.smos.SmosFile;
+import org.esa.beam.dataio.smos.SmosProductReader;
 
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
@@ -41,9 +46,9 @@ class EEExportGridPointHandler implements GridPointHandler {
         timeTracker = new TimeTracker();
         geometryTracker = new GeometryTracker();
 
-        final String fomatName = targetContext.getFormat().getName();
+        final String formatName = targetContext.getFormat().getName();
         // @todo 2 tb/tb extend to L2 -DA products once they're supported
-        isL2File = ProductFactory.is_L2_User_File(fomatName);
+        isL2File = SmosProductReader.isSmUserFormat(formatName) || SmosProductReader.isOsUserFormat(formatName);
     }
 
     @Override
@@ -82,7 +87,7 @@ class EEExportGridPointHandler implements GridPointHandler {
     }
 
     boolean hasValidArea() {
-        return geometryTracker.hasValidArea();        
+        return geometryTracker.hasValidArea();
     }
 
     Rectangle2D getArea() {
