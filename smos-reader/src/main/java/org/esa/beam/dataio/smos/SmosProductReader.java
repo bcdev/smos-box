@@ -52,7 +52,7 @@ public class SmosProductReader extends AbstractProductReader {
                 return smosFile.createProduct();
             } else if (isDualPolScienceFormat(formatName)) {
                 smosFile = new L1cScienceSmosFile(hdrFile, dblFile, format);
-                factory = new ProductFactory();
+                return smosFile.createProduct();
             } else if (isFullPolScienceFormat(formatName)) {
                 smosFile = new L1cScienceSmosFile(hdrFile, dblFile, format);
                 factory = new ProductFactory();

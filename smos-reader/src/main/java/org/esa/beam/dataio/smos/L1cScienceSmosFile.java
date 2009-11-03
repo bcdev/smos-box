@@ -18,6 +18,7 @@ import com.bc.ceres.binio.CompoundData;
 import com.bc.ceres.binio.CompoundType;
 import com.bc.ceres.binio.DataFormat;
 import com.bc.ceres.binio.SequenceData;
+import org.esa.beam.framework.datamodel.Product;
 
 import java.awt.geom.Rectangle2D;
 import java.io.File;
@@ -31,8 +32,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import org.esa.beam.framework.datamodel.Product;
-
 /**
  * Represents a SMOS L1c Science product file.
  *
@@ -42,15 +41,14 @@ import org.esa.beam.framework.datamodel.Product;
  */
 public class L1cScienceSmosFile extends L1cSmosFile {
 
-    private static final float CENTER_BROWSE_INCIDENCE_ANGLE = 42.5f;
-    private static final float MIN_BROWSE_INCIDENCE_ANGLE = 37.5f;
-    private static final float MAX_BROWSE_INCIDENCE_ANGLE = 52.5f;
-    private static final float INCIDENCE_ANGLE_FACTOR = 0.001373291f; // 90.0 / 2^16
+    private static final double CENTER_BROWSE_INCIDENCE_ANGLE = 42.5;
+    private static final double MIN_BROWSE_INCIDENCE_ANGLE = 37.5;
+    private static final double MAX_BROWSE_INCIDENCE_ANGLE = 52.5;
 
     private final int flagsIndex;
-
     private final int incidenceAngleIndex;
     private final int snapshotIdOfPixelIndex;
+    private final double incidenceAngleScalingFactor;
     private final SequenceData snapshotList;
     private final CompoundType snapshotType;
 
@@ -60,8 +58,9 @@ public class L1cScienceSmosFile extends L1cSmosFile {
         super(hdrFile, dblFile, format);
 
         flagsIndex = getBtDataType().getMemberIndex(SmosConstants.BT_FLAGS_NAME);
-        incidenceAngleIndex = this.btDataType.getMemberIndex(SmosConstants.BT_INCIDENCE_ANGLE_NAME);
-        snapshotIdOfPixelIndex = btDataType.getMemberIndex(SmosConstants.BT_SNAPSHOT_ID_OF_PIXEL_NAME);
+        incidenceAngleIndex = getBtDataType().getMemberIndex(SmosConstants.BT_INCIDENCE_ANGLE_NAME);
+        incidenceAngleScalingFactor = getIncidenceAngleScalingFactor(format.getName());
+        snapshotIdOfPixelIndex = getBtDataType().getMemberIndex(SmosConstants.BT_SNAPSHOT_ID_OF_PIXEL_NAME);
 
         snapshotList = getDataBlock().getSequence(SmosConstants.SNAPSHOT_LIST_NAME);
         if (snapshotList == null) {
@@ -70,23 +69,41 @@ public class L1cScienceSmosFile extends L1cSmosFile {
         snapshotType = (CompoundType) snapshotList.getType().getElementType();
     }
 
-    @Override
-    protected void addBand(Product product, BandDescriptor descriptor) {
-        super.addBand(product, descriptor);
+    private double getIncidenceAngleScalingFactor(String formatName) {
+        for (final BandDescriptor descriptor : DDDB.getInstance().getBandDescriptors(formatName).asList()) {
+            if (SmosConstants.BT_INCIDENCE_ANGLE_NAME.equals(descriptor.getMemberName())) {
+                return descriptor.getScalingFactor();
+            }
+        }
+
+        throw new IllegalStateException("No scaling factor for incidence angle data found.");
     }
 
     @Override
-    protected ValueProvider createValueProvider(BandDescriptor descriptor) {
-        return super.createValueProvider(descriptor);
+    protected final void addBand(Product product, BandDescriptor descriptor) {
+        if (descriptor.getPolarization() < 0) {
+            super.addBand(product, descriptor);
+        } else {
+            addBand(product, descriptor, getBtDataType());
+        }
+    }
+
+    @Override
+    protected final ValueProvider createValueProvider(BandDescriptor descriptor) {
+        if (descriptor.getPolarization() < 0) {
+            return super.createValueProvider(descriptor);
+        }
+        return new L1cScienceDataValueProvider(this, getBtDataType().getMemberIndex(descriptor.getMemberName()),
+                                               descriptor.getPolarization());
     }
 
     @Deprecated
     @Override
     public byte getBrowseBtData(int gridPointIndex, int fieldIndex, int polMode, byte noDataValue) throws IOException {
         if (fieldIndex == flagsIndex) {
-            return (byte) getCombinedBtFlags(gridPointIndex, polMode, noDataValue);
+            return (byte) getCombinedFlags(gridPointIndex, polMode, noDataValue);
         } else {
-            return (byte) getInterpolatedBtData(gridPointIndex, fieldIndex, polMode, noDataValue);
+            return (byte) getBrowseBtDataValueFloat(gridPointIndex, fieldIndex, polMode, noDataValue);
         }
     }
 
@@ -95,9 +112,9 @@ public class L1cScienceSmosFile extends L1cSmosFile {
     public short getBrowseBtData(int gridPointIndex, int fieldIndex, int polMode,
                                  short noDataValue) throws IOException {
         if (fieldIndex == flagsIndex) {
-            return (short) getCombinedBtFlags(gridPointIndex, polMode, noDataValue);
+            return (short) getCombinedFlags(gridPointIndex, polMode, noDataValue);
         } else {
-            return (short) getInterpolatedBtData(gridPointIndex, fieldIndex, polMode, noDataValue);
+            return (short) getBrowseBtDataValueFloat(gridPointIndex, fieldIndex, polMode, noDataValue);
         }
     }
 
@@ -106,9 +123,9 @@ public class L1cScienceSmosFile extends L1cSmosFile {
     public int getBrowseBtData(int gridPointIndex, int fieldIndex, int polMode,
                                int noDataValue) throws IOException {
         if (fieldIndex == flagsIndex) {
-            return getCombinedBtFlags(gridPointIndex, polMode, noDataValue);
+            return getCombinedFlags(gridPointIndex, polMode, noDataValue);
         } else {
-            return (int) getInterpolatedBtData(gridPointIndex, fieldIndex, polMode, noDataValue);
+            return (int) getBrowseBtDataValueFloat(gridPointIndex, fieldIndex, polMode, noDataValue);
         }
     }
 
@@ -116,7 +133,7 @@ public class L1cScienceSmosFile extends L1cSmosFile {
     @Override
     public float getBrowseBtData(int gridPointIndex, int fieldIndex, int polMode,
                                  float noDataValue) throws IOException {
-        return getInterpolatedBtData(gridPointIndex, fieldIndex, polMode, noDataValue);
+        return 0.0f;
     }
 
     @Deprecated
@@ -193,7 +210,39 @@ public class L1cScienceSmosFile extends L1cSmosFile {
         }
     }
 
-    private CompoundData getSnapshotBtData(int gridPointIndex, int polMode, long snapshotId) throws IOException {
+    byte getBrowseBtDataValueByte(int gridPointIndex, int memberIndex, int polarization,
+                                  byte noDataValue) throws IOException {
+        if (memberIndex == flagsIndex) {
+            return (byte) getCombinedFlags(gridPointIndex, polarization, noDataValue);
+        } else {
+            return (byte) getInterpolatedValue(gridPointIndex, memberIndex, polarization, noDataValue);
+        }
+    }
+
+    short getBrowseBtDataValueShort(int gridPointIndex, int memberIndex, int polarization,
+                                    short noDataValue) throws IOException {
+        if (memberIndex == flagsIndex) {
+            return (short) getCombinedFlags(gridPointIndex, polarization, noDataValue);
+        } else {
+            return (short) getInterpolatedValue(gridPointIndex, memberIndex, polarization, noDataValue);
+        }
+    }
+
+    int getBrowseBtDataValueInt(int gridPointIndex, int memberIndex, int polarization,
+                                int noDataValue) throws IOException {
+        if (memberIndex == flagsIndex) {
+            return getCombinedFlags(gridPointIndex, polarization, noDataValue);
+        } else {
+            return (int) getInterpolatedValue(gridPointIndex, memberIndex, polarization, noDataValue);
+        }
+    }
+
+    float getBrowseBtDataValueFloat(int gridPointIndex, int memberIndex, int polarization,
+                                    float noDataValue) throws IOException {
+        return (float) getInterpolatedValue(gridPointIndex, memberIndex, polarization, noDataValue);
+    }
+
+    CompoundData getSnapshotBtData(int gridPointIndex, int polarization, long snapshotId) throws IOException {
         final SequenceData btDataList = getBtDataList(gridPointIndex);
         final int elementCount = btDataList.getElementCount();
 
@@ -209,7 +258,7 @@ public class L1cScienceSmosFile extends L1cSmosFile {
             btData = btDataList.getCompound(i);
             if (btData.getLong(snapshotIdOfPixelIndex) == snapshotId) {
                 final int flags = btData.getInt(flagsIndex);
-                if (polMode == SmosConstants.L1C_POL_MODE_ANY || polMode == (flags & 3) || (polMode & flags & 2) != 0) {
+                if (polarization == 4 || polarization == (flags & 1) || (polarization & flags & 2) != 0) {
                     return btData;
                 }
             }
@@ -218,7 +267,55 @@ public class L1cScienceSmosFile extends L1cSmosFile {
         return null;
     }
 
-    private int getCombinedBtFlags(int gridPointIndex, int polMode, int noDataValue) throws IOException {
+    private double getInterpolatedValue(int gridPointIndex, int memberIndex, int polarization,
+                                        double noDataValue) throws IOException {
+        final SequenceData btDataList = getBtDataList(gridPointIndex);
+        final int elementCount = btDataList.getElementCount();
+
+        int count = 0;
+        double sx = 0;
+        double sy = 0;
+        double sxx = 0;
+        double sxy = 0;
+
+        boolean hasLower = false;
+        boolean hasUpper = false;
+
+        for (int i = 0; i < elementCount; ++i) {
+            final CompoundData btData = btDataList.getCompound(i);
+            final int flags = btData.getInt(flagsIndex);
+
+            if (polarization == 4 || polarization == (flags & 1) || (polarization & flags & 2) != 0) {
+                final double incidenceAngle = incidenceAngleScalingFactor * btData.getInt(incidenceAngleIndex);
+
+                if (incidenceAngle >= MIN_BROWSE_INCIDENCE_ANGLE && incidenceAngle <= MAX_BROWSE_INCIDENCE_ANGLE) {
+                    final float value = btData.getFloat(memberIndex);
+
+                    sx += incidenceAngle;
+                    sy += value;
+                    sxx += incidenceAngle * incidenceAngle;
+                    sxy += incidenceAngle * value;
+                    count++;
+
+                    if (!hasLower) {
+                        hasLower = incidenceAngle <= CENTER_BROWSE_INCIDENCE_ANGLE;
+                    }
+                    if (!hasUpper) {
+                        hasUpper = incidenceAngle > CENTER_BROWSE_INCIDENCE_ANGLE;
+                    }
+                }
+            }
+        }
+        if (hasLower && hasUpper) {
+            final double a = (count * sxy - sx * sy) / (count * sxx - sx * sx);
+            final double b = (sy - a * sx) / count;
+            return a * CENTER_BROWSE_INCIDENCE_ANGLE + b;
+        }
+
+        return noDataValue;
+    }
+
+    private int getCombinedFlags(int gridPointIndex, int polMode, int noDataValue) throws IOException {
         final SequenceData btDataList = getBtDataList(gridPointIndex);
         final int elementCount = btDataList.getElementCount();
 
@@ -231,8 +328,8 @@ public class L1cScienceSmosFile extends L1cSmosFile {
             final CompoundData btData = btDataList.getCompound(i);
             final int flags = btData.getInt(flagsIndex);
 
-            if (polMode == SmosConstants.L1C_POL_MODE_ANY || polMode == (flags & 3) || (polMode & flags & 2) != 0) {
-                final float incidenceAngle = INCIDENCE_ANGLE_FACTOR * btData.getInt(incidenceAngleIndex);
+            if (polMode == 4 || polMode == (flags & 3) || (polMode & flags & 2) != 0) {
+                final double incidenceAngle = incidenceAngleScalingFactor * btData.getInt(incidenceAngleIndex);
 
                 if (incidenceAngle >= MIN_BROWSE_INCIDENCE_ANGLE && incidenceAngle <= MAX_BROWSE_INCIDENCE_ANGLE) {
                     combinedFlags |= flags;
@@ -248,54 +345,6 @@ public class L1cScienceSmosFile extends L1cSmosFile {
         }
         if (hasLower && hasUpper) {
             return combinedFlags;
-        }
-
-        return noDataValue;
-    }
-
-    private float getInterpolatedBtData(int gridPointIndex, int fieldIndex, int polMode,
-                                        float noDataValue) throws IOException {
-        final SequenceData btDataList = getBtDataList(gridPointIndex);
-        final int elementCount = btDataList.getElementCount();
-
-        int count = 0;
-        float sx = 0;
-        float sy = 0;
-        float sxx = 0;
-        float sxy = 0;
-
-        boolean hasLower = false;
-        boolean hasUpper = false;
-
-        for (int i = 0; i < elementCount; ++i) {
-            final CompoundData btData = btDataList.getCompound(i);
-            final int flags = btData.getInt(flagsIndex);
-
-            if (polMode == SmosConstants.L1C_POL_MODE_ANY || polMode == (flags & 3) || (polMode & flags & 2) != 0) {
-                final float incidenceAngle = INCIDENCE_ANGLE_FACTOR * btData.getInt(incidenceAngleIndex);
-
-                if (incidenceAngle >= MIN_BROWSE_INCIDENCE_ANGLE && incidenceAngle <= MAX_BROWSE_INCIDENCE_ANGLE) {
-                    final float btValue = btData.getFloat(fieldIndex);
-
-                    sx += incidenceAngle;
-                    sy += btValue;
-                    sxx += incidenceAngle * incidenceAngle;
-                    sxy += incidenceAngle * btValue;
-                    count++;
-
-                    if (!hasLower) {
-                        hasLower = incidenceAngle <= CENTER_BROWSE_INCIDENCE_ANGLE;
-                    }
-                    if (!hasUpper) {
-                        hasUpper = incidenceAngle > CENTER_BROWSE_INCIDENCE_ANGLE;
-                    }
-                }
-            }
-        }
-        if (hasLower && hasUpper) {
-            final float a = (count * sxy - sx * sy) / (count * sxx - sx * sx);
-            final float b = (sy - a * sx) / count;
-            return a * CENTER_BROWSE_INCIDENCE_ANGLE + b;
         }
 
         return noDataValue;
@@ -325,8 +374,8 @@ public class L1cScienceSmosFile extends L1cSmosFile {
         final Set<Long> xy = new TreeSet<Long>();
 
         final Map<Long, Rectangle2D> snapshotEnvelopeMap = new TreeMap<Long, Rectangle2D>();
-        final int latIndex = getGridPointType().getMemberIndex("Grid_Point_Latitude");
-        final int lonIndex = getGridPointType().getMemberIndex("Grid_Point_Longitude");
+        final int latIndex = getGridPointType().getMemberIndex("Latitude");
+        final int lonIndex = getGridPointType().getMemberIndex("Longitude");
 
         final SequenceData gridPointList = getGridPointList();
         final int gridPointCount = getGridPointCount();
@@ -399,5 +448,4 @@ public class L1cScienceSmosFile extends L1cSmosFile {
 
         return new SnapshotInfo(snapshotIndexMap, all, x, y, xy, snapshotEnvelopeMap);
     }
-
 }

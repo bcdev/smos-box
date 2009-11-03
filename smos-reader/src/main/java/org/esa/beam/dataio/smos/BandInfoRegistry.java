@@ -77,10 +77,8 @@ public class BandInfoRegistry {
                          "Error accuracy measurement in the Brightness " +
                          "Temperature presented in the previous field, " +
                          "extracted in the direction of the pixel.");
-        registerBandInfo("Incidence_Angle", "deg", 0.0, 90.0 / (1 << 16), 0, 0.0, 90.0,
-                         "Incidence angle value corresponding to the " +
-                         "measured BT value over current Earth fixed " +
-                         "grid point. Measured as angle from pixel to " +
+        registerBandInfo("Incidence_Angle", "deg", 0.0, 0.001373291015625, 0, 0.0, 90.0,
+                         "Incidence angle value corresponding to the measured BT value over current Earth fixed grid point. Measured as angle from pixel to " +
                          "S/C with respect to the pixel local normal (0° " +
                          "if vertical)");
         registerBandInfo("Azimuth_Angle", "deg", 0.0, 0.0054931640625, 0, 0.0, 360.0,
@@ -90,15 +88,11 @@ public class BandInfoRegistry {
                          "tangent plane from projected pixel to S/C " +
                          "direction with respect to the local North (0° if" +
                          "local North)", true);
-        registerBandInfo("Faraday_Rotation_Angle", "deg", 0.0, 360.0 / (1 << 16), 0, 0.0, 360.0,
-                         "Faraday rotation angle value corresponding " +
-                         "to the measured BT value over current Earth " +
-                         "fixed grid point. It is computed as the rotation " +
+        registerBandInfo("Faraday_Rotation_Angle", "deg", 0.0, 255.0 / (1 << 8), 0, 0.0, 360.0,
+                         "Faraday rotation angle value corresponding to the measured BT value over current Earth fixed grid point. It is computed as the rotation " +
                          "from antenna to surface (i.e. inverse angle)", true);
         registerBandInfo("Geometric_Rotation_Angle", "deg", 0.0, 360.0 / (1 << 16), 0, 0.0, 360.0,
-                         "Geometric rotation angle value " +
-                         "corresponding to the measured BT value " +
-                         "over current Earth fixed grid point. It is " +
+                         "Geometric rotation angle value corresponding to the measured BT value over current Earth fixed grid point. It is " +
                          "computed as the rotation from surface to " +
                          "antenna (i.e. direct angle).", true);
         registerBandInfo("Footprint_Axis1", "km", 0.0, 0.00152587890625, 0, 20.0, 35.0,

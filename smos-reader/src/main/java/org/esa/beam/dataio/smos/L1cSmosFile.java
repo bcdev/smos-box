@@ -33,8 +33,8 @@ import java.text.MessageFormat;
  */
 public abstract class L1cSmosFile extends SmosFile {
 
-    protected final int btDataListIndex;
-    protected final CompoundType btDataType;
+    private final int btDataListIndex;
+    private final CompoundType btDataType;
 
     protected L1cSmosFile(File hdrFile, File dblFile, DataFormat format) throws IOException {
         super(hdrFile, dblFile, format);

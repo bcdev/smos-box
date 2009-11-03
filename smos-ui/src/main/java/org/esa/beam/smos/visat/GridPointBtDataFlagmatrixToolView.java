@@ -24,6 +24,24 @@ public class GridPointBtDataFlagmatrixToolView extends GridPointBtDataToolView {
     public static final String ID = GridPointBtDataFlagmatrixToolView.class.getName();
     private static final String SERIES_KEY = "Flags";
 
+    private static final String[] FLAG_NAMES = {
+            "POL_FLAG_1",
+            "POL_FLAG_2",
+            "SUN_FOV",
+            "SUN_GLINT_FOV",
+            "MOON_GLINT_FOV",
+            "SINGLE_SNAPSHOT",
+            "FTT",
+            "SUN_POINT",
+            "SUN_GLINT_AREA",
+            "MOON_POINT",
+            "AF_FOV",
+            "EAF_FOV",
+            "BORDER_FOV",
+            "SUN_TAILS",
+            "RFI"
+    };
+
     private JFreeChart chart;
     private DefaultXYZDataset dataset;
     private XYPlot plot;
@@ -86,7 +104,7 @@ public class GridPointBtDataFlagmatrixToolView extends GridPointBtDataToolView {
         int iq = ds.getColumnIndex(SmosConstants.BT_FLAGS_NAME);
         if (iq != -1) {
             final int m = ds.data.length;
-            final int n = getSelectedSmosProduct().getFlagCodingGroup().get("L1c flags").getNumAttributes();
+            final int n = FLAG_NAMES.length;
             double[][] data = new double[3][n * m];
             for (int x = 0; x < m; x++) {
                 final int flags = ds.data[x][iq].intValue();
@@ -116,7 +134,7 @@ public class GridPointBtDataFlagmatrixToolView extends GridPointBtDataToolView {
     }
 
     private String[] createFlagNames() {
-        return getSelectedSmosProduct().getFlagCodingGroup().get("L1c flags").getFlagNames();
+        return FLAG_NAMES;
     }
 
 
