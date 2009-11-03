@@ -31,6 +31,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import org.esa.beam.framework.datamodel.Product;
+
 /**
  * Represents a SMOS L1c Science product file.
  *
@@ -66,6 +68,16 @@ public class L1cScienceSmosFile extends L1cSmosFile {
             throw new IOException("Data block does not include snapshot list.");
         }
         snapshotType = (CompoundType) snapshotList.getType().getElementType();
+    }
+
+    @Override
+    protected void addBand(Product product, BandDescriptor descriptor) {
+        super.addBand(product, descriptor);
+    }
+
+    @Override
+    protected ValueProvider createValueProvider(BandDescriptor descriptor) {
+        return super.createValueProvider(descriptor);
     }
 
     @Deprecated

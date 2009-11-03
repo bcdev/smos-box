@@ -332,7 +332,7 @@ public class DDDB {
         private final boolean visible;
         private final String bandName;
         private final String memberName;
-        private final int indexInCollection;
+        private final int polarization;
         private final int sampleModel;
         private final double scalingOffset;
         private final double scalingFactor;
@@ -350,7 +350,7 @@ public class DDDB {
             visible = parseBoolean(tokens[0], true);
             bandName = parseString(tokens[1]);
             memberName = parseString(tokens[2], bandName);
-            indexInCollection = parseInt(tokens[3], -1);
+            polarization = parseInt(tokens[3], -1);
             sampleModel = parseInt(tokens[4], 0);
 
             scalingOffset = parseDouble(tokens[5], 0.0);
@@ -387,8 +387,8 @@ public class DDDB {
         }
 
         @Override
-        public int getIndexInCollection() {
-            return indexInCollection;
+        public int getPolarization() {
+            return polarization;
         }
 
         @Override

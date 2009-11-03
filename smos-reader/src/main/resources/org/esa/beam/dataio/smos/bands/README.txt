@@ -5,7 +5,7 @@ Properties used in band descriptors:
     visible         boolean         should the band appear in the BEAM product tree? (not used)
     band            string          band name used in BEAM
     dataset         string          the name of the dataset
-    index           int             index in sequence
+    pol             int             polarization
     sampleModel     int             0, 1, 2
     scalingOffset   double          scaling offset applied to the raw data
     scalingFactor   double          scaling factor applied to the raw data

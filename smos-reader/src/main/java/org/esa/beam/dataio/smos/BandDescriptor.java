@@ -6,7 +6,7 @@ public interface BandDescriptor {
 
     String getMemberName();
 
-    int getIndexInCollection();
+    int getPolarization();
 
     boolean isVisible();
 
