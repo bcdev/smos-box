@@ -388,7 +388,7 @@ public class L1cScienceSmosFile extends L1cSmosFile {
 
         DP vp;
         BandDescriptor descriptor;
-
+        
         vp = new DPH(product, valueProviderMap, false);
         descriptor = descriptors.getMember("BT_Value_H");
         addRotatedBand(product, descriptor, vp);
