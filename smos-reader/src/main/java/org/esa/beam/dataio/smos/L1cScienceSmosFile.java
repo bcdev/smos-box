@@ -48,6 +48,7 @@ public class L1cScienceSmosFile extends L1cSmosFile {
     private static final double MIN_BROWSE_INCIDENCE_ANGLE = 37.5;
     private static final double MAX_BROWSE_INCIDENCE_ANGLE = 52.5;
 
+    // todo: rq/rq - use this map to get BTH/V/HV values for the chart tool (20091104)
     private final Map<String, ValueProvider> valueProviderMap = new HashMap<String, ValueProvider>(17);
     private final int flagsIndex;
     private final int incidenceAngleIndex;
