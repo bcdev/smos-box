@@ -1,5 +1,6 @@
 package org.esa.beam.dataio.smos;
 
+import org.esa.beam.framework.datamodel.Band;
 import org.esa.beam.framework.datamodel.Product;
 
 import java.awt.geom.Area;
@@ -14,20 +15,20 @@ abstract class FP implements ValueProvider {
     private final ValueProvider btxProvider;
     private final ValueProvider btyProvider;
     private final ValueProvider btxyProvider;
+
+    private final boolean accuracy;
     private final boolean imaginary;
 
     protected FP(Product product, Map<String, ValueProvider> valueProviderMap,
                  boolean accuracy, boolean imaginary) {
+        this.accuracy = accuracy;
         this.imaginary = imaginary;
-        frxProvider = new ValueScaler(valueProviderMap.get("Faraday_Rotation_Angle_X"),
-                                           product.getBand("Faraday_Rotation_Angle_X"));
-        grxProvider = new ValueScaler(valueProviderMap.get("Geometric_Rotation_Angle_X"),
-                                           product.getBand("Geometric_Rotation_Angle_X"));
 
-        fryProvider = new ValueScaler(valueProviderMap.get("Faraday_Rotation_Angle_Y"),
-                                           product.getBand("Faraday_Rotation_Angle_Y"));
-        gryProvider = new ValueScaler(valueProviderMap.get("Geometric_Rotation_Angle_Y"),
-                                           product.getBand("Geometric_Rotation_Angle_Y"));
+        frxProvider = getValueProvider(product, "Faraday_Rotation_Angle_X", valueProviderMap);
+        grxProvider = getValueProvider(product, "Geometric_Rotation_Angle_X", valueProviderMap);
+
+        fryProvider = getValueProvider(product, "Faraday_Rotation_Angle_Y", valueProviderMap);
+        gryProvider = getValueProvider(product, "Geometric_Rotation_Angle_Y", valueProviderMap);
 
         final String quantity;
         if (accuracy) {
@@ -40,19 +41,27 @@ abstract class FP implements ValueProvider {
             btxProvider = null;
             btyProvider = null;
             if (accuracy) {
-                btxyProvider = valueProviderMap.get(quantity + "_XY");
+                btxyProvider = getValueProvider(product, quantity + "_XY", valueProviderMap);
             } else {
-                btxyProvider = valueProviderMap.get(quantity + "_XY_Imag");
+                btxyProvider = getValueProvider(product, quantity + "_XY_Imag", valueProviderMap);
             }
         } else {
-            btxProvider = valueProviderMap.get(quantity + "_X");
-            btyProvider = valueProviderMap.get(quantity + "_Y");
+            btxProvider = getValueProvider(product, quantity + "_X", valueProviderMap);
+            btyProvider = getValueProvider(product, quantity + "_Y", valueProviderMap);
             if (accuracy) {
-                btxyProvider = valueProviderMap.get(quantity + "_XY");
+                btxyProvider = getValueProvider(product, quantity + "_XY", valueProviderMap);
             } else {
-                btxyProvider = valueProviderMap.get(quantity + "_XY_Real");
+                btxyProvider = getValueProvider(product, quantity + "_XY_Real", valueProviderMap);
             }
         }
+    }
+
+    private static ValueProvider getValueProvider(Product product, String bandName, Map<String, ValueProvider> map) {
+        final Band band = product.getBand(bandName);
+        if (band.isScalingApplied()) {
+            return new Scaler(map.get(bandName), band);
+        }
+        return map.get(bandName);
     }
 
     @Override
@@ -82,11 +91,22 @@ abstract class FP implements ValueProvider {
 
     @Override
     public final float getValue(int gridPointIndex, float noDataValue) {
-        final double frx = frxProvider.getValue(gridPointIndex, noDataValue);
-        final double grx = grxProvider.getValue(gridPointIndex, noDataValue);
-
-        final double fry = fryProvider.getValue(gridPointIndex, noDataValue);
-        final double gry = gryProvider.getValue(gridPointIndex, noDataValue);
+        final float frx = frxProvider.getValue(gridPointIndex, Float.NaN);
+        if (Float.isNaN(frx)) {
+            return noDataValue;
+        }
+        final float grx = grxProvider.getValue(gridPointIndex, Float.NaN);
+        if (Float.isNaN(grx)) {
+            return noDataValue;
+        }
+        final float fry = fryProvider.getValue(gridPointIndex, Float.NaN);
+        if (Float.isNaN(fry)) {
+            return noDataValue;
+        }
+        final float gry = gryProvider.getValue(gridPointIndex, Float.NaN);
+        if (Float.isNaN(gry)) {
+            return noDataValue;
+        }
 
         final double alphaX = Math.toRadians(frx - grx);
         final double alphaY = Math.toRadians(fry - gry);
@@ -109,8 +129,14 @@ abstract class FP implements ValueProvider {
             btxy = btxyProvider.getValue(gridPointIndex, noDataValue);
         }
 
-        return (float) compute(btx, bty, btxy, aa, ab, bb);
+        if (accuracy) {
+            return computeRA(btx, bty, btxy, aa, ab, bb);
+        } else {
+            return computeBT(btx, bty, btxy, aa, ab, bb);
+        }
     }
 
-    protected abstract double compute(double btx, double bty, double btxy, double aa, double ab, double bb);
+    protected abstract float computeBT(double btx, double bty, double btxy, double aa, double ab, double bb);
+
+    protected abstract float computeRA(double rax, double ray, double raxy, double aa, double ab, double bb);
 }

@@ -11,7 +11,12 @@ class DPH extends DP {
     }
 
     @Override
-    protected double compute(double btx, double bty, double aa, double bb) {
-        return (aa * btx - bb * bty);
+    protected float computeBT(double btx, double bty, double aa, double bb) {
+        return (float) (aa * btx - bb * bty);
+    }
+
+    @Override
+    protected float computeRA(double rax, double ray, double aa, double bb) {
+        return (float) Math.sqrt(aa * aa * rax * rax + bb * bb * ray * ray);
     }
 }

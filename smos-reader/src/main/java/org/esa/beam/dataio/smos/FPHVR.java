@@ -11,7 +11,12 @@ class FPHVR extends FP {
     }
 
     @Override
-    protected double compute(double btx, double bty, double btxy, double aa, double ab, double bb) {
-        return ab * (btx - bty) + (aa - bb) * btxy;
+    protected float computeBT(double btx, double bty, double btxy, double aa, double ab, double bb) {
+        return (float) (ab * (btx - bty) + (aa - bb) * btxy);
+    }
+
+    @Override
+    protected float computeRA(double rax, double ray, double raxy, double aa, double ab, double bb) {
+        return (float) Math.sqrt(ab * ab * (rax * rax + ray * ray)  + (aa - bb) * (aa - bb) * raxy * raxy);
     }
 }

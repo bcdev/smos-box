@@ -11,7 +11,12 @@ class DPV extends DP {
     }
 
     @Override
-    protected double compute(double btx, double bty, double aa, double bb) {
-        return aa * bty - bb * btx;
+    protected float computeBT(double btx, double bty, double aa, double bb) {
+        return (float) (aa * bty - bb * btx);
+    }
+
+    @Override
+    protected float computeRA(double rax, double ray, double aa, double bb) {
+        return (float) Math.sqrt(aa * aa * ray * ray + bb * bb * rax * rax);
     }
 }

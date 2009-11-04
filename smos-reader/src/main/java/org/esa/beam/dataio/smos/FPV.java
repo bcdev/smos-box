@@ -11,7 +11,12 @@ class FPV extends FP {
     }
 
     @Override
-    protected double compute(double btx, double bty, double btxy, double aa, double ab, double bb) {
-        return (aa + bb) * btxy;
+    protected float computeBT(double btx, double bty, double btxy, double aa, double ab, double bb) {
+        return (float) ((aa + bb) * btxy);
+    }
+
+    @Override
+    protected float computeRA(double rax, double ray, double raxy, double aa, double ab, double bb) {
+        return (float) ((aa + bb) * raxy);
     }
 }

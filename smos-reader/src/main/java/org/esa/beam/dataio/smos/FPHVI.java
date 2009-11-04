@@ -11,7 +11,12 @@ class FPHVI extends FP {
     }
 
     @Override
-    protected double compute(double btx, double bty, double btxy, double aa, double ab, double bb) {
-        return bb * btx + 2.0 * ab * btxy + aa * bty;
+    protected float computeBT(double btx, double bty, double btxy, double aa, double ab, double bb) {
+        return (float) (bb * btx + 2.0 * ab * btxy + aa * bty);
+    }
+
+    @Override
+    protected float computeRA(double rax, double ray, double raxy, double aa, double ab, double bb) {
+        return (float) Math.sqrt(bb * bb * rax * rax + 4.0 * ab * ab * raxy * raxy + aa * aa * ray * ray);
     }
 }

@@ -388,7 +388,7 @@ public class L1cScienceSmosFile extends L1cSmosFile {
 
         DP vp;
         BandDescriptor descriptor;
-        
+
         vp = new DPH(product, valueProviderMap, false);
         descriptor = descriptors.getMember("BT_Value_H");
         addRotatedBand(product, descriptor, vp);
@@ -405,8 +405,8 @@ public class L1cScienceSmosFile extends L1cSmosFile {
         descriptor = descriptors.getMember("Pixel_Radiometric_Accuracy_V");
         addRotatedBand(product, descriptor, vp);
 
-        ProductHelper.addVirtualBand(product, "Stokes_1", "(BT_Value_H + BT_Value_V) / 2.0");
-        ProductHelper.addVirtualBand(product, "Stokes_2", "(BT_Value_H - BT_Value_V) / 2.0");
+        ProductHelper.addVirtualBand(product, descriptors.getMember("Stokes_1"), "(BT_Value_H + BT_Value_V) / 2.0");
+        ProductHelper.addVirtualBand(product, descriptors.getMember("Stokes_2"), "(BT_Value_H - BT_Value_V) / 2.0");
     }
 
     private void addRotatedFullPolBands(Product product, Map<String, ValueProvider> valueProviderMap) {
@@ -417,9 +417,7 @@ public class L1cScienceSmosFile extends L1cSmosFile {
 
         vp = new FPH(product, valueProviderMap, false);
         descriptor = descriptors.getMember("BT_Value_H");
-        if (descriptor != null) {
-            addRotatedBand(product, descriptor, vp);
-        }
+        addRotatedBand(product, descriptor, vp);
 
         vp = new FPV(product, valueProviderMap, false);
         descriptor = descriptors.getMember("BT_Value_V");
@@ -445,10 +443,10 @@ public class L1cScienceSmosFile extends L1cSmosFile {
         descriptor = descriptors.getMember("Pixel_Radiometric_Accuracy_HV");
         addRotatedBand(product, descriptor, vp);
 
-        ProductHelper.addVirtualBand(product, "Stokes_1", "(BT_Value_H + BT_Value_V) / 2.0");
-        ProductHelper.addVirtualBand(product, "Stokes_2", "(BT_Value_H - BT_Value_V) / 2.0");
-        ProductHelper.addVirtualBand(product, "Stokes_3", "BT_Value_HV_Real");
-        ProductHelper.addVirtualBand(product, "Stokes_4", "BT_Value_HV_Imag");
+        ProductHelper.addVirtualBand(product, descriptors.getMember("Stokes_1"), "(BT_Value_H + BT_Value_V) / 2.0");
+        ProductHelper.addVirtualBand(product, descriptors.getMember("Stokes_2"), "(BT_Value_H - BT_Value_V) / 2.0");
+        ProductHelper.addVirtualBand(product, descriptors.getMember("Stokes_3"), "BT_Value_HV_Real");
+        ProductHelper.addVirtualBand(product, descriptors.getMember("Stokes_4"), "BT_Value_HV_Imag");
     }
 
     private Band addRotatedBand(Product product, BandDescriptor descriptor, ValueProvider valueProvider) {

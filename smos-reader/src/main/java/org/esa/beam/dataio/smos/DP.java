@@ -1,5 +1,6 @@
 package org.esa.beam.dataio.smos;
 
+import org.esa.beam.framework.datamodel.Band;
 import org.esa.beam.framework.datamodel.Product;
 
 import java.awt.geom.Area;
@@ -14,16 +15,16 @@ abstract class DP implements ValueProvider {
     private final ValueProvider btxProvider;
     private final ValueProvider btyProvider;
 
-    protected DP(Product product, Map<String, ValueProvider> valueProviderMap, boolean accuracy) {
-        frxProvider = new ValueScaler(valueProviderMap.get("Faraday_Rotation_Angle_X"),
-                                           product.getBand("Faraday_Rotation_Angle_X"));
-        grxProvider = new ValueScaler(valueProviderMap.get("Geometric_Rotation_Angle_X"),
-                                           product.getBand("Geometric_Rotation_Angle_X"));
+    private final boolean accuracy;
 
-        fryProvider = new ValueScaler(valueProviderMap.get("Faraday_Rotation_Angle_Y"),
-                                           product.getBand("Faraday_Rotation_Angle_Y"));
-        gryProvider = new ValueScaler(valueProviderMap.get("Geometric_Rotation_Angle_Y"),
-                                           product.getBand("Geometric_Rotation_Angle_Y"));
+    protected DP(Product product, Map<String, ValueProvider> valueProviderMap, boolean accuracy) {
+        this.accuracy = accuracy;
+
+        frxProvider = getValueProvider(product, "Faraday_Rotation_Angle_X", valueProviderMap);
+        grxProvider = getValueProvider(product, "Geometric_Rotation_Angle_X", valueProviderMap);
+
+        fryProvider = getValueProvider(product, "Faraday_Rotation_Angle_Y", valueProviderMap);
+        gryProvider = getValueProvider(product, "Geometric_Rotation_Angle_Y", valueProviderMap);
 
         final String quantity;
         if (accuracy) {
@@ -32,8 +33,16 @@ abstract class DP implements ValueProvider {
             quantity = "BT_Value";
         }
 
-        btxProvider = valueProviderMap.get(quantity + "_X");
-        btyProvider = valueProviderMap.get(quantity + "_Y");
+        btxProvider = getValueProvider(product, quantity + "_X", valueProviderMap);
+        btyProvider = getValueProvider(product, quantity + "_Y", valueProviderMap);
+    }
+
+    private static ValueProvider getValueProvider(Product product, String bandName, Map<String, ValueProvider> map) {
+        final Band band = product.getBand(bandName);
+        if (band.isScalingApplied()) {
+            return new Scaler(map.get(bandName), band);
+        }
+        return map.get(bandName);
     }
 
     @Override
@@ -63,11 +72,22 @@ abstract class DP implements ValueProvider {
 
     @Override
     public final float getValue(int gridPointIndex, float noDataValue) {
-        final double frx = frxProvider.getValue(gridPointIndex, noDataValue);
-        final double grx = grxProvider.getValue(gridPointIndex, noDataValue);
-
-        final double fry = fryProvider.getValue(gridPointIndex, noDataValue);
-        final double gry = gryProvider.getValue(gridPointIndex, noDataValue);
+        final float frx = frxProvider.getValue(gridPointIndex, Float.NaN);
+        if (Float.isNaN(frx)) {
+            return noDataValue;
+        }
+        final float grx = grxProvider.getValue(gridPointIndex, Float.NaN);
+        if (Float.isNaN(grx)) {
+            return noDataValue;
+        }
+        final float fry = fryProvider.getValue(gridPointIndex, Float.NaN);
+        if (Float.isNaN(fry)) {
+            return noDataValue;
+        }
+        final float gry = gryProvider.getValue(gridPointIndex, Float.NaN);
+        if (Float.isNaN(gry)) {
+            return noDataValue;
+        }
 
         final double alphaX = Math.toRadians(frx - grx);
         final double alphaY = Math.toRadians(fry - gry);
@@ -79,8 +99,14 @@ abstract class DP implements ValueProvider {
         final double btx = btxProvider.getValue(gridPointIndex, noDataValue);
         final double bty = btyProvider.getValue(gridPointIndex, noDataValue);
 
-        return (float) (compute(btx, bty, aa, bb) / (aa * aa - bb * bb));
+        if (accuracy) {
+            return (float) (computeRA(btx, bty, aa, bb) / Math.abs(aa * aa - bb * bb));
+        } else {
+            return (float) (computeBT(btx, bty, aa, bb) / (aa * aa - bb * bb));
+        }
     }
 
-    protected abstract double compute(double btx, double bty, double aa, double bb);
+    protected abstract float computeBT(double btx, double bty, double aa, double bb);
+
+    protected abstract float computeRA(double rax, double ray, double aa, double bb);
 }
