@@ -5,14 +5,14 @@ import com.bc.ceres.binio.CompoundData;
 import java.awt.geom.Area;
 import java.io.IOException;
 
-public class L1cScienceDataValueProvider implements ValueProvider {
+public class L1cScienceValueProvider implements ValueProvider {
 
     private final L1cScienceSmosFile smosFile;
     private final int memberIndex;
     private final int polarisation;
     private volatile long snapshotId;
 
-    L1cScienceDataValueProvider(L1cScienceSmosFile smosFile, int memberIndex, int polarization) {
+    L1cScienceValueProvider(L1cScienceSmosFile smosFile, int memberIndex, int polarization) {
         this.smosFile = smosFile;
         this.memberIndex = memberIndex;
         this.polarisation = polarization;

@@ -61,12 +61,12 @@ public class L1cScienceSmosFile extends L1cSmosFile {
     L1cScienceSmosFile(File hdrFile, File dblFile, DataFormat format) throws IOException {
         super(hdrFile, dblFile, format);
 
-        flagsIndex = getBtDataType().getMemberIndex(SmosConstants.BT_FLAGS_NAME);
-        incidenceAngleIndex = getBtDataType().getMemberIndex(SmosConstants.BT_INCIDENCE_ANGLE_NAME);
+        flagsIndex = getBtDataType().getMemberIndex(SmosConstants.L1C_BT_FLAGS_NAME);
+        incidenceAngleIndex = getBtDataType().getMemberIndex(SmosConstants.L1C_BT_INCIDENCE_ANGLE_NAME);
         incidenceAngleScalingFactor = getIncidenceAngleScalingFactor(format.getName());
-        snapshotIdOfPixelIndex = getBtDataType().getMemberIndex(SmosConstants.BT_SNAPSHOT_ID_OF_PIXEL_NAME);
+        snapshotIdOfPixelIndex = getBtDataType().getMemberIndex(SmosConstants.L1C_BT_SNAPSHOT_ID_OF_PIXEL_NAME);
 
-        snapshotList = getDataBlock().getSequence(SmosConstants.SNAPSHOT_LIST_NAME);
+        snapshotList = getDataBlock().getSequence(SmosConstants.L1C_SNAPSHOT_LIST_NAME);
         if (snapshotList == null) {
             throw new IOException("Data block does not include snapshot list.");
         }
@@ -75,7 +75,7 @@ public class L1cScienceSmosFile extends L1cSmosFile {
 
     private double getIncidenceAngleScalingFactor(String formatName) {
         for (final BandDescriptor descriptor : DDDB.getInstance().getBandDescriptors(formatName).asList()) {
-            if (SmosConstants.BT_INCIDENCE_ANGLE_NAME.equals(descriptor.getMemberName())) {
+            if (SmosConstants.L1C_BT_INCIDENCE_ANGLE_NAME.equals(descriptor.getMemberName())) {
                 return descriptor.getScalingFactor();
             }
         }
@@ -85,7 +85,6 @@ public class L1cScienceSmosFile extends L1cSmosFile {
 
     @Override
     public void close() {
-        snapshotInfoFuture = null;
         valueProviderMap.clear();
         super.close();
     }
@@ -94,7 +93,7 @@ public class L1cScienceSmosFile extends L1cSmosFile {
     protected void addBands(Product product) {
         super.addBands(product);
 
-        if (SmosProductReader.isDualPolScienceFormat(getFormat().getName())) {
+        if (SmosProductReader.isDualPolScienceFormat(getDataFormat().getName())) {
             addRotatedDualPolBands(product, valueProviderMap);
         } else {
             addRotatedFullPolBands(product, valueProviderMap);
@@ -117,7 +116,7 @@ public class L1cScienceSmosFile extends L1cSmosFile {
             return super.createValueProvider(descriptor);
         }
         final int memberIndex = getBtDataType().getMemberIndex(descriptor.getMemberName());
-        final ValueProvider valueProvider = new L1cScienceDataValueProvider(this, memberIndex, polarization);
+        final ValueProvider valueProvider = new L1cScienceValueProvider(this, memberIndex, polarization);
         valueProviderMap.put(descriptor.getBandName(), valueProvider);
 
         return valueProvider;
@@ -371,7 +370,7 @@ public class L1cScienceSmosFile extends L1cSmosFile {
         }
 
         final Map<Long, Integer> snapshotIndexMap = new TreeMap<Long, Integer>();
-        final int snapshotIdIndex = snapshotType.getMemberIndex(SmosConstants.SNAPSHOT_ID_NAME);
+        final int snapshotIdIndex = snapshotType.getMemberIndex(SmosConstants.L1C_SNAPSHOT_ID_NAME);
         final int snapshotCount = snapshotList.getElementCount();
 
         for (int i = 0; i < snapshotCount; i++) {
@@ -385,7 +384,7 @@ public class L1cScienceSmosFile extends L1cSmosFile {
     }
 
     private void addRotatedDualPolBands(Product product, Map<String, ValueProvider> valueProviderMap) {
-        final Family<BandDescriptor> descriptors = DDDB.getInstance().getBandDescriptors(getFormat().getName());
+        final Family<BandDescriptor> descriptors = DDDB.getInstance().getBandDescriptors(getDataFormat().getName());
 
         DP vp;
         BandDescriptor descriptor;
@@ -411,7 +410,7 @@ public class L1cScienceSmosFile extends L1cSmosFile {
     }
 
     private void addRotatedFullPolBands(Product product, Map<String, ValueProvider> valueProviderMap) {
-        final Family<BandDescriptor> descriptors = DDDB.getInstance().getBandDescriptors(getFormat().getName());
+        final Family<BandDescriptor> descriptors = DDDB.getInstance().getBandDescriptors(getDataFormat().getName());
 
         FP vp;
         BandDescriptor descriptor;
@@ -426,11 +425,11 @@ public class L1cScienceSmosFile extends L1cSmosFile {
         descriptor = descriptors.getMember("BT_Value_V");
         addRotatedBand(product, descriptor, vp);
 
-        vp = new FPR(product, valueProviderMap, false);
+        vp = new FPHVR(product, valueProviderMap, false);
         descriptor = descriptors.getMember("BT_Value_HV_Real");
         addRotatedBand(product, descriptor, vp);
 
-        vp = new FPI(product, valueProviderMap, false);
+        vp = new FPHVI(product, valueProviderMap, false);
         descriptor = descriptors.getMember("BT_Value_HV_Imag");
         addRotatedBand(product, descriptor, vp);
 
@@ -442,7 +441,7 @@ public class L1cScienceSmosFile extends L1cSmosFile {
         descriptor = descriptors.getMember("Pixel_Radiometric_Accuracy_V");
         addRotatedBand(product, descriptor, vp);
 
-        vp = new FPR(product, valueProviderMap, true);
+        vp = new FPHVR(product, valueProviderMap, true);
         descriptor = descriptors.getMember("Pixel_Radiometric_Accuracy_HV");
         addRotatedBand(product, descriptor, vp);
 

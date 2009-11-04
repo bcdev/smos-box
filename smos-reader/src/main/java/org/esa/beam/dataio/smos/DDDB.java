@@ -142,6 +142,18 @@ public class DDDB {
         return bandDescriptorMap.get(identifier);
     }
 
+    public BandDescriptor findBandDescriptorForMember(String identifier, String memberName) {
+        final Family<BandDescriptor> descriptors = getBandDescriptors(identifier);
+        if (descriptors != null) {
+            for (final BandDescriptor descriptor : descriptors.asList()) {
+                if (descriptor.getMemberName().equals(memberName)) {
+                    return descriptor;
+                }
+            }
+        }
+        return null;
+    }
+
     public Family<FlagDescriptor> getFlagDescriptors(String identifier) {
         if (!flagDescriptorMap.containsKey(identifier)) {
             final InputStream inputStream = getFlagDescriptorResource(identifier);

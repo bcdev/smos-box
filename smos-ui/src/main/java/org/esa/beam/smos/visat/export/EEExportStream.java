@@ -27,7 +27,7 @@ class EEExportStream implements GridPointFilterStream {
     public void startFile(SmosFile sourceFile) throws FileNotFoundException {
         final File sourceDblFile = sourceFile.getDblFile();
         targetDblFile = getTargetDblFile(sourceDblFile);
-        final DataFormat targetFormat = sourceFile.getFormat();
+        final DataFormat targetFormat = sourceFile.getDataFormat();
 
         targetContext = targetFormat.createContext(targetDblFile, "rw");
         targetGridPointHandler = new EEExportGridPointHandler(targetContext);

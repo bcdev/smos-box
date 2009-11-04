@@ -31,7 +31,7 @@ import java.text.MessageFormat;
  * @version $Revision$ $Date$
  * @since SMOS-Box 1.0
  */
-public abstract class L1cSmosFile extends SmosFile {
+public class L1cSmosFile extends SmosFile {
 
     private final int btDataListIndex;
     private final CompoundType btDataType;
@@ -39,7 +39,7 @@ public abstract class L1cSmosFile extends SmosFile {
     protected L1cSmosFile(File hdrFile, File dblFile, DataFormat format) throws IOException {
         super(hdrFile, dblFile, format);
 
-        btDataListIndex = getGridPointType().getMemberIndex(SmosConstants.BT_DATA_LIST_NAME);
+        btDataListIndex = getGridPointType().getMemberIndex(SmosConstants.L1C_BT_DATA_LIST_NAME);
         if (btDataListIndex == -1) {
             throw new IOException("Grid point type does not include BT data list.");
         }

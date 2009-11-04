@@ -72,12 +72,6 @@ public class SmosFile extends ExplorerFile {
         gridPointIdIndex = gridPointType.getMemberIndex(SmosConstants.GRID_POINT_ID_NAME);
     }
 
-    @Override
-    public void close() {
-        gridPointInfoFuture = null;
-        super.close();
-    }
-
     public final int getGridPointCount() {
         return gridPointList.getElementCount();
     }
@@ -178,7 +172,7 @@ public class SmosFile extends ExplorerFile {
     @Override
     protected Product createProduct() throws IOException {
         final String productName = FileUtils.getFilenameWithoutExtension(getHdrFile());
-        final String productType = getFormat().getName().substring(12, 22);
+        final String productType = getDataFormat().getName().substring(12, 22);
         final Dimension dimension = ProductHelper.getSceneRasterDimension();
         final Product product = new Product(productName, productType, dimension.width, dimension.height);
 
@@ -194,7 +188,7 @@ public class SmosFile extends ExplorerFile {
     }
 
     protected void addBands(Product product) {
-        final String formatName = getFormat().getName();
+        final String formatName = getDataFormat().getName();
         final Family<BandDescriptor> descriptors = DDDB.getInstance().getBandDescriptors(formatName);
 
         if (descriptors != null) {

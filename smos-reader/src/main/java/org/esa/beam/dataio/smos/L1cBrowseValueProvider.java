@@ -3,13 +3,13 @@ package org.esa.beam.dataio.smos;
 import java.awt.geom.Area;
 import java.io.IOException;
 
-class L1cBrowseDataValueProvider implements ValueProvider {
+class L1cBrowseValueProvider implements ValueProvider {
 
     private final L1cBrowseSmosFile smosFile;
     private final int memberIndex;
     private final int polarisation;
 
-    L1cBrowseDataValueProvider(L1cBrowseSmosFile smosFile, int memberIndex, int polarization) {
+    L1cBrowseValueProvider(L1cBrowseSmosFile smosFile, int memberIndex, int polarization) {
         this.smosFile = smosFile;
         this.memberIndex = memberIndex;
         this.polarisation = polarization;

@@ -85,7 +85,7 @@ public class GridPointBtDataChartToolView extends GridPointBtDataToolView {
             final L1cScienceSmosFile smosFile = (L1cScienceSmosFile) l1cSmosFile;
             modeCheckers[0].setEnabled(true);
             modeCheckers[1].setEnabled(true);
-            modeCheckers[2].setEnabled(SmosProductReader.isFullPolScienceFormat(smosFile.getFormat().getName()));
+            modeCheckers[2].setEnabled(SmosProductReader.isFullPolScienceFormat(smosFile.getDataFormat().getName()));
         }
     }
 

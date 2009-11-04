@@ -101,7 +101,7 @@ public class GridPointBtDataFlagmatrixToolView extends GridPointBtDataToolView {
     protected void updateGridPointBtDataComponent(GridPointBtDataset ds) {
         dataset.removeSeries(SERIES_KEY);
 
-        int iq = ds.getColumnIndex(SmosConstants.BT_FLAGS_NAME);
+        int iq = ds.getColumnIndex(SmosConstants.L1C_BT_FLAGS_NAME);
         if (iq != -1) {
             final int m = ds.data.length;
             final int n = FLAG_NAMES.length;

@@ -16,7 +16,7 @@ import org.esa.beam.dataio.smos.ValueProvider;
 import org.esa.beam.dataio.smos.L1cScienceSmosFile;
 import org.esa.beam.dataio.smos.SmosFile;
 import org.esa.beam.dataio.smos.SmosMultiLevelSource;
-import org.esa.beam.dataio.smos.L1cScienceDataValueProvider;
+import org.esa.beam.dataio.smos.L1cScienceValueProvider;
 import org.esa.beam.framework.datamodel.Band;
 import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.framework.datamodel.RasterDataNode;
@@ -222,8 +222,8 @@ public class SnapshotInfoToolView extends SmosToolView {
             if (multiLevelImage.getSource() instanceof SmosMultiLevelSource) {
                 final SmosMultiLevelSource smosMultiLevelSource = (SmosMultiLevelSource) multiLevelImage.getSource();
                 final ValueProvider valueProvider = smosMultiLevelSource.getValueProvider();
-                if (valueProvider instanceof L1cScienceDataValueProvider) {
-                    final L1cScienceDataValueProvider btDataValueProvider = (L1cScienceDataValueProvider) valueProvider;
+                if (valueProvider instanceof L1cScienceValueProvider) {
+                    final L1cScienceValueProvider btDataValueProvider = (L1cScienceValueProvider) valueProvider;
                     if (btDataValueProvider.getSnapshotId() != snapshotId) {
                         btDataValueProvider.setSnapshotId(snapshotId);
                         resetRasterImages(raster);

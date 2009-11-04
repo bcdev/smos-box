@@ -6,7 +6,6 @@ import com.bc.ceres.binio.CompoundData;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.FileNotFoundException;
 import java.awt.geom.Area;
 import java.util.Date;
 import java.util.Calendar;
@@ -23,16 +22,16 @@ public abstract class ExplorerFile {
 
     private final File hdrFile;
     private final File dblFile;
-    private final DataFormat format;
+    private final DataFormat dataFormat;
     private final DataContext dataContext;
     private final CompoundData dataBlock;
     private volatile Future<Area> envelopeFuture;
 
-    protected ExplorerFile(File hdrFile, File dblFile, DataFormat format) throws IOException {
+    protected ExplorerFile(File hdrFile, File dblFile, DataFormat dataFormat) throws IOException {
         this.hdrFile = hdrFile;
         this.dblFile = dblFile;
-        this.format = DDDB.getInstance().getDataFormat(hdrFile);
-        dataContext = format.createContext(dblFile, "r");
+        this.dataFormat = DDDB.getInstance().getDataFormat(hdrFile);
+        dataContext = dataFormat.createContext(dblFile, "r");
         dataBlock = dataContext.getData();
     }
 
@@ -44,8 +43,8 @@ public abstract class ExplorerFile {
         return dblFile;
     }
 
-    public final DataFormat getFormat() {
-        return format;
+    public final DataFormat getDataFormat() {
+        return dataFormat;
     }
 
     public final DataContext getDataContext() {

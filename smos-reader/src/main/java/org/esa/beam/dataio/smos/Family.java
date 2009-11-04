@@ -6,5 +6,5 @@ public interface Family<T> {
 
     List<T> asList();
 
-    T getMember(String memberName);
+    T getMember(String name);
 }

@@ -5,15 +5,16 @@ import com.bc.ceres.binio.CompoundType;
 import com.bc.ceres.binio.SequenceData;
 import com.bc.ceres.binio.SimpleType;
 import com.bc.ceres.binio.Type;
+import org.esa.beam.dataio.smos.BandDescriptor;
+import org.esa.beam.dataio.smos.DDDB;
 import org.esa.beam.dataio.smos.L1cSmosFile;
-import org.esa.beam.dataio.smos.BandInfoRegistry;
-import org.esa.beam.dataio.smos.BandInfo;
 
 import java.io.IOException;
 import java.math.BigInteger;
 
 
 class GridPointBtDataset {
+
     final int gridPointIndex;
     final CompoundType btDataType;
     final String[] columnNames;
@@ -30,18 +31,19 @@ class GridPointBtDataset {
 
         final String[] columnNames = new String[memberCount];
         final Class[] columnClasses = new Class[memberCount];
-        final BandInfo[] bandInfos = new BandInfo[memberCount];
+        final BandDescriptor[] descriptors = new BandDescriptor[memberCount];
 
         for (int j = 0; j < memberCount; j++) {
             final String memberName = type.getMemberName(j);
             columnNames[j] = memberName;
-            final BandInfo bandInfo = BandInfoRegistry.getInstance().getBandInfo(memberName);
-            if (bandInfo == null || bandInfo.getScaleFactor() == 1.0 && bandInfo.getScaleOffset() == 0.0) {
+            final BandDescriptor descriptor =
+                    DDDB.getInstance().findBandDescriptorForMember(smosFile.getDataFormat().getName(), memberName);
+            if (descriptor == null || descriptor.getScalingFactor() == 1.0 && descriptor.getScalingOffset() == 0.0) {
                 columnClasses[j] = getNumericMemberType(type, j);
             } else {
                 columnClasses[j] = Double.class;
             }
-            bandInfos[j] = bandInfo;
+            descriptors[j] = descriptor;
         }
 
         final Number[][] tableData = new Number[btDataListCount][memberCount];
@@ -49,11 +51,11 @@ class GridPointBtDataset {
             CompoundData btData = btDataList.getCompound(i);
             for (int j = 0; j < memberCount; j++) {
                 final Number member = getNumbericMember(btData, j);
-                final BandInfo bandInfo = bandInfos[j];
-                if (bandInfo == null || bandInfo.getScaleFactor() == 1.0 && bandInfo.getScaleOffset() == 0.0) {
+                final BandDescriptor descriptor = descriptors[j];
+                if (descriptor == null || descriptor.getScalingFactor() == 1.0 && descriptor.getScalingOffset() == 0.0) {
                     tableData[i][j] = member;
                 } else {
-                    tableData[i][j] = member.doubleValue() * bandInfo.getScaleFactor() + bandInfo.getScaleOffset();
+                    tableData[i][j] = member.doubleValue() * descriptor.getScalingFactor() + descriptor.getScalingOffset();
                 }
             }
         }
@@ -115,7 +117,8 @@ class GridPointBtDataset {
         return numberClass;
     }
 
-    GridPointBtDataset(int gridPointIndex, CompoundType btDataType, String[] columnNames, Class[] columnClasses, Number[][] data) {
+    GridPointBtDataset(int gridPointIndex, CompoundType btDataType, String[] columnNames, Class[] columnClasses,
+                       Number[][] data) {
         this.gridPointIndex = gridPointIndex;
         this.btDataType = btDataType;
         this.columnNames = columnNames;

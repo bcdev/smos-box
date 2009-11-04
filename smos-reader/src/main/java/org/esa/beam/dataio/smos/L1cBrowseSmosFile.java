@@ -14,7 +14,6 @@
  */
 package org.esa.beam.dataio.smos;
 
-import com.bc.ceres.binio.CompoundData;
 import com.bc.ceres.binio.DataFormat;
 import org.esa.beam.framework.datamodel.Product;
 
@@ -49,11 +48,7 @@ public class L1cBrowseSmosFile extends L1cSmosFile {
         if (polarization < 0) {
             return super.createValueProvider(descriptor);
         }
-        return new L1cBrowseDataValueProvider(this, getBtDataType().getMemberIndex(descriptor.getMemberName()),
-                                              polarization);
-    }
-
-    private CompoundData getBtData(int gridPointIndex, int polMode) throws IOException {
-        return getBtDataList(gridPointIndex).getCompound(polMode);
+        return new L1cBrowseValueProvider(this, getBtDataType().getMemberIndex(descriptor.getMemberName()),
+                                          polarization);
     }
 }

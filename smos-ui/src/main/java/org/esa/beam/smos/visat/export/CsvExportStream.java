@@ -23,8 +23,8 @@ import com.bc.ceres.binio.SequenceData;
 import com.bc.ceres.binio.SequenceType;
 import com.bc.ceres.binio.SimpleType;
 import com.bc.ceres.binio.Type;
-import org.esa.beam.dataio.smos.BandInfo;
-import org.esa.beam.dataio.smos.BandInfoRegistry;
+import org.esa.beam.dataio.smos.BandDescriptor;
+import org.esa.beam.dataio.smos.DDDB;
 import org.esa.beam.dataio.smos.SmosFile;
 
 import java.io.IOException;
@@ -108,10 +108,12 @@ class CsvExportStream implements GridPointFilterStream {
                 if (member.getType() == SimpleType.DOUBLE || member.getType() == SimpleType.FLOAT) {
                     printWriter.print(compoundData.getDouble(i));
                 } else {
-                    BandInfo bandInfo = BandInfoRegistry.getInstance().getBandInfo(memberName);
+                    final String formatName = compoundData.getContext().getFormat().getName();
+                    final BandDescriptor descriptor =
+                            DDDB.getInstance().findBandDescriptorForMember(formatName, memberName);
                     long longValue = compoundData.getLong(i);
-                    if (bandInfo != null) {
-                        double doubleValue = bandInfo.getScaleFactor() * longValue + bandInfo.getScaleOffset();
+                    if (descriptor != null) {
+                        double doubleValue = descriptor.getScalingFactor() * longValue + descriptor.getScalingOffset();
                         printWriter.print(doubleValue);
                     } else {
                         printWriter.print(longValue);
