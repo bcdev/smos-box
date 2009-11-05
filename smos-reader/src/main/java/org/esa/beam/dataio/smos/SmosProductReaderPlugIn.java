@@ -31,7 +31,7 @@ import java.util.Locale;
 public class SmosProductReaderPlugIn implements ProductReaderPlugIn {
 
     @Override
-    public ProductReader createReaderInstance() {
+    public SmosProductReader createReaderInstance() {
         return new SmosProductReader(this);
     }
 

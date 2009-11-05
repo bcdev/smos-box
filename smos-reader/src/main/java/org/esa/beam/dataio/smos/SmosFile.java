@@ -59,7 +59,7 @@ public class SmosFile extends ExplorerFile {
 
     private volatile Future<GridPointInfo> gridPointInfoFuture;
 
-    public SmosFile(File hdrFile, File dblFile, DataFormat format) throws IOException {
+    SmosFile(File hdrFile, File dblFile, DataFormat format) throws IOException {
         super(hdrFile, dblFile, format);
 
         gridPointList = getDataBlock().getSequence(SmosConstants.GRID_POINT_LIST_NAME);

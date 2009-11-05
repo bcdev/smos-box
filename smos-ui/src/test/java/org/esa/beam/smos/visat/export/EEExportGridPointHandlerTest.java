@@ -2,14 +2,13 @@ package org.esa.beam.smos.visat.export;
 
 import com.bc.ceres.binio.CompoundData;
 import com.bc.ceres.binio.DataContext;
-import com.bc.ceres.binio.DataFormat;
 import com.bc.ceres.binio.SequenceData;
 import com.bc.ceres.binio.util.ByteArrayIOHandler;
 import com.bc.ceres.binio.util.DataPrinter;
 import static junit.framework.Assert.assertEquals;
-import org.esa.beam.dataio.smos.DDDB;
 import org.esa.beam.dataio.smos.SmosConstants;
 import org.esa.beam.dataio.smos.SmosFile;
+import org.esa.beam.dataio.smos.SmosProductReader;
 import org.junit.Test;
 
 import java.io.File;
@@ -21,20 +20,16 @@ import java.net.URL;
 public class EEExportGridPointHandlerTest {
 
     private static final String SCENARIO_27_DBL_NAME = "scenario27/SM_TEST_MIR_SCSD1C_20070223T142110_20070223T142111_320_001_0/SM_TEST_MIR_SCSD1C_20070223T142110_20070223T142111_320_001_0.DBL";
-    private static final String SCENARIO_27_HDR_NAME = "scenario27/SM_TEST_MIR_SCSD1C_20070223T142110_20070223T142111_320_001_0/SM_TEST_MIR_SCSD1C_20070223T142110_20070223T142111_320_001_0.HDR";
 
     @Test
     public void handleGridPointsForScenario27() throws URISyntaxException, IOException {
-        final File dblFile = getResourceAsFile(SCENARIO_27_DBL_NAME);
-        final File hdrFile = getResourceAsFile(SCENARIO_27_HDR_NAME);
-        final DataFormat dblFormat = DDDB.getInstance().getDataFormat(hdrFile);
-        final SmosFile sourceFile = new SmosFile(hdrFile, dblFile, dblFormat);
+        final SmosFile sourceFile = SmosProductReader.createSmosFile(getResourceAsFile(SCENARIO_27_DBL_NAME));
 
         final SequenceData sourceGridPointList = sourceFile.getGridPointList();
         assertEquals(5533, sourceGridPointList.getElementCount());
         assertEquals("Grid_Point_Data_Type[5533]", sourceGridPointList.getType().getName());
 
-        final DataContext targetContext = dblFormat.createContext(new ByteArrayIOHandler());
+        final DataContext targetContext = sourceFile.getDataFormat().createContext(new ByteArrayIOHandler());
         final GridPointHandler handler = new EEExportGridPointHandler(targetContext, new GridPointFilter() {
             @Override
             public boolean accept(int id, CompoundData gridPointData) throws IOException {

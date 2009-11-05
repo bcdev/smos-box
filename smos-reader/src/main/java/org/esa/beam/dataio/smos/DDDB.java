@@ -111,35 +111,9 @@ public class DDDB {
 
             return getDataFormat(formatName);
         } else {
-            throw new IOException(MessageFormat.format("File ''{0}'': Missing datablock schema.", hdrFile.getPath()));
+            throw new IOException(MessageFormat.format(
+                    "File ''{0}'': Missing datablock schema.", hdrFile.getPath()));
         }
-    }
-
-    public Family<BandDescriptor> getBandDescriptors(String identifier) {
-        if (!bandDescriptorMap.containsKey(identifier)) {
-            final InputStream inputStream = getBandDescriptorResource(identifier);
-
-            if (inputStream != null) {
-                final BandDescriptors descriptors;
-
-                try {
-                    descriptors = readBandDescriptors(inputStream);
-                } catch (Throwable e) {
-                    throw new IllegalStateException(MessageFormat.format(
-                            "Band descriptor resource for identifier ''{0}'': {1}", identifier, e.getMessage()));
-                } finally {
-                    try {
-                        inputStream.close();
-                    } catch (IOException e) {
-                        //ignore
-                    }
-                }
-
-                bandDescriptorMap.putIfAbsent(identifier, descriptors);
-            }
-        }
-
-        return bandDescriptorMap.get(identifier);
     }
 
     public BandDescriptor findBandDescriptorForMember(String identifier, String memberName) {
@@ -154,6 +128,33 @@ public class DDDB {
         return null;
     }
 
+    public Family<BandDescriptor> getBandDescriptors(String formatName) {
+        if (!bandDescriptorMap.containsKey(formatName)) {
+            final InputStream inputStream = getBandDescriptorResource(formatName);
+
+            if (inputStream != null) {
+                final BandDescriptors descriptors;
+
+                try {
+                    descriptors = readBandDescriptors(inputStream);
+                } catch (Throwable t) {
+                    throw new IllegalStateException(MessageFormat.format(
+                            "An error ocurred while reading band descriptors for format name ''{0}''.", formatName));
+                } finally {
+                    try {
+                        inputStream.close();
+                    } catch (IOException e) {
+                        //ignore
+                    }
+                }
+
+                bandDescriptorMap.putIfAbsent(formatName, descriptors);
+            }
+        }
+
+        return bandDescriptorMap.get(formatName);
+    }
+
     public Family<FlagDescriptor> getFlagDescriptors(String identifier) {
         if (!flagDescriptorMap.containsKey(identifier)) {
             final InputStream inputStream = getFlagDescriptorResource(identifier);
@@ -165,7 +166,7 @@ public class DDDB {
                     descriptors = readFlagDescriptors(inputStream);
                 } catch (Throwable e) {
                     throw new IllegalStateException(MessageFormat.format(
-                            "Flag descriptor resource for identifier ''{0}'': {1}", identifier, e.getMessage()));
+                            "An error ocurred while reading flag descriptors for identifier ''{0}''.", identifier));
                 } finally {
                     try {
                         inputStream.close();

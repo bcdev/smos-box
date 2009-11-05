@@ -29,7 +29,7 @@ import java.io.IOException;
  */
 public class L1cBrowseSmosFile extends L1cSmosFile {
 
-    public L1cBrowseSmosFile(File hdrFile, File dblFile, DataFormat format) throws IOException {
+    L1cBrowseSmosFile(File hdrFile, File dblFile, DataFormat format) throws IOException {
         super(hdrFile, dblFile, format);
     }
 

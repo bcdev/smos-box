@@ -1,10 +1,8 @@
 package org.esa.beam.smos.visat.export;
 
-import com.bc.ceres.binio.DataFormat;
 import com.bc.ceres.core.ProgressMonitor;
-import org.esa.beam.dataio.smos.DDDB;
 import org.esa.beam.dataio.smos.SmosFile;
-import org.esa.beam.util.io.FileUtils;
+import org.esa.beam.dataio.smos.SmosProductReader;
 
 import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
@@ -21,32 +19,21 @@ public class EEExporter {
     /**
      * Example for exporting subsets of SMOS data to EE format.
      *
-     * @param args the pathname of a SMOS DBL file as first element,
+     * @param args the pathname of a SMOS header or datablock file as first element,
      *             the path of the target directory as second element.
      */
     public static void main(String[] args) {
-        final File sourceDblFile = new File(args[0]);
-        final File sourceHdrFile = FileUtils.exchangeExtension(sourceDblFile, ".HDR");
+        final File sourceFile = new File(args[0]);
         final File targetDirectory = new File(args[1]);
 
-        // 1. get the format of the SMOS DBL file
-        final DataFormat sourceDblFormat;
-        try {
-            sourceDblFormat = DDDB.getInstance().getDataFormat(sourceHdrFile);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return;
-        }
-        // 2. create a SMOS file
         final SmosFile smosFile;
         try {
-            smosFile = new SmosFile(sourceHdrFile, sourceDblFile, sourceDblFormat);
+            smosFile = SmosProductReader.createSmosFile(sourceFile);
         } catch (IOException e) {
             e.printStackTrace();
             return;
         }
 
-        // 3. process SMOS file
         try {
             final EEExportStream exportStream = new EEExportStream(targetDirectory);
             final SmosFileProcessor processor = new SmosFileProcessor(exportStream, TARGET_REGION);
