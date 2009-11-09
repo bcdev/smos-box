@@ -12,6 +12,7 @@ import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.framework.ui.PixelPositionListener;
 import org.esa.beam.framework.ui.product.ProductSceneView;
 import org.esa.beam.visat.VisatApp;
+import org.esa.beam.smos.dgg.SmosDgg;
 
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
@@ -89,8 +90,7 @@ public class SceneViewSelectionService {
     }
 
     public int getGridPointId(int pixelX, int pixelY, int currentLevel) {
-        Band gridPointIdBand = getSelectedSmosProduct().getBandAt(0); // Convention! Grid_Point_ID is always first!
-        MultiLevelImage levelImage = (MultiLevelImage) gridPointIdBand.getSourceImage();
+        final MultiLevelImage levelImage = SmosDgg.getInstance().getDggMultiLevelImage();
         RenderedImage image = levelImage.getImage(currentLevel);
         Raster data = image.getData(new Rectangle(pixelX, pixelY, 1, 1));
         return data.getSample(pixelX, pixelY, 0);
