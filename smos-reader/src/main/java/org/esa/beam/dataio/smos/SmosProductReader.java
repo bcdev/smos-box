@@ -48,7 +48,7 @@ public class SmosProductReader extends AbstractProductReader {
         } else if (isFullPolScienceFormat(formatName)) {
             return new L1cScienceSmosFile(hdrFile, dblFile, format);
         } else if (isOsUserFormat(formatName)) {
-            return new SmosFile(hdrFile, dblFile, format);
+            return new  SmosFile(hdrFile, dblFile, format);
         } else if (isSmUserFormat(formatName)) {
             return new SmosFile(hdrFile, dblFile, format);
         } else if (isOsAnalysisFormat(formatName)) {
