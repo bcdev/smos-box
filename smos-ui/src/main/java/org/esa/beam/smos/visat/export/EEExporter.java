@@ -4,7 +4,7 @@ import com.bc.ceres.core.ProgressMonitor;
 import org.esa.beam.dataio.smos.SmosFile;
 import org.esa.beam.dataio.smos.SmosProductReader;
 
-import java.awt.Shape;
+import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.io.IOException;
@@ -15,7 +15,7 @@ import java.io.IOException;
 public class EEExporter {
 
     // POLYGON((120 45,150 45,150 0,120 0,120 45))
-    private static final Shape TARGET_REGION = new Rectangle2D.Double(-140, -24, 280, 34);
+    private static final Shape TARGET_REGION = new Rectangle2D.Double(0, 20, 20, 15);
 
     /**
      * Example for exporting subsets of SMOS data to EE format.

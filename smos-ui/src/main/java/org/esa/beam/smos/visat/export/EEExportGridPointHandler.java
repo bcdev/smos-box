@@ -42,8 +42,10 @@ class EEExportGridPointHandler implements GridPointHandler {
         geometryTracker = new GeometryTracker();
 
         final String formatName = targetContext.getFormat().getName();
-        // @todo 2 tb/tb extend to L2 -DA products once they're supported
-        isL2File = SmosProductReader.isSmUserFormat(formatName) || SmosProductReader.isOsUserFormat(formatName);
+        isL2File = SmosProductReader.isSmUserFormat(formatName) ||
+                SmosProductReader.isSmAnalysisFormat(formatName) ||
+                SmosProductReader.isOsUserFormat(formatName) ||
+                SmosProductReader.isOsAnalysisFormat(formatName);
     }
 
     @Override
@@ -101,13 +103,13 @@ class EEExportGridPointHandler implements GridPointHandler {
         }
 
         if (isL2File) {
-            throw new IllegalStateException("Currently not implemented - waiting for ESA input");
-//            int index = gridPointData.getType().getMemberIndex("Mean_acq_time");
-//            final CompoundData utcData = gridPointData.getCompound(index);
-//            final int days = utcData.getInt(0);
-//            final long seconds = utcData.getUInt(1);
-//            final long microSeconds = utcData.getUInt(2);
-//            timeTracker.track(ExplorerFile.getCfiDateInUtc(days, seconds, microSeconds));
+            int index = gridPointData.getType().getMemberIndex("Mean_acq_time");
+            if (index < 0) {
+                return; // we have a data analysis product - no timing information stored in there
+            }
+            final float mjdTime = gridPointData.getFloat(index);
+            final Date date = SmosFile.mjdFloatDateToUtc(mjdTime);
+            timeTracker.track(date);
         } else {
             int index = type.getMemberIndex(SmosConstants.L1C_BT_DATA_LIST_NAME);
             final SequenceData btDataList = gridPointData.getSequence(index);

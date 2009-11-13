@@ -1,22 +1,21 @@
 package org.esa.beam.dataio.smos;
 
-import com.bc.ceres.binio.DataFormat;
-import com.bc.ceres.binio.DataContext;
 import com.bc.ceres.binio.CompoundData;
+import com.bc.ceres.binio.DataContext;
+import com.bc.ceres.binio.DataFormat;
+import org.esa.beam.framework.datamodel.Product;
 
+import java.awt.geom.Area;
 import java.io.File;
 import java.io.IOException;
-import java.awt.geom.Area;
-import java.util.Date;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-import java.util.concurrent.Executors;
 import java.util.concurrent.Callable;
-
-import org.esa.beam.framework.datamodel.Product;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public abstract class ExplorerFile {
 
@@ -110,5 +109,13 @@ public abstract class ExplorerFile {
         calendar.add(Calendar.MILLISECOND, (int) (microseconds * 0.001));
 
         return calendar.getTime();
+    }
+
+    public static Date mjdFloatDateToUtc(float mjd) {
+        int days = (int) mjd;
+        double doubleSecs = (mjd - days) * 86400;
+        int secs = (int)doubleSecs;
+        int microsecs = (int) ((doubleSecs - secs) * 1e6);
+        return cfiDateToUtc(days, secs, microsecs);
     }
 }
