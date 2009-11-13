@@ -1,6 +1,9 @@
 package org.esa.beam.smos.visat.export;
 
-import org.jdom.*;
+import org.jdom.Document;
+import org.jdom.Element;
+import org.jdom.JDOMException;
+import org.jdom.Namespace;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
@@ -9,11 +12,11 @@ import java.awt.geom.Rectangle2D;
 import java.io.*;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
-import java.text.SimpleDateFormat;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.Iterator;
+import java.util.List;
 
 class EEHdrFilePatcher {
 
@@ -80,40 +83,31 @@ class EEHdrFilePatcher {
         final Element variableHeader = element.getChild("Variable_Header", namespace);
         final Element specificHeader = variableHeader.getChild("Specific_Product_Header", namespace);
         final Element mainInfo = specificHeader.getChild("Main_Info", namespace);
-        final Element timeInfo = mainInfo.getChild("Time_Info", namespace);
+        Element timeInfo = null;
+        if (mainInfo != null) {
+            // this is the case if we handle ECMWF aux-data files
+            timeInfo = mainInfo.getChild("Time_Info", namespace);
+        }
 
-        if (sensingStart != null) {
+        if (sensingStart != null && timeInfo != null) {
             final Element validityStart = timeInfo.getChild("Precise_Validity_Start", namespace);
             validityStart.setText(dateFormatMicroSec.format(sensingStart));
         }
-        if (sensingStop != null) {
+        if (sensingStop != null && timeInfo != null) {
             final Element validityStop = timeInfo.getChild("Precise_Validity_Stop", namespace);
             validityStop.setText(dateFormatMicroSec.format(sensingStop));
         }
 
         if (area != null) {
             final DecimalFormat numberFormat = createDecimalFormat();
-
-            // @todo 3 tb/tb check for orbit orientation - right now we always assume north-south direction
-            final Element productLocation = specificHeader.getChild("Product_Location", namespace);
-            final Element startLat = productLocation.getChild("Start_Lat", namespace);
-            startLat.setText(numberFormat.format(area.getMaxY()));
-
-            final Element startLon = productLocation.getChild("Start_Lon", namespace);
-            startLon.setText(numberFormat.format(area.getMinX()));
-
-            final Element stopLat = productLocation.getChild("Stop_Lat", namespace);
-            stopLat.setText(numberFormat.format(area.getMinY()));
-
-            final Element stopLon = productLocation.getChild("Stop_Lon", namespace);
-            stopLon.setText(numberFormat.format(area.getMaxX()));
-
-            // @todo 3 tb/tb pure averaging is not really correct here
-            final Element midLat = productLocation.getChild("Mid_Lat", namespace);
-            midLat.setText(numberFormat.format(area.getMinY() + 0.5 * (area.getMaxY() - area.getMinY())));
-
-            final Element midLon = productLocation.getChild("Mid_Lon", namespace);
-            midLon.setText(numberFormat.format(area.getMinX() + 0.5 * (area.getMaxX() - area.getMinX())));
+            Element productLocation = specificHeader.getChild("Product_Location", namespace);
+            if (productLocation == null) {
+                // we maybe have an ECMWF aux file
+                productLocation = specificHeader.getChild("L2_Product_Location", namespace);
+                patchGeolocation_ECMWF(namespace, numberFormat, productLocation);
+            } else {
+                patchGeolocation_L1_L2(namespace, numberFormat, productLocation);
+            }
         }
 
         if (gridPointCount > 0) {
@@ -147,6 +141,51 @@ class EEHdrFilePatcher {
                 offset += dsSize;
             }
         }
+    }
+
+    private void patchGeolocation_L1_L2(Namespace namespace, DecimalFormat numberFormat, Element productLocation) {
+        // @todo 3 tb/tb check for orbit orientation - right now we always assume north-south direction
+        final Element startLat = productLocation.getChild("Start_Lat", namespace);
+        startLat.setText(numberFormat.format(area.getMaxY()));
+
+        final Element startLon = productLocation.getChild("Start_Lon", namespace);
+        startLon.setText(numberFormat.format(area.getMinX()));
+
+        final Element stopLat = productLocation.getChild("Stop_Lat", namespace);
+        stopLat.setText(numberFormat.format(area.getMinY()));
+
+        final Element stopLon = productLocation.getChild("Stop_Lon", namespace);
+        stopLon.setText(numberFormat.format(area.getMaxX()));
+
+        // @todo 3 tb/tb pure averaging is not really correct here
+        final Element midLat = productLocation.getChild("Mid_Lat", namespace);
+        midLat.setText(numberFormat.format(area.getMinY() + 0.5 * (area.getMaxY() - area.getMinY())));
+
+        final Element midLon = productLocation.getChild("Mid_Lon", namespace);
+        midLon.setText(numberFormat.format(area.getMinX() + 0.5 * (area.getMaxX() - area.getMinX())));
+    }
+
+    // @todo 3 tb/tb merge with method above
+    private void patchGeolocation_ECMWF(Namespace namespace, DecimalFormat numberFormat, Element productLocation) {
+        // @todo 3 tb/tb check for orbit orientation - right now we always assume north-south direction
+        final Element startLat = productLocation.getChild("Start_Lat", namespace);
+        startLat.setText(numberFormat.format(area.getMaxY()));
+
+        final Element startLon = productLocation.getChild("Start_Long", namespace);
+        startLon.setText(numberFormat.format(area.getMinX()));
+
+        final Element stopLat = productLocation.getChild("Stop_Lat", namespace);
+        stopLat.setText(numberFormat.format(area.getMinY()));
+
+        final Element stopLon = productLocation.getChild("Stop_Long", namespace);
+        stopLon.setText(numberFormat.format(area.getMaxX()));
+
+        // @todo 3 tb/tb pure averaging is not really correct here
+        final Element midLat = productLocation.getChild("Mid_Lat", namespace);
+        midLat.setText(numberFormat.format(area.getMinY() + 0.5 * (area.getMaxY() - area.getMinY())));
+
+        final Element midLon = productLocation.getChild("Mid_Long", namespace);
+        midLon.setText(numberFormat.format(area.getMinX() + 0.5 * (area.getMaxX() - area.getMinX())));
     }
 
     private DecimalFormat createDecimalFormat() {

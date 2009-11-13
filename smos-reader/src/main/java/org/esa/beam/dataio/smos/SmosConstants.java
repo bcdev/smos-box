@@ -27,4 +27,6 @@ public class SmosConstants {
     public static final int L1C_POL_MODE_XY1 = 2;
     public static final int L1C_POL_MODE_XY2 = 3;
     public static final int L1C_POL_MODE_ANY = 4;
+
+     public static final String ECMWF_DATA_LIST_NAME = "ECMWF_PARAMS_Data_Type";
 }

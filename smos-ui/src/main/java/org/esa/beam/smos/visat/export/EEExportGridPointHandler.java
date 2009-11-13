@@ -1,11 +1,6 @@
 package org.esa.beam.smos.visat.export;
 
-import com.bc.ceres.binio.CollectionData;
-import com.bc.ceres.binio.CompoundData;
-import com.bc.ceres.binio.CompoundType;
-import com.bc.ceres.binio.DataAccessException;
-import com.bc.ceres.binio.DataContext;
-import com.bc.ceres.binio.SequenceData;
+import com.bc.ceres.binio.*;
 import org.esa.beam.dataio.smos.SmosConstants;
 import org.esa.beam.dataio.smos.SmosFile;
 import org.esa.beam.dataio.smos.SmosProductReader;
@@ -99,6 +94,12 @@ class EEExportGridPointHandler implements GridPointHandler {
     }
 
     private void trackSensingTime(CompoundData gridPointData) throws IOException {
+        final CompoundType type = gridPointData.getType();
+        final String typeName = type.getName();
+        if (typeName.indexOf("ECMWF") >= 0) {
+            return; // no sensing time information in ECMWF aux files
+        }
+
         if (isL2File) {
             throw new IllegalStateException("Currently not implemented - waiting for ESA input");
 //            int index = gridPointData.getType().getMemberIndex("Mean_acq_time");
@@ -108,7 +109,7 @@ class EEExportGridPointHandler implements GridPointHandler {
 //            final long microSeconds = utcData.getUInt(2);
 //            timeTracker.track(ExplorerFile.getCfiDateInUtc(days, seconds, microSeconds));
         } else {
-            int index = gridPointData.getType().getMemberIndex(SmosConstants.L1C_BT_DATA_LIST_NAME);
+            int index = type.getMemberIndex(SmosConstants.L1C_BT_DATA_LIST_NAME);
             final SequenceData btDataList = gridPointData.getSequence(index);
             final CompoundData btData = btDataList.getCompound(0);
             index = btData.getType().getMemberIndex("Snapshot_ID");
