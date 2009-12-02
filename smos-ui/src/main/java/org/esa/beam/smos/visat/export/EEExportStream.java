@@ -10,7 +10,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-class EEExportStream implements GridPointFilterStream {
+public class EEExportStream implements GridPointFilterStream {
 
     private final File targetDirectory;
 

@@ -9,17 +9,17 @@ import org.esa.beam.dataio.smos.SmosConstants;
 import java.awt.Shape;
 import java.io.IOException;
 
-class SmosFileProcessor {
+public class SmosFileProcessor {
 
     private final GridPointFilterStream filterStream;
     private final Shape targetRegion;
 
-    SmosFileProcessor(GridPointFilterStream filterStream, Shape targetRegion) {
+    public SmosFileProcessor(GridPointFilterStream filterStream, Shape targetRegion) {
         this.filterStream = filterStream;
         this.targetRegion = targetRegion;
     }
 
-    void process(SmosFile smosFile, ProgressMonitor pm) throws IOException {
+   public void process(SmosFile smosFile, ProgressMonitor pm) throws IOException {
         final CompoundType gridPointType = smosFile.getGridPointType();
         final int latIndex = gridPointType.getMemberIndex(SmosConstants.GRID_POINT_LAT_NAME);
         final int lonIndex = gridPointType.getMemberIndex(SmosConstants.GRID_POINT_LON_NAME);
