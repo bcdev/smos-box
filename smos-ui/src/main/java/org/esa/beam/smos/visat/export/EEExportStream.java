@@ -65,6 +65,14 @@ public class EEExportStream implements GridPointFilterStream {
         dispose();
     }
 
+    public File getTargetDblFile() {
+        return targetDblFile;
+    }
+
+    public File getTargetHdrFile() {
+        return targetHdrFile;
+    }
+
     private void dispose() throws IOException {
         if (targetContext != null) {
             targetContext.dispose();
