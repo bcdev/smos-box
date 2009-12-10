@@ -12,7 +12,7 @@ public class TimeTrackerTest extends TestCase {
         assertEquals(new Date(Long.MAX_VALUE), start);
 
         final Date stop = timeTracker.getIntervalStop();
-        assertEquals(new Date(0), stop);
+        assertEquals(new Date(Long.MIN_VALUE), stop);
     }
 
     public void testTrackOneDate() {

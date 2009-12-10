@@ -8,7 +8,7 @@ class TimeTracker {
 
     TimeTracker() {
         intervalStart = Long.MAX_VALUE;
-        intervalStop = 0;
+        intervalStop = Long.MIN_VALUE;
     }
 
     Date getIntervalStart() {

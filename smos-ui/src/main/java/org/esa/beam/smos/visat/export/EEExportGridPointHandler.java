@@ -108,8 +108,10 @@ class EEExportGridPointHandler implements GridPointHandler {
                 return; // we have a data analysis product - no timing information stored in there
             }
             final float mjdTime = gridPointData.getFloat(index);
-            final Date date = SmosFile.mjdFloatDateToUtc(mjdTime);
-            timeTracker.track(date);
+            if (mjdTime > 0) {  // condition for valid measurement
+                final Date date = SmosFile.mjdFloatDateToUtc(mjdTime);
+                timeTracker.track(date);
+            }
         } else {
             int index = type.getMemberIndex(SmosConstants.L1C_BT_DATA_LIST_NAME);
             final SequenceData btDataList = gridPointData.getSequence(index);
