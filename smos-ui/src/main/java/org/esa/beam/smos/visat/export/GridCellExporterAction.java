@@ -16,24 +16,6 @@
  */
 package org.esa.beam.smos.visat.export;
 
-import com.bc.ceres.binding.Property;
-import com.bc.ceres.binding.PropertyContainer;
-import com.bc.ceres.binding.PropertyDescriptor;
-import com.bc.ceres.binding.ValidationException;
-import com.bc.ceres.binding.ValueRange;
-import com.bc.ceres.binding.ValueSet;
-import com.bc.ceres.binding.swing.Binding;
-import com.bc.ceres.binding.swing.BindingContext;
-import com.bc.ceres.binding.swing.ComponentAdapter;
-import com.bc.ceres.binding.swing.ValueEditor;
-import com.bc.ceres.binding.swing.ValueEditorRegistry;
-import com.bc.ceres.binding.swing.internal.FileEditor;
-import com.bc.ceres.binding.swing.internal.SingleSelectionEditor;
-import com.bc.ceres.binding.swing.internal.TextComponentAdapter;
-import com.bc.ceres.binding.swing.internal.TextFieldEditor;
-import com.bc.ceres.core.ProgressMonitor;
-import com.bc.ceres.swing.TableLayout;
-import com.bc.ceres.swing.progress.ProgressMonitorSwingWorker;
 import org.esa.beam.framework.datamodel.Band;
 import org.esa.beam.framework.datamodel.GeoCoding;
 import org.esa.beam.framework.datamodel.Pin;
@@ -47,22 +29,6 @@ import org.esa.beam.util.ProductUtils;
 import org.esa.beam.util.SystemUtils;
 import org.esa.beam.visat.VisatApp;
 
-import javax.swing.AbstractButton;
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.ButtonGroup;
-import javax.swing.DefaultListCellRenderer;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JFileChooser;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JTextField;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.FlowLayout;
@@ -82,6 +48,42 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.swing.AbstractButton;
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JTextField;
+
+import com.bc.ceres.binding.Property;
+import com.bc.ceres.binding.PropertyContainer;
+import com.bc.ceres.binding.PropertyDescriptor;
+import com.bc.ceres.binding.ValidationException;
+import com.bc.ceres.binding.ValueRange;
+import com.bc.ceres.binding.ValueSet;
+import com.bc.ceres.binding.swing.Binding;
+import com.bc.ceres.binding.swing.BindingContext;
+import com.bc.ceres.binding.swing.ComponentAdapter;
+import com.bc.ceres.binding.swing.PropertyEditor;
+import com.bc.ceres.binding.swing.PropertyEditorRegistry;
+import com.bc.ceres.binding.swing.internal.FileEditor;
+import com.bc.ceres.binding.swing.internal.SingleSelectionEditor;
+import com.bc.ceres.binding.swing.internal.TextComponentAdapter;
+import com.bc.ceres.binding.swing.internal.TextFieldEditor;
+import com.bc.ceres.core.ProgressMonitor;
+import com.bc.ceres.swing.TableLayout;
+import com.bc.ceres.swing.progress.ProgressMonitorSwingWorker;
 
 /**
  * @author Marco Zuehlke
@@ -375,7 +377,7 @@ public class GridCellExporterAction extends ExecCommand {
             buttonGroup.add(useAreaButton);
             bindingContext.bind("roiSource", buttonGroup, inputValueSet);
 
-            ValueEditor selectionEditor = ValueEditorRegistry.getInstance().getValueEditor(
+            PropertyEditor selectionEditor = PropertyEditorRegistry.getInstance().getValueEditor(
                     SingleSelectionEditor.class.getName());
             JComboBox roiCombo = (JComboBox) selectionEditor.createEditorComponent(vc.getDescriptor("roiRaster"),
                                                                                    bindingContext);
@@ -427,7 +429,7 @@ public class GridCellExporterAction extends ExecCommand {
         }
 
         private Component createLatLonInputElement(String name, String displayName, int numColumns) {
-            ValueEditor textEditor = ValueEditorRegistry.getInstance().getValueEditor(TextFieldEditor.class.getName());
+            PropertyEditor textEditor = PropertyEditorRegistry.getInstance().getValueEditor(TextFieldEditor.class.getName());
             JPanel panel = new JPanel(new FlowLayout());
             panel.add(new JLabel(displayName));
             JTextField editor = (JTextField) textEditor.createEditorComponent(vc.getDescriptor(name), bindingContext);
@@ -447,7 +449,7 @@ public class GridCellExporterAction extends ExecCommand {
             JPanel panel = new JPanel(layout);
             panel.setBorder(BorderFactory.createTitledBorder("Output"));
             panel.add(new JLabel("CSV-File:"));
-            ValueEditor fileEditor = ValueEditorRegistry.getInstance().getValueEditor(FileEditor.class.getName());
+            PropertyEditor fileEditor = PropertyEditorRegistry.getInstance().getValueEditor(FileEditor.class.getName());
             panel.add(fileEditor.createEditorComponent(vc.getDescriptor("output"), bindingContext));
             setFileEditorWidth("output");
             return panel;
