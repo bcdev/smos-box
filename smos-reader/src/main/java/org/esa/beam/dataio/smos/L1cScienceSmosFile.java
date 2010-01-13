@@ -327,7 +327,7 @@ public class L1cScienceSmosFile extends L1cSmosFile {
                 if (lon > 180.0) {
                     lon -= 360.0;
                 }
-                final Rectangle2D.Double rectangle = createGridPointRectangle(lon, lat);
+                final Rectangle2D rectangle = createGridPointRectangle(lon, lat);
 
                 long lastId = -1;
                 for (int j = 0; j < btCount; j++) {
@@ -458,7 +458,7 @@ public class L1cScienceSmosFile extends L1cSmosFile {
         return band;
     }
 
-    private static Rectangle2D.Double createGridPointRectangle(double lon, double lat) {
+    private static Rectangle2D createGridPointRectangle(double lon, double lat) {
         // the average width of a grid point is about 0.04
         lon -= 0.02;
         if (lon < -180.0) {
