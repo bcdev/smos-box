@@ -323,19 +323,11 @@ public class L1cScienceSmosFile extends L1cSmosFile {
                 final CompoundData gridData = gridPointList.getCompound(i);
                 double lon = gridData.getDouble(lonIndex);
                 double lat = gridData.getDouble(latIndex);
-                lon -= 0.02;
-                if (lon < -180.0) {
-                    lon = -180.0;
-                }
-                lat += 0.02;
-                if (lat > 90.0) {
-                    lat = 90.0;
-                }
                 // normalisation to [-180, 180] necessary for some L1c test products
                 if (lon > 180.0) {
                     lon -= 360.0;
                 }
-                final Rectangle2D.Double rectangle = new Rectangle2D.Double(lon, lat, 0.04, 0.04);
+                final Rectangle2D.Double rectangle = createGridPointRectangle(lon, lat);
 
                 long lastId = -1;
                 for (int j = 0; j < btCount; j++) {
@@ -464,5 +456,23 @@ public class L1cScienceSmosFile extends L1cSmosFile {
         band.setImageInfo(ProductHelper.createImageInfo(band, descriptor));
 
         return band;
+    }
+
+    private static Rectangle2D.Double createGridPointRectangle(double lon, double lat) {
+        // the average width of a grid point is about 0.04
+        lon -= 0.02;
+        if (lon < -180.0) {
+            lon = -180.0;
+        } else if (lon + 0.04 > 180.0) {
+            lon -= 0.04;
+        }
+        // the height of a grid point always is about 0.02
+        lat -= 0.01;
+        if (lat < -90.0) {
+            lat = -90.0;
+        } else if (lat + 0.02 > 90.0) {
+            lat -= 0.02;
+        }
+        return new Rectangle2D.Double(lon, lat, 0.04, 0.02);
     }
 }
