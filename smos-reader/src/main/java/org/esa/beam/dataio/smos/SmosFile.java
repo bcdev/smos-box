@@ -120,7 +120,7 @@ public class SmosFile extends ExplorerFile {
     }
 
     @Override
-    public Area computeEnvelope() throws IOException {
+    protected Area computeEnvelope() throws IOException {
         final int latIndex = getGridPointType().getMemberIndex(SmosConstants.GRID_POINT_LAT_NAME);
         final int lonIndex = getGridPointType().getMemberIndex(SmosConstants.GRID_POINT_LON_NAME);
         final SequenceData gridPointList = getGridPointList();

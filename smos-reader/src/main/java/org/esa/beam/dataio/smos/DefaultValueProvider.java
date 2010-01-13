@@ -49,7 +49,7 @@ class DefaultValueProvider implements ValueProvider {
     }
 
     @Override
-    public final Area getDomain() {
+    public final Area getEnvelope() {
         return smosFile.getEnvelope();
     }
 

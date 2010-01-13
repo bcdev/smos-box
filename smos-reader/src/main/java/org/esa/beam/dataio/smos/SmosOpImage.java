@@ -62,7 +62,7 @@ class SmosOpImage extends SingleBandedOpImage {
         if (envelope == null) {
             synchronized (this) {
                 if (envelope == null) {
-                    final Area modelDomain = valueProvider.getDomain();
+                    final Area modelDomain = valueProvider.getEnvelope();
                     envelope = modelDomain.createTransformedArea(model.getModelToImageTransform(getLevel()));
                 }
             }

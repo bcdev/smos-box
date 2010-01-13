@@ -24,7 +24,7 @@ public class SmosProductReader extends AbstractProductReader {
         super(readerPlugIn);
     }
 
-    public SmosFile getSmosFile() {
+    public ExplorerFile getExplorerFile() {
         synchronized (this) {
             return smosFile;
         }
@@ -57,6 +57,8 @@ public class SmosProductReader extends AbstractProductReader {
             return new SmosFile(hdrFile, dblFile, format);
         } else if (isEcmwfFormat(formatName)) {
             return new SmosFile(hdrFile, dblFile, format);
+        } else if (isDffLaiFormat(formatName)) {
+            return null; // todo - return a file
         } else {
             throw new IOException(MessageFormat.format(
                     "File ''{0}'': unsupported SMOS data format ''{1}''.", file, formatName));
@@ -145,6 +147,10 @@ public class SmosProductReader extends AbstractProductReader {
 
     public static boolean isEcmwfFormat(String formatName) {
         return formatName.contains("AUX_ECMWF_");
+    }
+
+    public static boolean isDffLaiFormat(String formatName) {
+        return formatName.contains("AUX_DFFLAI");
     }
 
     private File getInputFile() {

@@ -28,7 +28,7 @@ public class L1cScienceValueProvider implements ValueProvider {
     }
 
     @Override
-    public Area getDomain() {
+    public Area getEnvelope() {
         return smosFile.getEnvelope();
     }
 

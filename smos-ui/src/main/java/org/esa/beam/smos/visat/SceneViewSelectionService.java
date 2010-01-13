@@ -7,7 +7,6 @@ import org.esa.beam.dataio.smos.SmosFile;
 import org.esa.beam.dataio.smos.SmosProductReader;
 import org.esa.beam.dataio.smos.ExplorerFile;
 import org.esa.beam.framework.dataio.ProductReader;
-import org.esa.beam.framework.datamodel.Band;
 import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.framework.ui.PixelPositionListener;
 import org.esa.beam.framework.ui.product.ProductSceneView;
@@ -76,7 +75,7 @@ public class SceneViewSelectionService {
         if (product != null) {
             final ProductReader productReader = product.getProductReader();
             Assert.state(productReader instanceof SmosProductReader, "productReader instanceof SmosProductReader");
-            final ExplorerFile smosFile = ((SmosProductReader) productReader).getSmosFile();
+            final ExplorerFile smosFile = ((SmosProductReader) productReader).getExplorerFile();
             if (smosFile instanceof SmosFile) {
                 return (SmosFile) smosFile;
             }

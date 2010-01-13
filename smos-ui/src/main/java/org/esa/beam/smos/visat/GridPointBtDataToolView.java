@@ -198,7 +198,7 @@ public abstract class GridPointBtDataToolView extends SmosToolView {
         for (final Product product : products) {
             final ProductReader productReader = product.getProductReader();
             if (productReader instanceof SmosProductReader) {
-                final ExplorerFile smosFile = ((SmosProductReader) productReader).getSmosFile();
+                final ExplorerFile smosFile = ((SmosProductReader) productReader).getExplorerFile();
                 if (smosFile instanceof L1cSmosFile) {
                     String productName = product.getName();
                     String relevantProductname = getRelevantProductname(productName);

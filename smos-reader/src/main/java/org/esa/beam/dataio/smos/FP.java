@@ -65,8 +65,8 @@ abstract class FP implements ValueProvider {
     }
 
     @Override
-    public final Area getDomain() {
-        return frxProvider.getDomain();
+    public final Area getEnvelope() {
+        return frxProvider.getEnvelope();
     }
 
     @Override

@@ -55,7 +55,7 @@ class GridPointFilterStreamHandler {
         ProductReader productReader = product.getProductReader();
         if (productReader instanceof SmosProductReader) {
             SmosProductReader smosProductReader = (SmosProductReader) productReader;
-            ExplorerFile smosFile = smosProductReader.getSmosFile();
+            ExplorerFile smosFile = smosProductReader.getExplorerFile();
             if (smosFile instanceof SmosFile) {
                 smosFileProcessor.process((SmosFile) smosFile, pm);
             }

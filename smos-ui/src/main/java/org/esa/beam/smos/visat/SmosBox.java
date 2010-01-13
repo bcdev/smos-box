@@ -96,7 +96,7 @@ public class SmosBox implements VisatPlugIn {
         if (raster != null) {
             final ProductReader productReader = raster.getProductReader();
             if (productReader instanceof SmosProductReader) {
-                final ExplorerFile smosFile = ((SmosProductReader) productReader).getSmosFile();
+                final ExplorerFile smosFile = ((SmosProductReader) productReader).getExplorerFile();
                 if (smosFile instanceof L1cScienceSmosFile) {
                     return (L1cScienceSmosFile) smosFile;
                 }

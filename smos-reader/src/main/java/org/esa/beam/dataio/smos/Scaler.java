@@ -15,8 +15,8 @@ class Scaler implements ValueProvider {
     }
 
     @Override
-    public Area getDomain() {
-        return provider.getDomain();
+    public Area getEnvelope() {
+        return provider.getEnvelope();
     }
 
     @Override
