@@ -125,10 +125,10 @@ public class SmosFile extends ExplorerFile {
         final int lonIndex = getGridPointType().getMemberIndex(SmosConstants.GRID_POINT_LON_NAME);
         final SequenceData gridPointList = getGridPointList();
 
-        final Rectangle2D[] tileRects = new Rectangle2D[512];
+        final Rectangle2D[] tileRectangles = new Rectangle2D[512];
         for (int i = 0; i < 32; ++i) {
             for (int j = 0; j < 16; ++j) {
-                tileRects[i * 16 + j] = createTileRectangle(i, j);
+                tileRectangles[i * 16 + j] = createTileRectangle(i, j);
             }
         }
 
@@ -151,9 +151,9 @@ public class SmosFile extends ExplorerFile {
             final double h = 0.04;
 
             if (!envelope.contains(x, y, w, h)) {
-                for (Rectangle2D tileRect : tileRects) {
-                    if (tileRect.intersects(x, y, w, h) && !envelope.contains(tileRect)) {
-                        envelope.add(new Area(tileRect));
+                for (final Rectangle2D tileRectangle : tileRectangles) {
+                    if (tileRectangle.intersects(x, y, w, h) && !envelope.contains(tileRectangle)) {
+                        envelope.add(new Area(tileRectangle));
                         if (envelope.contains(x, y, w, h)) {
                             break;
                         }
