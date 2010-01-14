@@ -44,6 +44,9 @@ import java.util.concurrent.Future;
  */
 public class L1cScienceSmosFile extends L1cSmosFile {
 
+    private static final String INCIDENCE_ANGLE_NAME = "Incidence_Angle";
+    private static final String SNAPSHOT_ID_OF_PIXEL_NAME = "Snapshot_ID_of_Pixel";
+
     private static final double CENTER_BROWSE_INCIDENCE_ANGLE = 42.5;
     private static final double MIN_BROWSE_INCIDENCE_ANGLE = 37.5;
     private static final double MAX_BROWSE_INCIDENCE_ANGLE = 52.5;
@@ -63,9 +66,9 @@ public class L1cScienceSmosFile extends L1cSmosFile {
         super(hdrFile, dblFile, format);
 
         flagsIndex = getBtDataType().getMemberIndex(SmosConstants.BT_FLAGS_NAME);
-        incidenceAngleIndex = getBtDataType().getMemberIndex(SmosConstants.BT_INCIDENCE_ANGLE_NAME);
+        incidenceAngleIndex = getBtDataType().getMemberIndex(INCIDENCE_ANGLE_NAME);
         incidenceAngleScalingFactor = getIncidenceAngleScalingFactor(format.getName());
-        snapshotIdOfPixelIndex = getBtDataType().getMemberIndex(SmosConstants.BT_SNAPSHOT_ID_OF_PIXEL_NAME);
+        snapshotIdOfPixelIndex = getBtDataType().getMemberIndex(SNAPSHOT_ID_OF_PIXEL_NAME);
 
         snapshotList = getDataBlock().getSequence(SmosConstants.SNAPSHOT_LIST_NAME);
         if (snapshotList == null) {
@@ -76,7 +79,7 @@ public class L1cScienceSmosFile extends L1cSmosFile {
 
     private double getIncidenceAngleScalingFactor(String formatName) {
         for (final BandDescriptor descriptor : DDDB.getInstance().getBandDescriptors(formatName).asList()) {
-            if (SmosConstants.BT_INCIDENCE_ANGLE_NAME.equals(descriptor.getMemberName())) {
+            if (INCIDENCE_ANGLE_NAME.equals(descriptor.getMemberName())) {
                 return descriptor.getScalingFactor();
             }
         }

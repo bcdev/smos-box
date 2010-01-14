@@ -126,7 +126,7 @@ public class GridPointBtDataChartToolView extends GridPointBtDataToolView {
                 boolean m2 = modeCheckers[1].isSelected();
                 int length = ds.data.length;
                 for (int i = 0; i < length; i++) {
-                    int polMode = ds.data[i][iq].intValue() & SmosConstants.L1C_POL_FLAGS_MASK;
+                    int polMode = ds.data[i][iq].intValue() & SmosConstants.L1C_POL_MODE_FLAGS_MASK;
                     double x = ds.data[i][ix].doubleValue();
                     double y = ds.data[i][iy1].doubleValue();
                     double dev = ds.data[i][id].doubleValue();
@@ -152,7 +152,7 @@ public class GridPointBtDataChartToolView extends GridPointBtDataToolView {
                     boolean m3 = modeCheckers[2].isSelected();
                     int length = ds.data.length;
                     for (int i = 0; i < length; i++) {
-                        int polMode = ds.data[i][iq].intValue() & SmosConstants.L1C_POL_FLAGS_MASK;
+                        int polMode = ds.data[i][iq].intValue() & SmosConstants.L1C_POL_MODE_FLAGS_MASK;
                         double dev = ds.data[i][id].doubleValue();
                         double x = ds.data[i][ix].doubleValue();
                         double y1 = ds.data[i][iy1].doubleValue();
