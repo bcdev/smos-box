@@ -13,7 +13,7 @@ import java.net.URL;
 import java.text.MessageFormat;
 
 /**
- * Providfes a {@link com.bc.ceres.glevel.MultiLevelImage multi level image} of
+ * Provides a {@link com.bc.ceres.glevel.MultiLevelImage multi level image} of
  * the SMOS Discrete global grid.
  *
  * @author Marco Peters
