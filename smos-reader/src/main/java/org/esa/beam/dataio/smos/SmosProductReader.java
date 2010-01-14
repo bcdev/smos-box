@@ -18,7 +18,7 @@ import java.text.MessageFormat;
 
 public class SmosProductReader extends AbstractProductReader {
 
-    private SmosFile smosFile;
+    private ExplorerFile smosFile;
 
     SmosProductReader(ProductReaderPlugIn readerPlugIn) {
         super(readerPlugIn);
@@ -30,7 +30,7 @@ public class SmosProductReader extends AbstractProductReader {
         }
     }
 
-    public static SmosFile createSmosFile(File file) throws IOException {
+    public static ExplorerFile createExplorerFile(File file) throws IOException {
         final File hdrFile = FileUtils.exchangeExtension(file, ".HDR");
         final File dblFile = FileUtils.exchangeExtension(file, ".DBL");
 
@@ -48,7 +48,7 @@ public class SmosProductReader extends AbstractProductReader {
         } else if (isFullPolScienceFormat(formatName)) {
             return new L1cScienceSmosFile(hdrFile, dblFile, format);
         } else if (isOsUserFormat(formatName)) {
-            return new  SmosFile(hdrFile, dblFile, format);
+            return new SmosFile(hdrFile, dblFile, format);
         } else if (isSmUserFormat(formatName)) {
             return new SmosFile(hdrFile, dblFile, format);
         } else if (isOsAnalysisFormat(formatName)) {
@@ -58,7 +58,10 @@ public class SmosProductReader extends AbstractProductReader {
         } else if (isEcmwfFormat(formatName)) {
             return new SmosFile(hdrFile, dblFile, format);
         } else if (isDffLaiFormat(formatName)) {
+            final LaiFile laiFile = new LaiFile(hdrFile, dblFile, format);
             return null; // todo - return a file
+        } else if (isVTecFormat(formatName)) {
+            return new VTecFile(hdrFile, dblFile, format);
         } else {
             throw new IOException(MessageFormat.format(
                     "File ''{0}'': unsupported SMOS data format ''{1}''.", file, formatName));
@@ -69,7 +72,7 @@ public class SmosProductReader extends AbstractProductReader {
     protected final Product readProductNodesImpl() throws IOException {
         synchronized (this) {
             final File inputFile = getInputFile();
-            smosFile = createSmosFile(inputFile);
+            smosFile = createExplorerFile(inputFile);
 
             return smosFile.createProduct();
         }
@@ -151,6 +154,11 @@ public class SmosProductReader extends AbstractProductReader {
 
     public static boolean isDffLaiFormat(String formatName) {
         return formatName.contains("AUX_DFFLAI");
+    }
+
+    public static boolean isVTecFormat(String formatName) {
+        return formatName.contains("AUX_VTEC_C")
+               || formatName.contains("AUX_VTEC_P");
     }
 
     private File getInputFile() {

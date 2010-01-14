@@ -176,8 +176,7 @@ public class SmosFile extends ExplorerFile {
         product.setPreferredTileSize(512, 512);
         ProductHelper.addMetadata(product.getMetadataRoot(), this);
 
-        final MapInfo mapInfo = ProductHelper.createMapInfo(ProductHelper.getSceneRasterDimension());
-        product.setGeoCoding(new MapGeoCoding(mapInfo));
+        product.setGeoCoding(ProductHelper.createGeoCoding(dimension));
         addBands(product);
 
         return product;

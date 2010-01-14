@@ -6,7 +6,9 @@ import com.bc.ceres.glevel.MultiLevelImage;
 import com.bc.jexp.ParseException;
 import org.esa.beam.framework.datamodel.Band;
 import org.esa.beam.framework.datamodel.ColorPaletteDef;
+import org.esa.beam.framework.datamodel.CrsGeoCoding;
 import org.esa.beam.framework.datamodel.FlagCoding;
+import org.esa.beam.framework.datamodel.GeoCoding;
 import org.esa.beam.framework.datamodel.ImageInfo;
 import org.esa.beam.framework.datamodel.Mask;
 import org.esa.beam.framework.datamodel.MetadataAttribute;
@@ -15,20 +17,20 @@ import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.framework.datamodel.ProductData;
 import org.esa.beam.framework.datamodel.VirtualBand;
 import org.esa.beam.framework.dataop.barithm.BandArithmetic;
-import org.esa.beam.framework.dataop.maptransf.Datum;
-import org.esa.beam.framework.dataop.maptransf.IdentityTransformDescriptor;
-import org.esa.beam.framework.dataop.maptransf.MapInfo;
-import org.esa.beam.framework.dataop.maptransf.MapProjection;
-import org.esa.beam.framework.dataop.maptransf.MapProjectionRegistry;
 import org.esa.beam.smos.dgg.SmosDgg;
+import org.geotools.referencing.crs.DefaultGeographicCRS;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.Namespace;
 import org.jdom.input.SAXBuilder;
+import org.opengis.referencing.FactoryException;
+import org.opengis.referencing.operation.TransformException;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Rectangle;
+import java.awt.geom.AffineTransform;
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.Random;
@@ -93,16 +95,22 @@ class ProductHelper {
         return new ImageInfo(new ColorPaletteDef(points));
     }
 
-    static MapInfo createMapInfo(Dimension dimension) {
-        final MapProjection projection = MapProjectionRegistry.getProjection(IdentityTransformDescriptor.NAME);
-        final MapInfo mapInfo = new MapInfo(projection, 0.0f, 0.0f, -180.0f, 90.0f,
-                                            360.0f / dimension.width,
-                                            180.0f / dimension.height,
-                                            Datum.WGS_84);
-        mapInfo.setSceneWidth(dimension.width);
-        mapInfo.setSceneHeight(dimension.height);
 
-        return mapInfo;
+    static GeoCoding createGeoCoding(Dimension dimension) {
+        final double scaleX = 360.0 / dimension.getWidth();
+        final double scaleY = 180.0 / dimension.getHeight();
+
+        final AffineTransform imageToMap = new AffineTransform();
+        imageToMap.translate(-180.0, 90.0);
+        imageToMap.scale(scaleX, -scaleY);
+
+        try {
+            return new CrsGeoCoding(DefaultGeographicCRS.WGS84, new Rectangle(dimension), imageToMap);
+        } catch (FactoryException e) {
+            throw new IllegalArgumentException("dimension");
+        } catch (TransformException e) {
+            throw new IllegalArgumentException("dimension");
+        }
     }
 
     static Dimension getSceneRasterDimension() {

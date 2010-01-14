@@ -4,7 +4,7 @@ import com.bc.ceres.core.ProgressMonitor;
 import org.esa.beam.dataio.smos.SmosFile;
 import org.esa.beam.dataio.smos.SmosProductReader;
 
-import java.awt.*;
+import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.io.IOException;
@@ -31,8 +31,8 @@ public class EEExporter {
 
         final SmosFile smosFile;
         try {
-            smosFile = SmosProductReader.createSmosFile(sourceFile);
-        } catch (IOException e) {
+            smosFile = (SmosFile) SmosProductReader.createExplorerFile(sourceFile);
+        } catch (Exception e) {
             e.printStackTrace();
             return;
         }

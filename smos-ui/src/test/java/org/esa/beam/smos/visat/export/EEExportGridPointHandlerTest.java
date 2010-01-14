@@ -5,7 +5,7 @@ import com.bc.ceres.binio.DataContext;
 import com.bc.ceres.binio.SequenceData;
 import com.bc.ceres.binio.util.ByteArrayIOHandler;
 import com.bc.ceres.binio.util.DataPrinter;
-import static junit.framework.Assert.assertEquals;
+import org.esa.beam.dataio.smos.ExplorerFile;
 import org.esa.beam.dataio.smos.SmosConstants;
 import org.esa.beam.dataio.smos.SmosFile;
 import org.esa.beam.dataio.smos.SmosProductReader;
@@ -17,13 +17,18 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 public class EEExportGridPointHandlerTest {
 
     private static final String SCENARIO_27_DBL_NAME = "scenario27/SM_TEST_MIR_SCSD1C_20070223T142110_20070223T142111_320_001_0/SM_TEST_MIR_SCSD1C_20070223T142110_20070223T142111_320_001_0.DBL";
 
     @Test
     public void handleGridPointsForScenario27() throws URISyntaxException, IOException {
-        final SmosFile sourceFile = SmosProductReader.createSmosFile(getResourceAsFile(SCENARIO_27_DBL_NAME));
+        final ExplorerFile explorerFile = SmosProductReader.createExplorerFile(getResourceAsFile(SCENARIO_27_DBL_NAME));
+        assertTrue(explorerFile instanceof SmosFile);
+        final SmosFile sourceFile = (SmosFile) explorerFile;
 
         final SequenceData sourceGridPointList = sourceFile.getGridPointList();
         assertEquals(5533, sourceGridPointList.getElementCount());
