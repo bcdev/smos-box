@@ -25,7 +25,7 @@ import java.awt.geom.Area;
  */
 public interface ValueProvider {
 
-    Area getEnvelope();
+    Area getArea();
 
     int getGridPointIndex(int seqnum);
 

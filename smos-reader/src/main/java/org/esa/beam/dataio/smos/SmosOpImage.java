@@ -40,7 +40,7 @@ class SmosOpImage extends SingleBandedOpImage {
     private final MultiLevelModel model;
     private final double noDataValue;
 
-    private volatile Area envelope;
+    private volatile Area area;
     private volatile NoDataRaster noDataRaster;
 
     SmosOpImage(ValueProvider valueProvider, RasterDataNode rasterDataNode, MultiLevelModel model,
@@ -58,21 +58,21 @@ class SmosOpImage extends SingleBandedOpImage {
         this.noDataValue = rasterDataNode.getNoDataValue();
     }
 
-    private Area getEnvelope() {
-        if (envelope == null) {
+    private Area getArea() {
+        if (area == null) {
             synchronized (this) {
-                if (envelope == null) {
-                    final Area modelDomain = valueProvider.getEnvelope();
-                    envelope = modelDomain.createTransformedArea(model.getModelToImageTransform(getLevel()));
+                if (area == null) {
+                    final Area modelDomain = valueProvider.getArea();
+                    area = modelDomain.createTransformedArea(model.getModelToImageTransform(getLevel()));
                 }
             }
         }
-        return envelope;
+        return area;
     }
 
     @Override
     public Raster computeTile(int tileX, int tileY) {
-        if (getEnvelope().intersects(getTileRect(tileX, tileY))) {
+        if (getArea().intersects(getTileRect(tileX, tileY))) {
             return super.computeTile(tileX, tileY);
         }
 
@@ -100,7 +100,7 @@ class SmosOpImage extends SingleBandedOpImage {
                 seqnumRaster, rectangle, seqnumRaster.getSampleModel().getTransferType(), false);
         final UnpackedImageData targetData = targetAccessor.getPixels(
                 targetRaster, rectangle, targetRaster.getSampleModel().getTransferType(), true);
-        final PixelCounter pixelCounter = new PixelCounter(rectangle, getEnvelope());
+        final PixelCounter pixelCounter = new PixelCounter(rectangle, getArea());
 
         switch (targetData.type) {
         case DataBuffer.TYPE_BYTE:

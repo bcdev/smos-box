@@ -76,8 +76,8 @@ class VTecFile extends ExplorerFile {
     }
 
     @Override
-    protected Area computeEnvelope() throws IOException {
-        return new Area(new Rectangle2D.Double(-180.0, -90.0, 360.0, 180.0));
+    protected Area computeArea() throws IOException {
+        return new Area(new Rectangle2D.Double(lon1, lat2, lon2 - lon1, lat1 - lat2));
     }
 
     @Override

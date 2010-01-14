@@ -16,8 +16,8 @@ class L1cBrowseValueProvider implements ValueProvider {
     }
 
     @Override
-    public Area getEnvelope() {
-        return smosFile.getEnvelope();
+    public Area getArea() {
+        return smosFile.getArea();
     }
 
     @Override

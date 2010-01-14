@@ -49,8 +49,8 @@ class DefaultValueProvider implements ValueProvider {
     }
 
     @Override
-    public final Area getEnvelope() {
-        return smosFile.getEnvelope();
+    public final Area getArea() {
+        return smosFile.getArea();
     }
 
     @Override

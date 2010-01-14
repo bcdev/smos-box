@@ -239,7 +239,7 @@ public class SnapshotInfoToolView extends SmosToolView {
     private void locateSnapshotId(final ProductSceneView smosView, final long id) {
         final L1cScienceSmosFile smosFile = SmosBox.getL1cScienceSmosFile(smosView);
         if (smosFile != null) {
-            final Rectangle2D snapshotRegion = smosFile.getSnapshotInfo().getSnapshotEnvelope(id);
+            final Rectangle2D snapshotRegion = smosFile.getSnapshotInfo().getEnvelope(id);
             if (snapshotRegion != null) {
                 final Viewport vp = smosView.getLayerCanvas().getViewport();
                 final AffineTransform m2v = vp.getModelToViewTransform();
@@ -302,7 +302,7 @@ public class SnapshotInfoToolView extends SmosToolView {
             Graphics2D graphics = rendering.getGraphics();
             L1cScienceSmosFile scienceSmosFile = SmosBox.getL1cScienceSmosFile(view);
             if (scienceSmosFile != null) {
-                final Rectangle2D snapshotRegion = scienceSmosFile.getSnapshotInfo().getSnapshotEnvelope(snapshotId);
+                final Rectangle2D snapshotRegion = scienceSmosFile.getSnapshotInfo().getEnvelope(snapshotId);
                 if (snapshotRegion != null) {
                     final Viewport vp = view.getLayerCanvas().getViewport();
                     final AffineTransform m2v = vp.getModelToViewTransform();

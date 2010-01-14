@@ -60,7 +60,7 @@ public class SnapshotInfo {
         return snapshotIdsXY;
     }
 
-    public Rectangle2D getSnapshotEnvelope(long snapshotId) {
+    public Rectangle2D getEnvelope(long snapshotId) {
         return snapshotEnvelopeMap.get(snapshotId);
     }
 }

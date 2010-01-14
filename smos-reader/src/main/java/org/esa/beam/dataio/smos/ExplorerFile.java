@@ -24,7 +24,7 @@ public abstract class ExplorerFile {
     private final DataFormat dataFormat;
     private final DataContext dataContext;
     private final CompoundData dataBlock;
-    private volatile Future<Area> envelopeFuture;
+    private volatile Future<Area> areaFuture;
 
     protected ExplorerFile(File hdrFile, File dblFile, DataFormat dataFormat) throws IOException {
         this.hdrFile = hdrFile;
@@ -54,9 +54,9 @@ public abstract class ExplorerFile {
         return dataBlock;
     }
 
-    public final Area getEnvelope() {
+    public final Area getArea() {
         try {
-            return getEnvelopeFuture().get();
+            return getAreaFuture().get();
         } catch (InterruptedException e) {
             throw new IllegalStateException(e);
         } catch (ExecutionException e) {
@@ -64,33 +64,33 @@ public abstract class ExplorerFile {
         }
     }
 
-    public final boolean hasEnvelope() {
-        return getEnvelopeFuture().isDone();
+    public final boolean hasArea() {
+        return getAreaFuture().isDone();
     }
 
     public void close() {
         dataContext.dispose();
     }
 
-    protected abstract Area computeEnvelope() throws IOException;
+    protected abstract Area computeArea() throws IOException;
 
     protected abstract Product createProduct() throws IOException;
 
-    private Future<Area> getEnvelopeFuture() {
-        if (envelopeFuture == null) {
+    private Future<Area> getAreaFuture() {
+        if (areaFuture == null) {
             synchronized (this) {
-                if (envelopeFuture == null) {
-                    envelopeFuture = Executors.newSingleThreadExecutor().submit(new Callable<Area>() {
+                if (areaFuture == null) {
+                    areaFuture = Executors.newSingleThreadExecutor().submit(new Callable<Area>() {
                         @Override
                         public Area call() throws IOException {
-                            return computeEnvelope();
+                            return computeArea();
                         }
                     });
                 }
             }
         }
 
-        return envelopeFuture;
+        return areaFuture;
     }
 
     public static Date cfiDateToUtc(int days, long seconds, long microseconds) {
@@ -112,10 +112,11 @@ public abstract class ExplorerFile {
     }
 
     public static Date mjdFloatDateToUtc(float mjd) {
-        int days = (int) mjd;
-        double doubleSecs = (mjd - days) * 86400;
-        int secs = (int)doubleSecs;
-        int microsecs = (int) ((doubleSecs - secs) * 1e6);
-        return cfiDateToUtc(days, secs, microsecs);
+        final int days = (int) mjd;
+        final double secondsFraction = (mjd - days) * 86400.0;
+        final int seconds = (int) secondsFraction;
+        final int microseconds = (int) ((secondsFraction - seconds) * 1.0e6);
+
+        return cfiDateToUtc(days, seconds, microseconds);
     }
 }
