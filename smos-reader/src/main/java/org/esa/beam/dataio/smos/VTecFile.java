@@ -34,12 +34,18 @@ class VTecFile extends ExplorerFile {
     private static final String TAG_LONGITUDE_VECTOR_INCREMENT = "Longitude_Vector_Increment";
     private static final String TAG_SCALING_FACTOR_EXPONENT = "Scale_Factor";
 
+    private static final String DAYS_NAME = "Days";
+    private static final String EPOCH_CURRENT_MAP_NAME = "Epoch_Current_Map";
+    private static final String MAP_NUMBER_NAME = "Map_Number";
+    private static final String MICROSECONDS_NAME = "Microseconds";
+    private static final String SECONDS_NAME = "Seconds";
+
     private static final String VTEC_INFO_NAME = "VTEC_Info";
     private static final String VTEC_RECORD_NAME = "VTEC_Record";
     private static final String VTEC_DATA_NAME = "VTEC_Data";
     private static final String VTEC_VALUE_NAME = "VTEC_value";
 
-    private final SequenceData mapSequenceData;
+    private final SequenceData mapData;
 
     private final double lat1;
     private final double lat2;
@@ -82,10 +88,10 @@ class VTecFile extends ExplorerFile {
                                                                                        namespace));
         scalingFactor = Math.pow(10.0, scalingFactorExponent);
 
-        mapSequenceData = getDataBlock().getSequence(VTEC_INFO_NAME);
-        if (mapSequenceData == null) {
+        mapData = getDataBlock().getSequence(VTEC_INFO_NAME);
+        if (mapData == null) {
             throw new IllegalStateException(MessageFormat.format(
-                    "SMOS File ''{0}'': Missing VTEC information.", dblFile.getPath()));
+                    "SMOS File ''{0}'': Missing VTEC info.", dblFile.getPath()));
         }
 
         rowCount = (int) (Math.round((lat2 - lat1) / latDelta) + 1);
@@ -109,8 +115,8 @@ class VTecFile extends ExplorerFile {
         ProductHelper.addMetadata(product.getMetadataRoot(), this);
         product.setGeoCoding(ProductHelper.createGeoCoding(dimension));
 
-        for (int i = 0; i < mapSequenceData.getElementCount(); i++) {
-            final CompoundData mapCompoundData = this.mapSequenceData.getCompound(i);
+        for (int i = 0; i < mapData.getElementCount(); i++) {
+            final CompoundData mapCompoundData = mapData.getCompound(i);
             final SequenceData mapSequenceData = mapCompoundData.getSequence(VTEC_RECORD_NAME);
             final float[] tiePoints = new float[rowCount * colCount];
 
@@ -179,10 +185,10 @@ class VTecFile extends ExplorerFile {
     }
 
     private String getDescription(CompoundData mapCompoundData) throws IOException {
-        final CompoundData epoch = mapCompoundData.getCompound("Epoch_Current_Map");
-        final int days = epoch.getInt("Days");
-        final int seconds = epoch.getInt("Seconds");
-        final int microseconds = epoch.getInt("Microseconds");
+        final CompoundData epoch = mapCompoundData.getCompound(EPOCH_CURRENT_MAP_NAME);
+        final int days = epoch.getInt(DAYS_NAME);
+        final int seconds = epoch.getInt(SECONDS_NAME);
+        final int microseconds = epoch.getInt(MICROSECONDS_NAME);
         final String dateTime = cfiDateToUtc(days, seconds, microseconds).toString();
 
         final StringBuilder descriptionBuilder = new StringBuilder("Vertical total electron content (TECU) for epoch ");
@@ -193,7 +199,7 @@ class VTecFile extends ExplorerFile {
 
     private String getName(CompoundData mapCompoundData) throws IOException {
         final StringBuilder nameBuilder = new StringBuilder(getDataFormat().getName().substring(16, 22));
-        final int mapNumber = mapCompoundData.getInt("Map_Number");
+        final int mapNumber = mapCompoundData.getInt(MAP_NUMBER_NAME);
         nameBuilder.append("_").append(mapNumber);
 
         return nameBuilder.toString();

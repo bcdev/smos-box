@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.MessageFormat;
 
-public class LaiFile extends ExplorerFile {
+class LaiFile extends ExplorerFile {
 
     private final SequenceData zoneList;
     private final Rectangle2D[] zoneBounds;
