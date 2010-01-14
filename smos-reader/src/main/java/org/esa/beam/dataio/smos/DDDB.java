@@ -38,10 +38,14 @@ import java.util.concurrent.ConcurrentMap;
  */
 public class DDDB {
 
+    private static final String TAG_DATABLOCK_SCHEMA = "Datablock_Schema";
+    // Reference: SO-MA-IDR-GS-0004, SMOS DPGS, XML Schema Guidelines
+    private static final String SCHEMA_NAMING_CONVENTION = "DBL_\\w{2}_\\w{4}_\\w{10}_\\d{4}";
+
     private final Charset charset = Charset.forName("UTF-8");
     private final char[] separators = new char[]{'|'};
-    private final ResourcePathBuilder pathBuilder = new ResourcePathBuilder();
 
+    private final ResourcePathBuilder pathBuilder = new ResourcePathBuilder();
     private final ConcurrentMap<String, DataFormat> dataFormatMap;
     private final ConcurrentMap<String, BandDescriptors> bandDescriptorMap;
     private final ConcurrentMap<String, FlagDescriptors> flagDescriptorMap;
@@ -97,7 +101,7 @@ public class DDDB {
             public boolean matches(Object o) {
                 if (o instanceof Element) {
                     final Element e = (Element) o;
-                    if (e.getChildText(SmosConstants.TAG_DATABLOCK_SCHEMA, namespace) != null) {
+                    if (e.getChildText(TAG_DATABLOCK_SCHEMA, namespace) != null) {
                         return true;
                     }
                 }
@@ -107,7 +111,7 @@ public class DDDB {
         });
         if (descendants.hasNext()) {
             final Element e = (Element) descendants.next();
-            final String formatName = e.getChildText(SmosConstants.TAG_DATABLOCK_SCHEMA, namespace).substring(0, 27);
+            final String formatName = e.getChildText(TAG_DATABLOCK_SCHEMA, namespace).substring(0, 27);
 
             return getDataFormat(formatName);
         } else {
@@ -183,7 +187,7 @@ public class DDDB {
     }
 
     private URL getSchemaResource(String schemaName) {
-        if (schemaName == null || !schemaName.matches(SmosConstants.SCHEMA_NAMING_CONVENTION)) {
+        if (schemaName == null || !schemaName.matches(SCHEMA_NAMING_CONVENTION)) {
             return null;
         }
 
@@ -251,7 +255,7 @@ public class DDDB {
     }
 
     private InputStream getBandDescriptorResource(String identifier) {
-        if (identifier == null || !identifier.matches(SmosConstants.SCHEMA_NAMING_CONVENTION)) {
+        if (identifier == null || !identifier.matches(SCHEMA_NAMING_CONVENTION)) {
             return null;
         }
 
@@ -259,7 +263,7 @@ public class DDDB {
     }
 
     private InputStream getFlagDescriptorResource(String identifier) {
-        if (identifier == null || !identifier.matches(SmosConstants.SCHEMA_NAMING_CONVENTION + "_.*")) {
+        if (identifier == null || !identifier.matches(SCHEMA_NAMING_CONVENTION + "_.*")) {
             return null;
         }
 
@@ -281,6 +285,7 @@ public class DDDB {
     }
 
     // Initialization on demand holder idiom
+
     private static class Holder {
 
         private static final DDDB INSTANCE = new DDDB();

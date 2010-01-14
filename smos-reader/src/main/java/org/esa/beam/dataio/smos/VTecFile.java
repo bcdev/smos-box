@@ -23,6 +23,22 @@ import java.util.Iterator;
 
 class VTecFile extends ExplorerFile {
 
+    private static final String TAG_IONEX_DESCRIPTOR = "IONEX_Descriptor";
+    private static final String TAG_LATITUDE_VECTOR = "Latitude_Vector";
+    private static final String TAG_LATITUDE_VECTOR_1ST = "Latitude_Vector_1st";
+    private static final String TAG_LATITUDE_VECTOR_2ND = "Latitude_Vector_2nd";
+    private static final String TAG_LATITUDE_VECTOR_INCREMENT = "Latitude_Vector_Increment";
+    private static final String TAG_LONGITUDE_VECTOR = "Longitude_Vector";
+    private static final String TAG_LONGITUDE_VECTOR_1ST = "Longitude_Vector_1st";
+    private static final String TAG_LONGITUDE_VECTOR_2ND = "Longitude_Vector_2nd";
+    private static final String TAG_LONGITUDE_VECTOR_INCREMENT = "Longitude_Vector_Increment";
+    private static final String TAG_SCALING_FACTOR_EXPONENT = "Scale_Factor";
+
+    private static final String VTEC_INFO_NAME = "VTEC_Info";
+    private static final String VTEC_RECORD_NAME = "VTEC_Record";
+    private static final String VTEC_DATA_NAME = "VTEC_Data";
+    private static final String VTEC_VALUE_NAME = "VTEC_value";
+
     private final SequenceData mapSequenceData;
 
     private final double lat1;
@@ -51,22 +67,22 @@ class VTecFile extends ExplorerFile {
             throw new IOException(MessageFormat.format(
                     "File ''{0}'': Missing namespace", hdrFile.getPath()));
         }
-        final Element ionexDescriptor = getElement(document.getRootElement(), SmosConstants.TAG_IONEX_DESCRIPTOR);
-        final Element latitudeVector = getElement(ionexDescriptor, SmosConstants.TAG_LATITUDE_VECTOR);
-        lat1 = Double.valueOf(latitudeVector.getChildText(SmosConstants.TAG_LATITUDE_VECTOR_1ST, namespace));
-        lat2 = Double.valueOf(latitudeVector.getChildText(SmosConstants.TAG_LATITUDE_VECTOR_2ND, namespace));
-        latDelta = Double.valueOf(latitudeVector.getChildText(SmosConstants.TAG_LATITUDE_VECTOR_INCREMENT, namespace));
+        final Element ionexDescriptor = getElement(document.getRootElement(), TAG_IONEX_DESCRIPTOR);
+        final Element latitudeVector = getElement(ionexDescriptor, TAG_LATITUDE_VECTOR);
+        lat1 = Double.valueOf(latitudeVector.getChildText(TAG_LATITUDE_VECTOR_1ST, namespace));
+        lat2 = Double.valueOf(latitudeVector.getChildText(TAG_LATITUDE_VECTOR_2ND, namespace));
+        latDelta = Double.valueOf(latitudeVector.getChildText(TAG_LATITUDE_VECTOR_INCREMENT, namespace));
 
-        final Element longitudeVector = getElement(ionexDescriptor, SmosConstants.TAG_LONGITUDE_VECTOR);
-        lon1 = Double.valueOf(longitudeVector.getChildText(SmosConstants.TAG_LONGITUDE_VECTOR_1ST, namespace));
-        lon2 = Double.valueOf(longitudeVector.getChildText(SmosConstants.TAG_LONGITUDE_VECTOR_2ND, namespace));
-        lonDelta = Double.valueOf(longitudeVector.getChildText(SmosConstants.TAG_LONGITUDE_VECTOR_INCREMENT, namespace));
+        final Element longitudeVector = getElement(ionexDescriptor, TAG_LONGITUDE_VECTOR);
+        lon1 = Double.valueOf(longitudeVector.getChildText(TAG_LONGITUDE_VECTOR_1ST, namespace));
+        lon2 = Double.valueOf(longitudeVector.getChildText(TAG_LONGITUDE_VECTOR_2ND, namespace));
+        lonDelta = Double.valueOf(longitudeVector.getChildText(TAG_LONGITUDE_VECTOR_INCREMENT, namespace));
 
-        final int scalingFactorExponent = Integer.valueOf(ionexDescriptor.getChildText(SmosConstants.TAG_SCALING_FACTOR_EXPONENT,
+        final int scalingFactorExponent = Integer.valueOf(ionexDescriptor.getChildText(TAG_SCALING_FACTOR_EXPONENT,
                                                                                        namespace));
         scalingFactor = Math.pow(10.0, scalingFactorExponent);
 
-        mapSequenceData = getDataBlock().getSequence(SmosConstants.VTEC_INFO_NAME);
+        mapSequenceData = getDataBlock().getSequence(VTEC_INFO_NAME);
         if (mapSequenceData == null) {
             throw new IllegalStateException(MessageFormat.format(
                     "SMOS File ''{0}'': Missing VTEC information.", dblFile.getPath()));
@@ -95,15 +111,15 @@ class VTecFile extends ExplorerFile {
 
         for (int i = 0; i < mapSequenceData.getElementCount(); i++) {
             final CompoundData mapCompoundData = this.mapSequenceData.getCompound(i);
-            final SequenceData mapSequenceData = mapCompoundData.getSequence(SmosConstants.VTEC_RECORD_NAME);
+            final SequenceData mapSequenceData = mapCompoundData.getSequence(VTEC_RECORD_NAME);
             final float[] tiePoints = new float[rowCount * colCount];
 
             for (int j = 0; j < mapSequenceData.getElementCount(); j++) {
                 final CompoundData compoundData = mapSequenceData.getCompound(j);
-                final SequenceData sequenceData = compoundData.getSequence(SmosConstants.VTEC_DATA_NAME);
+                final SequenceData sequenceData = compoundData.getSequence(VTEC_DATA_NAME);
 
                 for (int k = 0; k < sequenceData.getElementCount(); k++) {
-                    tiePoints[j * colCount + k] = sequenceData.getCompound(k).getShort(SmosConstants.VTEC_VALUE_NAME);
+                    tiePoints[j * colCount + k] = sequenceData.getCompound(k).getShort(VTEC_VALUE_NAME);
                 }
             }
 

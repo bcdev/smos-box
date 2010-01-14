@@ -346,7 +346,7 @@ public class L1cScienceSmosFile extends L1cSmosFile {
                     }
 
                     final int flags = btData.getInt(flagsIndex);
-                    switch (flags & SmosConstants.L1C_POL_FLAGS_MASK) {
+                    switch (flags & SmosConstants.L1C_POL_MODE_FLAGS_MASK) {
                     case SmosConstants.L1C_POL_MODE_X:
                         x.add(id);
                         break;
