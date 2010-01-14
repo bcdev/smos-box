@@ -39,16 +39,15 @@ class LaiFile extends ExplorerFile {
 
         zoneBounds = new Rectangle2D[zoneList.getElementCount()];
 
-        final File file = new File("/Users/ralf/Desktop/lai.out");
-        final PrintWriter pw = new PrintWriter(file);
-
         for (int i = 0; i < zoneList.getElementCount(); i++) {
             final CompoundData zoneData = zoneList.getCompound(i);
             final SequenceData rowSequenceData = zoneData.getSequence("List_of_Row_Struct_Datas");
             final SequenceData laiSequenceData = zoneData.getSequence("List_of_DFFG_LAI_Point_Datas");
 
             if (laiSequenceData.getElementCount() > 0) {
-                pw.println("****************************************");
+                final File file = new File("/Users/ralf/Desktop/LAI/", "zone_" + i + ".out");
+                final PrintWriter pw = new PrintWriter(file);
+
                 final long zoneId = zoneData.getLong("Zone_ID");
                 final float delta = zoneData.getFloat("Delta");
                 final float latA = zoneData.getFloat("Lat_a");
@@ -84,11 +83,11 @@ class LaiFile extends ExplorerFile {
                     pw.println("Cumulated_N_Lon = " + cumulatedNLon);
                 }
 
-                pw.println();
+                pw.close();
             }
+
         }
 
-        pw.close();
     }
 
     public CompoundType getGridPointType() {
