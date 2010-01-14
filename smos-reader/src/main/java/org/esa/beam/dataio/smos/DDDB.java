@@ -97,7 +97,7 @@ public class DDDB {
             public boolean matches(Object o) {
                 if (o instanceof Element) {
                     final Element e = (Element) o;
-                    if (e.getChildText("Datablock_Schema", namespace) != null) {
+                    if (e.getChildText(SmosConstants.TAG_DATABLOCK_SCHEMA, namespace) != null) {
                         return true;
                     }
                 }
@@ -107,7 +107,7 @@ public class DDDB {
         });
         if (descendants.hasNext()) {
             final Element e = (Element) descendants.next();
-            final String formatName = e.getChildText("Datablock_Schema", namespace).substring(0, 27);
+            final String formatName = e.getChildText(SmosConstants.TAG_DATABLOCK_SCHEMA, namespace).substring(0, 27);
 
             return getDataFormat(formatName);
         } else {

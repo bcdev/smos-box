@@ -58,8 +58,7 @@ public class SmosProductReader extends AbstractProductReader {
         } else if (isEcmwfFormat(formatName)) {
             return new SmosFile(hdrFile, dblFile, format);
         } else if (isDffLaiFormat(formatName)) {
-            final LaiFile laiFile = new LaiFile(hdrFile, dblFile, format);
-            return null; // todo - return a file
+            return new LaiFile(hdrFile, dblFile, format);
         } else if (isVTecFormat(formatName)) {
             return new VTecFile(hdrFile, dblFile, format);
         } else {

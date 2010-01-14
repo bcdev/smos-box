@@ -62,12 +62,12 @@ public class L1cScienceSmosFile extends L1cSmosFile {
     L1cScienceSmosFile(File hdrFile, File dblFile, DataFormat format) throws IOException {
         super(hdrFile, dblFile, format);
 
-        flagsIndex = getBtDataType().getMemberIndex(SmosConstants.L1C_BT_FLAGS_NAME);
-        incidenceAngleIndex = getBtDataType().getMemberIndex(SmosConstants.L1C_BT_INCIDENCE_ANGLE_NAME);
+        flagsIndex = getBtDataType().getMemberIndex(SmosConstants.BT_FLAGS_NAME);
+        incidenceAngleIndex = getBtDataType().getMemberIndex(SmosConstants.BT_INCIDENCE_ANGLE_NAME);
         incidenceAngleScalingFactor = getIncidenceAngleScalingFactor(format.getName());
-        snapshotIdOfPixelIndex = getBtDataType().getMemberIndex(SmosConstants.L1C_BT_SNAPSHOT_ID_OF_PIXEL_NAME);
+        snapshotIdOfPixelIndex = getBtDataType().getMemberIndex(SmosConstants.BT_SNAPSHOT_ID_OF_PIXEL_NAME);
 
-        snapshotList = getDataBlock().getSequence(SmosConstants.L1C_SNAPSHOT_LIST_NAME);
+        snapshotList = getDataBlock().getSequence(SmosConstants.SNAPSHOT_LIST_NAME);
         if (snapshotList == null) {
             throw new IOException("Data block does not include snapshot list.");
         }
@@ -76,7 +76,7 @@ public class L1cScienceSmosFile extends L1cSmosFile {
 
     private double getIncidenceAngleScalingFactor(String formatName) {
         for (final BandDescriptor descriptor : DDDB.getInstance().getBandDescriptors(formatName).asList()) {
-            if (SmosConstants.L1C_BT_INCIDENCE_ANGLE_NAME.equals(descriptor.getMemberName())) {
+            if (SmosConstants.BT_INCIDENCE_ANGLE_NAME.equals(descriptor.getMemberName())) {
                 return descriptor.getScalingFactor();
             }
         }
@@ -363,7 +363,7 @@ public class L1cScienceSmosFile extends L1cSmosFile {
         }
 
         final Map<Long, Integer> snapshotIndexMap = new TreeMap<Long, Integer>();
-        final int snapshotIdIndex = snapshotType.getMemberIndex(SmosConstants.L1C_SNAPSHOT_ID_NAME);
+        final int snapshotIdIndex = snapshotType.getMemberIndex(SmosConstants.SNAPSHOT_ID_NAME);
         final int snapshotCount = snapshotList.getElementCount();
 
         for (int i = 0; i < snapshotCount; i++) {

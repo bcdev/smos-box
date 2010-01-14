@@ -113,7 +113,7 @@ class EEExportGridPointHandler implements GridPointHandler {
                 timeTracker.track(date);
             }
         } else {
-            int index = type.getMemberIndex(SmosConstants.L1C_BT_DATA_LIST_NAME);
+            int index = type.getMemberIndex(SmosConstants.BT_DATA_LIST_NAME);
             final SequenceData btDataList = gridPointData.getSequence(index);
             final CompoundData btData = btDataList.getCompound(0);
             index = btData.getType().getMemberIndex("Snapshot_ID");
@@ -156,7 +156,7 @@ class EEExportGridPointHandler implements GridPointHandler {
         final DataContext context = parent.getContext();
         final SequenceData snapShotData;
         try {
-            snapShotData = context.getData().getSequence(SmosConstants.L1C_SNAPSHOT_LIST_NAME);
+            snapShotData = context.getData().getSequence(SmosConstants.SNAPSHOT_LIST_NAME);
         } catch (DataAccessException e) {
             return; // we have a browse product
             // but this procedure is not really cool, better ask if the seqzuence is present

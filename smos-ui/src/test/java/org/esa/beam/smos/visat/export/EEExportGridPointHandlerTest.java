@@ -53,7 +53,7 @@ public class EEExportGridPointHandlerTest {
         final DataPrinter dataPrinter = new DataPrinter();
         dataPrinter.print(targetData);
 
-        final SequenceData targetSnapshotList = targetData.getSequence(SmosConstants.L1C_SNAPSHOT_LIST_NAME);
+        final SequenceData targetSnapshotList = targetData.getSequence(SmosConstants.SNAPSHOT_LIST_NAME);
         assertEquals(2, targetSnapshotList.getElementCount());
         assertEquals(60046, targetSnapshotList.getCompound(0).getInt("Snapshot_ID"));
         assertEquals(60047, targetSnapshotList.getCompound(1).getInt("Snapshot_ID"));
@@ -68,7 +68,7 @@ public class EEExportGridPointHandlerTest {
     private static void assertGridPointData(CompoundData gridPointData, int id, float... bt) throws IOException {
         assertEquals(id, gridPointData.getInt("Grid_Point_ID"));
 
-        final SequenceData btDataSequence = gridPointData.getSequence(SmosConstants.L1C_BT_DATA_LIST_NAME);
+        final SequenceData btDataSequence = gridPointData.getSequence(SmosConstants.BT_DATA_LIST_NAME);
         assertEquals(bt.length, btDataSequence.getElementCount());
 
         for (int i = 0; i < bt.length; i++) {
