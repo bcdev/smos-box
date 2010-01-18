@@ -62,8 +62,8 @@ class SmosOpImage extends SingleBandedOpImage {
         if (area == null) {
             synchronized (this) {
                 if (area == null) {
-                    final Area modelDomain = valueProvider.getArea();
-                    area = modelDomain.createTransformedArea(model.getModelToImageTransform(getLevel()));
+                    final Area modelArea = valueProvider.getArea();
+                    area = modelArea.createTransformedArea(model.getModelToImageTransform(getLevel()));
                 }
             }
         }
