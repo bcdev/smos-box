@@ -11,16 +11,19 @@ class Eeap {
 
     private final int zoneCount;
 
-    Eeap(double maxLat, double cutLat, double deltaLon) {
-        if (deltaLon <= 0.0 || !isIntegralValue(180.0 / deltaLon) || !isIntegralValue(360.0 / deltaLon)) {
-            throw new IllegalArgumentException(MessageFormat.format("Illegal longitude delta: {0}", deltaLon));
-        }
+    Eeap() {
+        this(89.0, 75.0, 5.0);
+    }
+
+    private Eeap(double maxLat, double cutLat, double deltaLon) {
+        assert maxLat > 0.0;
+        assert 180.0 / deltaLon == Math.floor(180.0 / deltaLon); // integral value
 
         this.maxLat = maxLat;
         this.cutLat = cutLat;
         this.deltaLon = deltaLon;
 
-        zoneCount = (int) (360.0 / deltaLon) + 2;
+        zoneCount = 2 + 2 * (int) (180.0 / deltaLon);
     }
 
     public int getZoneCount() {
@@ -42,7 +45,4 @@ class Eeap {
         }
     }
 
-    private static boolean isIntegralValue(double value) {
-        return value == Math.floor(value);
-    }
 }

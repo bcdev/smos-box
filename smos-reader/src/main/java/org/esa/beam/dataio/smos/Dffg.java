@@ -1,7 +1,5 @@
 package org.esa.beam.dataio.smos;
 
-import java.awt.geom.Rectangle2D;
-
 class Dffg {
 
     private final double maxLon;
@@ -9,14 +7,34 @@ class Dffg {
     private final double maxLat;
     private final double minLat;
 
-    public Dffg(Rectangle2D bounds) {
-        maxLon = bounds.getMaxX();
-        minLon = bounds.getMinX();
-        maxLat = bounds.getMaxY();
-        minLat = bounds.getMinY();
+    private final int latCount;
+    private final double deltaLat;
+    private final Row[] rows;
+
+    private static class Row {
+
+        private Row(int lonCount, double deltaLon, int cumulatedLonCount) {
+            this.lonCount = lonCount;
+            this.deltaLon = deltaLon;
+            this.cumulatedLonCount = cumulatedLonCount;
+        }
+
+        private final int lonCount;
+        private final double deltaLon;
+        private final int cumulatedLonCount;
     }
 
-    public int getCellCount() {
-        return 0;
+    Dffg(double minLat, double maxLat, double minLon, double maxLon, int latCount, double deltaLat) {
+        this.minLat = minLat;
+        this.maxLat = maxLat;
+        this.minLon = minLon;
+        this.maxLon = maxLon;
+
+        this.latCount = latCount;
+        this.deltaLat = deltaLat;
+
+        rows = new Row[latCount];
     }
+
+
 }

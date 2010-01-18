@@ -11,17 +11,12 @@ public class EeapTest {
 
     private static final double MAX_LAT = 89.0;
     private static final double CUT_LAT = 75.0;
-    private static final double DELTA_LON = 5.0;
 
     private Eeap eeap;
 
     @Before
     public void setup() {
-        final double maxLat = MAX_LAT;
-        final double cutLat = CUT_LAT;
-        final double deltaLon = DELTA_LON;
-
-        eeap = new Eeap(maxLat, cutLat, deltaLon);
+        eeap = new Eeap();
     }
 
     @Test
@@ -69,6 +64,4 @@ public class EeapTest {
         assertEquals(-CUT_LAT, bounds.getMinY(), 0.0);
         assertEquals(CUT_LAT, bounds.getMaxY(), 0.0);
     }
-
-
 }
