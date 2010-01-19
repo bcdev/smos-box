@@ -3,7 +3,7 @@ package org.esa.beam.dataio.smos;
 import java.awt.geom.Rectangle2D;
 import java.text.MessageFormat;
 
-class Eeap {
+class EEAP {
 
     private final double maxLat;
     private final double cutLat;
@@ -11,13 +11,17 @@ class Eeap {
 
     private final int zoneCount;
 
-    Eeap() {
+    static EEAP getInstance() {
+        return Holder.instance;
+    }
+
+    private EEAP() {
         this(89.0, 75.0, 5.0);
     }
 
-    private Eeap(double maxLat, double cutLat, double deltaLon) {
+    private EEAP(double maxLat, double cutLat, double deltaLon) {
         assert maxLat > 0.0;
-        assert 180.0 / deltaLon == Math.floor(180.0 / deltaLon); // integral value
+        assert 180.0 / deltaLon == Math.floor(180.0 / deltaLon); // ratio must be an integral value
 
         this.maxLat = maxLat;
         this.cutLat = cutLat;
@@ -26,11 +30,7 @@ class Eeap {
         zoneCount = 2 + 2 * (int) (180.0 / deltaLon);
     }
 
-    public int getZoneCount() {
-        return zoneCount;
-    }
-
-    public Rectangle2D getZoneBounds(int zoneIndex) {
+    Rectangle2D getZoneBounds(int zoneIndex) {
         if (zoneIndex < 0 || zoneIndex >= zoneCount) {
             throw new IllegalArgumentException(MessageFormat.format("Illegal zone index: {0}", zoneIndex));
         }
@@ -45,4 +45,29 @@ class Eeap {
         }
     }
 
+    int getZoneCount() {
+        return zoneCount;
+    }
+
+    int getZoneIndex(double lon, double lat) {
+        if (lon < 0.0) {
+            lon += 360.0;
+        }
+        if (lat <= maxLat && lat > cutLat) {
+            return 0;
+        }
+        if (lat <= -cutLat && lat > -maxLat) {
+            return 1;
+        }
+        if (lat <= cutLat && lat > -cutLat) {
+            return (int) Math.floor(lon / deltaLon) + 2;
+        }
+
+        return -1;
+    }
+
+    private static class Holder {
+
+        private static final EEAP instance = new EEAP();
+    }
 }

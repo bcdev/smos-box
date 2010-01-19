@@ -8,10 +8,7 @@ import org.esa.beam.framework.datamodel.TiePointGrid;
 import org.esa.beam.util.io.FileUtils;
 import org.jdom.Document;
 import org.jdom.Element;
-import org.jdom.JDOMException;
 import org.jdom.Namespace;
-import org.jdom.filter.Filter;
-import org.jdom.input.SAXBuilder;
 
 import java.awt.Dimension;
 import java.awt.geom.Area;
@@ -19,7 +16,6 @@ import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.io.IOException;
 import java.text.MessageFormat;
-import java.util.Iterator;
 
 class VTecFile extends ExplorerFile {
 
@@ -61,18 +57,8 @@ class VTecFile extends ExplorerFile {
     VTecFile(File hdrFile, File dblFile, DataFormat dataFormat) throws IOException {
         super(hdrFile, dblFile, dataFormat);
 
-        final Document document;
-        try {
-            document = new SAXBuilder().build(hdrFile);
-        } catch (JDOMException e) {
-            throw new IOException(MessageFormat.format(
-                    "File ''{0}'': Invalid document", hdrFile.getPath()), e);
-        }
+        final Document document = getDocument();
         final Namespace namespace = document.getRootElement().getNamespace();
-        if (namespace == null) {
-            throw new IOException(MessageFormat.format(
-                    "File ''{0}'': Missing namespace", hdrFile.getPath()));
-        }
         final Element ionexDescriptor = getElement(document.getRootElement(), TAG_IONEX_DESCRIPTOR);
         final Element latitudeVector = getElement(ionexDescriptor, TAG_LATITUDE_VECTOR);
         lat1 = Double.valueOf(latitudeVector.getChildText(TAG_LATITUDE_VECTOR_1ST, namespace));
@@ -160,28 +146,6 @@ class VTecFile extends ExplorerFile {
         tiePointGrid.setUnit("TECU");
 
         product.addTiePointGrid(tiePointGrid);
-    }
-
-    private Element getElement(Element parent, final String name) throws IOException {
-        final Iterator descendants = parent.getDescendants(new Filter() {
-            @Override
-            public boolean matches(Object o) {
-                if (o instanceof Element) {
-                    final Element e = (Element) o;
-                    if (name.equals(e.getName())) {
-                        return true;
-                    }
-                }
-
-                return false;
-            }
-        });
-        if (descendants.hasNext()) {
-            return (Element) descendants.next();
-        } else {
-            throw new IOException(MessageFormat.format(
-                    "File ''{0}'': Missing element ''{1}''.", getHdrFile().getPath(), name));
-        }
     }
 
     private String getDescription(CompoundData mapCompoundData) throws IOException {
