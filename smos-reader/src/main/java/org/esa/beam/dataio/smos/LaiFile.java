@@ -32,10 +32,27 @@ import java.util.concurrent.Future;
 
 class LaiFile extends ExplorerFile {
 
+    private static final String CUMULATED_LON_COUNT_NAME = "Cumulated_N_Lon";
+    private static final String DELTA_LAT_NAME = "Delta_Lat";
+    private static final String DELTA_LON_NAME = "Long_Step_Size_Ang";
+    private static final String DFFG_LAI_NAME = "DFFG_LAI";
+    private static final String LIST_OF_DFFG_LAI_POINT_DATA_NAME = "List_of_DFFG_LAI_Point_Datas";
+    private static final String LIST_OF_ROW_STRUCT_DATA_NAME = "List_of_Row_Struct_Datas";
+    private static final String LON_COUNT_NAME = "N_Lon";
+    private static final String MAX_LAT_NAME = "Lat_b";
+    private static final String MIN_LAT_NAME = "Lat_a";
+    private static final String MAX_LON_NAME = "Lon_b";
+    private static final String MIN_LON_NAME = "Lon_a";
+
+    private static final String ROW_COUNT_NAME = "N_Lat";
+    private static final String TAG_SCALING_OFFSET = "Offset";
+    private static final String TAG_SCALING_FACTOR = "Scaling_Factor";
+
+    private static final String TAG_DIGITS_TO_SHIFT = "Digits_To_Shift";
     private final double scalingOffset;
     private final double scalingFactor;
-    private final long zoneIndexMultiplier;
 
+    private final long zoneIndexMultiplier;
     private volatile Future<List<DFFG>> gridListFuture;
 
     LaiFile(File hdrFile, File dblFile, DataFormat dataFormat) throws IOException {
@@ -43,11 +60,11 @@ class LaiFile extends ExplorerFile {
 
         final Document document = getDocument();
         final Namespace namespace = document.getRootElement().getNamespace();
-        final Element specificProductHeader = getElement(document.getRootElement(), "Specific_Product_Header");
+        final Element specificProductHeader = getElement(document.getRootElement(), TAG_SPECIFIC_PRODUCT_HEADER);
 
-        scalingOffset = Double.valueOf(specificProductHeader.getChildText("Offset", namespace));
-        scalingFactor = Double.valueOf(specificProductHeader.getChildText("Scaling_Factor", namespace));
-        final int k = Integer.valueOf(specificProductHeader.getChildText("Digits_To_Shift", namespace));
+        scalingOffset = Double.valueOf(specificProductHeader.getChildText(TAG_SCALING_OFFSET, namespace));
+        scalingFactor = Double.valueOf(specificProductHeader.getChildText(TAG_SCALING_FACTOR, namespace));
+        final int k = Integer.valueOf(specificProductHeader.getChildText(TAG_DIGITS_TO_SHIFT, namespace));
         zoneIndexMultiplier = (long) Math.pow(10.0, k);
     }
 
@@ -177,7 +194,7 @@ class LaiFile extends ExplorerFile {
     }
 
     private List<DFFG> createGridList() throws IOException {
-        final SequenceData zoneSequenceData = getDataBlock().getSequence("DFFG_LAI");
+        final SequenceData zoneSequenceData = getDataBlock().getSequence(DFFG_LAI_NAME);
         if (zoneSequenceData == null) {
             throw new IllegalStateException(MessageFormat.format(
                     "SMOS File ''{0}'': Missing zone data.", getDblFile().getPath()));
@@ -187,21 +204,22 @@ class LaiFile extends ExplorerFile {
 
         for (int i = 0; i < zoneSequenceData.getElementCount(); i++) {
             final CompoundData zoneCompoundData = zoneSequenceData.getCompound(i);
-            final double minLat = zoneCompoundData.getDouble("Lat_a");
-            final double maxLat = zoneCompoundData.getDouble("Lat_b");
-            final double minLon = zoneCompoundData.getDouble("Lon_a");
-            final double maxLon = zoneCompoundData.getDouble("Lon_b");
-            final double deltaLat = zoneCompoundData.getDouble("Delta_Lat");
-            final int latCount = zoneCompoundData.getInt("N_Lat");
-            final SequenceData sequenceData = zoneCompoundData.getSequence("List_of_DFFG_LAI_Point_Datas");
-            final DFFG grid = new DFFG(minLat, maxLat, minLon, maxLon, deltaLat, latCount, sequenceData);
-            final SequenceData rowList = zoneCompoundData.getSequence("List_of_Row_Struct_Datas");
+            final double minLat = zoneCompoundData.getDouble(MIN_LAT_NAME);
+            final double maxLat = zoneCompoundData.getDouble(MAX_LAT_NAME);
+            final double minLon = zoneCompoundData.getDouble(MIN_LON_NAME);
+            final double maxLon = zoneCompoundData.getDouble(MAX_LON_NAME);
+            final double deltaLat = zoneCompoundData.getDouble(DELTA_LAT_NAME);
+            final int rowCount = zoneCompoundData.getInt(ROW_COUNT_NAME);
+            // due to an unknown bug in ceres-binio it is essential to remember the LAI sequence data 
+            final SequenceData sequenceData = zoneCompoundData.getSequence(LIST_OF_DFFG_LAI_POINT_DATA_NAME);
+            final DFFG grid = new DFFG(minLat, maxLat, minLon, maxLon, deltaLat, rowCount, sequenceData);
 
+            final SequenceData rowList = zoneCompoundData.getSequence(LIST_OF_ROW_STRUCT_DATA_NAME);
             for (int p = 0; p < rowList.getElementCount(); p++) {
                 final CompoundData rowData = rowList.getCompound(p);
-                final int lonCount = rowData.getInt("N_Lon");
-                final double deltaLon = rowData.getDouble("Long_Step_Size_Ang");
-                final int cumulatedLonCount = rowData.getInt("Cumulated_N_Lon");
+                final int lonCount = rowData.getInt(LON_COUNT_NAME);
+                final double deltaLon = rowData.getDouble(DELTA_LON_NAME);
+                final int cumulatedLonCount = rowData.getInt(CUMULATED_LON_COUNT_NAME);
 
                 grid.setRow(p, lonCount, deltaLon, cumulatedLonCount);
             }

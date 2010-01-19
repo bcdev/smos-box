@@ -26,6 +26,8 @@ import java.util.concurrent.Future;
 
 public abstract class ExplorerFile {
 
+    public static final String TAG_SPECIFIC_PRODUCT_HEADER = "Specific_Product_Header";
+    
     private final File hdrFile;
     private final File dblFile;
     private final DataFormat dataFormat;
