@@ -1,13 +1,16 @@
 package org.esa.beam.dataio.smos;
 
 import com.bc.ceres.binio.CompoundData;
+import com.bc.ceres.binio.CompoundMember;
+import com.bc.ceres.binio.CompoundType;
 import com.bc.ceres.binio.DataFormat;
 import com.bc.ceres.binio.SequenceData;
+import com.bc.ceres.glevel.MultiLevelImage;
+import com.bc.ceres.glevel.MultiLevelSource;
 import com.bc.ceres.glevel.support.AbstractMultiLevelSource;
 import com.bc.ceres.glevel.support.DefaultMultiLevelImage;
 import org.esa.beam.framework.datamodel.Band;
 import org.esa.beam.framework.datamodel.Product;
-import org.esa.beam.framework.datamodel.ProductData;
 import org.esa.beam.jai.ResolutionLevel;
 import org.esa.beam.smos.dgg.SmosDgg;
 import org.esa.beam.util.io.FileUtils;
@@ -49,10 +52,11 @@ class LaiFile extends ExplorerFile {
     private static final String TAG_SCALING_FACTOR = "Scaling_Factor";
 
     private static final String TAG_DIGITS_TO_SHIFT = "Digits_To_Shift";
+
     private final double scalingOffset;
     private final double scalingFactor;
-
     private final long zoneIndexMultiplier;
+
     private volatile Future<List<DFFG>> gridListFuture;
 
     LaiFile(File hdrFile, File dblFile, DataFormat dataFormat) throws IOException {
@@ -68,6 +72,10 @@ class LaiFile extends ExplorerFile {
         zoneIndexMultiplier = (long) Math.pow(10.0, k);
     }
 
+    private CompoundType getCellType() {
+        return (CompoundType) getDataFormat().getTypeDef("DFFG_LAI_Point_Data_Type");
+    }
+
     public final long getCellIndex(double lon, double lat) {
         final int zoneIndex = EEAP.getInstance().getZoneIndex(lon, lat);
         if (zoneIndex != -1) {
@@ -79,45 +87,45 @@ class LaiFile extends ExplorerFile {
         return -1;
     }
 
-    byte getLaiValue(long cellIndex, byte noDataValue) {
+    private byte getLaiValue(long cellIndex, int memberIndex, byte noDataValue) {
         final int zoneIndex = getZoneIndex(cellIndex);
         final int gridIndex = getGridIndex(cellIndex, zoneIndex);
 
         try {
-            return getGridList().get(zoneIndex).getSequenceData().getCompound(gridIndex).getByte("LAI");
+            return getGridList().get(zoneIndex).getSequenceData().getCompound(gridIndex).getByte(memberIndex);
         } catch (IOException e) {
             return noDataValue;
         }
     }
 
-    short getLaiValue(long cellIndex, short noDataValue) {
+    private short getLaiValue(long cellIndex, int memberIndex, short noDataValue) {
         final int zoneIndex = getZoneIndex(cellIndex);
         final int gridIndex = getGridIndex(cellIndex, zoneIndex);
 
         try {
-            return getGridList().get(zoneIndex).getSequenceData().getCompound(gridIndex).getShort("LAI");
+            return getGridList().get(zoneIndex).getSequenceData().getCompound(gridIndex).getShort(memberIndex);
         } catch (IOException e) {
             return noDataValue;
         }
     }
 
-    int getLaiValue(long cellIndex, int noDataValue) {
+    private int getLaiValue(long cellIndex, int memberIndex, int noDataValue) {
         final int zoneIndex = getZoneIndex(cellIndex);
         final int gridIndex = getGridIndex(cellIndex, zoneIndex);
 
         try {
-            return getGridList().get(zoneIndex).getSequenceData().getCompound(gridIndex).getInt("LAI");
+            return getGridList().get(zoneIndex).getSequenceData().getCompound(gridIndex).getInt(memberIndex);
         } catch (IOException e) {
             return noDataValue;
         }
     }
 
-    float getLaiValue(long cellIndex, float noDataValue) {
+    private float getLaiValue(long cellIndex, int memberIndex, float noDataValue) {
         final int zoneIndex = getZoneIndex(cellIndex);
         final int gridIndex = getGridIndex(cellIndex, zoneIndex);
 
         try {
-            return getGridList().get(zoneIndex).getSequenceData().getCompound(gridIndex).getFloat("LAI");
+            return getGridList().get(zoneIndex).getSequenceData().getCompound(gridIndex).getFloat(memberIndex);
         } catch (IOException e) {
             return noDataValue;
         }
@@ -140,22 +148,110 @@ class LaiFile extends ExplorerFile {
         ProductHelper.addMetadata(product.getMetadataRoot(), this);
 
         product.setGeoCoding(ProductHelper.createGeoCoding(dimension));
-        final Band band = product.addBand("LAI", ProductData.TYPE_UINT8);
-        band.setNoDataValue(0.0);
-        band.setNoDataValueUsed(true);
-        band.setScalingOffset(scalingOffset);
-        band.setScalingFactor(scalingFactor);
-
-        band.setSourceImage(new DefaultMultiLevelImage(
-                new AbstractMultiLevelSource(SmosDgg.getInstance().getDggMultiLevelImage().getModel()) {
-                    @Override
-                    protected RenderedImage createImage(int level) {
-                        return new LaiOpImage(LaiFile.this, band, getModel(),
-                                              ResolutionLevel.create(getModel(), level));
-                    }
-                }));
+        addBands(product);
 
         return product;
+    }
+
+    private void addBands(Product product) {
+        final String formatName = getDataFormat().getName();
+        final Family<BandDescriptor> descriptors = DDDB.getInstance().getBandDescriptors(formatName);
+
+        if (descriptors != null) {
+            for (final BandDescriptor descriptor : descriptors.asList()) {
+                addBand(product, descriptor, getCellType());
+            }
+        }
+    }
+
+    private void addBand(Product product, BandDescriptor descriptor, CompoundType compoundType) {
+        final int memberIndex = compoundType.getMemberIndex(descriptor.getMemberName());
+
+        if (memberIndex >= 0) {
+            final CompoundMember member = compoundType.getMember(memberIndex);
+
+            final int dataType = ProductHelper.getDataType(member.getType());
+            final Band band = product.addBand(descriptor.getBandName(), dataType);
+
+            if ("LAI".equals(member.getName())) {
+                band.setScalingOffset(scalingOffset);
+                band.setScalingFactor(scalingFactor);
+            } else {
+                band.setScalingOffset(descriptor.getScalingOffset());
+                band.setScalingFactor(descriptor.getScalingFactor());
+            }
+            if (descriptor.hasFillValue()) {
+                band.setNoDataValueUsed(true);
+                band.setNoDataValue(descriptor.getFillValue());
+            }
+            if (!descriptor.getValidPixelExpression().isEmpty()) {
+                band.setValidPixelExpression(descriptor.getValidPixelExpression());
+            }
+            if (!descriptor.getUnit().isEmpty()) {
+                band.setUnit(descriptor.getUnit());
+            }
+            if (!descriptor.getDescription().isEmpty()) {
+                band.setDescription(descriptor.getDescription());
+            }
+            if (descriptor.getFlagDescriptors() != null) {
+                ProductHelper.addFlagsAndMasks(product, band, descriptor.getFlagCodingName(),
+                                               descriptor.getFlagDescriptors());
+            }
+
+            final LaiValueProvider valueProvider = createValueProvider(descriptor);
+            band.setSourceImage(createSourceImage(band, valueProvider));
+            band.setImageInfo(ProductHelper.createImageInfo(band, descriptor));
+        }
+    }
+
+    protected LaiValueProvider createValueProvider(BandDescriptor descriptor) {
+        final int memberIndex = getCellType().getMemberIndex(descriptor.getMemberName());
+
+        return new LaiValueProvider() {
+
+            @Override
+            public Area getArea() {
+                return LaiFile.this.getArea();
+            }
+
+            @Override
+            public long getCellIndex(double lon, double lat) {
+                return LaiFile.this.getCellIndex(lon, lat);
+            }
+
+            @Override
+            public byte getLaiValue(long cellIndex, byte noDataValue) {
+                return LaiFile.this.getLaiValue(cellIndex, memberIndex, noDataValue);
+            }
+
+            @Override
+            public short getLaiValue(long cellIndex, short noDataValue) {
+                return LaiFile.this.getLaiValue(cellIndex, memberIndex, noDataValue);
+            }
+
+            @Override
+            public int getLaiValue(long cellIndex, int noDataValue) {
+                return LaiFile.this.getLaiValue(cellIndex, memberIndex, noDataValue);
+            }
+
+            @Override
+            public float getLaiValue(long cellIndex, float noDataValue) {
+                return LaiFile.this.getLaiValue(cellIndex, memberIndex, noDataValue);
+            }
+        };
+    }
+
+    protected MultiLevelImage createSourceImage(Band band, LaiValueProvider valueProvider) {
+        return new DefaultMultiLevelImage(createMultiLevelSource(band, valueProvider));
+    }
+
+    private MultiLevelSource createMultiLevelSource(final Band band, final LaiValueProvider valueProvider) {
+        return new AbstractMultiLevelSource(SmosDgg.getInstance().getDggMultiLevelImage().getModel()) {
+            @Override
+            protected RenderedImage createImage(int level) {
+                return new LaiOpImage(valueProvider, band, getModel(), ResolutionLevel.create(getModel(), level));
+            }
+        };
     }
 
     private int getGridIndex(long cellIndex, int zoneIndex) {
@@ -228,5 +324,20 @@ class LaiFile extends ExplorerFile {
         }
 
         return Collections.unmodifiableList(gridList);
+    }
+
+    public static interface LaiValueProvider {
+
+        Area getArea();
+
+        long getCellIndex(double lon, double lat);
+
+        byte getLaiValue(long cellIndex, byte noDataValue);
+
+        short getLaiValue(long cellIndex, short noDataValue);
+
+        int getLaiValue(long cellIndex, int noDataValue);
+
+        float getLaiValue(long cellIndex, float noDataValue);
     }
 }

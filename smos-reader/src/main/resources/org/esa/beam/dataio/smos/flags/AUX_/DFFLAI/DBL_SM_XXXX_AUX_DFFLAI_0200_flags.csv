@@ -1,0 +1,4 @@
+# visible | name       | mask     | color | transparency | description
+  *       | MODIS_FLAG | 00000001 | *     | *            | Used to distinguish if LAI values come from the MODIS data (0) or come from AUX_ECOLAI static ADF (1)
+  *       | AGE_FLAG   | 00000002 | *     | *            | Used to distinguish the case where AUX_ECOLAI LAI appears because the last MODIS LAI value is too old (1) from the case that MODIS LAI value is updated recently (0)
+  *       | WATER_FLAG | 00000004 | *     | *            | Derived from the Total_Water_Fraction defined in the AUX_ECOLAI

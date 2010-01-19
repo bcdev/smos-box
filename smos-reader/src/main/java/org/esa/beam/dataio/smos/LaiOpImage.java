@@ -21,7 +21,7 @@ import java.util.Arrays;
 
 class LaiOpImage extends SingleBandedOpImage {
 
-    private final LaiFile laiFile;
+    private final LaiFile.LaiValueProvider valueProvider;
     private final MultiLevelModel model;
     private final double noDataValue;
     private final AffineTransform imageToModelTransform;
@@ -29,7 +29,7 @@ class LaiOpImage extends SingleBandedOpImage {
     private volatile Area area;
     private volatile NoDataRaster noDataRaster;
 
-    LaiOpImage(LaiFile laiFile, RasterDataNode rasterDataNode, MultiLevelModel model, ResolutionLevel level) {
+    LaiOpImage(LaiFile.LaiValueProvider valueProvider, RasterDataNode rasterDataNode, MultiLevelModel model, ResolutionLevel level) {
         super(ImageManager.getDataBufferType(rasterDataNode.getDataType()),
               rasterDataNode.getSceneRasterWidth(),
               rasterDataNode.getSceneRasterHeight(),
@@ -37,7 +37,7 @@ class LaiOpImage extends SingleBandedOpImage {
               null, // no configuration
               level);
 
-        this.laiFile = laiFile;
+        this.valueProvider = valueProvider;
         this.model = model;
         this.noDataValue = rasterDataNode.getNoDataValue();
         this.imageToModelTransform = model.getImageToModelTransform(getLevel());
@@ -47,7 +47,7 @@ class LaiOpImage extends SingleBandedOpImage {
         if (area == null) {
             synchronized (this) {
                 if (area == null) {
-                    final Area modelArea = laiFile.getArea();
+                    final Area modelArea = valueProvider.getArea();
                     area = modelArea.createTransformedArea(model.getModelToImageTransform(getLevel()));
                 }
             }
@@ -139,7 +139,7 @@ class LaiOpImage extends SingleBandedOpImage {
                         value = valueCache[x + 1];
                     } else {
                         if (cellIndex != -1) {
-                            value = laiFile.getLaiValue(cellIndex, noDataValue);
+                            value = valueProvider.getLaiValue(cellIndex, noDataValue);
                         } else {
                             value = noDataValue;
                         }
@@ -197,7 +197,7 @@ class LaiOpImage extends SingleBandedOpImage {
                         value = valueCache[x + 1];
                     } else {
                         if (cellIndex != -1) {
-                            value = laiFile.getLaiValue(cellIndex, noDataValue);
+                            value = valueProvider.getLaiValue(cellIndex, noDataValue);
                         } else {
                             value = noDataValue;
                         }
@@ -254,7 +254,7 @@ class LaiOpImage extends SingleBandedOpImage {
                         value = valueCache[x + 1];
                     } else {
                         if (cellIndex != -1) {
-                            value = laiFile.getLaiValue(cellIndex, noDataValue);
+                            value = valueProvider.getLaiValue(cellIndex, noDataValue);
                         } else {
                             value = noDataValue;
                         }
@@ -312,7 +312,7 @@ class LaiOpImage extends SingleBandedOpImage {
                         value = valueCache[x + 1];
                     } else {
                         if (cellIndex != -1) {
-                            value = laiFile.getLaiValue(cellIndex, noDataValue);
+                            value = valueProvider.getLaiValue(cellIndex, noDataValue);
                         } else {
                             value = noDataValue;
                         }
@@ -338,7 +338,7 @@ class LaiOpImage extends SingleBandedOpImage {
         final double lon = point.getX();
         final double lat = point.getY();
 
-        return laiFile.getCellIndex(lon, lat);
+        return valueProvider.getCellIndex(lon, lat);
     }
 
     private static class PixelCounter {
