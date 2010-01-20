@@ -373,7 +373,7 @@ public class SnapshotInfoToolView extends SmosToolView {
         }
 
         // a workaround for the problem that all displayed mask images are cached (rq-20090612)
-        MaskImageCacheAccessor.removeAll(ImageManager.getInstance(), smosProduct);
+        ImageManager.getInstance().clearMaskImages(smosProduct);
 
         for (final Band band : smosProduct.getBands()) {
             if (band instanceof VirtualBand) {
