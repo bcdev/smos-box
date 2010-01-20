@@ -39,6 +39,7 @@ class LaiFile extends ExplorerFile {
     private static final String DELTA_LAT_NAME = "Delta_Lat";
     private static final String DELTA_LON_NAME = "Long_Step_Size_Ang";
     private static final String DFFG_LAI_NAME = "DFFG_LAI";
+    private static final String DFFG_LAI_POINT_DATA_TYPE_NAME = "DFFG_LAI_Point_Data_Type";
     private static final String LIST_OF_DFFG_LAI_POINT_DATA_NAME = "List_of_DFFG_LAI_Point_Datas";
     private static final String LIST_OF_ROW_STRUCT_DATA_NAME = "List_of_Row_Struct_Datas";
     private static final String LON_COUNT_NAME = "N_Lon";
@@ -46,18 +47,17 @@ class LaiFile extends ExplorerFile {
     private static final String MIN_LAT_NAME = "Lat_a";
     private static final String MAX_LON_NAME = "Lon_b";
     private static final String MIN_LON_NAME = "Lon_a";
-
     private static final String ROW_COUNT_NAME = "N_Lat";
+
     private static final String TAG_SCALING_OFFSET = "Offset";
     private static final String TAG_SCALING_FACTOR = "Scaling_Factor";
-
     private static final String TAG_DIGITS_TO_SHIFT = "Digits_To_Shift";
 
     private final double scalingOffset;
     private final double scalingFactor;
-    private final long zoneIndexMultiplier;
 
-    private volatile Future<List<DFFG>> gridListFuture;
+    private final long zoneIndexMultiplier;
+    private volatile Future<List<Dffg>> gridListFuture;
 
     LaiFile(File hdrFile, File dblFile, DataFormat dataFormat) throws IOException {
         super(hdrFile, dblFile, dataFormat);
@@ -72,63 +72,16 @@ class LaiFile extends ExplorerFile {
         zoneIndexMultiplier = (long) Math.pow(10.0, k);
     }
 
-    private CompoundType getCellType() {
-        return (CompoundType) getDataFormat().getTypeDef("DFFG_LAI_Point_Data_Type");
-    }
-
-    public final long getCellIndex(double lon, double lat) {
-        final int zoneIndex = EEAP.getInstance().getZoneIndex(lon, lat);
+    long getCellIndex(double lon, double lat) {
+        final int zoneIndex = Eeap.getInstance().getZoneIndex(lon, lat);
         if (zoneIndex != -1) {
             final int gridIndex = getGridList().get(zoneIndex).getIndex(lon, lat);
             if (gridIndex != -1) {
                 return gridIndex + zoneIndex * zoneIndexMultiplier;
             }
         }
+
         return -1;
-    }
-
-    private byte getLaiValue(long cellIndex, int memberIndex, byte noDataValue) {
-        final int zoneIndex = getZoneIndex(cellIndex);
-        final int gridIndex = getGridIndex(cellIndex, zoneIndex);
-
-        try {
-            return getGridList().get(zoneIndex).getSequenceData().getCompound(gridIndex).getByte(memberIndex);
-        } catch (IOException e) {
-            return noDataValue;
-        }
-    }
-
-    private short getLaiValue(long cellIndex, int memberIndex, short noDataValue) {
-        final int zoneIndex = getZoneIndex(cellIndex);
-        final int gridIndex = getGridIndex(cellIndex, zoneIndex);
-
-        try {
-            return getGridList().get(zoneIndex).getSequenceData().getCompound(gridIndex).getShort(memberIndex);
-        } catch (IOException e) {
-            return noDataValue;
-        }
-    }
-
-    private int getLaiValue(long cellIndex, int memberIndex, int noDataValue) {
-        final int zoneIndex = getZoneIndex(cellIndex);
-        final int gridIndex = getGridIndex(cellIndex, zoneIndex);
-
-        try {
-            return getGridList().get(zoneIndex).getSequenceData().getCompound(gridIndex).getInt(memberIndex);
-        } catch (IOException e) {
-            return noDataValue;
-        }
-    }
-
-    private float getLaiValue(long cellIndex, int memberIndex, float noDataValue) {
-        final int zoneIndex = getZoneIndex(cellIndex);
-        final int gridIndex = getGridIndex(cellIndex, zoneIndex);
-
-        try {
-            return getGridList().get(zoneIndex).getSequenceData().getCompound(gridIndex).getFloat(memberIndex);
-        } catch (IOException e) {
-            return noDataValue;
-        }
     }
 
     @Override
@@ -153,9 +106,13 @@ class LaiFile extends ExplorerFile {
         return product;
     }
 
+    private CompoundType getCellType() {
+        return (CompoundType) getDataFormat().getTypeDef(DFFG_LAI_POINT_DATA_TYPE_NAME);
+    }
+
     private void addBands(Product product) {
         final String formatName = getDataFormat().getName();
-        final Family<BandDescriptor> descriptors = DDDB.getInstance().getBandDescriptors(formatName);
+        final Family<BandDescriptor> descriptors = Dddb.getInstance().getBandDescriptors(formatName);
 
         if (descriptors != null) {
             for (final BandDescriptor descriptor : descriptors.asList()) {
@@ -198,55 +155,83 @@ class LaiFile extends ExplorerFile {
                                                descriptor.getFlagDescriptors());
             }
 
-            final LaiValueProvider valueProvider = createValueProvider(descriptor);
+            final LaiValueProvider valueProvider = createLaiValueProvider(descriptor);
             band.setSourceImage(createSourceImage(band, valueProvider));
             band.setImageInfo(ProductHelper.createImageInfo(band, descriptor));
         }
     }
 
-    protected LaiValueProvider createValueProvider(BandDescriptor descriptor) {
+    private LaiValueProvider createLaiValueProvider(BandDescriptor descriptor) {
         final int memberIndex = getCellType().getMemberIndex(descriptor.getMemberName());
 
         return new LaiValueProvider() {
 
             @Override
-            public Area getArea() {
+            public final Area getArea() {
                 return LaiFile.this.getArea();
             }
 
             @Override
-            public long getCellIndex(double lon, double lat) {
+            public final long getCellIndex(double lon, double lat) {
                 return LaiFile.this.getCellIndex(lon, lat);
             }
 
             @Override
-            public byte getLaiValue(long cellIndex, byte noDataValue) {
-                return LaiFile.this.getLaiValue(cellIndex, memberIndex, noDataValue);
+            public final byte getValue(long cellIndex, byte noDataValue) {
+                final int zoneIndex = getZoneIndex(cellIndex);
+                final int gridIndex = getGridIndex(cellIndex, zoneIndex);
+
+                try {
+                    return getGridList().get(zoneIndex).getSequenceData().getCompound(gridIndex).getByte(memberIndex);
+                } catch (IOException e) {
+                    return noDataValue;
+                }
             }
 
             @Override
-            public short getLaiValue(long cellIndex, short noDataValue) {
-                return LaiFile.this.getLaiValue(cellIndex, memberIndex, noDataValue);
+            public final short getValue(long cellIndex, short noDataValue) {
+                final int zoneIndex = getZoneIndex(cellIndex);
+                final int gridIndex = getGridIndex(cellIndex, zoneIndex);
+
+                try {
+                    return getGridList().get(zoneIndex).getSequenceData().getCompound(gridIndex).getShort(memberIndex);
+                } catch (IOException e) {
+                    return noDataValue;
+                }
             }
 
             @Override
-            public int getLaiValue(long cellIndex, int noDataValue) {
-                return LaiFile.this.getLaiValue(cellIndex, memberIndex, noDataValue);
+            public final int getValue(long cellIndex, int noDataValue) {
+                final int zoneIndex = getZoneIndex(cellIndex);
+                final int gridIndex = getGridIndex(cellIndex, zoneIndex);
+
+                try {
+                    return getGridList().get(zoneIndex).getSequenceData().getCompound(gridIndex).getInt(memberIndex);
+                } catch (IOException e) {
+                    return noDataValue;
+                }
             }
 
             @Override
-            public float getLaiValue(long cellIndex, float noDataValue) {
-                return LaiFile.this.getLaiValue(cellIndex, memberIndex, noDataValue);
+            public final float getValue(long cellIndex, float noDataValue) {
+                final int zoneIndex = getZoneIndex(cellIndex);
+                final int gridIndex = getGridIndex(cellIndex, zoneIndex);
+
+                try {
+                    return getGridList().get(zoneIndex).getSequenceData().getCompound(gridIndex).getFloat(memberIndex);
+                } catch (IOException e) {
+                    return noDataValue;
+                }
             }
         };
     }
 
-    protected MultiLevelImage createSourceImage(Band band, LaiValueProvider valueProvider) {
+    private MultiLevelImage createSourceImage(Band band, LaiValueProvider valueProvider) {
         return new DefaultMultiLevelImage(createMultiLevelSource(band, valueProvider));
     }
 
     private MultiLevelSource createMultiLevelSource(final Band band, final LaiValueProvider valueProvider) {
-        return new AbstractMultiLevelSource(SmosDgg.getInstance().getDggMultiLevelImage().getModel()) {
+        return new AbstractMultiLevelSource(SmosDgg.getInstance().getMultiLevelImage().getModel()) {
             @Override
             protected RenderedImage createImage(int level) {
                 return new LaiOpImage(valueProvider, band, getModel(), ResolutionLevel.create(getModel(), level));
@@ -262,7 +247,7 @@ class LaiFile extends ExplorerFile {
         return (int) (cellIndex / zoneIndexMultiplier);
     }
 
-    private List<DFFG> getGridList() {
+    private List<Dffg> getGridList() {
         try {
             return getGridListFuture().get();
         } catch (InterruptedException e) {
@@ -272,14 +257,14 @@ class LaiFile extends ExplorerFile {
         }
     }
 
-    private Future<List<DFFG>> getGridListFuture() {
+    private Future<List<Dffg>> getGridListFuture() {
         if (gridListFuture == null) {
             synchronized (this) {
                 if (gridListFuture == null) {
                     gridListFuture = Executors.newSingleThreadExecutor().submit(
-                            new Callable<List<DFFG>>() {
+                            new Callable<List<Dffg>>() {
                                 @Override
-                                public List<DFFG> call() throws IOException {
+                                public List<Dffg> call() throws IOException {
                                     return createGridList();
                                 }
                             });
@@ -289,13 +274,13 @@ class LaiFile extends ExplorerFile {
         return gridListFuture;
     }
 
-    private List<DFFG> createGridList() throws IOException {
+    private List<Dffg> createGridList() throws IOException {
         final SequenceData zoneSequenceData = getDataBlock().getSequence(DFFG_LAI_NAME);
         if (zoneSequenceData == null) {
             throw new IllegalStateException(MessageFormat.format(
                     "SMOS File ''{0}'': Missing zone data.", getDblFile().getPath()));
         }
-        final ArrayList<DFFG> gridList = new ArrayList<DFFG>(
+        final ArrayList<Dffg> gridList = new ArrayList<Dffg>(
                 zoneSequenceData.getElementCount());
 
         for (int i = 0; i < zoneSequenceData.getElementCount(); i++) {
@@ -305,17 +290,16 @@ class LaiFile extends ExplorerFile {
             final double minLon = zoneCompoundData.getDouble(MIN_LON_NAME);
             final double maxLon = zoneCompoundData.getDouble(MAX_LON_NAME);
             final double deltaLat = zoneCompoundData.getDouble(DELTA_LAT_NAME);
-            final int rowCount = zoneCompoundData.getInt(ROW_COUNT_NAME);
-            // due to an unknown bug in ceres-binio it is essential to remember the LAI sequence data 
-            final SequenceData sequenceData = zoneCompoundData.getSequence(LIST_OF_DFFG_LAI_POINT_DATA_NAME);
-            final DFFG grid = new DFFG(minLat, maxLat, minLon, maxLon, deltaLat, rowCount, sequenceData);
 
-            final SequenceData rowList = zoneCompoundData.getSequence(LIST_OF_ROW_STRUCT_DATA_NAME);
-            for (int p = 0; p < rowList.getElementCount(); p++) {
-                final CompoundData rowData = rowList.getCompound(p);
-                final int lonCount = rowData.getInt(LON_COUNT_NAME);
-                final double deltaLon = rowData.getDouble(DELTA_LON_NAME);
-                final int cumulatedLonCount = rowData.getInt(CUMULATED_LON_COUNT_NAME);
+            // due to an unresolved bug in ceres-binio it is essential to remember the LAI sequence data
+            final SequenceData sequenceData = zoneCompoundData.getSequence(LIST_OF_DFFG_LAI_POINT_DATA_NAME);
+            final Dffg grid = new Dffg(minLat, maxLat, minLon, maxLon, deltaLat, sequenceData);
+            final SequenceData rowSequenceData = zoneCompoundData.getSequence(LIST_OF_ROW_STRUCT_DATA_NAME);
+            for (int p = 0; p < rowSequenceData.getElementCount(); p++) {
+                final CompoundData rowCompoundData = rowSequenceData.getCompound(p);
+                final int lonCount = rowCompoundData.getInt(LON_COUNT_NAME);
+                final double deltaLon = rowCompoundData.getDouble(DELTA_LON_NAME);
+                final int cumulatedLonCount = rowCompoundData.getInt(CUMULATED_LON_COUNT_NAME);
 
                 grid.setRow(p, lonCount, deltaLon, cumulatedLonCount);
             }
@@ -326,18 +310,4 @@ class LaiFile extends ExplorerFile {
         return Collections.unmodifiableList(gridList);
     }
 
-    public static interface LaiValueProvider {
-
-        Area getArea();
-
-        long getCellIndex(double lon, double lat);
-
-        byte getLaiValue(long cellIndex, byte noDataValue);
-
-        short getLaiValue(long cellIndex, short noDataValue);
-
-        int getLaiValue(long cellIndex, int noDataValue);
-
-        float getLaiValue(long cellIndex, float noDataValue);
-    }
 }

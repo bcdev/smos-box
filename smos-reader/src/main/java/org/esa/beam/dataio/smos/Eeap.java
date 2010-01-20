@@ -3,7 +3,7 @@ package org.esa.beam.dataio.smos;
 import java.awt.geom.Rectangle2D;
 import java.text.MessageFormat;
 
-class EEAP {
+class Eeap {
 
     private final double maxLat;
     private final double cutLat;
@@ -11,15 +11,15 @@ class EEAP {
 
     private final int zoneCount;
 
-    static EEAP getInstance() {
-        return Holder.instance;
+    static Eeap getInstance() {
+        return Holder.INSTANCE;
     }
 
-    private EEAP() {
+    private Eeap() {
         this(89.0, 75.0, 5.0);
     }
 
-    private EEAP(double maxLat, double cutLat, double deltaLon) {
+    private Eeap(double maxLat, double cutLat, double deltaLon) {
         assert maxLat > 0.0;
         assert 180.0 / deltaLon == Math.floor(180.0 / deltaLon); // ratio must be an integral value
 
@@ -68,6 +68,6 @@ class EEAP {
 
     private static class Holder {
 
-        private static final EEAP instance = new EEAP();
+        private static final Eeap INSTANCE = new Eeap();
     }
 }

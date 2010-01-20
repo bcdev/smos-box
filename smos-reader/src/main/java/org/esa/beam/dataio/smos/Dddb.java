@@ -36,7 +36,7 @@ import java.util.concurrent.ConcurrentMap;
  * @version $Revision$ $Date$
  * @since SMOS-Box 2.0
  */
-public class DDDB {
+public class Dddb {
 
     private static final String TAG_DATABLOCK_SCHEMA = "Datablock_Schema";
     // Reference: SO-MA-IDR-GS-0004, SMOS DPGS, XML Schema Guidelines
@@ -50,13 +50,13 @@ public class DDDB {
     private final ConcurrentMap<String, BandDescriptors> bandDescriptorMap;
     private final ConcurrentMap<String, FlagDescriptors> flagDescriptorMap;
 
-    private DDDB() {
+    private Dddb() {
         dataFormatMap = new ConcurrentHashMap<String, DataFormat>(17);
         bandDescriptorMap = new ConcurrentHashMap<String, BandDescriptors>(17);
         flagDescriptorMap = new ConcurrentHashMap<String, FlagDescriptors>(17);
     }
 
-    public static DDDB getInstance() {
+    public static Dddb getInstance() {
         return Holder.INSTANCE;
     }
 
@@ -288,7 +288,7 @@ public class DDDB {
 
     private static class Holder {
 
-        private static final DDDB INSTANCE = new DDDB();
+        private static final Dddb INSTANCE = new Dddb();
     }
 
     private static class BandDescriptors implements Family<BandDescriptor> {

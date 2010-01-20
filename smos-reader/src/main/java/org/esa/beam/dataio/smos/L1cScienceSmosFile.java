@@ -78,7 +78,7 @@ public class L1cScienceSmosFile extends L1cSmosFile {
     }
 
     private double getIncidenceAngleScalingFactor(String formatName) {
-        for (final BandDescriptor descriptor : DDDB.getInstance().getBandDescriptors(formatName).asList()) {
+        for (final BandDescriptor descriptor : Dddb.getInstance().getBandDescriptors(formatName).asList()) {
             if (INCIDENCE_ANGLE_NAME.equals(descriptor.getMemberName())) {
                 return descriptor.getScalingFactor();
             }
@@ -380,7 +380,7 @@ public class L1cScienceSmosFile extends L1cSmosFile {
     }
 
     private void addRotatedDualPolBands(Product product, Map<String, ValueProvider> valueProviderMap) {
-        final Family<BandDescriptor> descriptors = DDDB.getInstance().getBandDescriptors(getDataFormat().getName());
+        final Family<BandDescriptor> descriptors = Dddb.getInstance().getBandDescriptors(getDataFormat().getName());
 
         DP vp;
         BandDescriptor descriptor;
@@ -406,7 +406,7 @@ public class L1cScienceSmosFile extends L1cSmosFile {
     }
 
     private void addRotatedFullPolBands(Product product, Map<String, ValueProvider> valueProviderMap) {
-        final Family<BandDescriptor> descriptors = DDDB.getInstance().getBandDescriptors(getDataFormat().getName());
+        final Family<BandDescriptor> descriptors = Dddb.getInstance().getBandDescriptors(getDataFormat().getName());
 
         FP vp;
         BandDescriptor descriptor;

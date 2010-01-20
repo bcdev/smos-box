@@ -32,7 +32,7 @@ public class LaiFileTest {
     @Test
     public void format() throws IOException {
         if (HDR_FILE.exists()) {
-            final DataFormat dataFormat = DDDB.getInstance().getDataFormat(HDR_FILE);
+            final DataFormat dataFormat = Dddb.getInstance().getDataFormat(HDR_FILE);
             final CompoundType dataBlockType = dataFormat.getType();
 
             assertEquals(1, dataBlockType.getMemberCount());
@@ -49,10 +49,10 @@ public class LaiFileTest {
     @Test
     public void zoneDataSizes() throws IOException {
         if (HDR_FILE.exists() && DBL_FILE.exists()) {
-            final DataFormat dataFormat = DDDB.getInstance().getDataFormat(HDR_FILE);
-            final ExplorerFile explorerFile = new LaiFile(HDR_FILE, DBL_FILE, dataFormat);
+            final DataFormat dataFormat = Dddb.getInstance().getDataFormat(HDR_FILE);
+            final LaiFile laiFile = new LaiFile(HDR_FILE, DBL_FILE, dataFormat);
 
-            final SequenceData sequenceData = explorerFile.getDataBlock().getSequence(DFFG_LAI_NAME);
+            final SequenceData sequenceData = laiFile.getDataBlock().getSequence(DFFG_LAI_NAME);
             assertEquals(ZONE_COUNT, sequenceData.getElementCount());
 
             CompoundData compoundData;
@@ -74,12 +74,14 @@ public class LaiFileTest {
             compoundData = sequenceData.getCompound(3);
             compoundData.resolveSize();
             assertEquals(3052488, compoundData.getSize());
+
+            laiFile.getCellIndex(0.0, 0.0);
         }
     }
 
     // for dumping the contents of a LAI file
     public static void main(String[] args) throws IOException {
-        final DataFormat dataFormat = DDDB.getInstance().getDataFormat(HDR_FILE);
+        final DataFormat dataFormat = Dddb.getInstance().getDataFormat(HDR_FILE);
         final ExplorerFile explorerFile = new LaiFile(HDR_FILE, DBL_FILE, dataFormat);
         final SequenceData sequenceData = explorerFile.getDataBlock().getSequence(DFFG_LAI_NAME);
 

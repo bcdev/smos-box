@@ -21,7 +21,7 @@ public class SmosMultiLevelSource extends AbstractMultiLevelSource {
     private final ValueProvider valueProvider;
 
     public SmosMultiLevelSource(RasterDataNode rasterDataNode, ValueProvider valueProvider) {
-        super(SmosDgg.getInstance().getDggMultiLevelImage().getModel());
+        super(SmosDgg.getInstance().getMultiLevelImage().getModel());
 
         this.valueProvider = valueProvider;
         this.rasterDataNode = rasterDataNode;

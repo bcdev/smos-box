@@ -2,7 +2,7 @@ package org.esa.beam.dataio.smos;
 
 import com.bc.ceres.binio.SequenceData;
 
-class DFFG {
+class Dffg {
 
     private final double maxLon;
     private final double minLon;
@@ -15,8 +15,7 @@ class DFFG {
     private final int[] cumulatedColumnCounts;
     private final SequenceData sequenceData;
 
-    DFFG(double minLat, double maxLat, double minLon, double maxLon, double latDelta,
-                             int rowCount, SequenceData sequenceData) {
+    Dffg(double minLat, double maxLat, double minLon, double maxLon, double latDelta, SequenceData sequenceData) {
         this.minLat = minLat;
         this.maxLat = maxLat;
         this.minLon = minLon;
@@ -25,6 +24,7 @@ class DFFG {
         this.latDelta = latDelta;
         this.sequenceData = sequenceData;
 
+        final int rowCount = (int) Math.round((maxLat - minLat) / latDelta);
         columnCounts = new int[rowCount];
         lonDeltas = new double[rowCount];
         cumulatedColumnCounts = new int[rowCount];
@@ -34,13 +34,14 @@ class DFFG {
         if (lon < 0.0) {
             lon += 360.0;
         }
-        if (lon < minLon || lon >= maxLon || lat <= minLat || lat > maxLat) {
-            return -1;
-        }
-        final int rowIndex = getRowIndex(lat);
-        final int columnIndex = getColumnIndex(lon, rowIndex);
+        if (lon >= minLon && lon < maxLon && lat > minLat && lat <= maxLat) {
+            final int rowIndex = getRowIndex(lat);
+            final int columnIndex = getColumnIndex(lon, rowIndex);
 
-        return cumulatedColumnCounts[rowIndex] + columnIndex;
+            return cumulatedColumnCounts[rowIndex] + columnIndex;
+        }
+
+        return -1;
     }
 
     SequenceData getSequenceData() {

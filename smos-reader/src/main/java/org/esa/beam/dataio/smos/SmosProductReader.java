@@ -34,7 +34,7 @@ public class SmosProductReader extends AbstractProductReader {
         final File hdrFile = FileUtils.exchangeExtension(file, ".HDR");
         final File dblFile = FileUtils.exchangeExtension(file, ".DBL");
 
-        final DataFormat format = DDDB.getInstance().getDataFormat(hdrFile);
+        final DataFormat format = Dddb.getInstance().getDataFormat(hdrFile);
         if (format == null) {
             throw new IOException(MessageFormat.format("File ''{0}'': unknown SMOS data format.", file));
         }

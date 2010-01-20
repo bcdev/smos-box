@@ -38,7 +38,7 @@ public abstract class ExplorerFile {
     protected ExplorerFile(File hdrFile, File dblFile, DataFormat dataFormat) throws IOException {
         this.hdrFile = hdrFile;
         this.dblFile = dblFile;
-        this.dataFormat = DDDB.getInstance().getDataFormat(hdrFile);
+        this.dataFormat = Dddb.getInstance().getDataFormat(hdrFile);
         dataContext = dataFormat.createContext(dblFile, "r");
         dataBlock = dataContext.getData();
     }

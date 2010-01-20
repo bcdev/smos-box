@@ -6,7 +6,7 @@ import com.bc.ceres.binio.SequenceData;
 import com.bc.ceres.binio.SimpleType;
 import com.bc.ceres.binio.Type;
 import org.esa.beam.dataio.smos.BandDescriptor;
-import org.esa.beam.dataio.smos.DDDB;
+import org.esa.beam.dataio.smos.Dddb;
 import org.esa.beam.dataio.smos.L1cSmosFile;
 
 import java.io.IOException;
@@ -37,7 +37,7 @@ class GridPointBtDataset {
             final String memberName = type.getMemberName(j);
             columnNames[j] = memberName;
             final BandDescriptor descriptor =
-                    DDDB.getInstance().findBandDescriptorForMember(smosFile.getDataFormat().getName(), memberName);
+                    Dddb.getInstance().findBandDescriptorForMember(smosFile.getDataFormat().getName(), memberName);
             if (descriptor == null || descriptor.getScalingFactor() == 1.0 && descriptor.getScalingOffset() == 0.0) {
                 columnClasses[j] = getNumericMemberType(type, j);
             } else {

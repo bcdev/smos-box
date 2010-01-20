@@ -89,7 +89,7 @@ public class SceneViewSelectionService {
     }
 
     public int getGridPointId(int pixelX, int pixelY, int currentLevel) {
-        final MultiLevelImage levelImage = SmosDgg.getInstance().getDggMultiLevelImage();
+        final MultiLevelImage levelImage = SmosDgg.getInstance().getMultiLevelImage();
         RenderedImage image = levelImage.getImage(currentLevel);
         Raster data = image.getData(new Rectangle(pixelX, pixelY, 1, 1));
         return data.getSample(pixelX, pixelY, 0);

@@ -21,15 +21,15 @@ import java.util.Arrays;
 
 class LaiOpImage extends SingleBandedOpImage {
 
-    private final LaiFile.LaiValueProvider valueProvider;
+    private final LaiValueProvider valueProvider;
     private final MultiLevelModel model;
     private final double noDataValue;
-    private final AffineTransform imageToModelTransform;
 
     private volatile Area area;
     private volatile NoDataRaster noDataRaster;
 
-    LaiOpImage(LaiFile.LaiValueProvider valueProvider, RasterDataNode rasterDataNode, MultiLevelModel model, ResolutionLevel level) {
+    LaiOpImage(LaiValueProvider valueProvider, RasterDataNode rasterDataNode, MultiLevelModel model,
+               ResolutionLevel level) {
         super(ImageManager.getDataBufferType(rasterDataNode.getDataType()),
               rasterDataNode.getSceneRasterWidth(),
               rasterDataNode.getSceneRasterHeight(),
@@ -40,7 +40,6 @@ class LaiOpImage extends SingleBandedOpImage {
         this.valueProvider = valueProvider;
         this.model = model;
         this.noDataValue = rasterDataNode.getNoDataValue();
-        this.imageToModelTransform = model.getImageToModelTransform(getLevel());
     }
 
     private Area getArea() {
@@ -113,6 +112,7 @@ class LaiOpImage extends SingleBandedOpImage {
         final byte[] valueCache = new byte[w];
 
         int targetLineOffset = targetData.getOffset(0);
+        final AffineTransform i2m = model.getImageToModelTransform(getLevel());
         final Point2D point = new Point2D.Double();
 
         for (int y = 0; y < h; ++y) {
@@ -124,27 +124,34 @@ class LaiOpImage extends SingleBandedOpImage {
                 targetPixelOffset += pixelCounter.leading * targetPixelStride;
             }
             if (pixelCounter.valid > 0) {
-                for (int x = pixelCounter.leading; x < pixelCounter.leading + pixelCounter.valid; ++x) {
-                    byte value;
-                    final long cellIndex = computeCellIndex(targetData.rect.x + x, targetData.rect.y + y, point);
+                point.setLocation(0.0, targetData.rect.y + y);
+                i2m.transform(point, point);
+                final double lat = point.getY();
 
-                    if (x > 0 && indexCache[x - 1] == cellIndex) {
+                for (int x = pixelCounter.leading; x < pixelCounter.leading + pixelCounter.valid; ++x) {
+                    point.setLocation(targetData.rect.x + x, 0.0);
+                    i2m.transform(point, point);
+                    final double lon = point.getX();
+                    final long index = valueProvider.getCellIndex(lon, lat);
+
+                    final byte value;
+                    if (x > 0 && indexCache[x - 1] == index) {
                         // pixel to the west
                         value = valueCache[x - 1];
-                    } else if (y > 0 && indexCache[x] == cellIndex) {
+                    } else if (y > 0 && indexCache[x] == index) {
                         // pixel to the north
                         value = valueCache[x];
-                    } else if (x + 1 < w && y > 0 && indexCache[x + 1] == cellIndex) {
+                    } else if (x + 1 < w && y > 0 && indexCache[x + 1] == index) {
                         // pixel to the north-east
                         value = valueCache[x + 1];
                     } else {
-                        if (cellIndex != -1) {
-                            value = valueProvider.getLaiValue(cellIndex, noDataValue);
+                        if (index != -1) {
+                            value = valueProvider.getValue(index, noDataValue);
                         } else {
                             value = noDataValue;
                         }
                     }
-                    indexCache[x] = cellIndex;
+                    indexCache[x] = index;
                     valueCache[x] = value;
 
                     targetDataArray[targetPixelOffset] = value;
@@ -182,27 +189,34 @@ class LaiOpImage extends SingleBandedOpImage {
                 targetPixelOffset += pixelCounter.leading * targetPixelStride;
             }
             if (pixelCounter.valid > 0) {
-                for (int x = pixelCounter.leading; x < pixelCounter.leading + pixelCounter.valid; ++x) {
-                    short value;
-                    final long cellIndex = computeCellIndex(targetData.rect.x + x, targetData.rect.y + y, point);
+                point.setLocation(0.0, targetData.rect.y + y);
+                i2m.transform(point, point);
+                final double lat = point.getY();
 
-                    if (x > 0 && indexCache[x - 1] == cellIndex) {
+                for (int x = pixelCounter.leading; x < pixelCounter.leading + pixelCounter.valid; ++x) {
+                    point.setLocation(targetData.rect.x + x, 0.0);
+                    i2m.transform(point, point);
+                    final double lon = point.getX();
+                    final long index = valueProvider.getCellIndex(lon, lat);
+
+                    final short value;
+                    if (x > 0 && indexCache[x - 1] == index) {
                         // pixel to the west
                         value = valueCache[x - 1];
-                    } else if (y > 0 && indexCache[x] == cellIndex) {
+                    } else if (y > 0 && indexCache[x] == index) {
                         // pixel to the north
                         value = valueCache[x];
-                    } else if (x + 1 < w && y > 0 && indexCache[x + 1] == cellIndex) {
+                    } else if (x + 1 < w && y > 0 && indexCache[x + 1] == index) {
                         // pixel to the north-east
                         value = valueCache[x + 1];
                     } else {
-                        if (cellIndex != -1) {
-                            value = valueProvider.getLaiValue(cellIndex, noDataValue);
+                        if (index != -1) {
+                            value = valueProvider.getValue(index, noDataValue);
                         } else {
                             value = noDataValue;
                         }
                     }
-                    indexCache[x] = cellIndex;
+                    indexCache[x] = index;
                     valueCache[x] = value;
 
                     targetDataArray[targetPixelOffset] = value;
@@ -228,6 +242,7 @@ class LaiOpImage extends SingleBandedOpImage {
         final int[] valueCache = new int[w];
 
         int targetLineOffset = targetData.getOffset(0);
+        final AffineTransform i2m = model.getImageToModelTransform(getLevel());
         final Point2D point = new Point2D.Double();
 
         for (int y = 0; y < h; ++y) {
@@ -239,27 +254,34 @@ class LaiOpImage extends SingleBandedOpImage {
                 targetPixelOffset += pixelCounter.leading * targetPixelStride;
             }
             if (pixelCounter.valid > 0) {
-                for (int x = pixelCounter.leading; x < pixelCounter.leading + pixelCounter.valid; ++x) {
-                    int value;
-                    final long cellIndex = computeCellIndex(targetData.rect.x + x, targetData.rect.y + y, point);
+                point.setLocation(0.0, targetData.rect.y + y);
+                i2m.transform(point, point);
+                final double lat = point.getY();
 
-                    if (x > 0 && indexCache[x - 1] == cellIndex) {
+                for (int x = pixelCounter.leading; x < pixelCounter.leading + pixelCounter.valid; ++x) {
+                    point.setLocation(targetData.rect.x + x, 0.0);
+                    i2m.transform(point, point);
+                    final double lon = point.getX();
+                    final long index = valueProvider.getCellIndex(lon, lat);
+
+                    final int value;
+                    if (x > 0 && indexCache[x - 1] == index) {
                         // pixel to the west
                         value = valueCache[x - 1];
-                    } else if (y > 0 && indexCache[x] == cellIndex) {
+                    } else if (y > 0 && indexCache[x] == index) {
                         // pixel to the north
                         value = valueCache[x];
-                    } else if (x + 1 < w && y > 0 && indexCache[x + 1] == cellIndex) {
+                    } else if (x + 1 < w && y > 0 && indexCache[x + 1] == index) {
                         // pixel to the north-east
                         value = valueCache[x + 1];
                     } else {
-                        if (cellIndex != -1) {
-                            value = valueProvider.getLaiValue(cellIndex, noDataValue);
+                        if (index != -1) {
+                            value = valueProvider.getValue(index, noDataValue);
                         } else {
                             value = noDataValue;
                         }
                     }
-                    indexCache[x] = cellIndex;
+                    indexCache[x] = index;
                     valueCache[x] = value;
 
                     targetDataArray[targetPixelOffset] = value;
@@ -297,27 +319,34 @@ class LaiOpImage extends SingleBandedOpImage {
                 targetPixelOffset += pixelCounter.leading * targetPixelStride;
             }
             if (pixelCounter.valid > 0) {
-                for (int x = pixelCounter.leading; x < pixelCounter.leading + pixelCounter.valid; ++x) {
-                    float value;
-                    final long cellIndex = computeCellIndex(targetData.rect.x + x, targetData.rect.y + y, point);
+                point.setLocation(0.0, targetData.rect.y + y);
+                i2m.transform(point, point);
+                final double lat = point.getY();
 
-                    if (x > 0 && indexCache[x - 1] == cellIndex) {
+                for (int x = pixelCounter.leading; x < pixelCounter.leading + pixelCounter.valid; ++x) {
+                    point.setLocation(targetData.rect.x + x, 0.0);
+                    i2m.transform(point, point);
+                    final double lon = point.getX();
+                    final long index = valueProvider.getCellIndex(lon, lat);
+
+                    final float value;
+                    if (x > 0 && indexCache[x - 1] == index) {
                         // pixel to the west
                         value = valueCache[x - 1];
-                    } else if (y > 0 && indexCache[x] == cellIndex) {
+                    } else if (y > 0 && indexCache[x] == index) {
                         // pixel to the north
                         value = valueCache[x];
-                    } else if (x + 1 < w && y > 0 && indexCache[x + 1] == cellIndex) {
+                    } else if (x + 1 < w && y > 0 && indexCache[x + 1] == index) {
                         // pixel to the north-east
                         value = valueCache[x + 1];
                     } else {
-                        if (cellIndex != -1) {
-                            value = valueProvider.getLaiValue(cellIndex, noDataValue);
+                        if (index != -1) {
+                            value = valueProvider.getValue(index, noDataValue);
                         } else {
                             value = noDataValue;
                         }
                     }
-                    indexCache[x] = cellIndex;
+                    indexCache[x] = index;
                     valueCache[x] = value;
 
                     targetDataArray[targetPixelOffset] = value;
@@ -329,16 +358,6 @@ class LaiOpImage extends SingleBandedOpImage {
             }
             targetLineOffset += targetLineStride;
         }
-    }
-
-    private long computeCellIndex(int x, int y, Point2D point) {
-        point.setLocation(x, y);
-        imageToModelTransform.transform(point, point);
-
-        final double lon = point.getX();
-        final double lat = point.getY();
-
-        return valueProvider.getCellIndex(lon, lat);
     }
 
     private static class PixelCounter {

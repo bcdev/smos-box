@@ -114,7 +114,7 @@ class ProductHelper {
     }
 
     static Dimension getSceneRasterDimension() {
-        final MultiLevelImage dggMultiLevelImage = SmosDgg.getInstance().getDggMultiLevelImage();
+        final MultiLevelImage dggMultiLevelImage = SmosDgg.getInstance().getMultiLevelImage();
         final int w = dggMultiLevelImage.getWidth();
         final int h = dggMultiLevelImage.getHeight();
 

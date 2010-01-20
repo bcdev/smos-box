@@ -59,7 +59,7 @@
         <module>smos-reader</module>
         <module>smos-ui</module>
         <module>smos-dgg</module>
-        <!--<module>smos-header</module>-->
+        <!--<module>smos-adffg</module>-->
     </modules>
 
     <dependencyManagement>
@@ -138,6 +138,13 @@
                 <artifactId>smos-dgg</artifactId>
                 <version>${pom.version}</version>
             </dependency>
+<!--
+            <dependency>
+                <groupId>org.esa.beam.smos</groupId>
+                <artifactId>smos-adffg</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+-->
             <dependency>
                 <groupId>org.esa.beam.smos</groupId>
                 <artifactId>smos-reader</artifactId>

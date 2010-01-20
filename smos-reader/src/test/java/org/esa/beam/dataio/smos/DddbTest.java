@@ -3,13 +3,13 @@ package org.esa.beam.dataio.smos;
 import static junit.framework.Assert.*;
 import org.junit.Test;
 
-public class DDDBTest {
+public class DddbTest {
 
     private static final String IDENTIFIER = "DBL_SM_XXXX_AUX_ECMWF__0200";
 
     @Test
     public void getBandDescriptors() {
-        final Family<BandDescriptor> descriptors = DDDB.getInstance().getBandDescriptors(IDENTIFIER);
+        final Family<BandDescriptor> descriptors = Dddb.getInstance().getBandDescriptors(IDENTIFIER);
         assertEquals(38, descriptors.asList().size());
 
         final BandDescriptor descriptor = descriptors.getMember("RR");
@@ -31,7 +31,7 @@ public class DDDBTest {
 
     @Test
     public void getFlagDescriptors() {
-        final Family<FlagDescriptor> descriptors = DDDB.getInstance().getFlagDescriptors(IDENTIFIER + "_flags1");
+        final Family<FlagDescriptor> descriptors = Dddb.getInstance().getFlagDescriptors(IDENTIFIER + "_flags1");
         assertEquals(21, descriptors.asList().size());
 
         FlagDescriptor descriptor;
@@ -47,7 +47,7 @@ public class DDDBTest {
 
     @Test
     public void getFlagDescriptorsFromBandDescriptor() {
-        final DDDB dddb = DDDB.getInstance();
+        final Dddb dddb = Dddb.getInstance();
         final Family<BandDescriptor> bandDescriptor = dddb.getBandDescriptors(IDENTIFIER);
         final Family<FlagDescriptor> flagDescriptors = bandDescriptor.getMember("F1").getFlagDescriptors();
         assertNotNull(flagDescriptors);

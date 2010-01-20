@@ -17,7 +17,6 @@
 package org.esa.beam.dataio.smos;
 
 import org.esa.beam.framework.dataio.DecodeQualification;
-import org.esa.beam.framework.dataio.ProductReader;
 import org.esa.beam.framework.dataio.ProductReaderPlugIn;
 import org.esa.beam.util.io.BeamFileFilter;
 import org.esa.beam.util.io.FileUtils;
@@ -45,7 +44,7 @@ public class SmosProductReaderPlugIn implements ProductReaderPlugIn {
 
             if (hdrFile.exists() && dblFile.exists()) {
                 try {
-                    if (DDDB.getInstance().getDataFormat(hdrFile) != null) {
+                    if (Dddb.getInstance().getDataFormat(hdrFile) != null) {
                         return DecodeQualification.INTENDED;
                     }
                 } catch (Exception e) {

@@ -22,9 +22,7 @@ import com.bc.ceres.glevel.MultiLevelImage;
 import com.bc.ceres.glevel.MultiLevelSource;
 import com.bc.ceres.glevel.support.DefaultMultiLevelImage;
 import org.esa.beam.framework.datamodel.Band;
-import org.esa.beam.framework.datamodel.MapGeoCoding;
 import org.esa.beam.framework.datamodel.Product;
-import org.esa.beam.framework.dataop.maptransf.MapInfo;
 import org.esa.beam.smos.dgg.SmosDgg;
 import org.esa.beam.util.io.FileUtils;
 
@@ -184,7 +182,7 @@ public class SmosFile extends ExplorerFile {
 
     protected void addBands(Product product) {
         final String formatName = getDataFormat().getName();
-        final Family<BandDescriptor> descriptors = DDDB.getInstance().getBandDescriptors(formatName);
+        final Family<BandDescriptor> descriptors = Dddb.getInstance().getBandDescriptors(formatName);
 
         if (descriptors != null) {
             for (final BandDescriptor descriptor : descriptors.asList()) {

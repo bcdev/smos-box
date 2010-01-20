@@ -41,7 +41,7 @@ public class SmosDgg {
         return gridPointId < a ? gridPointId : b * ((gridPointId - 1) / a) + ((gridPointId - 1) % a) + 2;
     }
 
-    public MultiLevelImage getDggMultiLevelImage() {
+    public MultiLevelImage getMultiLevelImage() {
         if (dggMultiLevelImage == null) {
             synchronized (getInstance()) {
                 if (dggMultiLevelImage == null) {
@@ -92,7 +92,9 @@ public class SmosDgg {
     }
 
     // Initialization on demand holder idiom
+
     private static class Holder {
+
         private static final SmosDgg instance = new SmosDgg();
     }
 }

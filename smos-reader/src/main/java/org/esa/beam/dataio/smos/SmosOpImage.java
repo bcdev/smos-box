@@ -89,7 +89,7 @@ class SmosOpImage extends SingleBandedOpImage {
 
     @Override
     protected final void computeRect(PlanarImage[] planarImages, WritableRaster targetRaster, Rectangle rectangle) {
-        final RenderedImage seqnumImage = SmosDgg.getInstance().getDggMultiLevelImage().getImage(getLevel());
+        final RenderedImage seqnumImage = SmosDgg.getInstance().getMultiLevelImage().getImage(getLevel());
         final Raster seqnumRaster = seqnumImage.getData(rectangle);
         final ColorModel cm = getColorModel();
 
