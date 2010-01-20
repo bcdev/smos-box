@@ -14,10 +14,13 @@
  */
 package org.esa.beam.smos.dgg;
 
-import junit.framework.TestCase;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 
-public class SmosDggTest extends TestCase {
+public class SmosDggTest {
+
     /**
      * <i>Antonio Gutierrez (antonio.gutierrez@deimos.com.pt) wrote:</i>
      * <p/>
@@ -51,8 +54,9 @@ public class SmosDggTest extends TestCase {
      * 2621442, 11000000000 ->9262145
      * </pre>
      */
-    public void testSmosEncodingScheme() {
 
+    @Test
+    public void testSmosEncodingScheme() {
         assertEquals(1, SmosDgg.gridPointIdToDggSeqnum(1));
         assertEquals(2, SmosDgg.gridPointIdToDggSeqnum(2));
         assertEquals(3, SmosDgg.gridPointIdToDggSeqnum(3));
