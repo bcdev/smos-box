@@ -1,8 +1,31 @@
 ============================================
 SCHEMAS VERSION
 ============================================
-2009-10-02_v04-04-01
+2009-12-23_v04-04-05
 
+===============================
+CHANGE LOG 2009-12-23_v04-04-05
+===============================
+-DBL_SM_XXXX_AUX_RGHNS3_0202.xsd schema provided by ARGANS on December 2nd has been added to the distribution.
+
+===============================
+CHANGE LOG 2009-12-04_v04-04-04
+===============================
+-HDR_SM_XXXX_MPL_ORBSCT has been updated to not allow incoherent values in the “Validity_Start” 
+ and “Validity_Stop” fields (SCH-PR-0009 fixed).
+
+===============================
+CHANGE LOG 2009-11-04_v04-04-03
+===============================
+-DBL_SM_XXXX_REP_XAR___ and DBL_SM_XXXX_REP_XDAR__ schemas have been corrected: "String_Value" field has been added into the "Event" structure, 
+ in accordance with SO-ID-IDR-GS-0018 XBAS-CORE ICD v1.9.
+
+===============================
+CHANGE LOG 2009-10-23_v04-04-02
+===============================
+-DBL_SM_XXXX_REP_XIP__ schema has been updated: The allowed values for the "Status" field have been changed 
+from "ERROR,WAITING" to "COMPLETED","ABORTED","STARTED","WAITING" in accordance with SO-ID-IDR-GS-0018 XBAS-CORE ICD v1.9.
+This bug was detected during GSOV test EE-20. 
 
 ===============================
 CHANGE LOG 2009-10-02_v04-04-01
