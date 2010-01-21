@@ -1,5 +1,18 @@
 package org.esa.beam.smos.visat;
 
+import com.bc.ceres.binio.CompoundData;
+import com.bc.ceres.binio.CompoundType;
+import com.bc.ceres.binio.Type;
+import com.bc.ceres.core.ProgressMonitor;
+import com.bc.ceres.glayer.CollectionLayer;
+import com.bc.ceres.glayer.Layer;
+import com.bc.ceres.glayer.support.ImageLayer;
+import com.bc.ceres.glayer.swing.LayerCanvas;
+import com.bc.ceres.glevel.MultiLevelImage;
+import com.bc.ceres.glevel.support.DefaultMultiLevelImage;
+import com.bc.ceres.glevel.support.FileMultiLevelSource;
+import com.bc.ceres.grender.Rendering;
+import com.bc.ceres.grender.Viewport;
 import org.esa.beam.dataio.smos.L1cScienceSmosFile;
 import org.esa.beam.dataio.smos.L1cScienceValueProvider;
 import org.esa.beam.dataio.smos.SmosFile;
@@ -17,30 +30,6 @@ import org.esa.beam.smos.visat.swing.SnapshotSelectorCombo;
 import org.esa.beam.smos.visat.swing.SnapshotSelectorComboModel;
 import org.esa.beam.visat.VisatApp;
 import org.jfree.layout.CenterLayout;
-
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.ComponentOrientation;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
-import java.awt.Shape;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
-import java.io.IOException;
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
@@ -65,20 +54,29 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableModel;
-
-import com.bc.ceres.binio.CompoundData;
-import com.bc.ceres.binio.CompoundType;
-import com.bc.ceres.binio.Type;
-import com.bc.ceres.core.ProgressMonitor;
-import com.bc.ceres.glayer.CollectionLayer;
-import com.bc.ceres.glayer.Layer;
-import com.bc.ceres.glayer.support.ImageLayer;
-import com.bc.ceres.glayer.swing.LayerCanvas;
-import com.bc.ceres.glevel.MultiLevelImage;
-import com.bc.ceres.glevel.support.DefaultMultiLevelImage;
-import com.bc.ceres.glevel.support.FileMultiLevelSource;
-import com.bc.ceres.grender.Rendering;
-import com.bc.ceres.grender.Viewport;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.ComponentOrientation;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
+import java.awt.Shape;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+import java.io.IOException;
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class SnapshotInfoToolView extends SmosToolView {
 
@@ -372,7 +370,7 @@ public class SnapshotInfoToolView extends SmosToolView {
             }
         }
 
-        // a workaround for the problem that all displayed mask images are cached (rq-20090612)
+        // todo - a workaround for the fact that all displayed mask images are cached, this shall not be necessary (rq-20090612)
         ImageManager.getInstance().clearMaskImages(smosProduct);
 
         for (final Band band : smosProduct.getBands()) {
