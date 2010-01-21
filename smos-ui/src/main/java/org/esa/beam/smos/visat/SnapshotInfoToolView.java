@@ -3,6 +3,7 @@ package org.esa.beam.smos.visat;
 import com.bc.ceres.binio.CompoundData;
 import com.bc.ceres.binio.CompoundType;
 import com.bc.ceres.binio.Type;
+import com.bc.ceres.binio.util.NumberUtils;
 import com.bc.ceres.core.ProgressMonitor;
 import com.bc.ceres.glayer.CollectionLayer;
 import com.bc.ceres.glayer.Layer;
@@ -192,7 +193,7 @@ public class SnapshotInfoToolView extends SmosToolView {
             final Type memberType = compoundType.getMemberType(i);
             if (memberType.isSimpleType()) {
                 try {
-                    entry[1] = GridPointBtDataset.getNumbericMember(data, i);
+                    entry[1] = NumberUtils.getNumericMember(data, i);
                 } catch (IOException e) {
                     entry[1] = "Failed reading data";
                 }
@@ -338,6 +339,7 @@ public class SnapshotInfoToolView extends SmosToolView {
         }
     }
 
+    // todo - make source images reset themselves and fire a node-data-changed, if affected by snapshot ID (rq-20100121)
     private void updateAllImagesAndViews(Product smosProduct, long snapshotId) {
         final long xPolId;
         final long yPolId;
@@ -370,7 +372,7 @@ public class SnapshotInfoToolView extends SmosToolView {
             }
         }
 
-        // todo - a workaround for the fact that all displayed mask images are cached, this shall not be necessary (rq-20100121)
+        // todo - a workaround for the problem that all displayed mask images are cached (rq-20090612)
         try {
             new MaskImageCacheAccessor(ImageManager.getInstance()).removeAll(smosProduct);
         } catch (NoSuchFieldException e) {
