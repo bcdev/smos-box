@@ -1,0 +1,8 @@
+In 'fs1/projects/ongoing/smos-box/software/adffgrid' there is a module
+for mapping between the SMOS ADFF grid and BEAM image pixels.
+
+The module is not used though, because the performance gained is about
+15 percent only, which is not too much when compared with the overhead
+of about 80 MB compressed disk storage required by the module.
+
+- Ralf
