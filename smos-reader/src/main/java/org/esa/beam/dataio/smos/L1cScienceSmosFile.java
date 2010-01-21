@@ -18,6 +18,7 @@ import com.bc.ceres.binio.CompoundData;
 import com.bc.ceres.binio.CompoundType;
 import com.bc.ceres.binio.DataFormat;
 import com.bc.ceres.binio.SequenceData;
+import com.bc.ceres.glevel.MultiLevelImage;
 import org.esa.beam.framework.datamodel.Band;
 import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.framework.datamodel.ProductData;
@@ -51,7 +52,7 @@ public class L1cScienceSmosFile extends L1cSmosFile {
     private static final double MIN_BROWSE_INCIDENCE_ANGLE = 37.5;
     private static final double MAX_BROWSE_INCIDENCE_ANGLE = 52.5;
 
-    // todo: rq/rq - use this map to get BTH/V/HV values for the chart tool (20091104)
+    // todo: use this map to get BTH/V/HV values for the chart tool (rq-20091104)
     private final Map<String, ValueProvider> valueProviderMap = new HashMap<String, ValueProvider>(17);
     private final int flagsIndex;
     private final int incidenceAngleIndex;
@@ -59,7 +60,8 @@ public class L1cScienceSmosFile extends L1cSmosFile {
     private final double incidenceAngleScalingFactor;
     private final SequenceData snapshotList;
     private final CompoundType snapshotType;
-
+    // todo: add field for snapshot ID (rq-20100121)
+    
     private volatile Future<SnapshotInfo> snapshotInfoFuture;
 
     L1cScienceSmosFile(File hdrFile, File dblFile, DataFormat format) throws IOException {
@@ -124,6 +126,12 @@ public class L1cScienceSmosFile extends L1cSmosFile {
         valueProviderMap.put(descriptor.getBandName(), valueProvider);
 
         return valueProvider;
+    }
+
+    @Override
+    protected final MultiLevelImage createSourceImage(Band band, ValueProvider valueProvider) {
+        // todo - make source image reset itself and fire node-data-changed, if affected by snapshot ID (rq-20100121)
+        return super.createSourceImage(band, valueProvider);
     }
 
     public final SequenceData getSnapshotList() {
