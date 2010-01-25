@@ -58,7 +58,10 @@
             </excludes>
 
             <binaries>
-                <includeDependencies>false</includeDependencies>
+                <includeDependencies>true</includeDependencies>
+                <includes>
+                    <include>com.bc.ceres:ceres-binio</include>
+                </includes>
                 <unpack>false</unpack>
                 <outputDirectory>modules</outputDirectory>
                 <outputFileNameMapping>${artifactId}-${version}.${extension}</outputFileNameMapping>
