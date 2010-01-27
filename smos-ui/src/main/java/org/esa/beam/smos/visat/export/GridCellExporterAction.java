@@ -377,7 +377,7 @@ public class GridCellExporterAction extends ExecCommand {
             buttonGroup.add(useAreaButton);
             bindingContext.bind("roiSource", buttonGroup, inputValueSet);
 
-            PropertyEditor selectionEditor = PropertyEditorRegistry.getInstance().getValueEditor(
+            PropertyEditor selectionEditor = PropertyEditorRegistry.getInstance().getPropertyEditor(
                     SingleSelectionEditor.class.getName());
             JComboBox roiCombo = (JComboBox) selectionEditor.createEditorComponent(vc.getDescriptor("roiRaster"),
                                                                                    bindingContext);
@@ -429,7 +429,7 @@ public class GridCellExporterAction extends ExecCommand {
         }
 
         private Component createLatLonInputElement(String name, String displayName, int numColumns) {
-            PropertyEditor textEditor = PropertyEditorRegistry.getInstance().getValueEditor(TextFieldEditor.class.getName());
+            PropertyEditor textEditor = PropertyEditorRegistry.getInstance().getPropertyEditor(TextFieldEditor.class.getName());
             JPanel panel = new JPanel(new FlowLayout());
             panel.add(new JLabel(displayName));
             JTextField editor = (JTextField) textEditor.createEditorComponent(vc.getDescriptor(name), bindingContext);
@@ -449,7 +449,7 @@ public class GridCellExporterAction extends ExecCommand {
             JPanel panel = new JPanel(layout);
             panel.setBorder(BorderFactory.createTitledBorder("Output"));
             panel.add(new JLabel("CSV-File:"));
-            PropertyEditor fileEditor = PropertyEditorRegistry.getInstance().getValueEditor(FileEditor.class.getName());
+            PropertyEditor fileEditor = PropertyEditorRegistry.getInstance().getPropertyEditor(FileEditor.class.getName());
             panel.add(fileEditor.createEditorComponent(vc.getDescriptor("output"), bindingContext));
             setFileEditorWidth("output");
             return panel;
