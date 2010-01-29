@@ -23,8 +23,8 @@ import com.bc.ceres.binio.SequenceData;
 import com.bc.ceres.binio.SequenceType;
 import com.bc.ceres.binio.SimpleType;
 import com.bc.ceres.binio.Type;
-import org.esa.beam.dataio.smos.BandDescriptor;
-import org.esa.beam.dataio.smos.Dddb;
+import org.esa.beam.dataio.smos.dddb.BandDescriptor;
+import org.esa.beam.dataio.smos.dddb.Dddb;
 import org.esa.beam.dataio.smos.SmosFile;
 
 import java.io.IOException;

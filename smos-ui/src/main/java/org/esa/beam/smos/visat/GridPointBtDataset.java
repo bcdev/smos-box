@@ -4,8 +4,8 @@ import com.bc.ceres.binio.CompoundData;
 import com.bc.ceres.binio.CompoundType;
 import com.bc.ceres.binio.SequenceData;
 import com.bc.ceres.binio.util.NumberUtils;
-import org.esa.beam.dataio.smos.BandDescriptor;
-import org.esa.beam.dataio.smos.Dddb;
+import org.esa.beam.dataio.smos.dddb.BandDescriptor;
+import org.esa.beam.dataio.smos.dddb.Dddb;
 import org.esa.beam.dataio.smos.L1cSmosFile;
 
 import java.io.IOException;
