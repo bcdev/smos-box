@@ -7,6 +7,7 @@ import com.bc.ceres.binio.SequenceData;
 import com.bc.ceres.binio.SequenceType;
 import com.bc.ceres.binio.Type;
 import com.bc.ceres.binio.util.DataPrinter;
+import org.esa.beam.dataio.smos.dddb.Dddb;
 import org.junit.Test;
 
 import java.io.File;

@@ -1,7 +1,8 @@
-package org.esa.beam.dataio.smos;
+package org.esa.beam.dataio.smos.dddb;
+
+import org.junit.Test;
 
 import static junit.framework.Assert.*;
-import org.junit.Test;
 
 public class DddbTest {
 
@@ -51,7 +52,7 @@ public class DddbTest {
         final Family<BandDescriptor> bandDescriptor = dddb.getBandDescriptors(IDENTIFIER);
         final Family<FlagDescriptor> flagDescriptors = bandDescriptor.getMember("F1").getFlagDescriptors();
         assertNotNull(flagDescriptors);
-        
+
         assertNotNull(dddb.getFlagDescriptors(IDENTIFIER + "_flags1"));
         assertSame(flagDescriptors, dddb.getFlagDescriptors(IDENTIFIER + "_flags1"));
     }
