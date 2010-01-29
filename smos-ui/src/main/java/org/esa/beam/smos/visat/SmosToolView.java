@@ -172,66 +172,6 @@ public abstract class SmosToolView extends AbstractToolView {
         }
     }
 
-    public static Number getNumbericMember(CompoundData compoundData, int memberIndex) throws IOException {
-        final Type memberType = compoundData.getCompoundType().getMemberType(memberIndex);
-
-        if (memberType == SimpleType.DOUBLE) {
-            return compoundData.getDouble(memberIndex);
-        }
-        if (memberType == SimpleType.FLOAT) {
-            return compoundData.getFloat(memberIndex);
-        }
-        if (memberType == SimpleType.ULONG) {
-            // This mask is used to obtain the value of an int as if it were unsigned.
-            // todo - write a test; according to the BigInteger API doc this cannot work as intended (rq-20090205)
-            final BigInteger mask = BigInteger.valueOf(0xffffffffffffffffL);
-            final BigInteger bi = BigInteger.valueOf(compoundData.getLong(memberIndex));
-            return bi.and(mask);
-        }
-        if (memberType == SimpleType.LONG || memberType == SimpleType.UINT) {
-            return compoundData.getDouble(memberIndex);
-        }
-        if (memberType == SimpleType.INT || memberType == SimpleType.USHORT) {
-            return compoundData.getDouble(memberIndex);
-        }
-        if (memberType == SimpleType.SHORT || memberType == SimpleType.UBYTE) {
-            return compoundData.getDouble(memberIndex);
-        }
-        if (memberType == SimpleType.BYTE) {
-            return compoundData.getDouble(memberIndex);
-        }
-
-        return null;
-    }
-
-    public static Class<? extends Number> getNumbericMemberType(CompoundType compoundData, int memberIndex) {
-        final Type memberType = compoundData.getMemberType(memberIndex);
-
-        if (memberType == SimpleType.DOUBLE) {
-            return Double.class;
-        }
-        if (memberType == SimpleType.FLOAT) {
-            return Float.class;
-        }
-        if (memberType == SimpleType.ULONG) {
-            return BigInteger.class;
-        }
-        if (memberType == SimpleType.LONG || memberType == SimpleType.UINT) {
-            return Long.class;
-        }
-        if (memberType == SimpleType.INT || memberType == SimpleType.USHORT) {
-            return Integer.class;
-        }
-        if (memberType == SimpleType.SHORT || memberType == SimpleType.UBYTE) {
-            return Short.class;
-        }
-        if (memberType == SimpleType.BYTE) {
-            return Byte.class;
-        }
-
-        return null;
-    }
-
     protected static AbstractButton createHelpButton() {
         final ImageIcon icon = UIUtils.loadImageIcon("icons/Help24.gif");
         final AbstractButton button = ToolButtonFactory.createButton(icon, false);

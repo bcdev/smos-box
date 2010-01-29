@@ -107,7 +107,7 @@ public abstract class GridPointBtDataToolView extends SmosToolView {
         if (!snapToSelectedPinCheckBox.isSelected()) {
             id = SmosBox.getInstance().getGridPointSelectionService().getSelectedGridPointId();
         } else {
-            final Pin selectedPin = getSelectedSmosProduct().getPinGroup().getSelectedNode();
+            final Pin selectedPin = getSelectedSmosView().getSelectedPin();
 
             if (selectedPin != null) {
                 final PixelPos pixelPos = selectedPin.getPixelPos();
@@ -214,7 +214,7 @@ public abstract class GridPointBtDataToolView extends SmosToolView {
     private class GPSL implements GridPointSelectionService.SelectionListener {
         @Override
         public void handleGridPointSelectionChanged(int oldId, int newId) {
-            if (!snapToSelectedPinCheckBox.isSelected()) {
+            if (!isSnappedToPin()) {
                 updateGridPointBtDataComponent(newId);
             }
         }
