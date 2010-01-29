@@ -17,7 +17,7 @@
             <source>license.html</source>
         </file>
     </files>
-    
+
     <fileSets>
         <fileSet>
             <directory>src/main/bin/win</directory>
@@ -49,7 +49,7 @@
                 <include>*.command</include>
             </includes>
         </fileSet>
-    </fileSets>    
+    </fileSets>
 
     <moduleSets>
         <moduleSet>
@@ -58,10 +58,7 @@
             </excludes>
 
             <binaries>
-                <includeDependencies>true</includeDependencies>
-                <includes>
-                    <include>com.bc.ceres:ceres-binio</include>
-                </includes>
+                <includeDependencies>false</includeDependencies>
                 <unpack>false</unpack>
                 <outputDirectory>modules</outputDirectory>
                 <outputFileNameMapping>${artifactId}-${version}.${extension}</outputFileNameMapping>
