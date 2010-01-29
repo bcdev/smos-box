@@ -1,4 +1,4 @@
-package org.esa.beam.dataio.smos;
+package org.esa.beam.dataio.smos.dddb;
 
 import com.bc.ceres.binio.DataFormat;
 import com.bc.ceres.binio.binx.BinX;

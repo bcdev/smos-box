@@ -16,6 +16,7 @@
  */
 package org.esa.beam.dataio.smos;
 
+import org.esa.beam.dataio.smos.dddb.Dddb;
 import org.esa.beam.framework.dataio.DecodeQualification;
 import org.esa.beam.framework.dataio.ProductReaderPlugIn;
 import org.esa.beam.util.io.BeamFileFilter;

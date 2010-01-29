@@ -1,4 +1,4 @@
-package org.esa.beam.dataio.smos;
+package org.esa.beam.dataio.smos.dddb;
 
 import java.awt.Color;
 

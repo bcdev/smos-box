@@ -2,6 +2,7 @@ package org.esa.beam.dataio.smos;
 
 import com.bc.ceres.binio.DataFormat;
 import com.bc.ceres.core.ProgressMonitor;
+import org.esa.beam.dataio.smos.dddb.Dddb;
 import org.esa.beam.framework.dataio.AbstractProductReader;
 import org.esa.beam.framework.dataio.ProductReaderPlugIn;
 import org.esa.beam.framework.datamodel.Band;

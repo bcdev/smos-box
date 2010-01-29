@@ -3,6 +3,7 @@ package org.esa.beam.dataio.smos;
 import com.bc.ceres.binio.CompoundData;
 import com.bc.ceres.binio.DataContext;
 import com.bc.ceres.binio.DataFormat;
+import org.esa.beam.dataio.smos.dddb.Dddb;
 import org.esa.beam.framework.datamodel.Product;
 import org.jdom.Document;
 import org.jdom.Element;
