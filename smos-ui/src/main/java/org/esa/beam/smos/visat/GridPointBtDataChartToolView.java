@@ -117,7 +117,7 @@ public class GridPointBtDataChartToolView extends GridPointBtDataToolView {
         int ix = ds.getColumnIndex("Incidence_Angle");
         int iq = ds.getColumnIndex("Flags");
         int id = ds.getColumnIndex("Pixel_Radiometric_Accuracy");
-        // todo: get H/V/HV BT values instead of X/Y/XY (rq-200100121)
+        // todo: calculate and display H/V/HV BT values instead of X/Y/XY (rq-200100121)
         if (ix != -1 && iq != -1 && id != -1) {
             int iy1 = ds.getColumnIndex("BT_Value");
             if (iy1 != -1) {
