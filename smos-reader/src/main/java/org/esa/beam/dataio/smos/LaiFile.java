@@ -50,7 +50,6 @@ class LaiFile extends ExplorerFile {
     private static final String MIN_LAT_NAME = "Lat_a";
     private static final String MAX_LON_NAME = "Lon_b";
     private static final String MIN_LON_NAME = "Lon_a";
-    private static final String ROW_COUNT_NAME = "N_Lat";
 
     private static final String TAG_SCALING_OFFSET = "Offset";
     private static final String TAG_SCALING_FACTOR = "Scaling_Factor";
