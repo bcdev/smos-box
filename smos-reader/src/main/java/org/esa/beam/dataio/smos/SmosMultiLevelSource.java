@@ -32,12 +32,6 @@ public class SmosMultiLevelSource extends AbstractMultiLevelSource {
     }
 
     @Override
-    public void reset() {
-        super.reset();
-        rasterDataNode.fireProductNodeDataChanged();
-    }
-
-    @Override
     public RenderedImage createImage(int level) {
         return new SmosOpImage(valueProvider, rasterDataNode, getModel(), ResolutionLevel.create(getModel(), level));
     }
