@@ -31,7 +31,11 @@ public class L1cScienceValueProvider implements ValueProvider {
 
     @Override
     public Area getArea() {
-        return smosFile.getArea();
+        if (snapshotId == -1) {
+            return smosFile.getArea();
+        } else {
+            return smosFile.getSnapshotInfo().getArea(snapshotId);
+        }
     }
 
     @Override

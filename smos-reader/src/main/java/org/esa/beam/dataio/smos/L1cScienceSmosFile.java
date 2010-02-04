@@ -19,6 +19,7 @@ import com.bc.ceres.binio.CompoundType;
 import com.bc.ceres.binio.DataFormat;
 import com.bc.ceres.binio.SequenceData;
 import com.bc.ceres.glevel.MultiLevelImage;
+import com.bc.ceres.glevel.support.DefaultMultiLevelImage;
 import org.esa.beam.dataio.smos.dddb.BandDescriptor;
 import org.esa.beam.dataio.smos.dddb.Dddb;
 import org.esa.beam.dataio.smos.dddb.Family;
@@ -322,7 +323,7 @@ public class L1cScienceSmosFile extends L1cSmosFile {
         final Set<Long> y = new TreeSet<Long>();
         final Set<Long> xy = new TreeSet<Long>();
 
-        final Map<Long, Rectangle2D> snapshotEnvelopeMap = new TreeMap<Long, Rectangle2D>();
+        final Map<Long, Rectangle2D> snapshotAreaMap = new TreeMap<Long, Rectangle2D>();
         final int latIndex = getGridPointType().getMemberIndex("Latitude");
         final int lonIndex = getGridPointType().getMemberIndex("Longitude");
 
@@ -350,11 +351,11 @@ public class L1cScienceSmosFile extends L1cSmosFile {
 
                     if (lastId != id) { // snapshots are ordered
                         all.add(id);
-                        if (snapshotEnvelopeMap.containsKey(id)) {
-                            // todo: rq/rq - snapshots on the anti-meridian (2009-10-22)
-                            snapshotEnvelopeMap.get(id).add(rectangle);
+                        if (snapshotAreaMap.containsKey(id)) {
+                            // todo: rq/rq - snapshots on the anti-meridian, use area instead of rectangle (2009-10-22)
+                            snapshotAreaMap.get(id).add(rectangle);
                         } else {
-                            snapshotEnvelopeMap.put(id, rectangle);
+                            snapshotAreaMap.put(id, rectangle);
                         }
                         lastId = id;
                     }
@@ -387,7 +388,7 @@ public class L1cScienceSmosFile extends L1cSmosFile {
             }
         }
 
-        return new SnapshotInfo(snapshotIndexMap, all, x, y, xy, snapshotEnvelopeMap);
+        return new SnapshotInfo(snapshotIndexMap, all, x, y, xy, snapshotAreaMap);
     }
 
     private void addRotatedDualPolBands(Product product, Map<String, ValueProvider> valueProviderMap) {

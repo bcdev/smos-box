@@ -15,8 +15,8 @@ public class MaskImageCacheAccessorTest extends TestCase {
         final MaskImageCacheAccessor cache = new MaskImageCacheAccessor(ImageManager.getInstance());
         assertEquals(0, cache.size());
 
-        ImageManager.getInstance().createColoredMaskImage("true", product1, Color.ORANGE, true, 0);
-        ImageManager.getInstance().createColoredMaskImage("true", product2, Color.ORANGE, true, 0);
+        ImageManager.getInstance().createColoredMaskImage(product1, "true", Color.ORANGE, true, 0);
+        ImageManager.getInstance().createColoredMaskImage(product2, "true", Color.ORANGE, true, 0);
         assertEquals(2, cache.size());
         assertNotNull(cache.get(product1, "true"));
         assertNotNull(cache.get(product2, "true"));
@@ -37,7 +37,7 @@ public class MaskImageCacheAccessorTest extends TestCase {
         final MaskImageCacheAccessor cache = new MaskImageCacheAccessor(ImageManager.getInstance());
         assertEquals(0, cache.size());
 
-        ImageManager.getInstance().createColoredMaskImage("true", product, Color.ORANGE, true, 0);
+        ImageManager.getInstance().createColoredMaskImage(product, "true", Color.ORANGE, true, 0);
         assertEquals(1, cache.size());
         assertNotNull(cache.get(product, "true"));
 
@@ -45,5 +45,4 @@ public class MaskImageCacheAccessorTest extends TestCase {
         assertEquals(0, cache.size());
         assertNull(cache.get(product, "true"));
     }
-
 }

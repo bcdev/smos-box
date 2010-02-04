@@ -264,11 +264,11 @@ public class SmosFile extends ExplorerFile {
         }
     }
 
-    protected MultiLevelImage createSourceImage(Band band, ValueProvider valueProvider) {
+    protected MultiLevelImage createSourceImage(final Band band, final ValueProvider valueProvider) {
         return new DefaultMultiLevelImage(createMultiLevelSource(band, valueProvider));
     }
 
-    private MultiLevelSource createMultiLevelSource(Band band, ValueProvider valueProvider) {
+    protected MultiLevelSource createMultiLevelSource(Band band, ValueProvider valueProvider) {
         return new SmosMultiLevelSource(band, valueProvider);
     }
 
