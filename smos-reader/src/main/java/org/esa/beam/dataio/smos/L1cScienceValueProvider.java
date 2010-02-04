@@ -19,12 +19,10 @@ public class L1cScienceValueProvider implements ValueProvider {
         this.snapshotId = -1;
     }
 
-    // todo - make the snapshot ID a field of the L1C SMOS file
     public long getSnapshotId() {
         return snapshotId;
     }
 
-    // todo - make the snapshot ID a field of the L1C SMOS file
     public void setSnapshotId(long snapshotId) {
         this.snapshotId = snapshotId;
     }

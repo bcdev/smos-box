@@ -26,7 +26,6 @@ import org.esa.beam.framework.datamodel.VirtualBand;
 import org.esa.beam.framework.help.HelpSys;
 import org.esa.beam.framework.ui.product.ProductSceneView;
 import org.esa.beam.glevel.TiledFileMultiLevelSource;
-import org.esa.beam.jai.ImageManager;
 import org.esa.beam.smos.visat.swing.SnapshotSelectorCombo;
 import org.esa.beam.smos.visat.swing.SnapshotSelectorComboModel;
 import org.esa.beam.visat.VisatApp;
@@ -339,7 +338,7 @@ public class SnapshotInfoToolView extends SmosToolView {
         }
     }
 
-    // todo - make source images reset themselves and fire a node-data-changed, if affected by snapshot ID (rq-20100121)
+    // todo - awful (rq-20100121)
     private void updateAllImagesAndViews(Product smosProduct, long snapshotId) {
         final long xPolId;
         final long yPolId;
@@ -371,16 +370,6 @@ public class SnapshotInfoToolView extends SmosToolView {
                 resetRasterImages(band);
             }
         }
-
-        // todo - a workaround for the problem that all displayed mask images are cached (rq-20090612)
-        try {
-            new MaskImageCacheAccessor(ImageManager.getInstance()).removeAll(smosProduct);
-        } catch (NoSuchFieldException e) {
-            // ignore
-        } catch (IllegalAccessException e) {
-            // ignore
-        }
-
         for (final Band band : smosProduct.getBands()) {
             if (band instanceof VirtualBand) {
                 resetViews(band, snapshotId);
@@ -464,18 +453,6 @@ public class SnapshotInfoToolView extends SmosToolView {
         locateSnapshotButton.addActionListener(new LocateSnapshotAction());
         locateSnapshotButton.setToolTipText("Locate selected snapshot in view");
         locateSnapshotButtonModel = locateSnapshotButton.getModel();
-
-//        code using tabular layout - replaced by flow layout (rq-20090209)
-//        final TableLayout viewSettingsLayout = new TableLayout(4);
-//        viewSettingsLayout.setTableAnchor(TableLayout.Anchor.NORTHWEST);
-//        viewSettingsLayout.setColumnWeightX(3, 1.0);  // spacer column
-//        JPanel viewSettingsPanel = new JPanel(viewSettingsLayout);
-//        viewSettingsPanel.add(synchroniseCheckBox, new TableLayout.Cell(0, 0));
-//        viewSettingsPanel.add(browseButton, new TableLayout.Cell(0, 1));
-//        viewSettingsPanel.add(followModeCheckBox, new TableLayout.Cell(0, 2));
-//        viewSettingsPanel.add(snapshotButton, new TableLayout.Cell(1, 1));
-//        viewSettingsPanel.add(locateSnapshotButton, new TableLayout.Cell(1, 2));
-//        viewSettingsPanel.add(new JPanel(), new TableLayout.Cell(0, 3));    // spacer column
 
         final JPanel viewSettingsPanel = new JPanel(new FlowLayout(FlowLayout.LEADING, 4, 4));
         viewSettingsPanel.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
@@ -577,7 +554,6 @@ public class SnapshotInfoToolView extends SmosToolView {
         worker.execute();
     }
 
-
     private class PolModeWaiter extends SwingWorker {
 
         private final ProductSceneView smosView;
@@ -592,7 +568,7 @@ public class SnapshotInfoToolView extends SmosToolView {
 
         @Override
         protected Object doInBackground() throws InterruptedException {
-            pm.beginTask("Creating index of snapshots and polarisation modes...", 100);
+            pm.beginTask("Indexing snapshots and polarisation modes...", 100);
             try {
                 while (!smosFile.hasSnapshotInfo()) {
                     Thread.sleep(100);
@@ -693,6 +669,7 @@ public class SnapshotInfoToolView extends SmosToolView {
 
     private static void resetRasterImages(final RasterDataNode raster) {
         raster.getSourceImage().reset();
+        raster.fireProductNodeDataChanged();
         if (raster.isValidMaskImageSet()) {
             raster.getValidMaskImage().reset();
         }
@@ -700,7 +677,6 @@ public class SnapshotInfoToolView extends SmosToolView {
             raster.getGeophysicalImage().reset();
         }
         raster.setStx(null);
-        raster.getStx();
     }
 
 }
