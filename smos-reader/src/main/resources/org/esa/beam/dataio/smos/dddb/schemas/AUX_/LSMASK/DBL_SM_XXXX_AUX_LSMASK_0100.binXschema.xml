@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- binX schema for smos product -->
+<!-- DPGS V2 09/10/2007 -->
+<!-- www.indra.es -->
+<!-- teledeteccion@indra.es -->
+<!-- Copyright (c) 2006 Indra Espacio -->
+<binx xmlns="http://www.edikt.org/binx/2003/06/binx" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.edikt.org/binx/2003/06/binx binx.xsd">
+	<definitions>
+		<defineType typeName="Grid_Point_Mask_Data_Type">
+			<struct>
+				<unsignedInteger-32 varName="Grid_Point_ID"/>
+				<unsignedByte-8 varName="Mask"/>
+				<unsignedByte-8 varName="Water_Fraction"/>
+			</struct>
+		</defineType>
+		<defineType typeName="Zone_Type">
+			<struct>
+				<unsignedLong-64 varName="Zone_ID"/>
+				<arrayVariable varName="Grid_Point_Mask_Data">
+					<sizeRef>
+						<unsignedInteger-32 varName="Grid_Point_Mask_Counter"/>
+					</sizeRef>
+					<useType typeName="Grid_Point_Mask_Data_Type"/>
+					<dim/>
+				</arrayVariable>
+			</struct>
+		</defineType>
+		<defineType typeName="Data_Block_Type">
+			<struct>
+				<arrayFixed varName="Land_Sea_Mask" byteOrder="littleEndian">
+					<useType typeName="Zone_Type"/>
+					<dim indexTo="9"/>
+				</arrayFixed>
+			</struct>
+		</defineType>
+	</definitions>
+	<dataset src=" ">
+		<useType typeName="Data_Block_Type" varName="Data_Block"/>
+	</dataset>
+</binx>
