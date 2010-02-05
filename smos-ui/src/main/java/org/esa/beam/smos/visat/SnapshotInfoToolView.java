@@ -80,7 +80,9 @@ import java.util.concurrent.ExecutionException;
 
 public class SnapshotInfoToolView extends SmosToolView {
 
+    @SuppressWarnings({"UnusedDeclaration"})
     public static final String ID = SnapshotInfoToolView.class.getName();
+    
     private static final SnapshotTableModel NULL_MODEL = new SnapshotTableModel(new Object[0][0]);
 
     private SnapshotSelectorCombo snapshotSelectorCombo;
