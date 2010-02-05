@@ -78,7 +78,7 @@ public class SmosFile extends ExplorerFile {
     }
 
     public final int getGridPointSeqnum(int i) throws IOException {
-        return SmosDgg.gridPointIdToDggSeqnum(getGridPointId(i));
+        return SmosDgg.getGridPointSeqnum(getGridPointId(i));
     }
 
     public SequenceData getGridPointList() {

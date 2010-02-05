@@ -34,11 +34,12 @@ public class SmosDgg {
         return Holder.instance;
     }
 
-    public static int gridPointIdToDggSeqnum(int gridPointId) {
-        final int a = 1000000;
-        final int b = 262144;
+    public static int getGridPointSeqnum(int gridPointId) {
+        return gridPointId < 1000000 ? gridPointId : gridPointId - 737856 * ((gridPointId - 1) / 1000000) + 1;
+    }
 
-        return gridPointId < a ? gridPointId : b * ((gridPointId - 1) / a) + ((gridPointId - 1) % a) + 2;
+    public static int getGridPointZoneId(int gridPointId) {
+        return gridPointId / 1000000 + 1;
     }
 
     public MultiLevelImage getMultiLevelImage() {

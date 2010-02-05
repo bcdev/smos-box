@@ -54,29 +54,54 @@ public class SmosDggTest {
      * 2621442, 11000000000 ->9262145
      * </pre>
      */
+    @Test
+    public void getGridPointSeqnum() {
+        assertEquals(1, SmosDgg.getGridPointSeqnum(1));
+        assertEquals(2, SmosDgg.getGridPointSeqnum(2));
+        assertEquals(3, SmosDgg.getGridPointSeqnum(3));
+
+        assertEquals(262144, SmosDgg.getGridPointSeqnum(262144));
+        assertEquals(262145, SmosDgg.getGridPointSeqnum(262145));
+        assertEquals(262146, SmosDgg.getGridPointSeqnum(1000001));
+        assertEquals(262147, SmosDgg.getGridPointSeqnum(1000002));
+
+        assertEquals(524288, SmosDgg.getGridPointSeqnum(1262143));
+        assertEquals(524289, SmosDgg.getGridPointSeqnum(1262144));
+        assertEquals(524290, SmosDgg.getGridPointSeqnum(2000001));
+        assertEquals(524291, SmosDgg.getGridPointSeqnum(2000002));
+
+        assertEquals(2359296, SmosDgg.getGridPointSeqnum(8262143));
+        assertEquals(2359297, SmosDgg.getGridPointSeqnum(8262144));
+        assertEquals(2359298, SmosDgg.getGridPointSeqnum(9000001));
+        assertEquals(2359299, SmosDgg.getGridPointSeqnum(9000002));
+
+        assertEquals(2621441, SmosDgg.getGridPointSeqnum(9262144));
+        assertEquals(2621442, SmosDgg.getGridPointSeqnum(9262145));
+    }
 
     @Test
-    public void testSmosEncodingScheme() {
-        assertEquals(1, SmosDgg.gridPointIdToDggSeqnum(1));
-        assertEquals(2, SmosDgg.gridPointIdToDggSeqnum(2));
-        assertEquals(3, SmosDgg.gridPointIdToDggSeqnum(3));
+    public void getGridPointZoneId() {
+        assertEquals(1, SmosDgg.getGridPointZoneId(1));
+        assertEquals(1, SmosDgg.getGridPointZoneId(2));
+        assertEquals(1, SmosDgg.getGridPointZoneId(3));
 
-        assertEquals(262144, SmosDgg.gridPointIdToDggSeqnum(262144));
-        assertEquals(262145, SmosDgg.gridPointIdToDggSeqnum(262145));
-        assertEquals(262146, SmosDgg.gridPointIdToDggSeqnum(1000001));
-        assertEquals(262147, SmosDgg.gridPointIdToDggSeqnum(1000002));
+        assertEquals(1, SmosDgg.getGridPointZoneId(262144));
+        assertEquals(1, SmosDgg.getGridPointZoneId(262145));
+        assertEquals(2, SmosDgg.getGridPointZoneId(1000001));
+        assertEquals(2, SmosDgg.getGridPointZoneId(1000001));
+        assertEquals(2, SmosDgg.getGridPointZoneId(1000002));
 
-        assertEquals(524288, SmosDgg.gridPointIdToDggSeqnum(1262143));
-        assertEquals(524289, SmosDgg.gridPointIdToDggSeqnum(1262144));
-        assertEquals(524290, SmosDgg.gridPointIdToDggSeqnum(2000001));
-        assertEquals(524291, SmosDgg.gridPointIdToDggSeqnum(2000002));
+        assertEquals(2, SmosDgg.getGridPointZoneId(1262143));
+        assertEquals(2, SmosDgg.getGridPointZoneId(1262144));
+        assertEquals(3, SmosDgg.getGridPointZoneId(2000001));
+        assertEquals(3, SmosDgg.getGridPointZoneId(2000002));
 
-        assertEquals(2359296, SmosDgg.gridPointIdToDggSeqnum(8262143));
-        assertEquals(2359297, SmosDgg.gridPointIdToDggSeqnum(8262144));
-        assertEquals(2359298, SmosDgg.gridPointIdToDggSeqnum(9000001));
-        assertEquals(2359299, SmosDgg.gridPointIdToDggSeqnum(9000002));
+        assertEquals(9, SmosDgg.getGridPointZoneId(8262143));
+        assertEquals(9, SmosDgg.getGridPointZoneId(8262144));
+        assertEquals(10, SmosDgg.getGridPointZoneId(9000001));
+        assertEquals(10, SmosDgg.getGridPointZoneId(9000002));
 
-        assertEquals(2621441, SmosDgg.gridPointIdToDggSeqnum(9262144));
-        assertEquals(2621442, SmosDgg.gridPointIdToDggSeqnum(9262145));
+        assertEquals(10, SmosDgg.getGridPointZoneId(9262144));
+        assertEquals(10, SmosDgg.getGridPointZoneId(9262145));
     }
 }
