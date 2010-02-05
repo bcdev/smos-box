@@ -216,7 +216,7 @@ public class SnapshotInfoToolView extends SmosToolView {
         return new SnapshotTableModel(list.toArray(new Object[2][list.size()]));
     }
 
-    private void updateSmosImage(RasterDataNode raster, long snapshotId) {
+    private void updateSnapshotImage(RasterDataNode raster, long snapshotId) {
         final MultiLevelImage sourceImage = raster.getSourceImage();
         if (sourceImage instanceof DefaultMultiLevelImage) {
             final DefaultMultiLevelImage multiLevelImage = (DefaultMultiLevelImage) sourceImage;
@@ -338,7 +338,6 @@ public class SnapshotInfoToolView extends SmosToolView {
         }
     }
 
-    // todo - awful (rq-20100121)
     private void updateAllImagesAndViews(Product smosProduct, long snapshotId) {
         final long xPolId;
         final long yPolId;
@@ -359,28 +358,28 @@ public class SnapshotInfoToolView extends SmosToolView {
             if (band instanceof VirtualBand) {
                 resetRasterImages(band);
             } else if (band.getName().endsWith("_X")) {
-                updateSmosImage(band, xPolId);
+                updateSnapshotImage(band, xPolId);
             } else if (band.getName().endsWith("_Y")) {
-                updateSmosImage(band, yPolId);
+                updateSnapshotImage(band, yPolId);
             } else if (band.getName().contains("_XY")) {
-                updateSmosImage(band, crossPolId);
+                updateSnapshotImage(band, crossPolId);
             } else if (band.isFlagBand()) {
-                updateSmosImage(band, snapshotId);
+                updateSnapshotImage(band, snapshotId);
             } else {
                 resetRasterImages(band);
             }
         }
         for (final Band band : smosProduct.getBands()) {
             if (band instanceof VirtualBand) {
-                resetViews(band, snapshotId);
+                updateViews(band, snapshotId);
             } else if (band.getName().endsWith("_X")) {
-                resetViews(band, xPolId);
+                updateViews(band, xPolId);
             } else if (band.getName().endsWith("_Y")) {
-                resetViews(band, yPolId);
+                updateViews(band, yPolId);
             } else if (band.getName().contains("_XY")) {
-                resetViews(band, crossPolId);
+                updateViews(band, crossPolId);
             } else {
-                resetViews(band, snapshotId);
+                updateViews(band, snapshotId);
             }
         }
         for (final Band band : smosProduct.getBands()) {
@@ -398,7 +397,7 @@ public class SnapshotInfoToolView extends SmosToolView {
         }
     }
 
-    private void resetViews(RasterDataNode raster, long snapshotId) {
+    private void updateViews(RasterDataNode raster, long snapshotId) {
         for (final JInternalFrame internalFrame : VisatApp.getApp().findInternalFrames(raster)) {
             if (internalFrame != null) {
                 if (internalFrame.getContentPane() instanceof ProductSceneView) {
@@ -669,7 +668,6 @@ public class SnapshotInfoToolView extends SmosToolView {
 
     private static void resetRasterImages(final RasterDataNode raster) {
         raster.getSourceImage().reset();
-        raster.fireProductNodeDataChanged();
         if (raster.isValidMaskImageSet()) {
             raster.getValidMaskImage().reset();
         }
@@ -677,6 +675,6 @@ public class SnapshotInfoToolView extends SmosToolView {
             raster.getGeophysicalImage().reset();
         }
         raster.setStx(null);
+        raster.fireProductNodeDataChanged();
     }
-
 }
