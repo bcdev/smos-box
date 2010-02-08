@@ -19,7 +19,6 @@ import com.bc.ceres.binio.CompoundType;
 import com.bc.ceres.binio.DataFormat;
 import com.bc.ceres.binio.SequenceData;
 import com.bc.ceres.glevel.MultiLevelImage;
-import com.bc.ceres.glevel.support.DefaultMultiLevelImage;
 import org.esa.beam.dataio.smos.dddb.BandDescriptor;
 import org.esa.beam.dataio.smos.dddb.Dddb;
 import org.esa.beam.dataio.smos.dddb.Family;
@@ -63,7 +62,7 @@ public class L1cScienceSmosFile extends L1cSmosFile {
     private final double incidenceAngleScalingFactor;
     private final SequenceData snapshotList;
     private final CompoundType snapshotType;
-    
+
     private volatile Future<SnapshotInfo> snapshotInfoFuture;
 
     L1cScienceSmosFile(File hdrFile, File dblFile, DataFormat format) throws IOException {
@@ -82,12 +81,14 @@ public class L1cScienceSmosFile extends L1cSmosFile {
     }
 
     private double getIncidenceAngleScalingFactor(String formatName) {
-        for (final BandDescriptor descriptor : Dddb.getInstance().getBandDescriptors(formatName).asList()) {
-            if (INCIDENCE_ANGLE_NAME.equals(descriptor.getMemberName())) {
-                return descriptor.getScalingFactor();
+        final Family<BandDescriptor> descriptors = Dddb.getInstance().getBandDescriptors(formatName);
+        if (descriptors != null) {
+            for (final BandDescriptor descriptor : descriptors.asList()) {
+                if (INCIDENCE_ANGLE_NAME.equals(descriptor.getMemberName())) {
+                    return descriptor.getScalingFactor();
+                }
             }
         }
-
         throw new IllegalStateException("No scaling factor for incidence angle data found.");
     }
 
