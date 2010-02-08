@@ -29,6 +29,7 @@ import org.esa.beam.framework.datamodel.ProductData;
 import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -70,7 +71,12 @@ public class L1cScienceSmosFile extends L1cSmosFile {
 
         flagsIndex = getBtDataType().getMemberIndex(SmosConstants.BT_FLAGS_NAME);
         incidenceAngleIndex = getBtDataType().getMemberIndex(INCIDENCE_ANGLE_NAME);
-        incidenceAngleScalingFactor = getIncidenceAngleScalingFactor(format.getName());
+        final Family<BandDescriptor> bandDescriptors = Dddb.getInstance().getBandDescriptors(format.getName());
+        if (bandDescriptors == null) {
+            throw new IOException(MessageFormat.format(
+                    "No band descriptors found for format ''{0}''.", format.getName()));
+        }
+        incidenceAngleScalingFactor = getIncidenceAngleScalingFactor(bandDescriptors);
         snapshotIdOfPixelIndex = getBtDataType().getMemberIndex(SNAPSHOT_ID_OF_PIXEL_NAME);
 
         snapshotList = getDataBlock().getSequence(SmosConstants.SNAPSHOT_LIST_NAME);
@@ -80,16 +86,13 @@ public class L1cScienceSmosFile extends L1cSmosFile {
         snapshotType = (CompoundType) snapshotList.getType().getElementType();
     }
 
-    private double getIncidenceAngleScalingFactor(String formatName) {
-        final Family<BandDescriptor> descriptors = Dddb.getInstance().getBandDescriptors(formatName);
-        if (descriptors != null) {
-            for (final BandDescriptor descriptor : descriptors.asList()) {
-                if (INCIDENCE_ANGLE_NAME.equals(descriptor.getMemberName())) {
-                    return descriptor.getScalingFactor();
-                }
+    private double getIncidenceAngleScalingFactor(Family<BandDescriptor> descriptors) {
+        for (final BandDescriptor descriptor : descriptors.asList()) {
+            if (INCIDENCE_ANGLE_NAME.equals(descriptor.getMemberName())) {
+                return descriptor.getScalingFactor();
             }
         }
-        throw new IllegalStateException("No scaling factor for incidence angle data found.");
+        throw new IllegalStateException("No incidence angle scaling factor found.");
     }
 
     @Override
