@@ -671,6 +671,7 @@ public class SnapshotInfoToolView extends SmosToolView {
     private static void resetRasterImages(final RasterDataNode raster) {
         raster.getSourceImage().reset();
         if (raster.isValidMaskImageSet()) {
+            raster.resetValidMask();
             raster.getValidMaskImage().reset();
         }
         if (raster.isGeophysicalImageSet()) {
