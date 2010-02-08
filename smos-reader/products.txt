@@ -23,9 +23,9 @@
   SO_xxxx_MIR_SM__2__ Soil Moisture
   SO_xxxx_MIR_OS__2__ Ocean Salinity
 + SM_xxxx_MIR_SMUDP2_ L2 Soil Moisture Output User Data Product
-+ SM_xxxx_MIR_SMDAP2_ L2 Soil Moisture Output Data Analysis Product
+  SM_xxxx_MIR_SMDAP2_ L2 Soil Moisture Output Data Analysis Product
 + SM_xxxx_MIR_OSUDP2_ L2 Ocean Salinity Output User Data Product
-+ SM_xxxx_MIR_OSDAP2_ L2 Ocean Sal. Output Data Analysis Product
+  SM_xxxx_MIR_OSDAP2_ L2 Ocean Sal. Output Data Analysis Product
 
     AUX
 
