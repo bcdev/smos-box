@@ -18,7 +18,7 @@ package org.esa.beam.smos.visat.export;
 
 import org.esa.beam.framework.datamodel.Band;
 import org.esa.beam.framework.datamodel.GeoCoding;
-import org.esa.beam.framework.datamodel.Pin;
+import org.esa.beam.framework.datamodel.Placemark;
 import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.framework.datamodel.ProductNode;
 import org.esa.beam.framework.datamodel.ROIDefinition;
@@ -208,7 +208,7 @@ public class GridCellExporterAction extends ExecCommand {
                 return new Area(geoPath);
             } else if (model.roiSource == 1) {
                 Area wholeArea = null;
-                for (Pin pin : product.getPinGroup().getSelectedNodes()) {
+                for (Placemark pin : product.getPinGroup().getSelectedNodes()) {
                     double lat = pin.getGeoPos().getLat();
                     double lon = pin.getGeoPos().getLon();
 

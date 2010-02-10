@@ -6,8 +6,8 @@ import org.esa.beam.dataio.smos.SmosFile;
 import org.esa.beam.dataio.smos.SmosProductReader;
 import org.esa.beam.framework.dataio.ProductReader;
 import org.esa.beam.framework.datamodel.MetadataElement;
-import org.esa.beam.framework.datamodel.Pin;
 import org.esa.beam.framework.datamodel.PixelPos;
+import org.esa.beam.framework.datamodel.Placemark;
 import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.framework.datamodel.ProductNode;
 import org.esa.beam.framework.datamodel.ProductNodeEvent;
@@ -110,7 +110,7 @@ public abstract class GridPointBtDataToolView extends SmosToolView {
         if (!snapToSelectedPinCheckBox.isSelected()) {
             id = SmosBox.getInstance().getGridPointSelectionService().getSelectedGridPointId();
         } else {
-            final Pin selectedPin = getSelectedSmosView().getSelectedPin();
+            final Placemark selectedPin = getSelectedSmosView().getSelectedPin();
 
             if (selectedPin != null) {
                 final PixelPos pixelPos = selectedPin.getPixelPos();
@@ -278,7 +278,7 @@ public abstract class GridPointBtDataToolView extends SmosToolView {
 
             private void updatePin(ProductNodeEvent event) {
                 final ProductNode sourceNode = event.getSourceNode();
-                if (sourceNode instanceof Pin) {
+                if (sourceNode instanceof Placemark) {
                     updateGridPointBtDataComponent();
                 }
             }
