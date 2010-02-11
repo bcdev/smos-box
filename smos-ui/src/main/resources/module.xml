@@ -44,7 +44,7 @@
         <action>
             <id>smosGridCellExport</id>
             <class>org.esa.beam.smos.visat.export.GridCellExporterAction</class>
-            <helpID>smosGridCellExport</helpID>
+            <helpId>smosGridCellExport</helpId>
             <parent>tool</parent>
             <text>Export SMOS Grid Cells..</text>
             <mnemonic>G</mnemonic>
