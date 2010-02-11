@@ -70,7 +70,7 @@
   SM_xxxx_AUX_GALNIR_ L-Band Galactic Brightness Temperature Map SM_xxxx_AUX_GLXY___ - Galaxy L-band Map
   SM_xxxx_AUX_LANDCL_ Land Cover parameters
   SM_xxxx_AUX_LCF____ Receivers Characterisation
-  SM_xxxx_AUX_LSMASK_ Land/Sea Mask
++ SM_xxxx_AUX_LSMASK_ Land/Sea Mask
   SM_xxxx_AUX_MASK___ L1C Pixel Mask
   SM_xxxx_AUX_MISP___ Mispointing angles between the Body Frame
   SM_xxxx_AUX_MOONT__ Moon Brightness Temperature Map Model
