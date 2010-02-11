@@ -19,7 +19,7 @@ import java.text.MessageFormat;
 
 public class SmosProductReader extends AbstractProductReader {
 
-    private ExplorerFile smosFile;
+    private ExplorerFile explorerFile;
 
     SmosProductReader(ProductReaderPlugIn readerPlugIn) {
         super(readerPlugIn);
@@ -27,7 +27,7 @@ public class SmosProductReader extends AbstractProductReader {
 
     public ExplorerFile getExplorerFile() {
         synchronized (this) {
-            return smosFile;
+            return explorerFile;
         }
     }
 
@@ -62,6 +62,8 @@ public class SmosProductReader extends AbstractProductReader {
             return new LaiFile(hdrFile, dblFile, format);
         } else if (isVTecFormat(formatName)) {
             return new VTecFile(hdrFile, dblFile, format);
+        } else if (isLsMaskFormat(formatName)) {
+            return new LsMaskFile(hdrFile, dblFile, format);
         } else {
             throw new IOException(MessageFormat.format(
                     "File ''{0}'': unsupported SMOS data format ''{1}''.", file, formatName));
@@ -72,9 +74,9 @@ public class SmosProductReader extends AbstractProductReader {
     protected final Product readProductNodesImpl() throws IOException {
         synchronized (this) {
             final File inputFile = getInputFile();
-            smosFile = createExplorerFile(inputFile);
+            explorerFile = createExplorerFile(inputFile);
 
-            return smosFile.createProduct();
+            return explorerFile.createProduct();
         }
     }
 
@@ -103,7 +105,7 @@ public class SmosProductReader extends AbstractProductReader {
     @Override
     public void close() throws IOException {
         synchronized (this) {
-            smosFile.close();
+            explorerFile.close();
             super.close();
         }
     }
@@ -159,6 +161,10 @@ public class SmosProductReader extends AbstractProductReader {
     public static boolean isVTecFormat(String formatName) {
         return formatName.contains("AUX_VTEC_C")
                || formatName.contains("AUX_VTEC_P");
+    }
+
+    public static boolean isLsMaskFormat(String formatName) {
+        return formatName.contains("AUX_LSMASK");
     }
 
     private File getInputFile() {

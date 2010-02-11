@@ -25,6 +25,15 @@ public class SmosDgg {
 
     private static final String SMOS_DGG_DIR_PROPERTY_NAME = "org.esa.beam.smos.smosDggDir";
 
+    private static final int A = 1000000;
+    private static final int B = 262144;
+    private static final int C = B + 1;
+    private static final int D = A - B;
+
+    private static final int MAX_GRID_POINT_ID = 9262145;
+    private static final int MAX_SEQNUM = 2621442;
+    private static final int MAX_ZONE_ID = 10;
+
     private volatile MultiLevelImage dggMultiLevelImage;
 
     private SmosDgg() {
@@ -34,12 +43,28 @@ public class SmosDgg {
         return Holder.instance;
     }
 
-    public static int getGridPointSeqnum(int gridPointId) {
-        return gridPointId < 1000000 ? gridPointId : gridPointId - 737856 * ((gridPointId - 1) / 1000000) + 1;
+    public static int gridPointIdToSeqnum(int gridPointId) {
+        return gridPointId < A ? gridPointId : gridPointId - D * ((gridPointId - 1) / A) + 1;
     }
 
-    public static int getGridPointZoneId(int gridPointId) {
-        return gridPointId / 1000000 + 1;
+    static int gridPointIdToSeqnumInZone(int gridPointId) {
+        return gridPointId % A;
+    }
+
+    static int gridPointIdToZoneId(int gridPointId) {
+        return gridPointId / A + 1;
+    }
+
+    static int seqnumToGridPointId(int seqnum) {
+        return seqnum <= C ? seqnum : seqnum == MAX_SEQNUM ? MAX_GRID_POINT_ID : seqnum - 1 + ((seqnum - 2) / B) * D;
+    }
+
+    public static int seqnumToSeqnumInZone(int seqnum) {
+        return seqnum <= C ? seqnum : seqnum == MAX_SEQNUM ? C : (seqnum - 2) % B + 1;
+    }
+
+    public static int seqnumToZoneId(int seqnum) {
+        return seqnum <= C ? 1 : seqnum == MAX_SEQNUM ? MAX_ZONE_ID : (seqnum - 2) / B + 1;
     }
 
     public MultiLevelImage getMultiLevelImage() {
