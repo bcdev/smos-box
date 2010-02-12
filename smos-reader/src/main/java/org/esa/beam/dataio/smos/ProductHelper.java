@@ -215,7 +215,7 @@ class ProductHelper {
                 mask = new Mask(maskName,
                                 product.getSceneRasterWidth(),
                                 product.getSceneRasterHeight(),
-                                new Mask.BandMathType());
+                                Mask.BandMathType.INSTANCE);
                 mask.setDescription(flagDescriptor.getDescription());
                 Color color = flagDescriptor.getColor();
                 if (color == null) {
