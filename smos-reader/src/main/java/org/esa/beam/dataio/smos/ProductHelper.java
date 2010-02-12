@@ -210,21 +210,15 @@ class ProductHelper {
         final Random random = new Random(5489); // for creating random colours
         for (final FlagDescriptor flagDescriptor : flagDescriptors.asList()) {
             final String maskName = band.getName() + "_" + flagDescriptor.getFlagName();
-            Mask mask = product.getMaskGroup().get(maskName);
-            if (mask == null) {
-                mask = new Mask(maskName,
-                                product.getSceneRasterWidth(),
-                                product.getSceneRasterHeight(),
-                                Mask.BandMathType.INSTANCE);
-                mask.setDescription(flagDescriptor.getDescription());
+            if (product.getMaskGroup().contains(maskName)) {
                 Color color = flagDescriptor.getColor();
                 if (color == null) {
                     color = new Color(random.nextInt(255), random.nextInt(255), random.nextInt(255));
                 }
-                mask.setImageColor(color);
-                mask.setImageTransparency(flagDescriptor.getTransparency());
-                final String imageExpression = band.getName() + "." + flagDescriptor.getFlagName();
-                mask.getImageConfig().setValue("expression", imageExpression);
+                final String expression = band.getName() + "." + flagDescriptor.getFlagName();
+                Mask mask = Mask.BandMathType.create(maskName, flagDescriptor.getDescription(), 
+                                                     product.getSceneRasterWidth(), product.getSceneRasterHeight(), 
+                                                     expression, color, flagDescriptor.getTransparency());
                 product.getMaskGroup().add(mask);
             }
         }
