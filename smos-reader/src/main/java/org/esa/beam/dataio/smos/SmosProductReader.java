@@ -23,126 +23,6 @@ public class SmosProductReader extends AbstractProductReader {
 
     private ExplorerFile explorerFile;
 
-    SmosProductReader(ProductReaderPlugIn readerPlugIn) {
-        super(readerPlugIn);
-    }
-
-    public ExplorerFile getExplorerFile() {
-        synchronized (this) {
-            return explorerFile;
-        }
-    }
-
-    public static ExplorerFile createExplorerFile(File file) throws IOException {
-        final File hdrFile = FileUtils.exchangeExtension(file, ".HDR");
-        final File dblFile = FileUtils.exchangeExtension(file, ".DBL");
-
-        final DataFormat format = Dddb.getInstance().getDataFormat(hdrFile);
-        if (format == null) {
-            throw new IOException(MessageFormat.format("File ''{0}'': unknown SMOS data format.", file));
-        }
-        final String formatName = format.getName();
-        if (isDualPolBrowseFormat(formatName)) {
-            return new L1cBrowseSmosFile(hdrFile, dblFile, format);
-        } else if (isFullPolBrowseFormat(formatName)) {
-            return new L1cBrowseSmosFile(hdrFile, dblFile, format);
-        } else if (isDualPolScienceFormat(formatName)) {
-            return new L1cScienceSmosFile(hdrFile, dblFile, format);
-        } else if (isFullPolScienceFormat(formatName)) {
-            return new L1cScienceSmosFile(hdrFile, dblFile, format);
-        } else if (isOsUserFormat(formatName)) {
-            return new SmosFile(hdrFile, dblFile, format);
-        } else if (isSmUserFormat(formatName)) {
-            return new SmosFile(hdrFile, dblFile, format);
-        } else if (isOsAnalysisFormat(formatName)) {
-            return new SmosFile(hdrFile, dblFile, format);
-        } else if (isSmAnalysisFormat(formatName)) {
-            return new SmosFile(hdrFile, dblFile, format);
-        } else if (isEcmwfFormat(formatName)) {
-            return new SmosFile(hdrFile, dblFile, format);
-        } else if (isDffLaiFormat(formatName)) {
-            return new LaiFile(hdrFile, dblFile, format);
-        } else if (isVTecFormat(formatName)) {
-            return new VTecFile(hdrFile, dblFile, format);
-        } else if (isLsMaskFormat(formatName)) {
-            return new LsMaskFile(hdrFile, dblFile, format);
-        } else {
-            throw new IOException(MessageFormat.format(
-                    "File ''{0}'': unsupported SMOS data format ''{1}''.", file, formatName));
-        }
-    }
-
-    @Override
-    protected final Product readProductNodesImpl() throws IOException {
-        synchronized (this) {
-            final File inputFile = getInputFile();
-            explorerFile = createExplorerFile(inputFile);
-
-            final Product product = explorerFile.createProduct();
-            if (explorerFile instanceof SmosFile) {
-                final BandDescriptor descriptor = Dddb.getInstance().getBandDescriptors(
-                        "DBL_SM_XXXX_AUX_LSMASK_0200").getMember("Land_Sea_Mask");
-
-                final Band band = product.addBand(descriptor.getBandName(), ProductData.TYPE_UINT8);
-
-                band.setScalingOffset(descriptor.getScalingOffset());
-                band.setScalingFactor(descriptor.getScalingFactor());
-                if (descriptor.hasFillValue()) {
-                    band.setNoDataValueUsed(true);
-                    band.setNoDataValue(descriptor.getFillValue());
-                }
-                if (!descriptor.getValidPixelExpression().isEmpty()) {
-                    band.setValidPixelExpression(descriptor.getValidPixelExpression());
-                }
-                if (!descriptor.getUnit().isEmpty()) {
-                    band.setUnit(descriptor.getUnit());
-                }
-                if (!descriptor.getDescription().isEmpty()) {
-                    band.setDescription(descriptor.getDescription());
-                }
-                if (descriptor.getFlagDescriptors() != null) {
-                    ProductHelper.addFlagsAndMasks(product, band, descriptor.getFlagCodingName(),
-                                                   descriptor.getFlagDescriptors());
-                }
-
-                band.setSourceImage(SmosLsMask.getInstance().getMultiLevelImage());
-                band.setImageInfo(ProductHelper.createImageInfo(band, descriptor));
-            }
-
-            return product;
-        }
-    }
-
-    @Override
-    protected final void readBandRasterDataImpl(int sourceOffsetX,
-                                                int sourceOffsetY,
-                                                int sourceWidth,
-                                                int sourceHeight,
-                                                int sourceStepX,
-                                                int sourceStepY,
-                                                Band targetBand,
-                                                int targetOffsetX,
-                                                int targetOffsetY,
-                                                int targetWidth,
-                                                int targetHeight,
-                                                ProductData targetBuffer,
-                                                ProgressMonitor pm) {
-        synchronized (this) {
-            final RenderedImage image = targetBand.getSourceImage();
-            final Raster data = image.getData(new Rectangle(targetOffsetX, targetOffsetY, targetWidth, targetHeight));
-
-            data.getDataElements(targetOffsetX, targetOffsetY, targetWidth, targetHeight, targetBuffer.getElems());
-        }
-    }
-
-    @Override
-    public void close() throws IOException {
-        synchronized (this) {
-            explorerFile.close();
-            super.close();
-        }
-    }
-
     public static boolean isDualPolBrowseFormat(String formatName) {
         return formatName.contains("MIR_BWLD1C")
                || formatName.contains("MIR_BWSD1C")
@@ -200,6 +80,100 @@ public class SmosProductReader extends AbstractProductReader {
         return formatName.contains("AUX_LSMASK");
     }
 
+    public static ExplorerFile createExplorerFile(File file) throws IOException {
+        final File hdrFile = FileUtils.exchangeExtension(file, ".HDR");
+        final File dblFile = FileUtils.exchangeExtension(file, ".DBL");
+
+        final DataFormat format = Dddb.getInstance().getDataFormat(hdrFile);
+        if (format == null) {
+            throw new IOException(MessageFormat.format("File ''{0}'': unknown SMOS data format.", file));
+        }
+        final String formatName = format.getName();
+        if (isDualPolBrowseFormat(formatName)) {
+            return new L1cBrowseSmosFile(hdrFile, dblFile, format);
+        } else if (isFullPolBrowseFormat(formatName)) {
+            return new L1cBrowseSmosFile(hdrFile, dblFile, format);
+        } else if (isDualPolScienceFormat(formatName)) {
+            return new L1cScienceSmosFile(hdrFile, dblFile, format);
+        } else if (isFullPolScienceFormat(formatName)) {
+            return new L1cScienceSmosFile(hdrFile, dblFile, format);
+        } else if (isOsUserFormat(formatName)) {
+            return new SmosFile(hdrFile, dblFile, format);
+        } else if (isSmUserFormat(formatName)) {
+            return new SmosFile(hdrFile, dblFile, format);
+        } else if (isOsAnalysisFormat(formatName)) {
+            return new SmosFile(hdrFile, dblFile, format);
+        } else if (isSmAnalysisFormat(formatName)) {
+            return new SmosFile(hdrFile, dblFile, format);
+        } else if (isEcmwfFormat(formatName)) {
+            return new SmosFile(hdrFile, dblFile, format);
+        } else if (isDffLaiFormat(formatName)) {
+            return new LaiFile(hdrFile, dblFile, format);
+        } else if (isVTecFormat(formatName)) {
+            return new VTecFile(hdrFile, dblFile, format);
+        } else if (isLsMaskFormat(formatName)) {
+            return new LsMaskFile(hdrFile, dblFile, format);
+        } else {
+            throw new IOException(MessageFormat.format(
+                    "File ''{0}'': unsupported SMOS data format ''{1}''.", file, formatName));
+        }
+    }
+
+    SmosProductReader(ProductReaderPlugIn readerPlugIn) {
+        super(readerPlugIn);
+    }
+
+    public ExplorerFile getExplorerFile() {
+        synchronized (this) {
+            return explorerFile;
+        }
+    }
+
+    @Override
+    protected final Product readProductNodesImpl() throws IOException {
+        synchronized (this) {
+            final File inputFile = getInputFile();
+            explorerFile = createExplorerFile(inputFile);
+
+            final Product product = explorerFile.createProduct();
+            if (explorerFile instanceof SmosFile) {
+                addLandSeaMask(product);
+            }
+
+            return product;
+        }
+    }
+
+    @Override
+    protected final void readBandRasterDataImpl(int sourceOffsetX,
+                                                int sourceOffsetY,
+                                                int sourceWidth,
+                                                int sourceHeight,
+                                                int sourceStepX,
+                                                int sourceStepY,
+                                                Band targetBand,
+                                                int targetOffsetX,
+                                                int targetOffsetY,
+                                                int targetWidth,
+                                                int targetHeight,
+                                                ProductData targetBuffer,
+                                                ProgressMonitor pm) {
+        synchronized (this) {
+            final RenderedImage image = targetBand.getSourceImage();
+            final Raster data = image.getData(new Rectangle(targetOffsetX, targetOffsetY, targetWidth, targetHeight));
+
+            data.getDataElements(targetOffsetX, targetOffsetY, targetWidth, targetHeight, targetBuffer.getElems());
+        }
+    }
+
+    @Override
+    public void close() throws IOException {
+        synchronized (this) {
+            explorerFile.close();
+            super.close();
+        }
+    }
+
     private File getInputFile() {
         final Object input = getInput();
 
@@ -213,4 +187,33 @@ public class SmosProductReader extends AbstractProductReader {
         throw new IllegalArgumentException(MessageFormat.format("Illegal input: {0}", input));
     }
 
+    private void addLandSeaMask(Product product) {
+        final BandDescriptor descriptor = Dddb.getInstance().getBandDescriptors(
+                "DBL_SM_XXXX_AUX_LSMASK_0200").getMember("Land_Sea_Mask");
+
+        final Band band = product.addBand(descriptor.getBandName(), ProductData.TYPE_UINT8);
+
+        band.setScalingOffset(descriptor.getScalingOffset());
+        band.setScalingFactor(descriptor.getScalingFactor());
+        if (descriptor.hasFillValue()) {
+            band.setNoDataValueUsed(true);
+            band.setNoDataValue(descriptor.getFillValue());
+        }
+        if (!descriptor.getValidPixelExpression().isEmpty()) {
+            band.setValidPixelExpression(descriptor.getValidPixelExpression());
+        }
+        if (!descriptor.getUnit().isEmpty()) {
+            band.setUnit(descriptor.getUnit());
+        }
+        if (!descriptor.getDescription().isEmpty()) {
+            band.setDescription(descriptor.getDescription());
+        }
+        if (descriptor.getFlagDescriptors() != null) {
+            ProductHelper.addFlagsAndMasks(product, band, descriptor.getFlagCodingName(),
+                                           descriptor.getFlagDescriptors());
+        }
+
+        band.setSourceImage(SmosLsMask.getInstance().getMultiLevelImage());
+        band.setImageInfo(ProductHelper.createImageInfo(band, descriptor));
+    }
 }
