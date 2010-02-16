@@ -2,12 +2,14 @@ package org.esa.beam.dataio.smos;
 
 import com.bc.ceres.binio.DataFormat;
 import com.bc.ceres.core.ProgressMonitor;
+import org.esa.beam.dataio.smos.dddb.BandDescriptor;
 import org.esa.beam.dataio.smos.dddb.Dddb;
 import org.esa.beam.framework.dataio.AbstractProductReader;
 import org.esa.beam.framework.dataio.ProductReaderPlugIn;
 import org.esa.beam.framework.datamodel.Band;
 import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.framework.datamodel.ProductData;
+import org.esa.beam.smos.lsmask.SmosLsMask;
 import org.esa.beam.util.io.FileUtils;
 
 import java.awt.Rectangle;
@@ -76,7 +78,38 @@ public class SmosProductReader extends AbstractProductReader {
             final File inputFile = getInputFile();
             explorerFile = createExplorerFile(inputFile);
 
-            return explorerFile.createProduct();
+            final Product product = explorerFile.createProduct();
+            if (explorerFile instanceof SmosFile) {
+                final BandDescriptor descriptor = Dddb.getInstance().getBandDescriptors(
+                        "DBL_SM_XXXX_AUX_LSMASK_0200").getMember("Land_Sea_Mask");
+
+                final Band band = product.addBand(descriptor.getBandName(), ProductData.TYPE_UINT8);
+
+                band.setScalingOffset(descriptor.getScalingOffset());
+                band.setScalingFactor(descriptor.getScalingFactor());
+                if (descriptor.hasFillValue()) {
+                    band.setNoDataValueUsed(true);
+                    band.setNoDataValue(descriptor.getFillValue());
+                }
+                if (!descriptor.getValidPixelExpression().isEmpty()) {
+                    band.setValidPixelExpression(descriptor.getValidPixelExpression());
+                }
+                if (!descriptor.getUnit().isEmpty()) {
+                    band.setUnit(descriptor.getUnit());
+                }
+                if (!descriptor.getDescription().isEmpty()) {
+                    band.setDescription(descriptor.getDescription());
+                }
+                if (descriptor.getFlagDescriptors() != null) {
+                    ProductHelper.addFlagsAndMasks(product, band, descriptor.getFlagCodingName(),
+                                                   descriptor.getFlagDescriptors());
+                }
+
+                band.setSourceImage(SmosLsMask.getInstance().getMultiLevelImage());
+                band.setImageInfo(ProductHelper.createImageInfo(band, descriptor));
+            }
+
+            return product;
         }
     }
 

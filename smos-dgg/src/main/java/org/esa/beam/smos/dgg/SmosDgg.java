@@ -23,7 +23,7 @@ import java.text.MessageFormat;
  */
 public class SmosDgg {
 
-    private static final String SMOS_DGG_DIR_PROPERTY_NAME = "org.esa.beam.smos.smosDggDir";
+    private static final String SMOS_DGG_DIR_PROPERTY_NAME = "org.esa.beam.smos.dggDir";
 
     private static final int A = 1000000;
     private static final int B = 262144;

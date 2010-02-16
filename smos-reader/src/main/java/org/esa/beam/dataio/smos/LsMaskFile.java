@@ -8,8 +8,8 @@ import com.bc.ceres.glevel.MultiLevelImage;
 import com.bc.ceres.glevel.MultiLevelSource;
 import com.bc.ceres.glevel.support.DefaultMultiLevelImage;
 import org.esa.beam.dataio.smos.dddb.BandDescriptor;
+import org.esa.beam.dataio.smos.dddb.Dddb;
 import org.esa.beam.dataio.smos.dddb.Family;
-import org.esa.beam.dataio.smos.dddb.FlagDescriptor;
 import org.esa.beam.framework.datamodel.Band;
 import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.smos.dgg.SmosDgg;
@@ -52,204 +52,18 @@ class LsMaskFile extends ExplorerFile {
         ProductHelper.addMetadata(product.getMetadataRoot(), this);
 
         product.setGeoCoding(ProductHelper.createGeoCoding(dimension));
-        addBand(product, new BandDescriptor() {
-            @Override
-            public String getBandName() {
-                return "Mask";
+        final CompoundType compoundType = (CompoundType) getDataFormat().getTypeDef("Grid_Point_Mask_Data_Type");
+        final Family<BandDescriptor> descriptors = Dddb.getInstance().getBandDescriptors(getDataFormat().getName());
+        if (descriptors != null) {
+            for (final BandDescriptor descriptor : descriptors.asList()) {
+                addBand(product, descriptor, compoundType);
             }
-
-            @Override
-            public String getMemberName() {
-                return "Mask";
-            }
-
-            @Override
-            public int getPolarization() {
-                return 0;
-            }
-
-            @Override
-            public boolean isVisible() {
-                return true;
-            }
-
-            @Override
-            public int getSampleModel() {
-                return 0;
-            }
-
-            @Override
-            public double getScalingOffset() {
-                return 0;
-            }
-
-            @Override
-            public double getScalingFactor() {
-                return 1;
-            }
-
-            @Override
-            public boolean hasTypicalMin() {
-                return true;
-            }
-
-            @Override
-            public boolean hasTypicalMax() {
-                return true;
-            }
-
-            @Override
-            public boolean hasFillValue() {
-                return false;
-            }
-
-            @Override
-            public double getTypicalMin() {
-                return 0;
-            }
-
-            @Override
-            public double getTypicalMax() {
-                return 255;
-            }
-
-            @Override
-            public double getFillValue() {
-                return 0;
-            }
-
-            @Override
-            public String getValidPixelExpression() {
-                return "";
-            }
-
-            @Override
-            public String getUnit() {
-                return "";
-            }
-
-            @Override
-            public boolean isCyclic() {
-                return false;
-            }
-
-            @Override
-            public String getDescription() {
-                return "";
-            }
-
-            @Override
-            public String getFlagCodingName() {
-                return null;
-            }
-
-            @Override
-            public Family<FlagDescriptor> getFlagDescriptors() {
-                return null;
-            }
-        }, (CompoundType) getDataFormat().getTypeDef("Grid_Point_Mask_Data_Type"));
-
-        addBand(product, new BandDescriptor() {
-            @Override
-            public String getBandName() {
-                return "Grid_Point_ID";
-            }
-
-            @Override
-            public String getMemberName() {
-                return "Grid_Point_ID";
-            }
-
-            @Override
-            public int getPolarization() {
-                return 0;
-            }
-
-            @Override
-            public boolean isVisible() {
-                return true;
-            }
-
-            @Override
-            public int getSampleModel() {
-                return 0;
-            }
-
-            @Override
-            public double getScalingOffset() {
-                return 0;
-            }
-
-            @Override
-            public double getScalingFactor() {
-                return 1;
-            }
-
-            @Override
-            public boolean hasTypicalMin() {
-                return false;
-            }
-
-            @Override
-            public boolean hasTypicalMax() {
-                return false;
-            }
-
-            @Override
-            public boolean hasFillValue() {
-                return false;
-            }
-
-            @Override
-            public double getTypicalMin() {
-                return 0;
-            }
-
-            @Override
-            public double getTypicalMax() {
-                return 0;
-            }
-
-            @Override
-            public double getFillValue() {
-                return 0;
-            }
-
-            @Override
-            public String getValidPixelExpression() {
-                return "";
-            }
-
-            @Override
-            public String getUnit() {
-                return "";
-            }
-
-            @Override
-            public boolean isCyclic() {
-                return false;
-            }
-
-            @Override
-            public String getDescription() {
-                return "";
-            }
-
-            @Override
-            public String getFlagCodingName() {
-                return null;
-            }
-
-            @Override
-            public Family<FlagDescriptor> getFlagDescriptors() {
-                return null;
-            }
-        }, (CompoundType) getDataFormat().getTypeDef("Grid_Point_Mask_Data_Type"));
+        }
 
         return product;
     }
 
-    protected final void addBand(Product product, BandDescriptor descriptor, CompoundType compoundType) {
+    private void addBand(Product product, BandDescriptor descriptor, CompoundType compoundType) {
         final int memberIndex = compoundType.getMemberIndex(descriptor.getMemberName());
 
         if (memberIndex >= 0) {

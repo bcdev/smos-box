@@ -210,7 +210,7 @@ class ProductHelper {
         final Random random = new Random(5489); // for creating random colours
         for (final FlagDescriptor flagDescriptor : flagDescriptors.asList()) {
             final String maskName = band.getName() + "_" + flagDescriptor.getFlagName();
-            if (product.getMaskGroup().contains(maskName)) {
+            if (!product.getMaskGroup().contains(maskName)) {
                 Color color = flagDescriptor.getColor();
                 if (color == null) {
                     color = new Color(random.nextInt(255), random.nextInt(255), random.nextInt(255));

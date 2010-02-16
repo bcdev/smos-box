@@ -1,0 +1,9 @@
+# visible | name                | mask     | color    | transparency | description
+  *       | USGS_SEA_FLAG       | 00000001 | 000000FF | *            | Water fraction is above 95 percent (1); below 95 percent (0)
+  *       | USGS_LAND_FLAG      | 00000002 | 0000FF00 | *            | Water fraction is below 10 percent (1); above 10 percent (0)
+  *       | USGS_MIXED_FLAG     | 00000004 | 0000FFFF | *            | Water fraction is above 10 and below 95 percent (1); below 10 or above 95 percent (0)
+  *       | 200_KM_COASTAL_FLAG | 00000008 | 00B28C00 | *            | Distance to coastline is less than 200 km (1); greater than 200 km (0)
+  *       | 100_KM_COASTAL_FLAG | 00000010 | 00FFC800 | *            | Distance to coastline is less than 100 km (1); greater than 100 km (0)
+  *       | 40_KM_COASTAL_FLAG  | 00000020 | 00FFFF00 | *            | Distance to coastline is less than 40 km (1); greater than 40 km (0)
+  *       | MIN_SEA_ICE_FLAG    | 00000040 | 00FFFFFF | *            | Sea ice is present for all months (1); is not present for all months (0)
+  *       | MAX_SEA_ICE_FLAG    | 00000080 | 00F0F0F0 | *            | Sea ice is present for any months (1); is not present for any months (0)

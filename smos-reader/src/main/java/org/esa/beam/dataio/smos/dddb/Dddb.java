@@ -254,12 +254,12 @@ public class Dddb {
         return new FlagDescriptors(recordList);
     }
 
-    private InputStream getBandDescriptorResource(String identifier) {
-        if (identifier == null || !identifier.matches(SCHEMA_NAMING_CONVENTION)) {
+    private InputStream getBandDescriptorResource(String formatName) {
+        if (formatName == null || !formatName.matches(SCHEMA_NAMING_CONVENTION)) {
             return null;
         }
 
-        return getClass().getResourceAsStream(pathBuilder.buildPath(identifier, "bands", ".csv"));
+        return getClass().getResourceAsStream(pathBuilder.buildPath(formatName, "bands", ".csv"));
     }
 
     private InputStream getFlagDescriptorResource(String identifier) {

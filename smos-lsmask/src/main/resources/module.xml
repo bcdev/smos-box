@@ -1,0 +1,29 @@
+<module>
+    <manifestVersion>1.0.0</manifestVersion>
+
+    <symbolicName>smos-lsmask</symbolicName>
+    <name>SMOS Land/Sea Mask</name>
+    <version>1.0</version>
+    <description>
+        This module provides the static land/sea mask mapped to BEAM image pixels.
+    </description>
+    <packaging>dir</packaging>
+
+    <vendor>Brockmann Consult GmbH</vendor>
+    <contactAddress>Max Planck Str.2, 21502 Geesthacht (Germany)</contactAddress>
+    <copyright>(C) 2010 by Brockmann Consult GmbH</copyright>
+    <url>http://envisat.esa.int/beam/</url>
+    <licenseUrl>http://www.gnu.org/licenses/gpl.html</licenseUrl>
+
+    <changelog/>
+
+    <categories>SMOS</categories>
+
+    <dependency>
+        <module>ceres-glayer</module>
+    </dependency>
+    <dependency>
+        <module>beam-core</module>
+    </dependency>
+    
+</module>

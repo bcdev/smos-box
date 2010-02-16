@@ -28,12 +28,12 @@
             <groupId>org.esa.beam.smos</groupId>
             <artifactId>smos-dgg</artifactId>
         </dependency>
-        <!--
-                <dependency>
-                    <groupId>org.esa.beam.smos</groupId>
-                    <artifactId>smos-adffg</artifactId>
-                </dependency>
-        -->
+
+        <dependency>
+            <groupId>org.esa.beam.smos</groupId>
+            <artifactId>smos-lsmask</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>org.esa.beam.smos</groupId>
             <artifactId>smos-reader</artifactId>

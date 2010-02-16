@@ -59,7 +59,7 @@
         <module>smos-reader</module>
         <module>smos-ui</module>
         <module>smos-dgg</module>
-        <!--<module>smos-adffg</module>-->
+        <module>smos-lsmask</module>
     </modules>
 
     <dependencyManagement>
@@ -141,24 +141,24 @@
             <dependency>
                 <groupId>org.esa.beam.smos</groupId>
                 <artifactId>smos-dgg</artifactId>
-                <version>${pom.version}</version>
+                <version>${project.version}</version>
             </dependency>
-<!--
+
             <dependency>
                 <groupId>org.esa.beam.smos</groupId>
-                <artifactId>smos-adffg</artifactId>
+                <artifactId>smos-lsmask</artifactId>
                 <version>1.0-SNAPSHOT</version>
             </dependency>
--->
+
             <dependency>
                 <groupId>org.esa.beam.smos</groupId>
                 <artifactId>smos-reader</artifactId>
-                <version>${pom.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.esa.beam.smos</groupId>
                 <artifactId>smos-ui</artifactId>
-                <version>${pom.version}</version>
+                <version>${project.version}</version>
             </dependency>
 
             <!-- JUnit Libraries ############################################# -->
