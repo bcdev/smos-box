@@ -1,6 +1,6 @@
 # visible | name                  | mask     | color | transparency | description
   *       | POL_FLAG_1            | 00000001 | *     | *            | Flag indicating antenna X (0) or Y (1) polarisation
-  *       | POL_FLAG_2            | 00000002 | *     | *            | Always False (0).
+  *       | POL_FLAG_2            | 00000002 | *     | *            | *
   *       | SUN_FOV               | 00000004 | *     | *            | Direct  Sun  correction  has  been  performed  during  image reconstruction of this pixel
   *       | SUN_GLINT_FOV         | 00000008 | *     | *            | Reflected  Sun  correction  has  been  performed  during  image reconstruction of this pixel
   *       | MOON_GLINT_FOV        | 00000010 | *     | *            | Direct  Moon  correction  has  been  performed  during  image reconstruction of this pixel
