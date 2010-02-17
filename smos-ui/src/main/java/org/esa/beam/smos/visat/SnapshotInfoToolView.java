@@ -16,6 +16,7 @@ import com.bc.ceres.grender.Rendering;
 import com.bc.ceres.grender.Viewport;
 import org.esa.beam.dataio.smos.L1cScienceSmosFile;
 import org.esa.beam.dataio.smos.L1cScienceValueProvider;
+import org.esa.beam.dataio.smos.SmosConstants;
 import org.esa.beam.dataio.smos.SmosFile;
 import org.esa.beam.dataio.smos.SmosMultiLevelSource;
 import org.esa.beam.dataio.smos.ValueProvider;
@@ -82,7 +83,7 @@ public class SnapshotInfoToolView extends SmosToolView {
 
     @SuppressWarnings({"UnusedDeclaration"})
     public static final String ID = SnapshotInfoToolView.class.getName();
-    
+
     private static final SnapshotTableModel NULL_MODEL = new SnapshotTableModel(new Object[0][0]);
 
     private SnapshotSelectorCombo snapshotSelectorCombo;
@@ -357,6 +358,9 @@ public class SnapshotInfoToolView extends SmosToolView {
         }
 
         for (final Band band : smosProduct.getBands()) {
+            if (band.getName().equals(SmosConstants.LAND_SEA_MASK_NAME)) {
+                continue;
+            }
             if (band instanceof VirtualBand) {
                 resetRasterImages(band);
             } else if (band.getName().endsWith("_X")) {
@@ -372,6 +376,9 @@ public class SnapshotInfoToolView extends SmosToolView {
             }
         }
         for (final Band band : smosProduct.getBands()) {
+            if (band.getName().equals(SmosConstants.LAND_SEA_MASK_NAME)) {
+                continue;
+            }
             if (band instanceof VirtualBand) {
                 updateViews(band, snapshotId);
             } else if (band.getName().endsWith("_X")) {
@@ -385,6 +392,9 @@ public class SnapshotInfoToolView extends SmosToolView {
             }
         }
         for (final Band band : smosProduct.getBands()) {
+            if (band.getName().equals(SmosConstants.LAND_SEA_MASK_NAME)) {
+                continue;
+            }
             if (band instanceof VirtualBand) {
                 setSelectedSnapshotId(band, snapshotId);
             } else if (band.getName().endsWith("_X")) {
