@@ -11,16 +11,16 @@ public class SmosConstants {
     public static final String GRID_POINT_LIST_NAME = "Grid_Point_List";
 
     public static final String GRID_POINT_COUNTER_NAME = "Grid_Point_Counter";
+
     public static final String GRID_POINT_ID_NAME = "Grid_Point_ID";
     public static final String GRID_POINT_LAT_NAME = "Latitude";
     public static final String GRID_POINT_LON_NAME = "Longitude";
-
     public static final String SNAPSHOT_LIST_NAME = "Swath_Snapshot_List";
+
     public static final String SNAPSHOT_ID_NAME = "Snapshot_ID";
-
     public static final String BT_DATA_LIST_NAME = "BT_Data";
-    public static final String BT_FLAGS_NAME = "Flags";
 
+    public static final String BT_FLAGS_NAME = "Flags";
     /**
      * Mask for flags indicating polarization mode.
      */
@@ -30,6 +30,7 @@ public class SmosConstants {
      * Flag value indicating X polarisation mode.
      */
     public static final int L1C_POL_MODE_X = 0;
+
     /**
      * Flag value indicating Y polarisation mode.
      */
@@ -42,4 +43,8 @@ public class SmosConstants {
      * Flag value indicating cross-polarisation mode.
      */
     public static final int L1C_POL_MODE_XY2 = 3;
+    /**
+     * Name of the band containing the static SMOS Land/Sea Mask.
+     */
+    public static final String LAND_SEA_MASK_NAME = "Land_Sea_Mask";
 }

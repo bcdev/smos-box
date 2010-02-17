@@ -21,6 +21,8 @@ import java.text.MessageFormat;
 
 public class SmosProductReader extends AbstractProductReader {
 
+    private static final String LSMASK_SCHEMA_NAME = "DBL_SM_XXXX_AUX_LSMASK_0200";
+
     private ExplorerFile explorerFile;
 
     public static boolean isDualPolBrowseFormat(String formatName) {
@@ -189,7 +191,7 @@ public class SmosProductReader extends AbstractProductReader {
 
     private void addLandSeaMask(Product product) {
         final BandDescriptor descriptor = Dddb.getInstance().getBandDescriptors(
-                "DBL_SM_XXXX_AUX_LSMASK_0200").getMember("Land_Sea_Mask");
+                LSMASK_SCHEMA_NAME).getMember(SmosConstants.LAND_SEA_MASK_NAME);
 
         final Band band = product.addBand(descriptor.getBandName(), ProductData.TYPE_UINT8);
 

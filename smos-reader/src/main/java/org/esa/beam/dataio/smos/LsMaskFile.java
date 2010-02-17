@@ -23,15 +23,18 @@ import java.io.IOException;
 
 class LsMaskFile extends ExplorerFile {
 
+    private static final String GRID_POINT_MASK_DATA_TYPE_NAME = "Grid_Point_Mask_Data_Type";
+    private static final String GRID_POINT_MASK_DATA_NAME = "Grid_Point_Mask_Data";
+
     private final SequenceData[] zones;
 
     LsMaskFile(File hdrFile, File dblFile, DataFormat dataFormat) throws IOException {
         super(hdrFile, dblFile, dataFormat);
-        final SequenceData zoneSequence = getDataBlock().getSequence("Land_Sea_Mask");
+        final SequenceData zoneSequence = getDataBlock().getSequence(SmosConstants.LAND_SEA_MASK_NAME);
 
         zones = new SequenceData[zoneSequence.getElementCount()];
         for (int i = 0; i < zones.length; i++) {
-            zones[i] = zoneSequence.getCompound(i).getSequence("Grid_Point_Mask_Data");
+            zones[i] = zoneSequence.getCompound(i).getSequence(GRID_POINT_MASK_DATA_NAME);
         }
     }
 
@@ -52,7 +55,7 @@ class LsMaskFile extends ExplorerFile {
         ProductHelper.addMetadata(product.getMetadataRoot(), this);
 
         product.setGeoCoding(ProductHelper.createGeoCoding(dimension));
-        final CompoundType compoundType = (CompoundType) getDataFormat().getTypeDef("Grid_Point_Mask_Data_Type");
+        final CompoundType compoundType = (CompoundType) getDataFormat().getTypeDef(GRID_POINT_MASK_DATA_TYPE_NAME);
         final Family<BandDescriptor> descriptors = Dddb.getInstance().getBandDescriptors(getDataFormat().getName());
         if (descriptors != null) {
             for (final BandDescriptor descriptor : descriptors.asList()) {
@@ -107,16 +110,17 @@ class LsMaskFile extends ExplorerFile {
 
             @Override
             public int getGridPointIndex(int seqnum) {
+                // we need the sequential number instead of the grid point index
                 return seqnum;
             }
 
             @Override
             public byte getValue(int seqnum, byte noDataValue) {
                 final int zoneIndex = SmosDgg.seqnumToZoneId(seqnum) - 1;
-                final int gridPointIndex = SmosDgg.seqnumToSeqnumInZone(seqnum) - 1;
+                final int gridIndex = SmosDgg.seqnumToSeqnumInZone(seqnum) - 1;
 
                 try {
-                    return zones[zoneIndex].getCompound(gridPointIndex).getByte(descriptor.getMemberName());
+                    return zones[zoneIndex].getCompound(gridIndex).getByte(descriptor.getMemberName());
                 } catch (IOException e) {
                     return noDataValue;
                 }
@@ -125,10 +129,10 @@ class LsMaskFile extends ExplorerFile {
             @Override
             public short getValue(int seqnum, short noDataValue) {
                 final int zoneIndex = SmosDgg.seqnumToZoneId(seqnum) - 1;
-                final int gridPointIndex = SmosDgg.seqnumToSeqnumInZone(seqnum) - 1;
+                final int gridIndex = SmosDgg.seqnumToSeqnumInZone(seqnum) - 1;
 
                 try {
-                    return zones[zoneIndex].getCompound(gridPointIndex).getShort(descriptor.getMemberName());
+                    return zones[zoneIndex].getCompound(gridIndex).getShort(descriptor.getMemberName());
                 } catch (IOException e) {
                     return noDataValue;
                 }
@@ -137,10 +141,10 @@ class LsMaskFile extends ExplorerFile {
             @Override
             public int getValue(int seqnum, int noDataValue) {
                 final int zoneIndex = SmosDgg.seqnumToZoneId(seqnum) - 1;
-                final int gridPointIndex = SmosDgg.seqnumToSeqnumInZone(seqnum) - 1;
+                final int gridIndex = SmosDgg.seqnumToSeqnumInZone(seqnum) - 1;
 
                 try {
-                    return zones[zoneIndex].getCompound(gridPointIndex).getInt(descriptor.getMemberName());
+                    return zones[zoneIndex].getCompound(gridIndex).getInt(descriptor.getMemberName());
                 } catch (IOException e) {
                     return noDataValue;
                 }
@@ -149,10 +153,10 @@ class LsMaskFile extends ExplorerFile {
             @Override
             public float getValue(int gridPointId, float noDataValue) {
                 final int zoneIndex = SmosDgg.seqnumToZoneId(gridPointId) - 1;
-                final int gridPointIndex = SmosDgg.seqnumToSeqnumInZone(gridPointId) - 1;
+                final int gridIndex = SmosDgg.seqnumToSeqnumInZone(gridPointId) - 1;
 
                 try {
-                    return zones[zoneIndex].getCompound(gridPointIndex).getFloat(descriptor.getMemberName());
+                    return zones[zoneIndex].getCompound(gridIndex).getFloat(descriptor.getMemberName());
                 } catch (IOException e) {
                     return noDataValue;
                 }
