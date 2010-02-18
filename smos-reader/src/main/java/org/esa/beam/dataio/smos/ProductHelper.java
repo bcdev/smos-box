@@ -216,7 +216,7 @@ class ProductHelper {
                     color = new Color(random.nextInt(255), random.nextInt(255), random.nextInt(255));
                 }
                 final String expression = band.getName() + "." + flagDescriptor.getFlagName();
-                Mask mask = Mask.BandMathType.create(maskName, flagDescriptor.getDescription(), 
+                Mask mask = Mask.BandMathsType.create(maskName, flagDescriptor.getDescription(), 
                                                      product.getSceneRasterWidth(), product.getSceneRasterHeight(), 
                                                      expression, color, flagDescriptor.getTransparency());
                 product.getMaskGroup().add(mask);
