@@ -17,7 +17,11 @@
 package org.esa.beam.dataio.smos;
 
 
-import com.bc.ceres.binio.*;
+import com.bc.ceres.binio.CompoundData;
+import com.bc.ceres.binio.CompoundMember;
+import com.bc.ceres.binio.CompoundType;
+import com.bc.ceres.binio.DataFormat;
+import com.bc.ceres.binio.SequenceData;
 import com.bc.ceres.glevel.MultiLevelImage;
 import com.bc.ceres.glevel.MultiLevelSource;
 import com.bc.ceres.glevel.support.DefaultMultiLevelImage;
@@ -29,7 +33,7 @@ import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.smos.dgg.SmosDgg;
 import org.esa.beam.util.io.FileUtils;
 
-import java.awt.*;
+import java.awt.Dimension;
 import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
 import java.io.File;
@@ -224,7 +228,7 @@ public class SmosFile extends ExplorerFile {
             }
             if (descriptor.getFlagDescriptors() != null) {
                 ProductHelper.addFlagsAndMasks(product, band, descriptor.getFlagCodingName(),
-                        descriptor.getFlagDescriptors());
+                                               descriptor.getFlagDescriptors());
             }
 
             final ValueProvider valueProvider = createValueProvider(descriptor);
@@ -233,34 +237,26 @@ public class SmosFile extends ExplorerFile {
         }
     }
 
-    protected ValueProvider createValueProvider(BandDescriptor descriptor) {
+    protected SmosValueProvider createValueProvider(BandDescriptor descriptor) {
+        final int memberIndex = getGridPointType().getMemberIndex(descriptor.getMemberName());
+
         switch (descriptor.getSampleModel()) {
-            case 1:
-                return new DefaultValueProvider(this, descriptor.getMemberName()) {
-                    @Override
-                    public int getValue(int gridPointIndex, int noDataValue) {
-                        try {
-                            final long value = getSmosFile().getGridPointData(gridPointIndex).getLong(getMemberIndex());
-                            return (int) (value & 0x00000000FFFFFFFFL);
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
-                    }
-                };
-            case 2:
-                return new DefaultValueProvider(this, descriptor.getMemberName()) {
-                    @Override
-                    public int getValue(int gridPointIndex, int noDataValue) {
-                        try {
-                            final long value = getSmosFile().getGridPointData(gridPointIndex).getLong(getMemberIndex());
-                            return (int) (value >>> 32);
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
-                    }
-                };
-            default:
-                return new DefaultValueProvider(this, descriptor.getMemberName());
+        case 1:
+            return new DefaultValueProvider(this, memberIndex) {
+                @Override
+                protected int getInt(int gridPointIndex) throws IOException {
+                    return (int) (getLong(memberIndex) & 0x00000000FFFFFFFFL);
+                }
+            };
+        case 2:
+            return new DefaultValueProvider(this, memberIndex) {
+                @Override
+                public int getInt(int gridPointIndex) throws IOException {
+                    return (int) (getLong(memberIndex) >>> 32);
+                }
+            };
+        default:
+            return new DefaultValueProvider(this, memberIndex);
         }
     }
 

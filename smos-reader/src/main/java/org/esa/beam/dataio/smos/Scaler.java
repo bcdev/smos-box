@@ -3,13 +3,14 @@ package org.esa.beam.dataio.smos;
 import org.esa.beam.framework.datamodel.Scaling;
 
 import java.awt.geom.Area;
+import java.io.IOException;
 
-class Scaler implements ValueProvider {
+class Scaler extends SmosValueProvider {
 
-    private final ValueProvider provider;
+    private final SmosValueProvider provider;
     private final Scaling scaling;
 
-    Scaler(ValueProvider provider, Scaling scaling) {
+    Scaler(SmosValueProvider provider, Scaling scaling) {
         this.provider = provider;
         this.scaling = scaling;
     }
@@ -25,22 +26,22 @@ class Scaler implements ValueProvider {
     }
 
     @Override
-    public byte getValue(int gridPointIndex, byte noDataValue) {
-        return provider.getValue(gridPointIndex, noDataValue);
+    protected final byte getByte(int gridPointIndex) throws IOException {
+        return provider.getByte(gridPointIndex);
     }
 
     @Override
-    public short getValue(int gridPointIndex, short noDataValue) {
-        return provider.getValue(gridPointIndex, noDataValue);
+    protected final short getShort(int gridPointIndex) throws IOException {
+        return provider.getShort(gridPointIndex);
     }
 
     @Override
-    public int getValue(int gridPointIndex, int noDataValue) {
-        return provider.getValue(gridPointIndex, noDataValue);
+    protected final int getInt(int gridPointIndex) throws IOException {
+        return provider.getInt(gridPointIndex);
     }
 
     @Override
-    public float getValue(int gridPointIndex, float noDataValue) {
-        return (float) scaling.scale(provider.getValue(gridPointIndex, noDataValue));
+    protected final float getFloat(int gridPointIndex) throws IOException {
+        return (float) scaling.scale(provider.getFloat(gridPointIndex));
     }
 }

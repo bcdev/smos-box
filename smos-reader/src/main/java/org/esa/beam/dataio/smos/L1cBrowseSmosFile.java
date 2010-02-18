@@ -44,12 +44,11 @@ public class L1cBrowseSmosFile extends L1cSmosFile {
     }
 
     @Override
-    protected final ValueProvider createValueProvider(BandDescriptor descriptor) {
+    protected final SmosValueProvider createValueProvider(BandDescriptor descriptor) {
         final int polarization = descriptor.getPolarization();
         if (polarization < 0) {
             return super.createValueProvider(descriptor);
         }
-        return new L1cBrowseValueProvider(this, getBtDataType().getMemberIndex(descriptor.getMemberName()),
-                                          polarization);
+        return new L1cBrowseValueProvider(this, getBtDataType().getMemberIndex(descriptor.getMemberName()), polarization);
     }
 }

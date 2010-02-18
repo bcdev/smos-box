@@ -3,7 +3,7 @@ package org.esa.beam.dataio.smos;
 import java.awt.geom.Area;
 import java.io.IOException;
 
-class L1cBrowseValueProvider implements ValueProvider {
+class L1cBrowseValueProvider extends SmosValueProvider {
 
     private final L1cBrowseSmosFile smosFile;
     private final int memberIndex;
@@ -16,48 +16,32 @@ class L1cBrowseValueProvider implements ValueProvider {
     }
 
     @Override
-    public Area getArea() {
+    public final Area getArea() {
         return smosFile.getArea();
     }
 
     @Override
-    public int getGridPointIndex(int seqnum) {
+    public final int getGridPointIndex(int seqnum) {
         return smosFile.getGridPointIndex(seqnum);
     }
 
     @Override
-    public byte getValue(int gridPointIndex, byte noDataValue) {
-        try {
-            return smosFile.getBtDataList(gridPointIndex).getCompound(polarisation).getByte(memberIndex);
-        } catch (IOException e) {
-            return noDataValue;
-        }
+    protected byte getByte(int gridPointIndex) throws IOException {
+        return smosFile.getBtDataList(gridPointIndex).getCompound(polarisation).getByte(memberIndex);
     }
 
     @Override
-    public short getValue(int gridPointIndex, short noDataValue) {
-        try {
-            return smosFile.getBtDataList(gridPointIndex).getCompound(polarisation).getShort(memberIndex);
-        } catch (IOException e) {
-            return noDataValue;
-        }
+    protected short getShort(int gridPointIndex) throws IOException {
+        return smosFile.getBtDataList(gridPointIndex).getCompound(polarisation).getShort(memberIndex);
     }
 
     @Override
-    public int getValue(int gridPointIndex, int noDataValue) {
-        try {
-            return smosFile.getBtDataList(gridPointIndex).getCompound(polarisation).getInt(memberIndex);
-        } catch (IOException e) {
-            return noDataValue;
-        }
+    protected int getInt(int gridPointIndex) throws IOException {
+        return smosFile.getBtDataList(gridPointIndex).getCompound(polarisation).getInt(memberIndex);
     }
 
     @Override
-    public float getValue(int gridPointIndex, float noDataValue) {
-        try {
-            return smosFile.getBtDataList(gridPointIndex).getCompound(polarisation).getFloat(memberIndex);
-        } catch (IOException e) {
-            return noDataValue;
-        }
+    protected float getFloat(int gridPointIndex) throws IOException {
+        return smosFile.getBtDataList(gridPointIndex).getCompound(polarisation).getFloat(memberIndex);
     }
 }

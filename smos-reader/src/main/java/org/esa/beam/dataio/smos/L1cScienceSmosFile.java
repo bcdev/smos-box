@@ -56,7 +56,7 @@ public class L1cScienceSmosFile extends L1cSmosFile {
     private static final double MIN_BROWSE_INCIDENCE_ANGLE = 37.5;
     private static final double MAX_BROWSE_INCIDENCE_ANGLE = 52.5;
 
-    private final Map<String, ValueProvider> valueProviderMap = new HashMap<String, ValueProvider>(17);
+    private final Map<String, SmosValueProvider> valueProviderMap = new HashMap<String, SmosValueProvider>(17);
     private final int flagsIndex;
     private final int incidenceAngleIndex;
     private final int snapshotIdOfPixelIndex;
@@ -122,13 +122,13 @@ public class L1cScienceSmosFile extends L1cSmosFile {
     }
 
     @Override
-    protected final ValueProvider createValueProvider(BandDescriptor descriptor) {
+    protected final SmosValueProvider createValueProvider(BandDescriptor descriptor) {
         final int polarization = descriptor.getPolarization();
         if (polarization < 0) {
             return super.createValueProvider(descriptor);
         }
         final int memberIndex = getBtDataType().getMemberIndex(descriptor.getMemberName());
-        final ValueProvider valueProvider = new L1cScienceValueProvider(this, memberIndex, polarization);
+        final SmosValueProvider valueProvider = new L1cScienceValueProvider(this, memberIndex, polarization);
         valueProviderMap.put(descriptor.getBandName(), valueProvider);
 
         return valueProvider;
@@ -162,36 +162,32 @@ public class L1cScienceSmosFile extends L1cSmosFile {
         }
     }
 
-    byte getBrowseBtDataValueByte(int gridPointIndex, int memberIndex, int polarization,
-                                  byte noDataValue) throws IOException {
+    byte getBrowseBtDataValueByte(int gridPointIndex, int memberIndex, int polarization) throws IOException {
         if (memberIndex == flagsIndex) {
-            return (byte) getCombinedFlags(gridPointIndex, polarization, noDataValue);
+            return (byte) getCombinedFlags(gridPointIndex, polarization);
         } else {
-            return (byte) getInterpolatedValue(gridPointIndex, memberIndex, polarization, noDataValue);
+            return (byte) getInterpolatedValue(gridPointIndex, memberIndex, polarization);
         }
     }
 
-    short getBrowseBtDataValueShort(int gridPointIndex, int memberIndex, int polarization,
-                                    short noDataValue) throws IOException {
+    short getBrowseBtDataValueShort(int gridPointIndex, int memberIndex, int polarization) throws IOException {
         if (memberIndex == flagsIndex) {
-            return (short) getCombinedFlags(gridPointIndex, polarization, noDataValue);
+            return (short) getCombinedFlags(gridPointIndex, polarization);
         } else {
-            return (short) getInterpolatedValue(gridPointIndex, memberIndex, polarization, noDataValue);
+            return (short) getInterpolatedValue(gridPointIndex, memberIndex, polarization);
         }
     }
 
-    int getBrowseBtDataValueInt(int gridPointIndex, int memberIndex, int polarization,
-                                int noDataValue) throws IOException {
+    int getBrowseBtDataValueInt(int gridPointIndex, int memberIndex, int polarization) throws IOException {
         if (memberIndex == flagsIndex) {
-            return getCombinedFlags(gridPointIndex, polarization, noDataValue);
+            return getCombinedFlags(gridPointIndex, polarization);
         } else {
-            return (int) getInterpolatedValue(gridPointIndex, memberIndex, polarization, noDataValue);
+            return (int) getInterpolatedValue(gridPointIndex, memberIndex, polarization);
         }
     }
 
-    float getBrowseBtDataValueFloat(int gridPointIndex, int memberIndex, int polarization,
-                                    float noDataValue) throws IOException {
-        return (float) getInterpolatedValue(gridPointIndex, memberIndex, polarization, noDataValue);
+    float getBrowseBtDataValueFloat(int gridPointIndex, int memberIndex, int polarization) throws IOException {
+        return (float) getInterpolatedValue(gridPointIndex, memberIndex, polarization);
     }
 
     CompoundData getSnapshotBtData(int gridPointIndex, int polarization, long snapshotId) throws IOException {
@@ -219,8 +215,7 @@ public class L1cScienceSmosFile extends L1cSmosFile {
         return null;
     }
 
-    private double getInterpolatedValue(int gridPointIndex, int memberIndex, int polarization,
-                                        double noDataValue) throws IOException {
+    private double getInterpolatedValue(int gridPointIndex, int memberIndex, int polarization) throws IOException {
         final SequenceData btDataList = getBtDataList(gridPointIndex);
         final int elementCount = btDataList.getElementCount();
 
@@ -264,10 +259,11 @@ public class L1cScienceSmosFile extends L1cSmosFile {
             return a * CENTER_BROWSE_INCIDENCE_ANGLE + b;
         }
 
-        return noDataValue;
+        throw new IOException(MessageFormat.format(
+                "No data found for grid point ''{0}'' and polarisation ''{1}''.", gridPointIndex, polarization));
     }
 
-    private int getCombinedFlags(int gridPointIndex, int polMode, int noDataValue) throws IOException {
+    private int getCombinedFlags(int gridPointIndex, int polarization) throws IOException {
         final SequenceData btDataList = getBtDataList(gridPointIndex);
         final int elementCount = btDataList.getElementCount();
 
@@ -280,7 +276,7 @@ public class L1cScienceSmosFile extends L1cSmosFile {
             final CompoundData btData = btDataList.getCompound(i);
             final int flags = btData.getInt(flagsIndex);
 
-            if (polMode == 4 || polMode == (flags & 3) || (polMode & flags & 2) != 0) {
+            if (polarization == 4 || polarization == (flags & 3) || (polarization & flags & 2) != 0) {
                 final double incidenceAngle = incidenceAngleScalingFactor * btData.getInt(incidenceAngleIndex);
 
                 if (incidenceAngle >= MIN_BROWSE_INCIDENCE_ANGLE && incidenceAngle <= MAX_BROWSE_INCIDENCE_ANGLE) {
@@ -299,7 +295,8 @@ public class L1cScienceSmosFile extends L1cSmosFile {
             return combinedFlags;
         }
 
-        return noDataValue;
+        throw new IOException(MessageFormat.format(
+                "No data found for grid point ''{0}'' and polarisation ''{1}''.", gridPointIndex, polarization));
     }
 
     private Future<SnapshotInfo> getSnapshotInfoFuture() {
@@ -393,7 +390,7 @@ public class L1cScienceSmosFile extends L1cSmosFile {
         return new SnapshotInfo(snapshotIndexMap, all, x, y, xy, snapshotAreaMap);
     }
 
-    private void addRotatedDualPolBands(Product product, Map<String, ValueProvider> valueProviderMap) {
+    private void addRotatedDualPolBands(Product product, Map<String, SmosValueProvider> valueProviderMap) {
         final Family<BandDescriptor> descriptors = Dddb.getInstance().getBandDescriptors(getDataFormat().getName());
 
         DP vp;
@@ -419,7 +416,7 @@ public class L1cScienceSmosFile extends L1cSmosFile {
         ProductHelper.addVirtualBand(product, descriptors.getMember("Stokes_2"), "(BT_Value_H - BT_Value_V) / 2.0");
     }
 
-    private void addRotatedFullPolBands(Product product, Map<String, ValueProvider> valueProviderMap) {
+    private void addRotatedFullPolBands(Product product, Map<String, SmosValueProvider> valueProviderMap) {
         final Family<BandDescriptor> descriptors = Dddb.getInstance().getBandDescriptors(getDataFormat().getName());
 
         FP vp;

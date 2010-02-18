@@ -167,12 +167,7 @@ class SmosOpImage extends SingleBandedOpImage {
                         // pixel to the north-east
                         value = valueCache[x + 1];
                     } else {
-                        final int gridPointIndex = valueProvider.getGridPointIndex(seqnum);
-                        if (gridPointIndex != -1) {
-                            value = valueProvider.getValue(gridPointIndex, noDataValue);
-                        } else {
-                            value = noDataValue;
-                        }
+                        value = valueProvider.getValue(seqnum, noDataValue);
                     }
                     seqnumCache[x] = seqnum;
                     valueCache[x] = value;
@@ -232,12 +227,7 @@ class SmosOpImage extends SingleBandedOpImage {
                         // pixel to the north-east
                         value = valueCache[x + 1];
                     } else {
-                        final int gridPointIndex = valueProvider.getGridPointIndex(seqnum);
-                        if (gridPointIndex != -1) {
-                            value = valueProvider.getValue(gridPointIndex, noDataValue);
-                        } else {
-                            value = noDataValue;
-                        }
+                        value = valueProvider.getValue(seqnum, noDataValue);
                     }
                     seqnumCache[x] = seqnum;
                     valueCache[x] = value;
@@ -297,12 +287,7 @@ class SmosOpImage extends SingleBandedOpImage {
                         // pixel to the north-east
                         value = valueCache[x + 1];
                     } else {
-                        final int gridPointIndex = valueProvider.getGridPointIndex(seqnum);
-                        if (gridPointIndex != -1) {
-                            value = valueProvider.getValue(gridPointIndex, noDataValue);
-                        } else {
-                            value = noDataValue;
-                        }
+                        value = valueProvider.getValue(seqnum, noDataValue);
                     }
                     seqnumCache[x] = seqnum;
                     valueCache[x] = value;
@@ -362,12 +347,7 @@ class SmosOpImage extends SingleBandedOpImage {
                         // pixel to the north-east
                         value = valueCache[x + 1];
                     } else {
-                        final int gridPointIndex = valueProvider.getGridPointIndex(seqnum);
-                        if (gridPointIndex != -1) {
-                            value = valueProvider.getValue(gridPointIndex, noDataValue);
-                        } else {
-                            value = noDataValue;
-                        }
+                        value = valueProvider.getValue(seqnum, noDataValue);
                     }
                     seqnumCache[x] = seqnum;
                     valueCache[x] = value;

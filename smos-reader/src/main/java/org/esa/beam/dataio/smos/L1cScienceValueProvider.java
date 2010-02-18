@@ -4,8 +4,9 @@ import com.bc.ceres.binio.CompoundData;
 
 import java.awt.geom.Area;
 import java.io.IOException;
+import java.text.MessageFormat;
 
-public class L1cScienceValueProvider implements ValueProvider {
+public class L1cScienceValueProvider extends SmosValueProvider {
 
     private final L1cScienceSmosFile smosFile;
     private final int memberIndex;
@@ -19,11 +20,11 @@ public class L1cScienceValueProvider implements ValueProvider {
         this.snapshotId = -1;
     }
 
-    public long getSnapshotId() {
+    public final long getSnapshotId() {
         return snapshotId;
     }
 
-    public void setSnapshotId(long snapshotId) {
+    public final void setSnapshotId(long snapshotId) {
         this.snapshotId = snapshotId;
     }
 
@@ -42,78 +43,58 @@ public class L1cScienceValueProvider implements ValueProvider {
     }
 
     @Override
-    public byte getValue(int gridPointIndex, byte noDataValue) {
+    protected byte getByte(int gridPointIndex) throws IOException {
         final long snapshotId = getSnapshotId();
-        try {
-            if (snapshotId == -1) {
-                return smosFile.getBrowseBtDataValueByte(gridPointIndex, memberIndex, polarisation, noDataValue);
-            } else {
-                final CompoundData data = smosFile.getSnapshotBtData(gridPointIndex, polarisation, snapshotId);
-                if (data != null) {
-                    return data.getByte(memberIndex);
-                } else {
-                    return noDataValue;
-                }
+        if (snapshotId == -1) {
+            return smosFile.getBrowseBtDataValueByte(gridPointIndex, memberIndex, polarisation);
+        } else {
+            final CompoundData data = smosFile.getSnapshotBtData(gridPointIndex, polarisation, snapshotId);
+            if (data != null) {
+                return data.getByte(memberIndex);
             }
-        } catch (IOException e) {
-            return noDataValue;
+            throw new IOException(MessageFormat.format("No data found for grid point ''{0}''.", gridPointIndex));
         }
     }
 
     @Override
-    public short getValue(int gridPointIndex, short noDataValue) {
+    protected short getShort(int gridPointIndex) throws IOException {
         final long snapshotId = getSnapshotId();
-        try {
-            if (snapshotId == -1) {
-                return smosFile.getBrowseBtDataValueShort(gridPointIndex, memberIndex, polarisation, noDataValue);
-            } else {
-                final CompoundData data = smosFile.getSnapshotBtData(gridPointIndex, polarisation, snapshotId);
-                if (data != null) {
-                    return data.getShort(memberIndex);
-                } else {
-                    return noDataValue;
-                }
+        if (snapshotId == -1) {
+            return smosFile.getBrowseBtDataValueShort(gridPointIndex, memberIndex, polarisation);
+        } else {
+            final CompoundData data = smosFile.getSnapshotBtData(gridPointIndex, polarisation, snapshotId);
+            if (data != null) {
+                return data.getShort(memberIndex);
             }
-        } catch (IOException e) {
-            return noDataValue;
+            throw new IOException(MessageFormat.format("No data found for grid point ''{0}''.", gridPointIndex));
         }
     }
 
     @Override
-    public int getValue(int gridPointIndex, int noDataValue) {
+    protected int getInt(int gridPointIndex) throws IOException {
         final long snapshotId = getSnapshotId();
-        try {
-            if (snapshotId == -1) {
-                return smosFile.getBrowseBtDataValueInt(gridPointIndex, memberIndex, polarisation, noDataValue);
-            } else {
-                final CompoundData data = smosFile.getSnapshotBtData(gridPointIndex, polarisation, snapshotId);
-                if (data != null) {
-                    return data.getInt(memberIndex);
-                } else {
-                    return noDataValue;
-                }
+        if (snapshotId == -1) {
+            return smosFile.getBrowseBtDataValueInt(gridPointIndex, memberIndex, polarisation);
+        } else {
+            final CompoundData data = smosFile.getSnapshotBtData(gridPointIndex, polarisation, snapshotId);
+            if (data != null) {
+                return data.getInt(memberIndex);
             }
-        } catch (IOException e) {
-            return noDataValue;
+            throw new IOException(MessageFormat.format("No data found for grid point ''{0}''.", gridPointIndex));
         }
     }
 
     @Override
-    public float getValue(int gridPointIndex, float noDataValue) {
+    protected float getFloat(int gridPointIndex) throws IOException {
         final long snapshotId = getSnapshotId();
-        try {
-            if (snapshotId == -1) {
-                return smosFile.getBrowseBtDataValueFloat(gridPointIndex, memberIndex, polarisation, noDataValue);
-            } else {
-                final CompoundData data = smosFile.getSnapshotBtData(gridPointIndex, polarisation, snapshotId);
-                if (data != null) {
-                    return data.getFloat(memberIndex);
-                } else {
-                    return noDataValue;
-                }
+        if (snapshotId == -1) {
+            return smosFile.getBrowseBtDataValueFloat(gridPointIndex, memberIndex, polarisation);
+        } else {
+            final CompoundData data = smosFile.getSnapshotBtData(gridPointIndex, polarisation, snapshotId);
+            if (data != null) {
+                return data.getFloat(memberIndex);
             }
-        } catch (IOException e) {
-            return noDataValue;
+            throw new IOException(MessageFormat.format("No data found for grid point ''{0}''.", gridPointIndex));
         }
     }
 }

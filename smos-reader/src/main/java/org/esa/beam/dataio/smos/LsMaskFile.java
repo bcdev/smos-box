@@ -109,12 +109,6 @@ class LsMaskFile extends ExplorerFile {
             }
 
             @Override
-            public int getGridPointIndex(int seqnum) {
-                // we need the sequential number instead of the grid point index
-                return seqnum;
-            }
-
-            @Override
             public byte getValue(int seqnum, byte noDataValue) {
                 final int zoneIndex = SmosDgg.seqnumToZoneId(seqnum) - 1;
                 final int gridIndex = SmosDgg.seqnumToSeqnumInZone(seqnum) - 1;

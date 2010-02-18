@@ -27,13 +27,11 @@ public interface ValueProvider {
 
     Area getArea();
 
-    int getGridPointIndex(int seqnum);
+    byte getValue(int seqnum, byte noDataValue);
 
-    byte getValue(int gridPointIndex, byte noDataValue);
+    short getValue(int seqnum, short noDataValue);
 
-    short getValue(int gridPointIndex, short noDataValue);
+    int getValue(int seqnum, int noDataValue);
 
-    int getValue(int gridPointIndex, int noDataValue);
-
-    float getValue(int gridPointIndex, float noDataValue);
+    float getValue(int seqnum, float noDataValue);
 }

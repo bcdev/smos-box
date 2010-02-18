@@ -25,7 +25,7 @@ import java.io.IOException;
  * @version $Revision$ $Date$
  * @since SMOS-Box 1.0
  */
-class DefaultValueProvider implements ValueProvider {
+class DefaultValueProvider extends SmosValueProvider {
 
     private final SmosFile smosFile;
     private final int memberIndex;
@@ -33,19 +33,6 @@ class DefaultValueProvider implements ValueProvider {
     DefaultValueProvider(SmosFile smosFile, int memberIndex) {
         this.smosFile = smosFile;
         this.memberIndex = memberIndex;
-    }
-
-    DefaultValueProvider(SmosFile smosFile, String memberName) {
-        this.smosFile = smosFile;
-        this.memberIndex = smosFile.getGridPointType().getMemberIndex(memberName);
-    }
-
-    public final SmosFile getSmosFile() {
-        return smosFile;
-    }
-
-    public final int getMemberIndex() {
-        return memberIndex;
     }
 
     @Override
@@ -59,38 +46,26 @@ class DefaultValueProvider implements ValueProvider {
     }
 
     @Override
-    public byte getValue(int gridPointIndex, byte noDataValue) {
-        try {
-            return smosFile.getGridPointData(gridPointIndex).getByte(getMemberIndex());
-        } catch (IOException e) {
-            return noDataValue;
-        }
+    protected byte getByte(int gridPointIndex) throws IOException {
+        return smosFile.getGridPointData(gridPointIndex).getByte(memberIndex);
     }
 
     @Override
-    public short getValue(int gridPointIndex, short noDataValue) {
-        try {
-            return smosFile.getGridPointData(gridPointIndex).getShort(getMemberIndex());
-        } catch (IOException e) {
-            return noDataValue;
-        }
+    protected short getShort(int gridPointIndex) throws IOException {
+        return smosFile.getGridPointData(gridPointIndex).getShort(memberIndex);
     }
 
     @Override
-    public int getValue(int gridPointIndex, int noDataValue) {
-        try {
-            return smosFile.getGridPointData(gridPointIndex).getInt(getMemberIndex());
-        } catch (IOException e) {
-            return noDataValue;
-        }
+    protected int getInt(int gridPointIndex) throws IOException {
+        return smosFile.getGridPointData(gridPointIndex).getInt(memberIndex);
+    }
+
+    protected long getLong(int gridPointIndex) throws IOException {
+        return smosFile.getGridPointData(gridPointIndex).getLong(memberIndex);
     }
 
     @Override
-    public float getValue(int gridPointIndex, float noDataValue) {
-        try {
-            return smosFile.getGridPointData(gridPointIndex).getFloat(getMemberIndex());
-        } catch (IOException e) {
-            return noDataValue;
-        }
+    protected float getFloat(int gridPointIndex) throws IOException {
+        return smosFile.getGridPointData(gridPointIndex).getFloat(memberIndex);
     }
 }
