@@ -205,6 +205,9 @@ public class Dddb {
             }
             if (name.matches("DBL_\\w{2}_\\w{4}_MIR_\\w{4}1C_\\d{4}")) {
                 binX.setVarNameMappings(getResourceAsProperties("mappings_MIR_XXXX1C.properties"));
+                if (name.matches("DBL_\\w{2}_\\w{4}_MIR_SC\\w{2}1C_\\d{4}")) {
+                    binX.setTypeMembersInlined(getResourceAsProperties("structs_MIR_SCXX1C.properties"));
+                }
             }
             if (name.contains("MIR_OSDAP2")) {
                 binX.setVarNameMappings(getResourceAsProperties("mappings_MIR_OSDAP2.properties"));
