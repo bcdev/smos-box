@@ -5,6 +5,7 @@ import org.esa.beam.framework.datamodel.RasterDataNode;
 import org.esa.beam.jai.ResolutionLevel;
 import org.esa.beam.smos.dgg.SmosDgg;
 
+import java.awt.Shape;
 import java.awt.image.RenderedImage;
 
 
@@ -32,7 +33,12 @@ public class SmosMultiLevelSource extends AbstractMultiLevelSource {
     }
 
     @Override
-    public RenderedImage createImage(int level) {
+    public Shape getImageShape(int level) {
+        return valueProvider.getArea().createTransformedArea(getModel().getModelToImageTransform(level));
+    }
+
+    @Override
+    protected RenderedImage createImage(int level) {
         return new SmosOpImage(valueProvider, rasterDataNode, getModel(), ResolutionLevel.create(getModel(), level));
     }
 }
