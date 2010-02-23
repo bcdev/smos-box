@@ -1,207 +1,229 @@
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>SMOS-Box</title>
-    <link rel="stylesheet" href="../../style.css">
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 25 March 2009), see www.w3.org" />
+
+  <title>SMOS-Box</title>
+  <link rel="stylesheet" href="../../style.css" type="text/css" />
 </head>
 
 <body>
-
-<table class="header">
+  <table class="header">
     <tr class="header">
-        <td class="header">&nbsp;
-            SMOS-Box
-        </td>
-        <td class="header" align="right"><a href="../../index.html"><img src="../images/BeamHeader.jpg" border=0></a>
-        </td>
+      <td class="header">&nbsp; SMOS-Box</td>
+
+      <td class="header" align="right"><a href=
+      "../../index.html"><img src="../images/BeamHeader.jpg"
+      border="0" /></a></td>
     </tr>
-</table>
+  </table>
 
-<h3>SMOS-Box</h3>
+  <h3>SMOS-Box</h3>
 
-<h4>Introduction</h4>
+  <h4>Introduction</h4>
 
-<p>
-    The BEAM SMOS-Box project has been brought into life in order to support users of data
-    acquired by ESA's Soil Moisture and Ocean Salinity (SMOS) mission.
-    BEAM and the SMOS-Box are user tools which ESA/ESRIN are providing free of charge to the
-    Earth Observation Community.
-</p>
+  <p>The BEAM SMOS-Box project has been brought into life in order
+  to support users of data acquired by ESA's Soil Moisture and
+  Ocean Salinity (SMOS) mission. BEAM and the SMOS-Box are user
+  tools which ESA/ESRIN are providing free of charge to the Earth
+  Observation Community.</p>
 
-<p>
-    The SMOS-Box software has been developed by
-    <a href="http://www.brockmann-consult.de/">Brockmann Consult</a>
-    under ESA contract initiated by Steven Delwart (ESTEC) and coordinated Peter
-    Regner (ESRIN).
-</p>
+  <p>The SMOS-Box software has been developed by <a href=
+  "http://www.brockmann-consult.de/">Brockmann Consult</a> under
+  ESA contract initiated by Steven Delwart (ESTEC) and coordinated
+  Peter Regner (ESRIN).</p>
 
-<p>
-    This document set provides the online help for Version 1.0 of the SMOS-Box.
-</p>
+  <p>This document set provides the online help for Version 1.0 of
+  the SMOS-Box.</p>
 
-<h4>License</h4>
+  <h4>License</h4>
 
-<p>
-    The SMOS-Box is free software; you can redistribute it and/or modify it under the terms of
-    the <a href="http://www.gnu.org/licenses/gpl.html">GNU General Public License</a> as published
-    by the Free Software Foundation. This program is
-    distributed in the hope it will be useful, but WITHOUT ANY WARRANTY; without even the implied
-    warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public
-    License for more details.
-</p>
+  <p>The SMOS-Box is free software; you can redistribute it and/or
+  modify it under the terms of the <a href=
+  "http://www.gnu.org/licenses/gpl.html">GNU General Public
+  License</a> as published by the Free Software Foundation. This
+  program is distributed in the hope it will be useful, but WITHOUT
+  ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+  General Public License for more details.</p>
 
-<h4>Supported Data Products</h4>
+  <h4>Supported Data Products</h4>
 
-<p>
-    Version 1.0 of the BEAM SMOS-Box is capable of reading SMOS data products complying with Schemas
-    Release 2009-06-02_v04-03-09. The SMOS-Box exclusively supports the following product types:
-</p>
+  <p>Version 1.0 of the BEAM SMOS-Box is capable of reading SMOS
+  data products complying with Schemas Release
+  2009-06-02_v04-03-09. The SMOS-Box exclusively supports the
+  following product types:</p>
 
-<table>
+  <table>
     <tr>
-        <th>Type</th>
-        <th>Description</th>
-    </tr>
-    <tr>
-        <td>MIR_BWLD1C</td>
-        <td>Level-1c Browse Land Dual-Polarisation Products. All measurements contained in the
-            <code>BT_Data_Type</code> record are
-            <a href="DataModel.html">represented</a> as BEAM bands
-        </td>
-    </tr>
-    <tr>
-        <td>MIR_BWLF1C</td>
-        <td>Level-1c Browse Land Full-Polarisation Products. All measurements contained in the
-            <code>BT_Data_Type</code> record are
-            <a href="DataModel.html">represented</a> as BEAM bands
-        </td>
-    </tr>
-    <tr>
-        <td>MIR_BWSD1C</td>
-        <td>Level-1c Browse Sea Dual-Polarisation Products. All measurements contained in the
-            <code>BT_Data_Type</code> record are
-            <a href="DataModel.html">represented</a> as BEAM bands
-        </td>
-    </tr>
-    <tr>
-        <td>MIR_BWSF1C</td>
-        <td>Level-1c Browse Sea Full-Polarisation Products. All measurements contained in the
-            <code>BT_Data_Type</code> record are
-            <a href="DataModel.html">represented</a> as BEAM bands
-        </td>
-    </tr>
-    <tr>
-        <td>MIR_SCLD1C</td>
-        <td>Level-1c Science Land Dual-Polarisation Products. All measurements contained in the
-            <code>BT_Data_Type</code> record are
-            <a href="DataModel.html">represented</a> as BEAM bands. For ech product, the user
-            can specify whether the band data should be provided by a simulated browse product
-            which is computed on-the-fly, or by an individual snapshot. The former is the default.
-            Brightness temperature measurements, pixel radiometric accuracies and Stokes parameters
-            are also represented in the Earth's reference frame.
-        </td>
-    </tr>
-    <tr>
-        <td>MIR_SCLF1C</td>
-        <td>Level-1c Science Land Full-Polarisation Products. All measurements contained in the
-            <code>BT_Data_Type</code> record are
-            <a href="DataModel.html">represented</a> as BEAM bands. For ech product, the user
-            can specify whether the band data should be provided by a simulated browse product
-            which is computed on-the-fly, or by an individual snapshot. The former is the default.
-            Brightness temperature measurements, pixel radiometric accuracies and Stokes parameters
-            are also represented in the Earth's reference frame.
-        </td>
-    </tr>
-    <tr>
-        <td>MIR_SCSD1C</td>
-        <td>Level-1c Science Sea Dual-Polarisation Products. All measurements contained in the
-            <code>BT_Data_Type</code> record are
-            <a href="DataModel.html">represented</a> as BEAM bands. For ech product, the user
-            can specify whether the band data should be provided by a simulated browse product
-            which is computed on-the-fly, or by an individual snapshot. The former is the default.
-            Brightness temperature measurements, pixel radiometric accuracies and Stokes parameters
-            are also represented in the Earth's reference frame.
-        </td>
-    </tr>
-    <tr>
-        <td>MIR_SCSF1C</td>
-        <td>Level-1c Science Sea Full-Polarisation Products. All measurements contained in the
-            <code>BT_Data_Type</code> record are
-            <a href="DataModel.html">represented</a> as BEAM bands. For ech product, the user
-            can specify whether the band data should be provided by a simulated browse product
-            which is computed on-the-fly, or by an individual snapshot. The former is the default.
-            Brightness temperature measurements, pixel radiometric accuracies and Stokes parameters
-            are also represented in the Earth's reference frame.
-        </td>
-    </tr>
-    <tr>
-        <td>MIR_OSUDP2</td>
-        <td>Level-2 Ocean Salinity User Data Products. All measurements contained in the
-            <code>Grid_Point_Data_Type</code> record and the enclosed record types are
-            <a href="DataModel.html">represented</a> as BEAM bands
-        </td>
-    </tr>
-    <tr>
-        <td>MIR_SMUDP2</td>
-        <td>Level-2 Soil Moisture User Data Products. All measurements contained in the
-            <code>Grid_Point_Data_Type</code> record and the enclosed record types are
-            <a href="DataModel.html">represented</a> as BEAM bands
-        </td>
-    </tr>
-</table>
+      <th>Type</th>
 
-<h4>Tools</h4>
+      <th>Description</th>
+    </tr>
 
-<p>
-    Version 1.0 of the SMOS-Box also includes five SMOS-specific tools:
-</p>
+    <tr>
+      <td>MIR_BWLD1C</td>
 
-<ol>
-    <li>
-        <a href="Tools.html">Grid point brightness temperature data table</a>: all measurements made
-        for the grid point selected by either the mouse pointer or a selected pin are displayed in a
-        table.
-    </li>
-    <li>
-        <a href="Tools.html">Grid point brightness temperature flag matrix diagram</a>: all flags
-        associated with the measurements made for the grid point selected by either the mouse pointer
-        or a selected pin are displayed in a flag matrix.
-    </li>
-    <li>
-        <a href="Tools.html">Grid point brightness temperature chart</a>: All brightness temperatures
-        measured for the grid point selected by either the mouse pointer or a selected pin are displayed
-        in a chart.
-    </li>
-    <li>
-        <a href="Tools.html">Snapshot information tool</a>: Information for all snapshots contained in a
-        Level-1c Science product can be browsed with a slider.
-    </li>
-    <li>
-        <a href="GridCellExport.html">Grid point export tool</a>: Exports all data for a user-defined set of SMOS
-        grid points into a plain text file.
-    </li>
-</ol>
+      <td>Level-1c Browse Land Dual-Polarisation Products. All
+      measurements contained in the <code>BT_Data_Type</code>
+      record are <a href="DataModel.html">represented</a> as BEAM
+      bands</td>
+    </tr>
 
-<h4>Known Limitations</h4>
+    <tr>
+      <td>MIR_BWLF1C</td>
 
-<p>
-    Version 1.0 of the SMOS-Box has the following known limitations:
-</p>
+      <td>Level-1c Browse Land Full-Polarisation Products. All
+      measurements contained in the <code>BT_Data_Type</code>
+      record are <a href="DataModel.html">represented</a> as BEAM
+      bands</td>
+    </tr>
 
-<ol>
-    <li>
-        All SMOS data products are represented as global products covering the whole surface of the Earth. Therefore
-        SMOS products do not have a geographical boundary.
-    </li>
-    <li>
-        Due to the representation of SMOS products as a global product, it is not possible to draw lines or shapes
-        crossing the anti-meridian.
-    </li>
-    <li>
-        Statistics, scatter plots, histograms and profile plots use image pixel data rather than SMOS grid point
-        data.
-    </li>
-</ol>
+    <tr>
+      <td>MIR_BWSD1C</td>
 
-<hr>
+      <td>Level-1c Browse Sea Dual-Polarisation Products. All
+      measurements contained in the <code>BT_Data_Type</code>
+      record are <a href="DataModel.html">represented</a> as BEAM
+      bands</td>
+    </tr>
+
+    <tr>
+      <td>MIR_BWSF1C</td>
+
+      <td>Level-1c Browse Sea Full-Polarisation Products. All
+      measurements contained in the <code>BT_Data_Type</code>
+      record are <a href="DataModel.html">represented</a> as BEAM
+      bands</td>
+    </tr>
+
+    <tr>
+      <td>MIR_SCLD1C</td>
+
+      <td>Level-1c Science Land Dual-Polarisation Products. All
+      measurements contained in the <code>BT_Data_Type</code>
+      record are <a href="DataModel.html">represented</a> as BEAM
+      bands. For ech product, the user can specify whether the band
+      data should be provided by a simulated browse product which
+      is computed on-the-fly, or by an individual snapshot. The
+      former is the default. Brightness temperature measurements,
+      pixel radiometric accuracies and Stokes parameters are also
+      represented in the Earth's reference frame.</td>
+    </tr>
+
+    <tr>
+      <td>MIR_SCLF1C</td>
+
+      <td>Level-1c Science Land Full-Polarisation Products. All
+      measurements contained in the <code>BT_Data_Type</code>
+      record are <a href="DataModel.html">represented</a> as BEAM
+      bands. For ech product, the user can specify whether the band
+      data should be provided by a simulated browse product which
+      is computed on-the-fly, or by an individual snapshot. The
+      former is the default. Brightness temperature measurements,
+      pixel radiometric accuracies and Stokes parameters are also
+      represented in the Earth's reference frame.</td>
+    </tr>
+
+    <tr>
+      <td>MIR_SCSD1C</td>
+
+      <td>Level-1c Science Sea Dual-Polarisation Products. All
+      measurements contained in the <code>BT_Data_Type</code>
+      record are <a href="DataModel.html">represented</a> as BEAM
+      bands. For ech product, the user can specify whether the band
+      data should be provided by a simulated browse product which
+      is computed on-the-fly, or by an individual snapshot. The
+      former is the default. Brightness temperature measurements,
+      pixel radiometric accuracies and Stokes parameters are also
+      represented in the Earth's reference frame.</td>
+    </tr>
+
+    <tr>
+      <td>MIR_SCSF1C</td>
+
+      <td>Level-1c Science Sea Full-Polarisation Products. All
+      measurements contained in the <code>BT_Data_Type</code>
+      record are <a href="DataModel.html">represented</a> as BEAM
+      bands. For ech product, the user can specify whether the band
+      data should be provided by a simulated browse product which
+      is computed on-the-fly, or by an individual snapshot. The
+      former is the default. Brightness temperature measurements,
+      pixel radiometric accuracies and Stokes parameters are also
+      represented in the Earth's reference frame.</td>
+    </tr>
+
+    <tr>
+      <td>MIR_OSUDP2</td>
+
+      <td>Level-2 Ocean Salinity User Data Products. All
+      measurements contained in the
+      <code>Grid_Point_Data_Type</code> record and the enclosed
+      record types are <a href="DataModel.html">represented</a> as
+      BEAM bands</td>
+    </tr>
+
+    <tr>
+      <td>MIR_SMUDP2</td>
+
+      <td>Level-2 Soil Moisture User Data Products. All
+      measurements contained in the
+      <code>Grid_Point_Data_Type</code> record and the enclosed
+      record types are <a href="DataModel.html">represented</a> as
+      BEAM bands</td>
+    </tr>
+  </table>
+
+  <h4>Tools</h4>
+
+  <p>Version 1.0 of the SMOS-Box also includes five SMOS-specific
+  tools:</p>
+
+  <ol>
+    <li><a href="Tools.html">Grid point brightness temperature data
+    table</a>: all measurements made for the grid point selected by
+    either the mouse pointer or a selected pin are displayed in a
+    table.</li>
+
+    <li><a href="Tools.html">Grid point brightness temperature flag
+    matrix diagram</a>: all flags associated with the measurements
+    made for the grid point selected by either the mouse pointer or
+    a selected pin are displayed in a flag matrix.</li>
+
+    <li><a href="Tools.html">Grid point brightness temperature
+    chart</a>: All brightness temperatures measured for the grid
+    point selected by either the mouse pointer or a selected pin
+    are displayed in a chart.</li>
+
+    <li><a href="Tools.html">Snapshot information tool</a>:
+    Information for all snapshots contained in a Level-1c Science
+    product can be browsed with a slider.</li>
+
+    <li><a href="GridCellExport.html">Grid point export tool</a>:
+    Exports all data for a user-defined set of SMOS grid points
+    into a plain text file.</li>
+  </ol>
+
+  <h4>Known Limitations</h4>
+
+  <p>Version 1.0 of the SMOS-Box has the following known
+  limitations:</p>
+
+  <ol>
+    <li>All SMOS data products are represented as global products
+    covering the whole surface of the Earth. Therefore SMOS
+    products do not have a geographical boundary.</li>
+
+    <li>Due to the representation of SMOS products as a global
+    product, it is not possible to draw lines or shapes crossing
+    the anti-meridian.</li>
+
+    <li>Statistics, scatter plots, histograms and profile plots use
+    image pixel data rather than SMOS grid point data.</li>
+  </ol>
+  <hr />
 </body>
 </html>
