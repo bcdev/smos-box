@@ -3,7 +3,7 @@
   List of SMOS data products
   ==========================
 
-  Products supported by SMOS-Box are marked with (+)
+  Products supported by the SMOS-Box are marked with (+)
 
     LEVEL 1C
     
