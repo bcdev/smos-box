@@ -33,30 +33,39 @@
   <h5>Geo-Coding</h5>
 
   <p>The geo-coding of all SMOS data products is provided by the
-  same WGS-84 geographic coordinate reference system. The mapping
+  WGS-84 geographic coordinate reference system. The mapping
   between image pixels and SMOS grid points is established by a
-  lookup table being a raster dataset of 16384 by 8192 image
-  pixels, yielding about 30 image pixels for an equatorial grid
-  cell of the ISEA4H-R9 grid.</p>
+  lookup table in form of an image of 16384 by 8192 pixels,
+  yielding about 30 image pixels for an equatorial grid cell of the
+  ISEA4H-R9 grid.</p>
 
   <p>The lookup table was computed by means of the <a href=
   "http://www.sou.edu/cs/sahr/dgg/dggrid/dggrid.html">DGGRID
   software</a> which yields a SMOS grid point sequential number
   <code>seqnum</code> for the latitude-longitude of each pixel.</p>
 
-  <p>The relation between the <code>seqnum</code> and the nominal SMOS
-  <code>gridPointId</code> is given by</p>
+  <p>The relation between the <code>seqnum</code> and the nominal
+  SMOS <code>gridPointId</code> is given by</p>
   <pre>
       int gridPointIdToSeqnum(int gridPointId) {
-          return gridPointId < 1000000 ? gridPointId : gridPointId - 737856 * ((gridPointId - 1) / 1000000) + 1;
+          return gridPointId &lt; 1000000 ? gridPointId : gridPointId - 737856 * ((gridPointId - 1) / 1000000) + 1;
       }
-  </pre>
+  
+</pre>
+
   <p>The inversion is</p>
   <pre>
       int seqnumToGridPointId(int seqnum) {
-          return seqnum <= 262145 ? seqnum : seqnum == 2621442 ? 9262145 : seqnum - 1 + ((seqnum - 2) / 262144) * 737856;
+          return seqnum &lt;= 262145 ? seqnum : seqnum == 2621442 ? 9262145 : seqnum - 1 + ((seqnum - 2) / 262144) * 737856;
       }
-  </pre>
+  
+</pre>
+
+  <p>An example of the lookup table image (in lower resolution) is
+  depicted in the image below.</p>
+
+  <p><img src="images/seqnum.png" alt=
+  "Example lookup table image" /></p>
 
   <h5>Bands for Level 1C Browse - Dual Polarisation</h5>
 
