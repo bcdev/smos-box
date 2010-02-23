@@ -1,7 +1,15 @@
 ============================================
 SCHEMAS VERSION
 ============================================
-2009-12-23_v04-04-05
+2010-02-12_v04-04-06
+
+===============================
+CHANGE LOG 2010-02-12_v04-05-00
+===============================
+-"DBL_SM_XXXX_AUX_CNFL1P_0210.xsd" provided by DMS on February 9th has been included in the distribution: 
+"Reference_Temperature_Level" field has been added.
+-"DBL_SM_XXXX_AUX_CNFNRT_0204.xsd" provided by DMS on February 9th has been included in the distribution: 
+"Reference_Temperature_Level" field has been added.
 
 ===============================
 CHANGE LOG 2009-12-23_v04-04-05
