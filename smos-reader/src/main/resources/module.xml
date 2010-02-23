@@ -40,6 +40,9 @@
     <dependency>
         <module>smos-dgg</module>
     </dependency>
+    <dependency>
+        <module>smos-lsmask</module>
+    </dependency>
 
     <categories>Reader,SMOS</categories>
 
