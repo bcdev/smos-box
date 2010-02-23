@@ -64,6 +64,7 @@
 
             <binaries>
                 <includeDependencies>false</includeDependencies>
+                <fileMode>0444</fileMode>
                 <unpack>false</unpack>
                 <outputDirectory>modules</outputDirectory>
                 <outputFileNameMapping>
