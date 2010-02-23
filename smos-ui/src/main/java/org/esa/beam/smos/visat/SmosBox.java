@@ -1,5 +1,9 @@
 package org.esa.beam.smos.visat;
 
+import com.bc.ceres.binding.PropertySet;
+import com.bc.ceres.glayer.Layer;
+import com.bc.ceres.glayer.LayerType;
+import com.bc.ceres.glayer.LayerTypeRegistry;
 import org.esa.beam.dataio.smos.ExplorerFile;
 import org.esa.beam.dataio.smos.L1cScienceSmosFile;
 import org.esa.beam.dataio.smos.SmosProductReader;
@@ -9,11 +13,6 @@ import org.esa.beam.framework.ui.product.ProductSceneView;
 import org.esa.beam.visat.VisatApp;
 import org.esa.beam.visat.VisatPlugIn;
 import org.esa.beam.worldmap.BlueMarbleLayerType;
-
-import com.bc.ceres.binding.PropertySet;
-import com.bc.ceres.glayer.Layer;
-import com.bc.ceres.glayer.LayerType;
-import com.bc.ceres.glayer.LayerTypeRegistry;
 
 public class SmosBox implements VisatPlugIn {
 
@@ -108,7 +107,11 @@ public class SmosBox implements VisatPlugIn {
 
     static L1cScienceSmosFile getL1cScienceSmosFile(ProductSceneView smosView) {
         if (smosView != null) {
-            return getL1cScienceSmosFile(smosView.getRaster());
+            try {
+                return getL1cScienceSmosFile(smosView.getRaster()); // can produce NullPointerException
+            } catch (NullPointerException e) {
+                return null;
+            }
         }
         return null;
     }
