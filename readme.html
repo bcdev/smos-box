@@ -19,12 +19,9 @@
 
 <p>
     The BEAM SMOS-Box project has been brought into life in order to support users of data
-    acquired by ESA's Soil Moisture and Ocean Salinity (SMOS) mission.
-</p>
-
-<p>
-    The SMOS-Box software is developed by
-    <a href="http://www.brockmann-consult.de/">Brockmann Consult</a> under
+    acquired by ESA's Soil Moisture and Ocean Salinity (SMOS) mission. The SMOS-Box software
+    is developed by
+    <a href="http://www.brockmann-consult.de/">Brockmann Consult</a>, under
     <a href="http://www.esa.int/">ESA</a> contract
     initiated by Steven Delwart (ESTEC) and coordinated by Peter Regner (ESRIN).
 </p>
@@ -35,90 +32,142 @@
 
 <p>
     Version 2.0 of the BEAM SMOS-Box is capable of reading SMOS data products complying with Schemas
-    Release 2009-06-02_v04-03-09. The SMOS-Box exclusively supports the following product types:
+    Release 2010-02-12_v04-04-06. The product types supported are listed in the table below.
 </p>
 
-<table>
+<table border="1" cellpadding="2">
     <tr>
         <th>Type</th>
+        <th>Level</th>
         <th>Description</th>
     </tr>
     <tr>
+        <td colspan="3">SMOS Products</td>
+    </tr>
+    <tr>
         <td>MIR_BWLD1C</td>
-        <td>Level-1c Browse Land Dual-Polarisation Products. All measurements contained in the
+        <td>1C</td>
+        <td>Browse Land Dual-Polarisation Product. All measurements contained in the
             <code>BT_Data_Type</code> record are represented as BEAM bands
         </td>
     </tr>
     <tr>
         <td>MIR_BWLF1C</td>
-        <td>Level-1c Browse Land Full-Polarisation Products. All measurements contained in the
+        <td>1C</td>
+        <td>Browse Land Full-Polarisation Product. All measurements contained in the
             <code>BT_Data_Type</code> record are represented as BEAM bands
         </td>
     </tr>
     <tr>
         <td>MIR_BWSD1C</td>
-        <td>Level-1c Browse Sea Dual-Polarisation Products. All measurements contained in the
+        <td>1C</td>
+        <td>Browse Sea Dual-Polarisation Product. All measurements contained in the
             <code>BT_Data_Type</code> record are represented as BEAM bands
         </td>
     </tr>
     <tr>
         <td>MIR_BWSF1C</td>
-        <td>Level-1c Browse Sea Full-Polarisation Products. All measurements contained in the
+        <td>1C</td>
+        <td>Browse Sea Full-Polarisation Product. All measurements contained in the
             <code>BT_Data_Type</code> record are represented as BEAM bands
         </td>
     </tr>
     <tr>
         <td>MIR_SCLD1C</td>
-        <td>Level-1c Science Land Dual-Polarisation Products. All measurements contained in the
-            <code>BT_Data_Type</code> record are represented as BEAM bands. For ech product, the user
-            can specify whether the band data should be provided by a simulated browse product
+        <td>1C</td>
+        <td>Science Land Dual-Polarisation Product. All measurements contained in the
+            <code>BT_Data_Type</code> record are represented as BEAM bands. The user can
+            specify whether the band data should be provided by a simulated browse product,
             which is computed on-the-fly, or by an individual snapshot. The former is the default.
             Brightness temperature measurements, pixel radiometric accuracies and Stokes parameters
-            are also represented in the Earth's reference frame.
+            are represented in the Satellite's as well as in the Earth's reference frame.
         </td>
     </tr>
     <tr>
         <td>MIR_SCLF1C</td>
-        <td>Level-1c Science Land Full-Polarisation Products. All measurements contained in the
-            <code>BT_Data_Type</code> record are represented as BEAM bands. For ech product, the user
-            can specify whether the band data should be provided by a simulated browse product
+        <td>1C</td>
+        <td>Land Full-Polarisation Product. All measurements contained in the
+            <code>BT_Data_Type</code> record are represented as BEAM bands. The user can
+            specify whether the band data should be provided by a simulated browse product,
             which is computed on-the-fly, or by an individual snapshot. The former is the default.
             Brightness temperature measurements, pixel radiometric accuracies and Stokes parameters
-            are also represented in the Earth's reference frame.
+            are represented in the Satellite's as well as in the Earth's reference frame.
         </td>
     </tr>
     <tr>
         <td>MIR_SCSD1C</td>
-        <td>Level-1c Science Sea Dual-Polarisation Products. All measurements contained in the
-            <code>BT_Data_Type</code> record are represented as BEAM bands. For ech product, the user
-            can specify whether the band data should be provided by a simulated browse product
+        <td>1C</td>
+        <td>Level-1c Science Sea Dual-Polarisation Product. All measurements contained in the
+            <code>BT_Data_Type</code> record are represented as BEAM bands. The user can
+            specify whether the band data should be provided by a simulated browse product,
             which is computed on-the-fly, or by an individual snapshot. The former is the default.
             Brightness temperature measurements, pixel radiometric accuracies and Stokes parameters
-            are also represented in the Earth's reference frame.
+            are represented in the Satellite's as well as in the Earth's reference frame.
         </td>
     </tr>
     <tr>
         <td>MIR_SCSF1C</td>
-        <td>Level-1c Science Sea Full-Polarisation Products. All measurements contained in the
-            <code>BT_Data_Type</code> record are represented as BEAM bands. For ech product, the user
-            can specify whether the band data should be provided by a simulated browse product
+        <td>1C</td>
+        <td>Level-1c Science Sea Full-Polarisation Product. All measurements contained in the
+            <code>BT_Data_Type</code> record are represented as BEAM bands. The user can
+            specify whether the band data should be provided by a simulated browse product,
             which is computed on-the-fly, or by an individual snapshot. The former is the default.
             Brightness temperature measurements, pixel radiometric accuracies and Stokes parameters
-            are also represented in the Earth's reference frame.
+            are represented in the Satellite's as well as in the Earth's reference frame.
         </td>
     </tr>
     <tr>
         <td>MIR_OSUDP2</td>
-        <td>Level-2 Ocean Salinity User Data Products. All measurements contained in the
+        <td>2</td>
+        <td>Ocean Salinity User Data Product. All measurements contained in the
             <code>Grid_Point_Data_Type</code> record and the enclosed record types are
             represented as BEAM bands
         </td>
     </tr>
     <tr>
         <td>MIR_SMUDP2</td>
-        <td>Level-2 Soil Moisture User Data Products. All measurements contained in the
+        <td>2</td>
+        <td>Soil Moisture User Data Product. All measurements contained in the
             <code>Grid_Point_Data_Type</code> record and the enclosed record types are
             represented as BEAM bands
+        </td>
+    </tr>
+    <tr>
+        <td colspan="3">Auxiliary Products</td>
+    </tr>
+    <tr>
+        <td>AUX_DFFLAI</td>
+        <td></td>
+        <td>Leaf area index (LAI) auxiliary product. All measurements contained in the
+            <code>DFFG_LAI_Point_Data_Type</code> record are represented as BEAM bands
+        </td>
+    </tr>
+    <tr>
+        <td>AUX_ECMWF_</td>
+        <td></td>
+        <td>ECMWF auxiliary product. Selected measurements contained in the
+            <code>ECMWF_PARAMS_Data_Type</code> record are represented as BEAM bands
+        </td>
+    </tr>
+    <tr>
+        <td>AUX_LSMASK</td>
+        <td></td>
+        <td>Land/sea mask auxiliary product. All flags in the land/sea mask are represented
+            as BEAM masks.
+        </td>
+    </tr>
+    <tr>
+        <td>AUX_VTEC_C</td>
+        <td></td>
+        <td>Consolidated Vertical Total Electron Content auxiliary product. All flags in the
+            <code>VTEC_Data_Type</code> are represented as BEAM masks.
+        </td>
+    </tr>
+    <tr>
+        <td>AUX_VTEC_P</td>
+        <td></td>
+        <td>Predicted Vertical Total Electron Content auxiliary product. All flags in the
+            <code>VTEC_Data_Type</code> are represented as BEAM masks.
         </td>
     </tr>
 </table>
@@ -126,10 +175,10 @@
 <h3>Tools</h3>
 
 <p>
-    Version 1.0 of the SMOS-Box also includes five SMOS-specific tools:
+    Version 2.0 of the SMOS-Box includes five SMOS-specific tools:
 </p>
 
-<ol>
+<ul>
     <li>
         Grid point brightness temperature data table: all measurements made
         for the grid point selected by either the mouse pointer or a selected pin are displayed in a
@@ -138,43 +187,43 @@
     <li>
         Grid point brightness temperature flag matrix diagram: all flags
         associated with the measurements made for the grid point selected by either the mouse pointer
-        or a selected pin are displayed in a flag matrix.
+        or a selected pin are displayed in a flag matrix
     </li>
     <li>
         Grid point brightness temperature chart: All brightness temperatures
         measured for the grid point selected by either the mouse pointer or a selected pin are displayed
-        in a chart.
+        in a chart
     </li>
     <li>
-        Snapshot information tool: Information for all snapshots contained in a
-        Level-1c Science product can be browsed with a slider.
+        Snapshot information tool: information for all snapshots contained in a
+        Level-1c Science product can be browsed with a slider
     </li>
     <li>
-        Grid point export tool: Exports all data for a user-defined set of SMOS
-        grid points into a plain text file.
+        Grid point export tool: exports all data for a user-defined set of SMOS
+        grid points into a plain text file
     </li>
-</ol>
+</ul>
 
 <h2>Limitations</h2>
 
 <p>
-    Version 1.0 of the SMOS-Box has the following known limitations:
+    Version 2.0 of the SMOS-Box has the following known limitations:
 </p>
 
-<ol>
+<ul>
     <li>
         All SMOS data products are represented as global products covering the whole surface of the Earth. Therefore
-        SMOS products do not have a geographical boundary.
+        SMOS products do not have a geographical boundary
     </li>
     <li>
-        Due to the representation of SMOS products as a global product, it is not possible to draw lines or shapes
-        crossing the anti-meridian.
+        Due to the representation of SMOS products as global products, it is not possible to draw lines or shapes
+        crossing the anti-meridian
     </li>
     <li>
         Statistics, scatter plots, histograms and profile plots use image pixel data rather than SMOS grid point
-        data.
+        data
     </li>
-</ol>
+</ul>
 
 <a name="license"/>
 
@@ -201,15 +250,14 @@
 
 <h2>Further Information</h2>
 
-<p>The most important source of information for the SMOS-Box project is going to be the
-    <a href="http://www.brockmann-consult.de/beam-wiki/display/SBOX/">SMOS-Box Wiki</a>.</p>
+<p>The most important source of information for BEAM and the SMOS-Box is the
+    <a href="http://www.brockmann-consult.de/cms/web/beam/forum">BEAM Forum</a>.</p>
 
-<p>Thank you for using the BEAM and SMOS-Box Software!</p>
+<p>Thank you for using the BEAM and the SMOS-Box Software!</p>
 
 <hr/>
 
-<p><i>Copyright &copy; 2009 by Brockmann Consult (beam-issues@brockmann-consult.de). All rights reserved.</i></p>
+<p><i>Copyright &copy; 2010 by Brockmann Consult (info@brockmann-consult.de). All rights reserved.</i></p>
 
 </body>
 </html>
-
