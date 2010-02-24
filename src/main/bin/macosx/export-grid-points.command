@@ -11,12 +11,10 @@ if [ -z "$BEAM4_HOME" ]; then
     exit 2
 fi
 
-. "$BEAM4_HOME/bin/detect_java.sh"
-
-"$app_java_home/bin/java" \
+java \
     -Xmx1024M \
     -Dceres.context=beam \
-    "-Dbeam.mainClass=org.esa.beam.smos.visat.export.GridCellExport" \
+    "-Dbeam.mainClass=org.esa.beam.smos.visat.export.GridPointExporter" \
     "-Dbeam.home=$BEAM4_HOME" \
     -jar "$BEAM4_HOME/bin/ceres-launcher.jar" "$@"
 

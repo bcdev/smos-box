@@ -8,6 +8,6 @@
         <tocitem text="Introduction" target="smosIntroduction"/>
         <tocitem text="SMOS Data in BEAM" target="smosDataModel"/>
         <tocitem text="Tools" target="smosTools"/>
-        <tocitem text="Grid Cell Export" target="smosGridCellExport"/>
+        <tocitem text="Grid Point Export" target="smosGridPointExport"/>
     </tocitem>
 </toc>

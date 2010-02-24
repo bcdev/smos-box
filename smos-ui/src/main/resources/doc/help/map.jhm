@@ -8,6 +8,6 @@
     <mapID target="smosIntroduction" url="smosbox/Introduction.html"/>
     <mapID target="smosDataModel" url="smosbox/DataModel.html"/>
     <mapID target="smosTools" url="smosbox/Tools.html"/>
-    <mapID target="smosGridCellExport" url="smosbox/GridCellExport.html"/>
+    <mapID target="smosGridPointExport" url="smosbox/GridPointExport.html"/>
 
 </map>
