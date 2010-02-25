@@ -2,12 +2,13 @@ package org.esa.beam.smos.visat;
 
 import com.bc.ceres.binio.CompoundMember;
 import com.bc.ceres.binio.CompoundType;
+import com.jidesoft.grid.AutoResizePopupMenuCustomizer;
 import com.jidesoft.grid.TableColumnChooser;
+import com.jidesoft.grid.TableColumnChooserPopupMenuCustomizer;
+import com.jidesoft.grid.TableHeaderPopupMenuInstaller;
 import org.esa.beam.dataio.smos.L1cSmosFile;
 import org.esa.beam.framework.ui.product.ProductSceneView;
-import org.esa.beam.framework.help.HelpSys;
 
-import javax.swing.AbstractButton;
 import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -72,7 +73,10 @@ public class GridPointBtDataTableToolView extends GridPointBtDataToolView {
 
     @Override
     protected JComponent createGridPointComponent() {
-        TableColumnChooser.install(table);
+        final TableHeaderPopupMenuInstaller installer = new TableHeaderPopupMenuInstaller(table);
+        installer.addTableHeaderPopupMenuCustomizer(new AutoResizePopupMenuCustomizer());
+        installer.addTableHeaderPopupMenuCustomizer(new TableColumnChooserPopupMenuCustomizer());
+
         return new JScrollPane(table);
     }
 
