@@ -212,7 +212,7 @@ class GridPointExportDialog extends ModalDialog {
         sourceProductPanel.add(useAllProductsInDirectoryButton);
         layout.setCellPadding(2, 0, new Insets(0, 24, 3, 3));
 
-        final JCheckBox checkBox = new JCheckBox("Descend into sub-directories");
+        final JCheckBox checkBox = new JCheckBox("Descend into subdirectories");
         bindingContext.bind(ALIAS_RECURSIVE, checkBox);
         bindingContext.bindEnabledState(ALIAS_RECURSIVE, true, ALIAS_USE_SELECTED_PRODUCT, false);
 
