@@ -3,8 +3,8 @@ package org.esa.beam.smos.visat.export;
 import com.bc.ceres.binio.CompoundData;
 import com.bc.ceres.binio.CompoundType;
 import com.bc.ceres.core.ProgressMonitor;
-import org.esa.beam.dataio.smos.SmosFile;
 import org.esa.beam.dataio.smos.SmosConstants;
+import org.esa.beam.dataio.smos.SmosFile;
 
 import java.awt.Shape;
 import java.io.IOException;
@@ -19,7 +19,7 @@ public class SmosFileProcessor {
         this.targetRegion = targetRegion;
     }
 
-   public void process(SmosFile smosFile, ProgressMonitor pm) throws IOException {
+    public void process(SmosFile smosFile, ProgressMonitor pm) throws IOException {
         final CompoundType gridPointType = smosFile.getGridPointType();
         final int latIndex = gridPointType.getMemberIndex(SmosConstants.GRID_POINT_LAT_NAME);
         final int lonIndex = gridPointType.getMemberIndex(SmosConstants.GRID_POINT_LON_NAME);
@@ -30,7 +30,7 @@ public class SmosFileProcessor {
         try {
             pm.beginTask("Processing grid cells...", gridPointCount);
             for (int i = 0; i < gridPointCount; i++) {
-                CompoundData gridPointData = smosFile.getGridPointData(i);
+                final CompoundData gridPointData = smosFile.getGridPointData(i);
                 double lat = gridPointData.getDouble(latIndex);
                 double lon = gridPointData.getDouble(lonIndex);
                 // normalisation to [-180, 180] necessary for some L1c test products
@@ -46,9 +46,8 @@ public class SmosFileProcessor {
                 }
             }
         } finally {
-            pm.done();
             filterStream.stopFile(smosFile);
+            pm.done();
         }
     }
-
 }
