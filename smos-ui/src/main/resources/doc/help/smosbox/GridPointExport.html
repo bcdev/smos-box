@@ -59,27 +59,32 @@
   the <code>bin</code> directory of your BEAM installation.
   Depending on your system platform, type</p>
   <pre>
-${BEAM_HOME}/bin/export-grid-points.bat
+    ${BEAM_HOME}/bin/export-grid-points.bat
+  
 </pre>
   <pre>
-${BEAM_HOME}/bin/export-grid-points.sh
+    ${BEAM_HOME}/bin/export-grid-points.sh
+  
 </pre>
 
   <p>or</p>
   <pre>
-${BEAM_HOME}/bin/export-grid-points.command
+    ${BEAM_HOME}/bin/export-grid-points.command
+  
 </pre>
 
   <p>in order to obtain a usage message. The grid points, for which
   data is exported can be defined by either a latitude-longitude
   box or a latitude-longitude point. For instance, type</p>
   <pre>
-export-grid-points.sh -point 1.0 7.0 SM_TEST_MIR_SCLF1C_20070223T061043_20070223T061105_310_001_0
+    export-grid-points.sh -point 1.0 7.0 SM_TEST_MIR_SCLF1C_20070223T061043_20070223T061105_310_001_0
+  
 </pre>
 
   <p>for exporting the data of a single grid point. Type</p>
   <pre>
-export-grid-points.sh -box -10.0 10.0 -20.0 20.0 SM_TEST_MIR_SCLF1C_20070223T061043_20070223T061105_310_001_0
+    export-grid-points.sh -box -10.0 10.0 -20.0 20.0 SM_TEST_MIR_SCLF1C_20070223T061043_20070223T061105_310_001_0
+  
 </pre>
 
   <p>For exporting all grid points contained in a
@@ -87,14 +92,16 @@ export-grid-points.sh -box -10.0 10.0 -20.0 20.0 SM_TEST_MIR_SCLF1C_20070223T061
   the <code>-o</code> option. If a target file is not defined, the
   output is dumped to the console. For example, type</p>
   <pre>
-export-grid-points.sh -point 1.0 7.0 -o export.csv SM_TEST_MIR_SCLF1C_20070223T061043_20070223T061105_310_001_0
+    export-grid-points.sh -point 1.0 7.0 -o export.csv SM_TEST_MIR_SCLF1C_20070223T061043_20070223T061105_310_001_0
+  
 </pre>
 
   <p>Using more than a single SMOS product as source is possible.
   The usual shell completion can be used to specify multiple
   product files. For example</p>
   <pre>
-export-grid-points.sh -point 1.0 7.0 -o export.csv SM_????_MIR_SCLD1C_2010*
+    export-grid-points.sh -point 1.0 7.0 -o export.csv SM_????_MIR_SCLD1C_2010*
+  
 </pre>
 
   <p>to export only SMOS land dual-polarisation science products
