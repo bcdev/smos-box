@@ -44,7 +44,7 @@
   tool. The tools can be invoked by clicking on the corresponding
   icons arranged in the SMOS-Box toolbar shown below.</p>
 
-  <p><img src="images/smos-toolbar.png" alt="SMOS Toolbar" /></p>
+  <p><img src="images/Toolbar.png" alt="SMOS Toolbar" /></p>
 
   <p>By default the SMOS-Box toolbar is located next to the
   standard VISAT toolbar.</p>
@@ -74,10 +74,10 @@
   as a Browse product is computed from the corresponding Science
   product.</p>
 
-  <p><img src="images/smos-visat.png" alt=
+  <p><img src="images/SmosBox.png" alt=
   "VISAT with SMOS product opened" /></p>
 
-  <p><img src="images/smos-visat-snapshot.png" alt=
+  <p><img src="images/SmosBoxSnapshot.png" alt=
   "VISAT with SMOS product opened in snapshot mode" /></p>
 
   <h5><img src="images/SmosGridPoint16.png" alt=
@@ -101,7 +101,7 @@
   character-separated text, either stored in a file or the
   clipboard.</p>
 
-  <p><img src="images/tableview.png" alt=
+  <p><img src="images/TableView.png" alt=
   "Grid point data table" /></p>
 
   <h5><img src="images/SmosFlags16.png" alt=
@@ -120,7 +120,7 @@
   pin</strong> option the selected grid point may also be defined
   by the position of a currently selected pin.</p>
 
-  <p><img src="images/flagmatrix.png" alt=
+  <p><img src="images/FlagMatrixView.png" alt=
   "Grid point flag matrix" /></p>
 
   <h5><img src="images/SmosBtGraph16.png" alt=
@@ -145,7 +145,7 @@
   and off by activating or deactivating the corresponding
   checkboxes.</p>
 
-  <p><img src="images/chartview.png" alt=
+  <p><img src="images/ChartView.png" alt=
   "Grid point brightness temperature chart" /></p>
 
   <h5><img src="images/SmosSnapshot16.png" alt=
@@ -174,7 +174,7 @@
   <h6>Combobox component</h6>
 
   <p>The combobox provides a facility for selecting a certain
-  polarisation mode (any, H, V, HV). When a certain mode is
+  polarisation mode (any, X, Y, XY). When a certain mode is
   selected, only IDs of snapshots acquired at the selected mode are
   navigable (i.e. IDs of snapshots acquired at a different mode do
   not appear in the list of snapshot IDs) by the spinner and slider
@@ -188,62 +188,63 @@
 
   <h6>Synchronise checkbox</h6><!-- TODO: review text below -->
 
-  <p>Enabled only when there is an active product scene view (PSV).
-  Synchronising implies:</p>
+  <p>Enabled only when there is an active image view. Synchronising
+  implies:</p>
 
   <ol>
     <li>The combobox component is disabled while its value is set
     to the polarisation mode of the band displayed in the active
-    view.</li>
+    image view.</li>
 
     <li>Only IDs of snapshots acquired at the selected polarisation
     mode are navigable.</li>
 
-    <li>The radio buttons (see below) are enabled.</li>
-
-    <li>The 'follow checkbox' is enabled.</li>
-
-    <li>The 'locate button' is enabled.</li>
+    <li>The 'radio buttons' (see below) are enabled.</li>
   </ol>
 
-  <p>Changing the active PSV while being in synchonised mode
+  <p>Changing the active image view while being in synchonised mode
   implies:</p>
 
   <ol>
-    <li>The value of the combobox is set to the polarisation mode
-    of the band displayed in the active view. Only IDs of snapshots
-    acquired at the selected polarisation mode are navigable.</li>
+    <li>The value of the combobox is set to the polarisation mode,
+    which corresponds to the active view.</li>
 
-    <li>When the selected snapshot ID is not navigable, the nearest
-    navigable snapshot becomes selected unless the active PSV is
-    associated with a snapshot ID which then becomes selected.</li>
+    <li>The selected snapshot is preserved, unless the active image
+    view corresponds to a polarisation mode, which is not available
+    for the selected snapshot. In the latter case, the nearest
+    snapshot acquired in the proper polarisation mode becomes
+    selected.</li>
   </ol>
 
   <h6>Radio buttons</h6>
 
-  <p>There are two radio buttons for selection the raster data
-  source for the active PSV. Selecting the 'Snapshot' radio button
-  implies that, firstly, the active PSV shows the raster data of
+  <p>There are two radio buttons for selection the data source for
+  the active image view. Selecting the 'Snapshot' radio button
+  implies that, firstly, the active image view displays the data of
   the selected snapshot instead of the browse, and, secondly, the
-  band displayed in the active PSV becomes associated with the ID
-  of the selected snapshot.</p>
+  selected snapshot becomes the data source for all bands in the
+  selected product, unless the proper polarisation mode is not
+  available for the selected snapshot. In the latter case, the
+  nearest snapshot acquired in the proper polarisation mode becomes
+  the data source.</p>
 
   <p>Selecting the 'Browse' radio button implies that, firstly, the
-  active PSV shows the raster data of the browse instead of the
-  selected snapshot, and, secondly, the band displayed in the
-  active PSV is not associated with a snapshot.</p>
+  active image view shows the raster data of the browse instead of
+  the selected snapshot, and, secondly, the data source for all
+  bands in the selected product is reset to the browse.</p>
 
   <h6>Follow checkbox</h6>
 
-  <p>When checked the viewport of the active PSV automatically
-  zooms to the region of the selected snapshot.</p>
+  <p>When checked the viewport of the active image view
+  automatically moves to and zooms into the region covered by the
+  selected snapshot.</p>
 
   <h6>Locate button</h6>
 
-  <p>When pressed the viewport of the active PSV zooms to the
-  region of the selected snapshot.</p>
+  <p>When pressed the viewport of the active image view moves to
+  and zooms into the region covered by the selected snapshot.</p>
 
-  <p><img src="images/snapshotview.png" alt=
+  <p><img src="images/SnapshotView.png" alt=
   "Snapshot information tool" /></p>
   <hr />
 </body>
