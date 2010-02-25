@@ -53,7 +53,7 @@ class GridPointFilterStreamHandler {
 
     void processDirectory(File dir, boolean recursive, ProgressMonitor pm) throws IOException {
         final List<File> sourceFileList = new ArrayList<File>();
-        collectSourceFiles(dir, recursive, sourceFileList);
+        findSourceFiles(dir, recursive, sourceFileList);
 
         try {
             pm.beginTask("Exporting grid point data...", sourceFileList.size());
@@ -84,9 +84,9 @@ class GridPointFilterStreamHandler {
         }
     }
 
-    private static void collectSourceFiles(File parent, boolean recursive, List<File> sourceFileList) {
+    private static void findSourceFiles(File parent, boolean recursive, List<File> sourceFileList) {
         final File[] dirs = parent.listFiles(DIRECTORY_FILTER);
-        if (dirs == null) {
+        if (dirs.length == 0) {
             final File[] files = parent.listFiles(EE_FILENAME_FILTER);
             if (files.length == 2) {
                 if (files[0].getName().endsWith(".DBL")) {
@@ -107,7 +107,7 @@ class GridPointFilterStreamHandler {
                 }
             } else {
                 if (recursive) {
-                    collectSourceFiles(dir, recursive, sourceFileList);
+                    findSourceFiles(dir, recursive, sourceFileList);
                 }
             }
         }
