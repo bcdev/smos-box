@@ -36,9 +36,6 @@ public class SmosDgg {
 
     private volatile MultiLevelImage dggMultiLevelImage;
 
-    private SmosDgg() {
-    }
-
     public static SmosDgg getInstance() {
         return Holder.instance;
     }
@@ -68,27 +65,19 @@ public class SmosDgg {
     }
 
     public MultiLevelImage getMultiLevelImage() {
-        if (dggMultiLevelImage == null) {
-            synchronized (getInstance()) {
-                if (dggMultiLevelImage == null) {
-                    dggMultiLevelImage = createDggMultiLevelImage();
-                }
-            }
-        }
         return dggMultiLevelImage;
     }
 
-    private MultiLevelImage createDggMultiLevelImage() {
-        String dirPath;
+    private SmosDgg() {
         try {
-            dirPath = getDirPathFromProperty();
+            String dirPath = getDirPathFromProperty();
             if (dirPath == null) {
                 dirPath = getDirPathFromModule();
             }
             final File dir = new File(dirPath);
             final MultiLevelSource dggMultiLevelSource = TiledFileMultiLevelSource.create(dir);
 
-            return new DefaultMultiLevelImage(dggMultiLevelSource);
+            dggMultiLevelImage = new DefaultMultiLevelImage(dggMultiLevelSource);
         } catch (Exception e) {
             throw new IllegalStateException(MessageFormat.format(
                     "Cannot create SMOS DDG multi-level image: {0}", e.getMessage()), e);

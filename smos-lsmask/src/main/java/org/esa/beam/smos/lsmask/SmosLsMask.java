@@ -17,34 +17,26 @@ public class SmosLsMask {
 
     private static final String SMOS_LS_MASK_DIR_PROPERTY_NAME = "org.esa.beam.smos.lsMaskDir";
 
-    private volatile MultiLevelImage multiLevelImage;
+    private final MultiLevelImage multiLevelImage;
 
     public static SmosLsMask getInstance() {
         return Holder.INSTANCE;
     }
 
     public MultiLevelImage getMultiLevelImage() {
-        if (multiLevelImage == null) {
-            synchronized (getInstance()) {
-                if (multiLevelImage == null) {
-                    multiLevelImage = createMultiLevelImage();
-                }
-            }
-        }
         return multiLevelImage;
     }
 
-    private MultiLevelImage createMultiLevelImage() {
-        String dirPath;
+    private SmosLsMask() {
         try {
-            dirPath = getDirPathFromProperty();
+            String dirPath = getDirPathFromProperty();
             if (dirPath == null) {
                 dirPath = getDirPathFromModule();
             }
             final File dir = new File(dirPath);
             final MultiLevelSource multiLevelSource = TiledFileMultiLevelSource.create(dir);
 
-            return new DefaultMultiLevelImage(multiLevelSource);
+            multiLevelImage = new DefaultMultiLevelImage(multiLevelSource);
         } catch (Exception e) {
             throw new IllegalStateException(MessageFormat.format(
                     "Cannot create SMOS Land/Sea Mask multi-level image: {0}", e.getMessage()), e);
@@ -74,9 +66,9 @@ public class SmosLsMask {
     }
 
     // Initialization on demand holder idiom
+
     private static class Holder {
 
         private static final SmosLsMask INSTANCE = new SmosLsMask();
     }
-
 }
