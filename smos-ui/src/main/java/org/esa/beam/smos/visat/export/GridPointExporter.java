@@ -35,7 +35,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Command line tool for grid cell export
+ * Command line tool for grid cell export.
  *
  * @author Marco Zuehlke
  * @version $Revision$ $Date$
