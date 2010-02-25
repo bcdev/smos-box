@@ -336,7 +336,6 @@ class GridPointExportDialog extends ModalDialog {
     private Component createLatLonCoordinatePanel(String name, String displayName, int numColumns) {
         final PropertyEditor editor =
                 PropertyEditorRegistry.getInstance().getPropertyEditor(TextFieldEditor.class.getName());
-
         final JTextField textField = (JTextField) editor.createEditorComponent(propertyContainer.getDescriptor(name),
                                                                                bindingContext);
 
