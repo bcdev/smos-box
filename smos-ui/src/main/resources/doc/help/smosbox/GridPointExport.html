@@ -1,91 +1,91 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-  <meta name="generator" content=
-  "HTML Tidy for Mac OS X (vers 25 March 2009), see www.w3.org" />
+    <meta name="generator" content=
+            "HTML Tidy for Mac OS X (vers 25 March 2009), see www.w3.org"/>
 
-  <title>SMOS Grid Point Export</title>
-  <link rel="stylesheet" href="../../style.css" type="text/css" />
+    <title>SMOS Grid Point Export</title>
+    <link rel="stylesheet" href="../../style.css" type="text/css"/>
 </head>
 
 <body>
-  <table class="header">
+<table class="header">
     <tr class="header">
-      <td class="header">&nbsp; SMOS Grid Cell Export</td>
+        <td class="header">&nbsp; SMOS Grid Cell Export</td>
 
-      <td class="header" align="right"><a href=
-      "../../index.html"><img src="../images/BeamHeader.jpg"
-      border="0" /></a></td>
+        <td class="header" align="right"><a href=
+                "../../index.html"><img src="../images/BeamHeader.jpg"
+                                        border="0"/></a></td>
     </tr>
-  </table>
+</table>
 
-  <h3>SMOS Grid Point Export</h3>
+<h3>SMOS Grid Point Export</h3>
 
-  <p>The grid cell export tool writes the data of a selection of
-  grid cells into a CSV (character separated values) file. The
-  values are separated by a semicolon.</p>
+<p>The Grid Point Export Tool can be used to write the data of selected DGG
+    grid points into a CSV formatted text file. Individual values are separated by a semicolon.</p>
 
-  <h2>Export tool from within VISAT</h2>
+<h4>Grid Point Export in VISAT</h4>
 
-  <p><img src="images/GridCellExportTool.png" alt=
-  "grid cell export tool" /></p>
+<p><img src="images/gridPointExport.png" alt=
+        "Grid Point Export"/></p>
 
-  <p><b>Input:</b> The selected product within VISAT can be for the
-  export. Alternatively the export tool can do an directory scan to
-  export data from multiple SMOS products. This directory scan can
-  be either flat, where only products that reside in the selected
-  directory are found, or recursive, where also all sub directories
-  are searched for products.</p>
+<p><b>Source Product(s):</b> Either the SMOS product selected in
+    VISAT, or all SMOS products residing in a directory of the
+    file system can be used for export. The search for SMOS
+    products may optionally include subdirectories.</p>
 
-  <p><b>Region of interest:</b> There are three different
-  possibilities to specify for which grid cells data should be
-  exported:</p>
+<p><b>Region of Interest:</b> There are three possibilities for
+    specifying a region of interest (ROI) considered
+    for export:</p>
+<ul>
+    <li>
+        A ROI defined by a geometry
+    </li>
+    <li>
+        A ROI defined by the grid points under the pins of the
+        SMOS product selected in VISAT
+    </li>
+    <li>
+        A ROI defined by a latitude-longitude box
+    </li>
+</ul>
 
-  <ul>
-    <li>A ROI containing a figure which can defined on any
-    band</li>
+<p><b>Target File:</b> The file, which receives the CSV output.
+    The amount of data can be huge, depending on the ROI selected
+    and the number of source products traversed.</p>
 
-    <li>The grid cells from all selected pin of the currently
-    selected product</li>
+<h4>Grid Point Export on the Command Line</h4>
 
-    <li>A specified longitude/latitude box</li>
-  </ul>
-
-  <p><b>Output:</b> The CSV file to which the data is written.
-  Please be aware that the amount of data can be huge, if the
-  region of interest contains many grid cells.</p>
-
-  <h2>Command line export tool</h2>
-
-  <p>The command line tool for grid cell exporting can executing
-  using the <code>export-grid-cells.sh</code> or
-  <code>export-grid-cells.bat</code> shell scripts, which reside in
-  the <code>${BEAM_HOME}/bin</code> directory.</p>
-
-  <p>The grid cells for which data should be exported can be
-  specified by defining a point with either its longitude and
-  latitude</p>
-  <pre>
-      export-grid-cells.sh -point 120 30 smosproduct.HDR
+<p>The command line tool for exporting grid point data resides in the
+    <code>bin</code> directory of your BEAM installation. From the
+    console, type</p>
+<pre>
+    ${BEAM_HOME}/bin/export-grid-points.bat</pre>
+<pre>
+    ${BEAM_HOME}/bin/export-grid-points.sh</pre>
+<p>or</p>
+<pre>
+    ${BEAM_HOME}/bin/export-grid-points.command</pre>
+<p>in order to obtain a usage message. The grid points, for which data is
+    exported can be defined by either a latitude-longitude box or a
+    latitude-longitude point. For instance, type</p>
+<pre>export-grid-points.sh -point 10.0 0.0 SM_TEST_MIR_SCLF1C_20070223T061043_20070223T061105_310_001_0</pre>
+<p>for dumping the data for a single grid point to the console. Type</p>
+  <pre>export-grid-points.sh -box -10.0 -10.0 10.0 10.0 SM_TEST_MIR_SCLF1C_20070223T061043_20070223T061105_310_001_0
 </pre>
 
-  <p>or with a longitude-latidue box</p>
-  <pre>
-      export-grid-cells.sh -box -120 -100 30 40 smosproduct.HDR
-</pre>
-
-  <p>The file to which the data should be written can specified by
-  means of the <code>-o</code> option. Otherwise
-  <code>stdout</code> is used.</p>
+<p>The file to which the data should be written can specified by
+    means of the <code>-o</code> option. Otherwise
+    <code>stdout</code> is used.</p>
   <pre>
       export-grid-cells.sh -point 120 30 -o grid_cell_data.csv smosproduct.HDR
 </pre>
 
-  <p>Multiple SMOS products from which data should be exported can
-  be specified. The usual shell pattern can be used to specify
-  multiple files:</p>
+<p>Multiple SMOS products from which data should be exported can
+    be specified. The usual shell pattern can be used to specify
+    multiple files:</p>
   <pre>
       export-grid-cells.sh -point 120 30 -o grid_cell_data.csv repository/SM_*/SM*.HDR
 </pre>
