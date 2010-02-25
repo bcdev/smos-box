@@ -142,7 +142,7 @@ public class GridPointExporter {
         System.out.println();
         System.out.println("ROI\n" +
                            "\n" +
-                           "    [-box lon1 lon2 lat1 lat2] | [-point lon lat]\n" +
+                           "    [-box minLon maxLon minLat maxLat] | [-point lon lat]\n" +
                            "        a region-of-interest either defined by a latitude-longitude\n" +
                            "        box or the coordinates of a DGG grid point");
         System.out.println();
@@ -184,21 +184,21 @@ public class GridPointExporter {
                     if (roi != null) {
                         throw new IllegalArgumentException("A ROI may either be defined by '-box' or '-point'.");
                     }
-                    final double lon1 = Double.valueOf(args[i + 1]);
-                    ensureRange("lon1", lon1, -180, 180);
-                    final double lon2 = Double.valueOf(args[i + 2]);
-                    ensureRange("lon2", lon2, -180, 180);
-                    if (lon2 <= lon1) {
-                        throw new IllegalArgumentException("The value of 'lon2' must exceed the value of 'lon1'.");
+                    final double minLon = Double.valueOf(args[i + 1]);
+                    ensureRange("minLon", minLon, -180, 180);
+                    final double maxLon = Double.valueOf(args[i + 2]);
+                    ensureRange("maxLon", maxLon, -180, 180);
+                    if (maxLon <= minLon) {
+                        throw new IllegalArgumentException("The value of 'maxLon' must exceed the value of 'minLon'.");
                     }
-                    final double lat1 = Double.valueOf(args[i + 3]);
-                    ensureRange("lat1", lat1, -90, 90);
-                    final double lat2 = Double.valueOf(args[i + 4]);
-                    ensureRange("lat2", lat2, -90, 90);
-                    if (lat2 <= lat1) {
-                        throw new IllegalArgumentException("The value of 'lat2' must exceed the value of 'lat1'.");
+                    final double minLat = Double.valueOf(args[i + 3]);
+                    ensureRange("minLat", minLat, -90, 90);
+                    final double maxLat = Double.valueOf(args[i + 4]);
+                    ensureRange("maxLat", maxLat, -90, 90);
+                    if (maxLat <= minLat) {
+                        throw new IllegalArgumentException("The value of 'maxLat' must exceed the value of 'minLat'.");
                     }
-                    roi = createBoxedArea(lon1, lon2, lat1, lat2);
+                    roi = createBoxedArea(minLon, maxLon, minLat, maxLat);
                     i += 4;
                 } else if (args[i].equals("-point")) {
                     if (args.length < i + 4) {
