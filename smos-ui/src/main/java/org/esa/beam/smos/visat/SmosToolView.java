@@ -1,9 +1,5 @@
 package org.esa.beam.smos.visat;
 
-import com.bc.ceres.binio.CompoundData;
-import com.bc.ceres.binio.CompoundType;
-import com.bc.ceres.binio.SimpleType;
-import com.bc.ceres.binio.Type;
 import org.esa.beam.dataio.smos.SmosFile;
 import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.framework.datamodel.RasterDataNode;
@@ -21,8 +17,6 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
-import java.io.IOException;
-import java.math.BigInteger;
 import java.net.URL;
 
 public abstract class SmosToolView extends AbstractToolView {
@@ -76,7 +70,7 @@ public abstract class SmosToolView extends AbstractToolView {
     @Override
     protected JComponent createControl() {
         panel = new JPanel(new BorderLayout());
-        URL resource = SmosToolView.class.getResource("smos-icon.png");
+        URL resource = SmosToolView.class.getResource("SmosIcon.png");
         if (resource != null) {
             defaultComponent = new JLabel(new ImageIcon(resource));
         } else {
