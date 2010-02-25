@@ -33,7 +33,7 @@ class ExportSwingWorker extends ProgressMonitorSwingWorker<Void, Void> {
     @Parameter(alias = GridPointExportDialog.ALIAS_SOURCE_DIRECTORY)
     private File sourceDirectory;
 
-    @Parameter(alias = GridPointExportDialog.ALIAS_RECURSIVE, defaultValue = "true")
+    @Parameter(alias = GridPointExportDialog.ALIAS_RECURSIVE, defaultValue = "false")
     private boolean recursive;
 
     @Parameter(alias = GridPointExportDialog.ALIAS_ROI_TYPE, defaultValue = "2", valueSet = {"0", "1", "2"})
