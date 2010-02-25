@@ -1,8 +1,8 @@
 1) understand file name pattern and modify subset file to follow convention
 
-Patch header:
+2) patch header:
 - <File_Name>
-- <Notes> - maybe add that fle was propcessed with SMOS-BOX version x.x.x
+- <Notes> - maybe add that fle was processed with SMOS-Box version x.x.x
 - <Precise_Validity_Start>: acquisition period??
 - <Checksum> how is this calculated and_ do we need to recalculate and patch?
 - <Header_Size unit="bytes">011122</Header_Size>
