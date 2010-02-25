@@ -4,7 +4,6 @@ import com.bc.ceres.binding.PropertyContainer;
 import com.bc.ceres.binding.PropertyDescriptor;
 import com.bc.ceres.binding.ValidationException;
 import com.bc.ceres.binding.ValueSet;
-import com.bc.ceres.core.ProgressMonitor;
 import com.bc.ceres.swing.TableLayout;
 import com.bc.ceres.swing.binding.Binding;
 import com.bc.ceres.swing.binding.BindingContext;
@@ -15,28 +14,18 @@ import com.bc.ceres.swing.binding.internal.FileEditor;
 import com.bc.ceres.swing.binding.internal.SingleSelectionEditor;
 import com.bc.ceres.swing.binding.internal.TextComponentAdapter;
 import com.bc.ceres.swing.binding.internal.TextFieldEditor;
-import com.bc.ceres.swing.progress.ProgressMonitorSwingWorker;
-import com.vividsolutions.jts.geom.Geometry;
 import org.esa.beam.dataio.smos.ExplorerFile;
 import org.esa.beam.dataio.smos.SmosFile;
 import org.esa.beam.dataio.smos.SmosProductReader;
 import org.esa.beam.framework.dataio.ProductReader;
 import org.esa.beam.framework.datamodel.Placemark;
-import org.esa.beam.framework.datamodel.PlacemarkGroup;
 import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.framework.datamodel.ProductNode;
 import org.esa.beam.framework.datamodel.ProductNodeGroup;
 import org.esa.beam.framework.datamodel.VectorDataNode;
-import org.esa.beam.framework.gpf.annotations.Parameter;
 import org.esa.beam.framework.gpf.annotations.ParameterDescriptorFactory;
 import org.esa.beam.framework.ui.AppContext;
 import org.esa.beam.framework.ui.ModalDialog;
-import org.esa.beam.util.PropertyMap;
-import org.geotools.feature.FeatureIterator;
-import org.geotools.geometry.jts.LiteShape2;
-import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.referencing.FactoryException;
-import org.opengis.referencing.operation.TransformException;
 
 import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
@@ -54,23 +43,15 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
-import javax.swing.SwingWorker;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.Insets;
-import java.awt.Point;
-import java.awt.Shape;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.geom.Area;
-import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -82,65 +63,28 @@ class GridPointExportDialog extends ModalDialog {
     private static final String LAST_SOURCE_DIR_KEY = "org.esa.beam.smos.export.sourceDir";
     private static final String LAST_TARGET_DIR_KEY = "org.esa.beam.smos.export.targetDir";
 
-    private static final String ALIAS_GEOMETRY = "geometry";
-    private static final String ALIAS_ROI_TYPE = "roiType";
-    private static final String ALIAS_RECURSIVE = "recursive";
-    private static final String ALIAS_SOURCE_DIRECTORY = "sourceDirectory";
-    private static final String ALIAS_TARGET_FILE = "targetFile";
-    private static final String ALIAS_USE_SELECTED_PRODUCT = "useSelectedProduct";
-    private static final String ALIAS_NORTH = "north";
-    private static final String ALIAS_SOUTH = "south";
-    private static final String ALIAS_EAST = "east";
-    private static final String ALIAS_WEST = "west";
-
-    private static final String DEFAULT_TARGET_FILE_NAME = "export.csv";
-
-    @Parameter(alias = ALIAS_USE_SELECTED_PRODUCT)
-    private boolean useSelectedProduct;
-
-    @Parameter(alias = ALIAS_SOURCE_DIRECTORY)
-    private File sourceDirectory;
-
-    @Parameter(alias = ALIAS_RECURSIVE, defaultValue = "true")
-    private boolean recursive;
-
-    @Parameter(alias = ALIAS_ROI_TYPE, defaultValue = "2", valueSet = {"0", "1", "2"})
-    private int roiType;
-
-    @Parameter(alias = ALIAS_GEOMETRY)
-    private VectorDataNode geometry;
-
-    @Parameter(alias = ALIAS_NORTH, defaultValue = "90.0", interval = "[-90.0, 90.0]")
-    private double north;
-
-    @Parameter(alias = ALIAS_SOUTH, defaultValue = "-90.0", interval = "[-90.0, 90.0]")
-    private double south;
-
-    @Parameter(alias = ALIAS_EAST, defaultValue = "180.0", interval = "[-180.0, 180.0]")
-    private double east;
-
-    @Parameter(alias = ALIAS_WEST, defaultValue = "-180.0", interval = "[-180.0, 180.0]")
-    private double west;
-
-    @Parameter(alias = ALIAS_TARGET_FILE, notNull = true, notEmpty = true)
-    private File targetFile;
+    static final String ALIAS_GEOMETRY = "geometry";
+    static final String ALIAS_ROI_TYPE = "roiType";
+    static final String ALIAS_RECURSIVE = "recursive";
+    static final String ALIAS_SOURCE_DIRECTORY = "sourceDirectory";
+    static final String ALIAS_TARGET_FILE = "targetFile";
+    static final String ALIAS_USE_SELECTED_PRODUCT = "useSelectedProduct";
+    static final String ALIAS_NORTH = "north";
+    static final String ALIAS_SOUTH = "south";
+    static final String ALIAS_EAST = "east";
+    static final String ALIAS_WEST = "west";
 
     private final AppContext appContext;
     private final PropertyContainer propertyContainer;
-
     private final BindingContext bindingContext;
+    private ExportSwingWorker exportSwingWorker;
 
     GridPointExportDialog(final AppContext appContext, String helpId) {
         super(appContext.getApplicationWindow(), "Export SMOS Grid Points", ID_OK_CANCEL_HELP, helpId); /* I18N */
+        exportSwingWorker = new ExportSwingWorker(appContext);
         this.appContext = appContext;
 
-        final PropertyMap preferences = appContext.getPreferences();
-        final String defaultPath = System.getProperty("user.home", ".");
-        sourceDirectory = new File(preferences.getPropertyString(LAST_SOURCE_DIR_KEY, defaultPath));
-        targetFile = new File(preferences.getPropertyString(LAST_TARGET_DIR_KEY, defaultPath),
-                              DEFAULT_TARGET_FILE_NAME);
-
-        propertyContainer = PropertyContainer.createObjectBacked(this, new ParameterDescriptorFactory());
+        propertyContainer = PropertyContainer.createObjectBacked(exportSwingWorker, new ParameterDescriptorFactory());
         try {
             initPropertyContainer();
         } catch (ValidationException e) {
@@ -159,9 +103,10 @@ class GridPointExportDialog extends ModalDialog {
 
     @Override
     protected void onOK() {
-        final PropertyMap preferences = appContext.getPreferences();
-        preferences.setPropertyString(LAST_SOURCE_DIR_KEY, sourceDirectory.getPath());
-        preferences.setPropertyString(LAST_TARGET_DIR_KEY, targetFile.getParent());
+        final File sourceDirectory = (File) propertyContainer.getValue(ALIAS_SOURCE_DIRECTORY);
+        final File targetFile = (File) propertyContainer.getValue(ALIAS_TARGET_FILE);
+        setDefaultSourceDirectory(sourceDirectory);
+        setDefaultTargetDirectory(targetFile.getParentFile());
 
         if (targetFile.exists()) {
             final String message = MessageFormat.format(
@@ -172,54 +117,22 @@ class GridPointExportDialog extends ModalDialog {
                 return;
             }
         }
-        final PrintWriter printWriter;
-        try {
-            printWriter = new PrintWriter(targetFile);
-        } catch (FileNotFoundException e) {
-            appContext.handleError(MessageFormat.format("Cannot create target file: {0}", e.getMessage()), e);
-            return;
-        }
-
         super.onOK();
-
-        final CsvExportStream exportStream = new CsvExportStream(printWriter, ";");
-        final SwingWorker<Void, Void> swingWorker =
-                new ProgressMonitorSwingWorker<Void, Void>(getJDialog(), "Exporting grid points...") {
-                    @Override
-                    protected Void doInBackground(ProgressMonitor pm) throws Exception {
-                        final Area area = getArea();
-                        final GridPointFilterStreamHandler streamHandler =
-                                new GridPointFilterStreamHandler(exportStream, area);
-                        try {
-                            if (useSelectedProduct) {
-                                streamHandler.processProduct(appContext.getSelectedProduct(), pm);
-                            } else {
-                                streamHandler.processDirectory(sourceDirectory, recursive, pm);
-                            }
-                        } catch (IOException e) {
-                            appContext.handleError(MessageFormat.format(
-                                    "An I/O error occurred: {0}", e.getMessage()), e);
-                            return null;
-                        } finally {
-                            try {
-                                exportStream.close();
-                            } catch (IOException e) {
-                                // ignore;
-                            }
-                        }
-                        return null;
-                    }
-                };
-        swingWorker.execute();
+        exportSwingWorker.execute();
     }
 
     @Override
     protected boolean verifyUserInput() {
+        final int roiType = (Integer) propertyContainer.getValue(ALIAS_ROI_TYPE);
         if (roiType == 2) {
+            final double north = (Double) propertyContainer.getValue(ALIAS_NORTH);
+            final double south = (Double) propertyContainer.getValue(ALIAS_SOUTH);
             if (north <= south) {
                 showErrorDialog("The southern latitude must be less than the northern latitude.");
                 return false;
             }
+            final double east = (Double) propertyContainer.getValue(ALIAS_EAST);
+            final double west = (Double) propertyContainer.getValue(ALIAS_WEST);
             if (east <= west) {
                 showErrorDialog("The western longitude must be less than the eastern longitude.");
                 return false;
@@ -230,6 +143,9 @@ class GridPointExportDialog extends ModalDialog {
 
     private void initPropertyContainer() throws ValidationException {
         propertyContainer.setDefaultValues();
+        propertyContainer.setValue(ALIAS_SOURCE_DIRECTORY, getDefaultSourceDirectory());
+        propertyContainer.setValue(ALIAS_TARGET_FILE, new File(getDefaultTargetDirectory(), "export.csv"));
+
         final Product selectedProduct = getSelectedSmosProduct();
         if (selectedProduct != null) {
             final List<VectorDataNode> geometryNodeList = new ArrayList<VectorDataNode>();
@@ -470,6 +386,24 @@ class GridPointExportDialog extends ModalDialog {
         return targetFilePanel;
     }
 
+    private File getDefaultSourceDirectory() {
+        return new File(appContext.getPreferences().getPropertyString(LAST_SOURCE_DIR_KEY,
+                                                                      System.getProperty("user.home", ".")));
+    }
+
+    private void setDefaultSourceDirectory(File sourceDirectory) {
+        appContext.getPreferences().setPropertyString(LAST_SOURCE_DIR_KEY, sourceDirectory.getPath());
+    }
+
+    private File getDefaultTargetDirectory() {
+        return new File(appContext.getPreferences().getPropertyString(LAST_TARGET_DIR_KEY,
+                                                                      System.getProperty("user.home", ".")));
+    }
+
+    private void setDefaultTargetDirectory(File targetDirectory) {
+        appContext.getPreferences().setPropertyString(LAST_TARGET_DIR_KEY, targetDirectory.getPath());
+    }
+
     private Product getSelectedSmosProduct() {
         final Product selectedProduct = appContext.getSelectedProduct();
 
@@ -485,72 +419,6 @@ class GridPointExportDialog extends ModalDialog {
         }
 
         return null;
-    }
-
-    private Area getArea() {
-        switch (roiType) {
-        case 0: {
-            final Area area = new Area();
-            final FeatureIterator<SimpleFeature> featureIterator = geometry.getFeatureCollection().features();
-
-            while (featureIterator.hasNext()) {
-                final Area featureArea;
-                final SimpleFeature feature = featureIterator.next();
-                if (feature.getFeatureType() == Placemark.getFeatureType()) {
-                    featureArea = getAreaForPlacemarkFeature(feature);
-                } else {
-                    featureArea = getArea(feature);
-                }
-                if (featureArea != null && !featureArea.isEmpty()) {
-                    area.add(featureArea);
-                }
-            }
-            return area;
-        }
-        case 1: {
-            final Area area = new Area();
-            final PlacemarkGroup pinGroup = appContext.getSelectedProduct().getPinGroup();
-
-            for (Placemark pin : pinGroup.toArray(new Placemark[pinGroup.getNodeCount()])) {
-                area.add(getAreaForPlacemarkFeature(pin.getFeature()));
-            }
-            return area;
-        }
-        case 2: {
-            return new Area(new Rectangle2D.Double(west, south, east - west, north - south));
-        }
-        default:
-            // cannot happen
-            throw new IllegalStateException(MessageFormat.format("Illegal ROI type: {0}", roiType));
-        }
-    }
-
-    private static Area getArea(SimpleFeature feature) {
-        Shape shape = null;
-        try {
-            final Object geometry = feature.getDefaultGeometry();
-            if (geometry instanceof Geometry) {
-                shape = new LiteShape2((Geometry) geometry, null, null, true);
-            }
-        } catch (TransformException e) {
-            // ignore
-        } catch (FactoryException e) {
-            // ignore
-        }
-        return shape != null ? new Area(shape) : null;
-    }
-
-    private static Area getAreaForPlacemarkFeature(SimpleFeature feature) {
-        final Point geometry = (Point) feature.getDefaultGeometry();
-        double lon = geometry.getX();
-        double lat = geometry.getY();
-
-        final double x = lon - 0.08;
-        final double y = lat - 0.08;
-        final double w = 0.16;
-        final double h = 0.16;
-
-        return new Area(new Rectangle2D.Double(x, y, w, h));
     }
 
     private static final class ProductNodeRenderer extends DefaultListCellRenderer {
