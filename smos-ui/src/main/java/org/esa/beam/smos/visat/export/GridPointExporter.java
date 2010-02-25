@@ -73,6 +73,7 @@ public class GridPointExporter {
 
             @Override
             public void error(final Throwable t) {
+                System.err.println(t.getMessage());
                 printUsage();
                 System.exit(1);
             }
@@ -86,8 +87,12 @@ public class GridPointExporter {
 
             @Override
             public void error(final Throwable t) {
+                System.err.println(t.getMessage());
                 logger.severe(t.getMessage());
-                t.printStackTrace(System.err);
+                final StackTraceElement[] stackTraceElements = t.getStackTrace();
+                for (final StackTraceElement stackTraceElement : stackTraceElements) {
+                    logger.severe(stackTraceElement.toString());
+                }
                 System.exit(1);
             }
         });
