@@ -77,11 +77,11 @@ class GridPointExportDialog extends ModalDialog {
     private final AppContext appContext;
     private final PropertyContainer propertyContainer;
     private final BindingContext bindingContext;
-    private ExportSwingWorker exportSwingWorker;
+    private GridPointExportSwingWorker exportSwingWorker;
 
     GridPointExportDialog(final AppContext appContext, String helpId) {
         super(appContext.getApplicationWindow(), "Export SMOS Grid Points", ID_OK_CANCEL_HELP, helpId); /* I18N */
-        exportSwingWorker = new ExportSwingWorker(appContext);
+        exportSwingWorker = new GridPointExportSwingWorker(appContext);
         this.appContext = appContext;
 
         propertyContainer = PropertyContainer.createObjectBacked(exportSwingWorker, new ParameterDescriptorFactory());

@@ -23,7 +23,7 @@ import java.io.PrintWriter;
 import java.text.MessageFormat;
 import java.util.concurrent.ExecutionException;
 
-class ExportSwingWorker extends ProgressMonitorSwingWorker<Void, Void> {
+class GridPointExportSwingWorker extends ProgressMonitorSwingWorker<Void, Void> {
 
     private final AppContext appContext;
 
@@ -57,7 +57,7 @@ class ExportSwingWorker extends ProgressMonitorSwingWorker<Void, Void> {
     @Parameter(alias = GridPointExportDialog.ALIAS_TARGET_FILE, notNull = true, notEmpty = true)
     private File targetFile;
 
-    ExportSwingWorker(AppContext appContext) {
+    GridPointExportSwingWorker(AppContext appContext) {
         super(appContext.getApplicationWindow(), "Exporting grid points");
         this.appContext = appContext;
     }
