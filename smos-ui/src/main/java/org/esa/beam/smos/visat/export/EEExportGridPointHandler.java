@@ -1,6 +1,10 @@
 package org.esa.beam.smos.visat.export;
 
-import com.bc.ceres.binio.*;
+import com.bc.ceres.binio.CollectionData;
+import com.bc.ceres.binio.CompoundData;
+import com.bc.ceres.binio.CompoundType;
+import com.bc.ceres.binio.DataContext;
+import com.bc.ceres.binio.SequenceData;
 import org.esa.beam.dataio.smos.SmosConstants;
 import org.esa.beam.dataio.smos.SmosFile;
 import org.esa.beam.dataio.smos.SmosProductReader;
@@ -18,7 +22,7 @@ class EEExportGridPointHandler implements GridPointHandler {
     private final HashMap<Long, Date> snapshotIdTimeMap;
     private final TimeTracker timeTracker;
     private final GeometryTracker geometryTracker;
-    private boolean isL2File;
+    private boolean level2;
 
     private long gridPointCount;
     private long gridPointDataPosition;
@@ -42,10 +46,10 @@ class EEExportGridPointHandler implements GridPointHandler {
         geometryTracker = new GeometryTracker();
 
         final String formatName = targetContext.getFormat().getName();
-        isL2File = SmosProductReader.isSmUserFormat(formatName) ||
-                SmosProductReader.isSmAnalysisFormat(formatName) ||
-                SmosProductReader.isOsUserFormat(formatName) ||
-                SmosProductReader.isOsAnalysisFormat(formatName);
+        level2 = SmosProductReader.isSmUserFormat(formatName) ||
+                 SmosProductReader.isSmAnalysisFormat(formatName) ||
+                 SmosProductReader.isOsUserFormat(formatName) ||
+                 SmosProductReader.isOsAnalysisFormat(formatName);
     }
 
     @Override
@@ -102,7 +106,7 @@ class EEExportGridPointHandler implements GridPointHandler {
             return; // no sensing time information in ECMWF aux files
         }
 
-        if (isL2File) {
+        if (level2) {
             int index = gridPointData.getType().getMemberIndex("Mean_acq_time");
             if (index < 0) {
                 return; // we have a data analysis product - no timing information stored in there
@@ -154,25 +158,22 @@ class EEExportGridPointHandler implements GridPointHandler {
 
     private void createSnapshotIdMap(CollectionData parent) throws IOException {
         final DataContext context = parent.getContext();
-        final SequenceData snapShotData;
-        try {
-            snapShotData = context.getData().getSequence(SmosConstants.SNAPSHOT_LIST_NAME);
-        } catch (DataAccessException e) {
+        final int snapshotListIndex = context.getData().getMemberIndex(SmosConstants.SNAPSHOT_LIST_NAME);
+        if (snapshotListIndex == -1) {
             return; // we have a browse product
-            // but this procedure is not really cool, better ask if the seqzuence is present
         }
-
-        final int numSnapshots = snapShotData.getElementCount();
-        for (int i = 0; i < numSnapshots; i++) {
-            final CompoundData snapShot = snapShotData.getCompound(i);
-            final CompoundData utcData = snapShot.getCompound(0);
+        final SequenceData snapshotData = context.getData().getSequence(snapshotListIndex);
+        final int snapshotCount = snapshotData.getElementCount();
+        for (int i = 0; i < snapshotCount; i++) {
+            final CompoundData snapshot = snapshotData.getCompound(i);
+            final CompoundData utcData = snapshot.getCompound(0);
             final int days = utcData.getInt(0);
             final long seconds = utcData.getUInt(1);
             final long microSeconds = utcData.getUInt(2);
-            final Date snapShotTime = SmosFile.cfiDateToUtc(days, seconds, microSeconds);
-            final long snapShotId = snapShot.getUInt(1);
+            final Date snapshotTime = SmosFile.cfiDateToUtc(days, seconds, microSeconds);
+            final long snapshotId = snapshot.getUInt(1);
 
-            snapshotIdTimeMap.put(snapShotId, snapShotTime);
+            snapshotIdTimeMap.put(snapshotId, snapshotTime);
         }
     }
 
