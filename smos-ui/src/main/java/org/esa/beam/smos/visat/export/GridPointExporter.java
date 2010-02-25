@@ -46,10 +46,10 @@ public class GridPointExporter {
 
 
     static {
-        logger = Logger.getLogger("org.eumetsat.iasicloud");
+        logger = Logger.getLogger("org.esa.beam.smos");
 
         try {
-            final FileHandler fileHandler = new FileHandler("iasicloud-proc.log");
+            final FileHandler fileHandler = new FileHandler("export.log");
             fileHandler.setLevel(Level.ALL);
             logger.addHandler(fileHandler);
 
@@ -117,7 +117,6 @@ public class GridPointExporter {
                 try {
                     logger.info(MessageFormat.format("Exporting source file ''{0}''.", sourceFile.getPath()));
                     streamHandler.processDirectory(sourceFile, false, ProgressMonitor.NULL);
-                    logger.info(MessageFormat.format("Completed source file ''{0}''.", sourceFile.getPath()));
                 } catch (IOException e) {
                     errorHandler.warning(e);
                 }
