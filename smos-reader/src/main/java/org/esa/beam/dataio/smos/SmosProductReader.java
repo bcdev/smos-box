@@ -142,7 +142,6 @@ public class SmosProductReader extends AbstractProductReader {
                 addLandSeaMask(product);
             }
 
-            product.setFileLocation(explorerFile.getDblFile());
             return product;
         }
     }
