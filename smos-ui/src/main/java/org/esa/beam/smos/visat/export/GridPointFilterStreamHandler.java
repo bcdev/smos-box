@@ -63,11 +63,12 @@ class GridPointFilterStreamHandler {
                     try {
                         explorerFile = SmosProductReader.createExplorerFile(sourceFile);
                     } catch (IOException e) {
-                        // ignore, file is skipped
+                        // ignore, file is skipped anyway
                     }
                     if (explorerFile instanceof SmosFile) {
                         smosFileProcessor.process((SmosFile) explorerFile, SubProgressMonitor.create(pm, 1));
                     } else {
+                        // skip file
                         pm.worked(1);
                     }
                     if (pm.isCanceled()) {
