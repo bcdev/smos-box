@@ -107,16 +107,18 @@ public abstract class GridPointBtDataToolView extends SmosToolView {
 
     final void updateGridPointBtDataComponent() {
         int id = -1;
-        if (!snapToSelectedPinCheckBox.isSelected()) {
+        if (!isSnappedToPin()) {
             id = SmosBox.getInstance().getGridPointSelectionService().getSelectedGridPointId();
         } else {
-            final Placemark selectedPin = getSelectedSmosView().getSelectedPin();
-
-            if (selectedPin != null) {
-                final PixelPos pixelPos = selectedPin.getPixelPos();
-                final int x = (int) Math.floor(pixelPos.getX());
-                final int y = (int) Math.floor(pixelPos.getY());
-                id = SmosBox.getInstance().getSmosViewSelectionService().getGridPointId(x, y);
+            final ProductSceneView view = getSelectedSmosView();
+            if (view != null) {
+                final Placemark selectedPin = view.getSelectedPin();
+                if (selectedPin != null) {
+                    final PixelPos pixelPos = selectedPin.getPixelPos();
+                    final int x = (int) Math.floor(pixelPos.getX());
+                    final int y = (int) Math.floor(pixelPos.getY());
+                    id = SmosBox.getInstance().getSmosViewSelectionService().getGridPointId(x, y);
+                }
             }
         }
         updateGridPointBtDataComponent(id);
@@ -228,21 +230,25 @@ public abstract class GridPointBtDataToolView extends SmosToolView {
 
         private final PCL pcl;
         private final PNL pnl;
+        private final VSL vsl;
 
         private IL() {
             pcl = new PCL();
             pnl = new PNL();
+            vsl = new VSL();
         }
 
         @Override
         public void itemStateChanged(ItemEvent e) {
             if (e.getStateChange() == ItemEvent.SELECTED) {
                 updateGridPointBtDataComponent();
+                SmosBox.getInstance().getSmosViewSelectionService().addSceneViewSelectionListener(vsl);
                 getSelectedSmosView().addPropertyChangeListener(ProductSceneView.PROPERTY_NAME_SELECTED_PIN, pcl);
                 getSelectedSmosProduct().addProductNodeListener(pnl);
             } else {
                 getSelectedSmosProduct().removeProductNodeListener(pnl);
                 getSelectedSmosView().removePropertyChangeListener(ProductSceneView.PROPERTY_NAME_SELECTED_PIN, pcl);
+                SmosBox.getInstance().getSmosViewSelectionService().removeSceneViewSelectionListener(vsl);
             }
         }
 
@@ -281,6 +287,20 @@ public abstract class GridPointBtDataToolView extends SmosToolView {
                 if (sourceNode instanceof Placemark) {
                     updateGridPointBtDataComponent();
                 }
+            }
+        }
+
+        private class VSL implements SceneViewSelectionService.SelectionListener {
+
+            @Override
+            public void handleSceneViewSelectionChanged(ProductSceneView oldView, ProductSceneView newView) {
+                if (oldView != null) {
+                    oldView.removePropertyChangeListener(ProductSceneView.PROPERTY_NAME_SELECTED_PIN, pcl);
+                }
+                if (newView != null) {
+                    newView.addPropertyChangeListener(ProductSceneView.PROPERTY_NAME_SELECTED_PIN, pcl);
+                }
+                updateGridPointBtDataComponent();
             }
         }
     }
