@@ -126,22 +126,18 @@ public class SmosProductReader extends AbstractProductReader {
     }
 
     public ExplorerFile getExplorerFile() {
-        synchronized (this) {
-            return explorerFile;
-        }
+        return explorerFile;
     }
 
     @Override
     protected final Product readProductNodesImpl() throws IOException {
         synchronized (this) {
-            final File inputFile = getInputFile();
-            explorerFile = createExplorerFile(inputFile);
-
+            explorerFile = createExplorerFile(getInputFile());
             final Product product = explorerFile.createProduct();
+            product.setFileLocation(explorerFile.getDblFile());
             if (explorerFile instanceof SmosFile) {
                 addLandSeaMask(product);
             }
-
             return product;
         }
     }
