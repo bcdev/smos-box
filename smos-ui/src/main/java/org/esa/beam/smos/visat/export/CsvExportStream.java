@@ -23,9 +23,9 @@ import com.bc.ceres.binio.SequenceData;
 import com.bc.ceres.binio.SequenceType;
 import com.bc.ceres.binio.SimpleType;
 import com.bc.ceres.binio.Type;
+import org.esa.beam.dataio.smos.SmosFile;
 import org.esa.beam.dataio.smos.dddb.BandDescriptor;
 import org.esa.beam.dataio.smos.dddb.Dddb;
-import org.esa.beam.dataio.smos.SmosFile;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -48,19 +48,18 @@ class CsvExportStream implements GridPointFilterStream {
     }
 
     @Override
-    public void startFile(SmosFile smosfile) {
-        printWriter.println(smosfile.getDblFile().getName());
-
-        printTypeHeader(smosfile.getGridPointType());
+    public void startFile(SmosFile smosFile) {
+        printWriter.println("# " + smosFile.getDblFile().getParent());
+        printTypeHeader(smosFile.getGridPointType());
         printWriter.println();
     }
 
     private void printTypeHeader(Type type) {
         if (type.isCompoundType()) {
-            CompoundType compoundType = (CompoundType) type;
-            int memberCount = compoundType.getMemberCount();
+            final CompoundType compoundType = (CompoundType) type;
+            final int memberCount = compoundType.getMemberCount();
             for (int i = 0; i < memberCount; i++) {
-                CompoundMember member = compoundType.getMember(i);
+                final CompoundMember member = compoundType.getMember(i);
                 if (member.getType().isSimpleType()) {
                     printWriter.print(member.getName());
                 } else {
@@ -71,20 +70,20 @@ class CsvExportStream implements GridPointFilterStream {
                 }
             }
         } else if (type.isSequenceType()) {
-            SequenceType sequenceType = (SequenceType) type;
-            Type elementType = sequenceType.getElementType();
+            final SequenceType sequenceType = (SequenceType) type;
+            final Type elementType = sequenceType.getElementType();
             printTypeHeader(elementType);
         }
     }
 
     @Override
-    public void stopFile(SmosFile smosfile) {
+    public void stopFile(SmosFile smosFile) {
         printWriter.println("-----------------------------------------------");
     }
 
     @Override
     public void handleGridPoint(int id, CompoundData gridPointData) throws IOException {
-        int btDataIndex = gridPointData.getMemberIndex("BT_Data_List");
+        final int btDataIndex = gridPointData.getMemberIndex("BT_Data_List");
         if (btDataIndex != -1) {
             SequenceData sequence = gridPointData.getSequence(btDataIndex);
             for (int i = 0; i < sequence.getElementCount(); i++) {
