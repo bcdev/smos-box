@@ -31,7 +31,7 @@ import org.esa.beam.framework.gpf.annotations.Parameter;
 import org.esa.beam.framework.gpf.annotations.ParameterDescriptorFactory;
 import org.esa.beam.framework.ui.AppContext;
 import org.esa.beam.framework.ui.ModalDialog;
-import org.esa.beam.util.SystemUtils;
+import org.esa.beam.util.PropertyMap;
 import org.geotools.feature.FeatureIterator;
 import org.geotools.geometry.jts.LiteShape2;
 import org.opengis.feature.simple.SimpleFeature;
@@ -79,7 +79,8 @@ import java.util.Map;
 
 class GridPointExportDialog extends ModalDialog {
 
-    private static final String LAST_DIR_KEY = "user.smos.import.dir";
+    private static final String LAST_SOURCE_DIR_KEY = "org.esa.beam.smos.export.sourceDir";
+    private static final String LAST_TARGET_DIR_KEY = "org.esa.beam.smos.export.targetDir";
 
     private static final String ALIAS_GEOMETRY = "geometry";
     private static final String ALIAS_ROI_TYPE = "roiType";
@@ -92,8 +93,39 @@ class GridPointExportDialog extends ModalDialog {
     private static final String ALIAS_EAST = "east";
     private static final String ALIAS_WEST = "west";
 
+    private static final String DEFAULT_TARGET_FILE_NAME = "export.csv";
+
+    @Parameter(alias = ALIAS_USE_SELECTED_PRODUCT)
+    private boolean useSelectedProduct;
+
+    @Parameter(alias = ALIAS_SOURCE_DIRECTORY)
+    private File sourceDirectory;
+
+    @Parameter(alias = ALIAS_RECURSIVE, defaultValue = "true")
+    private boolean recursive;
+
+    @Parameter(alias = ALIAS_ROI_TYPE, defaultValue = "2", valueSet = {"0", "1", "2"})
+    private int roiType;
+
+    @Parameter(alias = ALIAS_GEOMETRY)
+    private VectorDataNode geometry;
+
+    @Parameter(alias = ALIAS_NORTH, defaultValue = "90.0", interval = "[-90.0, 90.0]")
+    private double north;
+
+    @Parameter(alias = ALIAS_SOUTH, defaultValue = "-90.0", interval = "[-90.0, 90.0]")
+    private double south;
+
+    @Parameter(alias = ALIAS_EAST, defaultValue = "180.0", interval = "[-180.0, 180.0]")
+    private double east;
+
+    @Parameter(alias = ALIAS_WEST, defaultValue = "-180.0", interval = "[-180.0, 180.0]")
+    private double west;
+
+    @Parameter(alias = ALIAS_TARGET_FILE, notNull = true, notEmpty = true)
+    private File targetFile;
+
     private final AppContext appContext;
-    private final ParameterBlock parameterBlock;
     private final PropertyContainer propertyContainer;
 
     private final BindingContext bindingContext;
@@ -101,14 +133,14 @@ class GridPointExportDialog extends ModalDialog {
     GridPointExportDialog(final AppContext appContext, String helpId) {
         super(appContext.getApplicationWindow(), "Export SMOS Grid Points", ID_OK_CANCEL_HELP, helpId); /* I18N */
         this.appContext = appContext;
-        parameterBlock = new ParameterBlock();
 
-        final String smosDirPath =
-                appContext.getPreferences().getPropertyString(LAST_DIR_KEY, SystemUtils.getUserHomeDir().getPath());
-        parameterBlock.sourceDirectory = new File(smosDirPath);
-        parameterBlock.targetFile = new File(SystemUtils.getUserHomeDir(), "grid_point_export.csv");
+        final PropertyMap preferences = appContext.getPreferences();
+        final String defaultPath = System.getProperty("user.home", ".");
+        sourceDirectory = new File(preferences.getPropertyString(LAST_SOURCE_DIR_KEY, defaultPath));
+        targetFile = new File(preferences.getPropertyString(LAST_TARGET_DIR_KEY, defaultPath),
+                              DEFAULT_TARGET_FILE_NAME);
 
-        propertyContainer = PropertyContainer.createObjectBacked(parameterBlock, new ParameterDescriptorFactory());
+        propertyContainer = PropertyContainer.createObjectBacked(this, new ParameterDescriptorFactory());
         try {
             initPropertyContainer();
         } catch (ValidationException e) {
@@ -127,63 +159,68 @@ class GridPointExportDialog extends ModalDialog {
 
     @Override
     protected void onOK() {
-        if (parameterBlock.targetFile.exists()) {
+        if (targetFile.exists()) {
             final String message = MessageFormat.format(
-                    "The selected target file\n''{0}''\n already exists.\n\n Do you want to overwrite the existing file?",
-                    parameterBlock.targetFile.getPath());
+                    "The selected target file\n''{0}''\n already exists.\n\n Do you want to overwrite the target file?",
+                    targetFile.getPath());
             final int answer = JOptionPane.showConfirmDialog(getJDialog(), message, getTitle(),
                                                              JOptionPane.YES_NO_OPTION);
             if (answer != JOptionPane.YES_OPTION) {
-                return;
             }
+            return;
         }
         final PrintWriter printWriter;
         try {
-            printWriter = new PrintWriter(parameterBlock.targetFile);
+            printWriter = new PrintWriter(targetFile);
         } catch (FileNotFoundException e) {
             appContext.handleError(MessageFormat.format("Cannot create target file: {0}", e.getMessage()), e);
             return;
         }
-        final CsvExportStream csvExportStream = new CsvExportStream(printWriter, ";");
-        final SwingWorker<Void, Void> swingWorker = new ProgressMonitorSwingWorker<Void, Void>(getJDialog(),
-                                                                                               "Exporting grid points...") {
-            @Override
-            protected Void doInBackground(ProgressMonitor pm) throws Exception {
-                final Area area = getArea();
-                final GridPointFilterStreamHandler streamHandler =
-                        new GridPointFilterStreamHandler(csvExportStream, area);
-                try {
-                    if (parameterBlock.useSelectedProduct) {
-                        streamHandler.processProduct(appContext.getSelectedProduct(), pm);
-                    } else {
-                        streamHandler.processDirectory(parameterBlock.sourceDirectory, parameterBlock.recursive, pm);
-                    }
-                } catch (IOException e) {
-                    appContext.handleError(MessageFormat.format(
-                            "An I/O error occurred: {0}", e.getMessage()), e);
-                    return null;
-                } finally {
-                    try {
-                        csvExportStream.close();
-                    } catch (IOException e) {
-                        // ignore;
-                    }
-                }
-                return null;
-            }
-        };
+        final PropertyMap preferences = appContext.getPreferences();
+        preferences.setPropertyString(LAST_SOURCE_DIR_KEY, sourceDirectory.getPath());
+        preferences.setPropertyString(LAST_TARGET_DIR_KEY, targetFile.getParent());
+
         super.onOK();
+
+        final CsvExportStream exportStream = new CsvExportStream(printWriter, ";");
+        final SwingWorker<Void, Void> swingWorker =
+                new ProgressMonitorSwingWorker<Void, Void>(getJDialog(), "Exporting grid points...") {
+                    @Override
+                    protected Void doInBackground(ProgressMonitor pm) throws Exception {
+                        final Area area = getArea();
+                        final GridPointFilterStreamHandler streamHandler =
+                                new GridPointFilterStreamHandler(exportStream, area);
+                        try {
+                            if (useSelectedProduct) {
+                                streamHandler.processProduct(appContext.getSelectedProduct(), pm);
+                            } else {
+                                streamHandler.processDirectory(sourceDirectory, recursive, pm);
+                            }
+                        } catch (IOException e) {
+                            appContext.handleError(MessageFormat.format(
+                                    "An I/O error occurred: {0}", e.getMessage()), e);
+                            return null;
+                        } finally {
+                            try {
+                                exportStream.close();
+                            } catch (IOException e) {
+                                // ignore;
+                            }
+                        }
+                        return null;
+                    }
+                };
         swingWorker.execute();
     }
 
     @Override
     protected boolean verifyUserInput() {
-        if (parameterBlock.roiType == 2) {
-            if (parameterBlock.north <= parameterBlock.south) {
+        if (roiType == 2) {
+            if (north <= south) {
                 showErrorDialog("The southern latitude must be less than the northern latitude.");
                 return false;
             }
-            if (parameterBlock.east <= parameterBlock.west) {
+            if (east <= west) {
                 showErrorDialog("The western longitude must be less than the eastern longitude.");
                 return false;
             }
@@ -291,7 +328,7 @@ class GridPointExportDialog extends ModalDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 final JFileChooser fileChooser = new JFileChooser();
-                fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+                fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
                 final int state = fileChooser.showDialog(panel, "Select");
                 if (state == JFileChooser.APPROVE_OPTION && fileChooser.getSelectedFile() != null) {
                     binding.setPropertyValue(fileChooser.getSelectedFile());
@@ -451,10 +488,10 @@ class GridPointExportDialog extends ModalDialog {
     }
 
     private Area getArea() {
-        switch (parameterBlock.roiType) {
+        switch (roiType) {
         case 0: {
             final Area area = new Area();
-            final FeatureIterator<SimpleFeature> featureIterator = parameterBlock.geometry.getFeatureCollection().features();
+            final FeatureIterator<SimpleFeature> featureIterator = geometry.getFeatureCollection().features();
 
             while (featureIterator.hasNext()) {
                 final Area featureArea;
@@ -480,13 +517,11 @@ class GridPointExportDialog extends ModalDialog {
             return area;
         }
         case 2: {
-            return new Area(new Rectangle2D.Double(parameterBlock.west, parameterBlock.south,
-                                                   parameterBlock.east - parameterBlock.west,
-                                                   parameterBlock.north - parameterBlock.south));
+            return new Area(new Rectangle2D.Double(west, south, east - west, north - south));
         }
         default:
             // cannot happen
-            throw new IllegalStateException(MessageFormat.format("Illegal ROI type: {0}", parameterBlock.roiType));
+            throw new IllegalStateException(MessageFormat.format("Illegal ROI type: {0}", roiType));
         }
     }
 
@@ -536,38 +571,5 @@ class GridPointExportDialog extends ModalDialog {
             }
             return label;
         }
-    }
-
-    private static final class ParameterBlock {
-
-        @Parameter(alias = ALIAS_USE_SELECTED_PRODUCT)
-        private boolean useSelectedProduct;
-
-        @Parameter(alias = ALIAS_ROI_TYPE, defaultValue = "2", valueSet = {"0", "1", "2"})
-        private int roiType;
-
-        @Parameter(alias = ALIAS_SOURCE_DIRECTORY)
-        private File sourceDirectory;
-
-        @Parameter(alias = ALIAS_RECURSIVE, defaultValue = "false")
-        private boolean recursive;
-
-        @Parameter(alias = ALIAS_GEOMETRY)
-        private VectorDataNode geometry;
-
-        @Parameter(alias = ALIAS_NORTH, defaultValue = "90.0", interval = "[-90.0, 90.0]")
-        private double north;
-
-        @Parameter(alias = ALIAS_SOUTH, defaultValue = "-90.0", interval = "[-90.0, 90.0]")
-        private double south;
-
-        @Parameter(alias = ALIAS_EAST, defaultValue = "180.0", interval = "[-180.0, 180.0]")
-        private double east;
-
-        @Parameter(alias = ALIAS_WEST, defaultValue = "-180.0", interval = "[-180.0, 180.0]")
-        private double west;
-
-        @Parameter(alias = ALIAS_TARGET_FILE, notNull = true, notEmpty = true)
-        private File targetFile;
     }
 }

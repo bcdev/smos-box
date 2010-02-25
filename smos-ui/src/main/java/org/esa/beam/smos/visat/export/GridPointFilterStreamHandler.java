@@ -18,72 +18,65 @@ package org.esa.beam.smos.visat.export;
 
 import com.bc.ceres.core.ProgressMonitor;
 import com.bc.ceres.core.SubProgressMonitor;
+import org.esa.beam.dataio.smos.ExplorerFile;
 import org.esa.beam.dataio.smos.SmosFile;
 import org.esa.beam.dataio.smos.SmosProductReader;
-import org.esa.beam.dataio.smos.ExplorerFile;
-import org.esa.beam.framework.dataio.DecodeQualification;
-import org.esa.beam.framework.dataio.ProductIO;
 import org.esa.beam.framework.dataio.ProductReader;
-import org.esa.beam.framework.dataio.ProductReaderPlugIn;
 import org.esa.beam.framework.datamodel.Product;
-import org.esa.beam.util.io.FileUtils;
 
 import java.awt.Shape;
 import java.io.File;
+import java.io.FileFilter;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author Marco Zuehlke
- * @version $Revision$ $Date$
- * @since SMOS-Box 2.0
- */
 class GridPointFilterStreamHandler {
 
-    private final GridPointFilterStream filterStream;
-    private final Shape area;
     private final SmosFileProcessor smosFileProcessor;
 
     GridPointFilterStreamHandler(GridPointFilterStream filterStream, Shape area) {
-        this.filterStream = filterStream;
-        this.area = area;
         smosFileProcessor = new SmosFileProcessor(filterStream, area);
     }
 
     void processProduct(Product product, ProgressMonitor pm) throws IOException {
-        ProductReader productReader = product.getProductReader();
+        final ProductReader productReader = product.getProductReader();
         if (productReader instanceof SmosProductReader) {
-            SmosProductReader smosProductReader = (SmosProductReader) productReader;
-            ExplorerFile smosFile = smosProductReader.getExplorerFile();
-            if (smosFile instanceof SmosFile) {
-                smosFileProcessor.process((SmosFile) smosFile, pm);
+            final SmosProductReader smosProductReader = (SmosProductReader) productReader;
+            final ExplorerFile explorerFile = smosProductReader.getExplorerFile();
+            if (explorerFile instanceof SmosFile) {
+                smosFileProcessor.process((SmosFile) explorerFile, pm);
             }
         }
     }
 
     void processDirectory(File dir, boolean recursive, ProgressMonitor pm) throws IOException {
-        List<File> fileList = new ArrayList<File>();
-        scanDir(dir, recursive, fileList, 0);
+        final List<File> sourceFileList = new ArrayList<File>();
+        collectSourceFiles(dir, recursive, sourceFileList);
 
-        ProductReader smosProductReader = ProductIO.getProductReader("SMOS");
-        ProductReaderPlugIn readerPlugIn = smosProductReader.getReaderPlugIn();
-        pm.beginTask("Export grid cells", fileList.size());
         try {
-            for (File file : fileList) {
-                DecodeQualification qualification = readerPlugIn.getDecodeQualification(file);
-                if (qualification.equals(DecodeQualification.INTENDED)) {
+            pm.beginTask("Export grid cells", sourceFileList.size());
+            for (final File sourceFile : sourceFileList) {
+                ExplorerFile explorerFile = null;
+                try {
                     try {
-                        Product product = smosProductReader.readProductNodes(file, null);
-                        processProduct(product, SubProgressMonitor.create(pm, 1));
-                    } catch (Exception e) {
-                        // ignore
+                        explorerFile = SmosProductReader.createExplorerFile(sourceFile);
+                    } catch (IOException e) {
+                        // ignore, file is skipped
                     }
-                } else {
-                    pm.worked(1);
-                }
-                if (pm.isCanceled()) {
-                    throw new IOException("Export cancled");
+                    if (explorerFile instanceof SmosFile) {
+                        smosFileProcessor.process((SmosFile) explorerFile, SubProgressMonitor.create(pm, 1));
+                    } else {
+                        pm.worked(1);
+                    }
+                    if (pm.isCanceled()) {
+                        throw new IOException("Export was cancelled by user.");
+                    }
+                } finally {
+                    if (explorerFile != null) {
+                        explorerFile.close();
+                    }
                 }
             }
         } finally {
@@ -91,25 +84,46 @@ class GridPointFilterStreamHandler {
         }
     }
 
-    private void scanDir(File dir, boolean recursive, List<File> fileList, int depth) throws IOException {
-        final File[] files = dir.listFiles();
-        if (files == null) {
+    private static void collectSourceFiles(File parent, boolean recursive, List<File> sourceFileList) {
+        final File[] dirs = parent.listFiles(DIRECTORY_FILTER);
+        if (dirs == null) {
+            final File[] files = parent.listFiles(EE_FILENAME_FILTER);
+            if (files.length == 2) {
+                if (files[0].getName().endsWith(".DBL")) {
+                    sourceFileList.add(files[0]);
+                } else {
+                    sourceFileList.add(files[1]);
+                }
+            }
             return;
         }
-        for (final File file : files) {
-            if (file.isDirectory()) {
-                if (recursive || depth < 1) {
-                    scanDir(file, recursive, fileList, depth + 1);
+        for (final File dir : dirs) {
+            final File[] files = dir.listFiles(EE_FILENAME_FILTER);
+            if (files.length == 2) {
+                if (files[0].getName().endsWith(".DBL")) {
+                    sourceFileList.add(files[0]);
+                } else {
+                    sourceFileList.add(files[1]);
                 }
             } else {
-                if (file.getName().endsWith(".HDR")) {
-                    final File dblFile = FileUtils.exchangeExtension(file, ".DBL");
-                    if (dblFile.exists()) {
-                        fileList.add(file);
-                    }
+                if (recursive) {
+                    collectSourceFiles(dir, recursive, sourceFileList);
                 }
             }
         }
     }
 
+    private static final FileFilter DIRECTORY_FILTER = new FileFilter() {
+        @Override
+        public boolean accept(File file) {
+            return file.isDirectory() && file.canRead();
+        }
+    };
+
+    private static final FilenameFilter EE_FILENAME_FILTER = new FilenameFilter() {
+        @Override
+        public boolean accept(File dir, String name) {
+            return name.equals(dir.getName() + ".HDR") || name.equals(dir.getName() + ".DBL");
+        }
+    };
 }
