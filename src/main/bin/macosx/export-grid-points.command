@@ -2,11 +2,18 @@
 
 export BEAM4_HOME=${installer:sys.installationDir}
 
+if [ ! -d "$BEAM4_HOME" ]
+then
+    PRGDIR=`dirname $0`
+    export BEAM4_HOME=`cd "$PRGDIR/.." ; pwd`
+fi
+
 if [ -z "$BEAM4_HOME" ]; then
     echo
-    echo Error: BEAM4_HOME not found in your environment.
-    echo Please set the BEAM4_HOME variable in your environment to match the
-    echo location of the BEAM 4.x installation
+    echo Error:
+    echo BEAM4_HOME does not exists in your environment. Please
+    echo set the BEAM4_HOME variable in your environment to the
+    echo location of your BEAM 4.x installation.
     echo
     exit 2
 fi
