@@ -56,7 +56,7 @@ class GridPointFilterStreamHandler {
         collectSourceFiles(dir, recursive, sourceFileList);
 
         try {
-            pm.beginTask("Export grid cells", sourceFileList.size());
+            pm.beginTask("Exporting grid point data...", sourceFileList.size());
             for (final File sourceFile : sourceFileList) {
                 ExplorerFile explorerFile = null;
                 try {
