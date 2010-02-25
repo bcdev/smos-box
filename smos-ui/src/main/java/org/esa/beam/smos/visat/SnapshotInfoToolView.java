@@ -457,7 +457,7 @@ public class SnapshotInfoToolView extends SmosToolView {
         buttonGroup.add(browseButton);
         buttonGroup.add(snapshotButton);
 
-        final JCheckBox followModeCheckBox = new JCheckBox("Follow", true);
+        final JCheckBox followModeCheckBox = new JCheckBox("Follow", false);
         followModeButtonModel = followModeCheckBox.getModel();
 
         final JButton locateSnapshotButton = new JButton("Locate in view");
