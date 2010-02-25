@@ -17,165 +17,213 @@
 package org.esa.beam.smos.visat.export;
 
 import com.bc.ceres.core.ProgressMonitor;
-import org.esa.beam.framework.dataio.DecodeQualification;
-import org.esa.beam.framework.dataio.ProductIO;
-import org.esa.beam.framework.dataio.ProductReader;
-import org.esa.beam.framework.dataio.ProductReaderPlugIn;
-import org.esa.beam.framework.datamodel.Product;
 
 import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.FileHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
- * Command line tool for grid cell export.
+ * Command line tool for grid point export.
  *
+ * @author Ralf Quast
  * @author Marco Zuehlke
  * @version $Revision$ $Date$
  * @since SMOS-Box 2.0
  */
 public class GridPointExporter {
 
-    public static void main(String[] args) {
-        final Arguments arguments = new Arguments(args);
-        final PrintWriter printWriter;
+    private static Logger logger;
 
-        if (arguments.outputfile != null) {
-            try {
-                printWriter = new PrintWriter(arguments.outputfile);
-            } catch (FileNotFoundException e) {
-                System.err.println(MessageFormat.format(
-                        "Could not write to file: ''{0}''.", arguments.outputfile.getName()));
-                e.printStackTrace();
-                return;
-            }
-        } else {
-            printWriter = new PrintWriter(System.out);
-        }
 
-        final CsvExportStream csvExportStream = new CsvExportStream(printWriter, ";");
-        final GridPointFilterStreamHandler streamHandler = new GridPointFilterStreamHandler(csvExportStream,
-                                                                                            arguments.area);
-        final ProductReader smosProductReader = ProductIO.getProductReader("SMOS");
-        final ProductReaderPlugIn readerPlugIn = smosProductReader.getReaderPlugIn();
-        final Set<File> handledProductFiles = new HashSet<File>();
+    static {
+        logger = Logger.getLogger("org.eumetsat.iasicloud");
 
         try {
-            for (final File sourceFile : arguments.sourceFiles) {
-                final DecodeQualification qualification = readerPlugIn.getDecodeQualification(sourceFile);
-                if (qualification.equals(DecodeQualification.INTENDED)) {
-                    Product product = null;
-                    try {
-                        product = smosProductReader.readProductNodes(sourceFile, null);
-                        final File productFile = product.getFileLocation();
-                        if (!handledProductFiles.contains(productFile)) {
-                            streamHandler.processProduct(product, ProgressMonitor.NULL);
-                            handledProductFiles.add(productFile);
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        System.err.println(e.getMessage());
-                    } finally {
-                        if (product != null) {
-                            product.dispose();
-                        }
-                    }
-                } else {
-                    System.err.println("Not a SMOS product: " + sourceFile.getAbsolutePath());
-                }
-            }
-        } finally {
-            printWriter.close();
+            final FileHandler fileHandler = new FileHandler("iasicloud-proc.log");
+            fileHandler.setLevel(Level.ALL);
+            logger.addHandler(fileHandler);
+
+            final ConsoleHandler consoleHandler = new ConsoleHandler();
+            consoleHandler.setLevel(Level.INFO);
+            logger.addHandler(consoleHandler);
+
+            // handlers are set, so
+            logger.setUseParentHandlers(false);
+            logger.setLevel(Level.INFO);
+        } catch (Exception e) {
+            // ignore
         }
     }
 
+    public static void main(String[] args) {
+        final Arguments arguments = new Arguments(args, new ErrorHandler() {
+            @Override
+            public void warning(final Throwable t) {
+            }
+
+            @Override
+            public void error(final Throwable t) {
+                printUsage();
+                System.exit(1);
+            }
+        });
+
+        execute(arguments, new ErrorHandler() {
+            @Override
+            public void warning(final Throwable t) {
+                logger.warning(t.getMessage());
+            }
+
+            @Override
+            public void error(final Throwable t) {
+                logger.severe(t.getMessage());
+                t.printStackTrace(System.err);
+                System.exit(1);
+            }
+        });
+    }
+
+    private static void execute(Arguments arguments, ErrorHandler errorHandler) {
+        logger.info(MessageFormat.format("targetFile = {0}", arguments.targetFile));
+        logger.info(MessageFormat.format("ROI = {0}", arguments.roi.getBounds2D()));
+
+        PrintWriter printWriter = null;
+        try {
+            if (arguments.targetFile != null) {
+                try {
+                    printWriter = new PrintWriter(arguments.targetFile);
+                } catch (FileNotFoundException e) {
+                    errorHandler.error(e);
+                }
+            }
+            if (printWriter == null) {
+                printWriter = new PrintWriter(System.out);
+            }
+            final CsvExportStream csvExportStream = new CsvExportStream(printWriter, ";");
+            final GridPointFilterStreamHandler streamHandler =
+                    new GridPointFilterStreamHandler(csvExportStream, arguments.roi);
+
+            for (final File sourceFile : arguments.sourceFiles) {
+                try {
+                    logger.info(MessageFormat.format("Exporting source file ''{0}''.", sourceFile.getPath()));
+                    streamHandler.processDirectory(sourceFile, false, ProgressMonitor.NULL);
+                    logger.info(MessageFormat.format("Completed source file ''{0}''.", sourceFile.getPath()));
+                } catch (IOException e) {
+                    errorHandler.warning(e);
+                }
+            }
+        } finally {
+            if (printWriter != null) {
+                printWriter.close();
+            }
+        }
+    }
+
+    private static void printUsage() {
+        System.out.println("SMOS-Box Grid Point Export command line tool, version 2.0");
+        System.out.println("February 25, 2010");
+        System.out.println();
+        System.out.println("usage : export-grid-points [ROI] [-o targetFile] [sourceProduct ...]");
+        System.out.println();
+        System.out.println();
+        System.out.println("ROI\n" +
+                           "\n" +
+                           "    [-box lon1 lon2 lat1 lat2] | [-point lon lat]\n" +
+                           "        a region-of-interest either defined by a latitude-longitude\n" +
+                           "        box or the coordinates of a DGG grid point");
+        System.out.println();
+        System.out.println("Note that each source product must be specified by the path name of\n" +
+                           "the directory, which contains the SMOS '.HDR' and '.DBL' files.");
+        System.out.println();
+        System.out.println("When no target file is specified, the output is written to standard\n" +
+                           "output, which usually is the console.");
+        System.out.println();
+        System.out.println();
+    }
 
     private static class Arguments {
 
-        Area area;
-        File outputfile;
+        Area roi;
+        File targetFile;
         File[] sourceFiles;
 
-        public Arguments(String[] args) {
+        public Arguments(String[] args, ErrorHandler errorHandler) {
             try {
                 parse(args);
-            } catch (Exception e) {
-                printHelpAndExit();
+            } catch (IllegalArgumentException e) {
+                errorHandler.error(e);
             }
-            if (area == null) {
-                area = getBoxArea(-180, 180, -90, 90);
+            if (roi == null) {
+                roi = createBoxedArea(-180, 180, -90, 90);
             }
         }
 
         private void parse(String[] args) {
             if (args.length == 0) {
-                printHelpAndExit();
+                throw new IllegalArgumentException("No arguments specified.");
             }
             for (int i = 0; i < args.length; i++) {
                 if (args[i].equals("-box")) {
                     if (args.length < i + 6) {
-                        printHelpAndExit();
+                        throw new IllegalArgumentException("Not enough arguments specified.");
                     }
-                    if (area != null) {
-                        System.err.println("Either the parameter '-box' or the parameter '-point' can be specified.");
-                        printHelpAndExit();
+                    if (roi != null) {
+                        throw new IllegalArgumentException("A ROI may either be defined by '-box' or '-point'.");
                     }
                     final double lon1 = Double.valueOf(args[i + 1]);
-                    rangeCheck(lon1, "lon1", -180, 180);
+                    ensureRange("lon1", lon1, -180, 180);
                     final double lon2 = Double.valueOf(args[i + 2]);
-                    rangeCheck(lon2, "lon2", -180, 180);
+                    ensureRange("lon2", lon2, -180, 180);
                     if (lon2 <= lon1) {
-                        System.err.println("The value of 'lon2' must exceed the value of 'lon1'.");
-                        System.err.println("lon1 =" + lon1);
-                        System.err.println("lon2 =" + lon2);
-                        printHelpAndExit();
+                        throw new IllegalArgumentException("The value of 'lon2' must exceed the value of 'lon1'.");
                     }
                     final double lat1 = Double.valueOf(args[i + 3]);
-                    rangeCheck(lat1, "lat1", -90, 90);
+                    ensureRange("lat1", lat1, -90, 90);
                     final double lat2 = Double.valueOf(args[i + 4]);
-                    rangeCheck(lat2, "lat2", -90, 90);
+                    ensureRange("lat2", lat2, -90, 90);
                     if (lat2 <= lat1) {
-                        System.err.println("The value of 'lat2' must exceed the value of 'lat1'.");
-                        System.err.println("lat1=" + lat1);
-                        System.err.println("lat2=" + lat2);
-                        printHelpAndExit();
+                        throw new IllegalArgumentException("The value of 'lat2' must exceed the value of 'lat1'.");
                     }
-                    area = getBoxArea(lon1, lon2, lat1, lat2);
+                    roi = createBoxedArea(lon1, lon2, lat1, lat2);
                     i += 4;
                 } else if (args[i].equals("-point")) {
                     if (args.length < i + 4) {
-                        printHelpAndExit();
+                        throw new IllegalArgumentException("Not enough arguments specified.");
                     }
-                    if (area != null) {
-                        System.err.println("Either the parameter '-box' or the parameter '-point' can be specified.");
-                        printHelpAndExit();
+                    if (roi != null) {
+                        throw new IllegalArgumentException("A ROI may either be defined by '-box' or '-point'.");
                     }
                     final double lon = Double.valueOf(args[i + 1]);
-                    rangeCheck(lon, "lon", -180, 180);
+                    ensureRange("lon", lon, -180, 180);
                     final double lat = Double.valueOf(args[i + 2]);
-                    rangeCheck(lat, "lat", -90, 90);
-                    area = getPointArea(lon, lat);
+                    ensureRange("lat", lat, -90, 90);
+                    roi = createPointArea(lon, lat);
                     i += 2;
                 } else if (args[i].equals("-o")) {
                     if (args.length < i + 3) {
-                        printHelpAndExit();
+                        throw new IllegalArgumentException("Not enough arguments specified.");
                     }
-                    outputfile = new File(args[i + 1]);
+                    targetFile = new File(args[i + 1]);
                     i += 1;
                 } else if (args[i].startsWith("-")) {
-                    printHelpAndExit();
+                    throw new IllegalArgumentException("Illegal option.");
                 } else {
                     final List<File> sourceFileList = new ArrayList<File>();
                     for (int j = i; j < args.length; j++) {
-                        final File file = new File(args[j]);
-                        sourceFileList.add(file);
+                        final File sourceFile = new File(args[j]);
+                        if (sourceFile.isDirectory()) {
+                            sourceFileList.add(sourceFile);
+                        }
                     }
                     sourceFiles = sourceFileList.toArray(new File[sourceFileList.size()]);
                     i = args.length - 1;
@@ -183,26 +231,18 @@ public class GridPointExporter {
             }
         }
 
-        private static void rangeCheck(double value, String name, double min, double max) {
+        private static void ensureRange(String name, double value, double min, double max) {
             if (value < min || value > max) {
-                System.err.println(MessageFormat.format("The value of ''{0}'' must be between ''{1}'' and ''{2}''.",
-                                                        name, min, max));
-                System.err.println(MessageFormat.format("The actual value is: {0}", value));
-                printHelpAndExit();
+                throw new IllegalArgumentException(MessageFormat.format(
+                        "The value of ''{0}'' = ''{1}'' is out of range [''{2}'', ''{3}''].", name, value, min, max));
             }
         }
 
-        private static void printHelpAndExit() {
-            System.out.println(
-                    "Usage: [-box <lon1> <lon2> <lat1> <lat2>]|[-point lon lat] [-o output] smosProducts...");
-            System.exit(1);
-        }
-
-        private static Area getBoxArea(double lon1, double lon2, double lat1, double lat2) {
+        private static Area createBoxedArea(double lon1, double lon2, double lat1, double lat2) {
             return new Area(new Rectangle2D.Double(lon1, lat1, lon2 - lon1, lat2 - lat1));
         }
 
-        private static Area getPointArea(double lon, double lat) {
+        private static Area createPointArea(double lon, double lat) {
             final double x = lon - 0.08;
             final double y = lat - 0.08;
             final double w = 0.16;
@@ -210,5 +250,12 @@ public class GridPointExporter {
 
             return new Area(new Rectangle2D.Double(x, y, w, h));
         }
+    }
+
+    private interface ErrorHandler {
+
+        public void warning(final Throwable t);
+
+        public void error(final Throwable t);
     }
 }
