@@ -159,15 +159,18 @@ class GridPointExportDialog extends ModalDialog {
 
     @Override
     protected void onOK() {
+        final PropertyMap preferences = appContext.getPreferences();
+        preferences.setPropertyString(LAST_SOURCE_DIR_KEY, sourceDirectory.getPath());
+        preferences.setPropertyString(LAST_TARGET_DIR_KEY, targetFile.getParent());
+
         if (targetFile.exists()) {
             final String message = MessageFormat.format(
                     "The selected target file\n''{0}''\n already exists.\n\n Do you want to overwrite the target file?",
                     targetFile.getPath());
-            final int answer = JOptionPane.showConfirmDialog(getJDialog(), message, getTitle(),
-                                                             JOptionPane.YES_NO_OPTION);
-            if (answer != JOptionPane.YES_OPTION) {
+            final int i = JOptionPane.showConfirmDialog(getJDialog(), message, getTitle(), JOptionPane.YES_NO_OPTION);
+            if (i != JOptionPane.YES_OPTION) {
+                return;
             }
-            return;
         }
         final PrintWriter printWriter;
         try {
@@ -176,9 +179,6 @@ class GridPointExportDialog extends ModalDialog {
             appContext.handleError(MessageFormat.format("Cannot create target file: {0}", e.getMessage()), e);
             return;
         }
-        final PropertyMap preferences = appContext.getPreferences();
-        preferences.setPropertyString(LAST_SOURCE_DIR_KEY, sourceDirectory.getPath());
-        preferences.setPropertyString(LAST_TARGET_DIR_KEY, targetFile.getParent());
 
         super.onOK();
 
