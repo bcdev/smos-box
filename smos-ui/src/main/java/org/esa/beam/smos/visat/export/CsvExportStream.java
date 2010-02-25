@@ -23,6 +23,7 @@ import com.bc.ceres.binio.SequenceData;
 import com.bc.ceres.binio.SequenceType;
 import com.bc.ceres.binio.SimpleType;
 import com.bc.ceres.binio.Type;
+import org.esa.beam.dataio.smos.SmosConstants;
 import org.esa.beam.dataio.smos.SmosFile;
 import org.esa.beam.dataio.smos.dddb.BandDescriptor;
 import org.esa.beam.dataio.smos.dddb.Dddb;
@@ -78,14 +79,14 @@ class CsvExportStream implements GridPointFilterStream {
 
     @Override
     public void stopFile(SmosFile smosFile) {
-        printWriter.println("-----------------------------------------------");
+        printWriter.println();
     }
 
     @Override
     public void handleGridPoint(int id, CompoundData gridPointData) throws IOException {
-        final int btDataIndex = gridPointData.getMemberIndex("BT_Data_List");
+        final int btDataIndex = gridPointData.getMemberIndex(SmosConstants.BT_DATA_LIST_NAME);
         if (btDataIndex != -1) {
-            SequenceData sequence = gridPointData.getSequence(btDataIndex);
+            final SequenceData sequence = gridPointData.getSequence(btDataIndex);
             for (int i = 0; i < sequence.getElementCount(); i++) {
                 writeCompound(gridPointData);
                 writeCompound(sequence.getCompound(i));
