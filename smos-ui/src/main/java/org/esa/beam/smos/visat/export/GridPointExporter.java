@@ -139,7 +139,6 @@ public class GridPointExporter {
         System.out.println();
         System.out.println("usage : export-grid-points [ROI] [-o targetFile] [sourceProduct ...]");
         System.out.println();
-        System.out.println();
         System.out.println("ROI\n" +
                            "\n" +
                            "    [-box minLon maxLon minLat maxLat] | [-point lon lat]\n" +
