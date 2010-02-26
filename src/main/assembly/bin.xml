@@ -63,7 +63,10 @@
             </excludes>
 
             <binaries>
-                <includeDependencies>false</includeDependencies>
+                <includeDependencies>true</includeDependencies>
+                <includes>
+                    <include>com.bc.ceres:ceres-core</include>
+                </includes>
                 <fileMode>0444</fileMode>
                 <unpack>false</unpack>
                 <outputDirectory>modules</outputDirectory>
