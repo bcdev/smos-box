@@ -340,7 +340,7 @@ class GridPointExportDialog extends ModalDialog {
                                                                                bindingContext);
 
         final JLabel nameLabel = new JLabel(displayName);
-        final JLabel unitLabel = new JLabel("°");
+        final JLabel unitLabel = new JLabel("\u00b0");
         nameLabel.setEnabled(textField.isEnabled());
         unitLabel.setEnabled(textField.isEnabled());
 
