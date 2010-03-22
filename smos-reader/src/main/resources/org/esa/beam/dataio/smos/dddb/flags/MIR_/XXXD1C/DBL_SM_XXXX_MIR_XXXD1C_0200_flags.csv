@@ -13,4 +13,5 @@
   *       | EAF_FOV               | 00000800 | *     | *            | Pixel is inside the Extended Alias free zone (obtained after removing sky aliases)
   *       | BORDER_FOV            | 00001000 | *     | *            | Pixel is close to the border delimiting the Extended Alias free zone
   *       | SUN_TAILS             | 00002000 | *     | *            | Pixel is located in the hexagonal alias directions centred on a Sun alias (if Sun is not removed, measurement may be degraded in these directions)
-  *       | RFI                   | 00004000 | *     | *            | Pixel is affected by RFI effects (as identified in static ADF file)
+  *       | RFI_1                 | 00004000 | *     | *            | Pixel is affected by RFI effects (as detected in the L1b processing)
+  *       | RFI_2                 | 00008000 | *     | *            | Pixel is flagged as RFI in the AUX_RFI file
