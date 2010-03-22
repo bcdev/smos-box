@@ -1,7 +1,7 @@
 <module>
     <manifestVersion>1.0.0</manifestVersion>
     <symbolicName>smos-reader</symbolicName>
-    <version>2.0</version>
+    <version>2.0.1</version>
     <name>SMOS Product Reader</name>
     <description>
         The SMOS Product Reader provides the capability of reading data
@@ -18,12 +18,8 @@
     <licenseUrl>http://www.gnu.org/licenses/gpl.html</licenseUrl>
 
     <changelog><![CDATA[
-       <p> Changes in 1.0.1:<br>
-        [SBOX-19] Rebuild SMOS-Box for BEAM 4.6.1<br>
-       </p> 
-       <p>Changes from version 0.5 to 1.0:<br/>
-        [SBOX-4] No bitmask overlay available for L2 products<br/>
-        [SBOX-3] Slow and chaotic image redraw<br/>
+       <p> Changes in 2.0.1:<br>
+        [SBOX-20] Second RFI flag not shown in L1c flag coding<br>
        </p>]]>
     </changelog>
 
