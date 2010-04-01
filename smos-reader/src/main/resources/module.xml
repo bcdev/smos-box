@@ -19,6 +19,7 @@
 
     <changelog><![CDATA[
        <p> Changes in 2.0.1:<br>
+        [SBOX-22] Interpolation for full pol products is wrong<br>
         [SBOX-20] Second RFI flag not shown in L1c flag coding<br>
        </p>]]>
     </changelog>

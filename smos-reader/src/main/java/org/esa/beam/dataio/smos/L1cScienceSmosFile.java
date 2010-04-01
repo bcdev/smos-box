@@ -232,7 +232,7 @@ public class L1cScienceSmosFile extends L1cSmosFile {
             final CompoundData btData = btDataList.getCompound(i);
             final int flags = btData.getInt(flagsIndex);
 
-            if (polarization == 4 || polarization == (flags & 1) || (polarization & flags & 2) != 0) {
+            if (polarization == 4 || polarization == (flags & 3) || (polarization & flags & 2) != 0) {
                 final double incidenceAngle = incidenceAngleScalingFactor * btData.getInt(incidenceAngleIndex);
 
                 if (incidenceAngle >= MIN_BROWSE_INCIDENCE_ANGLE && incidenceAngle <= MAX_BROWSE_INCIDENCE_ANGLE) {
