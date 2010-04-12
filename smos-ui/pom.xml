@@ -6,7 +6,7 @@
     <parent>
         <artifactId>smos-box</artifactId>
         <groupId>org.esa.beam.smos</groupId>
-        <version>2.0</version>
+        <version>2.0.1</version>
     </parent>
 
     <packaging>jar</packaging>
@@ -14,7 +14,7 @@
     <groupId>org.esa.beam.smos</groupId>
     <artifactId>smos-ui</artifactId>
     <name>SMOS UI Components</name>
-    <version>2.0</version>
+    <version>2.0.1</version>
     <description>SMOS UI Components</description>
 
     <dependencies>
