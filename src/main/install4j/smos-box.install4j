@@ -130,7 +130,7 @@
 File[] smosModuleFiles = modulesDir.listFiles(new FileFilter() {
     public boolean accept(File file) {
         String name = file.getName();
-        return name.startsWith("smos-");
+        return name.startsWith("smos-") || name.startsWith("ceres-binio");
     }
 });
 
