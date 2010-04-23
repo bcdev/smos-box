@@ -28,11 +28,10 @@
         <module>ceres-binio</module>
     </dependency>
     <dependency>
-        <module>beam-core</module>
+        <module>ceres-jai</module>
     </dependency>
     <dependency>
-        <module>beam-visat</module>
-        <optional>true</optional>
+        <module>beam-core</module>
     </dependency>
     <dependency>
         <module>smos-dgg</module>
