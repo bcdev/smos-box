@@ -63,13 +63,10 @@
             </excludes>
 
             <binaries>
-                <includeDependencies>false</includeDependencies>
-<!--
                 <includeDependencies>true</includeDependencies>
                 <includes>
-                    <include>com.bc.ceres:ceres-core</include>
+                    <include>com.bc.ceres:ceres-binio</include>
                 </includes>
--->
                 <fileMode>0444</fileMode>
                 <unpack>false</unpack>
                 <outputDirectory>modules</outputDirectory>
