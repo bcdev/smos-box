@@ -6,7 +6,8 @@
     <description>
         The SMOS Product Reader provides the capability of reading data
         products acquired by ESA's SMOS mission; supported products are:
-        L1C Browse, L1C Science, L2 SM and L2 OS. 
+        L1C Browse, L1C Science, L2 SM, L2 OS as well as SMOS auxiliary
+        data for LAI, ECMWF, VTEC-C, and VTEC-P.
     </description>
 
     <vendor>Brockmann Consult GmbH</vendor>
@@ -41,19 +42,5 @@
     </dependency>
 
     <categories>Reader,SMOS</categories>
-
-    <extension point="beam-ui:actions">
-        <action>
-            <class>org.esa.beam.visat.actions.ProductImportAction</class>
-            <id>importSmosProduct</id>
-            <helpId/>
-            <formatName>SMOS</formatName>
-            <useAllFileFilter>true</useAllFileFilter>
-            <text>Import SMOS Product...</text>
-            <mnemonic/>
-            <shortDescr>Import a SMOS data product or product subset.</shortDescr>
-            <description>Import a SMOS data product or product subset.</description>
-        </action>
-    </extension>
 
 </module>
