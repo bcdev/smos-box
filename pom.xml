@@ -69,7 +69,7 @@
             <dependency>
                 <groupId>com.bc.ceres</groupId>
                 <artifactId>ceres-launcher</artifactId>
-                <version>0.10.2</version>
+                <version>0.10.3-SNAPSHOT</version>
             </dependency>
 
             <dependency>
