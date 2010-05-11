@@ -32,6 +32,10 @@ public abstract class GridPointBtDataToolView extends SmosToolView {
 
     public static final String ID = GridPointBtDataToolView.class.getName();
 
+    private static final String TAG_DS_NAME = "DS_Name";
+    private static final String TAG_LIST_OF_DATA_SETS = "List_of_Data_Sets";
+    private static final String TAG_REF_FILENAME = "Ref_Filename";
+
     private JLabel infoLabel;
     private JCheckBox snapToSelectedPinCheckBox;
     private GPSL gpsl;
@@ -86,23 +90,23 @@ public abstract class GridPointBtDataToolView extends SmosToolView {
     }
 
     protected L1cSmosFile getL1cSmosFile() {
-        SmosFile smosFile = getSelectedSmosFile();
-        L1cSmosFile l1cSmosFile = null;
+        final SmosFile smosFile = getSelectedSmosFile();
         if (smosFile instanceof L1cSmosFile) {
-            l1cSmosFile = (L1cSmosFile) smosFile;
-        } else {
-            // If smosFile is not an L1cSmosFile (i.e. its an L2SmosFile)
-            // find the corresponding L1cSmosFile
+            return (L1cSmosFile) smosFile;
+        } else if (smosFile != null) {
+            // find the L1c SMOS file corresponding to the selected SMOS file
             final Product selectedProduct = getSelectedSmosProduct();
-            final MetadataElement element = findElement(selectedProduct.getMetadataRoot(), "List_of_Data_Sets");
-            if (element != null) {
-                final String name = getRefFilename(element);
-                if (name != null) {
-                    l1cSmosFile = findL1cSmosFile(name);
+            if (selectedProduct != null) {
+                final MetadataElement element = findElement(selectedProduct.getMetadataRoot(), TAG_LIST_OF_DATA_SETS);
+                if (element != null) {
+                    final String referredFileName = getReferredFileName(element);
+                    if (referredFileName != null) {
+                        return findL1cSmosFile(referredFileName);
+                    }
                 }
             }
         }
-        return l1cSmosFile;
+        return null;
     }
 
     final void updateGridPointBtDataComponent() {
@@ -178,26 +182,25 @@ public abstract class GridPointBtDataToolView extends SmosToolView {
         return null;
     }
 
-    private static String getRefFilename(MetadataElement element) {
+    private static String getReferredFileName(MetadataElement element) {
         for (final MetadataElement metadataElement : element.getElements()) {
-            if ("L1C_SM_FILE".equals(metadataElement.getAttributeString("DS_Name", ""))
-                || "L1C_OS_FILE".equals(metadataElement.getAttributeString("DS_Name", ""))) {
-                final String name = metadataElement.getAttributeString("Ref_Filename", "");
-                return getRelevantProductname(name);
+            if ("L1C_SM_FILE".equals(metadataElement.getAttributeString(TAG_DS_NAME, ""))
+                || "L1C_OS_FILE".equals(metadataElement.getAttributeString(TAG_DS_NAME, ""))) {
+                final String name = metadataElement.getAttributeString(TAG_REF_FILENAME, "");
+                return trimVersionNumber(name);
             }
         }
         return null;
     }
 
-    private static String getRelevantProductname(String name) {
-        if (name.length() > 10) {
-            // ignore version numbers in file name
-            return name.substring(0, name.length() - 10);
+    private static String trimVersionNumber(String productName) {
+        if (productName.length() > 10) {
+            return productName.substring(0, productName.length() - 10);
         }
         return null;
     }
 
-    private static L1cSmosFile findL1cSmosFile(String name) {
+    private static L1cSmosFile findL1cSmosFile(String referredFileName) {
         final Product[] products = VisatApp.getApp().getProductManager().getProducts();
 
         for (final Product product : products) {
@@ -205,9 +208,7 @@ public abstract class GridPointBtDataToolView extends SmosToolView {
             if (productReader instanceof SmosProductReader) {
                 final ExplorerFile smosFile = ((SmosProductReader) productReader).getExplorerFile();
                 if (smosFile instanceof L1cSmosFile) {
-                    String productName = product.getName();
-                    String relevantProductname = getRelevantProductname(productName);
-                    if (name.equalsIgnoreCase(relevantProductname)) {
+                    if (referredFileName.equalsIgnoreCase(trimVersionNumber(product.getName()))) {
                         return (L1cSmosFile) smosFile;
                     }
                 }
