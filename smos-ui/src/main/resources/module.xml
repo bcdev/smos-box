@@ -1,7 +1,7 @@
 <module>
     <manifestVersion>1.0.0</manifestVersion>
     <symbolicName>smos-ui</symbolicName>
-    <version>2.0.1</version>
+    <version>2.1</version>
     <name>SMOS UI Components</name>
     <description>
         This module provides several UI components suited for visual

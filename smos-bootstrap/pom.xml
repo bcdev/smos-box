@@ -7,7 +7,7 @@
     <parent>
         <artifactId>smos-box</artifactId>
         <groupId>org.esa.beam.smos</groupId>
-        <version>2.0.1</version>
+        <version>2.1-SNAPSHOT</version>
     </parent>
 
     <packaging>jar</packaging>
@@ -15,7 +15,6 @@
     <groupId>org.esa.beam.smos</groupId>
     <artifactId>smos-bootstrap</artifactId>
     <name>SMOS Box Bootstrap</name>
-    <version>2.0.1</version>
     <description>Provides the bootstrap classpath for all SMOS-Box modules</description>
 
     <dependencies>
