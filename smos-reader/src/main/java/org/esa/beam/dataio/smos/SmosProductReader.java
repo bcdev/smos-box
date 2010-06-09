@@ -83,6 +83,12 @@ public class SmosProductReader extends AbstractProductReader {
     }
 
     public static ExplorerFile createExplorerFile(File file) throws IOException {
+        if (file.isDirectory()) {
+            File[] files = file.listFiles(new ExplorerFilenameFilter());
+            if (files.length == 2) {
+                file = files[0];
+            }
+        }
         final File hdrFile = FileUtils.exchangeExtension(file, ".HDR");
         final File dblFile = FileUtils.exchangeExtension(file, ".DBL");
 

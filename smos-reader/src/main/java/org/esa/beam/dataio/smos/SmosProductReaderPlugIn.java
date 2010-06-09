@@ -23,12 +23,15 @@ import org.esa.beam.util.io.BeamFileFilter;
 import org.esa.beam.util.io.FileUtils;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.util.Locale;
 
 /**
  * Plugin providing the SMOS product reader.
  */
 public class SmosProductReaderPlugIn implements ProductReaderPlugIn {
+
+    private static final FilenameFilter FILENAME_FILTER = new ExplorerFilenameFilter();
 
     @Override
     public SmosProductReader createReaderInstance() {
@@ -37,8 +40,14 @@ public class SmosProductReaderPlugIn implements ProductReaderPlugIn {
 
     @Override
     public DecodeQualification getDecodeQualification(Object input) {
-        final File file = input instanceof File ? (File) input : new File(input.toString());
+        File file = input instanceof File ? (File) input : new File(input.toString());
 
+        if (file.isDirectory()) {
+            final File[] files = file.listFiles(FILENAME_FILTER);
+            if (files.length == 2) {
+                file = files[0];
+            }
+        }
         if (file.getName().endsWith(".HDR") || file.getName().endsWith(".DBL")) {
             final File hdrFile = FileUtils.exchangeExtension(file, ".HDR");
             final File dblFile = FileUtils.exchangeExtension(file, ".DBL");
@@ -64,7 +73,7 @@ public class SmosProductReaderPlugIn implements ProductReaderPlugIn {
 
     @Override
     public String[] getDefaultFileExtensions() {
-        return new String[]{".HDR", ".DBL"};
+        return new String[0];
     }
 
     @Override
@@ -79,6 +88,11 @@ public class SmosProductReaderPlugIn implements ProductReaderPlugIn {
 
     @Override
     public BeamFileFilter getProductFileFilter() {
-        return new BeamFileFilter(getFormatNames()[0], getDefaultFileExtensions(), getDescription(null));
+        return new BeamFileFilter(getFormatNames()[0], getDefaultFileExtensions(), getDescription(null)) {
+            @Override
+            public boolean isCompoundDocument(File dir) {
+                return dir.isDirectory() && dir.listFiles(FILENAME_FILTER).length == 2;
+            }
+        };
     }
 }
