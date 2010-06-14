@@ -71,6 +71,7 @@
                     ${artifact.artifactId}-${artifact.version}.${artifact.extension}
                 </outputFileNameMapping>
                 <dependencySets>
+<!--
                     <dependencySet>
                         <fileMode>0444</fileMode>
                         <unpack>false</unpack>
@@ -80,6 +81,7 @@
                             <include>com.bc.ceres:ceres-launcher</include>
                         </includes>
                     </dependencySet>
+-->
                     <dependencySet>
                         <fileMode>0444</fileMode>
                         <unpack>false</unpack>
