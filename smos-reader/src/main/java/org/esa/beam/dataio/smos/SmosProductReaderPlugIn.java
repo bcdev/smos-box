@@ -73,7 +73,7 @@ public class SmosProductReaderPlugIn implements ProductReaderPlugIn {
 
     @Override
     public String[] getDefaultFileExtensions() {
-        return new String[0];
+        return new String[]{".DBL"};
     }
 
     @Override
