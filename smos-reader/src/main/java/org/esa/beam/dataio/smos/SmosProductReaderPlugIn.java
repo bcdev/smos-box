@@ -91,8 +91,14 @@ public class SmosProductReaderPlugIn implements ProductReaderPlugIn {
         return new BeamFileFilter(getFormatNames()[0], getDefaultFileExtensions(), getDescription(null)) {
             @Override
             public boolean isCompoundDocument(File dir) {
-                return dir != null && dir.isDirectory() && dir.listFiles(FILENAME_FILTER).length == 2;
+                return dir != null && dir.isDirectory() && acceptDir(dir);
+            }
+
+            private boolean acceptDir(File dir) {
+                final File[] files = dir.listFiles(FILENAME_FILTER);
+                return files != null && files.length == 2;
             }
         };
     }
+
 }
