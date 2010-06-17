@@ -89,6 +89,12 @@ public class SmosProductReaderPlugIn implements ProductReaderPlugIn {
     @Override
     public BeamFileFilter getProductFileFilter() {
         return new BeamFileFilter(getFormatNames()[0], getDefaultFileExtensions(), getDescription(null)) {
+
+            @Override
+            public FileSelectionMode getFileSelectionMode() {
+                return FileSelectionMode.FILES_AND_DIRECTORIES;
+            }
+
             @Override
             public boolean isCompoundDocument(File dir) {
                 return dir != null && dir.isDirectory() && acceptDir(dir);
