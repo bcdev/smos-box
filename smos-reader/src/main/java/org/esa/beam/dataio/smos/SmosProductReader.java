@@ -84,8 +84,8 @@ public class SmosProductReader extends AbstractProductReader {
 
     public static ExplorerFile createExplorerFile(File file) throws IOException {
         if (file.isDirectory()) {
-            File[] files = file.listFiles(new ExplorerFilenameFilter());
-            if (files.length == 2) {
+            final File[] files = file.listFiles(new ExplorerFilenameFilter());
+            if (files != null && files.length == 2) {
                 file = files[0];
             }
         }

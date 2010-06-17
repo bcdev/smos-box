@@ -7,6 +7,6 @@ class ExplorerFilenameFilter implements FilenameFilter {
 
     @Override
     public boolean accept(File dir, String name) {
-        return name.endsWith(".HDR") || name.endsWith(".DBL");
+        return name != null && (name.endsWith(".HDR") || name.endsWith(".DBL"));
     }
 }
