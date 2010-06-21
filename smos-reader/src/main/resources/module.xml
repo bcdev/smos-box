@@ -20,6 +20,7 @@
 
     <changelog><![CDATA[
        <p> Changes in 2.1:<br>
+        [SBOX-24] Pixels eastward of 168.5° E do not show up<br>
         [SBOX-23] Confusing product selection<br>
        <p> Changes in 2.0.1:<br>
         [SBOX-22] Interpolation for full pol products is wrong<br>

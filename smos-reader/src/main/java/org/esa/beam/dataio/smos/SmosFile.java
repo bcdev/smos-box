@@ -298,7 +298,7 @@ public class SmosFile extends ExplorerFile {
     private Rectangle2D createTileRectangle(int i, int j) {
         final double w = 11.25;
         final double h = 11.25;
-        final double x = w * i - 180.0 - w;
+        final double x = w * i - 180.0;
         final double y = 90.0 - h * (j + 1);
 
         return new Rectangle2D.Double(x, y, w, w);
