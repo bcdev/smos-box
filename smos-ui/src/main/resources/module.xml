@@ -36,8 +36,22 @@
             <class>org.esa.beam.visat.actions.ProductImportAction</class>
             <id>importSmosProduct</id>
             <helpId/>
+            <formatName>SMOS-DBL</formatName>
+            <useAllFileFilter>false</useAllFileFilter>
+            <text>Import SMOS Data Block File...</text>
+            <mnemonic/>
+            <shortDescr>Import a SMOS data product or product subset.</shortDescr>
+            <description>Import a SMOS data product or product subset.</description>
+        </action>
+    </extension>
+
+    <extension point="beam-ui:actions">
+        <action>
+            <class>org.esa.beam.visat.actions.ProductImportAction</class>
+            <id>importSmosProduct</id>
+            <helpId/>
             <formatName>SMOS</formatName>
-            <useAllFileFilter>true</useAllFileFilter>
+            <useAllFileFilter>false</useAllFileFilter>
             <text>Import SMOS Product...</text>
             <mnemonic/>
             <shortDescr>Import a SMOS data product or product subset.</shortDescr>
