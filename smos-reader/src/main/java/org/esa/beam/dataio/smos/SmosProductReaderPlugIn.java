@@ -69,7 +69,7 @@ public class SmosProductReaderPlugIn implements ProductReaderPlugIn {
 
     @Override
     public String getDescription(Locale locale) {
-        return "SMOS Products";
+        return "SMOS Data Products";
     }
 
     @Override
