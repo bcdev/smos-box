@@ -30,9 +30,10 @@ public class SmosDgg {
     private static final int C = B + 1;
     private static final int D = A - B;
 
-    private static final int MAX_GRID_POINT_ID = 9262145;
-    private static final int MAX_SEQNUM = 2621442;
-    private static final int MAX_ZONE_ID = 10;
+    public static final int MIN_GRID_POINT_ID = 1;
+    public static final int MAX_GRID_POINT_ID = 9262145;
+    public static final int MAX_SEQNUM = 2621442;
+    public static final int MAX_ZONE_ID = 10;
 
     private volatile MultiLevelImage dggMultiLevelImage;
 

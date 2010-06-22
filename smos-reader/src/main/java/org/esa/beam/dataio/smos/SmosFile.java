@@ -78,7 +78,11 @@ public class SmosFile extends ExplorerFile {
     }
 
     public final int getGridPointId(int i) throws IOException {
-        return gridPointList.getCompound(i).getInt(gridPointIdIndex);
+        final int gridPointId = gridPointList.getCompound(i).getInt(gridPointIdIndex);
+        if (gridPointId < SmosDgg.MIN_GRID_POINT_ID || gridPointId > SmosDgg.MAX_GRID_POINT_ID) {
+            throw new IOException(MessageFormat.format("Invalid Grid Point ID: {0}.", gridPointId));
+        }
+        return gridPointId;
     }
 
     public final int getGridPointSeqnum(int i) throws IOException {
@@ -110,9 +114,9 @@ public class SmosFile extends ExplorerFile {
         try {
             return getGridPointInfoFuture().get().getGridPointIndex(seqnum);
         } catch (InterruptedException e) {
-            throw new IllegalStateException(e);
+            throw new RuntimeException(e);
         } catch (ExecutionException e) {
-            throw new IllegalStateException(e.getCause());
+            throw new RuntimeException(e.getCause());
         }
     }
 
@@ -241,22 +245,22 @@ public class SmosFile extends ExplorerFile {
         final int memberIndex = getGridPointType().getMemberIndex(descriptor.getMemberName());
 
         switch (descriptor.getSampleModel()) {
-        case 1:
-            return new DefaultValueProvider(this, memberIndex) {
-                @Override
-                protected int getInt(int gridPointIndex) throws IOException {
-                    return (int) (getLong(memberIndex) & 0x00000000FFFFFFFFL);
-                }
-            };
-        case 2:
-            return new DefaultValueProvider(this, memberIndex) {
-                @Override
-                public int getInt(int gridPointIndex) throws IOException {
-                    return (int) (getLong(memberIndex) >>> 32);
-                }
-            };
-        default:
-            return new DefaultValueProvider(this, memberIndex);
+            case 1:
+                return new DefaultValueProvider(this, memberIndex) {
+                    @Override
+                    protected int getInt(int gridPointIndex) throws IOException {
+                        return (int) (getLong(memberIndex) & 0x00000000FFFFFFFFL);
+                    }
+                };
+            case 2:
+                return new DefaultValueProvider(this, memberIndex) {
+                    @Override
+                    public int getInt(int gridPointIndex) throws IOException {
+                        return (int) (getLong(memberIndex) >>> 32);
+                    }
+                };
+            default:
+                return new DefaultValueProvider(this, memberIndex);
         }
     }
 

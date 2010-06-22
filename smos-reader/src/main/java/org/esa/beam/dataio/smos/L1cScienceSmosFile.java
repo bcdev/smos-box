@@ -156,9 +156,9 @@ public class L1cScienceSmosFile extends L1cSmosFile {
         try {
             return getSnapshotInfoFuture().get();
         } catch (InterruptedException e) {
-            throw new IllegalStateException(e);
+            throw new RuntimeException(e);
         } catch (ExecutionException e) {
-            throw new IllegalStateException(e.getCause());
+            throw new RuntimeException(e.getCause());
         }
     }
 
