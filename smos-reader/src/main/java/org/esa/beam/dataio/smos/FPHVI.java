@@ -7,7 +7,7 @@ import java.util.Map;
 class FPHVI extends FP {
 
     FPHVI(Product product, Map<String, SmosValueProvider> valueProviderMap, boolean accuracy) {
-        super(product, valueProviderMap, accuracy, false);
+        super(product, valueProviderMap, accuracy, true);
     }
 
     @Override
