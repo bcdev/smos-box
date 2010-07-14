@@ -21,7 +21,6 @@ import com.bc.ceres.core.ProgressMonitor;
 import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.MessageFormat;
@@ -102,22 +101,11 @@ public class GridPointExporter {
         logger.info(MessageFormat.format("targetFile = {0}", arguments.targetFile));
         logger.info(MessageFormat.format("ROI = {0}", arguments.roi.getBounds2D()));
 
-        PrintWriter printWriter = null;
+        GridPointFilterStream filterStream = null;
         try {
-            if (arguments.targetFile != null) {
-                try {
-                    printWriter = new PrintWriter(arguments.targetFile);
-                } catch (FileNotFoundException e) {
-                    errorHandler.error(e);
-                }
-            }
-            if (printWriter == null) {
-                printWriter = new PrintWriter(System.out);
-            }
-            final CsvExportStream csvExportStream = new CsvExportStream(printWriter, ";");
+            filterStream = createGridPointFilterStream(arguments);
             final GridPointFilterStreamHandler streamHandler =
-                    new GridPointFilterStreamHandler(csvExportStream, arguments.roi);
-
+                    new GridPointFilterStreamHandler(filterStream, arguments.roi);
             for (final File sourceFile : arguments.sourceFiles) {
                 try {
                     logger.info(MessageFormat.format("Exporting source file ''{0}''.", sourceFile.getPath()));
@@ -126,16 +114,33 @@ public class GridPointExporter {
                     errorHandler.warning(e);
                 }
             }
+        } catch (Exception e) {
+            errorHandler.error(e);
         } finally {
-            if (printWriter != null) {
-                printWriter.close();
+            if (filterStream != null) {
+                try {
+                    filterStream.close();
+                } catch (IOException e) {
+                    // ignore
+                }
             }
         }
     }
 
+    private static GridPointFilterStream createGridPointFilterStream(Arguments arguments) throws IOException {
+        if (arguments.targetFile != null) {
+            if (arguments.targetFile.isDirectory()) {
+                return new EEExportStream(arguments.targetFile);
+            } else {
+                return new CsvExportStream(new PrintWriter(arguments.targetFile), ";");
+            }
+        }
+        return new CsvExportStream(new PrintWriter(System.out), ";");
+    }
+
     private static void printUsage() {
-        System.out.println("SMOS-Box Grid Point Export command line tool, version 2.0");
-        System.out.println("February 25, 2010");
+        System.out.println("SMOS-Box Grid Point Export command line tool, version 2.1");
+        System.out.println("July 16, 2010");
         System.out.println();
         System.out.println("usage : export-grid-points [ROI] [-o targetFile] [sourceProduct ...]");
         System.out.println();
@@ -148,8 +153,12 @@ public class GridPointExporter {
         System.out.println("Note that each source product must be specified by the path name of\n" +
                            "the directory, which contains the SMOS '.HDR' and '.DBL' files.");
         System.out.println();
-        System.out.println("When no target file is specified, the output is written to standard\n" +
-                           "output, which usually is the console.");
+        System.out.println("If the target file is a directory, the grid point data are exported" +
+                           "into of EE formatted files, which reside in the target directory.\n" +
+                           "If the target file is a normal file, the grid point data are stored" +
+                           "into the target file in form of a CSV table.\n");
+        System.out.println("If no target file is specified,  the grid point data are printed to" +
+                           "the console (in CSV format).");
         System.out.println();
         System.out.println();
     }
