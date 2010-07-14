@@ -44,14 +44,20 @@ public class EEExportStream implements GridPointFilterStream {
             if (targetGridPointHandler.hasValidPeriod()) {
                 final FileNamePatcher fileNamePatcher = createFileNamePatcher();
                 patcher.setFileName(fileNamePatcher.getFileNameWithoutExtension());
-                patcher.setSensingPeriod(targetGridPointHandler.getSensingStart(), targetGridPointHandler.getSensingStop());
+                patcher.setSensingPeriod(targetGridPointHandler.getSensingStart(),
+                                         targetGridPointHandler.getSensingStop());
             }
             if (targetGridPointHandler.hasValidArea()) {
                 patcher.setArea(targetGridPointHandler.getArea());
             }
             patcher.patch(sourceHdrFile, targetHdrFile);
         } finally {
-            dispose();
+            renameFiles();
+            try {
+                close();
+            } catch (IOException e) {
+                // ignore
+            }
         }
     }
 
@@ -62,7 +68,11 @@ public class EEExportStream implements GridPointFilterStream {
 
     @Override
     public void close() throws IOException {
-        dispose();
+        if (targetContext != null) {
+            targetContext.dispose();
+            targetContext = null;
+        }
+        targetGridPointHandler = null;
     }
 
     public File getTargetDblFile() {
@@ -73,26 +83,21 @@ public class EEExportStream implements GridPointFilterStream {
         return targetHdrFile;
     }
 
-    private void dispose() throws IOException {
-        if (targetContext != null) {
-            targetContext.dispose();
-        }
-
+    private void renameFiles() throws IOException {
         final FileNamePatcher fileNamePatcher = createFileNamePatcher();
-        targetGridPointHandler = null;
         final File targetDir = targetHdrFile.getParentFile();
         final File newHdrFile = new File(targetDir, fileNamePatcher.getHdrFileName());
         renameFile(targetHdrFile, newHdrFile);
-        targetHdrFile = newHdrFile;
         final File newDblFile = new File(targetDir, fileNamePatcher.getDblFileName());
         renameFile(targetDblFile, newDblFile);
+        targetHdrFile = newHdrFile;
         targetDblFile = newDblFile;
     }
-    
+
     private void renameFile(File oldFile, File newFile) throws IOException {
         if (!oldFile.renameTo(newFile)) {
-            String msg = String.format("Failed to rename file from: '%s' to '%s'.", oldFile.getAbsolutePath(), newFile.getAbsolutePath());
-            throw new IOException(msg);
+            throw new IOException(String.format(
+                    "Failed to rename file from: '%s' to '%s'.", oldFile.getAbsolutePath(), newFile.getAbsolutePath()));
         }
     }
 
