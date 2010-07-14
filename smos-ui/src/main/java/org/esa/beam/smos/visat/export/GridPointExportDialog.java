@@ -73,6 +73,7 @@ class GridPointExportDialog extends ModalDialog {
     static final String ALIAS_SOUTH = "south";
     static final String ALIAS_EAST = "east";
     static final String ALIAS_WEST = "west";
+    static final String ALIAS_EXPORT_TYPE = "EXPORT_TYPE";
 
     private final AppContext appContext;
     private final PropertyContainer propertyContainer;
@@ -180,6 +181,7 @@ class GridPointExportDialog extends ModalDialog {
         mainPanel.setLayout(layout);
         mainPanel.add(createSourceProductPanel());
         mainPanel.add(createRoiPanel());
+        // todo - export type radio buttons (rq-20100714)
         mainPanel.add(createTargetFilePanel());
 
         setContent(mainPanel);
