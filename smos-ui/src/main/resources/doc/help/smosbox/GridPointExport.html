@@ -87,23 +87,37 @@
   
 </pre>
 
-  <p>For exporting all grid points contained in a
+  <p>for exporting all grid points contained in a
   latitude-longitude box. The target file can defined by means of
   the <code>-o</code> option. If a target file is not defined, the
-  output is dumped to the console. For example, type</p>
+  output is printed to the console. For example, type</p>
   <pre>
     export-grid-points.sh -point 1.0 7.0 -o export.csv SM_TEST_MIR_SCLF1C_20070223T061043_20070223T061105_310_001_0
   
 </pre>
 
-  <p>Using more than a single SMOS product as source is possible.
-  The usual shell completion can be used to specify multiple
-  product files. For example</p>
+  <p>If the target file is a directory, the grid point data are
+      exported in form of EE formatted files, which all reside in
+      the target directory. For example, type</p>
   <pre>
-    export-grid-points.sh -point 1.0 7.0 -o export.csv SM_????_MIR_SCLD1C_2010*
+    export-grid-points.sh -point 1.0 7.0 -o exportDir SM_????_MIR_SCLD1C_2010*
   
 </pre>
 
+  <p>Using more than a single SMOS product as source is possible.
+  The usual shell completion can be used to specify multiple
+  product files. For example, type</p>
+  <pre>
+    export-grid-points.sh -point 1.0 7.0 -o export.csv SM_????_MIR_SCLD1C_2010*
+
+</pre>
+
+  <p>or</p>
+  <pre>
+    export-grid-points.sh -point 1.0 7.0 -o exportDir SM_????_MIR_SCLD1C_2010*
+
+</pre>
+  
   <p>to export only SMOS land dual-polarisation science products
   for 2010.</p>
 </body>
