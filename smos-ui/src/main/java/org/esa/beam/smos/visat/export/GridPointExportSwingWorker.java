@@ -57,6 +57,9 @@ class GridPointExportSwingWorker extends ProgressMonitorSwingWorker<Void, Void> 
     @Parameter(alias = GridPointExportDialog.ALIAS_TARGET_FILE, notNull = true, notEmpty = true)
     private File targetFile;
 
+    @Parameter(alias = GridPointExportDialog.ALIAS_EXPORT_TYPE, defaultValue = "1", valueSet = {"1", "2"})
+    private int exportType;
+
     GridPointExportSwingWorker(AppContext appContext) {
         super(appContext.getApplicationWindow(), "Exporting grid points");
         this.appContext = appContext;
@@ -64,22 +67,23 @@ class GridPointExportSwingWorker extends ProgressMonitorSwingWorker<Void, Void> 
 
     @Override
     protected Void doInBackground(ProgressMonitor pm) throws Exception {
-        GridPointFilterStream exportStream = null;
+        GridPointFilterStream filterStream = null;
         try {
-            final PrintWriter printWriter = new PrintWriter(targetFile);
-            exportStream = new CsvExportStream(printWriter, ";");
-
+            if (exportType == 1) {
+                filterStream = new CsvExportStream(new PrintWriter(targetFile), ";");
+            } else {
+                filterStream = new EEExportStream(targetFile);
+            }
             final Area area = getArea();
-            final GridPointFilterStreamHandler handler = new GridPointFilterStreamHandler(exportStream, area);
-
+            final GridPointFilterStreamHandler handler = new GridPointFilterStreamHandler(filterStream, area);
             if (useSelectedProduct) {
                 handler.processProduct(appContext.getSelectedProduct(), pm);
             } else {
                 handler.processDirectory(sourceDirectory, recursive, pm);
             }
         } finally {
-            if (exportStream != null) {
-                exportStream.close();
+            if (filterStream != null) {
+                filterStream.close();
             }
         }
         return null;
