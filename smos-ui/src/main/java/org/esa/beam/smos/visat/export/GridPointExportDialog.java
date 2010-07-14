@@ -45,6 +45,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
@@ -240,6 +241,9 @@ class GridPointExportDialog extends ModalDialog {
         panel.add(textField, BorderLayout.CENTER);
 
         final JButton etcButton = new JButton("...");
+        final Dimension size = new Dimension(26, 16);
+        etcButton.setPreferredSize(size);
+        etcButton.setMinimumSize(size);
         panel.add(etcButton, BorderLayout.EAST);
 
         etcButton.addActionListener(new ActionListener() {
