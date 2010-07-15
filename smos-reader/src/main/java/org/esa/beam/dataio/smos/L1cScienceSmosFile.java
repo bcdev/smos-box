@@ -50,7 +50,6 @@ import java.util.concurrent.Future;
 public class L1cScienceSmosFile extends L1cSmosFile {
 
     private static final String INCIDENCE_ANGLE_NAME = "Incidence_Angle";
-    private static final String SNAPSHOT_ID_OF_PIXEL_NAME = "Snapshot_ID_of_Pixel";
 
     private static final double CENTER_BROWSE_INCIDENCE_ANGLE = 42.5;
     private static final double MIN_BROWSE_INCIDENCE_ANGLE = 37.5;
@@ -77,7 +76,7 @@ public class L1cScienceSmosFile extends L1cSmosFile {
                     "No band descriptors found for format ''{0}''.", format.getName()));
         }
         incidenceAngleScalingFactor = getIncidenceAngleScalingFactor(bandDescriptors);
-        snapshotIdOfPixelIndex = getBtDataType().getMemberIndex(SNAPSHOT_ID_OF_PIXEL_NAME);
+        snapshotIdOfPixelIndex = getBtDataType().getMemberIndex(SmosConstants.BT_SNAPSHOT_ID_OF_PIXEL_NAME);
 
         snapshotList = getDataBlock().getSequence(SmosConstants.SNAPSHOT_LIST_NAME);
         if (snapshotList == null) {

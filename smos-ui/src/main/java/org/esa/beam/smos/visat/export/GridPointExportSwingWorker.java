@@ -5,6 +5,7 @@ import com.bc.ceres.swing.progress.ProgressMonitorSwingWorker;
 import com.vividsolutions.jts.geom.Geometry;
 import org.esa.beam.framework.datamodel.Placemark;
 import org.esa.beam.framework.datamodel.PlacemarkGroup;
+import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.framework.datamodel.VectorDataNode;
 import org.esa.beam.framework.gpf.annotations.Parameter;
 import org.esa.beam.framework.ui.AppContext;
@@ -21,9 +22,10 @@ import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.io.PrintWriter;
 import java.text.MessageFormat;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-class GridPointExportSwingWorker extends ProgressMonitorSwingWorker<Void, Void> {
+class GridPointExportSwingWorker extends ProgressMonitorSwingWorker<File, File> {
 
     private final AppContext appContext;
 
@@ -57,8 +59,9 @@ class GridPointExportSwingWorker extends ProgressMonitorSwingWorker<Void, Void> 
     @Parameter(alias = GridPointExportDialog.ALIAS_TARGET_FILE, notNull = true, notEmpty = true)
     private File targetFile;
 
-    @Parameter(alias = GridPointExportDialog.ALIAS_EXPORT_TYPE, defaultValue = "1", valueSet = {"1", "2"})
-    private int exportType;
+    @Parameter(alias = GridPointExportDialog.ALIAS_EXPORT_FORMAT, defaultValue = GridPointExportDialog.NAME_CSV,
+               valueSet = {GridPointExportDialog.NAME_CSV, GridPointExportDialog.NAME_EEF})
+    private String exportFormat;
 
     GridPointExportSwingWorker(AppContext appContext) {
         super(appContext.getApplicationWindow(), "Exporting grid points");
@@ -66,10 +69,10 @@ class GridPointExportSwingWorker extends ProgressMonitorSwingWorker<Void, Void> 
     }
 
     @Override
-    protected Void doInBackground(ProgressMonitor pm) throws Exception {
+    protected File doInBackground(ProgressMonitor pm) throws Exception {
         GridPointFilterStream filterStream = null;
         try {
-            if (exportType == 1) {
+            if (GridPointExportDialog.NAME_CSV.equals(exportFormat)) {
                 filterStream = new CsvExportStream(new PrintWriter(targetFile), ";");
             } else {
                 filterStream = new EEExportStream(targetFile);
@@ -78,6 +81,7 @@ class GridPointExportSwingWorker extends ProgressMonitorSwingWorker<Void, Void> 
             final GridPointFilterStreamHandler handler = new GridPointFilterStreamHandler(filterStream, area);
             if (useSelectedProduct) {
                 handler.processProduct(appContext.getSelectedProduct(), pm);
+                
             } else {
                 handler.processDirectory(sourceDirectory, recursive, pm);
             }
@@ -104,39 +108,39 @@ class GridPointExportSwingWorker extends ProgressMonitorSwingWorker<Void, Void> 
 
     private Area getArea() {
         switch (roiType) {
-        case 0: {
-            final Area area = new Area();
-            final FeatureIterator<SimpleFeature> featureIterator = geometry.getFeatureCollection().features();
+            case 0: {
+                final Area area = new Area();
+                final FeatureIterator<SimpleFeature> featureIterator = geometry.getFeatureCollection().features();
 
-            while (featureIterator.hasNext()) {
-                final Area featureArea;
-                final SimpleFeature feature = featureIterator.next();
-                if (feature.getFeatureType() == Placemark.getFeatureType()) {
-                    featureArea = getAreaForPlacemarkFeature(feature);
-                } else {
-                    featureArea = getArea(feature);
+                while (featureIterator.hasNext()) {
+                    final Area featureArea;
+                    final SimpleFeature feature = featureIterator.next();
+                    if (feature.getFeatureType() == Placemark.getFeatureType()) {
+                        featureArea = getAreaForPlacemarkFeature(feature);
+                    } else {
+                        featureArea = getArea(feature);
+                    }
+                    if (featureArea != null && !featureArea.isEmpty()) {
+                        area.add(featureArea);
+                    }
                 }
-                if (featureArea != null && !featureArea.isEmpty()) {
-                    area.add(featureArea);
-                }
+                return area;
             }
-            return area;
-        }
-        case 1: {
-            final Area area = new Area();
-            final PlacemarkGroup pinGroup = appContext.getSelectedProduct().getPinGroup();
+            case 1: {
+                final Area area = new Area();
+                final PlacemarkGroup pinGroup = appContext.getSelectedProduct().getPinGroup();
 
-            for (Placemark pin : pinGroup.toArray(new Placemark[pinGroup.getNodeCount()])) {
-                area.add(getAreaForPlacemarkFeature(pin.getFeature()));
+                for (Placemark pin : pinGroup.toArray(new Placemark[pinGroup.getNodeCount()])) {
+                    area.add(getAreaForPlacemarkFeature(pin.getFeature()));
+                }
+                return area;
             }
-            return area;
-        }
-        case 2: {
-            return new Area(new Rectangle2D.Double(west, south, east - west, north - south));
-        }
-        default:
-            // cannot happen
-            throw new IllegalStateException(MessageFormat.format("Illegal ROI type: {0}", roiType));
+            case 2: {
+                return new Area(new Rectangle2D.Double(west, south, east - west, north - south));
+            }
+            default:
+                // cannot happen
+                throw new IllegalStateException(MessageFormat.format("Illegal ROI type: {0}", roiType));
         }
     }
 

@@ -1,6 +1,5 @@
 package org.esa.beam.smos.visat.export;
 
-import static junit.framework.Assert.assertEquals;
 import org.jdom.Document;
 import org.junit.Test;
 
@@ -8,6 +7,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
+
+import static junit.framework.Assert.assertEquals;
 
 public class EEHdrFilePatcherTest {
 

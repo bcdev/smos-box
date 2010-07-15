@@ -29,6 +29,7 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,8 +56,8 @@ class GridPointFilterStreamHandler {
         final List<File> sourceFileList = new ArrayList<File>();
         findSourceFiles(dir, recursive, sourceFileList);
 
+        pm.beginTask("Exporting grid point data...", sourceFileList.size());
         try {
-            pm.beginTask("Exporting grid point data...", sourceFileList.size());
             for (final File sourceFile : sourceFileList) {
                 ExplorerFile explorerFile = null;
                 try {
@@ -66,9 +67,10 @@ class GridPointFilterStreamHandler {
                         // ignore, file is skipped anyway
                     }
                     if (explorerFile instanceof SmosFile) {
+                        pm.setSubTaskName(MessageFormat.format(
+                                "Processing file ''{0}''...", explorerFile.getDblFile().getName()));
                         smosFileProcessor.process((SmosFile) explorerFile, SubProgressMonitor.create(pm, 1));
                     } else {
-                        // skip file
                         pm.worked(1);
                     }
                     if (pm.isCanceled()) {

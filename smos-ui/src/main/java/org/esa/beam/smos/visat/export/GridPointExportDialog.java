@@ -10,7 +10,6 @@ import com.bc.ceres.swing.binding.BindingContext;
 import com.bc.ceres.swing.binding.ComponentAdapter;
 import com.bc.ceres.swing.binding.PropertyEditor;
 import com.bc.ceres.swing.binding.PropertyEditorRegistry;
-import com.bc.ceres.swing.binding.internal.FileEditor;
 import com.bc.ceres.swing.binding.internal.SingleSelectionEditor;
 import com.bc.ceres.swing.binding.internal.TextComponentAdapter;
 import com.bc.ceres.swing.binding.internal.TextFieldEditor;
@@ -26,6 +25,7 @@ import org.esa.beam.framework.datamodel.VectorDataNode;
 import org.esa.beam.framework.gpf.annotations.ParameterDescriptorFactory;
 import org.esa.beam.framework.ui.AppContext;
 import org.esa.beam.framework.ui.ModalDialog;
+import org.esa.beam.util.io.FileChooserFactory;
 
 import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
@@ -43,6 +43,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -62,20 +63,22 @@ import java.util.Map;
 class GridPointExportDialog extends ModalDialog {
 
     private static final String LAST_SOURCE_DIR_KEY = "org.esa.beam.smos.export.sourceDir";
-    private static final String LAST_TARGET_DIR_KEY = "org.esa.beam.smos.export.targetDir";
+    private static final String LAST_TARGET_FILE_KEY = "org.esa.beam.smos.export.targetFile";
 
     static final String ALIAS_GEOMETRY = "geometry";
     static final String ALIAS_ROI_TYPE = "roiType";
     static final String ALIAS_RECURSIVE = "recursive";
     static final String ALIAS_SOURCE_DIRECTORY = "sourceDirectory";
-    static final String ALIAS_TARGET_FILE = "targetFile";
+    static final String ALIAS_TARGET_FILE = "targetFileOrDir";
     static final String ALIAS_USE_SELECTED_PRODUCT = "useSelectedProduct";
     static final String ALIAS_NORTH = "north";
     static final String ALIAS_SOUTH = "south";
     static final String ALIAS_EAST = "east";
     static final String ALIAS_WEST = "west";
-    static final String ALIAS_EXPORT_TYPE = "EXPORT_TYPE";
+    static final String ALIAS_EXPORT_FORMAT = "exportFormat";
+    static final String NAME_CSV = "CSV";
 
+    static final String NAME_EEF = "Earth Explorer subsets";
     private final AppContext appContext;
     private final PropertyContainer propertyContainer;
     private final BindingContext bindingContext;
@@ -108,14 +111,14 @@ class GridPointExportDialog extends ModalDialog {
         final File sourceDirectory = (File) propertyContainer.getValue(ALIAS_SOURCE_DIRECTORY);
         final File targetFile = (File) propertyContainer.getValue(ALIAS_TARGET_FILE);
         setDefaultSourceDirectory(sourceDirectory);
-        setDefaultTargetDirectory(targetFile.getParentFile());
-
-        if (targetFile.exists()) {
+        setDefaultTargetFile(targetFile);
+        if (targetFile.exists() && targetFile.isFile()) {
             final String message = MessageFormat.format(
-                    "The selected target file\n''{0}''\n already exists.\n\n Do you want to overwrite the target file?",
+                    "The selected target file\n''{0}''\nalready exists.\n\nDo you want to overwrite the target file?",
                     targetFile.getPath());
-            final int i = JOptionPane.showConfirmDialog(getJDialog(), message, getTitle(), JOptionPane.YES_NO_OPTION);
-            if (i != JOptionPane.YES_OPTION) {
+            final int answer = JOptionPane.showConfirmDialog(getJDialog(), message, getTitle(),
+                                                             JOptionPane.YES_NO_OPTION);
+            if (answer != JOptionPane.YES_OPTION) {
                 return;
             }
         }
@@ -140,13 +143,27 @@ class GridPointExportDialog extends ModalDialog {
                 return false;
             }
         }
+        final File targetFile = (File) propertyContainer.getValue(ALIAS_TARGET_FILE);
+        final String exportFormat = (String) propertyContainer.getValue(ALIAS_EXPORT_FORMAT);
+        if (NAME_CSV.equals(exportFormat)) {
+            if (targetFile.exists() && !targetFile.isFile()) {
+                showErrorDialog("The target file must be a normal file, not a directory.");
+                return false;
+            }
+        } else {
+            if (targetFile.exists() && !targetFile.isDirectory()) {
+                showErrorDialog("The target file must be a directory, not a normal file.");
+                return false;
+            }
+        }
         return true;
     }
 
     private void initPropertyContainer() throws ValidationException {
         propertyContainer.setDefaultValues();
         propertyContainer.setValue(ALIAS_SOURCE_DIRECTORY, getDefaultSourceDirectory());
-        propertyContainer.setValue(ALIAS_TARGET_FILE, new File(getDefaultTargetDirectory(), "export.csv"));
+        final File targetFile = getDefaultTargetFile();
+        propertyContainer.setValue(ALIAS_TARGET_FILE, targetFile);
 
         final Product selectedProduct = getSelectedSmosProduct();
         if (selectedProduct != null) {
@@ -173,6 +190,10 @@ class GridPointExportDialog extends ModalDialog {
             }
         }
         propertyContainer.setValue(ALIAS_USE_SELECTED_PRODUCT, selectedProduct != null);
+        if (targetFile.isDirectory()) {
+            propertyContainer.setValue(ALIAS_EXPORT_FORMAT, NAME_EEF);
+        }
+        propertyContainer.addPropertyChangeListener(ALIAS_EXPORT_FORMAT, new ExportFormatChangeListener());
     }
 
     private void createUI() {
@@ -182,21 +203,14 @@ class GridPointExportDialog extends ModalDialog {
         mainPanel.setLayout(layout);
         mainPanel.add(createSourceProductPanel());
         mainPanel.add(createRoiPanel());
-        // todo - export type radio buttons (rq-20100714)
         mainPanel.add(createTargetFilePanel());
 
         setContent(mainPanel);
     }
 
     private JComponent createSourceProductPanel() {
-        final TableLayout layout = new TableLayout(1);
-        layout.setTableAnchor(TableLayout.Anchor.WEST);
-        layout.setTableFill(TableLayout.Fill.HORIZONTAL);
-        layout.setTablePadding(3, 3);
-        layout.setTableWeightX(1.0);
-
         final JRadioButton useSelectedProductButton = new JRadioButton("Use selected SMOS product");
-        final JRadioButton useAllProductsInDirectoryButton = new JRadioButton("Use all SMOS products in directory");
+        final JRadioButton useAllProductsInDirectoryButton = new JRadioButton("Use all SMOS products in directory:");
         final Map<AbstractButton, Object> buttonGroupValueSet = new HashMap<AbstractButton, Object>();
         buttonGroupValueSet.put(useSelectedProductButton, true);
         buttonGroupValueSet.put(useAllProductsInDirectoryButton, false);
@@ -209,48 +223,57 @@ class GridPointExportDialog extends ModalDialog {
         bindingContext.bind(ALIAS_USE_SELECTED_PRODUCT, buttonGroup, buttonGroupValueSet);
         bindingContext.bindEnabledState(ALIAS_SOURCE_DIRECTORY, true, ALIAS_USE_SELECTED_PRODUCT, false);
 
-        final JPanel sourceProductPanel = new JPanel(layout);
-        sourceProductPanel.setBorder(BorderFactory.createTitledBorder("Source Product(s)"));
-        sourceProductPanel.add(useSelectedProductButton);
-        sourceProductPanel.add(useAllProductsInDirectoryButton);
-        layout.setCellPadding(2, 0, new Insets(0, 24, 3, 3));
-
         final JCheckBox checkBox = new JCheckBox("Descend into subdirectories");
         bindingContext.bind(ALIAS_RECURSIVE, checkBox);
         bindingContext.bindEnabledState(ALIAS_RECURSIVE, true, ALIAS_USE_SELECTED_PRODUCT, false);
 
-        sourceProductPanel.add(checkBox);
-        layout.setCellPadding(3, 0, new Insets(0, 24, 3, 3));
-
         final PropertyDescriptor sourceDirectoryDescriptor = propertyContainer.getDescriptor(ALIAS_SOURCE_DIRECTORY);
-        final JComponent component = createFileSelectorComponent(sourceDirectoryDescriptor);
-        sourceProductPanel.add(component);
+        final CF chooserFactory = new CF() {
+            @Override
+            public JFileChooser createChooser(File file) {
+                return FileChooserFactory.getInstance().createDirChooser(file);
+            }
+        };
+        final JComponent fileEditor = createFileEditorComponent(sourceDirectoryDescriptor, chooserFactory);
 
-        final JTextField textField = (JTextField) component.getComponent(0);
-        textField.setColumns(30);
+        final TableLayout layout = new TableLayout(1);
+        layout.setTableAnchor(TableLayout.Anchor.WEST);
+        layout.setTableFill(TableLayout.Fill.HORIZONTAL);
+        layout.setTablePadding(3, 3);
+        layout.setTableWeightX(1.0);
+
+        final JPanel sourceProductPanel = new JPanel(layout);
+        sourceProductPanel.setBorder(BorderFactory.createTitledBorder("Source Products"));
+        sourceProductPanel.add(useSelectedProductButton);
+        sourceProductPanel.add(useAllProductsInDirectoryButton);
+        layout.setCellPadding(2, 0, new Insets(0, 24, 3, 3));
+        sourceProductPanel.add(fileEditor);
+        layout.setCellPadding(3, 0, new Insets(0, 24, 3, 3));
+        sourceProductPanel.add(checkBox);
+
 
         return sourceProductPanel;
     }
 
-    private JComponent createFileSelectorComponent(PropertyDescriptor descriptor) {
+    private JComponent createFileEditorComponent(PropertyDescriptor descriptor, final CF cf) {
         final JTextField textField = new JTextField();
+        textField.setColumns(30);
         final ComponentAdapter adapter = new TextComponentAdapter(textField);
         final Binding binding = bindingContext.bind(descriptor.getName(), adapter);
-
-        final JPanel panel = new JPanel(new BorderLayout(2, 2));
-        panel.add(textField, BorderLayout.CENTER);
 
         final JButton etcButton = new JButton("...");
         final Dimension size = new Dimension(26, 16);
         etcButton.setPreferredSize(size);
         etcButton.setMinimumSize(size);
+
+        final JPanel panel = new JPanel(new BorderLayout(2, 2));
+        panel.add(textField, BorderLayout.CENTER);
         panel.add(etcButton, BorderLayout.EAST);
 
         etcButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                final JFileChooser fileChooser = new JFileChooser();
-                fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+                final JFileChooser fileChooser = cf.createChooser((File) binding.getPropertyValue());
                 final int state = fileChooser.showDialog(panel, "Select");
                 if (state == JFileChooser.APPROVE_OPTION && fileChooser.getSelectedFile() != null) {
                     binding.setPropertyValue(fileChooser.getSelectedFile());
@@ -315,7 +338,6 @@ class GridPointExportDialog extends ModalDialog {
         return roiPanel;
     }
 
-
     private Component createLatLonPanel() {
         final TableLayout layout = new TableLayout(3);
         layout.setTableAnchor(TableLayout.Anchor.WEST);
@@ -377,36 +399,71 @@ class GridPointExportDialog extends ModalDialog {
 
         final JPanel targetFilePanel = new JPanel(layout);
         targetFilePanel.setBorder(BorderFactory.createTitledBorder("Target File"));
-        targetFilePanel.add(new JLabel("Target file:"));
 
-        final PropertyEditor fileEditor =
-                PropertyEditorRegistry.getInstance().getPropertyEditor(FileEditor.class.getName());
-        final PropertyDescriptor propertyDescriptor = propertyContainer.getDescriptor(ALIAS_TARGET_FILE);
-        final JComponent editor = fileEditor.createEditorComponent(propertyDescriptor, bindingContext);
-        targetFilePanel.add(editor);
+        final PropertyDescriptor formatDescriptor = propertyContainer.getDescriptor(ALIAS_EXPORT_FORMAT);
+        final JComboBox formatComboBox = new JComboBox(formatDescriptor.getValueSet().getItems());
+        bindingContext.bind(ALIAS_EXPORT_FORMAT, formatComboBox);
 
-        final JTextField textField = (JTextField) editor.getComponent(0);
-        textField.setColumns(30);
+        final JPanel formatPanel = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
+        formatPanel.add(new JLabel("Export as:"));
+        formatPanel.add(formatComboBox);
 
+        final JLabel label = new JLabel();
+        if (NAME_CSV.equals(propertyContainer.getValue(ALIAS_EXPORT_FORMAT))) {
+            label.setText("Save to file:");
+        } else {
+            label.setText("Save subset files to directory:");
+        }
+        final PropertyDescriptor targetFileDescriptor = propertyContainer.getDescriptor(ALIAS_TARGET_FILE);
+        final CF chooserFactory = new CF() {
+            @Override
+            public JFileChooser createChooser(File file) {
+                final FileChooserFactory chooserFactory = FileChooserFactory.getInstance();
+                final JFileChooser fileChooser;
+                if (NAME_CSV.equals(bindingContext.getBinding(ALIAS_EXPORT_FORMAT).getPropertyValue())) {
+                    fileChooser = chooserFactory.createFileChooser(file);
+                    fileChooser.setAcceptAllFileFilterUsed(true);
+                    fileChooser.setFileFilter(new FileNameExtensionFilter("CSV", "CSV"));
+                } else {
+                    fileChooser = chooserFactory.createDirChooser(file);
+                }
+                return fileChooser;
+            }
+        };
+        final JComponent fileEditor = createFileEditorComponent(targetFileDescriptor, chooserFactory);
+        targetFilePanel.add(formatPanel);
+        targetFilePanel.add(label);
+        targetFilePanel.add(fileEditor);
+
+        bindingContext.addPropertyChangeListener(ALIAS_EXPORT_FORMAT, new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                if (NAME_CSV.equals(evt.getNewValue())) {
+                    label.setText("Save to file:");
+                } else {
+                    label.setText("Save subset files to directory:");
+                }
+            }
+        });
         return targetFilePanel;
     }
 
     private File getDefaultSourceDirectory() {
-        return new File(appContext.getPreferences().getPropertyString(LAST_SOURCE_DIR_KEY,
-                                                                      System.getProperty("user.home", ".")));
+        final String def = System.getProperty("user.home", ".");
+        return new File(appContext.getPreferences().getPropertyString(LAST_SOURCE_DIR_KEY, def));
     }
 
     private void setDefaultSourceDirectory(File sourceDirectory) {
         appContext.getPreferences().setPropertyString(LAST_SOURCE_DIR_KEY, sourceDirectory.getPath());
     }
 
-    private File getDefaultTargetDirectory() {
-        return new File(appContext.getPreferences().getPropertyString(LAST_TARGET_DIR_KEY,
-                                                                      System.getProperty("user.home", ".")));
+    private File getDefaultTargetFile() {
+        final String def = new File(System.getProperty("user.home", "."), "export.csv").getPath();
+        return new File(appContext.getPreferences().getPropertyString(LAST_TARGET_FILE_KEY, def));
     }
 
-    private void setDefaultTargetDirectory(File targetDirectory) {
-        appContext.getPreferences().setPropertyString(LAST_TARGET_DIR_KEY, targetDirectory.getPath());
+    private void setDefaultTargetFile(File targetFile) {
+        appContext.getPreferences().setPropertyString(LAST_TARGET_FILE_KEY, targetFile.getPath());
     }
 
     private Product getSelectedSmosProduct() {
@@ -424,6 +481,29 @@ class GridPointExportDialog extends ModalDialog {
         }
 
         return null;
+    }
+
+    private interface CF {
+
+        JFileChooser createChooser(File file);
+    }
+
+    private class ExportFormatChangeListener implements PropertyChangeListener {
+
+        File last;
+
+        @Override
+        public void propertyChange(PropertyChangeEvent evt) {
+            if (NAME_CSV.equals(evt.getNewValue())) {
+                final File dir = (File) propertyContainer.getValue(ALIAS_TARGET_FILE);
+                if (last != null) {
+                    propertyContainer.setValue(ALIAS_TARGET_FILE, new File(dir, last.getName()));
+                }
+            } else {
+                last = (File) propertyContainer.getValue(ALIAS_TARGET_FILE);
+                propertyContainer.setValue(ALIAS_TARGET_FILE, last.getParentFile());
+            }
+        }
     }
 
     private static final class ProductNodeRenderer extends DefaultListCellRenderer {

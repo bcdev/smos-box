@@ -102,10 +102,9 @@ class EEExportGridPointHandler implements GridPointHandler {
     private void trackSensingTime(CompoundData gridPointData) throws IOException {
         final CompoundType type = gridPointData.getType();
         final String typeName = type.getName();
-        if (typeName.indexOf("ECMWF") >= 0) {
-            return; // no sensing time information in ECMWF aux files
+        if (typeName.contains("ECMWF")) {
+            return; // no sensing time information in ECMWF auxiliary files
         }
-
         if (level2) {
             int index = gridPointData.getType().getMemberIndex("Mean_acq_time");
             if (index < 0) {
@@ -120,7 +119,7 @@ class EEExportGridPointHandler implements GridPointHandler {
             int index = type.getMemberIndex(SmosConstants.BT_DATA_LIST_NAME);
             final SequenceData btDataList = gridPointData.getSequence(index);
             final CompoundData btData = btDataList.getCompound(0);
-            index = btData.getType().getMemberIndex("Snapshot_ID");
+            index = btData.getType().getMemberIndex(SmosConstants.BT_SNAPSHOT_ID_OF_PIXEL_NAME);
             if (index >= 0) {
                 final long snapShotId = btData.getUInt(index);
                 timeTracker.track(snapshotIdTimeMap.get(snapShotId));

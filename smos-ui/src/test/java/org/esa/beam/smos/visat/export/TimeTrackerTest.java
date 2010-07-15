@@ -5,6 +5,7 @@ import junit.framework.TestCase;
 import java.util.Date;
 
 public class TimeTrackerTest extends TestCase {
+
     private TimeTracker timeTracker;
 
     public void testCreateAndGet() {
@@ -48,13 +49,13 @@ public class TimeTrackerTest extends TestCase {
     }
 
     public void testHasValidPeriod_noDates() {
-        assertFalse(timeTracker.hasValidPeriod());   
+        assertFalse(timeTracker.hasValidPeriod());
     }
 
     public void testHasValidPeriod_oneDate() {
         timeTracker.track(new Date(2000));
 
-        assertTrue(timeTracker.hasValidPeriod());   
+        assertTrue(timeTracker.hasValidPeriod());
     }
 
     public void testHasValidPeriod_twoDate() {

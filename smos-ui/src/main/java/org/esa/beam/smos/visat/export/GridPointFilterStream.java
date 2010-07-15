@@ -32,7 +32,7 @@ import java.io.IOException;
  */
 interface GridPointFilterStream extends GridPointHandler {
 
-    void startFile(SmosFile smosfile) throws FileNotFoundException;
+    void startFile(SmosFile smosfile) throws IOException;
 
     void stopFile(SmosFile smosfile) throws IOException;
 

@@ -8,6 +8,7 @@ import org.esa.beam.dataio.smos.SmosFile;
 
 import java.awt.Shape;
 import java.io.IOException;
+import java.text.MessageFormat;
 
 public class SmosFileProcessor {
 
@@ -27,8 +28,9 @@ public class SmosFileProcessor {
         filterStream.startFile(smosFile);
         final int gridPointCount = smosFile.getGridPointCount();
 
+        pm.beginTask(MessageFormat.format(
+                "Processing file ''{0}''...", smosFile.getDblFile().getName()), gridPointCount);
         try {
-            pm.beginTask("Processing grid cells...", gridPointCount);
             for (int i = 0; i < gridPointCount; i++) {
                 final CompoundData gridPointData = smosFile.getGridPointData(i);
                 double lat = gridPointData.getDouble(latIndex);
