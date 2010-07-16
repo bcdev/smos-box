@@ -70,29 +70,30 @@
                 <outputFileNameMapping>
                     ${artifact.artifactId}-${artifact.version}.${artifact.extension}
                 </outputFileNameMapping>
-                <dependencySets>
-<!--
-                    <dependencySet>
-                        <fileMode>0444</fileMode>
-                        <unpack>false</unpack>
-                        <outputDirectory>bin</outputDirectory>
-                        <outputFileNameMapping>${artifact.artifactId}.${artifact.extension}</outputFileNameMapping>
-                        <includes>
-                            <include>com.bc.ceres:ceres-launcher</include>
-                        </includes>
-                    </dependencySet>
--->
-                    <dependencySet>
-                        <fileMode>0444</fileMode>
-                        <unpack>false</unpack>
-                        <outputDirectory>modules</outputDirectory>
-                        <outputFileNameMapping>${artifact.artifactId}-${artifact.version}.${artifact.extension}
-                        </outputFileNameMapping>
-                        <includes>
-                            <include>com.bc.ceres:ceres-binio</include>
-                        </includes>
-                    </dependencySet>
-                </dependencySets>
+                <!-- the following is left here as example of how to include extra dependencies (rq-20100715) -->
+                <!--
+                                <dependencySets>
+                                    <dependencySet>
+                                        <fileMode>0444</fileMode>
+                                        <unpack>false</unpack>
+                                        <outputDirectory>bin</outputDirectory>
+                                        <outputFileNameMapping>${artifact.artifactId}.${artifact.extension}</outputFileNameMapping>
+                                        <includes>
+                                            <include>com.bc.ceres:ceres-launcher</include>
+                                        </includes>
+                                    </dependencySet>
+                                    <dependencySet>
+                                        <fileMode>0444</fileMode>
+                                        <unpack>false</unpack>
+                                        <outputDirectory>modules</outputDirectory>
+                                        <outputFileNameMapping>${artifact.artifactId}-${artifact.version}.${artifact.extension}
+                                        </outputFileNameMapping>
+                                        <includes>
+                                            <include>com.bc.ceres:ceres-binio</include>
+                                        </includes>
+                                    </dependencySet>
+                                </dependencySets>
+                -->
             </binaries>
         </moduleSet>
     </moduleSets>
