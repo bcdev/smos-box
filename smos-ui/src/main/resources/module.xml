@@ -17,7 +17,11 @@
     <url>http://envisat.esa.int/beam</url>
     <licenseUrl>http://www.gnu.org/licenses/gpl.html</licenseUrl>
 
-    <changelog/>
+    <changelog><![CDATA[
+       <p> Changes in 2.1:<br>
+        [SBOX-26] Grid point export to Earth Explorer format<br>
+       </p>]]>
+    </changelog>
 
     <dependency>
         <module>beam-visat</module>
