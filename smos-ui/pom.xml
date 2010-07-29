@@ -28,11 +28,7 @@
         <dependency>
             <groupId>org.esa.beam.smos</groupId>
             <artifactId>smos-reader</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.esa.beam</groupId>
-            <artifactId>blue-marble-worldmap</artifactId>
-        </dependency>
+        </dependency> 
     </dependencies>
 
 	<build>
