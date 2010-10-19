@@ -29,8 +29,12 @@ import org.esa.beam.dataio.smos.dddb.Dddb;
 import org.esa.beam.dataio.smos.dddb.Family;
 import org.esa.beam.framework.datamodel.Band;
 import org.esa.beam.framework.datamodel.Product;
+import org.esa.beam.framework.datamodel.ProductData;
 import org.esa.beam.smos.dgg.SmosDgg;
 import org.esa.beam.util.io.FileUtils;
+import org.jdom.Document;
+import org.jdom.Element;
+import org.jdom.Namespace;
 
 import java.awt.Dimension;
 import java.awt.geom.Area;
@@ -186,6 +190,7 @@ public class SmosFile extends ExplorerFile {
 
         product.setGeoCoding(ProductHelper.createGeoCoding(dimension));
         addBands(product);
+        setTimes(product);
 
         return product;
     }
@@ -305,6 +310,21 @@ public class SmosFile extends ExplorerFile {
         final double y = 90.0 - h * (j + 1);
 
         return new Rectangle2D.Double(x, y, w, w);
+    }
+
+    private void setTimes(Product product) {
+        final String pattern = "'UTC='yyyy-MM-dd'T'HH:mm:ss";
+        try {
+            final Document document = getDocument();
+            final Namespace namespace = document.getRootElement().getNamespace();
+            final Element validityPeriod = getElement(document.getRootElement(), "Validity_Period");
+            final String validityStart = validityPeriod.getChildText("Validity_Start", namespace);
+            final String validityStop = validityPeriod.getChildText("Validity_Stop", namespace);
+            product.setStartTime(ProductData.UTC.parse(validityStart, pattern));
+            product.setEndTime(ProductData.UTC.parse(validityStop, pattern));
+        } catch (Exception e) {
+            // ignore
+        }
     }
 
     private static final class GridPointInfo {

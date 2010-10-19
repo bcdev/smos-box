@@ -14,6 +14,7 @@
     <groupId>org.esa.beam.smos</groupId>
     <artifactId>smos-reader</artifactId>
     <name>SMOS Product Reader</name>
+    <version>2.1.1-SNAPSHOT</version>
     <description>SMOS Product Reader</description>
 
     <dependencies>

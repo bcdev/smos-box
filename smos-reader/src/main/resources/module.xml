@@ -1,7 +1,7 @@
 <module>
     <manifestVersion>1.0.0</manifestVersion>
     <symbolicName>smos-reader</symbolicName>
-    <version>2.1</version>
+    <version>2.1.1</version>
     <name>SMOS Product Reader</name>
     <description>
         The SMOS Product Reader provides the capability of reading data
@@ -19,6 +19,8 @@
     <licenseUrl>http://www.gnu.org/licenses/gpl.html</licenseUrl>
 
     <changelog><![CDATA[
+       <p> Changes in 2.1.1:<br>
+        [SBOX-27] Missing start and stop times<br>
        <p> Changes in 2.1:<br>
         [SBOX-25] Incorrect brightness temperatures at ground<br>
         [SBOX-24] Pixels eastward of 168.5° E do not show up<br>
