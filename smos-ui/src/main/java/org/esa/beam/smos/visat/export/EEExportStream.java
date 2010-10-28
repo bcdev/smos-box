@@ -40,8 +40,8 @@ public class EEExportStream implements GridPointFilterStream {
 
     @Override
     public void startFile(SmosFile sourceFile) throws IOException {
-        final File sourceDblFile = sourceFile.getDblFile();
-        targetDblFile = getTargetDblFile(sourceDblFile);
+        targetDblFile = getTargetDblFile(sourceFile.getDblFile());
+        targetHdrFile = getTargetHdrFile(sourceFile.getHdrFile());
         final DataFormat targetFormat = sourceFile.getDataFormat();
 
         //noinspection ResultOfMethodCallIgnored
@@ -53,39 +53,42 @@ public class EEExportStream implements GridPointFilterStream {
     @Override
     public void stopFile(SmosFile sourceFile) throws IOException {
         final long gridPointCount = targetGridPointHandler.getGridPointCount();
-        try {
-            final File sourceHdrFile = getSourceHdrFile(sourceFile.getDblFile());
-            targetHdrFile = getTargetHdrFile(sourceHdrFile);
+        final boolean validPeriod = targetGridPointHandler.hasValidPeriod();
+        final boolean validArea = targetGridPointHandler.hasValidArea();
 
-            final EEHdrFilePatcher patcher = new EEHdrFilePatcher();
-            patcher.setGridPointCount(gridPointCount);
-            if (targetGridPointHandler.hasValidPeriod()) {
-                final FileNamePatcher fileNamePatcher = createFileNamePatcher();
-                patcher.setFileName(fileNamePatcher.getFileNameWithoutExtension());
-                patcher.setSensingPeriod(targetGridPointHandler.getSensingStart(),
-                                         targetGridPointHandler.getSensingStop());
+        if (gridPointCount != 0) {
+            final EEHdrFilePatcher hdrFilePatcher = new EEHdrFilePatcher();
+            final FileNamePatcher fileNamePatcher = new FileNamePatcher(
+                    FileUtils.getFilenameWithoutExtension(targetDblFile));
+            hdrFilePatcher.setGridPointCount(gridPointCount);
+            if (validPeriod) {
+                fileNamePatcher.setStartDate(targetGridPointHandler.getSensingStart());
+                fileNamePatcher.setStopDate(targetGridPointHandler.getSensingStop());
+                hdrFilePatcher.setFileName(fileNamePatcher.getFileNameWithoutExtension());
+                hdrFilePatcher.setSensingPeriod(targetGridPointHandler.getSensingStart(),
+                                                targetGridPointHandler.getSensingStop());
             }
-            if (targetGridPointHandler.hasValidArea()) {
-                patcher.setArea(targetGridPointHandler.getArea());
+            if (validArea) {
+                hdrFilePatcher.setArea(targetGridPointHandler.getArea());
             }
-            patcher.patch(sourceHdrFile, targetHdrFile);
-        } finally {
             try {
-                close();
-            } catch (IOException e) {
-                // ignore
+                hdrFilePatcher.patch(sourceFile.getHdrFile(), targetHdrFile);
+            } finally {
+                try {
+                    close();
+                } catch (IOException e) {
+                    // ignore
+                }
+                renameFiles(fileNamePatcher);
             }
-            if (gridPointCount == 0) {
-                final File parentDir = targetHdrFile.getParentFile();
-                //noinspection ResultOfMethodCallIgnored
-                targetHdrFile.delete();
-                //noinspection ResultOfMethodCallIgnored
-                targetDblFile.delete();
-                //noinspection ResultOfMethodCallIgnored
-                parentDir.delete();
-            } else {
-                renameFiles();
-            }
+        } else {
+            final File parentDir = targetHdrFile.getParentFile();
+            //noinspection ResultOfMethodCallIgnored
+            targetHdrFile.delete();
+            //noinspection ResultOfMethodCallIgnored
+            targetDblFile.delete();
+            //noinspection ResultOfMethodCallIgnored
+            parentDir.delete();
         }
     }
 
@@ -111,8 +114,7 @@ public class EEExportStream implements GridPointFilterStream {
         return targetHdrFile;
     }
 
-    private void renameFiles() throws IOException {
-        final FileNamePatcher fileNamePatcher = createFileNamePatcher();
+    private void renameFiles(FileNamePatcher fileNamePatcher) throws IOException {
         final File parentDir = targetHdrFile.getParentFile();
         final File newHdrFile = new File(parentDir, fileNamePatcher.getHdrFileName());
         renameFile(targetHdrFile, newHdrFile);
@@ -130,20 +132,6 @@ public class EEExportStream implements GridPointFilterStream {
             throw new IOException(String.format(
                     "Cannot rename file \n'%s'\nto\n'%s'.", oldFile.getPath(), newFile.getPath()));
         }
-    }
-
-    private FileNamePatcher createFileNamePatcher() {
-        final String basename = FileUtils.getFilenameWithoutExtension(targetDblFile);
-        final FileNamePatcher patcher = new FileNamePatcher(basename);
-        if (targetGridPointHandler.hasValidPeriod()) {
-            patcher.setStartDate(targetGridPointHandler.getSensingStart());
-            patcher.setStopDate(targetGridPointHandler.getSensingStop());
-        }
-        return patcher;
-    }
-
-    private File getSourceHdrFile(File sourceDblFile) {
-        return FileUtils.exchangeExtension(sourceDblFile, ".HDR");
     }
 
     private File getTargetDblFile(File sourceDblFile) {
