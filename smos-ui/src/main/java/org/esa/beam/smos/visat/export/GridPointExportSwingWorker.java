@@ -19,9 +19,9 @@ package org.esa.beam.smos.visat.export;
 import com.bc.ceres.core.ProgressMonitor;
 import com.bc.ceres.swing.progress.ProgressMonitorSwingWorker;
 import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.geom.Point;
 import org.esa.beam.framework.datamodel.Placemark;
 import org.esa.beam.framework.datamodel.PlacemarkGroup;
-import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.framework.datamodel.VectorDataNode;
 import org.esa.beam.framework.gpf.annotations.Parameter;
 import org.esa.beam.framework.ui.AppContext;
@@ -31,14 +31,11 @@ import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.operation.TransformException;
 
-import java.awt.Point;
-import java.awt.Shape;
 import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.io.PrintWriter;
 import java.text.MessageFormat;
-import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 class GridPointExportSwingWorker extends ProgressMonitorSwingWorker<File, File> {
@@ -97,7 +94,7 @@ class GridPointExportSwingWorker extends ProgressMonitorSwingWorker<File, File> 
             final GridPointFilterStreamHandler handler = new GridPointFilterStreamHandler(filterStream, area);
             if (useSelectedProduct) {
                 handler.processProduct(appContext.getSelectedProduct(), pm);
-                
+
             } else {
                 handler.processDirectory(sourceDirectory, recursive, pm);
             }
@@ -161,24 +158,23 @@ class GridPointExportSwingWorker extends ProgressMonitorSwingWorker<File, File> 
     }
 
     private Area getArea(SimpleFeature feature) {
-        Shape shape = null;
         try {
             final Object geometry = feature.getDefaultGeometry();
             if (geometry instanceof Geometry) {
-                shape = new LiteShape2((Geometry) geometry, null, null, true);
+                return new Area(new LiteShape2((Geometry) geometry, null, null, true));
             }
         } catch (TransformException e) {
             // ignore
         } catch (FactoryException e) {
             // ignore
         }
-        return shape != null ? new Area(shape) : null;
+        return null;
     }
 
     private Area getAreaForPlacemarkFeature(SimpleFeature feature) {
         final Point geometry = (Point) feature.getDefaultGeometry();
-        double lon = geometry.getX();
-        double lat = geometry.getY();
+        final double lon = geometry.getX();
+        final double lat = geometry.getY();
 
         final double x = lon - 0.08;
         final double y = lat - 0.08;

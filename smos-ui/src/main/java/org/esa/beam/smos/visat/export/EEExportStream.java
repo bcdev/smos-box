@@ -69,7 +69,6 @@ public class EEExportStream implements GridPointFilterStream {
                 patcher.setArea(targetGridPointHandler.getArea());
             }
             patcher.patch(sourceHdrFile, targetHdrFile);
-            renameFiles();
         } finally {
             try {
                 close();
@@ -84,6 +83,8 @@ public class EEExportStream implements GridPointFilterStream {
                 targetDblFile.delete();
                 //noinspection ResultOfMethodCallIgnored
                 parentDir.delete();
+            } else {
+                renameFiles();
             }
         }
     }
