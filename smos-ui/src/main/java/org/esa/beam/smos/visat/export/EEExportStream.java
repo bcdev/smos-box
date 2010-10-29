@@ -55,12 +55,12 @@ public class EEExportStream implements GridPointFilterStream {
         final long gridPointCount = targetGridPointHandler.getGridPointCount();
         final boolean validPeriod = targetGridPointHandler.hasValidPeriod();
         final boolean validArea = targetGridPointHandler.hasValidArea();
+        final FileNamePatcher fileNamePatcher =
+                new FileNamePatcher(FileUtils.getFilenameWithoutExtension(targetDblFile));
+        final EEHdrFilePatcher hdrFilePatcher = new EEHdrFilePatcher();
+        hdrFilePatcher.setGridPointCount(gridPointCount);
 
-        if (gridPointCount != 0) {
-            final EEHdrFilePatcher hdrFilePatcher = new EEHdrFilePatcher();
-            final FileNamePatcher fileNamePatcher = new FileNamePatcher(
-                    FileUtils.getFilenameWithoutExtension(targetDblFile));
-            hdrFilePatcher.setGridPointCount(gridPointCount);
+        try {
             if (validPeriod) {
                 fileNamePatcher.setStartDate(targetGridPointHandler.getSensingStart());
                 fileNamePatcher.setStopDate(targetGridPointHandler.getSensingStop());
@@ -71,24 +71,24 @@ public class EEExportStream implements GridPointFilterStream {
             if (validArea) {
                 hdrFilePatcher.setArea(targetGridPointHandler.getArea());
             }
+            hdrFilePatcher.patch(sourceFile.getHdrFile(), targetHdrFile);
+        } finally {
             try {
-                hdrFilePatcher.patch(sourceFile.getHdrFile(), targetHdrFile);
-            } finally {
-                try {
-                    close();
-                } catch (IOException e) {
-                    // ignore
-                }
+                close();
+            } catch (IOException e) {
+                // ignore
+            }
+            if (gridPointCount == 0) {
+                final File parentDir = targetHdrFile.getParentFile();
+                //noinspection ResultOfMethodCallIgnored
+                targetHdrFile.delete();
+                //noinspection ResultOfMethodCallIgnored
+                targetDblFile.delete();
+                //noinspection ResultOfMethodCallIgnored
+                parentDir.delete();
+            } else {
                 renameFiles(fileNamePatcher);
             }
-        } else {
-            final File parentDir = targetHdrFile.getParentFile();
-            //noinspection ResultOfMethodCallIgnored
-            targetHdrFile.delete();
-            //noinspection ResultOfMethodCallIgnored
-            targetDblFile.delete();
-            //noinspection ResultOfMethodCallIgnored
-            parentDir.delete();
         }
     }
 
