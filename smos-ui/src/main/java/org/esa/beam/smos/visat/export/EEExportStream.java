@@ -58,13 +58,13 @@ public class EEExportStream implements GridPointFilterStream {
         final FileNamePatcher fileNamePatcher =
                 new FileNamePatcher(FileUtils.getFilenameWithoutExtension(targetDblFile));
         final EEHdrFilePatcher hdrFilePatcher = new EEHdrFilePatcher();
+        hdrFilePatcher.setFileName(fileNamePatcher.getFileNameWithoutExtension());
         hdrFilePatcher.setGridPointCount(gridPointCount);
 
         try {
             if (validPeriod) {
                 fileNamePatcher.setStartDate(targetGridPointHandler.getSensingStart());
                 fileNamePatcher.setStopDate(targetGridPointHandler.getSensingStop());
-                hdrFilePatcher.setFileName(fileNamePatcher.getFileNameWithoutExtension());
                 hdrFilePatcher.setSensingPeriod(targetGridPointHandler.getSensingStart(),
                                                 targetGridPointHandler.getSensingStop());
             }
@@ -128,9 +128,11 @@ public class EEExportStream implements GridPointFilterStream {
     }
 
     private void renameFile(File oldFile, File newFile) throws IOException {
-        if (!oldFile.renameTo(newFile)) {
-            throw new IOException(String.format(
-                    "Cannot rename file \n'%s'\nto\n'%s'.", oldFile.getPath(), newFile.getPath()));
+        if (!newFile.equals(oldFile)) {
+            if (!oldFile.renameTo(newFile)) {
+                throw new IOException(String.format(
+                        "Cannot rename file \n'%s'\nto\n'%s'.", oldFile.getPath(), newFile.getPath()));
+            }
         }
     }
 

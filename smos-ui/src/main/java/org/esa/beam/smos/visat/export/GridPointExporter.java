@@ -103,7 +103,8 @@ public class GridPointExporter {
         GridPointFilterStream filterStream = null;
         try {
             filterStream = createGridPointFilterStream(arguments);
-            final GridPointFilterStreamHandler streamHandler = new GridPointFilterStreamHandler(filterStream, arguments.roi);
+            final GridPointFilterStreamHandler streamHandler = new GridPointFilterStreamHandler(filterStream,
+                                                                                                arguments.roi);
             for (final File sourceFile : arguments.sourceFiles) {
                 try {
                     logger.info(MessageFormat.format("Exporting source file ''{0}''.", sourceFile.getPath()));
