@@ -116,15 +116,9 @@ class ProductHelper {
 
 
     static GeoCoding createGeoCoding(Dimension dimension) {
-        final double scaleX = 360.0 / dimension.getWidth();
-        final double scaleY = 180.0 / dimension.getHeight();
-
-        final AffineTransform imageToMap = new AffineTransform();
-        imageToMap.translate(-180.0, 90.0);
-        imageToMap.scale(scaleX, -scaleY);
-
+        final AffineTransform transform = SmosDgg.getInstance().getImageToMapTransform();
         try {
-            return new CrsGeoCoding(DefaultGeographicCRS.WGS84, new Rectangle(dimension), imageToMap);
+            return new CrsGeoCoding(DefaultGeographicCRS.WGS84, new Rectangle(dimension), transform);
         } catch (FactoryException e) {
             throw new IllegalArgumentException("dimension");
         } catch (TransformException e) {
@@ -232,9 +226,9 @@ class ProductHelper {
                     color = new Color(random.nextInt(255), random.nextInt(255), random.nextInt(255));
                 }
                 final String expression = band.getName() + "." + flagDescriptor.getFlagName();
-                Mask mask = Mask.BandMathsType.create(maskName, flagDescriptor.getDescription(), 
-                                                     product.getSceneRasterWidth(), product.getSceneRasterHeight(), 
-                                                     expression, color, flagDescriptor.getTransparency());
+                Mask mask = Mask.BandMathsType.create(maskName, flagDescriptor.getDescription(),
+                                                      product.getSceneRasterWidth(), product.getSceneRasterHeight(),
+                                                      expression, color, flagDescriptor.getTransparency());
                 product.getMaskGroup().add(mask);
             }
         }

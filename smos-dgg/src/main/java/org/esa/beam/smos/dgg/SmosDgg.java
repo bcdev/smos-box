@@ -21,6 +21,7 @@ import com.bc.ceres.glevel.MultiLevelSource;
 import com.bc.ceres.glevel.support.DefaultMultiLevelImage;
 import org.esa.beam.glevel.TiledFileMultiLevelSource;
 
+import java.awt.geom.AffineTransform;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -51,7 +52,9 @@ public class SmosDgg {
     public static final int MAX_SEQNUM = 2621442;
     public static final int MAX_ZONE_ID = 10;
 
+    private volatile AffineTransform imageToMapTransform;
     private volatile MultiLevelImage dggMultiLevelImage;
+
 
     public static SmosDgg getInstance() {
         return Holder.instance;
@@ -81,6 +84,10 @@ public class SmosDgg {
         return seqnum <= C ? 1 : seqnum == MAX_SEQNUM ? MAX_ZONE_ID : (seqnum - 2) / B + 1;
     }
 
+    public AffineTransform getImageToMapTransform() {
+        return imageToMapTransform;
+    }
+
     public MultiLevelImage getMultiLevelImage() {
         return dggMultiLevelImage;
     }
@@ -95,6 +102,11 @@ public class SmosDgg {
             final MultiLevelSource dggMultiLevelSource = TiledFileMultiLevelSource.create(dir);
 
             dggMultiLevelImage = new DefaultMultiLevelImage(dggMultiLevelSource);
+            final double scaleX = 360.0 / dggMultiLevelImage.getWidth();
+            final double scaleY = 180.0 / dggMultiLevelImage.getHeight();
+            imageToMapTransform = new AffineTransform();
+            imageToMapTransform.translate(-180.0, 90.0);
+            imageToMapTransform.scale(scaleX, -scaleY);
         } catch (Exception e) {
             throw new IllegalStateException(MessageFormat.format(
                     "Cannot create SMOS DDG multi-level image: {0}", e.getMessage()), e);
