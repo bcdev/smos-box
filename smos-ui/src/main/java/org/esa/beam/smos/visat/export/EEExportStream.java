@@ -115,16 +115,18 @@ public class EEExportStream implements GridPointFilterStream {
     }
 
     private void renameFiles(FileNamePatcher fileNamePatcher) throws IOException {
-        final File parentDir = targetHdrFile.getParentFile();
-        final File newHdrFile = new File(parentDir, fileNamePatcher.getHdrFileName());
-        renameFile(targetHdrFile, newHdrFile);
-        final File newDblFile = new File(parentDir, fileNamePatcher.getDblFileName());
-        renameFile(targetDblFile, newDblFile);
-        final File newParentDir = new File(parentDir.getParent(), fileNamePatcher.getFileNameWithoutExtension());
-        renameFile(parentDir, newParentDir);
+        final File oldParentDir = targetHdrFile.getParentFile();
+        final File newParentDir = new File(oldParentDir.getParent(), fileNamePatcher.getFileNameWithoutExtension());
+        renameFile(oldParentDir, newParentDir);
+        final File newHdrFile = new File(newParentDir, fileNamePatcher.getHdrFileName());
+        final File oldHdrFile = new File(newParentDir, targetHdrFile.getName());
+        renameFile(oldHdrFile, newHdrFile);
+        final File newDblFile = new File(newParentDir, fileNamePatcher.getDblFileName());
+        final File oldDblFile = new File(newParentDir, targetDblFile.getName());
+        renameFile(oldDblFile, newDblFile);
 
-        targetHdrFile = new File(newParentDir, fileNamePatcher.getHdrFileName());
-        targetDblFile = new File(newParentDir, fileNamePatcher.getDblFileName());
+        targetHdrFile = newHdrFile;
+        targetDblFile = newDblFile;
     }
 
     private void renameFile(File oldFile, File newFile) throws IOException {
