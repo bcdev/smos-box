@@ -103,8 +103,8 @@ public class GridPointExporter {
         GridPointFilterStream filterStream = null;
         try {
             filterStream = createGridPointFilterStream(arguments);
-            final GridPointFilterStreamHandler streamHandler = new GridPointFilterStreamHandler(filterStream,
-                                                                                                arguments.roi);
+            final GridPointFilterStreamHandler streamHandler =
+                    new GridPointFilterStreamHandler(filterStream, new RegionFilter(arguments.roi));
             for (final File sourceFile : arguments.sourceFiles) {
                 try {
                     logger.info(MessageFormat.format("Exporting source file ''{0}''.", sourceFile.getPath()));
@@ -254,12 +254,7 @@ public class GridPointExporter {
         }
 
         private static Area createPointArea(double lon, double lat) {
-            final double x = lon - 0.08;
-            final double y = lat - 0.08;
-            final double w = 0.16;
-            final double h = 0.16;
-
-            return new Area(new Rectangle2D.Double(x, y, w, h));
+            return new Area(new Rectangle2D.Double(lon, lat, 0.0, 0.0));
         }
     }
 

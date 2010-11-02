@@ -22,24 +22,22 @@ import com.bc.ceres.core.ProgressMonitor;
 import org.esa.beam.dataio.smos.SmosConstants;
 import org.esa.beam.dataio.smos.SmosFile;
 
-import java.awt.Shape;
 import java.io.IOException;
 import java.text.MessageFormat;
 
 public class SmosFileProcessor {
 
     private final GridPointFilterStream filterStream;
-    private final Shape targetRegion;
+    private final GridPointFilter gridPointFilter;
 
-    public SmosFileProcessor(GridPointFilterStream filterStream, Shape targetRegion) {
+    public SmosFileProcessor(GridPointFilterStream filterStream, GridPointFilter gridPointFilter) {
         this.filterStream = filterStream;
-        this.targetRegion = targetRegion;
+        this.gridPointFilter = gridPointFilter;
     }
 
     public void process(SmosFile smosFile, ProgressMonitor pm) throws IOException {
         final CompoundType gridPointType = smosFile.getGridPointType();
-        final int latIndex = gridPointType.getMemberIndex(SmosConstants.GRID_POINT_LAT_NAME);
-        final int lonIndex = gridPointType.getMemberIndex(SmosConstants.GRID_POINT_LON_NAME);
+        final int idIndex = gridPointType.getMemberIndex(SmosConstants.GRID_POINT_ID_NAME);
 
         filterStream.startFile(smosFile);
         final int gridPointCount = smosFile.getGridPointCount();
@@ -49,13 +47,8 @@ public class SmosFileProcessor {
         try {
             for (int i = 0; i < gridPointCount; i++) {
                 final CompoundData gridPointData = smosFile.getGridPointData(i);
-                double lat = gridPointData.getDouble(latIndex);
-                double lon = gridPointData.getDouble(lonIndex);
-                // normalisation to [-180, 180] necessary for some L1c test products
-                if (lon > 180.0) {
-                    lon = lon - 360.0;
-                }
-                if (targetRegion.contains(lon, lat)) {
+                final int id = gridPointData.getInt(idIndex);
+                if (gridPointFilter.accept(id, gridPointData)) {
                     filterStream.handleGridPoint(i, gridPointData);
                 }
                 pm.worked(1);

@@ -55,7 +55,7 @@ public class EEExporter {
 
         try {
             final EEExportStream exportStream = new EEExportStream(targetDirectory);
-            final SmosFileProcessor processor = new SmosFileProcessor(exportStream, TARGET_REGION);
+            final SmosFileProcessor processor = new SmosFileProcessor(exportStream, new RegionFilter(TARGET_REGION));
             processor.process(smosFile, ProgressMonitor.NULL);
         } catch (IOException e) {
             e.printStackTrace();

@@ -23,7 +23,6 @@ import org.esa.beam.dataio.smos.SmosProductReader;
 import org.esa.beam.framework.dataio.ProductReader;
 import org.esa.beam.framework.datamodel.Product;
 
-import java.awt.Shape;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FilenameFilter;
@@ -36,8 +35,8 @@ class GridPointFilterStreamHandler {
 
     private final SmosFileProcessor smosFileProcessor;
 
-    GridPointFilterStreamHandler(GridPointFilterStream filterStream, Shape area) {
-        smosFileProcessor = new SmosFileProcessor(filterStream, area);
+    GridPointFilterStreamHandler(GridPointFilterStream filterStream, GridPointFilter gridPointFilter) {
+        smosFileProcessor = new SmosFileProcessor(filterStream, gridPointFilter);
     }
 
     void processProduct(Product product, ProgressMonitor pm) throws IOException {

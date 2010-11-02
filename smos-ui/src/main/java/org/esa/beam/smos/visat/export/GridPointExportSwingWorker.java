@@ -31,7 +31,7 @@ import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.operation.TransformException;
 
-import java.awt.geom.Area;
+import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.io.PrintWriter;
@@ -90,11 +90,11 @@ class GridPointExportSwingWorker extends ProgressMonitorSwingWorker<File, File> 
             } else {
                 filterStream = new EEExportStream(targetFile);
             }
-            final Area area = getArea();
-            final GridPointFilterStreamHandler handler = new GridPointFilterStreamHandler(filterStream, area);
+            final GridPointFilter gridPointFilter = getGridPointFilter();
+            final GridPointFilterStreamHandler handler = new GridPointFilterStreamHandler(filterStream,
+                                                                                          gridPointFilter);
             if (useSelectedProduct) {
                 handler.processProduct(appContext.getSelectedProduct(), pm);
-
             } else {
                 handler.processDirectory(sourceDirectory, recursive, pm);
             }
@@ -119,37 +119,36 @@ class GridPointExportSwingWorker extends ProgressMonitorSwingWorker<File, File> 
         }
     }
 
-    private Area getArea() {
+    private GridPointFilter getGridPointFilter() {
         switch (roiType) {
             case 0: {
-                final Area area = new Area();
+                final MultiFilter multiFilter = new MultiFilter();
                 final FeatureIterator<SimpleFeature> featureIterator = geometry.getFeatureCollection().features();
 
                 while (featureIterator.hasNext()) {
-                    final Area featureArea;
+                    final Shape featureShape;
                     final SimpleFeature feature = featureIterator.next();
                     if (feature.getFeatureType() == Placemark.getFeatureType()) {
-                        featureArea = getAreaForPlacemarkFeature(feature);
+                        featureShape = getPointShape(feature);
                     } else {
-                        featureArea = getArea(feature);
+                        featureShape = getAreaShape(feature);
                     }
-                    if (featureArea != null && !featureArea.isEmpty()) {
-                        area.add(featureArea);
+                    if (featureShape != null) {
+                        multiFilter.add(new RegionFilter(featureShape));
                     }
                 }
-                return area;
+                return multiFilter;
             }
             case 1: {
-                final Area area = new Area();
+                final MultiFilter multiFilter = new MultiFilter();
                 final PlacemarkGroup pinGroup = appContext.getSelectedProduct().getPinGroup();
-
                 for (Placemark pin : pinGroup.toArray(new Placemark[pinGroup.getNodeCount()])) {
-                    area.add(getAreaForPlacemarkFeature(pin.getFeature()));
+                    multiFilter.add(new RegionFilter(getPointShape(pin.getFeature())));
                 }
-                return area;
+                return multiFilter;
             }
             case 2: {
-                return new Area(new Rectangle2D.Double(west, south, east - west, north - south));
+                return new RegionFilter(new Rectangle2D.Double(west, south, east - west, north - south));
             }
             default:
                 // cannot happen
@@ -157,11 +156,11 @@ class GridPointExportSwingWorker extends ProgressMonitorSwingWorker<File, File> 
         }
     }
 
-    private Area getArea(SimpleFeature feature) {
+    private Shape getAreaShape(SimpleFeature feature) {
         try {
             final Object geometry = feature.getDefaultGeometry();
             if (geometry instanceof Geometry) {
-                return new Area(new LiteShape2((Geometry) geometry, null, null, true));
+                return new LiteShape2((Geometry) geometry, null, null, true);
             }
         } catch (TransformException e) {
             // ignore
@@ -171,16 +170,11 @@ class GridPointExportSwingWorker extends ProgressMonitorSwingWorker<File, File> 
         return null;
     }
 
-    private Area getAreaForPlacemarkFeature(SimpleFeature feature) {
-        final Point geometry = (Point) feature.getDefaultGeometry();
-        final double lon = geometry.getX();
-        final double lat = geometry.getY();
+    private Shape getPointShape(SimpleFeature feature) {
+        final Point point = (Point) feature.getDefaultGeometry();
+        final double lon = point.getX();
+        final double lat = point.getY();
 
-        final double x = lon - 0.08;
-        final double y = lat - 0.08;
-        final double w = 0.16;
-        final double h = 0.16;
-
-        return new Area(new Rectangle2D.Double(x, y, w, h));
+        return new Rectangle2D.Double(lon, lat, 0.0, 0.0);
     }
 }
