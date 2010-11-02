@@ -150,7 +150,6 @@ class EEExportGridPointHandler implements GridPointHandler {
         if (lon > 180.0) {
             lon = lon - 360.0;
         }
-
         geometryTracker.add(new Point2D.Double(lon, lat));
     }
 
