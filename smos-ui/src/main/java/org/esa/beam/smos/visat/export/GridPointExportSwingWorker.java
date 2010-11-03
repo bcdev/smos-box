@@ -36,9 +36,11 @@ import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.io.PrintWriter;
 import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-class GridPointExportSwingWorker extends ProgressMonitorSwingWorker<File, File> {
+class GridPointExportSwingWorker extends ProgressMonitorSwingWorker<List<Exception>, File> {
 
     private final AppContext appContext;
 
@@ -82,7 +84,9 @@ class GridPointExportSwingWorker extends ProgressMonitorSwingWorker<File, File> 
     }
 
     @Override
-    protected File doInBackground(ProgressMonitor pm) throws Exception {
+    protected List<Exception> doInBackground(ProgressMonitor pm) throws Exception {
+        final List<Exception> problemList = new ArrayList<Exception>();
+
         GridPointFilterStream filterStream = null;
         try {
             if (GridPointExportDialog.NAME_CSV.equals(exportFormat)) {
@@ -96,20 +100,31 @@ class GridPointExportSwingWorker extends ProgressMonitorSwingWorker<File, File> 
             if (useSelectedProduct) {
                 handler.processProduct(appContext.getSelectedProduct(), pm);
             } else {
-                handler.processDirectory(sourceDirectory, recursive, pm);
+                handler.processDirectory(sourceDirectory, recursive, pm, problemList);
             }
         } finally {
             if (filterStream != null) {
                 filterStream.close();
             }
         }
-        return null;
+        return problemList;
     }
 
     @Override
     protected void done() {
         try {
-            get();
+            final List<Exception> problemList = get();
+            if (!problemList.isEmpty()) {
+                final StringBuilder message = new StringBuilder();
+                message.append("The following problem(s) have occurred:\n");
+                for (final Exception problem : problemList) {
+                    problem.printStackTrace();
+                    message.append("  ");
+                    message.append(problem.getMessage());
+                    message.append("\n");
+                }
+                appContext.handleError(message.toString(), null);
+            }
         } catch (InterruptedException e) {
             appContext.handleError(MessageFormat.format(
                     "An error occurred: {0}", e.getMessage()), e);

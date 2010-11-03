@@ -135,12 +135,12 @@ public class EEExportStream implements GridPointFilterStream {
         if (!newFile.equals(oldFile)) {
             if (newFile.exists()) {
                 throw new IOException(String.format(
-                        "Cannot rename file \n'%s'\nto\n'%s'\nbecause the latter already exists.", oldPath,
-                        newPath));
+                        "File \n'%s'\ncould not be renamed to\n'%s'\nbecause the latter was already existing.",
+                        oldPath, newPath));
             }
             if (!oldFile.renameTo(newFile)) {
                 throw new IOException(String.format(
-                        "Cannot rename file \n'%s'\nto\n'%s'.", oldPath, newPath));
+                        "File \n'%s'\ncould not be renamed to\n'%s'.", oldPath, newPath));
             }
         }
     }

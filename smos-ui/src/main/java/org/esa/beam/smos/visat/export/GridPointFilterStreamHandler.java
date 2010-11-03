@@ -15,6 +15,7 @@
  */
 package org.esa.beam.smos.visat.export;
 
+import com.bc.ceres.core.CanceledException;
 import com.bc.ceres.core.ProgressMonitor;
 import com.bc.ceres.core.SubProgressMonitor;
 import org.esa.beam.dataio.smos.ExplorerFile;
@@ -50,7 +51,8 @@ class GridPointFilterStreamHandler {
         }
     }
 
-    void processDirectory(File dir, boolean recursive, ProgressMonitor pm) throws IOException {
+    void processDirectory(File dir, boolean recursive, ProgressMonitor pm, List<Exception> problemList) throws
+                                                                                                        CanceledException {
         final List<File> sourceFileList = new ArrayList<File>();
         findSourceFiles(dir, recursive, sourceFileList);
 
@@ -67,12 +69,16 @@ class GridPointFilterStreamHandler {
                     if (explorerFile instanceof SmosFile) {
                         pm.setSubTaskName(MessageFormat.format(
                                 "Processing file ''{0}''...", explorerFile.getDblFile().getName()));
-                        smosFileProcessor.process((SmosFile) explorerFile, SubProgressMonitor.create(pm, 1));
+                        try {
+                            smosFileProcessor.process((SmosFile) explorerFile, SubProgressMonitor.create(pm, 1));
+                        } catch (Exception e) {
+                            problemList.add(e);
+                        }
                     } else {
                         pm.worked(1);
                     }
                     if (pm.isCanceled()) {
-                        throw new IOException("Export was cancelled by user.");
+                        throw new CanceledException();
                     }
                 } finally {
                     if (explorerFile != null) {

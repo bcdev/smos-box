@@ -97,6 +97,7 @@ public class GridPointExporter {
     }
 
     private static void execute(Arguments arguments, ErrorHandler errorHandler) {
+        final List<Exception> problemList = new ArrayList<Exception>();
         logger.info(MessageFormat.format("targetFile = {0}", arguments.targetFile));
         logger.info(MessageFormat.format("ROI = {0}", arguments.roi.getBounds2D()));
 
@@ -108,14 +109,19 @@ public class GridPointExporter {
             for (final File sourceFile : arguments.sourceFiles) {
                 try {
                     logger.info(MessageFormat.format("Exporting source file ''{0}''.", sourceFile.getPath()));
-                    streamHandler.processDirectory(sourceFile, false, ProgressMonitor.NULL);
-                } catch (IOException e) {
+                    streamHandler.processDirectory(sourceFile, false, ProgressMonitor.NULL, problemList);
+                } catch (Exception e) {
                     errorHandler.warning(e);
                 }
             }
         } catch (Exception e) {
             errorHandler.error(e);
         } finally {
+            if (!problemList.isEmpty()) {
+                for (Exception problem : problemList) {
+                    errorHandler.warning(problem);
+                }
+            }
             if (filterStream != null) {
                 try {
                     filterStream.close();
