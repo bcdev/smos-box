@@ -83,7 +83,7 @@ public class SmosFile extends ExplorerFile {
     public final int getGridPointId(int i) throws IOException {
         final int gridPointId = gridPointList.getCompound(i).getInt(gridPointIdIndex);
         if (gridPointId < SmosDgg.MIN_GRID_POINT_ID || gridPointId > SmosDgg.MAX_GRID_POINT_ID) {
-            throw new IOException(MessageFormat.format("Invalid Grid Point ID: {0}.", gridPointId));
+            throw new IOException(MessageFormat.format("Invalid Grid Point ID {0} at index {1}.", gridPointId, i));
         }
         return gridPointId;
     }
