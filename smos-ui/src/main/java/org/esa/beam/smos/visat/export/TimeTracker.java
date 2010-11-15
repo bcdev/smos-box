@@ -36,6 +36,10 @@ class TimeTracker {
     }
 
     void track(Date date) {
+        if (date == null) {
+            return;
+        }
+        
         final long currentMillis = date.getTime();
 
         if (intervalStart > currentMillis) {

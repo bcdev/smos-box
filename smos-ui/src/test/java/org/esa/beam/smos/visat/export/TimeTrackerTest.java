@@ -64,6 +64,16 @@ public class TimeTrackerTest extends TestCase {
         assertEquals(date_1, timeTracker.getIntervalStop());
     }
 
+    public void testTrackNullDate() {
+        try {
+            timeTracker.track(null);            
+        } catch (Exception e) {
+            fail("no exception expected");
+        }
+
+        assertFalse(timeTracker.hasValidPeriod());
+    }
+
     public void testHasValidPeriod_noDates() {
         assertFalse(timeTracker.hasValidPeriod());
     }

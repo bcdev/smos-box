@@ -21,18 +21,17 @@ import com.bc.ceres.glevel.MultiLevelImage;
 import org.esa.beam.dataio.smos.SmosConstants;
 import org.esa.beam.smos.dgg.SmosDgg;
 
-import java.awt.Rectangle;
-import java.awt.Shape;
+import java.awt.*;
 import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Point2D;
 import java.awt.geom.RectangularShape;
 import java.io.IOException;
 
-class RegionFilter implements GridPointFilter {
+public class RegionFilter implements GridPointFilter {
 
     private final GridPointFilter filter;
 
-    RegionFilter(Shape region) {
+    public RegionFilter(Shape region) {
         if (region instanceof RectangularShape) {
             final RectangularShape rectangularShape = (RectangularShape) region;
             if (rectangularShape.isEmpty()) {
