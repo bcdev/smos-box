@@ -31,11 +31,7 @@ import java.awt.geom.Area;
 import java.io.File;
 import java.io.IOException;
 import java.text.MessageFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.Iterator;
-import java.util.TimeZone;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
@@ -44,7 +40,7 @@ import java.util.concurrent.Future;
 public abstract class ExplorerFile {
 
     public static final String TAG_SPECIFIC_PRODUCT_HEADER = "Specific_Product_Header";
-    
+
     private final File hdrFile;
     private final File dblFile;
     private final DataFormat dataFormat;
@@ -103,8 +99,7 @@ public abstract class ExplorerFile {
         try {
             document = new SAXBuilder().build(hdrFile);
         } catch (JDOMException e) {
-            throw new IOException(MessageFormat.format(
-                    "File ''{0}'': Invalid document", hdrFile.getPath()), e);
+            throw new IOException(MessageFormat.format("File ''{0}'': Invalid document", hdrFile.getPath()), e);
         }
         return document;
     }
@@ -126,8 +121,7 @@ public abstract class ExplorerFile {
         if (descendants.hasNext()) {
             return (Element) descendants.next();
         } else {
-            throw new IOException(MessageFormat.format(
-                    "File ''{0}'': Missing element ''{1}''.", getHdrFile().getPath(), name));
+            throw new IOException(MessageFormat.format("File ''{0}'': Missing element ''{1}''.", getHdrFile().getPath(), name));
         }
     }
 
@@ -150,32 +144,5 @@ public abstract class ExplorerFile {
         }
 
         return areaFuture;
-    }
-
-    public static Date cfiDateToUtc(int days, long seconds, long microseconds) {
-        final Calendar calendar = new GregorianCalendar(TimeZone.getTimeZone("UTC"));
-
-        calendar.set(Calendar.YEAR, 2000);
-        calendar.set(Calendar.MONTH, 0);
-        calendar.set(Calendar.DAY_OF_MONTH, 1);
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-
-        calendar.add(Calendar.DATE, days);
-        calendar.add(Calendar.SECOND, (int) seconds);
-        calendar.add(Calendar.MILLISECOND, (int) (microseconds * 0.001));
-
-        return calendar.getTime();
-    }
-
-    public static Date mjdFloatDateToUtc(float mjd) {
-        final int days = (int) mjd;
-        final double secondsFraction = (mjd - days) * 86400.0;
-        final int seconds = (int) secondsFraction;
-        final int microseconds = (int) ((secondsFraction - seconds) * 1.0e6);
-
-        return cfiDateToUtc(days, seconds, microseconds);
     }
 }

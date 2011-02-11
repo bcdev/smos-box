@@ -36,6 +36,7 @@ import org.esa.beam.dataio.smos.SmosConstants;
 import org.esa.beam.dataio.smos.SmosFile;
 import org.esa.beam.dataio.smos.SmosMultiLevelSource;
 import org.esa.beam.dataio.smos.ValueProvider;
+import org.esa.beam.dataio.smos.util.DateTimeUtils;
 import org.esa.beam.framework.datamodel.Band;
 import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.framework.datamodel.RasterDataNode;
@@ -223,7 +224,7 @@ public class SnapshotInfoToolView extends SmosToolView {
                         final int days = utcData.getInt(0);
                         final long seconds = utcData.getUInt(1);
                         final long microSeconds = utcData.getUInt(2);
-                        entry[1] = SmosFile.cfiDateToUtc(days, seconds, microSeconds);
+                        entry[1] = DateTimeUtils.cfiDateToUtc(days, seconds, microSeconds);
                     } catch (IOException e) {
                         entry[1] = "Failed reading data";
                     }

@@ -16,7 +16,8 @@
 
 package org.esa.beam.smos.visat.export;
 
-import java.text.SimpleDateFormat;
+import org.esa.beam.dataio.smos.util.DateTimeUtils;
+
 import java.util.Date;
 
 public class FileNamePatcher {
@@ -26,22 +27,20 @@ public class FileNamePatcher {
     private String oldStopDate;
     private String prefix;
     private String suffix;
-    private SimpleDateFormat dateFormat;
 
     public FileNamePatcher(String originalName) {
         prefix = originalName.substring(0, 19);
         oldStartDate = originalName.substring(19, 34);
         oldStopDate = originalName.substring(35, 50);
         suffix = originalName.substring(50, originalName.length());
-        dateFormat = new SimpleDateFormat("yyyyMMdd'T'HHmmss");
     }
 
     public void setStartDate(Date startDate) {
-        newStartDate = dateFormat.format(startDate);
+        newStartDate = DateTimeUtils.toFileNameFormat(startDate);
     }
 
     public void setStopDate(Date stopDate) {
-        newStopDate = dateFormat.format(stopDate);
+        newStopDate = DateTimeUtils.toFileNameFormat(stopDate);
     }
 
     public String getHdrFileName() {

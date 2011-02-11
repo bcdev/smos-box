@@ -6,7 +6,7 @@
     <parent>
         <artifactId>smos-box</artifactId>
         <groupId>org.esa.beam.smos</groupId>
-        <version>2.1</version>
+        <version>2.2-SNAPSHOT</version>
     </parent>
 
     <packaging>jar</packaging>
@@ -14,7 +14,7 @@
     <groupId>org.esa.beam.smos</groupId>
     <artifactId>smos-reader</artifactId>
     <name>SMOS Product Reader</name>
-    <version>2.1.1</version>
+    <version>2.2.0-SNAPSHOT</version>
     <description>SMOS Product Reader</description>
 
     <dependencies>
@@ -29,7 +29,6 @@
         <dependency>
             <groupId>org.esa.beam.smos</groupId>
             <artifactId>smos-dgg</artifactId>
-            <version>2.1.1</version>
         </dependency>
         <dependency>
             <groupId>org.esa.beam.smos</groupId>

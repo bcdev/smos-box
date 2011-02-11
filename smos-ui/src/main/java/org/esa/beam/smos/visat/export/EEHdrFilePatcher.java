@@ -16,6 +16,7 @@
 
 package org.esa.beam.smos.visat.export;
 
+import org.esa.beam.dataio.smos.util.DateTimeUtils;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -95,7 +96,6 @@ class EEHdrFilePatcher {
     }
 
     private void patchVariableHeader(Element element, Namespace namespace) {
-        final SimpleDateFormat dateFormatMicroSec = new SimpleDateFormat("'UTC='yyyy-MM-dd'T'HH:mm:ss.SSSSSS");
         final Element variableHeader = element.getChild("Variable_Header", namespace);
         final Element specificHeader = variableHeader.getChild("Specific_Product_Header", namespace);
         final Element mainInfo = specificHeader.getChild("Main_Info", namespace);
@@ -107,11 +107,11 @@ class EEHdrFilePatcher {
 
         if (sensingStart != null && timeInfo != null) {
             final Element validityStart = timeInfo.getChild("Precise_Validity_Start", namespace);
-            validityStart.setText(dateFormatMicroSec.format(sensingStart));
+            validityStart.setText(DateTimeUtils.toVariableHeaderFormat(sensingStart));
         }
         if (sensingStop != null && timeInfo != null) {
             final Element validityStop = timeInfo.getChild("Precise_Validity_Stop", namespace);
-            validityStop.setText(dateFormatMicroSec.format(sensingStop));
+            validityStop.setText(DateTimeUtils.toVariableHeaderFormat(sensingStop));
         }
 
         if (area != null) {
@@ -207,16 +207,15 @@ class EEHdrFilePatcher {
             fileNameField.setText(fileName);
         }
 
-        final SimpleDateFormat dateFormat = new SimpleDateFormat("'UTC='yyyy-MM-dd'T'HH:mm:ss");
         final Element validityPeriod = fixedHeader.getChild("Validity_Period", namespace);
         if (sensingStart != null) {
             final Element validityStart = validityPeriod.getChild("Validity_Start", namespace);
-            validityStart.setText(dateFormat.format(sensingStart));
+            validityStart.setText(DateTimeUtils.toFixedHeaderFormat(sensingStart));
         }
 
         if (sensingStop != null) {
             final Element validityStop = validityPeriod.getChild("Validity_Stop", namespace);
-            validityStop.setText(dateFormat.format(sensingStop));
+            validityStop.setText(DateTimeUtils.toFixedHeaderFormat(sensingStop));
         }
     }
 }

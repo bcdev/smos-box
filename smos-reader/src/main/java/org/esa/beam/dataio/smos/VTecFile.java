@@ -19,6 +19,7 @@ package org.esa.beam.dataio.smos;
 import com.bc.ceres.binio.CompoundData;
 import com.bc.ceres.binio.DataFormat;
 import com.bc.ceres.binio.SequenceData;
+import org.esa.beam.dataio.smos.util.DateTimeUtils;
 import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.framework.datamodel.TiePointGrid;
 import org.esa.beam.util.io.FileUtils;
@@ -169,7 +170,7 @@ class VTecFile extends ExplorerFile {
         final int days = epoch.getInt(DAYS_NAME);
         final int seconds = epoch.getInt(SECONDS_NAME);
         final int microseconds = epoch.getInt(MICROSECONDS_NAME);
-        final String dateTime = cfiDateToUtc(days, seconds, microseconds).toString();
+        final String dateTime = DateTimeUtils.cfiDateToUtc(days, seconds, microseconds).toString();
 
         final StringBuilder descriptionBuilder = new StringBuilder("Vertical total electron content (TECU) for epoch ");
         descriptionBuilder.append(dateTime);

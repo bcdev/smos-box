@@ -16,14 +16,10 @@
 
 package org.esa.beam.smos.visat.export;
 
-import com.bc.ceres.binio.CollectionData;
-import com.bc.ceres.binio.CompoundData;
-import com.bc.ceres.binio.CompoundType;
-import com.bc.ceres.binio.DataContext;
-import com.bc.ceres.binio.SequenceData;
+import com.bc.ceres.binio.*;
 import org.esa.beam.dataio.smos.SmosConstants;
-import org.esa.beam.dataio.smos.SmosFile;
 import org.esa.beam.dataio.smos.SmosProductReader;
+import org.esa.beam.dataio.smos.util.DateTimeUtils;
 
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
@@ -44,6 +40,7 @@ class EEExportGridPointHandler implements GridPointHandler {
     private long gridPointDataPosition;
     private int latIndex;
     private int lonIndex;
+    private static final int SEGMENT_SIZE = 16384;
 
     EEExportGridPointHandler(DataContext targetContext) {
         this(targetContext, new GridPointFilter() {
@@ -62,10 +59,7 @@ class EEExportGridPointHandler implements GridPointHandler {
         geometryTracker = new GeometryTracker();
 
         final String formatName = targetContext.getFormat().getName();
-        level2 = SmosProductReader.isSmUserFormat(formatName) ||
-                 SmosProductReader.isSmAnalysisFormat(formatName) ||
-                 SmosProductReader.isOsUserFormat(formatName) ||
-                 SmosProductReader.isOsAnalysisFormat(formatName);
+        level2 = isLevel2File(formatName);
     }
 
     @Override
@@ -128,7 +122,7 @@ class EEExportGridPointHandler implements GridPointHandler {
             }
             final float mjdTime = gridPointData.getFloat(index);
             if (mjdTime > 0) {  // condition for valid measurement
-                final Date date = SmosFile.mjdFloatDateToUtc(mjdTime);
+                final Date date = DateTimeUtils.mjdFloatDateToUtc(mjdTime);
                 timeTracker.track(date);
             }
         } else {
@@ -184,7 +178,7 @@ class EEExportGridPointHandler implements GridPointHandler {
             final int days = utcData.getInt(0);
             final long seconds = utcData.getUInt(1);
             final long microSeconds = utcData.getUInt(2);
-            final Date snapshotTime = SmosFile.cfiDateToUtc(days, seconds, microSeconds);
+            final Date snapshotTime = DateTimeUtils.cfiDateToUtc(days, seconds, microSeconds);
             final long snapshotId = snapshot.getUInt(1);
 
             snapshotIdTimeMap.put(snapshotId, snapshotTime);
@@ -197,12 +191,11 @@ class EEExportGridPointHandler implements GridPointHandler {
 
     private static void copyBytes(DataContext sourceContext,
                                   DataContext targetContext, long from, long to) throws IOException {
-        final int segmentSize = 16384;
-        byte[] bytes = new byte[segmentSize];
+        byte[] bytes = new byte[SEGMENT_SIZE];
 
-        for (long pos = from; pos < to; pos += segmentSize) {
+        for (long pos = from; pos < to; pos += SEGMENT_SIZE) {
             final long remainderSize = to - pos;
-            if (remainderSize < segmentSize) {
+            if (remainderSize < SEGMENT_SIZE) {
                 bytes = new byte[(int) remainderSize];
             }
 
@@ -221,5 +214,12 @@ class EEExportGridPointHandler implements GridPointHandler {
 
     private static void put(DataContext targetContext, byte[] bytes, long position) throws IOException {
         targetContext.getHandler().write(targetContext, bytes, position);
+    }
+
+    private static boolean isLevel2File(String formatName) {
+        return SmosProductReader.isSmUserFormat(formatName) ||
+                SmosProductReader.isSmAnalysisFormat(formatName) ||
+                SmosProductReader.isOsUserFormat(formatName) ||
+                SmosProductReader.isOsAnalysisFormat(formatName);
     }
 }
