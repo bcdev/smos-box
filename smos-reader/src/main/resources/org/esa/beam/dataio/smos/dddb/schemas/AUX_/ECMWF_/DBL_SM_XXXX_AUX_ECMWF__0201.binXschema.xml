@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- binX schema for smos product -->
+<binx xmlns="http://www.edikt.org/binx/2003/06/binx" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.edikt.org/binx/2003/06/binx binx.xsd">
+	<definitions>
+		<defineType typeName="ECMWF_PARAMS_Data_Type">
+			<struct>
+				<unsignedInteger-32 varName="Grid_Point_ID"/>
+				<float-32 varName="Latitude"/>
+				<float-32 varName="Longitude"/>
+				<unsignedByte-8 varName="Land_Sea_Mask"/>
+				<float-32 varName="Sea_Ice_Cover"/>
+				<float-32 varName="Surface_Pressure"/>
+				<float-32 varName="Air_Temperature_2m"/>
+				<float-32 varName="Sea_Surface_Temperature"/>
+				<float-32 varName="Total_Coulmn_Water_Vapor"/>
+				<float-32 varName="Large_Scale_Precipitation"/>
+				<float-32 varName="Convective_Precipitation"/>
+				<float-32 varName="Rain_Rate"/>
+				<float-32 varName="Volumetric_Soil_Water_L1"/>
+				<float-32 varName="Volumetric_Soil_Water_L2"/>
+				<float-32 varName="Scaled_Volumetric_Soil_Water_L1"/>
+				<float-32 varName="Skin_Reservoir_Content"/>
+				<float-32 varName="Soil_Temperature_L1"/>
+				<float-32 varName="Soil_Temperature_L2"/>
+				<float-32 varName="Soil_Temperature_L3"/>
+				<float-32 varName="Soil_Temperature_L4"/>
+				<float-32 varName="Skin_Temperature"/>
+				<float-32 varName="Temperature_Snow_Layer"/>
+				<float-32 varName="Ice_Surface_Temperature"/>
+				<float-32 varName="Snow_Depth"/>
+				<float-32 varName="Accumutated_Water"/>
+				<float-32 varName="Snow_Density"/>
+				<float-32 varName="Wind_Zonal_Lowest_Level"/>
+				<float-32 varName="Wind_Meridional_Lowest_Level"/>
+				<float-32 varName="Temperature_Lowest_Level"/>
+				<float-32 varName="Specific_Humidity_Lowest_Level"/>
+				<float-32 varName="Charnock_Parameter"/>
+				<float-32 varName="Dewpoint_2m"/>
+				<float-32 varName="Sea_Level_Pressure"/>
+				<float-32 varName="Northward_Surface_Stress_Rate"/>
+				<float-32 varName="Eastward_Surface_Stress_Rate"/>
+				<float-32 varName="Surface_Shortwave_Radiation_Rate"/>
+				<float-32 varName="Surface_Thermal_Radiative_Flux_Rate"/>
+				<float-32 varName="Surface_Sensible_Heat_Flux_Rate"/>
+				<float-32 varName="Surface_Latent_Heat_Flux_Rate"/>
+				<float-32 varName="Drag_Coefficient_With_Waves"/>
+				<float-32 varName="Wind_10m_Wave_Model"/>
+				<float-32 varName="Peak_Period_1D"/>
+				<float-32 varName="Significant_Wave_Height"/>
+				<float-32 varName="Mean_Square_Slope"/>
+				<float-32 varName="Mean_Period_Wind_Waves"/>
+				<float-32 varName="Significant_Height_Wind_Waves"/>
+				<float-32 varName="10m_Neutral_Equivalent_Wind_Zonal"/>
+				<float-32 varName="10m_Neutral_Equivalent_Wind_Meridional"/>
+				<float-32 varName="Roughness_Lenght"/>
+				<float-32 varName="Friction_Velocity_from_surface_model"/>
+				<float-32 varName="Friction_Velocity_from_wave_model"/>
+				<float-32 varName="Inverse_Wave_Age"/>
+				<float-32 varName="Height_Lowest_Model_Level"/>
+				<float-32 varName="Virtual_Temperature_Lowest_Model_Level"/>
+				<unsignedLong-64 varName="Flags"/>
+				<unsignedLong-64 varName="Degradation_Flags"/>
+			</struct>
+		</defineType>
+		<defineType typeName="Data_Block_Type">
+			<struct>
+				<arrayVariable varName="ECMWF_PARAMS" byteOrder="littleEndian">
+					<sizeRef>
+						<unsignedInteger-32 varName="Num_Points"/>
+					</sizeRef>
+					<useType typeName="ECMWF_PARAMS_Data_Type"/>
+					<dim/>
+				</arrayVariable>
+			</struct>
+		</defineType>
+	</definitions>
+	<dataset src=" ">
+		<useType typeName="Data_Block_Type" varName="Data_Block"/>
+	</dataset>
+</binx>

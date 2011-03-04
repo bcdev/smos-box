@@ -1,7 +1,95 @@
 ============================================
 SCHEMAS VERSION
 ============================================
-2010-02-12_v04-04-06
+2011-02-21_v04-07-85
+
+===============================
+CHANGE LOG 2011-02-21_v04-07-85
+===============================
+
+-HDR_SM_XXXX_AUX_CNVNRT_0200.xsd, DBL_SM_XXXX_AUX_CNVNRT_0200.xsd, HDR_SM_XXXX_REP_BUFR___0200.xsd, DBL_SM_XXXX_REP_BUFR___0200.xsd, 
+HDR_SM_XXXX_CNF_BUFRCV_0200.xsd, DBL_SM_XXXX_CNF_BUFRCV_0200.xsd delivered by Raffaele Crapolicchio on Feb 10th have been added to the distribution.
+The formats of these files are defined in SO-ID-DMS-GS-0004 - DPGS2BUFR ICD v2.0 and SO-ID-DMS-GS-0002 NRT Product Format v3.1.
+
+Please notice that this is an intermediate version between v04-07-08 and v04-07-09 to be used in the re-processing platform (and in nominal platform if needed) with L1OP v346.
+
+
+===============================
+CHANGE LOG 2010-12-23_v04-07-08
+===============================
+-DBL_SM_XXXX_AUX_RGHNS3_0203.binXschema.xml and HDR_SM_XXXX_AUX_RGHNS3_0201.xsd provided by ARGANS on Oct-22 
+have been added do the distribution.
+-DBL_SM_XXXX_AUX_CNFSMD_0203.xsd, DBL_SM_XXXX_AUX_CNFSMF_0203.xsd, DBL_SM_XXXX_AUX_ECMWF__0201.binXschema.xml
+DBL_SM_XXXX_MIR_SMUDP2_0202.binXschema.xml provided by Array on Nov-26 have been added to the distribution.
+-HDR_SM_XXXX_AUX_ECMCDF_0200.xsd and DBL_SM_XXXX_AUX_ECMCDF_0200.binXschema.xml delivered by Array (through S.Delwart) on Dec-20 
+have been added to the distribution.
+All these changes are reflected in L2 Specs v5.3.
+
+
+===============================
+CHANGE LOG 2010-11-17_v04-07-07
+===============================
+-DBL_SM_XXXX_AUX_CNFNRT_0206.xsd provided by Deimos-Space (Esteban Santiago)
+on November 15th has been added to the distribution.
+-DBL_SM_XXXX_AUX_BULL_B_0201.binXschema.xml has been modified after detecting errors 
+to ingest AUX_BULL_B products in SPQC. 
+
+===============================
+CHANGE LOG 2010-10-22_v04-07-06
+===============================
+-DBL_SM_XXXX_AUX_BULL_B_0200.binXschema.xml and HDR_SM_XXXX_AUX_BULL_B_0200.xsd 
+have been added to the distribution in accordance with the specification included in SO-TN-IDR-GS-0041 v1.1 2010-10-22
+
+===============================
+CHANGE LOG 2010-09-20_v04-07-05
+===============================
+-DBL_SM_XXXX_MIR_ANIR1A_0201 and HDR_SM_XXXX_MIR_ANIR1A_0201 provided by DME on 17/09/2010 have been added to the distribution. 
+ 
+===============================
+CHANGE LOG 2010-05-20_v04-07-04
+===============================
+HDR_SM_XXXX_MIR_CRSD1A schema has been updated, as it was requested by R.Crapolicchio on May 14th,  to allow 4 digits in the following fields:
+Cons_Long_PMS_DSR_New, Cons_Long_PMS_DSR_Removed, Cons_Phase_FWF_Origin_New, Cons_Phase_FWF_Origin_Removed,
+Cons_Long_Ampl_FWF_Origin_New, Cons_Long_Ampl_FWF_Origin_Removed.
+
+===============================
+CHANGE LOG 2010-05-04_v04-07-03
+===============================
+-DBL_SM_XXXX_AUX_CNFL1P schema has been updated in order to add “RFI_Filter_u-noise_threshold” field.
+-DBL_SM_XXXX_AUX_CNFNRT schema has been updated in order to add RFI_Filter_u-noise_threshold field and
+ to increase the precision from 4 bytes to 5 bytes in the following fields: “Max_Separation_Within_Step”, “Max_Gap_Within_Sequence” and “Max_Sequence_Duration”
+-DBL_SM_XXXX_AUX_SPAR___ schema has been modified to organize the "Receiver_Path_Type" elements and attributes according to the convention defined 
+in SO-MA-IDR-GS-0004 XML Guidelines v2.0 2007-11-16
+
+
+
+===============================
+CHANGE LOG 2010-05-03_v04-07-02
+===============================
+-DBL_SM_XXXX_AUX_PMS____0205 provided by Deimos on 22nd April has been added to the distribution.
+-DBL_SM_XXXX_AUX_CNFL1P_0211 has been updated in order to increase the precission from 4 bytes to 
+5 bytes in the following fields: Maximum_Separation_Within_Step, Maximum_Gap and Maximum_Sequence_Duration.
+-DBL_SM_XXXX_AUX_SPAR___0203 provided by Deimos on 29th April has been added to the distribution.  
+
+===============================
+CHANGE LOG 2010-03-25_v04-07-01
+===============================
+-Release to fix a bug in the schemas_config.xml related with the AUX_CNFOSD schema version.
+
+===============================
+CHANGE LOG 2010-03-24_v04-07-00
+===============================
+-DBL_SM_XXXX_REP_PER_DA_, DBL_SM_XXXX_REP_PER_WE_, DBL_SM_XXXX_REP_PER_MO_, DBL_SM_XXXX_REP_PER_GL_ schemas have been modified
+in order to remove numeric restrictions in the file_type of the products.
+
+-DBL_SM_XXXX_AUX_CNFOSD_0203, DBL_SM_XXXX_AUX_CNFOSF_0203, AUX_OTT1D_, AUX_OTT1F_, AUX_OTT2D_, AUX_OTT2F_, AUX_OTT3D_,AUX_OTT3F_
+provided by ARGANS on 10-March-2010 have been added to the distribution.  
+
+===============================
+CHANGE LOG 2010-03-04_v04-06-00
+===============================
+-DBL_SM_XXXX_AUX_CNFSMD_0202, DBL_SM_XXXX_AUX_CNFSMF_0202 and HDR_SM_XXXX_MIR_SMUDP2_0201 provided
+by Array on Feb 25th have been added to the distribution: "Chi_2_Scale" field has been included.
 
 ===============================
 CHANGE LOG 2010-02-12_v04-05-00
