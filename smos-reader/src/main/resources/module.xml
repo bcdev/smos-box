@@ -19,6 +19,8 @@
     <licenseUrl>http://www.gnu.org/licenses/gpl.html</licenseUrl>
 
     <changelog><![CDATA[
+       <p> Changes in 2.1.2:<br>
+        [SBOX-30] Update schemas<br>
        <p> Changes in 2.1.1:<br>
         [SBOX-27] Missing start and stop times<br>
        <p> Changes in 2.1:<br>
