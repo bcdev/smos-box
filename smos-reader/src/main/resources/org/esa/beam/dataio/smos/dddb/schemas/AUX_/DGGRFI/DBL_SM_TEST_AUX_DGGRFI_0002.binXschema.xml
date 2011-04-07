@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- binX schema for smos product -->
+<!-- v 2.0 19/12/2006 -->
+<!-- www.indra.es -->
+<!-- teledeteccion@indra.es -->
+<!-- Copyright (c) 2006 Indra Espacio -->
+<binx xmlns="http://www.edikt.org/binx/2003/06/binx" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.edikt.org/binx/2003/06/binx binx.xsd">
+	<definitions>
+		<defineType typeName="Current_RFI_Data_Type">
+			<struct>
+				<unsignedInteger-32 varName="Grid_Point_ID"/>	
+				<unsignedInteger-32 varName="N_Snap"/>
+				<unsignedInteger-32 varName="N_RFI_H"/>
+				<unsignedInteger-32 varName="N_RFI_V"/>
+			</struct>
+		</defineType>
+		<defineType typeName="RFI_Zone_Type">
+			<struct>
+				<arrayVariable varName="List_of_Current_RFI_Datas" byteOrder="littleEndian">
+					<sizeRef>
+						<unsignedInteger-32 varName="Num_Points"/>
+					</sizeRef>
+					<useType typeName="Current_RFI_Data_Type"/>
+					<dim/>
+				</arrayVariable>
+			</struct>
+		</defineType>
+		<defineType typeName="Data_Block_Type">
+			<struct>
+				<arrayFixed varName="Current_RFI" byteOrder="littleEndian">
+					<useType typeName="RFI_Zone_Type"/>
+					<dim indexTo="7"/>
+				</arrayFixed>
+			</struct>
+		</defineType>
+	</definitions>
+	<dataset src=" ">
+		<useType typeName="Data_Block_Type" varName="Data_Block"/>
+	</dataset>
+</binx>

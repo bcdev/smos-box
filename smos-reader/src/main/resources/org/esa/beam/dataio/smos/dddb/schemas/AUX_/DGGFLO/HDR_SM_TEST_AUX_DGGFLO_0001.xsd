@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- XML schema for smos product -->
+<!--  v 1.0 07/11/2006 -->
+<!-- www.indra.es -->
+<!-- teledeteccion@indra.es -->
+<!-- Copyright (c) 2006 Indra Espacio -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://213.170.46.150/smos/schemas" targetNamespace="http://213.170.46.150/smos/schemas" elementFormDefault="qualified" attributeFormDefault="unqualified" version="0001">
+	<xs:include schemaLocation="../../common/common/Basic_Types_0002.xsd"/>
+	<xs:include schemaLocation="../../common/common/Fixed_Header_0003.xsd"/>
+	<xs:include schemaLocation="../../common/AUX_/Auxiliary_L2_SPH_Data_Sets_0002.xsd"/>
+	<xs:complexType name="Specific_Product_Header_Type">
+		<xs:sequence>
+			<xs:element name="SPH_Descriptor" type="string_14_Type" default="AUX_DGGFLO_SPH"/>
+			<xs:element name="Ref_Doc" type="string_200_Type" default="SO-TN-IDR-GS-0006 v1.3 L2 Spec"/>
+			<xs:element name="Precise_Validity_Start" type="string_date_30_Type" default="UTC=2007-01-01T00:00:00.000000"/>
+			<xs:element name="Precise_Validity_Stop" type="string_date_30_Type" default="UTC=2007-01-01T00:00:00.000000"/>
+			<xs:element name="Total_Size" type="integer_011d_Type" default="00000000000"/>
+			<xs:element name="Datablock_Schema" type="string_200_Type" default="DBL_SM_TEST_AUX_DGGFLO_0001.binXschema.xml"/>
+			<xs:element name="Checksum" type="integer_010d_Type" default="0000000000"/>
+			<xs:element name="Last_Grid_Point_ID_1" type="integer_07d_Type" default="0000000"/>
+			<xs:element name="Last_Grid_Point_ID_2" type="integer_07d_Type" default="0000000"/>
+			<xs:element name="Last_Grid_Point_ID_3" type="integer_07d_Type" default="0000000"/>
+			<xs:element name="Last_Grid_Point_ID_4" type="integer_07d_Type" default="0000000"/>
+			<xs:element name="Last_Grid_Point_ID_5" type="integer_07d_Type" default="0000000"/>
+			<xs:element name="Last_Grid_Point_ID_6" type="integer_07d_Type" default="0000000"/>
+			<xs:element name="Last_Grid_Point_ID_7" type="integer_07d_Type" default="0000000"/>
+			<xs:element name="Last_Grid_Point_ID_8" type="integer_07d_Type" default="0000000"/>
+			<xs:element name="List_of_Data_Sets" type="List_Data_Sets_Type"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="Variable_Header_Type">
+		<xs:sequence>
+			<xs:element name="Specific_Product_Header" type="Specific_Product_Header_Type"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="Header_Type">
+		<xs:sequence>
+			<xs:element name="Fixed_Header" type="Fixed_Header_Type"/>
+			<xs:element name="Variable_Header" type="Variable_Header_Type"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="Earth_Explorer_Header" type="Header_Type"/>
+</xs:schema>

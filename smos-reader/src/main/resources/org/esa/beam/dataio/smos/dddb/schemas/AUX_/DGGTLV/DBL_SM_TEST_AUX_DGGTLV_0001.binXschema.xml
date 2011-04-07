@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- binX schema for smos product -->
+<!-- v 1.0 30/03/2006 -->
+<!-- www.indra.es -->
+<!-- teledeteccion@indra.es -->
+<!-- Copyright (c) 2006 Indra Espacio -->
+<binx xmlns="http://www.edikt.org/binx/2003/06/binx" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.edikt.org/binx/2003/06/binx binx.xsd">
+	<definitions>
+		<defineType typeName="Dsr_Current_Tau_Nadir_LV_Datas_Type">
+			<struct>
+				<unsignedInteger-32 varName="Grid_Point_ID"/>	
+				<unsignedShort-16 varName="Tau_Nad"/>
+				<character-8 varName="Tau_Nad_DQX"/>
+				<character-8 varName="DT_Class"/>
+				<unsignedShort-16 varName="Date_Stamp"/>
+			</struct>
+		</defineType>
+		<defineType typeName="Data_Block_Type">
+			<struct>
+				<arrayVariable varName="Ds_List_of_Current_Tau_Nadir_LV_Datas" byteOrder="littleEndian">
+					<sizeRef>
+						<unsignedInteger-32 varName="Counter"/>
+					</sizeRef>
+					<useType typeName="Dsr_Current_Tau_Nadir_LV_Datas_Type"/>
+					<dim/>
+				</arrayVariable>
+			</struct>
+		</defineType>
+	</definitions>
+	<dataset src=" ">
+		<useType typeName="Data_Block_Type" varName="Data_Block"/>
+	</dataset>
+</binx>
