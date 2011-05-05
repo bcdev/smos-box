@@ -1,7 +1,7 @@
 <module>
     <manifestVersion>1.0.0</manifestVersion>
     <symbolicName>smos-reader</symbolicName>
-    <version>2.1.1</version>
+    <version>2.1.2</version>
     <name>SMOS Product Reader</name>
     <description>
         The SMOS Product Reader provides the capability of reading data
@@ -20,7 +20,7 @@
 
     <changelog><![CDATA[
        <p> Changes in 2.1.2:<br>
-        [SBOX-30] Update schemas<br>
+        [SBOX-30] Update schemas to Release 2011-02-21_v04-07-85_DPGS_V3<br>
        <p> Changes in 2.1.1:<br>
         [SBOX-27] Missing start and stop times<br>
        <p> Changes in 2.1:<br>
