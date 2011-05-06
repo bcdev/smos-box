@@ -27,7 +27,7 @@ public class DddbTest {
     @Test
     public void getBandDescriptors() {
         final Family<BandDescriptor> descriptors = Dddb.getInstance().getBandDescriptors(IDENTIFIER);
-        assertEquals(38, descriptors.asList().size());
+        assertEquals(53, descriptors.asList().size());
 
         final BandDescriptor descriptor = descriptors.getMember("RR");
         assertNotNull(descriptor);
