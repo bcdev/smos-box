@@ -28,6 +28,7 @@ import org.esa.beam.framework.datamodel.ProductData;
 import org.esa.beam.smos.lsmask.SmosLsMask;
 import org.esa.beam.util.io.FileUtils;
 
+import javax.media.jai.operator.CropDescriptor;
 import java.awt.Rectangle;
 import java.awt.image.Raster;
 import java.awt.image.RenderedImage;
@@ -233,7 +234,8 @@ public class SmosProductReader extends AbstractProductReader {
                                            descriptor.getFlagDescriptors());
         }
 
-        band.setSourceImage(SmosLsMask.getInstance().getMultiLevelImage());
+        final Rectangle imageBounds = ProductHelper.getImageBounds(explorerFile.getArea());
+        band.setSourceImage(CropDescriptor.create(SmosLsMask.getInstance().getMultiLevelImage(), (float) imageBounds.x, (float) imageBounds.y, (float) imageBounds.width, (float) imageBounds.height, null));
         band.setImageInfo(ProductHelper.createImageInfo(band, descriptor));
     }
 }

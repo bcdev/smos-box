@@ -16,12 +16,17 @@
 
 package org.esa.beam.dataio.smos;
 
+import com.bc.ceres.glevel.MultiLevelModel;
 import com.bc.ceres.glevel.support.AbstractMultiLevelSource;
+import com.bc.ceres.glevel.support.DefaultMultiLevelModel;
 import org.esa.beam.framework.datamodel.RasterDataNode;
 import org.esa.beam.jai.ResolutionLevel;
 import org.esa.beam.smos.dgg.SmosDgg;
 
+import java.awt.Rectangle;
 import java.awt.Shape;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Area;
 import java.awt.image.RenderedImage;
 
 
@@ -38,10 +43,26 @@ public class SmosMultiLevelSource extends AbstractMultiLevelSource {
     private final ValueProvider valueProvider;
 
     public SmosMultiLevelSource(RasterDataNode rasterDataNode, ValueProvider valueProvider) {
-        super(SmosDgg.getInstance().getMultiLevelImage().getModel());
+        super(createMultiLevelModel(rasterDataNode, valueProvider));
 
         this.valueProvider = valueProvider;
         this.rasterDataNode = rasterDataNode;
+    }
+
+    private static MultiLevelModel createMultiLevelModel(RasterDataNode rasterDataNode, ValueProvider valueProvider) {
+        final MultiLevelModel model = SmosDgg.getInstance().getMultiLevelImage().getModel();
+        final AffineTransform imageToModelTransform = new AffineTransform(model.getImageToModelTransform(0));
+        final AffineTransform modelToImageTransform = new AffineTransform(model.getModelToImageTransform(0));
+
+        final Area area = new Area(valueProvider.getArea());
+        area.transform(modelToImageTransform);
+        final Rectangle bounds = area.getBounds();
+        imageToModelTransform.translate(bounds.x, bounds.y);
+
+        final int width = rasterDataNode.getSceneRasterWidth();
+        final int height = rasterDataNode.getSceneRasterHeight();
+
+        return new DefaultMultiLevelModel(model.getLevelCount(), imageToModelTransform, width, height);
     }
 
     public ValueProvider getValueProvider() {
