@@ -84,8 +84,8 @@
     -->
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <beam.version>4.8</beam.version>
-        <ceres.version>0.11</ceres.version>
+        <beam.version>4.9-SNAPSHOT</beam.version>
+        <ceres.version>0.12-SNAPSHOT</ceres.version>
     </properties>
     
 
@@ -194,7 +194,7 @@
             <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
-                <version>4.5</version>
+                <version>4.8.2</version>
                 <scope>test</scope>
             </dependency>
         </dependencies>
