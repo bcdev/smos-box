@@ -446,7 +446,23 @@ return;</preActivation>
     </applications>
   </installerGui>
   <mediaSets>
-    <windows name="Windows" id="18" customizedId="" mediaFileName="" installDir="smos-box" overridePrincipalLanguage="false" jreBitType="32" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" useLegacyMediaFileIds="false" legacyMediaFileIds="" includedJRE="" manualJREEntry="false" bundleType="1" jreURL="" jreFtpURL="" jreShared="false" directDownload="false" installOnlyIfNecessary="false" customInstallBaseDir="" contentFilesType="1" downloadURL="" verifyIntegrity="true">
+    <windows name="Win32" id="18" customizedId="" mediaFileName="beam-smos-box_${compiler:sys.version}_win32_installer" installDir="smos-box" overridePrincipalLanguage="false" jreBitType="32" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" useLegacyMediaFileIds="false" legacyMediaFileIds="" includedJRE="" manualJREEntry="false" bundleType="1" jreURL="" jreFtpURL="" jreShared="false" directDownload="false" installOnlyIfNecessary="false" customInstallBaseDir="" contentFilesType="1" downloadURL="" verifyIntegrity="true">
+      <excludedLaunchers />
+      <excludedBeans />
+      <overriddenPrincipalLanguage id="en" customLocalizationFile="" />
+      <exclude>
+        <entry location="bin/export-grid-points.command" fileType="regular" />
+        <entry location="bin/export-grid-points.sh" fileType="regular" />
+      </exclude>
+      <variables />
+      <autoUpdate useMinUpdatableVersion="false" minUpdatableVersion="" useMaxUpdatableVersion="false" maxUpdatableVersion="">
+        <commentFiles />
+        <customAttributes />
+      </autoUpdate>
+      <excludedComponents />
+      <includedDownloadableComponents />
+    </windows>
+    <windows name="Win64" id="284" customizedId="" mediaFileName="beam-smos-box_${compiler:sys.version}_win64_installer" installDir="smos-box" overridePrincipalLanguage="false" jreBitType="32" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" useLegacyMediaFileIds="false" legacyMediaFileIds="" includedJRE="" manualJREEntry="false" bundleType="1" jreURL="" jreFtpURL="" jreShared="false" directDownload="false" installOnlyIfNecessary="false" customInstallBaseDir="" contentFilesType="1" downloadURL="" verifyIntegrity="true">
       <excludedLaunchers />
       <excludedBeans />
       <overriddenPrincipalLanguage id="en" customLocalizationFile="" />
@@ -500,9 +516,9 @@ return;</preActivation>
   </mediaSets>
   <buildIds buildAll="true">
     <mediaSet refId="18" />
+    <mediaSet refId="284" />
     <mediaSet refId="59" />
     <mediaSet refId="60" />
-    <mediaSet refId="236" />
   </buildIds>
   <buildOptions verbose="false" faster="false" debug="false" />
 </install4j>
