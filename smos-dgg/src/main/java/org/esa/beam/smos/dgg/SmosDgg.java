@@ -52,7 +52,6 @@ public class SmosDgg {
     public static final int MAX_SEQNUM = 2621442;
     public static final int MAX_ZONE_ID = 10;
 
-    private volatile AffineTransform imageToMapTransform;
     private volatile MultiLevelImage dggMultiLevelImage;
 
 
@@ -85,7 +84,7 @@ public class SmosDgg {
     }
 
     public AffineTransform getImageToMapTransform() {
-        return imageToMapTransform;
+        return getMultiLevelImage().getModel().getImageToModelTransform(0);
     }
 
     public MultiLevelImage getMultiLevelImage() {
@@ -102,11 +101,6 @@ public class SmosDgg {
             final MultiLevelSource dggMultiLevelSource = TiledFileMultiLevelSource.create(dir);
 
             dggMultiLevelImage = new DefaultMultiLevelImage(dggMultiLevelSource);
-            final double scaleX = 360.0 / dggMultiLevelImage.getWidth();
-            final double scaleY = 180.0 / dggMultiLevelImage.getHeight();
-            imageToMapTransform = new AffineTransform();
-            imageToMapTransform.translate(-180.0, 90.0);
-            imageToMapTransform.scale(scaleX, -scaleY);
         } catch (Exception e) {
             throw new IllegalStateException(MessageFormat.format(
                     "Cannot create SMOS DDG multi-level image: {0}", e.getMessage()), e);
