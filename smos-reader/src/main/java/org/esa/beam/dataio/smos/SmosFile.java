@@ -36,7 +36,7 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.Namespace;
 
-import java.awt.Rectangle;
+import java.awt.Dimension;
 import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
 import java.io.File;
@@ -181,16 +181,14 @@ public class SmosFile extends ExplorerFile {
     protected Product createProduct() throws IOException {
         final String productName = FileUtils.getFilenameWithoutExtension(getHdrFile());
         final String productType = getDataFormat().getName().substring(12, 22);
-
-        final Area area = getArea();
-        final Rectangle bounds = ProductHelper.getImageBounds(new Area(area));
-        final Product product = new Product(productName, productType, bounds.width, bounds.height);
+        final Dimension dimension = ProductHelper.getSceneRasterDimension();
+        final Product product = new Product(productName, productType, dimension.width, dimension.height);
 
         product.setFileLocation(getDblFile());
         product.setPreferredTileSize(512, 512);
         ProductHelper.addMetadata(product.getMetadataRoot(), this);
 
-        product.setGeoCoding(ProductHelper.createGeoCoding(bounds));
+        product.setGeoCoding(ProductHelper.createGeoCoding(dimension));
         addBands(product);
         setTimes(product);
 

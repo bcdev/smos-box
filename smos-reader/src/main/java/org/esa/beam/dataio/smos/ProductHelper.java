@@ -19,7 +19,6 @@ package org.esa.beam.dataio.smos;
 import com.bc.ceres.binio.SimpleType;
 import com.bc.ceres.binio.Type;
 import com.bc.ceres.glevel.MultiLevelImage;
-import com.bc.ceres.glevel.MultiLevelModel;
 import com.bc.jexp.ParseException;
 import org.esa.beam.dataio.smos.dddb.BandDescriptor;
 import org.esa.beam.dataio.smos.dddb.Family;
@@ -51,7 +50,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.Area;
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.Random;
@@ -125,18 +123,6 @@ class ProductHelper {
             throw new IllegalArgumentException("dimension");
         } catch (TransformException e) {
             throw new IllegalArgumentException("dimension");
-        }
-    }
-
-    static GeoCoding createGeoCoding(Rectangle bounds) {
-        final AffineTransform transform = new AffineTransform(SmosDgg.getInstance().getImageToMapTransform());
-        transform.translate(bounds.getX(), bounds.getY());
-        try {
-            return new CrsGeoCoding(DefaultGeographicCRS.WGS84, new Rectangle(bounds), transform);
-        } catch (FactoryException e) {
-            throw new IllegalArgumentException("bounds");
-        } catch (TransformException e) {
-            throw new IllegalArgumentException("bounds");
         }
     }
 
@@ -268,12 +254,5 @@ class ProductHelper {
         } catch (ParseException e) {
             return null;
         }
-    }
-
-    static Rectangle getImageBounds(Area modelArea) {
-        final MultiLevelModel model = SmosDgg.getInstance().getMultiLevelImage().getModel();
-        final AffineTransform modelToImageTransform = model.getModelToImageTransform(0);
-        modelArea.transform(modelToImageTransform);
-        return modelArea.getBounds();
     }
 }
