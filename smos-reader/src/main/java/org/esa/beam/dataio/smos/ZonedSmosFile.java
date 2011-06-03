@@ -1,19 +1,3 @@
-/*
- * Copyright (C) 2010 Brockmann Consult GmbH (info@brockmann-consult.de)
- *
- * This program is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by the Free
- * Software Foundation; either version 3 of the License, or (at your option)
- * any later version.
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
- * more details.
- *
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, see http://www.gnu.org/licenses/
- */
-
 package org.esa.beam.dataio.smos;
 
 import com.bc.ceres.binio.CompoundMember;
@@ -37,20 +21,22 @@ import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.io.IOException;
 
-class LsMaskFile extends ExplorerFile {
+class ZonedSmosFile extends ExplorerFile {
 
-    private static final String GRID_POINT_MASK_DATA_TYPE_NAME = "Grid_Point_Mask_Data_Type";
-    private static final String GRID_POINT_MASK_DATA_NAME = "Grid_Point_Mask_Data";
-
+    private final String gridPointDataTypeName;
     private final SequenceData[] zones;
 
-    LsMaskFile(File hdrFile, File dblFile, DataFormat dataFormat) throws IOException {
+    protected ZonedSmosFile(File hdrFile, File dblFile, DataFormat dataFormat,
+                            String zoneSequenceName,
+                            String gridPointSequenceName,
+                            String gridPointDataTypeName) throws IOException {
         super(hdrFile, dblFile, dataFormat);
-        final SequenceData zoneSequence = getDataBlock().getSequence(SmosConstants.LAND_SEA_MASK_NAME);
+        this.gridPointDataTypeName = gridPointDataTypeName;
+        final SequenceData zoneSequence = getDataBlock().getSequence(0);
 
         zones = new SequenceData[zoneSequence.getElementCount()];
         for (int i = 0; i < zones.length; i++) {
-            zones[i] = zoneSequence.getCompound(i).getSequence(GRID_POINT_MASK_DATA_NAME);
+            zones[i] = zoneSequence.getCompound(i).getSequence(0);
         }
     }
 
@@ -71,7 +57,7 @@ class LsMaskFile extends ExplorerFile {
         ProductHelper.addMetadata(product.getMetadataRoot(), this);
 
         product.setGeoCoding(ProductHelper.createGeoCoding(dimension));
-        final CompoundType compoundType = (CompoundType) getDataFormat().getTypeDef(GRID_POINT_MASK_DATA_TYPE_NAME);
+        final CompoundType compoundType = (CompoundType) getDataFormat().getTypeDef(gridPointDataTypeName);
         final Family<BandDescriptor> descriptors = Dddb.getInstance().getBandDescriptors(getDataFormat().getName());
         if (descriptors != null) {
             for (final BandDescriptor descriptor : descriptors.asList()) {
@@ -121,7 +107,7 @@ class LsMaskFile extends ExplorerFile {
         return new ValueProvider() {
             @Override
             public Area getArea() {
-                return LsMaskFile.this.getArea();
+                return ZonedSmosFile.this.getArea();
             }
 
             @Override

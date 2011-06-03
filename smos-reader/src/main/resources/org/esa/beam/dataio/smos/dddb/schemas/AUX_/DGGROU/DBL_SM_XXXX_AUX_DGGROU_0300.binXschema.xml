@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- binX schema for smos product -->
+<!-- v 3.0 16/05/2011 -->
+<!-- www.indra.es -->
+<!-- teledeteccion@indra.es -->
+<!-- Copyright (c) 2006 Indra Espacio -->
+<binx xmlns="http://www.edikt.org/binx/2003/06/binx" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.edikt.org/binx/2003/06/binx binx.xsd">
+	<definitions>
+		<defineType typeName="Current_Roughness_H_Data_Type">
+			<struct>
+				<unsignedInteger-32 varName="Grid_Point_ID"/>	
+				<float-32 varName="Latitude"/>
+				<float-32 varName="Longitude"/>
+				<unsignedShort-16 varName="HR"/>
+				<unsignedByte-8 varName="HR_DQX"/>
+				<unsignedByte-8 varName="DT_Branch_HR"/>
+				<unsignedShort-16 varName="Date_Stamp_HR"/>
+			</struct>
+		</defineType>
+		<defineType typeName="Roughness_H_Zone_Type">
+			<struct>
+				<arrayVariable varName="List_of_Current_Roughness_H_Datas" byteOrder="littleEndian">
+					<sizeRef>
+						<unsignedInteger-32 varName="Num_Points"/>
+					</sizeRef>
+					<useType typeName="Current_Roughness_H_Data_Type"/>
+					<dim/>
+				</arrayVariable>
+			</struct>
+		</defineType>
+		<defineType typeName="Data_Block_Type">
+			<struct>
+				<arrayFixed varName="Current_Roughness_H" byteOrder="littleEndian">
+					<useType typeName="Roughness_H_Zone_Type"/>
+					<dim indexTo="7"/>
+				</arrayFixed>
+			</struct>
+		</defineType>
+	</definitions>
+	<dataset src=" ">
+		<useType typeName="Data_Block_Type" varName="Data_Block"/>
+	</dataset>
+</binx>

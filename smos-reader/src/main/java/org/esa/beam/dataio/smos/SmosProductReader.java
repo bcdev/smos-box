@@ -98,6 +98,26 @@ public class SmosProductReader extends AbstractProductReader {
         return formatName.contains("AUX_LSMASK");
     }
 
+    private static boolean isDggFloFormat(String formatName) {
+        return formatName.contains("AUX_DGGFLO");
+    }
+
+    private static boolean isDggRfiFormat(String formatName) {
+        return formatName.contains("AUX_DGGRFI");
+    }
+
+    private static boolean isDggRouFormat(String formatName) {
+        return formatName.contains("AUX_DGGROU");
+    }
+
+    private static boolean isDggTfoFormat(String formatName) {
+        return formatName.contains("AUX_DGGTFO");
+    }
+
+    private static boolean isDggTlvFormat(String formatName) {
+        return formatName.contains("AUX_DGGTLV");
+    }
+
     public static ExplorerFile createExplorerFile(File file) throws IOException {
         if (file.isDirectory()) {
             final File[] files = file.listFiles(new ExplorerFilenameFilter());
@@ -136,7 +156,35 @@ public class SmosProductReader extends AbstractProductReader {
         } else if (isVTecFormat(formatName)) {
             return new VTecFile(hdrFile, dblFile, format);
         } else if (isLsMaskFormat(formatName)) {
-            return new LsMaskFile(hdrFile, dblFile, format);
+            return new ZonedSmosFile(hdrFile, dblFile, format,
+                                     SmosConstants.LAND_SEA_MASK_NAME,
+                                     "Grid_Point_Mask_Data",
+                                     "Grid_Point_Mask_Data_Type");
+        } else if (isDggFloFormat(formatName)) {
+            return new ZonedSmosFile(hdrFile, dblFile, format,
+                                     "Current_Flood",
+                                     "List_of_Current_Flood_Datas",
+                                     "Current_Flood_Data_Type");
+        } else if (isDggRfiFormat(formatName)) {
+            return new ZonedSmosFile(hdrFile, dblFile, format,
+                                     "Current_RFI",
+                                     "List_of_Current_RFI_Datas",
+                                     "Current_RFI_Data_Type");
+        } else if (isDggRouFormat(formatName)) {
+            return new ZonedSmosFile(hdrFile, dblFile, format,
+                                     "Current_Roughness_H",
+                                     "List_of_Current_Roughness_H_Datas",
+                                     "Current_Roughness_H_Data_Type");
+        } else if (isDggTfoFormat(formatName)) {
+            return new ZonedSmosFile(hdrFile, dblFile, format,
+                                     "Current_Tau_Nadir_FO",
+                                     "List_of_Current_Tau_Nadir_FO_Datas",
+                                     "Current_Tau_Nadir_FO_Data_Type");
+        } else if (isDggTlvFormat(formatName)) {
+            return new ZonedSmosFile(hdrFile, dblFile, format,
+                                     "Current_Tau_Nadir_LV",
+                                     "List_of_Current_Tau_Nadir_LV_Datas",
+                                     "Current_Tau_Nadir_LV_Data_Type");
         } else {
             throw new IOException(MessageFormat.format(
                     "File ''{0}'': unsupported SMOS data format ''{1}''.", file, formatName));

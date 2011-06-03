@@ -1,17 +1,44 @@
 ============================================
 SCHEMAS VERSION
 ============================================
-2011-02-21_v04-07-85
+2011-05-20_v05-00-00
 
 ===============================
-CHANGE LOG 2011-02-21_v04-07-85
+CHANGE LOG 2011-05-20_v05-00-00
 ===============================
+-The following schemas delivered by ARGANS (Paul Spurgeon) on May 9th have been added to the distribution:
+o	DBL_SM_XXXX_AUX_CNFOSD_0300.xsd
+o	DBL_SM_XXXX_AUX_CNFOSF_0300.xsd
+o	DBL_SM_XXXX_MIR_OSUDP2_0300.binXschema.xml
+-The following schemas delivered by DEIMOS (Antonio Gutierrez)on May 10th have been added to the distribution:
+o	DBL_SM_XXXX_AUX_CNFL1P_0300.xsd
+o	DBL_SM_XXXX_AUX_LCF____0300.xsd
+o	DBL_SM_XXXX_MIR_CRSD1A_0300.binXschema.xml
+o	HDR_SM_XXXX_MIR_CRSD1A_0300.xsd
+o	DBL_SM_XXXX_MIR_CRSU1A_0300.binXschema.xml
+o	HDR_SM_XXXX_MIR_CRSU1A_0300.xsd
+-The following schemas delivered by Array (Ali Mahmoodi) on May 11th have been added to the distribution:
+o	DBL_SM_XXXX_AUX_CNFSMD_0300.xsd
+o	DBL_SM_XXXX_AUX_CNFSMF_0300.xsd
+o	DBL_SM_XXXX_MIR_SMUDP2_0300.binXschema.xml
 
+The rest of the updates does not correspond to format changes but they are only increases in the major version of the schemas
+to indicate the new baseline (V500) 
+
+
+===============================
+CHANGE LOG 2011-02-16_v04-07-09
+===============================
+-The following schemas delivered by ESA (Jean-Claude.Debruyn) on Nov-08 have been added to the distribution: 
+o	DBL_SM_XXXX_MIR_CRSD1A_0203.binXschema.xml
+o	DBL_SM_XXXX_MIR_CRSU1A_0203.binXschema.xml
+o	DBL_SM_XXXX_TLM_MIRA1A_0201.binXschema.xml
+-DBL_SM_XXXX_AUX_NIR____0204.xsd schema delivered by Deimos (Antonio Gutierrez) on Nov-09 has been added to the distribution. 
+-DBL_SM_XXXX_AUX_RFILST_0200.xsd and HDR_SM_XXXX_AUX_RFILST_0200.xsd delivered by R.Crapolicchio on Jan-26 have been added to the distribution.
+All these changes are in line with L1 Specs 5.19
 -HDR_SM_XXXX_AUX_CNVNRT_0200.xsd, DBL_SM_XXXX_AUX_CNVNRT_0200.xsd, HDR_SM_XXXX_REP_BUFR___0200.xsd, DBL_SM_XXXX_REP_BUFR___0200.xsd, 
 HDR_SM_XXXX_CNF_BUFRCV_0200.xsd, DBL_SM_XXXX_CNF_BUFRCV_0200.xsd delivered by Raffaele Crapolicchio on Feb 10th have been added to the distribution.
 The formats of these files are defined in SO-ID-DMS-GS-0004 - DPGS2BUFR ICD v2.0 and SO-ID-DMS-GS-0002 NRT Product Format v3.1.
-
-Please notice that this is an intermediate version between v04-07-08 and v04-07-09 to be used in the re-processing platform (and in nominal platform if needed) with L1OP v346.
 
 
 ===============================

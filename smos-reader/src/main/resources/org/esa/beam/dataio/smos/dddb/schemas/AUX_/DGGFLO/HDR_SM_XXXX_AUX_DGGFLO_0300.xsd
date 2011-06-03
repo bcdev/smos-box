@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- XML schema for smos product -->
+<!-- www.indra.es -->
+<!-- teledeteccion@indra.es -->
+<!-- Copyright (c) 2006 Indra Espacio -->
+<xs:schema xmlns="http://213.170.46.150/smos/schemas" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://213.170.46.150/smos/schemas" elementFormDefault="qualified" attributeFormDefault="unqualified" version="0300">
+	<xs:include schemaLocation="../../common/common/Basic_Types_0016.xsd"/>
+	<xs:include schemaLocation="../../common/common/Fixed_Header_0015.xsd"/>
+	<xs:include schemaLocation="../../common/AUX_/Auxiliary_L2_Main_SPH_for_Binary_0008.xsd"/>
+	<xs:include schemaLocation="../../common/AUX_/Auxiliary_L2_SPH_Data_Sets_0010.xsd"/>
+	<xs:complexType name="Specific_Product_Header_Type">
+		<xs:sequence>
+			<xs:element name="Main_SPH" type="Main_SPH_Type"/>
+			<xs:element name="Last_Grid_Point_ID_1" type="integer_07d_Type" default="0000000"/>
+			<xs:element name="Last_Grid_Point_ID_2" type="integer_07d_Type" default="0000000"/>
+			<xs:element name="Last_Grid_Point_ID_3" type="integer_07d_Type" default="0000000"/>
+			<xs:element name="Last_Grid_Point_ID_4" type="integer_07d_Type" default="0000000"/>
+			<xs:element name="Last_Grid_Point_ID_5" type="integer_07d_Type" default="0000000"/>
+			<xs:element name="Last_Grid_Point_ID_6" type="integer_07d_Type" default="0000000"/>
+			<xs:element name="Last_Grid_Point_ID_7" type="integer_07d_Type" default="0000000"/>
+			<xs:element name="Last_Grid_Point_ID_8" type="integer_07d_Type" default="0000000"/>
+			<xs:element name="List_of_Data_Sets" type="List_Data_Sets_Type"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="Variable_Header_Type">
+		<xs:sequence>
+			<xs:element name="Specific_Product_Header" type="Specific_Product_Header_Type"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="Header_Type">
+		<xs:sequence>
+			<xs:element name="Fixed_Header" type="Fixed_Header_Type"/>
+			<xs:element name="Variable_Header" type="Variable_Header_Type"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="Earth_Explorer_Header" type="Header_Type"/>
+</xs:schema>
