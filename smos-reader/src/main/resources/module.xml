@@ -20,6 +20,11 @@
 
     <changelog><![CDATA[
        <p> Changes in 2.1.3:<br>
+        [SBOX-39] Add support for AUX_DGGTLV<br>
+        [SBOX-38] Add support for AUX_DGGTFO<br>
+        [SBOX-37] Add support for AUX_DGGROU<br>
+        [SBOX-36] Add support for AUX_DGGRFI<br>
+        [SBOX-35] Add support for AUX_DGGFLO<br>
         [SBOX-34] Update to schemas 2011-05-18_v05-00-00<br>
        <p> Changes in 2.1.2:<br>
         [SBOX-30] Update schemas to Release 2011-02-21_v04-07-85_DPGS_V3<br>
