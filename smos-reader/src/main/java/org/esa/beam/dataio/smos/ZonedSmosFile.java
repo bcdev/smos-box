@@ -23,20 +23,15 @@ import java.io.IOException;
 
 class ZonedSmosFile extends ExplorerFile {
 
-    private final String gridPointDataTypeName;
     private final SequenceData[] zones;
 
-    protected ZonedSmosFile(File hdrFile, File dblFile, DataFormat dataFormat,
-                            String zoneSequenceName,
-                            String gridPointSequenceName,
-                            String gridPointDataTypeName) throws IOException {
+    protected ZonedSmosFile(File hdrFile, File dblFile, DataFormat dataFormat) throws IOException {
         super(hdrFile, dblFile, dataFormat);
-        this.gridPointDataTypeName = gridPointDataTypeName;
         final SequenceData zoneSequence = getDataBlock().getSequence(0);
 
         zones = new SequenceData[zoneSequence.getElementCount()];
         for (int i = 0; i < zones.length; i++) {
-            zones[i] = zoneSequence.getCompound(i).getSequence(0);
+            zones[i] = zoneSequence.getCompound(i).getSequence(1);
         }
     }
 
@@ -57,7 +52,7 @@ class ZonedSmosFile extends ExplorerFile {
         ProductHelper.addMetadata(product.getMetadataRoot(), this);
 
         product.setGeoCoding(ProductHelper.createGeoCoding(dimension));
-        final CompoundType compoundType = (CompoundType) getDataFormat().getTypeDef(gridPointDataTypeName);
+        final CompoundType compoundType = (CompoundType) zones[0].getType().getElementType();
         final Family<BandDescriptor> descriptors = Dddb.getInstance().getBandDescriptors(getDataFormat().getName());
         if (descriptors != null) {
             for (final BandDescriptor descriptor : descriptors.asList()) {
