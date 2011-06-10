@@ -156,7 +156,7 @@ public class SmosProductReader extends AbstractProductReader {
         } else if (isVTecFormat(formatName)) {
             return new VTecFile(hdrFile, dblFile, format);
         } else if (isLsMaskFormat(formatName)) {
-            return new ZonedSmosFile(hdrFile, dblFile, format);
+            return new GlobalZonedSmosFile(hdrFile, dblFile, format);
         } else if (isDggFloFormat(formatName)) {
             return new ZonedSmosFile(hdrFile, dblFile, format);
         } else if (isDggRfiFormat(formatName)) {

@@ -1,18 +1,12 @@
 package org.esa.beam.dataio.smos;
 
-import com.bc.ceres.binio.CompoundMember;
 import com.bc.ceres.binio.CompoundType;
 import com.bc.ceres.binio.DataFormat;
 import com.bc.ceres.binio.SequenceData;
-import com.bc.ceres.glevel.MultiLevelImage;
-import com.bc.ceres.glevel.MultiLevelSource;
-import com.bc.ceres.glevel.support.DefaultMultiLevelImage;
 import org.esa.beam.dataio.smos.dddb.BandDescriptor;
 import org.esa.beam.dataio.smos.dddb.Dddb;
 import org.esa.beam.dataio.smos.dddb.Family;
-import org.esa.beam.framework.datamodel.Band;
 import org.esa.beam.framework.datamodel.Product;
-import org.esa.beam.smos.dgg.SmosDgg;
 import org.esa.beam.util.io.FileUtils;
 
 import java.awt.Dimension;
@@ -25,18 +19,20 @@ class ZonedSmosFile extends ExplorerFile {
 
     private final SequenceData[] zones;
 
-    protected ZonedSmosFile(File hdrFile, File dblFile, DataFormat dataFormat) throws IOException {
-        super(hdrFile, dblFile, dataFormat);
+    public ZonedSmosFile(File hdrFile, File dblFile, DataFormat format) throws IOException {
+        super(hdrFile, dblFile, format);
         final SequenceData zoneSequence = getDataBlock().getSequence(0);
 
         zones = new SequenceData[zoneSequence.getElementCount()];
         for (int i = 0; i < zones.length; i++) {
             zones[i] = zoneSequence.getCompound(i).getSequence(1);
         }
+        // todo - gridPointInfo as in SmosFIle, but iterate over all zones
     }
 
     @Override
     protected Area computeArea() throws IOException {
+        // todo - implement as in SmosFIle, but iterate over all zones
         return new Area(new Rectangle2D.Double(-180.0, -90.0, 360.0, 180.0));
     }
 
@@ -64,102 +60,6 @@ class ZonedSmosFile extends ExplorerFile {
     }
 
     private void addBand(Product product, BandDescriptor descriptor, CompoundType compoundType) {
-        final int memberIndex = compoundType.getMemberIndex(descriptor.getMemberName());
-
-        if (memberIndex >= 0) {
-            final CompoundMember member = compoundType.getMember(memberIndex);
-
-            final int dataType = ProductHelper.getDataType(member.getType());
-            final Band band = product.addBand(descriptor.getBandName(), dataType);
-
-            band.setScalingOffset(descriptor.getScalingOffset());
-            band.setScalingFactor(descriptor.getScalingFactor());
-            if (descriptor.hasFillValue()) {
-                band.setNoDataValueUsed(true);
-                band.setNoDataValue(descriptor.getFillValue());
-            }
-            if (!descriptor.getValidPixelExpression().isEmpty()) {
-                band.setValidPixelExpression(descriptor.getValidPixelExpression());
-            }
-            if (!descriptor.getUnit().isEmpty()) {
-                band.setUnit(descriptor.getUnit());
-            }
-            if (!descriptor.getDescription().isEmpty()) {
-                band.setDescription(descriptor.getDescription());
-            }
-            if (descriptor.getFlagDescriptors() != null) {
-                ProductHelper.addFlagsAndMasks(product, band, descriptor.getFlagCodingName(),
-                                               descriptor.getFlagDescriptors());
-            }
-
-            final ValueProvider valueProvider = createValueProvider(descriptor);
-            band.setSourceImage(createSourceImage(band, valueProvider));
-            band.setImageInfo(ProductHelper.createImageInfo(band, descriptor));
-        }
-    }
-
-    private ValueProvider createValueProvider(final BandDescriptor descriptor) {
-        return new ValueProvider() {
-            @Override
-            public Area getArea() {
-                return ZonedSmosFile.this.getArea();
-            }
-
-            @Override
-            public byte getValue(int seqnum, byte noDataValue) {
-                final int zoneIndex = SmosDgg.seqnumToZoneId(seqnum) - 1;
-                final int gridIndex = SmosDgg.seqnumToSeqnumInZone(seqnum) - 1;
-
-                try {
-                    return zones[zoneIndex].getCompound(gridIndex).getByte(descriptor.getMemberName());
-                } catch (IOException e) {
-                    return noDataValue;
-                }
-            }
-
-            @Override
-            public short getValue(int seqnum, short noDataValue) {
-                final int zoneIndex = SmosDgg.seqnumToZoneId(seqnum) - 1;
-                final int gridIndex = SmosDgg.seqnumToSeqnumInZone(seqnum) - 1;
-
-                try {
-                    return zones[zoneIndex].getCompound(gridIndex).getShort(descriptor.getMemberName());
-                } catch (IOException e) {
-                    return noDataValue;
-                }
-            }
-
-            @Override
-            public int getValue(int seqnum, int noDataValue) {
-                final int zoneIndex = SmosDgg.seqnumToZoneId(seqnum) - 1;
-                final int gridIndex = SmosDgg.seqnumToSeqnumInZone(seqnum) - 1;
-
-                try {
-                    return zones[zoneIndex].getCompound(gridIndex).getInt(descriptor.getMemberName());
-                } catch (IOException e) {
-                    return noDataValue;
-                }
-            }
-
-            @Override
-            public float getValue(int gridPointId, float noDataValue) {
-                final int zoneIndex = SmosDgg.seqnumToZoneId(gridPointId) - 1;
-                final int gridIndex = SmosDgg.seqnumToSeqnumInZone(gridPointId) - 1;
-
-                try {
-                    return zones[zoneIndex].getCompound(gridIndex).getFloat(descriptor.getMemberName());
-                } catch (IOException e) {
-                    return noDataValue;
-                }
-            }
-        };
-    }
-
-    private MultiLevelImage createSourceImage(final Band band, final ValueProvider valueProvider) {
-        return new DefaultMultiLevelImage(createMultiLevelSource(band, valueProvider));
-    }
-
-    private MultiLevelSource createMultiLevelSource(Band band, ValueProvider valueProvider) {
-        return new SmosMultiLevelSource(band, valueProvider);
+        // todo - implement as in SmosFIle / GlobalZonedSmosFile
     }
 }
