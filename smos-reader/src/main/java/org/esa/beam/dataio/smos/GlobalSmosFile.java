@@ -21,11 +21,11 @@ import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.io.IOException;
 
-class GlobalZonedSmosFile extends ExplorerFile {
+class GlobalSmosFile extends ExplorerFile {
 
     private final SequenceData[] zones;
 
-    protected GlobalZonedSmosFile(File hdrFile, File dblFile, DataFormat dataFormat) throws IOException {
+    protected GlobalSmosFile(File hdrFile, File dblFile, DataFormat dataFormat) throws IOException {
         super(hdrFile, dblFile, dataFormat);
         final SequenceData zoneSequence = getDataBlock().getSequence(0);
 
@@ -102,7 +102,7 @@ class GlobalZonedSmosFile extends ExplorerFile {
         return new ValueProvider() {
             @Override
             public final Area getArea() {
-                return GlobalZonedSmosFile.this.getArea();
+                return GlobalSmosFile.this.getArea();
             }
 
             @Override

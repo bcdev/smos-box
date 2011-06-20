@@ -22,6 +22,7 @@ import com.bc.ceres.binio.SequenceData;
 import com.bc.ceres.binio.util.ByteArrayIOHandler;
 import com.bc.ceres.binio.util.DataPrinter;
 import org.esa.beam.dataio.smos.ExplorerFile;
+import org.esa.beam.dataio.smos.GridPointList;
 import org.esa.beam.dataio.smos.SmosConstants;
 import org.esa.beam.dataio.smos.SmosFile;
 import org.esa.beam.dataio.smos.SmosProductReader;
@@ -46,9 +47,8 @@ public class EEExportGridPointHandlerTest {
         assertTrue(explorerFile instanceof SmosFile);
         final SmosFile sourceFile = (SmosFile) explorerFile;
 
-        final SequenceData sourceGridPointList = sourceFile.getGridPointList();
+        final GridPointList sourceGridPointList = sourceFile.getGridPointList();
         assertEquals(5533, sourceGridPointList.getElementCount());
-        assertEquals("Grid_Point_Data_Type[5533]", sourceGridPointList.getType().getName());
 
         final DataContext targetContext = sourceFile.getDataFormat().createContext(new ByteArrayIOHandler());
         final GridPointHandler handler = new EEExportGridPointHandler(targetContext, new GridPointFilter() {

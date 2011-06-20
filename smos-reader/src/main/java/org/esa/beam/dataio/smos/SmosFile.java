@@ -57,23 +57,78 @@ import java.util.concurrent.Future;
  */
 public class SmosFile extends ExplorerFile {
 
-    private final SequenceData gridPointList;
-    private final CompoundType gridPointType;
+    private final GridPointList gridPointList;
     private final int gridPointIdIndex;
 
     private volatile Future<GridPointInfo> gridPointInfoFuture;
 
     SmosFile(File hdrFile, File dblFile, DataFormat format) throws IOException {
         super(hdrFile, dblFile, format);
-
-        gridPointList = getDataBlock().getSequence(SmosConstants.GRID_POINT_LIST_NAME);
-        if (gridPointList == null) {
-            throw new IllegalStateException(MessageFormat.format(
-                    "SMOS File ''{0}'': Missing grid point list.", dblFile.getPath()));
+        try {
+            final SequenceData gridPointSequence = getDataBlock().getSequence(SmosConstants.GRID_POINT_LIST_NAME);
+            if (gridPointSequence != null) {
+                gridPointList = createGridPointList(gridPointSequence);
+            } else {
+                gridPointList = createGridPointListFromZones(getDataBlock().getSequence(0));
+            }
+            gridPointIdIndex = gridPointList.getCompoundType().getMemberIndex(SmosConstants.GRID_POINT_ID_NAME);
+        } catch (IOException e) {
+            throw new IOException(MessageFormat.format(
+                    "Unable to read SMOS File ''{0}'': {1}.", dblFile.getPath(), e.getMessage()), e);
         }
+    }
 
-        gridPointType = (CompoundType) gridPointList.getType().getElementType();
-        gridPointIdIndex = gridPointType.getMemberIndex(SmosConstants.GRID_POINT_ID_NAME);
+    private GridPointList createGridPointList(final SequenceData sequence) {
+        return new GridPointList() {
+            @Override
+            public final int getElementCount() {
+                return sequence.getElementCount();
+            }
+
+            @Override
+            public final CompoundData getCompound(int i) throws IOException {
+                return sequence.getCompound(i);
+            }
+
+            @Override
+            public final CompoundType getCompoundType() {
+                return (CompoundType) sequence.getType().getElementType();
+            }
+        };
+    }
+
+    private GridPointList createGridPointListFromZones(SequenceData zoneSequence) throws IOException {
+        final SequenceData[] zones = new SequenceData[zoneSequence.getElementCount()];
+        for (int i = 0; i < zones.length; i++) {
+            zones[i] = zoneSequence.getCompound(i).getSequence(1);
+        }
+        return new GridPointList() {
+            @Override
+            public final int getElementCount() {
+                int elementCount = 0;
+                for (final SequenceData zone : zones) {
+                    elementCount += zone.getElementCount();
+                }
+                return elementCount;
+            }
+
+            @Override
+            public final CompoundData getCompound(int i) throws IOException {
+                int elementCount = 0;
+                for (final SequenceData zone : zones) {
+                    elementCount += zone.getElementCount();
+                    if (i < elementCount) {
+                        return zone.getCompound(i - elementCount);
+                    }
+                }
+                throw new IOException("");
+            }
+
+            @Override
+            public final CompoundType getCompoundType() {
+                return (CompoundType) zones[0].getType().getElementType();
+            }
+        };
     }
 
     public final int getGridPointCount() {
@@ -92,7 +147,7 @@ public class SmosFile extends ExplorerFile {
         return SmosDgg.gridPointIdToSeqnum(getGridPointId(i));
     }
 
-    public SequenceData getGridPointList() {
+    public final GridPointList getGridPointList() {
         return gridPointList;
     }
 
@@ -123,19 +178,18 @@ public class SmosFile extends ExplorerFile {
         }
     }
 
-    public CompoundType getGridPointType() {
-        return gridPointType;
+    public final CompoundType getGridPointType() {
+        return gridPointList.getCompoundType();
     }
 
-    public CompoundData getGridPointData(int gridPointIndex) throws IOException {
+    public final CompoundData getGridPointData(int gridPointIndex) throws IOException {
         return gridPointList.getCompound(gridPointIndex);
     }
 
     @Override
-    protected Area computeArea() throws IOException {
+    protected final Area computeArea() throws IOException {
         final int latIndex = getGridPointType().getMemberIndex(SmosConstants.GRID_POINT_LAT_NAME);
         final int lonIndex = getGridPointType().getMemberIndex(SmosConstants.GRID_POINT_LON_NAME);
-        final SequenceData gridPointList = getGridPointList();
 
         final Rectangle2D[] tileRectangles = new Rectangle2D[512];
         for (int i = 0; i < 32; ++i) {
@@ -178,7 +232,7 @@ public class SmosFile extends ExplorerFile {
     }
 
     @Override
-    protected Product createProduct() throws IOException {
+    protected final Product createProduct() throws IOException {
         final String productName = FileUtils.getFilenameWithoutExtension(getHdrFile());
         final String productType = getDataFormat().getName().substring(12, 22);
         final Dimension dimension = ProductHelper.getSceneRasterDimension();
@@ -249,22 +303,22 @@ public class SmosFile extends ExplorerFile {
         final int memberIndex = getGridPointType().getMemberIndex(descriptor.getMemberName());
 
         switch (descriptor.getSampleModel()) {
-            case 1:
-                return new DefaultValueProvider(this, memberIndex) {
-                    @Override
-                    protected int getInt(int gridPointIndex) throws IOException {
-                        return (int) (getLong(memberIndex) & 0x00000000FFFFFFFFL);
-                    }
-                };
-            case 2:
-                return new DefaultValueProvider(this, memberIndex) {
-                    @Override
-                    public int getInt(int gridPointIndex) throws IOException {
-                        return (int) (getLong(memberIndex) >>> 32);
-                    }
-                };
-            default:
-                return new DefaultValueProvider(this, memberIndex);
+        case 1:
+            return new DefaultValueProvider(this, memberIndex) {
+                @Override
+                protected int getInt(int gridPointIndex) throws IOException {
+                    return (int) (getLong(memberIndex) & 0x00000000FFFFFFFFL);
+                }
+            };
+        case 2:
+            return new DefaultValueProvider(this, memberIndex) {
+                @Override
+                public int getInt(int gridPointIndex) throws IOException {
+                    return (int) (getLong(memberIndex) >>> 32);
+                }
+            };
+        default:
+            return new DefaultValueProvider(this, memberIndex);
         }
     }
 

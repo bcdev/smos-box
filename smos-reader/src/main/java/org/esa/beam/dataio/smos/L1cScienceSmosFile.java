@@ -326,7 +326,7 @@ public class L1cScienceSmosFile extends L1cSmosFile {
         final int latIndex = getGridPointType().getMemberIndex("Latitude");
         final int lonIndex = getGridPointType().getMemberIndex("Longitude");
 
-        final SequenceData gridPointList = getGridPointList();
+        final GridPointList gridPointList = getGridPointList();
         final int gridPointCount = getGridPointCount();
 
         for (int i = 0; i < gridPointCount; i++) {
