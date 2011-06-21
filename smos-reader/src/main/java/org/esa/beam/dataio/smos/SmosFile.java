@@ -65,11 +65,21 @@ public class SmosFile extends ExplorerFile {
     SmosFile(File hdrFile, File dblFile, DataFormat format) throws IOException {
         super(hdrFile, dblFile, format);
         try {
-            final SequenceData gridPointSequence = getDataBlock().getSequence(SmosConstants.GRID_POINT_LIST_NAME);
-            if (gridPointSequence != null) {
-                gridPointList = createGridPointList(gridPointSequence);
-            } else {
+            gridPointList = createGridPointList(getDataBlock().getSequence(SmosConstants.GRID_POINT_LIST_NAME));
+            gridPointIdIndex = gridPointList.getCompoundType().getMemberIndex(SmosConstants.GRID_POINT_ID_NAME);
+        } catch (IOException e) {
+            throw new IOException(MessageFormat.format(
+                    "Unable to read SMOS File ''{0}'': {1}.", dblFile.getPath(), e.getMessage()), e);
+        }
+    }
+
+    SmosFile(File hdrFile, File dblFile, DataFormat format, boolean fromZones) throws IOException {
+        super(hdrFile, dblFile, format);
+        try {
+            if (fromZones) {
                 gridPointList = createGridPointListFromZones(getDataBlock().getSequence(0));
+            } else {
+                gridPointList = createGridPointList(getDataBlock().getSequence(SmosConstants.GRID_POINT_LIST_NAME));
             }
             gridPointIdIndex = gridPointList.getCompoundType().getMemberIndex(SmosConstants.GRID_POINT_ID_NAME);
         } catch (IOException e) {
@@ -114,14 +124,14 @@ public class SmosFile extends ExplorerFile {
 
             @Override
             public final CompoundData getCompound(int i) throws IOException {
-                int elementCount = 0;
-                for (final SequenceData zone : zones) {
-                    elementCount += zone.getElementCount();
-                    if (i < elementCount) {
-                        return zone.getCompound(i - elementCount);
+                for (int z = 0, counts = 0, offset = 0, zonesLength = zones.length; z < zonesLength; z++) {
+                    counts += zones[z].getElementCount();
+                    if (i < counts) {
+                        return zones[z].getCompound(i - offset);
                     }
+                    offset = counts;
                 }
-                throw new IOException("");
+                throw new IOException(MessageFormat.format("Cannot read compound data for index {0}", i));
             }
 
             @Override
@@ -303,22 +313,22 @@ public class SmosFile extends ExplorerFile {
         final int memberIndex = getGridPointType().getMemberIndex(descriptor.getMemberName());
 
         switch (descriptor.getSampleModel()) {
-        case 1:
-            return new DefaultValueProvider(this, memberIndex) {
-                @Override
-                protected int getInt(int gridPointIndex) throws IOException {
-                    return (int) (getLong(memberIndex) & 0x00000000FFFFFFFFL);
-                }
-            };
-        case 2:
-            return new DefaultValueProvider(this, memberIndex) {
-                @Override
-                public int getInt(int gridPointIndex) throws IOException {
-                    return (int) (getLong(memberIndex) >>> 32);
-                }
-            };
-        default:
-            return new DefaultValueProvider(this, memberIndex);
+            case 1:
+                return new DefaultValueProvider(this, memberIndex) {
+                    @Override
+                    protected int getInt(int gridPointIndex) throws IOException {
+                        return (int) (getLong(memberIndex) & 0x00000000FFFFFFFFL);
+                    }
+                };
+            case 2:
+                return new DefaultValueProvider(this, memberIndex) {
+                    @Override
+                    public int getInt(int gridPointIndex) throws IOException {
+                        return (int) (getLong(memberIndex) >>> 32);
+                    }
+                };
+            default:
+                return new DefaultValueProvider(this, memberIndex);
         }
     }
 

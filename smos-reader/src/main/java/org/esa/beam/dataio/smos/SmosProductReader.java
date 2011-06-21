@@ -158,15 +158,15 @@ public class SmosProductReader extends AbstractProductReader {
         } else if (isLsMaskFormat(formatName)) {
             return new GlobalSmosFile(hdrFile, dblFile, format);
         } else if (isDggFloFormat(formatName)) {
-            return new SmosFile(hdrFile, dblFile, format);
+            return new SmosFile(hdrFile, dblFile, format, true);
         } else if (isDggRfiFormat(formatName)) {
-            return new SmosFile(hdrFile, dblFile, format);
+            return new SmosFile(hdrFile, dblFile, format, true);
         } else if (isDggRouFormat(formatName)) {
-            return new SmosFile(hdrFile, dblFile, format);
+            return new SmosFile(hdrFile, dblFile, format, true);
         } else if (isDggTfoFormat(formatName)) {
-            return new SmosFile(hdrFile, dblFile, format);
+            return new SmosFile(hdrFile, dblFile, format, true);
         } else if (isDggTlvFormat(formatName)) {
-            return new SmosFile(hdrFile, dblFile, format);
+            return new SmosFile(hdrFile, dblFile, format, true);
         } else {
             throw new IOException(MessageFormat.format(
                     "File ''{0}'': unsupported SMOS data format ''{1}''.", file, formatName));
