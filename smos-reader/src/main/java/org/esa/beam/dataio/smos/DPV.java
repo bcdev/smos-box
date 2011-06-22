@@ -22,7 +22,7 @@ import java.util.Map;
 
 class DPV extends DP {
 
-    DPV(Product product, Map<String, SmosValueProvider> valueProviderMap, boolean accuracy) {
+    DPV(Product product, Map<String, AbstractValueProvider> valueProviderMap, boolean accuracy) {
         super(product, valueProviderMap, accuracy);
     }
 

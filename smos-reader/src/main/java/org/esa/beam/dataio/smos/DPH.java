@@ -22,7 +22,7 @@ import java.util.Map;
 
 class DPH extends DP {
 
-    DPH(Product product, Map<String, SmosValueProvider> valueProviderMap, boolean accuracy) {
+    DPH(Product product, Map<String, AbstractValueProvider> valueProviderMap, boolean accuracy) {
         super(product, valueProviderMap, accuracy);
     }
 

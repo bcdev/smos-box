@@ -19,7 +19,7 @@ package org.esa.beam.dataio.smos;
 import java.awt.geom.Area;
 import java.io.IOException;
 
-class L1cBrowseValueProvider extends SmosValueProvider {
+class L1cBrowseValueProvider extends AbstractValueProvider {
 
     private final L1cBrowseSmosFile smosFile;
     private final int memberIndex;

@@ -22,15 +22,15 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * Represents a SMOS DGG product file.
+ * Represents a zoned DGG product file.
  *
  * @author Ralf Quast
  * @version $Revision$ $Date$
  * @since SMOS-Box 1.0
  */
-public class SmosFile extends DggFile {
+class AuxiliaryFile extends DggFile {
 
-    SmosFile(File hdrFile, File dblFile, DataFormat format) throws IOException {
-        super(hdrFile, dblFile, format, false);
+    AuxiliaryFile(File hdrFile, File dblFile, DataFormat format) throws IOException {
+        super(hdrFile, dblFile, format, true);
     }
 }

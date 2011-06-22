@@ -18,7 +18,7 @@ package org.esa.beam.dataio.smos;
 
 import java.io.IOException;
 
-abstract class SmosValueProvider implements ValueProvider {
+abstract class AbstractValueProvider implements ValueProvider {
 
     @Override
     public byte getValue(int seqnum, byte noDataValue) {

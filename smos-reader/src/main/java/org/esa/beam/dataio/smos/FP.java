@@ -23,20 +23,20 @@ import java.awt.geom.Area;
 import java.io.IOException;
 import java.util.Map;
 
-abstract class FP extends SmosValueProvider {
+abstract class FP extends AbstractValueProvider {
 
-    private final SmosValueProvider frxProvider;
-    private final SmosValueProvider fryProvider;
-    private final SmosValueProvider grxProvider;
-    private final SmosValueProvider gryProvider;
-    private final SmosValueProvider btxProvider;
-    private final SmosValueProvider btyProvider;
-    private final SmosValueProvider btxyProvider;
+    private final AbstractValueProvider frxProvider;
+    private final AbstractValueProvider fryProvider;
+    private final AbstractValueProvider grxProvider;
+    private final AbstractValueProvider gryProvider;
+    private final AbstractValueProvider btxProvider;
+    private final AbstractValueProvider btyProvider;
+    private final AbstractValueProvider btxyProvider;
 
     private final boolean accuracy;
     private final boolean imaginary;
 
-    protected FP(Product product, Map<String, SmosValueProvider> valueProviderMap, boolean accuracy,
+    protected FP(Product product, Map<String, AbstractValueProvider> valueProviderMap, boolean accuracy,
                  boolean imaginary) {
         this.accuracy = accuracy;
         this.imaginary = imaginary;
@@ -71,7 +71,7 @@ abstract class FP extends SmosValueProvider {
         }
     }
 
-    private static SmosValueProvider getValueProvider(Band band, Map<String, SmosValueProvider> map) {
+    private static AbstractValueProvider getValueProvider(Band band, Map<String, AbstractValueProvider> map) {
         if (band.isScalingApplied()) {
             return new Scaler(map.get(band.getName()), band);
         }

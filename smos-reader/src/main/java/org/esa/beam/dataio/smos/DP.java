@@ -23,18 +23,18 @@ import java.awt.geom.Area;
 import java.io.IOException;
 import java.util.Map;
 
-abstract class DP extends SmosValueProvider {
+abstract class DP extends AbstractValueProvider {
 
-    private final SmosValueProvider frxProvider;
-    private final SmosValueProvider fryProvider;
-    private final SmosValueProvider grxProvider;
-    private final SmosValueProvider gryProvider;
-    private final SmosValueProvider btxProvider;
-    private final SmosValueProvider btyProvider;
+    private final AbstractValueProvider frxProvider;
+    private final AbstractValueProvider fryProvider;
+    private final AbstractValueProvider grxProvider;
+    private final AbstractValueProvider gryProvider;
+    private final AbstractValueProvider btxProvider;
+    private final AbstractValueProvider btyProvider;
 
     private final boolean accuracy;
 
-    protected DP(Product product, Map<String, SmosValueProvider> valueProviderMap, boolean accuracy) {
+    protected DP(Product product, Map<String, AbstractValueProvider> valueProviderMap, boolean accuracy) {
         this.accuracy = accuracy;
 
         frxProvider = getValueProvider(product.getBand("Faraday_Rotation_Angle_X"), valueProviderMap);
@@ -53,7 +53,7 @@ abstract class DP extends SmosValueProvider {
         btyProvider = getValueProvider(product.getBand(quantity + "_Y"), valueProviderMap);
     }
 
-    private static SmosValueProvider getValueProvider(Band band, Map<String, SmosValueProvider> map) {
+    private static AbstractValueProvider getValueProvider(Band band, Map<String, AbstractValueProvider> map) {
         if (band.isScalingApplied()) {
             return new Scaler(map.get(band.getName()), band);
         }

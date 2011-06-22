@@ -22,7 +22,7 @@ import java.awt.geom.Area;
 import java.io.IOException;
 import java.text.MessageFormat;
 
-public class L1cScienceValueProvider extends SmosValueProvider {
+public class L1cScienceValueProvider extends AbstractValueProvider {
 
     private final L1cScienceSmosFile smosFile;
     private final int memberIndex;

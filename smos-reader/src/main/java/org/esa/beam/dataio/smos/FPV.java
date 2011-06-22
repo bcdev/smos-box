@@ -22,7 +22,7 @@ import java.util.Map;
 
 class FPV extends FP {
 
-    FPV(Product product, Map<String, SmosValueProvider> valueProviderMap, boolean accuracy) {
+    FPV(Product product, Map<String, AbstractValueProvider> valueProviderMap, boolean accuracy) {
         super(product, valueProviderMap, accuracy, false);
     }
 

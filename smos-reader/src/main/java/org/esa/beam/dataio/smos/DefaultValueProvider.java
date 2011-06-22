@@ -26,47 +26,47 @@ import java.io.IOException;
  * @version $Revision$ $Date$
  * @since SMOS-Box 1.0
  */
-class DefaultValueProvider extends SmosValueProvider {
+class DefaultValueProvider extends AbstractValueProvider {
 
-    private final SmosFile smosFile;
+    private final DggFile dggFile;
     private final int memberIndex;
 
-    DefaultValueProvider(SmosFile smosFile, int memberIndex) {
-        this.smosFile = smosFile;
+    DefaultValueProvider(DggFile dggFile, int memberIndex) {
+        this.dggFile = dggFile;
         this.memberIndex = memberIndex;
     }
 
     @Override
     public final Area getArea() {
-        return smosFile.getArea();
+        return dggFile.getArea();
     }
 
     @Override
     public final int getGridPointIndex(int seqnum) {
-        return smosFile.getGridPointIndex(seqnum);
+        return dggFile.getGridPointIndex(seqnum);
     }
 
     @Override
     protected byte getByte(int gridPointIndex) throws IOException {
-        return smosFile.getGridPointData(gridPointIndex).getByte(memberIndex);
+        return dggFile.getGridPointData(gridPointIndex).getByte(memberIndex);
     }
 
     @Override
     protected short getShort(int gridPointIndex) throws IOException {
-        return smosFile.getGridPointData(gridPointIndex).getShort(memberIndex);
+        return dggFile.getGridPointData(gridPointIndex).getShort(memberIndex);
     }
 
     @Override
     protected int getInt(int gridPointIndex) throws IOException {
-        return smosFile.getGridPointData(gridPointIndex).getInt(memberIndex);
+        return dggFile.getGridPointData(gridPointIndex).getInt(memberIndex);
     }
 
     protected long getLong(int gridPointIndex) throws IOException {
-        return smosFile.getGridPointData(gridPointIndex).getLong(memberIndex);
+        return dggFile.getGridPointData(gridPointIndex).getLong(memberIndex);
     }
 
     @Override
     protected float getFloat(int gridPointIndex) throws IOException {
-        return smosFile.getGridPointData(gridPointIndex).getFloat(memberIndex);
+        return dggFile.getGridPointData(gridPointIndex).getFloat(memberIndex);
     }
 }

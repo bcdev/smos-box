@@ -21,12 +21,12 @@ import org.esa.beam.framework.datamodel.Scaling;
 import java.awt.geom.Area;
 import java.io.IOException;
 
-class Scaler extends SmosValueProvider {
+class Scaler extends AbstractValueProvider {
 
-    private final SmosValueProvider provider;
+    private final AbstractValueProvider provider;
     private final Scaling scaling;
 
-    Scaler(SmosValueProvider provider, Scaling scaling) {
+    Scaler(AbstractValueProvider provider, Scaling scaling) {
         this.provider = provider;
         this.scaling = scaling;
     }

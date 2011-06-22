@@ -56,7 +56,7 @@ public class L1cScienceSmosFile extends L1cSmosFile {
     private static final double MIN_BROWSE_INCIDENCE_ANGLE = 37.5;
     private static final double MAX_BROWSE_INCIDENCE_ANGLE = 52.5;
 
-    private final Map<String, SmosValueProvider> valueProviderMap = new HashMap<String, SmosValueProvider>(17);
+    private final Map<String, AbstractValueProvider> valueProviderMap = new HashMap<String, AbstractValueProvider>(17);
     private final int flagsIndex;
     private final int incidenceAngleIndex;
     private final int snapshotIdOfPixelIndex;
@@ -122,13 +122,13 @@ public class L1cScienceSmosFile extends L1cSmosFile {
     }
 
     @Override
-    protected final SmosValueProvider createValueProvider(BandDescriptor descriptor) {
+    protected final AbstractValueProvider createValueProvider(BandDescriptor descriptor) {
         final int polarization = descriptor.getPolarization();
         if (polarization < 0) {
             return super.createValueProvider(descriptor);
         }
         final int memberIndex = getBtDataType().getMemberIndex(descriptor.getMemberName());
-        final SmosValueProvider valueProvider = new L1cScienceValueProvider(this, memberIndex, polarization);
+        final AbstractValueProvider valueProvider = new L1cScienceValueProvider(this, memberIndex, polarization);
         valueProviderMap.put(descriptor.getBandName(), valueProvider);
 
         return valueProvider;
@@ -390,7 +390,7 @@ public class L1cScienceSmosFile extends L1cSmosFile {
         return new SnapshotInfo(snapshotIndexMap, all, x, y, xy, snapshotAreaMap);
     }
 
-    private void addRotatedDualPolBands(Product product, Map<String, SmosValueProvider> valueProviderMap) {
+    private void addRotatedDualPolBands(Product product, Map<String, AbstractValueProvider> valueProviderMap) {
         final Family<BandDescriptor> descriptors = Dddb.getInstance().getBandDescriptors(getDataFormat().getName());
 
         DP vp;
@@ -416,7 +416,7 @@ public class L1cScienceSmosFile extends L1cSmosFile {
         ProductHelper.addVirtualBand(product, descriptors.getMember("Stokes_2"), "(BT_Value_H - BT_Value_V) / 2.0");
     }
 
-    private void addRotatedFullPolBands(Product product, Map<String, SmosValueProvider> valueProviderMap) {
+    private void addRotatedFullPolBands(Product product, Map<String, AbstractValueProvider> valueProviderMap) {
         final Family<BandDescriptor> descriptors = Dddb.getInstance().getBandDescriptors(getDataFormat().getName());
 
         FP vp;
