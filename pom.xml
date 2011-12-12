@@ -75,6 +75,7 @@
         <module>smos-ui</module>
         <module>smos-dgg</module>
         <module>smos-lsmask</module>
+        <module>smos-tools</module>
     </modules>
 
     <!--
