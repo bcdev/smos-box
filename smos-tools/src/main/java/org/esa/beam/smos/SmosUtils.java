@@ -229,6 +229,12 @@ public class SmosUtils {
         return formatName.contains("MIR_SMUDP2");
     }
 
+    public static boolean isDualPolBrowseFormat(String formatName) {
+        return formatName.contains("MIR_BWLD1C")
+                || formatName.contains("MIR_BWSD1C")
+                || formatName.contains("MIR_BWND1C");
+    }
+
     ////////////////////////////////////////////////////////////////////////////////
     /////// END OF PUBLIC
     ////////////////////////////////////////////////////////////////////////////////

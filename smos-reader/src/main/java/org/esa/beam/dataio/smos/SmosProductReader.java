@@ -45,12 +45,6 @@ public class SmosProductReader extends AbstractProductReader {
     private ExplorerFile explorerFile;
     private VirtualDir virtualDir;
 
-    public static boolean isDualPolBrowseFormat(String formatName) {
-        return formatName.contains("MIR_BWLD1C")
-                || formatName.contains("MIR_BWSD1C")
-                || formatName.contains("MIR_BWND1C");
-    }
-
     public static boolean isDualPolScienceFormat(String formatName) {
         return formatName.contains("MIR_SCLD1C")
                 || formatName.contains("MIR_SCSD1C")
@@ -270,7 +264,7 @@ public class SmosProductReader extends AbstractProductReader {
         }
 
         final String formatName = format.getName();
-        if (isDualPolBrowseFormat(formatName)) {
+        if (SmosUtils.isDualPolBrowseFormat(formatName)) {
             return new L1cBrowseSmosFile(hdrFile, dblFile, format);
         } else if (isFullPolBrowseFormat(formatName)) {
             return new L1cBrowseSmosFile(hdrFile, dblFile, format);
