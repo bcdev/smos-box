@@ -279,4 +279,24 @@ public class SmosUtilsTest extends TestCase {
         assertFalse(SmosUtils.isAuxECMWFType("SM_TEST_MIR_OSUDP2_20121118T143742_20121118T153047_306_002_1.zip"));
         assertFalse(SmosUtils.isAuxECMWFType("SM_OPER_MIR_BWLD1C_20121118T002733_20121118T012104_116_001_1.zip"));
     }
+
+    public void testIsSmUserFormat() {
+        assertTrue(SmosUtils.isSmUserFormat("SM_TEST_MIR_SMUDP2_20070225T041815_20070225T050750_306_001_8.DBL"));
+        assertFalse(SmosUtils.isSmUserFormat("SM_OPER_MIR_SCSF1C_20100315T144805_20100315T154207_330_001_1"));
+    }
+
+    public void testIsSmAnalysisFormat() {
+        assertTrue(SmosUtils.isSmAnalysisFormat("SM_TEST_MIR_SMDAP2_20121117T183648_20121117T193048_304_001_1.zip"));
+        assertFalse(SmosUtils.isSmAnalysisFormat("SM_OPER_MIR_SCSF1C_20100315T144805_20100315T154207_330_001_1"));
+    }
+
+    public void testIsOsUserFormat() {
+        assertTrue(SmosUtils.isOsUserFormat("SM_TEST_MIR_OSUDP2_20070225T041815_20070225T050750_306_001_8.DBL"));
+        assertFalse(SmosUtils.isOsUserFormat("SM_TEST_MIR_BWSF1C_20070223T112729_20070223T121644_141_000_0.zip"));
+    }
+
+    public void testIsOsAnalysisFormat() {
+        assertTrue(SmosUtils.isOsAnalysisFormat("SM_TEST_MIR_OSDAP2_20070225T041815_20070225T050750_306_001_8.DBL"));
+        assertFalse(SmosUtils.isOsAnalysisFormat("SM_OPER_MIR_OSUDP2_20091204T001853_20091204T011255_310_001_1.zip"));
+    }
 }

@@ -18,8 +18,8 @@ package org.esa.beam.smos.visat.export;
 
 import com.bc.ceres.binio.*;
 import org.esa.beam.dataio.smos.SmosConstants;
-import org.esa.beam.dataio.smos.SmosProductReader;
 import org.esa.beam.dataio.smos.util.DateTimeUtils;
+import org.esa.beam.smos.SmosUtils;
 
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
@@ -217,9 +217,9 @@ class EEExportGridPointHandler implements GridPointHandler {
     }
 
     private static boolean isLevel2File(String formatName) {
-        return SmosProductReader.isSmUserFormat(formatName) ||
-                SmosProductReader.isSmAnalysisFormat(formatName) ||
-                SmosProductReader.isOsUserFormat(formatName) ||
-                SmosProductReader.isOsAnalysisFormat(formatName);
+        return SmosUtils.isSmUserFormat(formatName) ||
+                SmosUtils.isSmAnalysisFormat(formatName) ||
+                SmosUtils.isOsUserFormat(formatName) ||
+                SmosUtils.isOsAnalysisFormat(formatName);
     }
 }

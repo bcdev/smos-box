@@ -18,6 +18,7 @@ package org.esa.beam.dataio.smos;
 import org.esa.beam.dataio.smos.dddb.Dddb;
 import org.esa.beam.framework.dataio.DecodeQualification;
 import org.esa.beam.framework.dataio.ProductReaderPlugIn;
+import org.esa.beam.smos.SmosUtils;
 import org.esa.beam.util.io.BeamFileFilter;
 import org.esa.beam.util.io.FileUtils;
 
@@ -38,7 +39,8 @@ public class SmosProductReaderPlugIn implements ProductReaderPlugIn {
     public DecodeQualification getDecodeQualification(Object input) {
         final File file = input instanceof File ? (File) input : new File(input.toString());
 
-        if (file.getName().endsWith(".HDR") || file.getName().endsWith(".DBL")) {
+        final String fileName = file.getName();
+        if (fileName.endsWith(".HDR") || fileName.endsWith(".DBL")) {
             final File hdrFile = FileUtils.exchangeExtension(file, ".HDR");
             final File dblFile = FileUtils.exchangeExtension(file, ".DBL");
 
@@ -51,6 +53,11 @@ public class SmosProductReaderPlugIn implements ProductReaderPlugIn {
                     // ignore
                 }
             }
+        } else if (SmosUtils.isCompressedFile(file)) {
+            if (SmosUtils.isL1cType(fileName) || SmosUtils.isL2Type(fileName) || SmosUtils.isAuxECMWFType(fileName)) {
+                return DecodeQualification.INTENDED;
+            }
+            return DecodeQualification.SUITABLE;
         }
 
         return DecodeQualification.UNABLE;

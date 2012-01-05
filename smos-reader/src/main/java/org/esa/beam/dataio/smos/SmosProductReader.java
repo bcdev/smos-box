@@ -18,6 +18,7 @@ package org.esa.beam.dataio.smos;
 
 import com.bc.ceres.binio.DataFormat;
 import com.bc.ceres.core.ProgressMonitor;
+import com.bc.ceres.core.VirtualDir;
 import org.esa.beam.dataio.smos.dddb.BandDescriptor;
 import org.esa.beam.dataio.smos.dddb.Dddb;
 import org.esa.beam.framework.dataio.AbstractProductReader;
@@ -25,10 +26,12 @@ import org.esa.beam.framework.dataio.ProductReaderPlugIn;
 import org.esa.beam.framework.datamodel.Band;
 import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.framework.datamodel.ProductData;
+import org.esa.beam.smos.SmosUtils;
 import org.esa.beam.smos.lsmask.SmosLsMask;
+import org.esa.beam.util.StringUtils;
 import org.esa.beam.util.io.FileUtils;
 
-import java.awt.Rectangle;
+import java.awt.*;
 import java.awt.image.Raster;
 import java.awt.image.RenderedImage;
 import java.io.File;
@@ -40,49 +43,30 @@ public class SmosProductReader extends AbstractProductReader {
     private static final String LSMASK_SCHEMA_NAME = "DBL_SM_XXXX_AUX_LSMASK_0200";
 
     private ExplorerFile explorerFile;
+    private VirtualDir virtualDir;
 
     public static boolean isDualPolBrowseFormat(String formatName) {
         return formatName.contains("MIR_BWLD1C")
-               || formatName.contains("MIR_BWSD1C")
-               || formatName.contains("MIR_BWND1C");
+                || formatName.contains("MIR_BWSD1C")
+                || formatName.contains("MIR_BWND1C");
     }
 
     public static boolean isDualPolScienceFormat(String formatName) {
         return formatName.contains("MIR_SCLD1C")
-               || formatName.contains("MIR_SCSD1C")
-               || formatName.contains("MIR_SCND1C");
+                || formatName.contains("MIR_SCSD1C")
+                || formatName.contains("MIR_SCND1C");
     }
 
     public static boolean isFullPolBrowseFormat(String formatName) {
         return formatName.contains("MIR_BWLF1C")
-               || formatName.contains("MIR_BWSF1C")
-               || formatName.contains("MIR_BWNF1C");
+                || formatName.contains("MIR_BWSF1C")
+                || formatName.contains("MIR_BWNF1C");
     }
 
     public static boolean isFullPolScienceFormat(String formatName) {
         return formatName.contains("MIR_SCLF1C")
-               || formatName.contains("MIR_SCSF1C")
-               || formatName.contains("MIR_SCNF1C");
-    }
-
-    public static boolean isOsAnalysisFormat(String formatName) {
-        return formatName.contains("MIR_OSDAP2");
-    }
-
-    public static boolean isOsUserFormat(String formatName) {
-        return formatName.contains("MIR_OSUDP2");
-    }
-
-    public static boolean isSmAnalysisFormat(String formatName) {
-        return formatName.contains("MIR_SMDAP2");
-    }
-
-    public static boolean isSmUserFormat(String formatName) {
-        return formatName.contains("MIR_SMUDP2");
-    }
-
-    public static boolean isEcmwfFormat(String formatName) {
-        return formatName.contains("AUX_ECMWF_");
+                || formatName.contains("MIR_SCSF1C")
+                || formatName.contains("MIR_SCNF1C");
     }
 
     public static boolean isDffLaiFormat(String formatName) {
@@ -91,31 +75,15 @@ public class SmosProductReader extends AbstractProductReader {
 
     public static boolean isVTecFormat(String formatName) {
         return formatName.contains("AUX_VTEC_C")
-               || formatName.contains("AUX_VTEC_P");
+                || formatName.contains("AUX_VTEC_P");
     }
 
     public static boolean isLsMaskFormat(String formatName) {
         return formatName.contains("AUX_LSMASK");
     }
 
-    private static boolean isDggFloFormat(String formatName) {
-        return formatName.contains("AUX_DGGFLO");
-    }
-
-    private static boolean isDggRfiFormat(String formatName) {
-        return formatName.contains("AUX_DGGRFI");
-    }
-
-    private static boolean isDggRouFormat(String formatName) {
-        return formatName.contains("AUX_DGGROU");
-    }
-
-    private static boolean isDggTfoFormat(String formatName) {
-        return formatName.contains("AUX_DGGTFO");
-    }
-
-    private static boolean isDggTlvFormat(String formatName) {
-        return formatName.contains("AUX_DGGTLV");
+    public ExplorerFile getExplorerFile() {
+        return explorerFile;
     }
 
     public static ExplorerFile createExplorerFile(File file) throws IOException {
@@ -128,63 +96,52 @@ public class SmosProductReader extends AbstractProductReader {
         final File hdrFile = FileUtils.exchangeExtension(file, ".HDR");
         final File dblFile = FileUtils.exchangeExtension(file, ".DBL");
 
-        final DataFormat format = Dddb.getInstance().getDataFormat(hdrFile);
-        if (format == null) {
-            throw new IOException(MessageFormat.format("File ''{0}'': unknown SMOS data format.", file));
+        final ExplorerFile explorerFile = createExplorerFile(hdrFile, dblFile);
+        if (explorerFile == null) {
+            throw new IOException(MessageFormat.format("File ''{0}'': unknown/unsupported SMOS data format.", file));
         }
-        final String formatName = format.getName();
-        if (isDualPolBrowseFormat(formatName)) {
-            return new L1cBrowseSmosFile(hdrFile, dblFile, format);
-        } else if (isFullPolBrowseFormat(formatName)) {
-            return new L1cBrowseSmosFile(hdrFile, dblFile, format);
-        } else if (isDualPolScienceFormat(formatName)) {
-            return new L1cScienceSmosFile(hdrFile, dblFile, format);
-        } else if (isFullPolScienceFormat(formatName)) {
-            return new L1cScienceSmosFile(hdrFile, dblFile, format);
-        } else if (isOsUserFormat(formatName)) {
-            return new SmosFile(hdrFile, dblFile, format);
-        } else if (isSmUserFormat(formatName)) {
-            return new SmosFile(hdrFile, dblFile, format);
-        } else if (isOsAnalysisFormat(formatName)) {
-            return new SmosFile(hdrFile, dblFile, format);
-        } else if (isSmAnalysisFormat(formatName)) {
-            return new SmosFile(hdrFile, dblFile, format);
-        } else if (isEcmwfFormat(formatName)) {
-            return new SmosFile(hdrFile, dblFile, format);
-        } else if (isDffLaiFormat(formatName)) {
-            return new LaiFile(hdrFile, dblFile, format);
-        } else if (isVTecFormat(formatName)) {
-            return new VTecFile(hdrFile, dblFile, format);
-        } else if (isLsMaskFormat(formatName)) {
-            return new GlobalSmosFile(hdrFile, dblFile, format);
-        } else if (isDggFloFormat(formatName)) {
-            return new AuxiliaryFile(hdrFile, dblFile, format);
-        } else if (isDggRfiFormat(formatName)) {
-            return new AuxiliaryFile(hdrFile, dblFile, format);
-        } else if (isDggRouFormat(formatName)) {
-            return new AuxiliaryFile(hdrFile, dblFile, format);
-        } else if (isDggTfoFormat(formatName)) {
-            return new AuxiliaryFile(hdrFile, dblFile, format);
-        } else if (isDggTlvFormat(formatName)) {
-            return new AuxiliaryFile(hdrFile, dblFile, format);
-        } else {
-            throw new IOException(MessageFormat.format(
-                    "File ''{0}'': unsupported SMOS data format ''{1}''.", file, formatName));
+        return explorerFile;
+    }
+
+    private ExplorerFile createExplorerFile(VirtualDir virtualDir) throws IOException {
+        String listPath = "";
+        String[] list = virtualDir.list(listPath);
+        if (list.length == 1) {
+            listPath = list[0] + "/";
         }
+        list = virtualDir.list(listPath);
+
+        String fileName = null;
+        for (String listEntry : list) {
+            if (listEntry.contains(".hdr") || listEntry.contains(".HDR")) {
+                fileName = listEntry;
+                break;
+            }
+        }
+
+        if (StringUtils.isNullOrEmpty(fileName)) {
+            throw new IOException(MessageFormat.format("File ''{0}'': unknown/unsupported SMOS data format.", virtualDir.getBasePath()));
+        }
+
+        final File hdrFile = virtualDir.getFile(listPath + fileName);
+        File dblFile = FileUtils.exchangeExtension(hdrFile, ".DBL");
+        dblFile = virtualDir.getFile(listPath + dblFile.getName());
+
+        final ExplorerFile explorerFile = createExplorerFile(hdrFile, dblFile);
+        if (explorerFile == null) {
+            throw new IOException(MessageFormat.format("File ''{0}'': unknown/unsupported SMOS data format.", hdrFile));
+        }
+        return explorerFile;
     }
 
     SmosProductReader(ProductReaderPlugIn readerPlugIn) {
         super(readerPlugIn);
     }
 
-    public ExplorerFile getExplorerFile() {
-        return explorerFile;
-    }
-
     @Override
     protected final Product readProductNodesImpl() throws IOException {
         synchronized (this) {
-            explorerFile = createExplorerFile(getInputFile());
+            explorerFile = createExplorerFile(getInputVirtualDir());
             final Product product = explorerFile.createProduct();
             product.setFileLocation(explorerFile.getDblFile());
             if (explorerFile instanceof SmosFile) {
@@ -193,6 +150,7 @@ public class SmosProductReader extends AbstractProductReader {
             return product;
         }
     }
+
 
     @Override
     protected final void readBandRasterDataImpl(int sourceOffsetX,
@@ -220,6 +178,9 @@ public class SmosProductReader extends AbstractProductReader {
     public void close() throws IOException {
         synchronized (this) {
             explorerFile.close();
+            if (virtualDir != null) {
+                virtualDir.close();
+            }
             super.close();
         }
     }
@@ -235,6 +196,21 @@ public class SmosProductReader extends AbstractProductReader {
         }
 
         throw new IllegalArgumentException(MessageFormat.format("Illegal input: {0}", input));
+    }
+
+    private VirtualDir getInputVirtualDir() {
+        File inputFile = getInputFile();
+
+        if (!SmosUtils.isCompressedFile(inputFile)) {
+            inputFile = inputFile.getParentFile();
+        }
+
+        virtualDir = VirtualDir.create(inputFile);
+        if (virtualDir == null) {
+            throw new IllegalArgumentException(MessageFormat.format("Illegal input: {0}", inputFile));
+        }
+
+        return virtualDir;
     }
 
     private void addLandSeaMask(Product product) {
@@ -260,10 +236,76 @@ public class SmosProductReader extends AbstractProductReader {
         }
         if (descriptor.getFlagDescriptors() != null) {
             ProductHelper.addFlagsAndMasks(product, band, descriptor.getFlagCodingName(),
-                                           descriptor.getFlagDescriptors());
+                    descriptor.getFlagDescriptors());
         }
 
         band.setSourceImage(SmosLsMask.getInstance().getMultiLevelImage());
         band.setImageInfo(ProductHelper.createImageInfo(band, descriptor));
+    }
+
+    private static boolean isDggFloFormat(String formatName) {
+        return formatName.contains("AUX_DGGFLO");
+    }
+
+    private static boolean isDggRfiFormat(String formatName) {
+        return formatName.contains("AUX_DGGRFI");
+    }
+
+    private static boolean isDggRouFormat(String formatName) {
+        return formatName.contains("AUX_DGGROU");
+    }
+
+    private static boolean isDggTfoFormat(String formatName) {
+        return formatName.contains("AUX_DGGTFO");
+    }
+
+    private static boolean isDggTlvFormat(String formatName) {
+        return formatName.contains("AUX_DGGTLV");
+    }
+
+    private static ExplorerFile createExplorerFile(File hdrFile, File dblFile) throws IOException {
+        final DataFormat format = Dddb.getInstance().getDataFormat(hdrFile);
+        if (format == null) {
+            return null;
+        }
+
+        final String formatName = format.getName();
+        if (isDualPolBrowseFormat(formatName)) {
+            return new L1cBrowseSmosFile(hdrFile, dblFile, format);
+        } else if (isFullPolBrowseFormat(formatName)) {
+            return new L1cBrowseSmosFile(hdrFile, dblFile, format);
+        } else if (isDualPolScienceFormat(formatName)) {
+            return new L1cScienceSmosFile(hdrFile, dblFile, format);
+        } else if (isFullPolScienceFormat(formatName)) {
+            return new L1cScienceSmosFile(hdrFile, dblFile, format);
+        } else if (SmosUtils.isOsUserFormat(formatName)) {
+            return new SmosFile(hdrFile, dblFile, format);
+        } else if (SmosUtils.isSmUserFormat(formatName)) {
+            return new SmosFile(hdrFile, dblFile, format);
+        } else if (SmosUtils.isOsAnalysisFormat(formatName)) {
+            return new SmosFile(hdrFile, dblFile, format);
+        } else if (SmosUtils.isSmAnalysisFormat(formatName)) {
+            return new SmosFile(hdrFile, dblFile, format);
+        } else if (SmosUtils.isAuxECMWFType(formatName)) {
+            return new SmosFile(hdrFile, dblFile, format);
+        } else if (isDffLaiFormat(formatName)) {
+            return new LaiFile(hdrFile, dblFile, format);
+        } else if (isVTecFormat(formatName)) {
+            return new VTecFile(hdrFile, dblFile, format);
+        } else if (isLsMaskFormat(formatName)) {
+            return new GlobalSmosFile(hdrFile, dblFile, format);
+        } else if (isDggFloFormat(formatName)) {
+            return new AuxiliaryFile(hdrFile, dblFile, format);
+        } else if (isDggRfiFormat(formatName)) {
+            return new AuxiliaryFile(hdrFile, dblFile, format);
+        } else if (isDggRouFormat(formatName)) {
+            return new AuxiliaryFile(hdrFile, dblFile, format);
+        } else if (isDggTfoFormat(formatName)) {
+            return new AuxiliaryFile(hdrFile, dblFile, format);
+        } else if (isDggTlvFormat(formatName)) {
+            return new AuxiliaryFile(hdrFile, dblFile, format);
+        }
+
+        return null;
     }
 }

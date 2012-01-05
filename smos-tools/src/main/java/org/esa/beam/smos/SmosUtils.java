@@ -1,5 +1,6 @@
 package org.esa.beam.smos;
 
+import org.esa.beam.util.StringUtils;
 import org.esa.beam.util.io.FileUtils;
 
 import java.io.File;
@@ -212,6 +213,22 @@ public class SmosUtils {
         return fileName.indexOf("_AUX_ECMWF_") > 0;
     }
 
+    public static boolean isOsAnalysisFormat(String formatName) {
+        return formatName.contains("MIR_OSDAP2");
+    }
+
+    public static boolean isOsUserFormat(String formatName) {
+        return formatName.contains("MIR_OSUDP2");
+    }
+
+    public static boolean isSmAnalysisFormat(String formatName) {
+        return formatName.contains("MIR_SMDAP2");
+    }
+
+    public static boolean isSmUserFormat(String formatName) {
+        return formatName.contains("MIR_SMUDP2");
+    }
+
     ////////////////////////////////////////////////////////////////////////////////
     /////// END OF PUBLIC
     ////////////////////////////////////////////////////////////////////////////////
@@ -239,5 +256,14 @@ public class SmosUtils {
             logger.log(Level.WARNING, "Exception while parsing sensing time from string: \"" + sensingTime + "\"", e);
             return null;
         }
+    }
+
+    public static boolean isCompressedFile(File file) {
+        final String extension = FileUtils.getExtension(file);
+        if (StringUtils.isNullOrEmpty(extension)) {
+            return false;
+        }
+
+        return extension.contains("zip") || extension.contains("ZIP");
     }
 }
