@@ -31,8 +31,8 @@ import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYZDataset;
 import org.jfree.ui.RectangleInsets;
 
-import javax.swing.JComponent;
-import java.awt.Color;
+import javax.swing.*;
+import java.awt.*;
 import java.io.IOException;
 
 public class GridPointBtDataFlagmatrixToolView extends GridPointBtDataToolView {
