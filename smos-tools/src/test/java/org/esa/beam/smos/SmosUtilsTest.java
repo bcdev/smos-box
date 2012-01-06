@@ -1,9 +1,14 @@
 package org.esa.beam.smos;
 
+import com.bc.util.TestUtil;
+import com.bc.util.encoder.MD5Encoder;
 import com.bc.util.time.TimeUtils;
 import junit.framework.TestCase;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -306,5 +311,37 @@ public class SmosUtilsTest extends TestCase {
 
         assertFalse(SmosUtils.isDualPolBrowseFormat("SM_OPER_MIR_OSUDP2_20091204T001853_20091204T011255_310_001_1.zip"));
         assertFalse(SmosUtils.isDualPolBrowseFormat("SM_OPER_MIR_SMDAP2_20111130T141947_20111130T151305_500_001_1.DBL"));
+    }
+
+    public void testCalculateMd5Hash() throws IOException, NoSuchAlgorithmException {
+        if (!TestUtil.TEST_PATH.mkdirs()) {
+            fail("Unable to create directory");
+        }
+        final File inputFile = new File(TestUtil.TEST_PATH, "test_me_file");
+        if (!inputFile.createNewFile()) {
+            fail("Unable write test file");
+        }
+
+        final String testFileContent = "abcdefghijockelmnoppelfinstufixet";
+        final FileOutputStream outStream = new FileOutputStream(inputFile);
+        outStream.write(testFileContent.getBytes());
+        outStream.flush();
+        outStream.close();
+
+
+        final String result = SmosUtils.calculateFileHash(inputFile);
+        final MD5Encoder encoder = new MD5Encoder();
+        assertEquals(encoder.encode(testFileContent), result);
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    /////// END OF PUBLIC
+    ////////////////////////////////////////////////////////////////////////////////
+
+    @Override
+    protected void tearDown() throws Exception {
+        if (TestUtil.TEST_PATH.isDirectory()) {
+            TestUtil.deleteFileTree(TestUtil.TEST_PATH);
+        }
     }
 }
