@@ -137,7 +137,12 @@ public class SmosProductReader extends AbstractProductReader {
         synchronized (this) {
             explorerFile = createExplorerFile(getInputVirtualDir());
             final Product product = explorerFile.createProduct();
-            product.setFileLocation(explorerFile.getDblFile());
+            if (virtualDir.isCompressed()) {
+                final String path = virtualDir.getBasePath();
+                product.setFileLocation(new File(path));
+            } else {
+                product.setFileLocation(explorerFile.getDblFile());
+            }
             if (explorerFile instanceof SmosFile) {
                 addLandSeaMask(product);
             }

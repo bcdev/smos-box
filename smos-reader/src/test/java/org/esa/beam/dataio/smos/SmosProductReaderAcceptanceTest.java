@@ -11,26 +11,35 @@ public class SmosProductReaderAcceptanceTest extends TestCase {
     private SmosProductReader reader;
 
     public void testRead_BWSD1C_directory() throws IOException {
-        final File file = getTestFileOrDirectory("SM_OPER_MIR_BWSD1C_20100201T134256_20100201T140057_324_001_1/SM_OPER_MIR_BWSD1C_20100201T134256_20100201T140057_324_001_1.HDR");
+        final String testFileName = "SM_OPER_MIR_BWSD1C_20100201T134256_20100201T140057_324_001_1.DBL";
+        final File file = getTestFileOrDirectory("SM_OPER_MIR_BWSD1C_20100201T134256_20100201T140057_324_001_1/" + testFileName);
         assertTrue(file.isFile());
 
         final Product product = reader.readProductNodes(file, null);
+        final File fileLocation = product.getFileLocation();
+        assertTrue(fileLocation.getPath().contains(testFileName));
         assertCorrect_BWSD1C_Product(product);
     }
 
     public void testRead_BWSD1C_plainZip() throws IOException {
-        final File file = getTestFileOrDirectory("SM_OPER_MIR_BWSD1C_20100201T134256_20100201T140057_324_001_1.zip");
+        final String testFilename = "SM_OPER_MIR_BWSD1C_20100201T134256_20100201T140057_324_001_1.zip";
+        final File file = getTestFileOrDirectory(testFilename);
         assertTrue(file.isFile());
 
         final Product product = reader.readProductNodes(file, null);
+        final File fileLocation = product.getFileLocation();
+        assertTrue(fileLocation.getPath().contains(testFilename));
         assertCorrect_BWSD1C_Product(product);
     }
 
     public void testRead_BWSD1C_zipWithDirectory() throws IOException {
-        final File file = getTestFileOrDirectory("SM_OPER_MIR_BWSD1C_20100201T134256_20100201T140057_324_001_1_with_dir.zip");
+        final String testFileName = "SM_OPER_MIR_BWSD1C_20100201T134256_20100201T140057_324_001_1_with_dir.zip";
+        final File file = getTestFileOrDirectory(testFileName);
         assertTrue(file.isFile());
 
         final Product product = reader.readProductNodes(file, null);
+        final File fileLocation = product.getFileLocation();
+        assertTrue(fileLocation.getPath().contains(testFileName));
         assertCorrect_BWSD1C_Product(product);
     }
 
