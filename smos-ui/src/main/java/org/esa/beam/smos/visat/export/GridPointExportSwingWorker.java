@@ -143,7 +143,8 @@ class GridPointExportSwingWorker extends ProgressMonitorSwingWorker<List<Excepti
                 while (featureIterator.hasNext()) {
                     final Shape featureShape;
                     final SimpleFeature feature = featureIterator.next();
-                    if (feature.getFeatureType() == Placemark.getFeatureType()) {
+                    // @todo tb/** name may change. When beam 4.10 is stable, replace with beam-constant
+                    if (feature.getFeatureType().getTypeName().equals("org.esa.beam.Pin")) {
                         featureShape = getPointShape(feature);
                     } else {
                         featureShape = getAreaShape(feature);

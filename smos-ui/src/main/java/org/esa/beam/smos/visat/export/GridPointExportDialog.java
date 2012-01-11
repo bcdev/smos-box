@@ -33,11 +33,7 @@ import org.esa.beam.dataio.smos.ExplorerFile;
 import org.esa.beam.dataio.smos.SmosFile;
 import org.esa.beam.dataio.smos.SmosProductReader;
 import org.esa.beam.framework.dataio.ProductReader;
-import org.esa.beam.framework.datamodel.Placemark;
-import org.esa.beam.framework.datamodel.Product;
-import org.esa.beam.framework.datamodel.ProductNode;
-import org.esa.beam.framework.datamodel.ProductNodeGroup;
-import org.esa.beam.framework.datamodel.VectorDataNode;
+import org.esa.beam.framework.datamodel.*;
 import org.esa.beam.framework.gpf.annotations.ParameterDescriptorFactory;
 import org.esa.beam.framework.ui.AppContext;
 import org.esa.beam.framework.ui.ModalDialog;
@@ -186,7 +182,8 @@ class GridPointExportDialog extends ModalDialog {
             final List<VectorDataNode> geometryNodeList = new ArrayList<VectorDataNode>();
             final ProductNodeGroup<VectorDataNode> vectorDataGroup = selectedProduct.getVectorDataGroup();
             for (VectorDataNode node : vectorDataGroup.toArray(new VectorDataNode[vectorDataGroup.getNodeCount()])) {
-                if (node.getFeatureType() != Placemark.getFeatureType()) {
+                // @todo tb/** name may change. When beam 4.10 is stable, replace with beam-constant
+                if (node.getFeatureType().getTypeName().equals("org.esa.beam.Geometry")) {
                     if (!node.getFeatureCollection().isEmpty()) {
                         geometryNodeList.add(node);
                     }
