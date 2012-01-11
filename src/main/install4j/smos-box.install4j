@@ -136,7 +136,7 @@ if (applicationInfo == null) {
     return true;
 }
 
-String requiredBeamVersion = "4.9";
+String requiredBeamVersion = "4.10";
 String existingBeamVersion = applicationInfo.getVersion();
 if (!existingBeamVersion.startsWith(requiredBeamVersion)) {
     Util.showErrorMessage("This version of " + context.getCompilerVariable("sys.fullName") + " " 
