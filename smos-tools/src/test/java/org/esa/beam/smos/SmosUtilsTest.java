@@ -1,14 +1,9 @@
 package org.esa.beam.smos;
 
-import com.bc.util.TestUtil;
-import com.bc.util.encoder.MD5Encoder;
-import com.bc.util.time.TimeUtils;
+
 import junit.framework.TestCase;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -54,22 +49,22 @@ public class SmosUtilsTest extends TestCase {
         final Calendar cal = GregorianCalendar.getInstance();
 
         cal.set(2007, 0, 1);
-        assertTrue(TimeUtils.isSameDay(cal.getTime(), SmosUtils.getSensingStartDayFromFilename("SM_TEST_AUX_PATT99_20070101T000000_20781231T235959_00000006.EEF")));
-        assertTrue(TimeUtils.isSameDay(cal.getTime(), SmosUtils.getSensingStartDayFromFilename("SM_TEST_AUX_BWGHT__20070101T000000_20781231T235959_00000003.EEF")));
-        assertTrue(TimeUtils.isSameDay(cal.getTime(), SmosUtils.getSensingStartDayFromFilename("SM_TEST_AUX_RFI____20070101T000000_20781231T235959_00000001.EEF")));
-        assertTrue(TimeUtils.isSameDay(cal.getTime(), SmosUtils.getSensingStartDayFromFilename("SM_TEST_AUX_RFI____20070101T235959_20781231T235959_00000001.EEF")));
+        assertTrue(isSameDay(cal.getTime(), SmosUtils.getSensingStartDayFromFilename("SM_TEST_AUX_PATT99_20070101T000000_20781231T235959_00000006.EEF")));
+        assertTrue(isSameDay(cal.getTime(), SmosUtils.getSensingStartDayFromFilename("SM_TEST_AUX_BWGHT__20070101T000000_20781231T235959_00000003.EEF")));
+        assertTrue(isSameDay(cal.getTime(), SmosUtils.getSensingStartDayFromFilename("SM_TEST_AUX_RFI____20070101T000000_20781231T235959_00000001.EEF")));
+        assertTrue(isSameDay(cal.getTime(), SmosUtils.getSensingStartDayFromFilename("SM_TEST_AUX_RFI____20070101T235959_20781231T235959_00000001.EEF")));
 
         cal.set(2007, 1, 23);
-        assertTrue(TimeUtils.isSameDay(cal.getTime(), SmosUtils.getSensingStartDayFromFilename("SM_TEST_AUX_VTEC___20070223T000000_20070224T000000_00000001.EEF")));
+        assertTrue(isSameDay(cal.getTime(), SmosUtils.getSensingStartDayFromFilename("SM_TEST_AUX_VTEC___20070223T000000_20070224T000000_00000001.EEF")));
 
         cal.set(2012, 10, 18);
-        assertTrue(TimeUtils.isSameDay(cal.getTime(), SmosUtils.getSensingStartDayFromFilename("SM_OPER_MIR_BWLD1C_20121118T002733_20121118T012104_116_001_1.zip")));
+        assertTrue(isSameDay(cal.getTime(), SmosUtils.getSensingStartDayFromFilename("SM_OPER_MIR_BWLD1C_20121118T002733_20121118T012104_116_001_1.zip")));
 
         cal.set(2012, 10, 20);
-        assertTrue(TimeUtils.isSameDay(cal.getTime(), SmosUtils.getSensingStartDayFromFilename("SM_OPER_MIR_UNCU1A_20121120T010256_20121120T014313_116_001_1.zip")));
+        assertTrue(isSameDay(cal.getTime(), SmosUtils.getSensingStartDayFromFilename("SM_OPER_MIR_UNCU1A_20121120T010256_20121120T014313_116_001_1.zip")));
 
         cal.set(2005, 0, 1);
-        assertTrue(TimeUtils.isSameDay(cal.getTime(), SmosUtils.getSensingStartDayFromFilename("SM_TEST_AUX_MOONT__20050101T000000_20500101T000000_001_001_4.zip")));
+        assertTrue(isSameDay(cal.getTime(), SmosUtils.getSensingStartDayFromFilename("SM_TEST_AUX_MOONT__20050101T000000_20500101T000000_001_001_4.zip")));
     }
 
     public void testGetProductType() {
@@ -313,35 +308,27 @@ public class SmosUtilsTest extends TestCase {
         assertFalse(SmosUtils.isDualPolBrowseFormat("SM_OPER_MIR_SMDAP2_20111130T141947_20111130T151305_500_001_1.DBL"));
     }
 
-    public void testCalculateMd5Hash() throws IOException, NoSuchAlgorithmException {
-        if (!TestUtil.TEST_PATH.mkdirs()) {
-            fail("Unable to create directory");
-        }
-        final File inputFile = new File(TestUtil.TEST_PATH, "test_me_file");
-        if (!inputFile.createNewFile()) {
-            fail("Unable write test file");
-        }
-
-        final String testFileContent = "abcdefghijockelmnoppelfinstufixet";
-        final FileOutputStream outStream = new FileOutputStream(inputFile);
-        outStream.write(testFileContent.getBytes());
-        outStream.flush();
-        outStream.close();
-
-
-        final String result = SmosUtils.calculateFileHash(inputFile);
-        final MD5Encoder encoder = new MD5Encoder();
-        assertEquals(encoder.encode(testFileContent), result);
-    }
-
     ////////////////////////////////////////////////////////////////////////////////
     /////// END OF PUBLIC
     ////////////////////////////////////////////////////////////////////////////////
 
-    @Override
-    protected void tearDown() throws Exception {
-        if (TestUtil.TEST_PATH.isDirectory()) {
-            TestUtil.deleteFileTree(TestUtil.TEST_PATH);
+    static boolean isSameDay(Date date_1, Date date_2) {
+        if (date_1 == null || date_2 == null) {
+            return false;
         }
+
+        final Calendar cal_1 = GregorianCalendar.getInstance();
+        cal_1.setTime(date_1);
+        final Calendar cal_2 = GregorianCalendar.getInstance();
+        cal_2.setTime(date_2);
+
+        //noinspection RedundantIfStatement
+        if (cal_1.get(Calendar.YEAR) == cal_2.get(Calendar.YEAR)
+                && cal_1.get(Calendar.MONTH) == cal_2.get(Calendar.MONTH)
+                && cal_1.get(Calendar.DAY_OF_MONTH) == cal_2.get(Calendar.DAY_OF_MONTH)) {
+            return true;
+
+        }
+        return false;
     }
 }

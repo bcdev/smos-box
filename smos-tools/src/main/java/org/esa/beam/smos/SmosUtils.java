@@ -1,12 +1,9 @@
 package org.esa.beam.smos;
 
-import com.bc.util.encoder.MD5Encoder;
 import org.esa.beam.util.StringUtils;
 import org.esa.beam.util.io.FileUtils;
 
 import java.io.File;
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -236,11 +233,6 @@ public class SmosUtils {
         return formatName.contains("MIR_BWLD1C")
                 || formatName.contains("MIR_BWSD1C")
                 || formatName.contains("MIR_BWND1C");
-    }
-
-    public static String calculateFileHash(File inputFile) throws IOException, NoSuchAlgorithmException {
-        final MD5Encoder md5Encoder = new MD5Encoder();
-        return md5Encoder.encode(inputFile);
     }
 
 

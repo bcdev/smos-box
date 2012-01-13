@@ -1,13 +1,12 @@
 <module>
     <manifestVersion>1.0.0</manifestVersion>
 
-    <symbolicName>smos-lsmask</symbolicName>
-    <name>SMOS Land/Sea Mask</name>
+    <symbolicName>smos-tools</symbolicName>
+    <name>SMOS Tools and Utilities</name>
     <version>2.2</version>
     <description>
-        This module provides the static land/sea mask mapped to BEAM image pixels.
+        This module provides utility classes for SMOS data handling
     </description>
-    <packaging>dir</packaging>
 
     <vendor>Brockmann Consult GmbH</vendor>
     <contactAddress>Max Planck Str.2, 21502 Geesthacht (Germany)</contactAddress>
@@ -15,17 +14,11 @@
     <url>http://envisat.esa.int/beam/</url>
     <licenseUrl>http://www.gnu.org/licenses/gpl.html</licenseUrl>
 
-    <changelog><![CDATA[
-        <p> Changes in 2.1.2:<br>
-         [SBOX-33] Inaccurate image-to-model transformation parameters<br>
-        </p>]]>
+    <changelog>
     </changelog>
 
-    <categories>SMOS</categories>
+    <categories>SMOS, Tools</categories>
 
-    <dependency>
-        <module>ceres-glayer</module>
-    </dependency>
     <dependency>
         <module>beam-core</module>
     </dependency>
