@@ -55,6 +55,9 @@
     <dependency>
         <module>smos-lsmask</module>
     </dependency>
+    <dependency>
+        <module>smos-tools</module>
+    </dependency>
 
     <categories>Reader,SMOS</categories>
 
