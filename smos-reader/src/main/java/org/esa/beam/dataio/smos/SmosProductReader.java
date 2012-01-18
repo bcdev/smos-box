@@ -97,7 +97,7 @@ public class SmosProductReader extends AbstractProductReader {
         return explorerFile;
     }
 
-    public ExplorerFile createExplorerFile(VirtualDir virtualDir) throws IOException {
+    public static ExplorerFile createExplorerFile(VirtualDir virtualDir) throws IOException {
         String listPath = "";
         String[] list = virtualDir.list(listPath);
         if (list.length == 1) {
