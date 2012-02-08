@@ -94,6 +94,11 @@ public class SmosUtils {
         return ".dbl".equalsIgnoreCase(extension);
     }
 
+    public static boolean isHdrFileName(String fileName) {
+        final String extension = FileUtils.getExtension(fileName);
+        return ".hdr".equalsIgnoreCase(extension);
+    }
+
     public static boolean isL0Type(String fileName) {
         return fileName.matches("SM_.{4}_MIR_SC_[DF]0__.{45}") ||
                 fileName.matches("SM_.{4}_MIR_TAR[DF]0__.{45}") ||

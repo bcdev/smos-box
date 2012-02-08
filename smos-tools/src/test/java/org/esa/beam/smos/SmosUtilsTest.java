@@ -89,6 +89,15 @@ public class SmosUtilsTest extends TestCase {
         assertTrue(SmosUtils.isDblFileName("SM_BLAH_MIR_TARD1A_20070223T112710_20070223T121514_001_001_0.DBL"));
     }
 
+    public void testIsHDRFileName() {
+        assertFalse(SmosUtils.isHdrFileName("plupsi.txt"));
+        assertFalse(SmosUtils.isHdrFileName("SM_OPER_MIR_BWLD1C_20121118T002733_20121118T012104_116_001_1.zip"));
+        assertFalse(SmosUtils.isHdrFileName("noExtensionFile"));
+
+        assertTrue(SmosUtils.isHdrFileName("SM_xxxx_MIR_CORN0__20070223T061024_20070223T062500_001_001_0.HDR"));
+        assertTrue(SmosUtils.isHdrFileName("SM_BLAH_MIR_TARD1A_20070223T112710_20070223T121514_001_001_0.hdr"));
+    }
+
     public void testIsL0FileType() {
         assertTrue(SmosUtils.isL0Type("SM_HELP_MIR_SC_F0__20070223T061024_20070223T062500_001_001_0.DBL"));
         assertTrue(SmosUtils.isL0Type("SM_xxxx_MIR_UNCU0__20070223T061024_20070223T062500_001_001_0.DBL"));

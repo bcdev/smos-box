@@ -135,9 +135,16 @@ public class SmosProductReader extends AbstractProductReader {
     @Override
     protected final Product readProductNodesImpl() throws IOException {
         synchronized (this) {
-            explorerFile = createExplorerFile(getInputVirtualDir());
+
+            final File inputFile = getInputFile();
+            final String inputFileName = inputFile.getName();
+            if (SmosUtils.isDblFileName(inputFileName) || SmosUtils.isHdrFileName(inputFileName)) {
+                explorerFile = createExplorerFile(inputFile);
+            } else {
+                explorerFile = createExplorerFile(getInputVirtualDir());
+            }
             final Product product = explorerFile.createProduct();
-            if (virtualDir.isCompressed()) {
+            if (virtualDir != null && virtualDir.isCompressed()) {
                 final String path = virtualDir.getBasePath();
                 product.setFileLocation(new File(path));
             } else {
