@@ -28,6 +28,7 @@ public class DddbTest {
     private static final String DBL_SM_XXXX_MIR_SMDAP2_0300 = "DBL_SM_XXXX_MIR_SMDAP2_0300";
     private static final String DBL_SM_XXXX_MIR_OSDAP2_0200 = "DBL_SM_XXXX_MIR_OSDAP2_0200";
     private static final String DBL_SM_XXXX_MIR_OSDAP2_0300 = "DBL_SM_XXXX_MIR_OSDAP2_0300";
+    private static final String DBL_SM_XXXX_MIR_SMUDP2_0200 = "DBL_SM_XXXX_MIR_SMUDP2_0200";
 
     @Test
     public void getBandDescriptors() {
@@ -121,5 +122,14 @@ public class DddbTest {
 
         final BandDescriptor out_of_lut_flags_4 = descriptors.getMember("Out_of_LUT_flags_4");
         assertNotNull(out_of_lut_flags_4);
+    }
+
+    @Test
+    public void testGetSMUPD2_v0200Descriptors() {
+        final Family<BandDescriptor> descriptors = Dddb.getInstance().getBandDescriptors(DBL_SM_XXXX_MIR_SMUDP2_0200);
+        assertEquals(63, descriptors.asList().size());
+
+        final BandDescriptor n_instrument_error = descriptors.getMember("N_Instrument_Error");
+        assertNotNull(n_instrument_error);
     }
 }
