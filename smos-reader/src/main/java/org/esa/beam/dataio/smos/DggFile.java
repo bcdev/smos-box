@@ -352,7 +352,8 @@ class DggFile extends ExplorerFile {
             product.setStartTime(ProductData.UTC.parse(validityStart, pattern));
             product.setEndTime(ProductData.UTC.parse(validityStop, pattern));
         } catch (Exception e) {
-            // ignore
+            System.out.println("e.getMessage() = " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
