@@ -28,6 +28,7 @@ import java.io.IOException;
 public class EEExportStream implements GridPointFilterStream {
 
     private final File targetDirectory;
+    private final int fileCounter;
 
     private DataContext targetContext;
     private EEExportGridPointHandler targetGridPointHandler;
@@ -36,6 +37,13 @@ public class EEExportStream implements GridPointFilterStream {
 
     public EEExportStream(File targetDirectory) {
         this.targetDirectory = targetDirectory;
+        fileCounter = 0;
+    }
+
+    @SuppressWarnings("UnusedDeclaration")
+    public EEExportStream(File targetDirectory, int fileCounter) {
+        this.targetDirectory = targetDirectory;
+        this.fileCounter = fileCounter;
     }
 
     @Override
@@ -55,8 +63,10 @@ public class EEExportStream implements GridPointFilterStream {
         final long gridPointCount = targetGridPointHandler.getGridPointCount();
         final boolean validPeriod = targetGridPointHandler.hasValidPeriod();
         final boolean validArea = targetGridPointHandler.hasValidArea();
-        final FileNamePatcher fileNamePatcher =
-                new FileNamePatcher(FileUtils.getFilenameWithoutExtension(targetDblFile));
+
+        final FileNamePatcher fileNamePatcher = new FileNamePatcher(FileUtils.getFilenameWithoutExtension(targetDblFile));
+        fileNamePatcher.setFileCounter(fileCounter);
+
         final EEHdrFilePatcher hdrFilePatcher = new EEHdrFilePatcher();
         hdrFilePatcher.setFileName(fileNamePatcher.getFileNameWithoutExtension());
         hdrFilePatcher.setGridPointCount(gridPointCount);
@@ -66,7 +76,7 @@ public class EEExportStream implements GridPointFilterStream {
                 fileNamePatcher.setStartDate(targetGridPointHandler.getSensingStart());
                 fileNamePatcher.setStopDate(targetGridPointHandler.getSensingStop());
                 hdrFilePatcher.setSensingPeriod(targetGridPointHandler.getSensingStart(),
-                                                targetGridPointHandler.getSensingStop());
+                        targetGridPointHandler.getSensingStop());
             }
             if (validArea) {
                 hdrFilePatcher.setArea(targetGridPointHandler.getArea());

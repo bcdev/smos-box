@@ -40,4 +40,40 @@ public class FileNamePatcherTest extends TestCase {
         assertEquals("SM_TEST_MIR_SCLD1C_20070223T061024_20070223T070437_141_000_0.DBL", patcher.getDblFileName());
         assertEquals("SM_TEST_MIR_SCLD1C_20070223T061024_20070223T070437_141_000_0", patcher.getFileNameWithoutExtension());
     }
+
+    public void testPatchFileCounter_noPatching() {
+        final FileNamePatcher patcher = new FileNamePatcher("SM_REPR_MIR_SCLF1C_20110904T022557_20110904T031917_504_001_5");
+        patcher.setFileCounter(0);
+
+        assertEquals("SM_REPR_MIR_SCLF1C_20110904T022557_20110904T031917_504_001_5.HDR", patcher.getHdrFileName());
+        assertEquals("SM_REPR_MIR_SCLF1C_20110904T022557_20110904T031917_504_001_5.DBL", patcher.getDblFileName());
+        assertEquals("SM_REPR_MIR_SCLF1C_20110904T022557_20110904T031917_504_001_5", patcher.getFileNameWithoutExtension());
+    }
+
+    public void testPatchFileCounter_oneDigit() {
+        final FileNamePatcher patcher = new FileNamePatcher("SM_REPR_MIR_SCLF1C_20110904T022557_20110904T031917_504_001_5");
+        patcher.setFileCounter(9);
+
+        assertEquals("SM_REPR_MIR_SCLF1C_20110904T022557_20110904T031917_504_009_5.HDR", patcher.getHdrFileName());
+        assertEquals("SM_REPR_MIR_SCLF1C_20110904T022557_20110904T031917_504_009_5.DBL", patcher.getDblFileName());
+        assertEquals("SM_REPR_MIR_SCLF1C_20110904T022557_20110904T031917_504_009_5", patcher.getFileNameWithoutExtension());
+    }
+
+    public void testPatchFileCounter_threeDigits() {
+        final FileNamePatcher patcher = new FileNamePatcher("SM_REPR_MIR_SCLF1C_20110904T022557_20110904T031917_504_001_5");
+        patcher.setFileCounter(198);
+
+        assertEquals("SM_REPR_MIR_SCLF1C_20110904T022557_20110904T031917_504_198_5.HDR", patcher.getHdrFileName());
+        assertEquals("SM_REPR_MIR_SCLF1C_20110904T022557_20110904T031917_504_198_5.DBL", patcher.getDblFileName());
+        assertEquals("SM_REPR_MIR_SCLF1C_20110904T022557_20110904T031917_504_198_5", patcher.getFileNameWithoutExtension());
+    }
+
+    public void testPatchFileCounter_fiveDigits() {
+        final FileNamePatcher patcher = new FileNamePatcher("SM_REPR_MIR_SCLF1C_20110904T022557_20110904T031917_504_001_5");
+        patcher.setFileCounter(12345);
+
+        assertEquals("SM_REPR_MIR_SCLF1C_20110904T022557_20110904T031917_504_345_5.HDR", patcher.getHdrFileName());
+        assertEquals("SM_REPR_MIR_SCLF1C_20110904T022557_20110904T031917_504_345_5.DBL", patcher.getDblFileName());
+        assertEquals("SM_REPR_MIR_SCLF1C_20110904T022557_20110904T031917_504_345_5", patcher.getFileNameWithoutExtension());
+    }
 }
