@@ -109,6 +109,15 @@ class EEExportGridPointHandler implements GridPointHandler {
         return gridPointCount;
     }
 
+    static float getL2MjdTimeStamp(CompoundData compoundData) throws IOException {
+        int index = compoundData.getType().getMemberIndex("Mean_Acq_Time");
+        if (index < 0) {
+            return 0.0f;
+        }
+
+        return compoundData.getFloat(index);
+    }
+
     private void trackSensingTime(CompoundData gridPointData) throws IOException {
         final CompoundType type = gridPointData.getType();
         final String typeName = type.getName();
@@ -116,11 +125,7 @@ class EEExportGridPointHandler implements GridPointHandler {
             return; // no sensing time information in ECMWF auxiliary files
         }
         if (level2) {
-            int index = gridPointData.getType().getMemberIndex("Mean_acq_time");
-            if (index < 0) {
-                return; // we have a data analysis product - no timing information stored in there
-            }
-            final float mjdTime = gridPointData.getFloat(index);
+            final float mjdTime = getL2MjdTimeStamp(gridPointData);
             if (mjdTime > 0) {  // condition for valid measurement
                 final Date date = DateTimeUtils.mjdFloatDateToUtc(mjdTime);
                 timeTracker.track(date);

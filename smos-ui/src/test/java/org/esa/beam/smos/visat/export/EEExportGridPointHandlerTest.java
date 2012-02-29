@@ -16,24 +16,24 @@
 
 package org.esa.beam.smos.visat.export;
 
-import com.bc.ceres.binio.CompoundData;
-import com.bc.ceres.binio.DataContext;
-import com.bc.ceres.binio.SequenceData;
+import com.bc.ceres.binio.*;
+import com.bc.ceres.binio.internal.InstanceFactory;
 import com.bc.ceres.binio.util.ByteArrayIOHandler;
 import com.bc.ceres.binio.util.DataPrinter;
-import org.esa.beam.dataio.smos.ExplorerFile;
-import org.esa.beam.dataio.smos.GridPointList;
-import org.esa.beam.dataio.smos.SmosConstants;
-import org.esa.beam.dataio.smos.SmosFile;
-import org.esa.beam.dataio.smos.SmosProductReader;
+import org.esa.beam.dataio.smos.*;
 import org.junit.Test;
 
+import javax.imageio.stream.MemoryCacheImageOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.ByteOrder;
 
+import static com.bc.ceres.binio.TypeBuilder.COMPOUND;
+import static com.bc.ceres.binio.TypeBuilder.MEMBER;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -79,6 +79,67 @@ public class EEExportGridPointHandlerTest {
 
         assertGridPointData(targetGridPointList.getCompound(0), 233545, 70.169426F, 173.99301F);
         assertGridPointData(targetGridPointList.getCompound(1), 235084, 62.994823F, 179.01186F);
+    }
+
+    @Test
+    public void testGetL2TimeStamp() throws IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        MemoryCacheImageOutputStream ios = new MemoryCacheImageOutputStream(baos);
+        ios.setByteOrder(ByteOrder.LITTLE_ENDIAN);
+        ios.writeFloat(26.99f);
+        ios.close();
+
+        CompoundType type = COMPOUND("dontcare",
+                                     MEMBER("Mean_Acq_Time", SimpleType.FLOAT));
+
+        byte[] byteData = baos.toByteArray();
+        DataContext context = new DataFormat(type, ByteOrder.LITTLE_ENDIAN).createContext(
+                new ByteArrayIOHandler(byteData));
+
+        CompoundData compoundData = InstanceFactory.createCompound(context, null, type, 0,
+                                                                   ByteOrder.LITTLE_ENDIAN);
+
+        float mjd = EEExportGridPointHandler.getL2MjdTimeStamp(compoundData);
+        assertEquals(26.99f, mjd, 1e-8);
+
+        baos = new ByteArrayOutputStream();
+        ios = new MemoryCacheImageOutputStream(baos);
+        ios.setByteOrder(ByteOrder.LITTLE_ENDIAN);
+        ios.writeFloat(19987.6f);
+        ios.close();
+
+
+        byteData = baos.toByteArray();
+        context = new DataFormat(type, ByteOrder.LITTLE_ENDIAN).createContext(
+                new ByteArrayIOHandler(byteData));
+
+        compoundData = InstanceFactory.createCompound(context, null, type, 0,
+                                                                   ByteOrder.LITTLE_ENDIAN);
+
+        mjd = EEExportGridPointHandler.getL2MjdTimeStamp(compoundData);
+        assertEquals(19987.6f, mjd, 1e-8);
+    }
+
+    @Test
+    public void testGetL2TimeStamp_notExistingMember() throws IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        MemoryCacheImageOutputStream ios = new MemoryCacheImageOutputStream(baos);
+        ios.setByteOrder(ByteOrder.LITTLE_ENDIAN);
+        ios.writeFloat(26.99f);
+        ios.close();
+
+        CompoundType type = COMPOUND("dontcare",
+                                     MEMBER("schnickschnack", SimpleType.FLOAT));
+
+        byte[] byteData = baos.toByteArray();
+        DataContext context = new DataFormat(type, ByteOrder.LITTLE_ENDIAN).createContext(
+                new ByteArrayIOHandler(byteData));
+
+        CompoundData compoundData = InstanceFactory.createCompound(context, null, type, 0,
+                                                                   ByteOrder.LITTLE_ENDIAN);
+
+        float mjd = EEExportGridPointHandler.getL2MjdTimeStamp(compoundData);
+        assertEquals(0, mjd, 1e-8);
     }
 
     private static void assertGridPointData(CompoundData gridPointData, int id, float... bt) throws IOException {
