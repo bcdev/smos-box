@@ -149,6 +149,34 @@ public class EEExportGridPointHandlerTest {
         assertNull(l2MjdTimeStamp);
     }
 
+    @Test
+    public void testGetL2TimeStamp_zeroValues() throws IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        MemoryCacheImageOutputStream ios = new MemoryCacheImageOutputStream(baos);
+        ios.setByteOrder(ByteOrder.LITTLE_ENDIAN);
+        ios.writeInt(0);
+        ios.writeInt(0);
+        ios.writeInt(0);
+        ios.close();
+
+        CompoundType type = COMPOUND("dontcare", MEMBER("Mean_Acq_Time",
+                                                        COMPOUND("UTC_Type",
+                                                                 MEMBER("Days", SimpleType.INT),
+                                                                 MEMBER("Seconds", SimpleType.UINT),
+                                                                 MEMBER("Microseconds", SimpleType.UINT))));
+
+
+        byte[] byteData = baos.toByteArray();
+        DataContext context = new DataFormat(type, ByteOrder.LITTLE_ENDIAN).createContext(
+                new ByteArrayIOHandler(byteData));
+
+        CompoundData compoundData = InstanceFactory.createCompound(context, null, type, 0,
+                                                                   ByteOrder.LITTLE_ENDIAN);
+
+        Date l2MjdTimeStamp = EEExportGridPointHandler.getL2MjdTimeStamp(compoundData);
+        assertNull(l2MjdTimeStamp);
+    }
+
     private static void assertGridPointData(CompoundData gridPointData, int id, float... bt) throws IOException {
         assertEquals(id, gridPointData.getInt("Grid_Point_ID"));
 

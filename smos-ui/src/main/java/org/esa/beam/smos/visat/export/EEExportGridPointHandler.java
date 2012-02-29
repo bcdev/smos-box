@@ -120,6 +120,10 @@ class EEExportGridPointHandler implements GridPointHandler {
         final long seconds = utcCompound.getUInt("Seconds");
         final long microseconds = utcCompound.getUInt("Microseconds");
 
+        if ((days + seconds + microseconds) == 0) {
+            return null;
+        }
+
         return DateTimeUtils.cfiDateToUtc(days, seconds, microseconds);
     }
 
