@@ -31,11 +31,11 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.ByteOrder;
+import java.util.Date;
 
 import static com.bc.ceres.binio.TypeBuilder.COMPOUND;
 import static com.bc.ceres.binio.TypeBuilder.MEMBER;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class EEExportGridPointHandlerTest {
 
@@ -86,11 +86,17 @@ public class EEExportGridPointHandlerTest {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         MemoryCacheImageOutputStream ios = new MemoryCacheImageOutputStream(baos);
         ios.setByteOrder(ByteOrder.LITTLE_ENDIAN);
-        ios.writeFloat(26.99f);
+        ios.writeInt(1250);
+        ios.writeInt(890);
+        ios.writeInt(100);
         ios.close();
 
-        CompoundType type = COMPOUND("dontcare",
-                                     MEMBER("Mean_Acq_Time", SimpleType.FLOAT));
+        CompoundType type = COMPOUND("dontcare", MEMBER("Mean_Acq_Time",
+                                                        COMPOUND("UTC_Type",
+                                                                 MEMBER("Days", SimpleType.INT),
+                                                                 MEMBER("Seconds", SimpleType.UINT),
+                                                                 MEMBER("Microseconds", SimpleType.UINT))));
+
 
         byte[] byteData = baos.toByteArray();
         DataContext context = new DataFormat(type, ByteOrder.LITTLE_ENDIAN).createContext(
@@ -99,25 +105,26 @@ public class EEExportGridPointHandlerTest {
         CompoundData compoundData = InstanceFactory.createCompound(context, null, type, 0,
                                                                    ByteOrder.LITTLE_ENDIAN);
 
-        float mjd = EEExportGridPointHandler.getL2MjdTimeStamp(compoundData);
-        assertEquals(26.99f, mjd, 1e-8);
+        Date l2MjdTimeStamp = EEExportGridPointHandler.getL2MjdTimeStamp(compoundData);
+        assertEquals(new Date(1054685690000L), l2MjdTimeStamp);
 
         baos = new ByteArrayOutputStream();
         ios = new MemoryCacheImageOutputStream(baos);
         ios.setByteOrder(ByteOrder.LITTLE_ENDIAN);
-        ios.writeFloat(19987.6f);
+        ios.writeInt(1252);
+        ios.writeInt(890);
+        ios.writeInt(100);
         ios.close();
-
 
         byteData = baos.toByteArray();
         context = new DataFormat(type, ByteOrder.LITTLE_ENDIAN).createContext(
                 new ByteArrayIOHandler(byteData));
 
         compoundData = InstanceFactory.createCompound(context, null, type, 0,
-                                                                   ByteOrder.LITTLE_ENDIAN);
+                                                      ByteOrder.LITTLE_ENDIAN);
 
-        mjd = EEExportGridPointHandler.getL2MjdTimeStamp(compoundData);
-        assertEquals(19987.6f, mjd, 1e-8);
+        l2MjdTimeStamp = EEExportGridPointHandler.getL2MjdTimeStamp(compoundData);
+        assertEquals(new Date(1054858490000L), l2MjdTimeStamp);
     }
 
     @Test
@@ -138,8 +145,8 @@ public class EEExportGridPointHandlerTest {
         CompoundData compoundData = InstanceFactory.createCompound(context, null, type, 0,
                                                                    ByteOrder.LITTLE_ENDIAN);
 
-        float mjd = EEExportGridPointHandler.getL2MjdTimeStamp(compoundData);
-        assertEquals(0, mjd, 1e-8);
+        final Date l2MjdTimeStamp = EEExportGridPointHandler.getL2MjdTimeStamp(compoundData);
+        assertNull(l2MjdTimeStamp);
     }
 
     private static void assertGridPointData(CompoundData gridPointData, int id, float... bt) throws IOException {

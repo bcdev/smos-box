@@ -109,13 +109,18 @@ class EEExportGridPointHandler implements GridPointHandler {
         return gridPointCount;
     }
 
-    static float getL2MjdTimeStamp(CompoundData compoundData) throws IOException {
+    static Date getL2MjdTimeStamp(CompoundData compoundData) throws IOException {
         int index = compoundData.getType().getMemberIndex("Mean_Acq_Time");
         if (index < 0) {
-            return 0.0f;
+            return null;
         }
 
-        return compoundData.getFloat(index);
+        final CompoundData utcCompound = compoundData.getCompound(index);
+        final int days = utcCompound.getInt("Days");
+        final long seconds = utcCompound.getUInt("Seconds");
+        final long microseconds = utcCompound.getUInt("Microseconds");
+
+        return DateTimeUtils.cfiDateToUtc(days, seconds, microseconds);
     }
 
     private void trackSensingTime(CompoundData gridPointData) throws IOException {
@@ -125,10 +130,9 @@ class EEExportGridPointHandler implements GridPointHandler {
             return; // no sensing time information in ECMWF auxiliary files
         }
         if (level2) {
-            final float mjdTime = getL2MjdTimeStamp(gridPointData);
-            if (mjdTime > 0) {  // condition for valid measurement
-                final Date date = DateTimeUtils.mjdFloatDateToUtc(mjdTime);
-                timeTracker.track(date);
+            final Date timeStamp = getL2MjdTimeStamp(gridPointData);
+            if (timeStamp != null) {  // condition for valid measurement
+                timeTracker.track(timeStamp);
             }
         } else {
             int index = type.getMemberIndex(SmosConstants.BT_DATA_LIST_NAME);
