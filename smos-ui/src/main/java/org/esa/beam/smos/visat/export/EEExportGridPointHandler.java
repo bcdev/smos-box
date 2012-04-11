@@ -115,6 +115,15 @@ class EEExportGridPointHandler implements GridPointHandler {
             return null;
         }
 
+        final Type acqTimeType = compoundData.getType().getMemberType(index);
+        if (acqTimeType.isSimpleType()) {
+            return getOSUDPDate(compoundData, index);
+        } else {
+            return getSMUDPDate(compoundData, index);
+        }
+    }
+
+    private static Date getSMUDPDate(CompoundData compoundData, int index) throws IOException {
         final CompoundData utcCompound = compoundData.getCompound(index);
         final int days = utcCompound.getInt("Days");
         final long seconds = utcCompound.getUInt("Seconds");
@@ -125,6 +134,14 @@ class EEExportGridPointHandler implements GridPointHandler {
         }
 
         return DateTimeUtils.cfiDateToUtc(days, seconds, microseconds);
+    }
+
+    private static Date getOSUDPDate(CompoundData compoundData, int index) throws IOException {
+        final float floatDate = compoundData.getFloat(index);
+        if (floatDate > 0.f) {
+            return DateTimeUtils.mjdFloatDateToUtc(floatDate);
+        }
+        return null;
     }
 
     private void trackSensingTime(CompoundData gridPointData) throws IOException {
