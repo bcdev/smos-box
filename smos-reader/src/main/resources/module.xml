@@ -19,6 +19,11 @@
     <licenseUrl>http://www.gnu.org/licenses/gpl.html</licenseUrl>
 
     <changelog><![CDATA[
+       <p> Changes in 2.2:<br>
+        [SBOX-45] Update to BEAM 4.10<br>
+        [SBOX-44] Prob_RFI that is not reported correctly<br>
+        [SBOX-43] Extend Reader to support compressed files<br>
+        [SBOX-42] New ECMWF products generated with processor version 315<br>
        <p> Changes in 2.1.3:<br>
         [SBOX-39] Add support for AUX_DGGTLV<br>
         [SBOX-38] Add support for AUX_DGGTFO<br>

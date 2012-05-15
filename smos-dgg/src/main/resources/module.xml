@@ -17,6 +17,8 @@
     <licenseUrl>http://www.gnu.org/licenses/gpl.html</licenseUrl>
 
     <changelog><![CDATA[
+        <p> Changes in 2.2:<br>
+         [SBOX-45] Update to BEAM 4.10<br>
         <p> Changes in 2.1.2:<br>
          [SBOX-33] Inaccurate image-to-model transformation parameters<br>
         </p>]]>
