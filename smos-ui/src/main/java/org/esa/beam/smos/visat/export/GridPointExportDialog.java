@@ -33,7 +33,11 @@ import org.esa.beam.dataio.smos.ExplorerFile;
 import org.esa.beam.dataio.smos.SmosFile;
 import org.esa.beam.dataio.smos.SmosProductReader;
 import org.esa.beam.framework.dataio.ProductReader;
-import org.esa.beam.framework.datamodel.*;
+import org.esa.beam.framework.datamodel.PlainFeatureFactory;
+import org.esa.beam.framework.datamodel.Product;
+import org.esa.beam.framework.datamodel.ProductNode;
+import org.esa.beam.framework.datamodel.ProductNodeGroup;
+import org.esa.beam.framework.datamodel.VectorDataNode;
 import org.esa.beam.framework.gpf.annotations.ParameterDescriptorFactory;
 import org.esa.beam.framework.ui.AppContext;
 import org.esa.beam.framework.ui.ModalDialog;
@@ -182,15 +186,11 @@ class GridPointExportDialog extends ModalDialog {
             final List<VectorDataNode> geometryNodeList = new ArrayList<VectorDataNode>();
             final ProductNodeGroup<VectorDataNode> vectorDataGroup = selectedProduct.getVectorDataGroup();
             for (VectorDataNode node : vectorDataGroup.toArray(new VectorDataNode[vectorDataGroup.getNodeCount()])) {
-                // @todo tb/** name may change. When beam 4.10 is stable, replace with beam-constant
-                if (node.getFeatureType().getTypeName().equals("org.esa.beam.Geometry")) {
+                if (node.getFeatureType().getTypeName().equals(PlainFeatureFactory.DEFAULT_TYPE_NAME)) {
                     if (!node.getFeatureCollection().isEmpty()) {
                         geometryNodeList.add(node);
                     }
                 }
-            }
-            if (selectedProduct.getPinGroup().getNodeCount() != 0) {
-                propertyContainer.setValue(ALIAS_ROI_TYPE, 1);
             }
             if (!geometryNodeList.isEmpty()) {
                 final PropertyDescriptor descriptor = propertyContainer.getDescriptor(ALIAS_GEOMETRY);
@@ -200,6 +200,8 @@ class GridPointExportDialog extends ModalDialog {
 
                 propertyContainer.setValue(ALIAS_ROI_TYPE, 0);
                 propertyContainer.getProperty(ALIAS_GEOMETRY).setValue(geometryNodeList.get(0));
+            } else if (selectedProduct.getPinGroup().getNodeCount() != 0) {
+                propertyContainer.setValue(ALIAS_ROI_TYPE, 1);
             }
         }
         propertyContainer.setValue(ALIAS_USE_SELECTED_PRODUCT, selectedProduct != null);
