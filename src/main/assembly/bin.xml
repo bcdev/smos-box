@@ -1,6 +1,6 @@
 <assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.1"
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0 http://maven.apache.org/xsd/assembly-1.1.1.xsd">
+        >
     <id>bin</id>
 
     <includeBaseDirectory>false</includeBaseDirectory>
@@ -71,29 +71,39 @@
                     ${artifact.artifactId}-${artifact.version}.${artifact.extension}
                 </outputFileNameMapping>
                 <!-- the following is left here as example of how to include extra dependencies (rq-20100715) -->
-                <!--
-                                <dependencySets>
-                                    <dependencySet>
-                                        <fileMode>0444</fileMode>
-                                        <unpack>false</unpack>
-                                        <outputDirectory>bin</outputDirectory>
-                                        <outputFileNameMapping>${artifact.artifactId}.${artifact.extension}</outputFileNameMapping>
-                                        <includes>
-                                            <include>com.bc.ceres:ceres-launcher</include>
-                                        </includes>
-                                    </dependencySet>
-                                    <dependencySet>
-                                        <fileMode>0444</fileMode>
-                                        <unpack>false</unpack>
-                                        <outputDirectory>modules</outputDirectory>
-                                        <outputFileNameMapping>${artifact.artifactId}-${artifact.version}.${artifact.extension}
-                                        </outputFileNameMapping>
-                                        <includes>
-                                            <include>com.bc.ceres:ceres-binio</include>
-                                        </includes>
-                                    </dependencySet>
-                                </dependencySets>
-                -->
+                <dependencySets>
+                    <!--
+                    <dependencySet>
+                        <fileMode>0444</fileMode>
+                        <unpack>false</unpack>
+                        <outputDirectory>bin</outputDirectory>
+                        <outputFileNameMapping>${artifact.artifactId}.${artifact.extension}</outputFileNameMapping>
+                        <includes>
+                            <include>com.bc.ceres:ceres-launcher</include>
+                        </includes>
+                    </dependencySet>
+                    <dependencySet>
+                        <fileMode>0444</fileMode>
+                        <unpack>false</unpack>
+                        <outputDirectory>modules</outputDirectory>
+                        <outputFileNameMapping>${artifact.artifactId}-${artifact.version}.${artifact.extension}
+                        </outputFileNameMapping>
+                        <includes>
+                            <include>com.bc.ceres:ceres-binio</include>
+                        </includes>
+                    </dependencySet>
+                    -->
+                    <dependencySet>
+                        <fileMode>0444</fileMode>
+                        <unpack>false</unpack>
+                        <outputDirectory>modules</outputDirectory>
+                        <outputFileNameMapping>${artifact.artifactId}-${artifact.version}.${artifact.extension}
+                        </outputFileNameMapping>
+                        <includes>
+                            <include>org.esa.beam:beam-core</include>
+                        </includes>
+                    </dependencySet>
+                </dependencySets>
             </binaries>
         </moduleSet>
     </moduleSets>
