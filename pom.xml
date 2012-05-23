@@ -85,7 +85,7 @@
     -->
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <beam.version>4.10</beam.version>
+        <beam.version>RELEASE</beam.version>
         <ceres.version>0.13</ceres.version>
     </properties>
 
@@ -156,7 +156,7 @@
             <dependency>
                 <groupId>org.esa.beam</groupId>
                 <artifactId>blue-marble-worldmap</artifactId>
-                <version>1.0.1</version>
+                <version>RELEASE</version>
             </dependency>
             <dependency>
                 <groupId>org.esa.beam</groupId>
