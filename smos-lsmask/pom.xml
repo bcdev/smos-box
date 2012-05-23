@@ -10,7 +10,7 @@
     <groupId>org.esa.beam.smos</groupId>
     <artifactId>smos-lsmask</artifactId>
     <name>SMOS Land/Sea Mask</name>
-    <version>2.2</version>
+    <version>2.2-SNAPSHOT</version>
 
     <dependencies>
         <dependency>
