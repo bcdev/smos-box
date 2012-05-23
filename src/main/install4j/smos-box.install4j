@@ -189,7 +189,7 @@ if (!existingBeamVersion.startsWith(requiredBeamVersion)) {
 File[] smosModuleFiles = modulesDir.listFiles(new FileFilter() {
     public boolean accept(File file) {
         String name = file.getName();
-        return name.startsWith("smos-") || name.startsWith("beam-");
+        return name.startsWith("smos-") || name.startsWith("beam-core");
     }
 });
 
