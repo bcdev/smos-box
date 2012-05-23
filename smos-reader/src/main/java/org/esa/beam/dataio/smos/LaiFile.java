@@ -47,10 +47,6 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 class LaiFile extends ExplorerFile {
 
@@ -75,7 +71,7 @@ class LaiFile extends ExplorerFile {
     private final double scalingFactor;
 
     private final long zoneIndexMultiplier;
-    private volatile Future<List<Dffg>> gridListFuture;
+    private volatile List<Dffg> gridList = null;
 
     LaiFile(File hdrFile, File dblFile, DataFormat dataFormat) throws IOException {
         super(hdrFile, dblFile, dataFormat);
@@ -266,30 +262,22 @@ class LaiFile extends ExplorerFile {
     }
 
     private List<Dffg> getGridList() {
-        try {
-            return getGridListFuture().get();
-        } catch (InterruptedException e) {
-            throw new IllegalStateException(e);
-        } catch (ExecutionException e) {
-            throw new IllegalStateException(e.getCause());
-        }
-    }
+        List<Dffg> result = gridList;
 
-    private Future<List<Dffg>> getGridListFuture() {
-        if (gridListFuture == null) {
+        if (result == null) {
             synchronized (this) {
-                if (gridListFuture == null) {
-                    gridListFuture = Executors.newSingleThreadExecutor().submit(
-                            new Callable<List<Dffg>>() {
-                                @Override
-                                public List<Dffg> call() throws IOException {
-                                    return createGridList();
-                                }
-                            });
+                result = gridList;
+                if (result == null) {
+                    try {
+                        gridList = result = createGridList();
+                    } catch (IOException e) {
+                        throw new RuntimeException("Cannot create zone list.", e);
+                    }
                 }
             }
         }
-        return gridListFuture;
+
+        return result;
     }
 
     private List<Dffg> createGridList() throws IOException {

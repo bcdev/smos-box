@@ -27,16 +27,12 @@ import java.io.File;
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.Arrays;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 class DggFile extends ExplorerFile {
 
     private final GridPointList gridPointList;
     private final int gridPointIdIndex;
-    private volatile Future<GridPointInfo> gridPointInfoFuture;
+    private volatile GridPointInfo gridPointInfo = null;
 
     protected DggFile(File hdrFile, File dblFile, DataFormat format, boolean fromZones) throws IOException {
         super(hdrFile, dblFile, format);
@@ -126,31 +122,27 @@ class DggFile extends ExplorerFile {
         return gridPointList;
     }
 
-    private Future<GridPointInfo> getGridPointInfoFuture() {
-        if (gridPointInfoFuture == null) {
+    private GridPointInfo getGridPointInfo() {
+        GridPointInfo result = gridPointInfo;
+
+        if (result == null) {
             synchronized (this) {
-                if (gridPointInfoFuture == null) {
-                    gridPointInfoFuture = Executors.newSingleThreadExecutor().submit(new Callable<GridPointInfo>() {
-                        @Override
-                        public GridPointInfo call() throws IOException {
-                            return createGridPointInfo();
-                        }
-                    });
+                result = gridPointInfo;
+                if (result == null) {
+                    try {
+                        gridPointInfo = result = createGridPointInfo();
+                    } catch (IOException e) {
+                        throw new RuntimeException("Cannot read grid point information.", e);
+                    }
                 }
             }
         }
 
-        return gridPointInfoFuture;
+        return result;
     }
 
     public final int getGridPointIndex(int seqnum) {
-        try {
-            return getGridPointInfoFuture().get().getGridPointIndex(seqnum);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        } catch (ExecutionException e) {
-            throw new RuntimeException(e.getCause());
-        }
+        return getGridPointInfo().getGridPointIndex(seqnum);
     }
 
     public final CompoundType getGridPointType() {

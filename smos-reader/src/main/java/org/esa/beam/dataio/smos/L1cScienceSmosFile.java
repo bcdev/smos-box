@@ -36,10 +36,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 /**
  * Represents a SMOS L1c Science product file.
@@ -64,7 +60,7 @@ public class L1cScienceSmosFile extends L1cSmosFile {
     private final SequenceData snapshotList;
     private final CompoundType snapshotType;
 
-    private volatile Future<SnapshotInfo> snapshotInfoFuture;
+    private volatile SnapshotInfo snapshotInfo = null;
 
     L1cScienceSmosFile(File hdrFile, File dblFile, DataFormat format) throws IOException {
         super(hdrFile, dblFile, format);
@@ -149,17 +145,28 @@ public class L1cScienceSmosFile extends L1cSmosFile {
     }
 
     public boolean hasSnapshotInfo() {
-        return getSnapshotInfoFuture().isDone();
+        synchronized (this) {
+            return snapshotInfo != null;
+        }
     }
 
     public SnapshotInfo getSnapshotInfo() {
-        try {
-            return getSnapshotInfoFuture().get();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        } catch (ExecutionException e) {
-            throw new RuntimeException(e.getCause());
+        SnapshotInfo result = snapshotInfo;
+
+        if (result == null) {
+            synchronized (this) {
+                result = snapshotInfo;
+                if (result == null) {
+                    try {
+                        snapshotInfo = result = createSnapshotInfo();
+                    } catch (IOException e) {
+                        throw new RuntimeException("Cannot read snapshot information.", e);
+                    }
+                }
+            }
         }
+
+        return result;
     }
 
     byte getBrowseBtDataValueByte(int gridPointIndex, int memberIndex, int polarization) throws IOException {
@@ -299,23 +306,6 @@ public class L1cScienceSmosFile extends L1cSmosFile {
                 "No data found for grid point ''{0}'' and polarisation ''{1}''.", gridPointIndex, polarization));
     }
 
-    private Future<SnapshotInfo> getSnapshotInfoFuture() {
-        if (snapshotInfoFuture == null) {
-            synchronized (this) {
-                if (snapshotInfoFuture == null) {
-                    snapshotInfoFuture = Executors.newSingleThreadExecutor().submit(new Callable<SnapshotInfo>() {
-                        @Override
-                        public SnapshotInfo call() throws IOException {
-                            return createSnapshotInfo();
-                        }
-                    });
-                }
-            }
-        }
-
-        return snapshotInfoFuture;
-    }
-
     private SnapshotInfo createSnapshotInfo() throws IOException {
         final Set<Long> all = new TreeSet<Long>();
         final Set<Long> x = new TreeSet<Long>();
@@ -361,16 +351,16 @@ public class L1cScienceSmosFile extends L1cSmosFile {
 
                     final int flags = btData.getInt(flagsIndex);
                     switch (flags & SmosConstants.L1C_POL_MODE_FLAGS_MASK) {
-                    case SmosConstants.L1C_POL_MODE_X:
-                        x.add(id);
-                        break;
-                    case SmosConstants.L1C_POL_MODE_Y:
-                        y.add(id);
-                        break;
-                    case SmosConstants.L1C_POL_MODE_XY1:
-                    case SmosConstants.L1C_POL_MODE_XY2:
-                        xy.add(id);
-                        break;
+                        case SmosConstants.L1C_POL_MODE_X:
+                            x.add(id);
+                            break;
+                        case SmosConstants.L1C_POL_MODE_Y:
+                            y.add(id);
+                            break;
+                        case SmosConstants.L1C_POL_MODE_XY1:
+                        case SmosConstants.L1C_POL_MODE_XY2:
+                            xy.add(id);
+                            break;
                     }
                 }
             }
