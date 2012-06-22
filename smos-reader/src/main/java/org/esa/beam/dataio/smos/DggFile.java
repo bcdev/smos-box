@@ -37,8 +37,8 @@ class DggFile extends ExplorerFile {
     private final GridPointList gridPointList;
     private final int gridPointIdIndex;
 
-    private final Future<Area> areaFuture;
-    private final Future<GridPointInfo> gridPointInfoFuture;
+    private final Area area;
+    private final GridPointInfo gridPointInfo;
 
     protected DggFile(File hdrFile, File dblFile, DataFormat format, boolean fromZones) throws IOException {
         super(hdrFile, dblFile, format);
@@ -53,18 +53,8 @@ class DggFile extends ExplorerFile {
             throw new IOException(MessageFormat.format(
                     "Unable to read SMOS File ''{0}'': {1}.", dblFile.getPath(), e.getMessage()), e);
         }
-        areaFuture = Executors.newSingleThreadExecutor().submit(new Callable<Area>() {
-            @Override
-            public Area call() throws IOException {
-                return computeArea();
-            }
-        });
-        gridPointInfoFuture = Executors.newSingleThreadExecutor().submit(new Callable<GridPointInfo>() {
-            @Override
-            public GridPointInfo call() throws IOException {
-                return createGridPointInfo();
-            }
-        });
+        area = computeArea();
+        gridPointInfo = createGridPointInfo();
     }
 
     protected GridPointList createGridPointList(final SequenceData sequence) {
@@ -141,13 +131,7 @@ class DggFile extends ExplorerFile {
     }
 
     public final int getGridPointIndex(int seqnum) {
-        try {
-            return gridPointInfoFuture.get().getGridPointIndex(seqnum);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        } catch (ExecutionException e) {
-            throw new RuntimeException(e.getCause());
-        }
+        return gridPointInfo.getGridPointIndex(seqnum);
     }
 
     public final CompoundType getGridPointType() {
@@ -160,13 +144,7 @@ class DggFile extends ExplorerFile {
 
     @Override
     protected final Area getArea() {
-        try {
-            return areaFuture.get();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        } catch (ExecutionException e) {
-            throw new RuntimeException(e.getCause());
-        }
+        return new Area(area);
     }
 
     private Area computeArea() throws IOException {
