@@ -36,6 +36,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 /**
  * Represents a SMOS L1c Science product file.
@@ -60,7 +64,7 @@ public class L1cScienceSmosFile extends L1cSmosFile {
     private final SequenceData snapshotList;
     private final CompoundType snapshotType;
 
-    private volatile SnapshotInfo snapshotInfo = null;
+    private final Future<SnapshotInfo> snapshotInfoFuture;
 
     L1cScienceSmosFile(File hdrFile, File dblFile, DataFormat format) throws IOException {
         super(hdrFile, dblFile, format);
@@ -80,6 +84,13 @@ public class L1cScienceSmosFile extends L1cSmosFile {
             throw new IOException("Data block does not include snapshot list.");
         }
         snapshotType = (CompoundType) snapshotList.getType().getElementType();
+
+        snapshotInfoFuture = Executors.newSingleThreadExecutor().submit(new Callable<SnapshotInfo>() {
+            @Override
+            public SnapshotInfo call() throws IOException {
+                return createSnapshotInfo();
+            }
+        });
     }
 
     private double getIncidenceAngleScalingFactor(Family<BandDescriptor> descriptors) {
@@ -145,28 +156,17 @@ public class L1cScienceSmosFile extends L1cSmosFile {
     }
 
     public boolean hasSnapshotInfo() {
-        synchronized (this) {
-            return snapshotInfo != null;
-        }
+        return snapshotInfoFuture.isDone();
     }
 
     public SnapshotInfo getSnapshotInfo() {
-        SnapshotInfo result = snapshotInfo;
-
-        if (result == null) {
-            synchronized (this) {
-                result = snapshotInfo;
-                if (result == null) {
-                    try {
-                        snapshotInfo = result = createSnapshotInfo();
-                    } catch (IOException e) {
-                        throw new RuntimeException("Cannot read snapshot information.", e);
-                    }
-                }
-            }
+        try {
+            return snapshotInfoFuture.get();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e.getCause());
         }
-
-        return result;
     }
 
     byte getBrowseBtDataValueByte(int gridPointIndex, int memberIndex, int polarization) throws IOException {

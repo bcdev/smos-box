@@ -27,12 +27,18 @@ import java.io.File;
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.Arrays;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 class DggFile extends ExplorerFile {
 
     private final GridPointList gridPointList;
     private final int gridPointIdIndex;
-    private volatile GridPointInfo gridPointInfo = null;
+
+    private final Future<Area> areaFuture;
+    private final Future<GridPointInfo> gridPointInfoFuture;
 
     protected DggFile(File hdrFile, File dblFile, DataFormat format, boolean fromZones) throws IOException {
         super(hdrFile, dblFile, format);
@@ -47,6 +53,18 @@ class DggFile extends ExplorerFile {
             throw new IOException(MessageFormat.format(
                     "Unable to read SMOS File ''{0}'': {1}.", dblFile.getPath(), e.getMessage()), e);
         }
+        areaFuture = Executors.newSingleThreadExecutor().submit(new Callable<Area>() {
+            @Override
+            public Area call() throws IOException {
+                return computeArea();
+            }
+        });
+        gridPointInfoFuture = Executors.newSingleThreadExecutor().submit(new Callable<GridPointInfo>() {
+            @Override
+            public GridPointInfo call() throws IOException {
+                return createGridPointInfo();
+            }
+        });
     }
 
     protected GridPointList createGridPointList(final SequenceData sequence) {
@@ -122,27 +140,14 @@ class DggFile extends ExplorerFile {
         return gridPointList;
     }
 
-    private GridPointInfo getGridPointInfo() {
-        GridPointInfo result = gridPointInfo;
-
-        if (result == null) {
-            synchronized (this) {
-                result = gridPointInfo;
-                if (result == null) {
-                    try {
-                        gridPointInfo = result = createGridPointInfo();
-                    } catch (IOException e) {
-                        throw new RuntimeException("Cannot read grid point information.", e);
-                    }
-                }
-            }
-        }
-
-        return result;
-    }
-
     public final int getGridPointIndex(int seqnum) {
-        return getGridPointInfo().getGridPointIndex(seqnum);
+        try {
+            return gridPointInfoFuture.get().getGridPointIndex(seqnum);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e.getCause());
+        }
     }
 
     public final CompoundType getGridPointType() {
@@ -154,7 +159,17 @@ class DggFile extends ExplorerFile {
     }
 
     @Override
-    protected final Area computeArea() throws IOException {
+    protected final Area getArea() {
+        try {
+            return areaFuture.get();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e.getCause());
+        }
+    }
+
+    private Area computeArea() throws IOException {
         final int latIndex = getGridPointType().getMemberIndex(SmosConstants.GRID_POINT_LAT_NAME);
         final int lonIndex = getGridPointType().getMemberIndex(SmosConstants.GRID_POINT_LON_NAME);
 
@@ -167,7 +182,7 @@ class DggFile extends ExplorerFile {
 
         final Area envelope = new Area();
         for (int i = 0; i < gridPointList.getElementCount(); i++) {
-            CompoundData compound = gridPointList.getCompound(i);
+            final CompoundData compound = gridPointList.getCompound(i);
             double lon = compound.getFloat(lonIndex);
             double lat = compound.getFloat(latIndex);
 

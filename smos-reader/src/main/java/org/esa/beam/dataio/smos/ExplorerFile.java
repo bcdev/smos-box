@@ -32,6 +32,10 @@ import java.io.File;
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.Iterator;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public abstract class ExplorerFile {
 
@@ -42,7 +46,6 @@ public abstract class ExplorerFile {
     private final DataFormat dataFormat;
     private final DataContext dataContext;
     private final CompoundData dataBlock;
-    private volatile Area area = null;
 
     protected ExplorerFile(File hdrFile, File dblFile, DataFormat dataFormat) throws IOException {
         this.hdrFile = hdrFile;
@@ -72,30 +75,7 @@ public abstract class ExplorerFile {
         return dataBlock;
     }
 
-    public final Area getArea() {
-        Area result = area;
-
-        if (result == null) {
-            synchronized (this) {
-                result = area;
-                if (result == null) {
-                    try {
-                        area = result = computeArea();
-                    } catch (IOException e) {
-                        throw new RuntimeException("Cannot compute area.", e);
-                    }
-                }
-            }
-        }
-
-        return result;
-    }
-
-    public final boolean hasArea() {
-        synchronized (this) {
-            return area != null;
-        }
-    }
+    abstract protected Area getArea();
 
     public void close() {
         dataContext.dispose();
@@ -128,12 +108,9 @@ public abstract class ExplorerFile {
         if (descendants.hasNext()) {
             return (Element) descendants.next();
         } else {
-            throw new IOException(
-                    MessageFormat.format("File ''{0}'': Missing element ''{1}''.", getHdrFile().getPath(), name));
+            throw new IOException(MessageFormat.format("File ''{0}'': Missing element ''{1}''.", getHdrFile().getPath(), name));
         }
     }
-
-    protected abstract Area computeArea() throws IOException;
 
     protected abstract Product createProduct() throws IOException;
 }
