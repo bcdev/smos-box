@@ -70,7 +70,7 @@ public class SmosProductReaderPlugIn implements ProductReaderPlugIn {
 
     @Override
     public String[] getDefaultFileExtensions() {
-        return new String[]{".DBL"};
+        return new String[]{".HDR", ".DBL", ".zip", ".ZIP"};
     }
 
     @Override
@@ -80,7 +80,7 @@ public class SmosProductReaderPlugIn implements ProductReaderPlugIn {
 
     @Override
     public String[] getFormatNames() {
-        return new String[]{"SMOS-DBL"};
+        return new String[]{"SMOS-EEF"};
     }
 
     @Override

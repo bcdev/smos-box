@@ -55,6 +55,10 @@
         <module>beam-core</module>
     </dependency>
     <dependency>
+        <module>beam-ui</module>
+        <optional>true</optional>
+    </dependency>
+    <dependency>
         <module>smos-dgg</module>
     </dependency>
     <dependency>
@@ -65,5 +69,19 @@
     </dependency>
 
     <categories>Reader,SMOS</categories>
+
+    <extension point="beam-ui:actions">
+        <action>
+            <class>org.esa.beam.visat.actions.ProductImportAction</class>
+            <id>importSmosProductDataBlockFile</id>
+            <helpId/>
+            <formatName>SMOS-EEF</formatName>
+            <useAllFileFilter>false</useAllFileFilter>
+            <text>SMOS Earth Explorer Format (EEF)</text>
+            <mnemonic/>
+            <shortDescr>Import a SMOS Earth Explorer Format (EEF) data product or product subset.</shortDescr>
+            <description>Import a SMOS Earth Explorer Format (EEF) data product or product subset.</description>
+        </action>
+    </extension>
 
 </module>
