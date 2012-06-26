@@ -22,6 +22,7 @@ import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Point;
 import org.esa.beam.framework.datamodel.Placemark;
 import org.esa.beam.framework.datamodel.PlacemarkGroup;
+import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.framework.datamodel.VectorDataNode;
 import org.esa.beam.framework.gpf.annotations.Parameter;
 import org.esa.beam.framework.ui.AppContext;
@@ -97,8 +98,9 @@ class GridPointExportSwingWorker extends ProgressMonitorSwingWorker<List<Excepti
             final GridPointFilter gridPointFilter = getGridPointFilter();
             final GridPointFilterStreamHandler handler = new GridPointFilterStreamHandler(filterStream,
                                                                                           gridPointFilter);
-            if (useSelectedProduct) {
-                handler.processProduct(appContext.getSelectedProduct(), pm);
+            final Product selectedProduct = appContext.getSelectedProduct();
+            if (useSelectedProduct && selectedProduct != null) {
+                handler.processProduct(selectedProduct, pm);
             } else {
                 handler.processDirectory(sourceDirectory, recursive, pm, problemList);
             }
@@ -158,9 +160,12 @@ class GridPointExportSwingWorker extends ProgressMonitorSwingWorker<List<Excepti
             }
             case 1: {
                 final MultiFilter multiFilter = new MultiFilter();
-                final PlacemarkGroup pinGroup = appContext.getSelectedProduct().getPinGroup();
-                for (Placemark pin : pinGroup.toArray(new Placemark[pinGroup.getNodeCount()])) {
-                    multiFilter.add(new RegionFilter(getPointShape(pin.getFeature())));
+                final Product selectedProduct = appContext.getSelectedProduct();
+                if (selectedProduct != null) {
+                    final PlacemarkGroup pinGroup = selectedProduct.getPinGroup();
+                    for (Placemark pin : pinGroup.toArray(new Placemark[pinGroup.getNodeCount()])) {
+                        multiFilter.add(new RegionFilter(getPointShape(pin.getFeature())));
+                    }
                 }
                 return multiFilter;
             }
