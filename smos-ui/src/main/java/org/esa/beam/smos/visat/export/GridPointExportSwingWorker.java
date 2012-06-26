@@ -138,18 +138,20 @@ class GridPointExportSwingWorker extends ProgressMonitorSwingWorker<List<Excepti
         switch (roiType) {
             case 0: {
                 final MultiFilter multiFilter = new MultiFilter();
-                final FeatureIterator<SimpleFeature> featureIterator = geometry.getFeatureCollection().features();
+                if (geometry != null) {
+                    final FeatureIterator<SimpleFeature> featureIterator = geometry.getFeatureCollection().features();
 
-                while (featureIterator.hasNext()) {
-                    final Shape featureShape;
-                    final SimpleFeature feature = featureIterator.next();
-                    if (feature.getDefaultGeometry() instanceof Point) {
-                        featureShape = getPointShape(feature);
-                    } else {
-                        featureShape = getAreaShape(feature);
-                    }
-                    if (featureShape != null) {
-                        multiFilter.add(new RegionFilter(featureShape));
+                    while (featureIterator.hasNext()) {
+                        final Shape featureShape;
+                        final SimpleFeature feature = featureIterator.next();
+                        if (feature.getDefaultGeometry() instanceof Point) {
+                            featureShape = getPointShape(feature);
+                        } else {
+                            featureShape = getAreaShape(feature);
+                        }
+                        if (featureShape != null) {
+                            multiFilter.add(new RegionFilter(featureShape));
+                        }
                     }
                 }
                 return multiFilter;
