@@ -93,28 +93,30 @@ class GridPointFilterStreamHandler {
 
     private static void findSourceFiles(File parent, boolean recursive, List<File> sourceFileList) {
         final File[] dirs = parent.listFiles(DIRECTORY_FILTER);
-        if (dirs.length == 0) {
-            final File[] files = parent.listFiles(EE_FILENAME_FILTER);
-            if (files.length == 2) {
-                if (files[0].getName().endsWith(".DBL")) {
-                    sourceFileList.add(files[0]);
-                } else {
-                    sourceFileList.add(files[1]);
+        if (dirs != null) {
+            if (dirs.length == 0) {
+                final File[] files = parent.listFiles(EEF_FILENAME_FILTER);
+                if (files != null && files.length == 2) {
+                    if (files[0].getName().endsWith(".DBL")) {
+                        sourceFileList.add(files[0]);
+                    } else {
+                        sourceFileList.add(files[1]);
+                    }
                 }
+                return;
             }
-            return;
-        }
-        for (final File dir : dirs) {
-            final File[] files = dir.listFiles(EE_FILENAME_FILTER);
-            if (files.length == 2) {
-                if (files[0].getName().endsWith(".DBL")) {
-                    sourceFileList.add(files[0]);
+            for (final File dir : dirs) {
+                final File[] files = dir.listFiles(EEF_FILENAME_FILTER);
+                if (files != null && files.length == 2) {
+                    if (files[0].getName().endsWith(".DBL")) {
+                        sourceFileList.add(files[0]);
+                    } else {
+                        sourceFileList.add(files[1]);
+                    }
                 } else {
-                    sourceFileList.add(files[1]);
-                }
-            } else {
-                if (recursive) {
-                    findSourceFiles(dir, recursive, sourceFileList);
+                    if (recursive) {
+                        findSourceFiles(dir, recursive, sourceFileList);
+                    }
                 }
             }
         }
@@ -127,7 +129,7 @@ class GridPointFilterStreamHandler {
         }
     };
 
-    private static final FilenameFilter EE_FILENAME_FILTER = new FilenameFilter() {
+    private static final FilenameFilter EEF_FILENAME_FILTER = new FilenameFilter() {
         @Override
         public boolean accept(File dir, String name) {
             return name.equals(dir.getName() + ".HDR") || name.equals(dir.getName() + ".DBL");
