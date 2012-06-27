@@ -78,15 +78,9 @@
         <module>smos-tools</module>
     </modules>
 
-    <!--
-    In version 3 of Maven the sourceEncoding property will be embedded in the
-    build tag. For now the convention is to that it as property.
-    TODO: Move the sourceEncoding property to the build tag if version 3 is released
-    -->
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <beam.version>RELEASE</beam.version>
-        <ceres.version>0.13</ceres.version>
+        <ceres.version>0.13.1</ceres.version>
+        <beam.version>4.10.3</beam.version>
     </properties>
 
 
@@ -156,7 +150,7 @@
             <dependency>
                 <groupId>org.esa.beam</groupId>
                 <artifactId>blue-marble-worldmap</artifactId>
-                <version>RELEASE</version>
+                <version>1.0.2</version>
             </dependency>
             <dependency>
                 <groupId>org.esa.beam</groupId>
