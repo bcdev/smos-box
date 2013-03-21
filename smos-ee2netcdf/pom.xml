@@ -1,0 +1,24 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <artifactId>smos-box</artifactId>
+        <groupId>org.esa.beam.smos</groupId>
+        <version>2.2</version>
+    </parent>
+
+    <packaging>jar</packaging>
+
+    <groupId>org.esa.beam.smos</groupId>
+    <artifactId>smos-ee2netcdf</artifactId>
+    <name>SMOS EE to NetCDF Converter</name>
+    <description>SMOS EarthExplorer to NetCDF Converter Operator</description>
+
+    <dependencies>
+        
+    </dependencies>
+
+</project>
+
