@@ -150,6 +150,11 @@
             </dependency>
             <dependency>
                 <groupId>org.esa.beam</groupId>
+                <artifactId>beam-gpf</artifactId>
+                <version>${beam.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.esa.beam</groupId>
                 <artifactId>blue-marble-worldmap</artifactId>
                 <version>1.0.2</version>
             </dependency>
@@ -164,31 +169,31 @@
             <dependency>
                 <groupId>org.esa.beam.smos</groupId>
                 <artifactId>smos-dgg</artifactId>
-                <version>2.2</version>
+                <version>2.3-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>org.esa.beam.smos</groupId>
                 <artifactId>smos-lsmask</artifactId>
-                <version>2.2</version>
+                <version>2.3-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>org.esa.beam.smos</groupId>
                 <artifactId>smos-reader</artifactId>
-                <version>2.2</version>
+                <version>2.3-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>org.esa.beam.smos</groupId>
                 <artifactId>smos-ui</artifactId>
-                <version>2.2</version>
+                <version>2.3-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>org.esa.beam.smos</groupId>
                 <artifactId>smos-tools</artifactId>
-                <version>2.2</version>
+                <version>2.3-SNAPSHOT</version>
             </dependency>
 
             <!-- JUnit Libraries ############################################# -->
@@ -227,7 +232,10 @@
                     <skip>false</skip>
                     <forkMode>once</forkMode>
 
-                    <argLine>-Dorg.esa.beam.smos.dggDir=${project.basedir}/../smos-dgg/src/main/resources/org/esa/beam/smos/dgg -Dorg.esa.beam.smos.lsMaskDir=${project.basedir}/../smos-lsmask/src/main/resources/org/esa/beam/smos/lsmask</argLine>
+                    <argLine>
+                        -Dorg.esa.beam.smos.dggDir=${project.basedir}/../smos-dgg/src/main/resources/org/esa/beam/smos/dgg
+                        -Dorg.esa.beam.smos.lsMaskDir=${project.basedir}/../smos-lsmask/src/main/resources/org/esa/beam/smos/lsmask
+                    </argLine>
                 </configuration>
             </plugin>
             <plugin>
