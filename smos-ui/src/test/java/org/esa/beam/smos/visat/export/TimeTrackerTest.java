@@ -16,14 +16,23 @@
 
 package org.esa.beam.smos.visat.export;
 
-import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.util.Date;
 
-public class TimeTrackerTest extends TestCase {
+import static org.junit.Assert.*;
+
+public class TimeTrackerTest {
 
     private TimeTracker timeTracker;
 
+    @Before
+    public void setUp() {
+        timeTracker = new TimeTracker();
+    }
+
+    @Test
     public void testCreateAndGet() {
         final Date start = timeTracker.getIntervalStart();
         assertEquals(new Date(Long.MAX_VALUE), start);
@@ -32,6 +41,7 @@ public class TimeTrackerTest extends TestCase {
         assertEquals(new Date(Long.MIN_VALUE), stop);
     }
 
+    @Test
     public void testTrackOneDate() {
         final Date date = new Date(300);
         timeTracker.track(date);
@@ -40,6 +50,7 @@ public class TimeTrackerTest extends TestCase {
         assertEquals(date, timeTracker.getIntervalStop());
     }
 
+    @Test
     public void testTrackTwoDates() {
         final Date date_1 = new Date(4000);
         final Date date_2 = new Date(5000);
@@ -51,6 +62,7 @@ public class TimeTrackerTest extends TestCase {
         assertEquals(date_2, timeTracker.getIntervalStop());
     }
 
+    @Test
     public void testTrackThreeDates() {
         final Date date_1 = new Date(11000);
         final Date date_2 = new Date(10000);
@@ -64,9 +76,10 @@ public class TimeTrackerTest extends TestCase {
         assertEquals(date_1, timeTracker.getIntervalStop());
     }
 
+    @Test
     public void testTrackNullDate() {
         try {
-            timeTracker.track(null);            
+            timeTracker.track(null);
         } catch (Exception e) {
             fail("no exception expected");
         }
@@ -74,25 +87,23 @@ public class TimeTrackerTest extends TestCase {
         assertFalse(timeTracker.hasValidPeriod());
     }
 
+    @Test
     public void testHasValidPeriod_noDates() {
         assertFalse(timeTracker.hasValidPeriod());
     }
 
+    @Test
     public void testHasValidPeriod_oneDate() {
         timeTracker.track(new Date(2000));
 
         assertTrue(timeTracker.hasValidPeriod());
     }
 
+    @Test
     public void testHasValidPeriod_twoDate() {
         timeTracker.track(new Date(2100));
         timeTracker.track(new Date(2000));
 
         assertTrue(timeTracker.hasValidPeriod());
-    }
-
-    @Override
-    protected void setUp() {
-        timeTracker = new TimeTracker();
     }
 }

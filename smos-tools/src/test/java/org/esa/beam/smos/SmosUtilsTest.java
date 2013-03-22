@@ -1,7 +1,7 @@
 package org.esa.beam.smos;
 
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
 import java.io.File;
 import java.text.DateFormat;
@@ -11,8 +11,11 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
-public class SmosUtilsTest extends TestCase {
+import static org.junit.Assert.*;
 
+public class SmosUtilsTest {
+
+    @Test
     public void testFindDblFile() {
         File[] inputFiles = new File[0];
         assertNull(SmosUtils.findDblFile(inputFiles));
@@ -29,6 +32,7 @@ public class SmosUtilsTest extends TestCase {
         assertEquals("blärks.dbl", dblFile.getName());
     }
 
+    @Test
     public void testGetSensingTimesFromFilename() {
         final DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
         df.setTimeZone(TimeZone.getTimeZone("UTC"));
@@ -40,12 +44,14 @@ public class SmosUtilsTest extends TestCase {
         assertEquals("2010-10-19T05:55:10", df.format(stopTime));
     }
 
+    @Test
     public void testGetSensingTimesFromTooShortFilename() {
         assertNull(SmosUtils.getSensingStartTimeFromFilename("SM_OPER_MIR_SMUDP2_20101019T0501"));
         assertNull(SmosUtils.getSensingStopTimeFromFilename("SM_OPER_MIR_SMUDP2_20101019T050111_20101019T0555"));
     }
 
     @SuppressWarnings("MagicConstant")
+    @Test
     public void testGetStartDateFromFilename() {
         final Calendar cal = GregorianCalendar.getInstance();
 
@@ -68,6 +74,7 @@ public class SmosUtilsTest extends TestCase {
         assertTrue(isSameDay(cal.getTime(), SmosUtils.getSensingStartDayFromFilename("SM_TEST_AUX_MOONT__20050101T000000_20500101T000000_001_001_4.zip")));
     }
 
+    @Test
     public void testGetProductType() {
         assertEquals("AUX_DATA", SmosUtils.getProductType("SM_TEST_AUX_LSMASK_20070101T000000_20781231T235959_00000001.EEF"));
         assertEquals("AUX_DATA", SmosUtils.getProductType("SM_TEST_AUX_BFP____20070101T000000_20781231T235959_00000004.EEF"));
@@ -81,6 +88,7 @@ public class SmosUtilsTest extends TestCase {
         assertEquals("RQC_RQD", SmosUtils.getProductType("SM_TEST_RQD_SCND1C_20121117T120515_20121117T122512_311_001_1.EEF"));
     }
 
+    @Test
     public void testIsDBLFileName() {
         assertFalse(SmosUtils.isDblFileName("plupsi.txt"));
         assertFalse(SmosUtils.isDblFileName("SM_OPER_MIR_BWLD1C_20121118T002733_20121118T012104_116_001_1.zip"));
@@ -90,6 +98,7 @@ public class SmosUtilsTest extends TestCase {
         assertTrue(SmosUtils.isDblFileName("SM_BLAH_MIR_TARD1A_20070223T112710_20070223T121514_001_001_0.DBL"));
     }
 
+    @Test
     public void testIsHDRFileName() {
         assertFalse(SmosUtils.isHdrFileName("plupsi.txt"));
         assertFalse(SmosUtils.isHdrFileName("SM_OPER_MIR_BWLD1C_20121118T002733_20121118T012104_116_001_1.zip"));
@@ -99,6 +108,7 @@ public class SmosUtilsTest extends TestCase {
         assertTrue(SmosUtils.isHdrFileName("SM_BLAH_MIR_TARD1A_20070223T112710_20070223T121514_001_001_0.hdr"));
     }
 
+    @Test
     public void testIsL0FileType() {
         assertTrue(SmosUtils.isL0Type("SM_HELP_MIR_SC_F0__20070223T061024_20070223T062500_001_001_0.DBL"));
         assertTrue(SmosUtils.isL0Type("SM_xxxx_MIR_UNCU0__20070223T061024_20070223T062500_001_001_0.DBL"));
@@ -110,6 +120,7 @@ public class SmosUtilsTest extends TestCase {
         assertFalse(SmosUtils.isL0Type("SM_TEST_AUX_IGRF___20080102T010000_20080102T025959_105_001_0.zip"));
     }
 
+    @Test
     public void testIsL1aFileType() {
         assertTrue(SmosUtils.isL1aType("SM_OPER_MIR_TARD1A_20121117T102025_20121117T105144_203_001_1.EEF"));
         assertTrue(SmosUtils.isL1aType("SM_OPER_MIR_CRSD1A_20121117T025249_20121117T043300_116_001_1.zip"));
@@ -121,6 +132,7 @@ public class SmosUtilsTest extends TestCase {
         assertFalse(SmosUtils.isL1aType("SM_OPER_AUX_ORBRES_20121118T000000_20121125T000000_240_028_1.EEF"));
     }
 
+    @Test
     public void testIsL1bFileType() {
         assertTrue(SmosUtils.isL1bType("SM_OPER_MIR_SC_D1B_20121118T002704_20121118T012104_116_001_1.zip"));
         assertTrue(SmosUtils.isL1bType("SM_OPER_MIR_TARD1B_20121117T102025_20121117T105144_116_001_1.zip"));
@@ -133,6 +145,7 @@ public class SmosUtilsTest extends TestCase {
         assertFalse(SmosUtils.isL1bType("SM_OPER_AUX_ORBRES_20121118T000000_20121125T000000_240_028_1.EEF"));
     }
 
+    @Test
     public void testIsL1cFileType() {
         assertTrue(SmosUtils.isL1cType("SM_TEST_MIR_SCLD1C_20070223T061024_20070223T070437_141_000_0.DBL"));
         assertTrue(SmosUtils.isL1cType("SM_TEST_MIR_BWLD1C_20070223T061024_20070223T070437_141_000_0.HDR"));
@@ -143,6 +156,7 @@ public class SmosUtilsTest extends TestCase {
         assertFalse(SmosUtils.isL1cType("SM_BLAH_MIR_TARD1A_20070223T112710_20070223T121514_001_001_0.DBL"));
     }
 
+    @Test
     public void testIsL2FileType() {
         assertTrue(SmosUtils.isL2Type("SO_GNAT_MIR_TSM_2__20070223T061024_20070223T062500_001_001_0.DBL"));
         assertTrue(SmosUtils.isL2Type("SO_GNOT_MIR_TOS_2__20070223T061024_20070223T062500_001_001_0.DBL"));
@@ -158,6 +172,7 @@ public class SmosUtilsTest extends TestCase {
         assertFalse(SmosUtils.isL2Type("SM_TEST_MIR_SC_F0__20070223T112710_20070223T121514_001_001_0.DBL"));
     }
 
+    @Test
     public void testIsAuxFileType() {
         assertTrue(SmosUtils.isAuxFileType("SM_OPER_AUX_ORBPRE_20121117T000000_20121124T000000_240_034_1.EEF"));
         assertTrue(SmosUtils.isAuxFileType("SM_TEST_AUX_APOD01_20070101T000000_20781231T235959_00000002.EEF"));
@@ -260,6 +275,7 @@ public class SmosUtilsTest extends TestCase {
         assertFalse(SmosUtils.isAuxFileType("SM_TEST_MIR_GMATD__20121117T020130_20781231T235959_115_001_3.tgz"));
     }
 
+    @Test
     public void testIsQualityControlType() {
         assertTrue(SmosUtils.isQualityControlType("SM_OPER_RQC_ECMWF__20090405T011500_20090405T021820_301_001_1.EEF"));
         assertTrue(SmosUtils.isQualityControlType("SM_TEST_RQD_OSDAP2_20121117T065617_20121117T075017_311_001_1.EEF"));
@@ -268,6 +284,7 @@ public class SmosUtilsTest extends TestCase {
         assertFalse(SmosUtils.isQualityControlType("SM_xxxx_MIR_CORN0__20070223T061024_20070223T062500_001_001_0.DBL"));
     }
 
+    @Test
     public void testIsMirasPlanType() {
         assertTrue(SmosUtils.isMirasPlanType("SM_TEST_MPL_ORBSCT_20070223T060002_20781231T235959_00000001.EEF"));
         assertTrue(SmosUtils.isMirasPlanType("SM_OPER_MPL_PROTEV_20091120T101808_20091221T101153_280_023_1.EEF"));
@@ -281,6 +298,7 @@ public class SmosUtilsTest extends TestCase {
         assertFalse(SmosUtils.isMirasPlanType("TheNewSensoir.txt"));
     }
 
+    @Test
     public void testIsAuxECMWFType() {
         assertTrue(SmosUtils.isAuxECMWFType("SM_OPER_AUX_ECMWF__20091113T030500_20091113T040730_306_001_3.HDR"));
         assertTrue(SmosUtils.isAuxECMWFType("SM_OPER_AUX_ECMWF__20110227T182140_20110227T192410_310_001_3.zip"));
@@ -290,26 +308,31 @@ public class SmosUtilsTest extends TestCase {
         assertFalse(SmosUtils.isAuxECMWFType("SM_OPER_MIR_BWLD1C_20121118T002733_20121118T012104_116_001_1.zip"));
     }
 
+    @Test
     public void testIsSmUserFormat() {
         assertTrue(SmosUtils.isSmUserFormat("SM_TEST_MIR_SMUDP2_20070225T041815_20070225T050750_306_001_8.DBL"));
         assertFalse(SmosUtils.isSmUserFormat("SM_OPER_MIR_SCSF1C_20100315T144805_20100315T154207_330_001_1"));
     }
 
+    @Test
     public void testIsSmAnalysisFormat() {
         assertTrue(SmosUtils.isSmAnalysisFormat("SM_TEST_MIR_SMDAP2_20121117T183648_20121117T193048_304_001_1.zip"));
         assertFalse(SmosUtils.isSmAnalysisFormat("SM_OPER_MIR_SCSF1C_20100315T144805_20100315T154207_330_001_1"));
     }
 
+    @Test
     public void testIsOsUserFormat() {
         assertTrue(SmosUtils.isOsUserFormat("SM_TEST_MIR_OSUDP2_20070225T041815_20070225T050750_306_001_8.DBL"));
         assertFalse(SmosUtils.isOsUserFormat("SM_TEST_MIR_BWSF1C_20070223T112729_20070223T121644_141_000_0.zip"));
     }
 
+    @Test
     public void testIsOsAnalysisFormat() {
         assertTrue(SmosUtils.isOsAnalysisFormat("SM_TEST_MIR_OSDAP2_20070225T041815_20070225T050750_306_001_8.DBL"));
         assertFalse(SmosUtils.isOsAnalysisFormat("SM_OPER_MIR_OSUDP2_20091204T001853_20091204T011255_310_001_1.zip"));
     }
 
+    @Test
     public void testIsDualPolBrowseFormat() {
         assertTrue(SmosUtils.isDualPolBrowseFormat("SM_OPER_MIR_BWLD1C_20100405T143038_20100405T152439_330_001_1.HDR"));
         assertTrue(SmosUtils.isDualPolBrowseFormat("SM_OPER_MIR_BWSD1C_20100201T134256_20100201T140057_324_001_1.HDR"));
@@ -318,6 +341,7 @@ public class SmosUtilsTest extends TestCase {
         assertFalse(SmosUtils.isDualPolBrowseFormat("SM_OPER_MIR_SMDAP2_20111130T141947_20111130T151305_500_001_1.DBL"));
     }
 
+    @Test
     public void testIsCompressedFile() {
         final File fileWithoutExtension = new File("a_file_without_extension");
         assertFalse(SmosUtils.isCompressedFile(fileWithoutExtension));

@@ -1,15 +1,24 @@
 package org.esa.beam.dataio.smos;
 
-import junit.framework.TestCase;
 import org.esa.beam.framework.datamodel.Product;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
 
-public class SmosProductReaderAcceptanceTest extends TestCase {
+import static org.junit.Assert.*;
+
+public class SmosProductReaderAcceptanceTest {
 
     private SmosProductReader reader;
 
+    @Before
+    public void setUp() {
+        reader = new SmosProductReader(new SmosProductReaderPlugIn());
+    }
+
+    @Test
     public void testRead_BWSD1C_directory() throws IOException {
         final String testFileName = "SM_OPER_MIR_BWSD1C_20100201T134256_20100201T140057_324_001_1.DBL";
         final File file = getTestFileOrDirectory("SM_OPER_MIR_BWSD1C_20100201T134256_20100201T140057_324_001_1/" + testFileName);
@@ -28,6 +37,7 @@ public class SmosProductReaderAcceptanceTest extends TestCase {
         }
     }
 
+    @Test
     public void testRead_BWSD1C_plainZip() throws IOException {
         final String testFilename = "SM_OPER_MIR_BWSD1C_20100201T134256_20100201T140057_324_001_1.zip";
         final File file = getTestFileOrDirectory(testFilename);
@@ -46,6 +56,7 @@ public class SmosProductReaderAcceptanceTest extends TestCase {
         }
     }
 
+    @Test
     public void testRead_BWSD1C_zipWithDirectory() throws IOException {
         final String testFileName = "SM_OPER_MIR_BWSD1C_20100201T134256_20100201T140057_324_001_1_with_dir.zip";
         final File file = getTestFileOrDirectory(testFileName);
@@ -69,11 +80,6 @@ public class SmosProductReaderAcceptanceTest extends TestCase {
     ////////////////////////////////////////////////////////////////////////////////
 
 
-    @Override
-    protected void setUp() {
-        reader = new SmosProductReader(new SmosProductReaderPlugIn());
-    }
-
     private static File getTestFileOrDirectory(String file) {
         File testTgz = new File("./smos-reader/src/test/resources/org/esa/beam/dataio/smos/" + file);
         if (!testTgz.exists()) {
@@ -82,7 +88,7 @@ public class SmosProductReaderAcceptanceTest extends TestCase {
         return testTgz;
     }
 
-    private void assertCorrect_BWSD1C_Product(Product product) {
+    private static void assertCorrect_BWSD1C_Product(Product product) {
         assertNotNull(product);
         assertEquals(11, product.getNumBands());
         assertEquals(8192, product.getSceneRasterHeight());
@@ -90,6 +96,4 @@ public class SmosProductReaderAcceptanceTest extends TestCase {
         assertEquals("01-FEB-2010 13:42:56.000000", product.getStartTime().format());
         assertEquals("01-FEB-2010 14:00:57.000000", product.getEndTime().format());
     }
-
-
 }

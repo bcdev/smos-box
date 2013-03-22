@@ -16,12 +16,15 @@
 
 package org.esa.beam.smos.visat.export;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
 import java.util.Date;
 
-public class FileNamePatcherTest extends TestCase {
+import static org.junit.Assert.assertEquals;
 
+public class FileNamePatcherTest {
+
+    @Test
     public void testPatchDates() {
         final FileNamePatcher patcher = new FileNamePatcher("SM_TEST_MIR_SCLD1C_20070223T061024_20070223T070437_141_000_0");
 
@@ -33,6 +36,7 @@ public class FileNamePatcherTest extends TestCase {
         assertEquals("SM_TEST_MIR_SCLD1C_19700101T001640_19700101T001650_141_000_0", patcher.getFileNameWithoutExtension());
     }
 
+    @Test
     public void testPatchNoDates() {
         final FileNamePatcher patcher = new FileNamePatcher("SM_TEST_MIR_SCLD1C_20070223T061024_20070223T070437_141_000_0");
 
@@ -41,6 +45,7 @@ public class FileNamePatcherTest extends TestCase {
         assertEquals("SM_TEST_MIR_SCLD1C_20070223T061024_20070223T070437_141_000_0", patcher.getFileNameWithoutExtension());
     }
 
+    @Test
     public void testPatchFileCounter_noPatching() {
         final FileNamePatcher patcher = new FileNamePatcher("SM_REPR_MIR_SCLF1C_20110904T022557_20110904T031917_504_001_5");
         patcher.setFileCounter(0);
@@ -50,6 +55,7 @@ public class FileNamePatcherTest extends TestCase {
         assertEquals("SM_REPR_MIR_SCLF1C_20110904T022557_20110904T031917_504_001_5", patcher.getFileNameWithoutExtension());
     }
 
+    @Test
     public void testPatchFileCounter_oneDigit() {
         final FileNamePatcher patcher = new FileNamePatcher("SM_REPR_MIR_SCLF1C_20110904T022557_20110904T031917_504_001_5");
         patcher.setFileCounter(9);
@@ -59,6 +65,7 @@ public class FileNamePatcherTest extends TestCase {
         assertEquals("SM_REPR_MIR_SCLF1C_20110904T022557_20110904T031917_504_009_5", patcher.getFileNameWithoutExtension());
     }
 
+    @Test
     public void testPatchFileCounter_threeDigits() {
         final FileNamePatcher patcher = new FileNamePatcher("SM_REPR_MIR_SCLF1C_20110904T022557_20110904T031917_504_001_5");
         patcher.setFileCounter(198);
@@ -68,6 +75,7 @@ public class FileNamePatcherTest extends TestCase {
         assertEquals("SM_REPR_MIR_SCLF1C_20110904T022557_20110904T031917_504_198_5", patcher.getFileNameWithoutExtension());
     }
 
+    @Test
     public void testPatchFileCounter_fiveDigits() {
         final FileNamePatcher patcher = new FileNamePatcher("SM_REPR_MIR_SCLF1C_20110904T022557_20110904T031917_504_001_5");
         patcher.setFileCounter(12345);

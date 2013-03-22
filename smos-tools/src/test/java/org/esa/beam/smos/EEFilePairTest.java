@@ -1,13 +1,22 @@
 package org.esa.beam.smos;
 
-import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.io.File;
 
-public class EEFilePairTest extends TestCase {
+import static org.junit.Assert.assertEquals;
+
+public class EEFilePairTest {
 
     private EEFilePair eeFilePair;
 
+    @Before
+    public void setUp() {
+        eeFilePair = new EEFilePair();
+    }
+
+    @Test
     public void testSetGetHdrFile() {
         final File file_1 = new File("bla.hdr");
         final File file_2 = new File("hurra.hdr");
@@ -28,15 +37,5 @@ public class EEFilePairTest extends TestCase {
 
         eeFilePair.setDblFile(file_2);
         assertEquals(file_2.getName(), eeFilePair.getDblFile().getName());
-    }
-
-    ////////////////////////////////////////////////////////////////////////////////
-    /////// END OF PUBLIC
-    ////////////////////////////////////////////////////////////////////////////////
-
-
-    @Override
-    protected void setUp() {
-        eeFilePair = new EEFilePair();
     }
 }
