@@ -233,8 +233,7 @@
                     <forkMode>once</forkMode>
 
                     <argLine>
-                        -Dorg.esa.beam.smos.dggDir=${project.basedir}/../smos-dgg/src/main/resources/org/esa/beam/smos/dgg
-                        -Dorg.esa.beam.smos.lsMaskDir=${project.basedir}/../smos-lsmask/src/main/resources/org/esa/beam/smos/lsmask
+                        -Dorg.esa.beam.smos.dggDir=${project.basedir}/../smos-dgg/src/main/resources/org/esa/beam/smos/dgg -Dorg.esa.beam.smos.lsMaskDir=${project.basedir}/../smos-lsmask/src/main/resources/org/esa/beam/smos/lsmask
                     </argLine>
                 </configuration>
             </plugin>
