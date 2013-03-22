@@ -54,17 +54,13 @@ public class ConverterOpAcceptanceTest {
                     new Product[]{product});
 
             assertTrue(targetDirectory.isDirectory());
+            final File expectedOutputFile = new File(targetDirectory, "SM_OPER_MIR_BWLF1C_20111026T143206_20111026T152520_503_001_1.nc4");
+            assertTrue(expectedOutputFile.isFile());
         } finally {
             if (product != null) {
                 product.dispose();
             }
         }
-    }
-
-    private HashMap<String, Object> createDefaultParameterMap() {
-        final HashMap<String, Object> parameterMap = new HashMap<String, Object>();
-        parameterMap.put("targetDirectory", targetDirectory);
-        return parameterMap;
     }
 
     @Test
@@ -80,6 +76,8 @@ public class ConverterOpAcceptanceTest {
                     new Product[]{product});
 
             assertTrue(targetDirectory.isDirectory());
+            final File expectedOutputFile = new File(targetDirectory, "SM_OPER_MIR_OSUDP2_20091204T001853_20091204T011255_310_001_1.nc4");
+            assertTrue(expectedOutputFile.isFile());
         } finally {
             if (product != null) {
                 product.dispose();
@@ -93,5 +91,11 @@ public class ConverterOpAcceptanceTest {
             testFile = new File("./src/test/resources/org/esa/beam/smos/ee2netcdf/" + filename);
         }
         return testFile;
+    }
+
+    private HashMap<String, Object> createDefaultParameterMap() {
+        final HashMap<String, Object> parameterMap = new HashMap<String, Object>();
+        parameterMap.put("targetDirectory", targetDirectory);
+        return parameterMap;
     }
 }

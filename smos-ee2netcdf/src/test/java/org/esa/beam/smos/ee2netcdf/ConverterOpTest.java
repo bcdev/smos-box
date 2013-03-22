@@ -5,6 +5,7 @@ import org.esa.beam.framework.gpf.annotations.Parameter;
 import org.esa.beam.framework.gpf.annotations.SourceProducts;
 import org.junit.Test;
 
+import java.io.File;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
@@ -44,6 +45,16 @@ public class ConverterOpTest {
         assertEquals("The target directory for the converted data. If not existing, directory will be created.", targetDirectory.description());
         assertTrue(targetDirectory.notEmpty());
         assertTrue(targetDirectory.notNull());
+    }
+
+    @Test
+    public void testGetOutputFile() {
+        final File input = new File("bla/bla/change_my_name.zip");
+        final File targetDir = new File("/target/di/rectory");
+
+        final File outputFile = ConverterOp.getOutputFile(input, targetDir);
+        assertEquals("change_my_name.nc4", outputFile.getName());
+        assertEquals(targetDir.getAbsolutePath(), outputFile.getParentFile().getAbsolutePath());
     }
 
 }

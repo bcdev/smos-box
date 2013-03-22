@@ -22,9 +22,12 @@
             <artifactId>beam-gpf</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.esa.beam</groupId>
+            <artifactId>beam-netcdf</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.esa.beam.smos</groupId>
             <artifactId>smos-reader</artifactId>
-            <scope>test</scope>
         </dependency>
     </dependencies>
 
