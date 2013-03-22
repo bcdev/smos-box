@@ -79,7 +79,6 @@ public class SmosProductReaderAcceptanceTest {
     /////// END OF PUBLIC
     ////////////////////////////////////////////////////////////////////////////////
 
-
     private static File getTestFileOrDirectory(String file) {
         File testTgz = new File("./smos-reader/src/test/resources/org/esa/beam/dataio/smos/" + file);
         if (!testTgz.exists()) {

@@ -1,6 +1,7 @@
 package org.esa.beam.smos.ee2netcdf;
 
 import org.esa.beam.framework.gpf.annotations.OperatorMetadata;
+import org.esa.beam.framework.gpf.annotations.Parameter;
 import org.esa.beam.framework.gpf.annotations.SourceProducts;
 import org.junit.Test;
 
@@ -8,6 +9,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class ConverterOpTest {
 
@@ -29,9 +31,19 @@ public class ConverterOpTest {
         final Field sourceProductsField = ConverterOp.class.getDeclaredField("sourceProducts");
         final SourceProducts sourceProducts = sourceProductsField.getAnnotation(SourceProducts.class);
         assertEquals(-1, sourceProducts.count());
-        assertEquals("MIR_BW[LS][DF]1C|MIR_SC[LS][DF]1C|MIR_OSUPD2|MIR_SMUPD2", sourceProducts.type());
+        assertEquals("MIR_BW[LS][DF]1C|MIR_SC[LS][DF]1C|MIR_OSUDP2|MIR_SMUPD2", sourceProducts.type());
         assertEquals("", sourceProducts.description());
         assertEquals(0, sourceProducts.bands().length);
+    }
+
+    @Test
+    public void testParameterAnnotation_targetDirectory() throws NoSuchFieldException {
+        final Field targetDirectoryField = ConverterOp.class.getDeclaredField("targetDirectory");
+        final Parameter targetDirectory = targetDirectoryField.getAnnotation(Parameter.class);
+        assertEquals(".", targetDirectory.defaultValue());
+        assertEquals("The target directory for the converted data. If not existing, directory will be created.", targetDirectory.description());
+        assertTrue(targetDirectory.notEmpty());
+        assertTrue(targetDirectory.notNull());
     }
 
 }
