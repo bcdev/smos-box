@@ -45,6 +45,7 @@ public class SmosUtilsTest extends TestCase {
         assertNull(SmosUtils.getSensingStopTimeFromFilename("SM_OPER_MIR_SMUDP2_20101019T050111_20101019T0555"));
     }
 
+    @SuppressWarnings("MagicConstant")
     public void testGetStartDateFromFilename() {
         final Calendar cal = GregorianCalendar.getInstance();
 
@@ -315,6 +316,20 @@ public class SmosUtilsTest extends TestCase {
 
         assertFalse(SmosUtils.isDualPolBrowseFormat("SM_OPER_MIR_OSUDP2_20091204T001853_20091204T011255_310_001_1.zip"));
         assertFalse(SmosUtils.isDualPolBrowseFormat("SM_OPER_MIR_SMDAP2_20111130T141947_20111130T151305_500_001_1.DBL"));
+    }
+
+    public void testIsCompressedFile() {
+        final File fileWithoutExtension = new File("a_file_without_extension");
+        assertFalse(SmosUtils.isCompressedFile(fileWithoutExtension));
+
+        final File textFile = new File("bla.txt");
+        assertFalse(SmosUtils.isCompressedFile(textFile));
+
+        final File zipFile = new File("gna.zip");
+        assertTrue(SmosUtils.isCompressedFile(zipFile));
+
+        final File zipFileWithCapitalExtension = new File("firlefanz.ZIP");
+        assertTrue(SmosUtils.isCompressedFile(zipFileWithCapitalExtension));
     }
 
     ////////////////////////////////////////////////////////////////////////////////

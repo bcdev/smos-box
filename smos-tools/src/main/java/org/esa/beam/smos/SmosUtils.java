@@ -240,6 +240,14 @@ public class SmosUtils {
                 || formatName.contains("MIR_BWND1C");
     }
 
+    public static boolean isCompressedFile(File file) {
+        final String extension = FileUtils.getExtension(file);
+        if (StringUtils.isNullOrEmpty(extension)) {
+            return false;
+        }
+
+        return extension.contains("zip") || extension.contains("ZIP");
+    }
 
     ////////////////////////////////////////////////////////////////////////////////
     /////// END OF PUBLIC
@@ -268,14 +276,5 @@ public class SmosUtils {
             logger.log(Level.WARNING, "Exception while parsing sensing time from string: \"" + sensingTime + "\"", e);
             return null;
         }
-    }
-
-    public static boolean isCompressedFile(File file) {
-        final String extension = FileUtils.getExtension(file);
-        if (StringUtils.isNullOrEmpty(extension)) {
-            return false;
-        }
-
-        return extension.contains("zip") || extension.contains("ZIP");
     }
 }
