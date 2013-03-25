@@ -38,6 +38,17 @@ public class ConverterOpTest {
     }
 
     @Test
+    public void testParameterAnnotations_Region() throws NoSuchFieldException {
+        // @todo 1 tb/tb continue here tb 2013-03-25
+       // final Field regionField = ConverterOp.class.getDeclaredField("region");
+//        final SourceProducts sourceProducts = sourceProductsField.getAnnotation(SourceProducts.class);
+//        assertEquals(-1, sourceProducts.count());
+//        assertEquals("MIR_BW[LS][DF]1C|MIR_SC[LS][DF]1C|MIR_OSUDP2|MIR_SMUPD2", sourceProducts.type());
+//        assertEquals("", sourceProducts.description());
+//        assertEquals(0, sourceProducts.bands().length);
+    }
+
+    @Test
     public void testParameterAnnotation_targetDirectory() throws NoSuchFieldException {
         final Field targetDirectoryField = ConverterOp.class.getDeclaredField("targetDirectory");
         final Parameter targetDirectory = targetDirectoryField.getAnnotation(Parameter.class);
@@ -53,8 +64,7 @@ public class ConverterOpTest {
         final File targetDir = new File("/target/di/rectory");
 
         final File outputFile = ConverterOp.getOutputFile(input, targetDir);
-        assertEquals("change_my_name.nc4", outputFile.getName());
+        assertEquals("change_my_name.nc", outputFile.getName());
         assertEquals(targetDir.getAbsolutePath(), outputFile.getParentFile().getAbsolutePath());
     }
-
 }

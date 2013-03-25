@@ -24,7 +24,7 @@ import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.Arrays;
 
-class DggFile extends ExplorerFile {
+public class DggFile extends ExplorerFile {
 
     private final GridPointList gridPointList;
     private final int gridPointIdIndex;
@@ -45,7 +45,7 @@ class DggFile extends ExplorerFile {
             throw new IOException(MessageFormat.format(
                     "Unable to read SMOS File ''{0}'': {1}.", dblFile.getPath(), e.getMessage()), e);
         }
-        area = computeArea();
+        area = computeArea(this);
         gridPointInfo = createGridPointInfo();
     }
 
@@ -134,14 +134,9 @@ class DggFile extends ExplorerFile {
         return gridPointList.getCompound(gridPointIndex);
     }
 
-    @Override
-    protected Area getArea() {
-        return new Area(area);
-    }
-
-    private Area computeArea() throws IOException {
-        final int latIndex = getGridPointType().getMemberIndex(SmosConstants.GRID_POINT_LAT_NAME);
-        final int lonIndex = getGridPointType().getMemberIndex(SmosConstants.GRID_POINT_LON_NAME);
+    public static Area computeArea(DggFile dggFile) throws IOException {
+        final int latIndex = dggFile.getGridPointType().getMemberIndex(SmosConstants.GRID_POINT_LAT_NAME);
+        final int lonIndex = dggFile.getGridPointType().getMemberIndex(SmosConstants.GRID_POINT_LON_NAME);
 
         final Rectangle2D[] tileRectangles = new Rectangle2D[512];
         for (int i = 0; i < 32; ++i) {
@@ -151,6 +146,7 @@ class DggFile extends ExplorerFile {
         }
 
         final Area envelope = new Area();
+        final GridPointList gridPointList = dggFile.getGridPointList();
         for (int i = 0; i < gridPointList.getElementCount(); i++) {
             final CompoundData compound = gridPointList.getCompound(i);
             double lon = compound.getFloat(lonIndex);
@@ -181,6 +177,20 @@ class DggFile extends ExplorerFile {
         }
 
         return envelope;
+    }
+
+    private static Rectangle2D createTileRectangle(int i, int j) {
+        final double w = 11.25;
+        final double h = 11.25;
+        final double x = w * i - 180.0;
+        final double y = 90.0 - h * (j + 1);
+
+        return new Rectangle2D.Double(x, y, w, w);
+    }
+
+    @Override
+    protected Area getArea() {
+        return new Area(area);
     }
 
     @Override
@@ -307,15 +317,6 @@ class DggFile extends ExplorerFile {
         }
 
         return gridPointInfo;
-    }
-
-    private Rectangle2D createTileRectangle(int i, int j) {
-        final double w = 11.25;
-        final double h = 11.25;
-        final double x = w * i - 180.0;
-        final double y = 90.0 - h * (j + 1);
-
-        return new Rectangle2D.Double(x, y, w, w);
     }
 
     private void setTimes(Product product) {

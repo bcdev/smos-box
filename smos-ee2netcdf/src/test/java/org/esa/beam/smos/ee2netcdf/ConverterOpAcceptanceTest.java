@@ -3,10 +3,12 @@ package org.esa.beam.smos.ee2netcdf;
 import org.esa.beam.framework.dataio.ProductIO;
 import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.framework.gpf.GPF;
+import org.esa.beam.smos.AcceptanceTestRunner;
 import org.esa.beam.util.io.FileUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,6 +17,7 @@ import java.util.HashMap;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+@RunWith(AcceptanceTestRunner.class)
 public class ConverterOpAcceptanceTest {
 
     private final ConverterOpSpi spi;
@@ -54,7 +57,7 @@ public class ConverterOpAcceptanceTest {
                     new Product[]{product});
 
             assertTrue(targetDirectory.isDirectory());
-            final File expectedOutputFile = new File(targetDirectory, "SM_OPER_MIR_BWLF1C_20111026T143206_20111026T152520_503_001_1.nc4");
+            final File expectedOutputFile = new File(targetDirectory, "SM_OPER_MIR_BWLF1C_20111026T143206_20111026T152520_503_001_1.nc");
             assertTrue(expectedOutputFile.isFile());
         } finally {
             if (product != null) {
@@ -76,7 +79,7 @@ public class ConverterOpAcceptanceTest {
                     new Product[]{product});
 
             assertTrue(targetDirectory.isDirectory());
-            final File expectedOutputFile = new File(targetDirectory, "SM_OPER_MIR_OSUDP2_20091204T001853_20091204T011255_310_001_1.nc4");
+            final File expectedOutputFile = new File(targetDirectory, "SM_OPER_MIR_OSUDP2_20091204T001853_20091204T011255_310_001_1.nc");
             assertTrue(expectedOutputFile.isFile());
         } finally {
             if (product != null) {

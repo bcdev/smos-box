@@ -1,14 +1,17 @@
 package org.esa.beam.dataio.smos;
 
 import org.esa.beam.framework.datamodel.Product;
+import org.esa.beam.smos.AcceptanceTestRunner;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.io.File;
 import java.io.IOException;
 
 import static org.junit.Assert.*;
 
+@RunWith(AcceptanceTestRunner.class)
 public class SmosProductReaderAcceptanceTest {
 
     private SmosProductReader reader;

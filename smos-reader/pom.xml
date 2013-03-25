@@ -22,6 +22,13 @@
             <artifactId>smos-tools</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.esa.beam.smos</groupId>
+            <artifactId>smos-tools</artifactId>
+            <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
             <groupId>com.bc.ceres</groupId>
             <artifactId>ceres-binio</artifactId>
         </dependency>
