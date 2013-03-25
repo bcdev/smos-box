@@ -1,5 +1,6 @@
 package org.esa.beam.smos.ee2netcdf;
 
+import com.vividsolutions.jts.geom.Geometry;
 import org.esa.beam.dataio.smos.DggFile;
 import org.esa.beam.dataio.smos.ExplorerFile;
 import org.esa.beam.dataio.smos.SmosProductReader;
@@ -12,6 +13,8 @@ import org.esa.beam.framework.gpf.annotations.OperatorMetadata;
 import org.esa.beam.framework.gpf.annotations.Parameter;
 import org.esa.beam.framework.gpf.annotations.SourceProducts;
 import org.esa.beam.framework.gpf.experimental.Output;
+import org.esa.beam.gpf.operators.standard.SubsetOp;
+import org.esa.beam.util.converters.JtsGeometryConverter;
 import org.esa.beam.util.io.FileUtils;
 
 import java.awt.*;
@@ -46,6 +49,10 @@ public class ConverterOp extends Operator implements Output {
             notNull = true)
     private File targetDirectory;
 
+    @Parameter(description = "The geographical region as a geometry in well-known text format (WKT).",
+            converter = JtsGeometryConverter.class)
+    private Geometry region;
+
     @Override
     public void initialize() throws OperatorException {
         setDummyTargetProduct();
@@ -67,9 +74,37 @@ public class ConverterOp extends Operator implements Output {
             final ExplorerFile explorerFile = productReader.getExplorerFile();
 
             final Area dataArea = DggFile.computeArea((DggFile) explorerFile);
-
-
             final Rectangle x_y_subset = getDataBoundingRect(sourceProduct, dataArea);
+
+            if (region != null) {
+                final Rectangle rectangle = SubsetOp.computePixelRegion(sourceProduct, region, 1);
+//            private static com.vividsolutions.jts.geom.Polygon convertAwtPathToJtsPolygon(Path2D
+//            path, GeometryFactory factory) {
+//                final PathIterator pathIterator = path.getPathIterator(null);
+//                ArrayList<double[]> coordList = new ArrayList<double[]>();
+//                int lastOpenIndex = 0;
+//                while (!pathIterator.isDone()) {
+//                    final double[] coords = new double[6];
+//                    final int segType = pathIterator.currentSegment(coords);
+//                    if (segType == PathIterator.SEG_CLOSE) {
+//                        // we should only detect a single SEG_CLOSE
+//                        coordList.add(coordList.get(lastOpenIndex));
+//                        lastOpenIndex = coordList.size();
+//                    } else {
+//                        coordList.add(coords);
+//                    }
+//                    pathIterator.next();
+//                }
+//                final Coordinate[] coordinates = new Coordinate[coordList.size()];
+//                for (int i1 = 0; i1 < coordinates.length; i1++) {
+//                    final double[] coord = coordList.get(i1);
+//                    coordinates[i1] = new Coordinate(coord[0], coord[1]);
+//                }
+//
+//                return factory.createPolygon(factory.createLinearRing(coordinates), null);
+//            }
+            }
+
             final ProductSubsetDef subsetDef = new ProductSubsetDef();
             subsetDef.setRegion(x_y_subset);
             final Product subset = sourceProduct.createSubset(subsetDef, "", "");
@@ -81,7 +116,7 @@ public class ConverterOp extends Operator implements Output {
         }
     }
 
-    private Rectangle getDataBoundingRect(Product sourceProduct, Area dataArea) throws IOException {
+    static Rectangle getDataBoundingRect(Product sourceProduct, Area dataArea) throws IOException {
         final GeoCoding geoCoding = sourceProduct.getGeoCoding();
         final GeoPos geoPos = new GeoPos(0.f, 0.f);
         final PixelPos pixelPos = new PixelPos(0.f, 0.f);

@@ -3,6 +3,7 @@ package org.esa.beam.smos.ee2netcdf;
 import org.esa.beam.framework.gpf.annotations.OperatorMetadata;
 import org.esa.beam.framework.gpf.annotations.Parameter;
 import org.esa.beam.framework.gpf.annotations.SourceProducts;
+import org.esa.beam.util.converters.JtsGeometryConverter;
 import org.junit.Test;
 
 import java.io.File;
@@ -10,6 +11,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class ConverterOpTest {
@@ -38,17 +40,6 @@ public class ConverterOpTest {
     }
 
     @Test
-    public void testParameterAnnotations_Region() throws NoSuchFieldException {
-        // @todo 1 tb/tb continue here tb 2013-03-25
-       // final Field regionField = ConverterOp.class.getDeclaredField("region");
-//        final SourceProducts sourceProducts = sourceProductsField.getAnnotation(SourceProducts.class);
-//        assertEquals(-1, sourceProducts.count());
-//        assertEquals("MIR_BW[LS][DF]1C|MIR_SC[LS][DF]1C|MIR_OSUDP2|MIR_SMUPD2", sourceProducts.type());
-//        assertEquals("", sourceProducts.description());
-//        assertEquals(0, sourceProducts.bands().length);
-    }
-
-    @Test
     public void testParameterAnnotation_targetDirectory() throws NoSuchFieldException {
         final Field targetDirectoryField = ConverterOp.class.getDeclaredField("targetDirectory");
         final Parameter targetDirectory = targetDirectoryField.getAnnotation(Parameter.class);
@@ -56,6 +47,17 @@ public class ConverterOpTest {
         assertEquals("The target directory for the converted data. If not existing, directory will be created.", targetDirectory.description());
         assertTrue(targetDirectory.notEmpty());
         assertTrue(targetDirectory.notNull());
+    }
+
+    @Test
+    public void testParameterAnnotations_Region() throws NoSuchFieldException {
+        final Field regionField = ConverterOp.class.getDeclaredField("region");
+        final Parameter regionFieldAnnotation = regionField.getAnnotation(Parameter.class);
+        assertEquals("", regionFieldAnnotation.defaultValue());
+        assertEquals("The geographical region as a geometry in well-known text format (WKT).", regionFieldAnnotation.description());
+        assertEquals(JtsGeometryConverter.class, regionFieldAnnotation.converter());
+        assertFalse(regionFieldAnnotation.notEmpty());
+        assertFalse(regionFieldAnnotation.notNull());
     }
 
     @Test
