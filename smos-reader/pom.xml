@@ -41,6 +41,11 @@
             <groupId>org.esa.beam.smos</groupId>
             <artifactId>smos-lsmask</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

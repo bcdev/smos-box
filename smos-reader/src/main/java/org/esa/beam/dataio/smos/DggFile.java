@@ -1,10 +1,6 @@
 package org.esa.beam.dataio.smos;
 
-import com.bc.ceres.binio.CompoundData;
-import com.bc.ceres.binio.CompoundMember;
-import com.bc.ceres.binio.CompoundType;
-import com.bc.ceres.binio.DataFormat;
-import com.bc.ceres.binio.SequenceData;
+import com.bc.ceres.binio.*;
 import com.bc.ceres.glevel.MultiLevelImage;
 import com.bc.ceres.glevel.MultiLevelSource;
 import com.bc.ceres.glevel.support.DefaultMultiLevelImage;
@@ -20,17 +16,13 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.Namespace;
 
-import java.awt.Dimension;
+import java.awt.*;
 import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.Arrays;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 class DggFile extends ExplorerFile {
 
@@ -130,7 +122,7 @@ class DggFile extends ExplorerFile {
         return gridPointList;
     }
 
-    public final int getGridPointIndex(int seqnum) {
+    public int getGridPointIndex(int seqnum) {
         return gridPointInfo.getGridPointIndex(seqnum);
     }
 
@@ -138,12 +130,12 @@ class DggFile extends ExplorerFile {
         return gridPointList.getCompoundType();
     }
 
-    public final CompoundData getGridPointData(int gridPointIndex) throws IOException {
+    public CompoundData getGridPointData(int gridPointIndex) throws IOException {
         return gridPointList.getCompound(gridPointIndex);
     }
 
     @Override
-    protected final Area getArea() {
+    protected Area getArea() {
         return new Area(area);
     }
 
@@ -250,7 +242,7 @@ class DggFile extends ExplorerFile {
             }
             if (descriptor.getFlagDescriptors() != null) {
                 ProductHelper.addFlagsAndMasks(product, band, descriptor.getFlagCodingName(),
-                                               descriptor.getFlagDescriptors());
+                        descriptor.getFlagDescriptors());
             }
 
             final ValueProvider valueProvider = createValueProvider(descriptor);

@@ -42,7 +42,7 @@ class DefaultValueProvider extends AbstractValueProvider {
     }
 
     @Override
-    public final int getGridPointIndex(int seqnum) {
+    public int getGridPointIndex(int seqnum) {
         return dggFile.getGridPointIndex(seqnum);
     }
 
