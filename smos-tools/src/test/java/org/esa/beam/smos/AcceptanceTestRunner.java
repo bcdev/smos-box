@@ -30,7 +30,7 @@ public class AcceptanceTestRunner extends BlockJUnit4ClassRunner {
             super.run(runNotifier);
         } else {
 
-            final Description description = Description.createTestDescription(clazz, "allMethods. Acceptance tests disabled");
+            final Description description = Description.createTestDescription(clazz, "allMethods. Acceptance tests disabled. Set VM param -Drun.acceptance.test=true to enable.");
             runNotifier.fireTestIgnored(description);
         }
     }

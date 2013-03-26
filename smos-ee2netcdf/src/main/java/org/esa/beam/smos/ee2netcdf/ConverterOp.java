@@ -1,6 +1,7 @@
 package org.esa.beam.smos.ee2netcdf;
 
-import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.geom.*;
+import com.vividsolutions.jts.geom.Polygon;
 import org.esa.beam.dataio.smos.DggFile;
 import org.esa.beam.dataio.smos.ExplorerFile;
 import org.esa.beam.dataio.smos.SmosProductReader;
@@ -13,7 +14,6 @@ import org.esa.beam.framework.gpf.annotations.OperatorMetadata;
 import org.esa.beam.framework.gpf.annotations.Parameter;
 import org.esa.beam.framework.gpf.annotations.SourceProducts;
 import org.esa.beam.framework.gpf.experimental.Output;
-import org.esa.beam.gpf.operators.standard.SubsetOp;
 import org.esa.beam.util.converters.JtsGeometryConverter;
 import org.esa.beam.util.io.FileUtils;
 
@@ -22,6 +22,7 @@ import java.awt.geom.Area;
 import java.awt.geom.PathIterator;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 @OperatorMetadata(
         alias = "SmosEE2NetCDF",
@@ -59,64 +60,53 @@ public class ConverterOp extends Operator implements Output {
 
         assertTargetDirectoryExists();
 
-        try {
-            // @todo 2 tb/tb change so that a single file failure does not kill the complete batch-run tb 2013-03-21
-            // @todo tb/tb attach logger tb 2013-03-25
-            convertProducts();
-        } catch (IOException e) {
-            throw new OperatorException(e.getMessage());
-        }
-    }
-
-    private void convertProducts() throws IOException {
         for (Product sourceProduct : sourceProducts) {
-            final SmosProductReader productReader = (SmosProductReader) sourceProduct.getProductReader();
-            final ExplorerFile explorerFile = productReader.getExplorerFile();
-
-            final Area dataArea = DggFile.computeArea((DggFile) explorerFile);
-            final Rectangle x_y_subset = getDataBoundingRect(sourceProduct, dataArea);
-
-            if (region != null) {
-                final Rectangle rectangle = SubsetOp.computePixelRegion(sourceProduct, region, 1);
-//            private static com.vividsolutions.jts.geom.Polygon convertAwtPathToJtsPolygon(Path2D
-//            path, GeometryFactory factory) {
-//                final PathIterator pathIterator = path.getPathIterator(null);
-//                ArrayList<double[]> coordList = new ArrayList<double[]>();
-//                int lastOpenIndex = 0;
-//                while (!pathIterator.isDone()) {
-//                    final double[] coords = new double[6];
-//                    final int segType = pathIterator.currentSegment(coords);
-//                    if (segType == PathIterator.SEG_CLOSE) {
-//                        // we should only detect a single SEG_CLOSE
-//                        coordList.add(coordList.get(lastOpenIndex));
-//                        lastOpenIndex = coordList.size();
-//                    } else {
-//                        coordList.add(coords);
-//                    }
-//                    pathIterator.next();
-//                }
-//                final Coordinate[] coordinates = new Coordinate[coordList.size()];
-//                for (int i1 = 0; i1 < coordinates.length; i1++) {
-//                    final double[] coord = coordList.get(i1);
-//                    coordinates[i1] = new Coordinate(coord[0], coord[1]);
-//                }
-//
-//                return factory.createPolygon(factory.createLinearRing(coordinates), null);
-//            }
-            }
-
-            final ProductSubsetDef subsetDef = new ProductSubsetDef();
-            subsetDef.setRegion(x_y_subset);
-            final Product subset = sourceProduct.createSubset(subsetDef, "", "");
-
-            final File outFile = getOutputFile(explorerFile.getDblFile(), targetDirectory);
-            outFile.createNewFile();
-
-            ProductIO.writeProduct(subset, outFile, "NetCDF4-CF", false);
+            convertProduct(sourceProduct);
         }
     }
 
-    static Rectangle getDataBoundingRect(Product sourceProduct, Area dataArea) throws IOException {
+
+    // package access for testing only tb 2013-03-26
+    static MultiPolygon convertToPolygon(Area dataArea) {
+        final PathIterator pathIterator = dataArea.getPathIterator(null);
+        final ArrayList<double[]> coordList = new ArrayList<double[]>();
+        final ArrayList<Polygon> polygonList = new ArrayList<Polygon>();
+        final GeometryFactory geometryFactory = new GeometryFactory();
+
+
+        while (!pathIterator.isDone()) {
+            final double[] coords = new double[6];
+            final int segType = pathIterator.currentSegment(coords);
+            if (segType == PathIterator.SEG_CLOSE) {
+                coordList.add(coordList.get(0));
+                final Coordinate[] coordinates = convert(coordList);
+
+                final Polygon polygon = geometryFactory.createPolygon(geometryFactory.createLinearRing(coordinates), null);
+                polygonList.add(polygon);
+
+                coordList.clear();
+            } else {
+                coordList.add(coords);
+            }
+            pathIterator.next();
+        }
+
+        final Polygon[] polygons = polygonList.toArray(new Polygon[polygonList.size()]);
+        return new MultiPolygon(polygons, geometryFactory);
+    }
+
+    // package access for testing tb 2013-03-26
+    static Coordinate[] convert(ArrayList<double[]> coordList) {
+        final Coordinate[] coordinates = new Coordinate[coordList.size()];
+        for (int i = 0; i < coordinates.length; i++) {
+            final double[] coord = coordList.get(i);
+            coordinates[i] = new Coordinate(coord[0], coord[1]);
+        }
+        return coordinates;
+    }
+
+    // package access for testing only tb 2013-03-26
+    static Rectangle getDataBoundingRect(Product sourceProduct, Geometry dataArea) throws IOException {
         final GeoCoding geoCoding = sourceProduct.getGeoCoding();
         final GeoPos geoPos = new GeoPos(0.f, 0.f);
         final PixelPos pixelPos = new PixelPos(0.f, 0.f);
@@ -124,41 +114,30 @@ public class ConverterOp extends Operator implements Output {
         double max_x = Integer.MIN_VALUE;
         double min_y = Integer.MAX_VALUE;
         double max_y = Integer.MIN_VALUE;
-        int segmentType;
-        final float[] coords = new float[6];
-        final PathIterator iterator = dataArea.getPathIterator(null);
-        while (!iterator.isDone()) {
-            segmentType = iterator.currentSegment(coords);
-            if (segmentType == PathIterator.SEG_MOVETO
-                    || segmentType == PathIterator.SEG_LINETO
-                    || segmentType == PathIterator.SEG_QUADTO
-                    || segmentType == PathIterator.SEG_CLOSE) {
 
-                geoPos.setLocation(coords[1], coords[0]);
-                geoCoding.getPixelPos(geoPos, pixelPos);
-
-                double ceil = Math.ceil(pixelPos.x);
-                if (ceil > max_x) {
-                    max_x = ceil;
-                }
-
-                double floor = Math.floor(pixelPos.x);
-                if (floor < min_x) {
-                    min_x = floor;
-                }
-
-                ceil = Math.ceil(pixelPos.y);
-                if (ceil > max_y) {
-                    max_y = ceil;
-                }
-
-                floor = Math.floor(pixelPos.y);
-                if (floor < min_y) {
-                    min_y = floor;
-                }
+        final Coordinate[] coordinates = dataArea.getCoordinates();
+        for (final Coordinate coordinate : coordinates) {
+            geoPos.setLocation((float) coordinate.y, (float) coordinate.x);
+            geoCoding.getPixelPos(geoPos, pixelPos);
+            double ceil = Math.ceil(pixelPos.x);
+            if (ceil > max_x) {
+                max_x = ceil;
             }
 
-            iterator.next();
+            double floor = Math.floor(pixelPos.x);
+            if (floor < min_x) {
+                min_x = floor;
+            }
+
+            ceil = Math.ceil(pixelPos.y);
+            if (ceil > max_y) {
+                max_y = ceil;
+            }
+
+            floor = Math.floor(pixelPos.y);
+            if (floor < min_y) {
+                min_y = floor;
+            }
         }
 
         return new Rectangle((int) min_x, (int) min_y, (int) (max_x - min_x), (int) (max_y - min_y));
@@ -183,5 +162,45 @@ public class ConverterOp extends Operator implements Output {
         final Product product = new Product("dummy", "dummy", 2, 2);
         product.addBand("dummy", ProductData.TYPE_INT8);
         setTargetProduct(product);
+    }
+
+    private void convertProduct(Product sourceProduct) {
+        try {
+            final SmosProductReader productReader = (SmosProductReader) sourceProduct.getProductReader();
+            final ExplorerFile explorerFile = productReader.getExplorerFile();
+
+            final Area dataArea = DggFile.computeArea((DggFile) explorerFile);
+            Geometry polygon = convertToPolygon(dataArea);
+
+            if (region != null) {
+                polygon = region.intersection(polygon);
+            }
+
+            if (polygon.isEmpty()) {
+                getLogger().info("No geometric intersection: " + sourceProduct.getFileLocation());
+                return;
+            }
+
+            final Rectangle x_y_subset = getDataBoundingRect(sourceProduct, polygon);
+            final ProductSubsetDef subsetDef = createSubsetDef(x_y_subset);
+            final Product subset = sourceProduct.createSubset(subsetDef, "", "");
+
+            final File outFile = getOutputFile(explorerFile.getDblFile(), targetDirectory);
+            if (!outFile.createNewFile()) {
+                throw new IOException("Unable to create target product: " + outFile.getAbsolutePath());
+            }
+
+            ProductIO.writeProduct(subset, outFile, "NetCDF4-CF", false);
+            getLogger().info("Successfully converted: " + sourceProduct.getFileLocation());
+        } catch (IOException e) {
+            getLogger().severe("Failed to convert file: " + sourceProduct.getFileLocation());
+            getLogger().severe(e.getMessage());
+        }
+    }
+
+    static ProductSubsetDef createSubsetDef(Rectangle rectangle) {
+        final ProductSubsetDef subsetDef = new ProductSubsetDef();
+        subsetDef.setRegion(rectangle);
+        return subsetDef;
     }
 }
