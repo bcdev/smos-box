@@ -1,0 +1,63 @@
+<module>
+    <manifestVersion>1.0.0</manifestVersion>
+
+    <symbolicName>smos-ee2netcdf</symbolicName>
+    <name>SMOS EarthExplorer to NetCDF converter</name>
+    <version>1.0</version>
+
+    <description>
+        <![CDATA[
+            <p>This SMOS-Box module allows conversion of SMOS file in Earth Explorer file format to
+            NetCDF 4 format.</p>
+        ]]>
+    </description>
+
+    <changelog>
+        <![CDATA[
+        Changes in 1.0:<br/>
+        ]]>
+    </changelog>
+
+    <vendor>Brockmann-Consult GmbH</vendor>
+    <contactAddress>Max-Planck-Str. 2, 21502 Geesthacht, Germany</contactAddress>
+    <copyright>(C) 2013 Brockmann-Consult GmbH</copyright>
+    <url>http://github.com/bcdev/smos-box</url>
+    <licenseUrl>http://www.gnu.org/licenses/gpl.html</licenseUrl>
+
+    <dependency>
+        <module>beam-gpf</module>
+    </dependency>
+    <dependency>
+        <module>beam-netcdf</module>
+    </dependency>
+    <dependency>
+        <module>smos-reader</module>
+    </dependency>
+    <dependency>
+        <module>smos-tools</module>
+    </dependency>
+
+
+    <categories>Processor,SMOS</categories>
+
+    <!-- @todo continue here tb 2013-03-26-->
+    <!--<extension point="beam-ui:actions">-->
+        <!--<action>-->
+            <!--<id>merisQaaIOP</id>-->
+            <!--<class>org.esa.beam.meris.qaa.ui.MerisQaaAction</class>-->
+            <!--<text>QAA for IOP (MERIS)...</text>-->
+            <!--<shortDescr>Invoke the QAA for IOP processor</shortDescr>-->
+            <!--<mnemonic>Q</mnemonic>-->
+            <!--<parent>tools</parent>-->
+            <!--<helpId>QAATool</helpId>-->
+            <!--<placeAfter>flhMciScientificTool</placeAfter>-->
+        <!--</action>-->
+    <!--</extension>-->
+
+    <!--<extension point="beam-ui:helpSets">-->
+        <!--<helpSet>-->
+            <!--<parent>beam-help</parent>-->
+            <!--<path>doc/help/qaa_v4.hs</path>-->
+        <!--</helpSet>-->
+    <!--</extension>-->
+</module>
