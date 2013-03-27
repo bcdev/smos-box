@@ -73,6 +73,33 @@ public class ConverterOpAcceptanceTest {
     }
 
     @Test
+    public void testConvert_BWSD1C_withRegion_andSourceProductPaths() throws IOException {
+        final File file = getResourceFile("SM_OPER_MIR_BWLF1C_20111026T143206_20111026T152520_503_001_1.zip");
+
+        Product product = null;
+        try {
+            product = ProductIO.readProduct(file);
+
+            final HashMap<String, Object> defaultParameterMap = createDefaultParameterMap();
+            defaultParameterMap.put("sourceProductPaths", file.getParent() + File.separator + "*BWLF1C*");
+            defaultParameterMap.put("region", "POLYGON((3 -70,5 -70,5 -71,3 -71,3 -70))");
+
+            GPF.createProduct("SmosEE2NetCDF",
+                    defaultParameterMap,
+                    null);
+
+            assertTrue(targetDirectory.isDirectory());
+            final File expectedOutputFile = new File(targetDirectory, "SM_OPER_MIR_BWLF1C_20111026T143206_20111026T152520_503_001_1.nc");
+            assertTrue(expectedOutputFile.isFile());
+            // @todo 2 tb/tb more assertions 2013-03-25
+        } finally {
+            if (product != null) {
+                product.dispose();
+            }
+        }
+    }
+
+    @Test
     public void testConvert_OSUDP2_withRegion() throws IOException {
         final File file = getResourceFile("SM_OPER_MIR_OSUDP2_20091204T001853_20091204T011255_310_001_1.zip");
 
@@ -166,7 +193,7 @@ public class ConverterOpAcceptanceTest {
 
     }
 
-    private File getResourceFile(String filename) {
+    static File getResourceFile(String filename) {
         File testFile = new File("./smos-ee2netcdf/src/test/resources/org/esa/beam/smos/ee2netcdf/" + filename);
         if (!testFile.exists()) {
             testFile = new File("./src/test/resources/org/esa/beam/smos/ee2netcdf/" + filename);

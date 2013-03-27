@@ -16,6 +16,7 @@ import org.esa.beam.framework.gpf.annotations.SourceProducts;
 import org.esa.beam.framework.gpf.experimental.Output;
 import org.esa.beam.util.converters.JtsGeometryConverter;
 import org.esa.beam.util.io.FileUtils;
+import org.esa.beam.util.io.WildcardMatcher;
 
 import java.awt.*;
 import java.awt.geom.Area;
@@ -23,7 +24,9 @@ import java.awt.geom.PathIterator;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.TreeSet;
 
+@SuppressWarnings("MismatchedReadAndWriteOfArray")
 @OperatorMetadata(
         alias = "SmosEE2NetCDF",
         version = "0.1",
@@ -40,9 +43,15 @@ public class ConverterOp extends Operator implements Output {
     // MIR_SM_OSUDP2
     // MIR_SM_SMUDP2
 
-    @SourceProducts(count = -1,
-            type = "MIR_BW[LS][DF]1C|MIR_SC[LS][DF]1C|MIR_OSUDP2|MIR_SMUPD2")
+    @SourceProducts(type = "MIR_BW[LS][DF]1C|MIR_SC[LS][DF]1C|MIR_OSUDP2|MIR_SMUPD2",
+            description = "The source products to be converted. If not given, the parameter 'sourceProductPaths' must be provided.")
     private Product[] sourceProducts;
+
+    @Parameter(description = "Comma-separated list of file paths specifying the source products.\n" +
+            "Each path may contain the wildcards '**' (matches recursively any directory),\n" +
+            "'*' (matches any character sequence in path names) and\n" +
+            "'?' (matches any single character).")
+    private String[] sourceProductPaths;
 
     @Parameter(description = "The target directory for the converted data. If not existing, directory will be created.",
             defaultValue = ".",
@@ -60,9 +69,32 @@ public class ConverterOp extends Operator implements Output {
 
         assertTargetDirectoryExists();
 
-        for (Product sourceProduct : sourceProducts) {
-            convertProduct(sourceProduct);
+        if (sourceProducts != null) {
+            for (Product sourceProduct : sourceProducts) {
+                convertProduct(sourceProduct);
+            }
         }
+
+        if (sourceProductPaths != null) {
+            final TreeSet<File> sourceFileSet = createInputFileSet(sourceProductPaths);
+
+            for (File inputFile : sourceFileSet) {
+                convertFile(inputFile);
+            }
+        }
+    }
+
+    // package access for testing only tb 2013-03-27
+    static TreeSet<File> createInputFileSet(String[] sourceProductPaths) {
+        final TreeSet<File> sourceFileSet = new TreeSet<File>();
+        try {
+            for (String sourceProductPath : sourceProductPaths) {
+                WildcardMatcher.glob(sourceProductPath, sourceFileSet);
+            }
+        } catch (IOException e) {
+            throw new OperatorException(e.getMessage());
+        }
+        return sourceFileSet;
     }
 
     // package access for testing only tb 2013-03-26
@@ -149,6 +181,13 @@ public class ConverterOp extends Operator implements Output {
         return outFile;
     }
 
+    // package access for testing only - tb 2013-03-27
+    static ProductSubsetDef createSubsetDef(Rectangle rectangle) {
+        final ProductSubsetDef subsetDef = new ProductSubsetDef();
+        subsetDef.setRegion(rectangle);
+        return subsetDef;
+    }
+
     private void assertTargetDirectoryExists() {
         if (!targetDirectory.isDirectory()) {
             if (!targetDirectory.mkdirs()) {
@@ -161,6 +200,20 @@ public class ConverterOp extends Operator implements Output {
         final Product product = new Product("dummy", "dummy", 2, 2);
         product.addBand("dummy", ProductData.TYPE_INT8);
         setTargetProduct(product);
+    }
+
+    private void convertFile(File inputFile) {
+        try {
+            final Product product = ProductIO.readProduct(inputFile);
+            if (product != null) {
+                convertProduct(product);
+            }  else {
+                getLogger().warning("Unable to open file: " + inputFile.getAbsolutePath());
+            }
+        } catch (IOException e) {
+            getLogger().severe("Failed to convert file: " + inputFile.getAbsolutePath());
+            getLogger().severe(e.getMessage());
+        }
     }
 
     private void convertProduct(Product sourceProduct) {
@@ -195,11 +248,5 @@ public class ConverterOp extends Operator implements Output {
             getLogger().severe("Failed to convert file: " + sourceProduct.getFileLocation());
             getLogger().severe(e.getMessage());
         }
-    }
-
-    static ProductSubsetDef createSubsetDef(Rectangle rectangle) {
-        final ProductSubsetDef subsetDef = new ProductSubsetDef();
-        subsetDef.setRegion(rectangle);
-        return subsetDef;
     }
 }
