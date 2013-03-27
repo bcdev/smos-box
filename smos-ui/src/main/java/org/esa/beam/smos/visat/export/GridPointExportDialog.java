@@ -266,7 +266,6 @@ class GridPointExportDialog extends ModalDialog {
         layout.setCellPadding(3, 0, new Insets(0, 24, 3, 3));
         sourceProductPanel.add(checkBox);
 
-
         return sourceProductPanel;
     }
 

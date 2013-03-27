@@ -44,4 +44,14 @@
         <serviceProvider>org.esa.beam.framework.gpf.OperatorSpi</serviceProvider>
     </extension>
 
+    <extension point="beam-ui:actions">
+        <action>
+            <id>smosEE2NetCDFExport</id>
+            <class>org.esa.beam.smos.ee2netcdf.visat.NetCDFExportAction</class>
+            <helpId>smosEE2NetCDFExport</helpId>
+            <parent>tool</parent>
+            <text>Convert SMOS EE files to NetCDF-4</text>
+            <mnemonic>N</mnemonic>
+        </action>
+    </extension>
 </module>
