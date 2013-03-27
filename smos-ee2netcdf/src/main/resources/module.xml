@@ -38,26 +38,10 @@
     </dependency>
 
 
-    <categories>Processor,SMOS</categories>
+    <categories>Processor,SMOS,Data Conversion</categories>
 
-    <!-- @todo continue here tb 2013-03-26-->
-    <!--<extension point="beam-ui:actions">-->
-        <!--<action>-->
-            <!--<id>merisQaaIOP</id>-->
-            <!--<class>org.esa.beam.meris.qaa.ui.MerisQaaAction</class>-->
-            <!--<text>QAA for IOP (MERIS)...</text>-->
-            <!--<shortDescr>Invoke the QAA for IOP processor</shortDescr>-->
-            <!--<mnemonic>Q</mnemonic>-->
-            <!--<parent>tools</parent>-->
-            <!--<helpId>QAATool</helpId>-->
-            <!--<placeAfter>flhMciScientificTool</placeAfter>-->
-        <!--</action>-->
-    <!--</extension>-->
+    <extension point="ceres-core:serviceProviders">
+        <serviceProvider>org.esa.beam.framework.gpf.OperatorSpi</serviceProvider>
+    </extension>
 
-    <!--<extension point="beam-ui:helpSets">-->
-        <!--<helpSet>-->
-            <!--<parent>beam-help</parent>-->
-            <!--<path>doc/help/qaa_v4.hs</path>-->
-        <!--</helpSet>-->
-    <!--</extension>-->
 </module>

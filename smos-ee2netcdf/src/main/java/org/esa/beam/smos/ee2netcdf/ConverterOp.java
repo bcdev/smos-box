@@ -65,7 +65,6 @@ public class ConverterOp extends Operator implements Output {
         }
     }
 
-
     // package access for testing only tb 2013-03-26
     static MultiPolygon convertToPolygon(Area dataArea) {
         final PathIterator pathIterator = dataArea.getPathIterator(null);
