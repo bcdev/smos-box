@@ -85,8 +85,7 @@ public class ConverterOpAcceptanceTest {
             defaultParameterMap.put("region", "POLYGON((3 -70,5 -70,5 -71,3 -71,3 -70))");
 
             GPF.createProduct("SmosEE2NetCDF",
-                    defaultParameterMap,
-                    null);
+                    defaultParameterMap);
 
             assertTrue(targetDirectory.isDirectory());
             final File expectedOutputFile = new File(targetDirectory, "SM_OPER_MIR_BWLF1C_20111026T143206_20111026T152520_503_001_1.nc");
