@@ -34,6 +34,7 @@ import org.esa.beam.framework.gpf.annotations.ParameterDescriptorFactory;
 import org.esa.beam.framework.ui.AppContext;
 import org.esa.beam.framework.ui.ModalDialog;
 import org.esa.beam.smos.gui.BindingConstants;
+import org.esa.beam.smos.gui.ChooserFactory;
 import org.esa.beam.smos.gui.GuiHelper;
 import org.esa.beam.util.io.FileChooserFactory;
 
@@ -210,7 +211,7 @@ class GridPointExportDialog extends ModalDialog {
         bindingContext.bindEnabledState(ALIAS_RECURSIVE, true, BindingConstants.SELECTED_PRODUCT, false);
 
         final PropertyDescriptor sourceDirectoryDescriptor = propertyContainer.getDescriptor(BindingConstants.SOURCE_DIRECTORY);
-        final CF chooserFactory = new CF() {
+        final ChooserFactory chooserFactory = new ChooserFactory() {
             @Override
             public JFileChooser createChooser(File file) {
                 return FileChooserFactory.getInstance().createDirChooser(file);
@@ -226,7 +227,7 @@ class GridPointExportDialog extends ModalDialog {
         return sourceProductPanel;
     }
 
-    private JComponent createFileEditorComponent(PropertyDescriptor descriptor, final CF cf) {
+    private JComponent createFileEditorComponent(PropertyDescriptor descriptor, final ChooserFactory cf) {
         final JTextField textField = new JTextField();
         textField.setColumns(30);
         final ComponentAdapter adapter = new TextComponentAdapter(textField);
@@ -375,7 +376,7 @@ class GridPointExportDialog extends ModalDialog {
             label.setText("Save subset files to directory:");
         }
         final PropertyDescriptor targetFileDescriptor = propertyContainer.getDescriptor(ALIAS_TARGET_FILE);
-        final CF chooserFactory = new CF() {
+        final ChooserFactory chooserFactory = new ChooserFactory() {
             @Override
             public JFileChooser createChooser(File file) {
                 final FileChooserFactory chooserFactory = FileChooserFactory.getInstance();
@@ -443,9 +444,6 @@ class GridPointExportDialog extends ModalDialog {
         return null;
     }
 
-    private interface CF {
-        JFileChooser createChooser(File file);
-    }
 
     private class ExportFormatChangeListener implements PropertyChangeListener {
 
