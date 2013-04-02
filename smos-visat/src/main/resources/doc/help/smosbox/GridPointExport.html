@@ -1,0 +1,152 @@
+<!--
+  ~ Copyright (C) 2010 Brockmann Consult GmbH (info@brockmann-consult.de)
+  ~
+  ~ This program is free software; you can redistribute it and/or modify it
+  ~ under the terms of the GNU General Public License as published by the Free
+  ~ Software Foundation; either version 3 of the License, or (at your option)
+  ~ any later version.
+  ~ This program is distributed in the hope that it will be useful, but WITHOUT
+  ~ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+  ~ FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+  ~ more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License along
+  ~ with this program; if not, see http://www.gnu.org/licenses/
+  -->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta name="generator" content=
+            "HTML Tidy for Mac OS X (vers 25 March 2009), see www.w3.org"/>
+
+    <title>SMOS Grid Point Export</title>
+    <link rel="stylesheet" href="../../style.css" type="text/css"/>
+</head>
+
+<body>
+<table class="header">
+    <tr class="header">
+        <td class="header">&nbsp; SMOS Grid Point Export</td>
+
+        <td class="header" align="right"><a href=
+                "../../index.html"><img src="../images/BeamHeader.jpg"
+                                        border="0"/></a></td>
+    </tr>
+</table>
+
+<h3>SMOS Grid Point Export</h3>
+
+<p>The Grid Point Export Command can be used to export the data of
+    selected DGG grid points. The data can be exported either as CSV
+    formatted text file (where individual values are separated by
+    a semicolon) or as Earth Explorer formatted subsets.</p>
+
+<h4>Grid Point Export in VISAT</h4>
+
+<p><img src="images/GridPointExport.png" alt=
+        "Grid Point Export"/></p>
+
+<p><b>Source Products:</b> Either the SMOS product selected in
+    VISAT, or all SMOS products residing in a directory of the file
+    system can be used for exporting. The search for SMOS products
+    may optionally include subdirectories.</p>
+
+<p><b>Region of Interest:</b> There are three possibilities for
+    specifying a region of interest (ROI) considered for export:</p>
+
+<ul>
+    <li>A ROI defined by a geometry</li>
+
+    <li>A ROI defined by the grid points under the pins of the SMOS
+        product selected in VISAT
+    </li>
+
+    <li>A ROI defined by a latitude-longitude box</li>
+</ul>
+
+<p><b>Target File:</b> The file, which receives the exported data.
+    For exporting as CSV, the target file must be a normal file while
+    for creating Earth Explorer subsets, it must be a directory. The
+    amount of data can be huge, depending on the ROI selected and the
+    number of source products traversed.</p>
+
+<p>The file name of each Earth Explorer subset is generated from
+    the file name of its source, with sensing start and stop times
+    matching the actual snapshots in the subset, if the source
+    contains the necessary snapshot information.
+</p>
+
+<h4>Grid Point Export on the Command Line</h4>
+
+<p>The command line tool for exporting grid point data resides in
+    the <code>bin</code> directory of your BEAM installation.
+    Depending on your system platform, type</p>
+  <pre>
+    ${BEAM_HOME}/bin/export-grid-points.bat
+  
+</pre>
+  <pre>
+    ${BEAM_HOME}/bin/export-grid-points.sh
+  
+</pre>
+
+<p>or</p>
+  <pre>
+    ${BEAM_HOME}/bin/export-grid-points.command
+  
+</pre>
+
+<p>in order to obtain a usage message. The grid points, for which
+    data is exported can be defined by either a latitude-longitude
+    box or a latitude-longitude point. For instance, type</p>
+  <pre>
+    export-grid-points.sh -point 1.0 7.0 SM_TEST_MIR_SCLF1C_20070223T061043_20070223T061105_310_001_0
+  
+</pre>
+
+<p>for exporting the data of a single grid point. Type</p>
+  <pre>
+    export-grid-points.sh -box -10.0 10.0 -20.0 20.0 SM_TEST_MIR_SCLF1C_20070223T061043_20070223T061105_310_001_0
+  
+</pre>
+
+<p>for exporting all grid points contained in a
+    latitude-longitude box. The target file can defined by means of
+    the <code>-o</code> option. If a target file is not defined, the
+    output is printed to the console. For example, type</p>
+  <pre>
+    export-grid-points.sh -point 1.0 7.0 -o export.csv SM_TEST_MIR_SCLF1C_20070223T061043_20070223T061105_310_001_0
+  
+</pre>
+
+<p>If the target file is a directory, the grid point data are
+    exported in form of EE formatted files, which all reside in
+    the target directory. The file name of each subset product is
+    generated from the file name of its source product. For example,
+    type</p>
+  <pre>
+    export-grid-points.sh -point 1.0 7.0 -o exportDir SM_????_MIR_SCLD1C_2010*
+  
+</pre>
+
+<p>Using more than a single SMOS product as source is possible.
+    The usual shell completion can be used to specify multiple
+    product files. For example, type</p>
+  <pre>
+    export-grid-points.sh -point 1.0 7.0 -o export.csv SM_????_MIR_SCLD1C_2010*
+
+</pre>
+
+<p>or</p>
+  <pre>
+    export-grid-points.sh -point 1.0 7.0 -o exportDir SM_????_MIR_SCLD1C_2010*
+
+</pre>
+
+<p>to export only SMOS land dual-polarisation science products
+    for 2010.</p>
+</body>
+</html>
