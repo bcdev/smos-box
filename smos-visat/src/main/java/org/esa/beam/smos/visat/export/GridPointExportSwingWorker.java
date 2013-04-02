@@ -26,6 +26,7 @@ import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.framework.datamodel.VectorDataNode;
 import org.esa.beam.framework.gpf.annotations.Parameter;
 import org.esa.beam.framework.ui.AppContext;
+import org.esa.beam.smos.gui.BindingConstants;
 import org.geotools.feature.FeatureIterator;
 import org.geotools.geometry.jts.LiteShape2;
 import org.opengis.feature.simple.SimpleFeature;
@@ -45,10 +46,10 @@ class GridPointExportSwingWorker extends ProgressMonitorSwingWorker<List<Excepti
 
     private final AppContext appContext;
 
-    @Parameter(alias = GridPointExportDialog.ALIAS_USE_SELECTED_PRODUCT)
+    @Parameter(alias = BindingConstants.SELECTED_PRODUCT)
     private boolean useSelectedProduct;
 
-    @Parameter(alias = GridPointExportDialog.ALIAS_SOURCE_DIRECTORY)
+    @Parameter(alias = BindingConstants.SOURCE_DIRECTORY)
     private File sourceDirectory;
 
     @Parameter(alias = GridPointExportDialog.ALIAS_RECURSIVE, defaultValue = "false")

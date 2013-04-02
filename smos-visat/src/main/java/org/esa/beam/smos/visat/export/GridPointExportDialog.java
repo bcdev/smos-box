@@ -21,11 +21,7 @@ import com.bc.ceres.binding.PropertyDescriptor;
 import com.bc.ceres.binding.ValidationException;
 import com.bc.ceres.binding.ValueSet;
 import com.bc.ceres.swing.TableLayout;
-import com.bc.ceres.swing.binding.Binding;
-import com.bc.ceres.swing.binding.BindingContext;
-import com.bc.ceres.swing.binding.ComponentAdapter;
-import com.bc.ceres.swing.binding.PropertyEditor;
-import com.bc.ceres.swing.binding.PropertyEditorRegistry;
+import com.bc.ceres.swing.binding.*;
 import com.bc.ceres.swing.binding.internal.SingleSelectionEditor;
 import com.bc.ceres.swing.binding.internal.TextComponentAdapter;
 import com.bc.ceres.swing.binding.internal.TextFieldEditor;
@@ -33,38 +29,17 @@ import org.esa.beam.dataio.smos.ExplorerFile;
 import org.esa.beam.dataio.smos.SmosFile;
 import org.esa.beam.dataio.smos.SmosProductReader;
 import org.esa.beam.framework.dataio.ProductReader;
-import org.esa.beam.framework.datamodel.PlainFeatureFactory;
-import org.esa.beam.framework.datamodel.Product;
-import org.esa.beam.framework.datamodel.ProductNode;
-import org.esa.beam.framework.datamodel.ProductNodeGroup;
-import org.esa.beam.framework.datamodel.VectorDataNode;
+import org.esa.beam.framework.datamodel.*;
 import org.esa.beam.framework.gpf.annotations.ParameterDescriptorFactory;
 import org.esa.beam.framework.ui.AppContext;
 import org.esa.beam.framework.ui.ModalDialog;
+import org.esa.beam.smos.gui.BindingConstants;
+import org.esa.beam.smos.gui.GuiHelper;
 import org.esa.beam.util.io.FileChooserFactory;
 
-import javax.swing.AbstractButton;
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.ButtonGroup;
-import javax.swing.DefaultListCellRenderer;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JFileChooser;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JTextField;
+import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Insets;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
@@ -84,9 +59,7 @@ class GridPointExportDialog extends ModalDialog {
     static final String ALIAS_GEOMETRY = "geometry";
     static final String ALIAS_ROI_TYPE = "roiType";
     static final String ALIAS_RECURSIVE = "recursive";
-    static final String ALIAS_SOURCE_DIRECTORY = "sourceDirectory";
     static final String ALIAS_TARGET_FILE = "targetFileOrDir";
-    static final String ALIAS_USE_SELECTED_PRODUCT = "useSelectedProduct";
     static final String ALIAS_NORTH = "north";
     static final String ALIAS_SOUTH = "south";
     static final String ALIAS_EAST = "east";
@@ -124,7 +97,7 @@ class GridPointExportDialog extends ModalDialog {
 
     @Override
     protected void onOK() {
-        final File sourceDirectory = (File) propertyContainer.getValue(ALIAS_SOURCE_DIRECTORY);
+        final File sourceDirectory = (File) propertyContainer.getValue(BindingConstants.SOURCE_DIRECTORY);
         final File targetFile = (File) propertyContainer.getValue(ALIAS_TARGET_FILE);
         setDefaultSourceDirectory(sourceDirectory);
         setDefaultTargetFile(targetFile);
@@ -133,7 +106,7 @@ class GridPointExportDialog extends ModalDialog {
                     "The selected target file\n''{0}''\nalready exists.\n\nDo you want to overwrite the target file?",
                     targetFile.getPath());
             final int answer = JOptionPane.showConfirmDialog(getJDialog(), message, getTitle(),
-                                                             JOptionPane.YES_NO_OPTION);
+                    JOptionPane.YES_NO_OPTION);
             if (answer != JOptionPane.YES_OPTION) {
                 return;
             }
@@ -177,7 +150,7 @@ class GridPointExportDialog extends ModalDialog {
 
     private void initPropertyContainer() throws ValidationException {
         propertyContainer.setDefaultValues();
-        propertyContainer.setValue(ALIAS_SOURCE_DIRECTORY, getDefaultSourceDirectory());
+        propertyContainer.setValue(BindingConstants.SOURCE_DIRECTORY, getDefaultSourceDirectory());
         final File targetFile = getDefaultTargetFile();
         propertyContainer.setValue(ALIAS_TARGET_FILE, targetFile);
 
@@ -204,7 +177,7 @@ class GridPointExportDialog extends ModalDialog {
                 propertyContainer.setValue(ALIAS_ROI_TYPE, 1);
             }
         }
-        propertyContainer.setValue(ALIAS_USE_SELECTED_PRODUCT, selectedProduct != null);
+        propertyContainer.setValue(BindingConstants.SELECTED_PRODUCT, selectedProduct != null);
         if (targetFile.isDirectory()) {
             propertyContainer.setValue(ALIAS_EXPORT_FORMAT, NAME_EEF);
         }
@@ -212,10 +185,8 @@ class GridPointExportDialog extends ModalDialog {
     }
 
     private void createUI() {
-        final JPanel mainPanel = new JPanel();
-        final BoxLayout layout = new BoxLayout(mainPanel, BoxLayout.Y_AXIS);
+        final JPanel mainPanel = GuiHelper.createPanelWithBoxLayout();
 
-        mainPanel.setLayout(layout);
         mainPanel.add(createSourceProductPanel());
         mainPanel.add(createRoiPanel());
         mainPanel.add(createTargetFilePanel());
@@ -224,25 +195,21 @@ class GridPointExportDialog extends ModalDialog {
     }
 
     private JComponent createSourceProductPanel() {
-        final JRadioButton useSelectedProductButton = new JRadioButton("Use selected SMOS product");
-        final JRadioButton useAllProductsInDirectoryButton = new JRadioButton("Use all SMOS products in directory:");
-        final Map<AbstractButton, Object> buttonGroupValueSet = new HashMap<AbstractButton, Object>();
-        buttonGroupValueSet.put(useSelectedProductButton, true);
-        buttonGroupValueSet.put(useAllProductsInDirectoryButton, false);
-        final ButtonGroup buttonGroup = new ButtonGroup();
-        buttonGroup.add(useSelectedProductButton);
-        buttonGroup.add(useAllProductsInDirectoryButton);
-        if (getSelectedSmosProduct() == null) {
-            useSelectedProductButton.setEnabled(false);
-        }
-        bindingContext.bind(ALIAS_USE_SELECTED_PRODUCT, buttonGroup, buttonGroupValueSet);
-        bindingContext.bindEnabledState(ALIAS_SOURCE_DIRECTORY, true, ALIAS_USE_SELECTED_PRODUCT, false);
+        final boolean useSelectProductEnabled = getSelectedSmosProduct() != null;
+
+        final TableLayout layout = GuiHelper.createWeightedTablelayout(1);
+        final JPanel sourceProductPanel = new JPanel(layout);
+        sourceProductPanel.setBorder(BorderFactory.createTitledBorder("Source Products"));
+
+        GuiHelper.addSourceProductsButtons(sourceProductPanel, useSelectProductEnabled, bindingContext);
+
+
 
         final JCheckBox checkBox = new JCheckBox("Descend into subdirectories");
         bindingContext.bind(ALIAS_RECURSIVE, checkBox);
-        bindingContext.bindEnabledState(ALIAS_RECURSIVE, true, ALIAS_USE_SELECTED_PRODUCT, false);
+        bindingContext.bindEnabledState(ALIAS_RECURSIVE, true, BindingConstants.SELECTED_PRODUCT, false);
 
-        final PropertyDescriptor sourceDirectoryDescriptor = propertyContainer.getDescriptor(ALIAS_SOURCE_DIRECTORY);
+        final PropertyDescriptor sourceDirectoryDescriptor = propertyContainer.getDescriptor(BindingConstants.SOURCE_DIRECTORY);
         final CF chooserFactory = new CF() {
             @Override
             public JFileChooser createChooser(File file) {
@@ -251,16 +218,6 @@ class GridPointExportDialog extends ModalDialog {
         };
         final JComponent fileEditor = createFileEditorComponent(sourceDirectoryDescriptor, chooserFactory);
 
-        final TableLayout layout = new TableLayout(1);
-        layout.setTableAnchor(TableLayout.Anchor.WEST);
-        layout.setTableFill(TableLayout.Fill.HORIZONTAL);
-        layout.setTablePadding(3, 3);
-        layout.setTableWeightX(1.0);
-
-        final JPanel sourceProductPanel = new JPanel(layout);
-        sourceProductPanel.setBorder(BorderFactory.createTitledBorder("Source Products"));
-        sourceProductPanel.add(useSelectedProductButton);
-        sourceProductPanel.add(useAllProductsInDirectoryButton);
         layout.setCellPadding(2, 0, new Insets(0, 24, 3, 3));
         sourceProductPanel.add(fileEditor);
         layout.setCellPadding(3, 0, new Insets(0, 24, 3, 3));
@@ -331,11 +288,7 @@ class GridPointExportDialog extends ModalDialog {
         final DefaultListCellRenderer listCellRenderer = new ProductNodeRenderer();
         geometryComboBox.setRenderer(listCellRenderer);
 
-        final TableLayout layout = new TableLayout(1);
-        layout.setTableAnchor(TableLayout.Anchor.WEST);
-        layout.setTableFill(TableLayout.Fill.HORIZONTAL);
-        layout.setTablePadding(3, 3);
-        layout.setTableWeightX(1.0);
+        final TableLayout layout = GuiHelper.createWeightedTablelayout(1);
 
         final JPanel roiPanel = new JPanel(layout);
         roiPanel.setBorder(BorderFactory.createTitledBorder("Region of Interest"));
@@ -353,10 +306,7 @@ class GridPointExportDialog extends ModalDialog {
     }
 
     private Component createLatLonPanel() {
-        final TableLayout layout = new TableLayout(3);
-        layout.setTableAnchor(TableLayout.Anchor.WEST);
-        layout.setTableFill(TableLayout.Fill.HORIZONTAL);
-        layout.setTablePadding(3, 3);
+        final TableLayout layout = GuiHelper.createTableLayout(3);
 
         final JPanel areaPanel = new JPanel(layout);
         final JLabel emptyLabel = new JLabel(" ");
@@ -379,7 +329,7 @@ class GridPointExportDialog extends ModalDialog {
         final PropertyEditor editor =
                 PropertyEditorRegistry.getInstance().getPropertyEditor(TextFieldEditor.class.getName());
         final JTextField textField = (JTextField) editor.createEditorComponent(propertyContainer.getDescriptor(name),
-                                                                               bindingContext);
+                bindingContext);
 
         final JLabel nameLabel = new JLabel(displayName);
         final JLabel unitLabel = new JLabel("\u00b0");
@@ -405,11 +355,7 @@ class GridPointExportDialog extends ModalDialog {
     }
 
     private JComponent createTargetFilePanel() {
-        final TableLayout layout = new TableLayout(1);
-        layout.setTableAnchor(TableLayout.Anchor.WEST);
-        layout.setTableFill(TableLayout.Fill.HORIZONTAL);
-        layout.setTablePadding(3, 3);
-        layout.setTableWeightX(1.0);
+        final TableLayout layout = GuiHelper.createWeightedTablelayout(1);
 
         final JPanel targetFilePanel = new JPanel(layout);
         targetFilePanel.setBorder(BorderFactory.createTitledBorder("Target File"));

@@ -192,7 +192,7 @@
 
             <dependency>
                 <groupId>org.esa.beam.smos</groupId>
-                <artifactId>smos-ui</artifactId>
+                <artifactId>smos-visat</artifactId>
                 <version>${version}</version>
             </dependency>
 
@@ -205,6 +205,12 @@
                 <groupId>org.esa.beam.smos</groupId>
                 <artifactId>smos-tools</artifactId>
                 <type>test-jar</type>
+                <version>${version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.esa.beam.smos</groupId>
+                <artifactId>smos-gui</artifactId>
                 <version>${version}</version>
             </dependency>
 

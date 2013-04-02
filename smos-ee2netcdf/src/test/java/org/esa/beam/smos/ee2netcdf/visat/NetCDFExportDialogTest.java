@@ -1,11 +1,11 @@
 package org.esa.beam.smos.ee2netcdf.visat;
 
 
+import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.framework.gpf.ui.DefaultAppContext;
 import org.junit.Test;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class NetCDFExportDialogTest {
 
@@ -13,6 +13,7 @@ public class NetCDFExportDialogTest {
 //    @Test
 //    public void testShow() {
 //        final DefaultAppContext appContext = new DefaultAppContext("test");
+//        appContext.setSelectedProduct(new Product("bla", "MIR_BWSF1C", 2, 2));
 //        final NetCDFExportDialog netCDFExportDialog = new NetCDFExportDialog(appContext, "bla");
 //        netCDFExportDialog.show();
 //    }
@@ -36,4 +37,32 @@ public class NetCDFExportDialogTest {
         assertFalse(NetCDFExportDialog.isSupportedType("AUX_ECMWF_"));
         assertFalse(NetCDFExportDialog.isSupportedType("MIR_AFWU1A"));
     }
+
+    @Test
+    public void testCanProductSelectionBeEnabled_noProduct() {
+        final DefaultAppContext appContext = new DefaultAppContext("test");
+        assertNull(appContext.getSelectedProduct());
+
+        assertFalse(NetCDFExportDialog.canProductSelectionBeEnabled(appContext));
+    }
+
+    @Test
+    public void testCanProductSelectionBeEnabled_wrongProductType() {
+        final DefaultAppContext appContext = new DefaultAppContext("test");
+        appContext.setSelectedProduct(new Product("test", "MER_RR__1P", 2, 2));
+        assertNotNull(appContext.getSelectedProduct());
+
+        assertFalse(NetCDFExportDialog.canProductSelectionBeEnabled(appContext));
+    }
+
+    @Test
+    public void testCanProductSelectionBeEnabled_validProductType() {
+        final DefaultAppContext appContext = new DefaultAppContext("test");
+        appContext.setSelectedProduct(new Product("test", "MIR_SCLF1C", 2, 2));
+        assertNotNull(appContext.getSelectedProduct());
+
+        assertTrue(NetCDFExportDialog.canProductSelectionBeEnabled(appContext));
+    }
 }
+
+
