@@ -1,8 +1,8 @@
 <module>
     <manifestVersion>1.0.0</manifestVersion>
     <symbolicName>smos-ui</symbolicName>
-    <version>2.2</version>
-    <name>SMOS UI Components</name>
+    <version>2.3</version>
+    <name>SMOS Visat Integration Components</name>
     <description>
         This module provides several UI components suited for visual
         inspection and analysis of data products acquired by ESA's
@@ -13,7 +13,7 @@
     <contactAddress>
         Max Planck Str.2, 21502 Geesthacht (Germany)
     </contactAddress>
-    <copyright>(C) 2010 by Brockmann Consult GmbH</copyright>
+    <copyright>(C) 2010-2013 by Brockmann Consult GmbH</copyright>
     <url>http://envisat.esa.int/beam</url>
     <licenseUrl>http://www.gnu.org/licenses/gpl.html</licenseUrl>
 

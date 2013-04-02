@@ -1,0 +1,52 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <artifactId>smos-box</artifactId>
+        <groupId>org.esa.beam.smos</groupId>
+        <version>2.3-SNAPSHOT</version>
+    </parent>
+
+    <packaging>jar</packaging>
+
+    <groupId>org.esa.beam.smos</groupId>
+    <artifactId>smos-gui</artifactId>
+    <name>SMOS Gui Tools</name>
+    <description>SMOS Gui Tools Package</description>
+
+    <repositories>
+        <repository>
+            <id>bc-mvn-repo-public</id>
+            <name>Public Maven Repository at Brockmann-Consult</name>
+            <url>http://www.brockmann-consult.de/mvn/os</url>
+            <releases>
+                <enabled>true</enabled>
+                <checksumPolicy>warn</checksumPolicy>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <checksumPolicy>warn</checksumPolicy>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>bc-mvn-repo-closed</id>
+            <name>Private Maven Repository at Brockmann Consult</name>
+            <url>scp://www.brockmann-consult.de/home/maven-cs</url>
+            <releases>
+                <enabled>true</enabled>
+                <checksumPolicy>warn</checksumPolicy>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <checksumPolicy>warn</checksumPolicy>
+            </snapshots>
+        </repository>
+    </repositories>
+
+    <dependencies>
+    </dependencies>
+
+</project>
+

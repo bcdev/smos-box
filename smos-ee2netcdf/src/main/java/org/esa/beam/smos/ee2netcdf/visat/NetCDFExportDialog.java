@@ -53,7 +53,6 @@ public class NetCDFExportDialog extends ModalDialog {
 
         setEnabledStateForProductSelection(useSelectedProductButton);
 
-
         final TableLayout layout = new TableLayout(1);
         layout.setTableAnchor(TableLayout.Anchor.WEST);
         layout.setTableFill(TableLayout.Fill.HORIZONTAL);

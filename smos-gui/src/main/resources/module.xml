@@ -1,11 +1,11 @@
 <module>
     <manifestVersion>1.0.0</manifestVersion>
 
-    <symbolicName>smos-tools</symbolicName>
-    <name>SMOS Tools and Utilities</name>
+    <symbolicName>smos-gui</symbolicName>
+    <name>SMOS Gui Tools and Utilities</name>
     <version>2.3-SNAPSHOT</version>
     <description>
-        This module provides utility classes for SMOS data handling
+        This module provides utility classes for SMOS GUI components
     </description>
 
     <vendor>Brockmann Consult GmbH</vendor>
@@ -17,10 +17,9 @@
     <changelog>
     </changelog>
 
-    <categories>SMOS, Tools</categories>
+    <categories>SMOS, Tools, GUI</categories>
 
     <dependency>
-        <module>beam-core</module>
     </dependency>
 
 </module>

@@ -498,7 +498,6 @@ class GridPointExportDialog extends ModalDialog {
     }
 
     private interface CF {
-
         JFileChooser createChooser(File file);
     }
 
