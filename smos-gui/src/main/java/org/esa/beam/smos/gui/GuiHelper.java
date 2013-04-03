@@ -6,6 +6,7 @@ import com.bc.ceres.swing.TableLayout;
 import com.bc.ceres.swing.binding.Binding;
 import com.bc.ceres.swing.binding.BindingContext;
 import com.bc.ceres.swing.binding.ComponentAdapter;
+import com.bc.ceres.swing.binding.internal.AbstractButtonAdapter;
 import com.bc.ceres.swing.binding.internal.TextComponentAdapter;
 
 import javax.swing.*;
@@ -54,6 +55,7 @@ public class GuiHelper {
 
         bindingContext.bind("useSelectedProduct", buttonGroup, buttonGroupValueSet);
         bindingContext.bindEnabledState(BindingConstants.SOURCE_DIRECTORY, true, BindingConstants.SELECTED_PRODUCT, false);
+        bindingContext.bindEnabledState(BindingConstants.OPEN_FILE_DIALOG, true, BindingConstants.SELECTED_PRODUCT, false);
 
         useSelectedProductButton.setEnabled(canProductSelectionBeEnabled);
 
@@ -71,6 +73,7 @@ public class GuiHelper {
         final Dimension size = new Dimension(26, 16);
         etcButton.setPreferredSize(size);
         etcButton.setMinimumSize(size);
+        bindingContext.bind(BindingConstants.OPEN_FILE_DIALOG, new AbstractButtonAdapter(etcButton));
 
         final JPanel panel = new JPanel(new BorderLayout(2, 2));
         panel.add(textField, BorderLayout.CENTER);

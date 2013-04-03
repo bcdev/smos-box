@@ -11,5 +11,6 @@ public class BindingConstantsTest {
     public void testBindingConstants() {
        assertEquals("useSelectedProduct", BindingConstants.SELECTED_PRODUCT);
        assertEquals("sourceDirectory", BindingConstants.SOURCE_DIRECTORY);
+       assertEquals("openFileDialog", BindingConstants.OPEN_FILE_DIALOG);
     }
 }

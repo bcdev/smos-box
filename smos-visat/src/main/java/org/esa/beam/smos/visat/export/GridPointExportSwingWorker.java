@@ -52,6 +52,9 @@ class GridPointExportSwingWorker extends ProgressMonitorSwingWorker<List<Excepti
     @Parameter(alias = BindingConstants.SOURCE_DIRECTORY)
     private File sourceDirectory;
 
+    @Parameter(alias = BindingConstants.OPEN_FILE_DIALOG)
+    private boolean openFileDialog;
+
     @Parameter(alias = GridPointExportDialog.ALIAS_RECURSIVE, defaultValue = "false")
     private boolean recursive;
 

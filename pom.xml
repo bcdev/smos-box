@@ -81,8 +81,8 @@
     </modules>
 
     <properties>
-        <ceres.version>0.13.1</ceres.version>
-        <beam.version>4.10.3</beam.version>
+        <ceres.version>0.13.2</ceres.version>
+        <beam.version>4.11</beam.version>
     </properties>
 
 

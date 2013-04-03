@@ -34,5 +34,15 @@ public class ExportParameterTest {
         parameter.setSourceDirectory(file);
         assertEquals(file.getPath(), parameter.getSourceDirectory().getPath());
     }
+
+    @Test
+    public void testSetIsOpenFileDialog() {
+        parameter.setOpenFileDialog(true);
+        assertTrue(parameter.isOpenFileDialog());
+
+        parameter.setOpenFileDialog(false);
+        assertFalse(parameter.isOpenFileDialog());
+
+    }
 }
 
