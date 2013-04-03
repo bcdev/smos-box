@@ -20,6 +20,10 @@
     <categories>SMOS, Tools, GUI</categories>
 
     <dependency>
+        <module>ceres-ui</module>
+    </dependency>
+    <dependency>
+        <module>beam-core</module>
     </dependency>
 
 </module>
