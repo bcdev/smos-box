@@ -68,6 +68,7 @@ public class DialogHelperTest {
 
     @Test
     public void testGetSelectedSmosProduct_noProduct() {
+        assumeTrue(isGuiAvailable);
         final DefaultAppContext appContext = new DefaultAppContext("test");
         assertNull(appContext.getSelectedProduct());
 
