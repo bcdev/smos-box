@@ -11,6 +11,12 @@ import static org.junit.Assume.assumeTrue;
 
 public class DialogHelperTest {
 
+    private final boolean isGuiAvailable;
+
+    public DialogHelperTest() {
+        isGuiAvailable = !GraphicsEnvironment.isHeadless();
+    }
+
     @Test
     public void testIsSupportedType() {
         assertTrue(DialogHelper.isSupportedType("MIR_BWLD1C"));
@@ -33,7 +39,7 @@ public class DialogHelperTest {
 
     @Test
     public void testCanProductSelectionBeEnabled_noProduct() {
-        assumeTrue(isGuiAvailable());
+        assumeTrue(isGuiAvailable);
         final DefaultAppContext appContext = new DefaultAppContext("test");
         assertNull(appContext.getSelectedProduct());
 
@@ -42,7 +48,7 @@ public class DialogHelperTest {
 
     @Test
     public void testCanProductSelectionBeEnabled_wrongProductType() {
-        assumeTrue(isGuiAvailable());
+        assumeTrue(isGuiAvailable);
         final DefaultAppContext appContext = new DefaultAppContext("test");
         appContext.setSelectedProduct(new Product("test", "MER_RR__1P", 2, 2));
         assertNotNull(appContext.getSelectedProduct());
@@ -52,7 +58,7 @@ public class DialogHelperTest {
 
     @Test
     public void testCanProductSelectionBeEnabled_validProductType() {
-        assumeTrue(isGuiAvailable());
+        assumeTrue(isGuiAvailable);
         final DefaultAppContext appContext = new DefaultAppContext("test");
         appContext.setSelectedProduct(new Product("test", "MIR_SCLF1C", 2, 2));
         assertNotNull(appContext.getSelectedProduct());
@@ -60,7 +66,33 @@ public class DialogHelperTest {
         assertTrue(DialogHelper.canProductSelectionBeEnabled(appContext));
     }
 
-    private boolean isGuiAvailable() {
-        return !GraphicsEnvironment.isHeadless();
+    @Test
+    public void testGetSelectedSmosProduct_noProduct() {
+        final DefaultAppContext appContext = new DefaultAppContext("test");
+        assertNull(appContext.getSelectedProduct());
+
+        assertNull(DialogHelper.getSelectedSmosProduct(appContext));
+    }
+
+    @Test
+    public void testGetSelectedSmosProduct_wrongProductType() {
+        assumeTrue(isGuiAvailable);
+        final DefaultAppContext appContext = new DefaultAppContext("test");
+        appContext.setSelectedProduct(new Product("test", "MER_RR__1P", 2, 2));
+        assertNotNull(appContext.getSelectedProduct());
+
+        assertNull(DialogHelper.getSelectedSmosProduct(appContext));
+    }
+
+    @Test
+    public void testGetSelectedSmosProduct_validProductType() {
+        assumeTrue(isGuiAvailable);
+        final DefaultAppContext appContext = new DefaultAppContext("test");
+        final Product expectedProduct = new Product("test", "MIR_OSUDP2", 2, 2);
+        appContext.setSelectedProduct(expectedProduct);
+        assertNotNull(appContext.getSelectedProduct());
+
+        final Product selectedProduct = DialogHelper.getSelectedSmosProduct(appContext);
+        assertEquals(expectedProduct, selectedProduct);
     }
 }

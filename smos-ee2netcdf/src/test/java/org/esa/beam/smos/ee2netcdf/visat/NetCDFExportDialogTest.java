@@ -18,7 +18,6 @@ public class NetCDFExportDialogTest {
 //        netCDFExportDialog.show();
 //    }
 
-
     @Test
     public void testDummy() {
          // to prevent build-server failure due to no tests in class tb 2013-04-03

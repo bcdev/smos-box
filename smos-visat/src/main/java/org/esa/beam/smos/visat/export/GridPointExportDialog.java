@@ -19,16 +19,19 @@ package org.esa.beam.smos.visat.export;
 import com.bc.ceres.binding.PropertyContainer;
 import com.bc.ceres.binding.PropertyDescriptor;
 import com.bc.ceres.binding.ValidationException;
-import com.bc.ceres.binding.ValueSet;
 import com.bc.ceres.swing.TableLayout;
-import com.bc.ceres.swing.binding.*;
+import com.bc.ceres.swing.binding.BindingContext;
+import com.bc.ceres.swing.binding.PropertyEditor;
+import com.bc.ceres.swing.binding.PropertyEditorRegistry;
 import com.bc.ceres.swing.binding.internal.SingleSelectionEditor;
 import com.bc.ceres.swing.binding.internal.TextFieldEditor;
 import org.esa.beam.dataio.smos.ExplorerFile;
 import org.esa.beam.dataio.smos.SmosFile;
 import org.esa.beam.dataio.smos.SmosProductReader;
 import org.esa.beam.framework.dataio.ProductReader;
-import org.esa.beam.framework.datamodel.*;
+import org.esa.beam.framework.datamodel.Product;
+import org.esa.beam.framework.datamodel.ProductNode;
+import org.esa.beam.framework.datamodel.VectorDataNode;
 import org.esa.beam.framework.gpf.annotations.ParameterDescriptorFactory;
 import org.esa.beam.framework.ui.AppContext;
 import org.esa.beam.framework.ui.ModalDialog;
@@ -45,18 +48,14 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.text.MessageFormat;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 class GridPointExportDialog extends ModalDialog {
 
-    private static final String LAST_SOURCE_DIR_KEY = "org.esa.beam.smos.export.sourceDir";
     private static final String LAST_TARGET_FILE_KEY = "org.esa.beam.smos.export.targetFile";
 
-    static final String ALIAS_GEOMETRY = "geometry";
-    static final String ALIAS_ROI_TYPE = "roiType";
     static final String ALIAS_RECURSIVE = "recursive";
     static final String ALIAS_TARGET_FILE = "targetFileOrDir";
     static final String ALIAS_NORTH = "north";
@@ -85,11 +84,11 @@ class GridPointExportDialog extends ModalDialog {
         }
 
         bindingContext = new BindingContext(propertyContainer);
-        bindingContext.bindEnabledState(ALIAS_GEOMETRY, true, ALIAS_ROI_TYPE, 0);
-        bindingContext.bindEnabledState(ALIAS_NORTH, true, ALIAS_ROI_TYPE, 2);
-        bindingContext.bindEnabledState(ALIAS_SOUTH, true, ALIAS_ROI_TYPE, 2);
-        bindingContext.bindEnabledState(ALIAS_EAST, true, ALIAS_ROI_TYPE, 2);
-        bindingContext.bindEnabledState(ALIAS_WEST, true, ALIAS_ROI_TYPE, 2);
+        bindingContext.bindEnabledState(BindingConstants.GEOMETRY, true, BindingConstants.ROI_TYPE, 0);
+        bindingContext.bindEnabledState(ALIAS_NORTH, true, BindingConstants.ROI_TYPE, 2);
+        bindingContext.bindEnabledState(ALIAS_SOUTH, true, BindingConstants.ROI_TYPE, 2);
+        bindingContext.bindEnabledState(ALIAS_EAST, true, BindingConstants.ROI_TYPE, 2);
+        bindingContext.bindEnabledState(ALIAS_WEST, true, BindingConstants.ROI_TYPE, 2);
 
         createUI();
     }
@@ -116,7 +115,7 @@ class GridPointExportDialog extends ModalDialog {
 
     @Override
     protected boolean verifyUserInput() {
-        final int roiType = (Integer) propertyContainer.getValue(ALIAS_ROI_TYPE);
+        final int roiType = (Integer) propertyContainer.getValue(BindingConstants.ROI_TYPE);
         if (roiType == 2) {
             final double north = (Double) propertyContainer.getValue(ALIAS_NORTH);
             final double south = (Double) propertyContainer.getValue(ALIAS_SOUTH);
@@ -149,31 +148,20 @@ class GridPointExportDialog extends ModalDialog {
 
     private void initPropertyContainer() throws ValidationException {
         propertyContainer.setDefaultValues();
-        propertyContainer.setValue(BindingConstants.SOURCE_DIRECTORY, getDefaultSourceDirectory());
+
+        final File defaultSourceDirectory = GuiHelper.getDefaultSourceDirectory(appContext);
+        propertyContainer.setValue(BindingConstants.SOURCE_DIRECTORY, defaultSourceDirectory);
+
         final File targetFile = getDefaultTargetFile();
         propertyContainer.setValue(ALIAS_TARGET_FILE, targetFile);
 
         final Product selectedProduct = getSelectedSmosProduct();
         if (selectedProduct != null) {
-            final List<VectorDataNode> geometryNodeList = new ArrayList<VectorDataNode>();
-            final ProductNodeGroup<VectorDataNode> vectorDataGroup = selectedProduct.getVectorDataGroup();
-            for (VectorDataNode node : vectorDataGroup.toArray(new VectorDataNode[vectorDataGroup.getNodeCount()])) {
-                if (node.getFeatureType().getTypeName().equals(PlainFeatureFactory.DEFAULT_TYPE_NAME)) {
-                    if (!node.getFeatureCollection().isEmpty()) {
-                        geometryNodeList.add(node);
-                    }
-                }
-            }
+            final List<VectorDataNode> geometryNodeList = GuiHelper.getGeometries(selectedProduct);
             if (!geometryNodeList.isEmpty()) {
-                final PropertyDescriptor descriptor = propertyContainer.getDescriptor(ALIAS_GEOMETRY);
-                descriptor.setNotNull(true);
-                descriptor.setNotEmpty(true);
-                descriptor.setValueSet(new ValueSet(geometryNodeList.toArray()));
-
-                propertyContainer.setValue(ALIAS_ROI_TYPE, 0);
-                propertyContainer.getProperty(ALIAS_GEOMETRY).setValue(geometryNodeList.get(0));
+                GuiHelper.bindGeometries(geometryNodeList, propertyContainer);
             } else if (selectedProduct.getPinGroup().getNodeCount() != 0) {
-                propertyContainer.setValue(ALIAS_ROI_TYPE, 1);
+                propertyContainer.setValue(BindingConstants.ROI_TYPE, 1);
             }
         }
         propertyContainer.setValue(BindingConstants.SELECTED_PRODUCT, selectedProduct != null);
@@ -219,7 +207,7 @@ class GridPointExportDialog extends ModalDialog {
 
     private Component createRoiPanel() {
         final JRadioButton useGeometryButton = new JRadioButton("Geometry");
-        final PropertyDescriptor geometryDescriptor = propertyContainer.getDescriptor(ALIAS_GEOMETRY);
+        final PropertyDescriptor geometryDescriptor = propertyContainer.getDescriptor(BindingConstants.GEOMETRY);
         if (geometryDescriptor.getValueSet() == null) {
             useGeometryButton.setEnabled(false);
         }
@@ -240,7 +228,7 @@ class GridPointExportDialog extends ModalDialog {
         buttonGroup.add(useGeometryButton);
         buttonGroup.add(usePinsButton);
         buttonGroup.add(useAreaButton);
-        bindingContext.bind(ALIAS_ROI_TYPE, buttonGroup, buttonGroupValueSet);
+        bindingContext.bind(BindingConstants.ROI_TYPE, buttonGroup, buttonGroupValueSet);
 
         final PropertyEditor selectionEditor =
                 PropertyEditorRegistry.getInstance().getPropertyEditor(SingleSelectionEditor.class.getName());
@@ -370,13 +358,8 @@ class GridPointExportDialog extends ModalDialog {
         return targetFilePanel;
     }
 
-    private File getDefaultSourceDirectory() {
-        final String def = System.getProperty("user.home", ".");
-        return new File(appContext.getPreferences().getPropertyString(LAST_SOURCE_DIR_KEY, def));
-    }
-
     private void setDefaultSourceDirectory(File sourceDirectory) {
-        appContext.getPreferences().setPropertyString(LAST_SOURCE_DIR_KEY, sourceDirectory.getPath());
+        appContext.getPreferences().setPropertyString(GuiHelper.LAST_SOURCE_DIR_KEY, sourceDirectory.getPath());
     }
 
     private File getDefaultTargetFile() {

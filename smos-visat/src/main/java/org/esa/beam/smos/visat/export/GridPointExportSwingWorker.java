@@ -58,10 +58,10 @@ class GridPointExportSwingWorker extends ProgressMonitorSwingWorker<List<Excepti
     @Parameter(alias = GridPointExportDialog.ALIAS_RECURSIVE, defaultValue = "false")
     private boolean recursive;
 
-    @Parameter(alias = GridPointExportDialog.ALIAS_ROI_TYPE, defaultValue = "2", valueSet = {"0", "1", "2"})
+    @Parameter(alias = BindingConstants.ROI_TYPE, defaultValue = "2", valueSet = {"0", "1", "2"})
     private int roiType;
 
-    @Parameter(alias = GridPointExportDialog.ALIAS_GEOMETRY)
+    @Parameter(alias = BindingConstants.GEOMETRY)
     private VectorDataNode geometry;
 
     @Parameter(alias = GridPointExportDialog.ALIAS_NORTH, defaultValue = "90.0", interval = "[-90.0, 90.0]")

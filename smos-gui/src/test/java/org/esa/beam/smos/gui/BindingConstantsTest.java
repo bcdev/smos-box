@@ -12,5 +12,7 @@ public class BindingConstantsTest {
        assertEquals("useSelectedProduct", BindingConstants.SELECTED_PRODUCT);
        assertEquals("sourceDirectory", BindingConstants.SOURCE_DIRECTORY);
        assertEquals("openFileDialog", BindingConstants.OPEN_FILE_DIALOG);
+       assertEquals("geometry", BindingConstants.GEOMETRY);
+       assertEquals("roiType", BindingConstants.ROI_TYPE);
     }
 }

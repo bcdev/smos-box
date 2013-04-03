@@ -1,13 +1,14 @@
 package org.esa.beam.smos.ee2netcdf.visat;
 
+import org.esa.beam.framework.datamodel.VectorDataNode;
+import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.junit.Before;
 import org.junit.Test;
+import org.opengis.feature.simple.SimpleFeatureType;
 
 import java.io.File;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class ExportParameterTest {
 
@@ -42,7 +43,31 @@ public class ExportParameterTest {
 
         parameter.setOpenFileDialog(false);
         assertFalse(parameter.isOpenFileDialog());
+    }
 
+    @Test
+    public void testSetGetGeometry() {
+        final SimpleFeatureTypeBuilder builder = new SimpleFeatureTypeBuilder();
+        builder.setName("sft");
+        builder.add("CAPITAL", String.class);
+        final SimpleFeatureType featureType = builder.buildFeatureType();
+
+        final VectorDataNode dataNode = new VectorDataNode("test", featureType);
+
+        parameter.setGeometry(dataNode);
+        assertEquals(dataNode, parameter.getGeometry());
+    }
+
+    @Test
+    public void testSetGetRoiType() {
+        final int type_1 = 1;
+        final int type_2 = 2;
+
+        parameter.setRoiType(type_1);
+        assertEquals(type_1, parameter.getRoiType());
+
+        parameter.setRoiType(type_2);
+        assertEquals(type_2, parameter.getRoiType());
     }
 }
 

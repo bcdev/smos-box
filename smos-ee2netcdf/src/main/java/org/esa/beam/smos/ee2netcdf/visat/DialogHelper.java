@@ -25,4 +25,14 @@ class DialogHelper {
         }
         return false;
     }
+
+    static Product getSelectedSmosProduct(AppContext appContext) {
+        final Product selectedProduct = appContext.getSelectedProduct();
+        if (selectedProduct != null) {
+            if (isSupportedType(selectedProduct.getProductType())) {
+                return selectedProduct;
+            }
+        }
+        return null;
+    }
 }
