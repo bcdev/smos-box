@@ -23,7 +23,6 @@ import com.bc.ceres.binding.ValueSet;
 import com.bc.ceres.swing.TableLayout;
 import com.bc.ceres.swing.binding.*;
 import com.bc.ceres.swing.binding.internal.SingleSelectionEditor;
-import com.bc.ceres.swing.binding.internal.TextComponentAdapter;
 import com.bc.ceres.swing.binding.internal.TextFieldEditor;
 import org.esa.beam.dataio.smos.ExplorerFile;
 import org.esa.beam.dataio.smos.SmosFile;
@@ -35,14 +34,13 @@ import org.esa.beam.framework.ui.AppContext;
 import org.esa.beam.framework.ui.ModalDialog;
 import org.esa.beam.smos.gui.BindingConstants;
 import org.esa.beam.smos.gui.ChooserFactory;
+import org.esa.beam.smos.gui.DefaultChooserFactory;
 import org.esa.beam.smos.gui.GuiHelper;
 import org.esa.beam.util.io.FileChooserFactory;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
@@ -204,20 +202,12 @@ class GridPointExportDialog extends ModalDialog {
 
         GuiHelper.addSourceProductsButtons(sourceProductPanel, useSelectProductEnabled, bindingContext);
 
-
-
         final JCheckBox checkBox = new JCheckBox("Descend into subdirectories");
         bindingContext.bind(ALIAS_RECURSIVE, checkBox);
         bindingContext.bindEnabledState(ALIAS_RECURSIVE, true, BindingConstants.SELECTED_PRODUCT, false);
 
         final PropertyDescriptor sourceDirectoryDescriptor = propertyContainer.getDescriptor(BindingConstants.SOURCE_DIRECTORY);
-        final ChooserFactory chooserFactory = new ChooserFactory() {
-            @Override
-            public JFileChooser createChooser(File file) {
-                return FileChooserFactory.getInstance().createDirChooser(file);
-            }
-        };
-        final JComponent fileEditor = createFileEditorComponent(sourceDirectoryDescriptor, chooserFactory);
+        final JComponent fileEditor = GuiHelper.createFileEditorComponent(sourceDirectoryDescriptor, new DefaultChooserFactory(), bindingContext);
 
         layout.setCellPadding(2, 0, new Insets(0, 24, 3, 3));
         sourceProductPanel.add(fileEditor);
@@ -225,35 +215,6 @@ class GridPointExportDialog extends ModalDialog {
         sourceProductPanel.add(checkBox);
 
         return sourceProductPanel;
-    }
-
-    private JComponent createFileEditorComponent(PropertyDescriptor descriptor, final ChooserFactory cf) {
-        final JTextField textField = new JTextField();
-        textField.setColumns(30);
-        final ComponentAdapter adapter = new TextComponentAdapter(textField);
-        final Binding binding = bindingContext.bind(descriptor.getName(), adapter);
-
-        final JButton etcButton = new JButton("...");
-        final Dimension size = new Dimension(26, 16);
-        etcButton.setPreferredSize(size);
-        etcButton.setMinimumSize(size);
-
-        final JPanel panel = new JPanel(new BorderLayout(2, 2));
-        panel.add(textField, BorderLayout.CENTER);
-        panel.add(etcButton, BorderLayout.EAST);
-
-        etcButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                final JFileChooser fileChooser = cf.createChooser((File) binding.getPropertyValue());
-                final int state = fileChooser.showDialog(panel, "Select");
-                if (state == JFileChooser.APPROVE_OPTION && fileChooser.getSelectedFile() != null) {
-                    binding.setPropertyValue(fileChooser.getSelectedFile());
-                }
-            }
-        });
-
-        return panel;
     }
 
     private Component createRoiPanel() {
@@ -391,7 +352,7 @@ class GridPointExportDialog extends ModalDialog {
                 return fileChooser;
             }
         };
-        final JComponent fileEditor = createFileEditorComponent(targetFileDescriptor, chooserFactory);
+        final JComponent fileEditor = GuiHelper.createFileEditorComponent(targetFileDescriptor, chooserFactory, bindingContext);
         targetFilePanel.add(formatPanel);
         targetFilePanel.add(label);
         targetFilePanel.add(fileEditor);
