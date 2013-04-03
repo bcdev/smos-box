@@ -4,6 +4,8 @@ import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.framework.gpf.ui.DefaultAppContext;
 import org.junit.Test;
 
+import java.awt.*;
+
 import static org.junit.Assert.*;
 import static org.junit.Assume.assumeTrue;
 
@@ -59,7 +61,6 @@ public class DialogHelperTest {
     }
 
     private boolean isGuiAvailable() {
-        final String property = System.getProperty("java.awt.headless");
-        return !"true".equalsIgnoreCase(property);
+        return !GraphicsEnvironment.isHeadless();
     }
 }
