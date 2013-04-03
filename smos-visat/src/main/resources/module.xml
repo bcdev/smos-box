@@ -48,6 +48,9 @@
     <dependency>
         <module>smos-tools</module>
     </dependency>
+    <dependency>
+        <module>smos-gui</module>
+    </dependency>
 
     <categories>SMOS</categories>
 
