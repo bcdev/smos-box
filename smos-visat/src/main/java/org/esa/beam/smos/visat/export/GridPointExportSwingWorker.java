@@ -64,16 +64,16 @@ class GridPointExportSwingWorker extends ProgressMonitorSwingWorker<List<Excepti
     @Parameter(alias = BindingConstants.GEOMETRY)
     private VectorDataNode geometry;
 
-    @Parameter(alias = GridPointExportDialog.ALIAS_NORTH, defaultValue = "90.0", interval = "[-90.0, 90.0]")
+    @Parameter(alias = BindingConstants.NORTH, defaultValue = "90.0", interval = "[-90.0, 90.0]")
     private double north;
 
-    @Parameter(alias = GridPointExportDialog.ALIAS_SOUTH, defaultValue = "-90.0", interval = "[-90.0, 90.0]")
+    @Parameter(alias = BindingConstants.SOUTH, defaultValue = "-90.0", interval = "[-90.0, 90.0]")
     private double south;
 
-    @Parameter(alias = GridPointExportDialog.ALIAS_EAST, defaultValue = "180.0", interval = "[-180.0, 180.0]")
+    @Parameter(alias = BindingConstants.EAST, defaultValue = "180.0", interval = "[-180.0, 180.0]")
     private double east;
 
-    @Parameter(alias = GridPointExportDialog.ALIAS_WEST, defaultValue = "-180.0", interval = "[-180.0, 180.0]")
+    @Parameter(alias = BindingConstants.WEST, defaultValue = "-180.0", interval = "[-180.0, 180.0]")
     private double west;
 
     @Parameter(alias = GridPointExportDialog.ALIAS_TARGET_FILE, notNull = true, notEmpty = true)

@@ -14,5 +14,9 @@ public class BindingConstantsTest {
        assertEquals("openFileDialog", BindingConstants.OPEN_FILE_DIALOG);
        assertEquals("geometry", BindingConstants.GEOMETRY);
        assertEquals("roiType", BindingConstants.ROI_TYPE);
+       assertEquals("north", BindingConstants.NORTH);
+       assertEquals("south", BindingConstants.SOUTH);
+       assertEquals("east", BindingConstants.EAST);
+       assertEquals("west", BindingConstants.WEST);
     }
 }

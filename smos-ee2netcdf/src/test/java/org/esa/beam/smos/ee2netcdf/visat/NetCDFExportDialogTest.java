@@ -11,7 +11,7 @@ public class NetCDFExportDialogTest {
 
 // Test is just for displaying the dialog - do not enable on commits. Buildserver should not open Dialogs - tb 2013-03-27
 //    @Test
-//    public void testShow() {
+//     public void testShow() {
 //        final DefaultAppContext appContext = new DefaultAppContext("test");
 //        appContext.setSelectedProduct(new Product("bla", "MIR_BWSF1C", 2, 2));
 //        final NetCDFExportDialog netCDFExportDialog = new NetCDFExportDialog(appContext, "bla");

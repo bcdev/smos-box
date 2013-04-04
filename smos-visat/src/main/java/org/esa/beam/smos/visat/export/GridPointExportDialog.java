@@ -21,16 +21,11 @@ import com.bc.ceres.binding.PropertyDescriptor;
 import com.bc.ceres.binding.ValidationException;
 import com.bc.ceres.swing.TableLayout;
 import com.bc.ceres.swing.binding.BindingContext;
-import com.bc.ceres.swing.binding.PropertyEditor;
-import com.bc.ceres.swing.binding.PropertyEditorRegistry;
-import com.bc.ceres.swing.binding.internal.SingleSelectionEditor;
-import com.bc.ceres.swing.binding.internal.TextFieldEditor;
 import org.esa.beam.dataio.smos.ExplorerFile;
 import org.esa.beam.dataio.smos.SmosFile;
 import org.esa.beam.dataio.smos.SmosProductReader;
 import org.esa.beam.framework.dataio.ProductReader;
 import org.esa.beam.framework.datamodel.Product;
-import org.esa.beam.framework.datamodel.ProductNode;
 import org.esa.beam.framework.datamodel.VectorDataNode;
 import org.esa.beam.framework.gpf.annotations.ParameterDescriptorFactory;
 import org.esa.beam.framework.ui.AppContext;
@@ -54,14 +49,8 @@ import java.util.Map;
 
 class GridPointExportDialog extends ModalDialog {
 
-    private static final String LAST_TARGET_FILE_KEY = "org.esa.beam.smos.export.targetFile";
-
     static final String ALIAS_RECURSIVE = "recursive";
     static final String ALIAS_TARGET_FILE = "targetFileOrDir";
-    static final String ALIAS_NORTH = "north";
-    static final String ALIAS_SOUTH = "south";
-    static final String ALIAS_EAST = "east";
-    static final String ALIAS_WEST = "west";
     static final String ALIAS_EXPORT_FORMAT = "exportFormat";
     static final String NAME_CSV = "CSV";
 
@@ -85,10 +74,7 @@ class GridPointExportDialog extends ModalDialog {
 
         bindingContext = new BindingContext(propertyContainer);
         bindingContext.bindEnabledState(BindingConstants.GEOMETRY, true, BindingConstants.ROI_TYPE, 0);
-        bindingContext.bindEnabledState(ALIAS_NORTH, true, BindingConstants.ROI_TYPE, 2);
-        bindingContext.bindEnabledState(ALIAS_SOUTH, true, BindingConstants.ROI_TYPE, 2);
-        bindingContext.bindEnabledState(ALIAS_EAST, true, BindingConstants.ROI_TYPE, 2);
-        bindingContext.bindEnabledState(ALIAS_WEST, true, BindingConstants.ROI_TYPE, 2);
+        GuiHelper.bindLonLatPanelToRoiType(2, bindingContext);
 
         createUI();
     }
@@ -117,14 +103,14 @@ class GridPointExportDialog extends ModalDialog {
     protected boolean verifyUserInput() {
         final int roiType = (Integer) propertyContainer.getValue(BindingConstants.ROI_TYPE);
         if (roiType == 2) {
-            final double north = (Double) propertyContainer.getValue(ALIAS_NORTH);
-            final double south = (Double) propertyContainer.getValue(ALIAS_SOUTH);
+            final double north = (Double) propertyContainer.getValue(BindingConstants.NORTH);
+            final double south = (Double) propertyContainer.getValue(BindingConstants.SOUTH);
             if (north <= south) {
                 showErrorDialog("The southern latitude must be less than the northern latitude.");
                 return false;
             }
-            final double east = (Double) propertyContainer.getValue(ALIAS_EAST);
-            final double west = (Double) propertyContainer.getValue(ALIAS_WEST);
+            final double east = (Double) propertyContainer.getValue(BindingConstants.EAST);
+            final double west = (Double) propertyContainer.getValue(BindingConstants.WEST);
             if (east <= west) {
                 showErrorDialog("The western longitude must be less than the eastern longitude.");
                 return false;
@@ -230,16 +216,9 @@ class GridPointExportDialog extends ModalDialog {
         buttonGroup.add(useAreaButton);
         bindingContext.bind(BindingConstants.ROI_TYPE, buttonGroup, buttonGroupValueSet);
 
-        final PropertyEditor selectionEditor =
-                PropertyEditorRegistry.getInstance().getPropertyEditor(SingleSelectionEditor.class.getName());
-        final JComboBox geometryComboBox =
-                (JComboBox) selectionEditor.createEditorComponent(geometryDescriptor, bindingContext);
-
-        final DefaultListCellRenderer listCellRenderer = new ProductNodeRenderer();
-        geometryComboBox.setRenderer(listCellRenderer);
+        final JComboBox geometryComboBox = GuiHelper.creatGeometryComboBox(geometryDescriptor, bindingContext);
 
         final TableLayout layout = GuiHelper.createWeightedTablelayout(1);
-
         final JPanel roiPanel = new JPanel(layout);
         roiPanel.setBorder(BorderFactory.createTitledBorder("Region of Interest"));
 
@@ -247,61 +226,13 @@ class GridPointExportDialog extends ModalDialog {
         roiPanel.add(geometryComboBox);
         roiPanel.add(usePinsButton);
         roiPanel.add(useAreaButton);
-        roiPanel.add(createLatLonPanel());
+        final Component latLonPanel = GuiHelper.createLatLonPanel(propertyContainer, bindingContext);
+        roiPanel.add(latLonPanel);
 
         layout.setCellPadding(1, 0, new Insets(0, 24, 3, 3));
         layout.setCellPadding(3, 0, new Insets(0, 24, 3, 3));
 
         return roiPanel;
-    }
-
-    private Component createLatLonPanel() {
-        final TableLayout layout = GuiHelper.createTableLayout(3);
-
-        final JPanel areaPanel = new JPanel(layout);
-        final JLabel emptyLabel = new JLabel(" ");
-        areaPanel.add(emptyLabel);
-        areaPanel.add(createLatLonCoordinatePanel(ALIAS_NORTH, "North:", 4));
-        areaPanel.add(emptyLabel);
-
-        areaPanel.add(createLatLonCoordinatePanel(ALIAS_WEST, "West:", 5));
-        areaPanel.add(emptyLabel);
-        areaPanel.add(createLatLonCoordinatePanel(ALIAS_EAST, "East:", 5));
-
-        areaPanel.add(emptyLabel);
-        areaPanel.add(createLatLonCoordinatePanel(ALIAS_SOUTH, "South:", 4));
-        areaPanel.add(emptyLabel);
-
-        return areaPanel;
-    }
-
-    private Component createLatLonCoordinatePanel(String name, String displayName, int numColumns) {
-        final PropertyEditor editor =
-                PropertyEditorRegistry.getInstance().getPropertyEditor(TextFieldEditor.class.getName());
-        final JTextField textField = (JTextField) editor.createEditorComponent(propertyContainer.getDescriptor(name),
-                bindingContext);
-
-        final JLabel nameLabel = new JLabel(displayName);
-        final JLabel unitLabel = new JLabel("\u00b0");
-        nameLabel.setEnabled(textField.isEnabled());
-        unitLabel.setEnabled(textField.isEnabled());
-
-        textField.setColumns(numColumns);
-        textField.addPropertyChangeListener("enabled", new PropertyChangeListener() {
-            @Override
-            public void propertyChange(PropertyChangeEvent evt) {
-                final Boolean enabled = (Boolean) evt.getNewValue();
-                nameLabel.setEnabled(enabled);
-                unitLabel.setEnabled(enabled);
-            }
-        });
-
-        final JPanel panel = new JPanel(new FlowLayout());
-        panel.add(nameLabel);
-        panel.add(textField);
-        panel.add(unitLabel);
-
-        return panel;
     }
 
     private JComponent createTargetFilePanel() {
@@ -364,11 +295,11 @@ class GridPointExportDialog extends ModalDialog {
 
     private File getDefaultTargetFile() {
         final String def = new File(System.getProperty("user.home", "."), "export.csv").getPath();
-        return new File(appContext.getPreferences().getPropertyString(LAST_TARGET_FILE_KEY, def));
+        return new File(appContext.getPreferences().getPropertyString(GuiHelper.LAST_TARGET_FILE_KEY, def));
     }
 
     private void setDefaultTargetFile(File targetFile) {
-        appContext.getPreferences().setPropertyString(LAST_TARGET_FILE_KEY, targetFile.getPath());
+        appContext.getPreferences().setPropertyString(GuiHelper.LAST_TARGET_FILE_KEY, targetFile.getPath());
     }
 
     private Product getSelectedSmosProduct() {
@@ -404,26 +335,6 @@ class GridPointExportDialog extends ModalDialog {
                 last = (File) propertyContainer.getValue(ALIAS_TARGET_FILE);
                 propertyContainer.setValue(ALIAS_TARGET_FILE, last.getParentFile());
             }
-        }
-    }
-
-    private static final class ProductNodeRenderer extends DefaultListCellRenderer {
-
-        @Override
-        public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected,
-                                                      boolean cellHasFocus) {
-            final Component component =
-                    super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-            if (!(component instanceof JLabel)) {
-                return component;
-            }
-            final JLabel label = (JLabel) component;
-            if (value instanceof ProductNode) {
-                label.setText(((ProductNode) value).getDisplayName());
-            } else {
-                label.setText("");
-            }
-            return label;
         }
     }
 }

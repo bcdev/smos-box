@@ -11,15 +11,19 @@ import org.esa.beam.framework.ui.AppContext;
 import org.esa.beam.framework.ui.ModalDialog;
 import org.esa.beam.smos.gui.BindingConstants;
 import org.esa.beam.smos.gui.DefaultChooserFactory;
+import org.esa.beam.smos.gui.DirectoryChooserFactory;
 import org.esa.beam.smos.gui.GuiHelper;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class NetCDFExportDialog extends ModalDialog {
 
+    private static final String TARGET_DIRECTORY_BINDING = "targetDirectory";
     private final ExportParameter exportParameter;
     private final PropertyContainer propertyContainer;
     private final AppContext appContext;
@@ -39,6 +43,8 @@ public class NetCDFExportDialog extends ModalDialog {
         }
 
         bindingContext = new BindingContext(propertyContainer);
+        bindingContext.bindEnabledState(BindingConstants.GEOMETRY, true, BindingConstants.ROI_TYPE, 0);
+        GuiHelper.bindLonLatPanelToRoiType(1, bindingContext);
 
         createUi();
     }
@@ -49,12 +55,18 @@ public class NetCDFExportDialog extends ModalDialog {
         final File defaultSourceDirectory = GuiHelper.getDefaultSourceDirectory(appContext);
         propertyContainer.setValue(BindingConstants.SOURCE_DIRECTORY, defaultSourceDirectory);
 
+        final File defaultTargetDirectory = GuiHelper.getDefaultTargetDirectory(appContext);
+        propertyContainer.setValue(TARGET_DIRECTORY_BINDING, defaultTargetDirectory);
+
         final Product selectedSmosProduct = DialogHelper.getSelectedSmosProduct(appContext);
         if (selectedSmosProduct != null) {
             final List<VectorDataNode> geometryNodeList = GuiHelper.getGeometries(selectedSmosProduct);
             if (!geometryNodeList.isEmpty()) {
                 GuiHelper.bindGeometries(geometryNodeList, propertyContainer);
             }
+            propertyContainer.setValue(BindingConstants.SELECTED_PRODUCT, true);
+        } else {
+            propertyContainer.setValue(BindingConstants.SELECTED_PRODUCT, false);
         }
     }
 
@@ -62,6 +74,8 @@ public class NetCDFExportDialog extends ModalDialog {
         final JPanel mainPanel = GuiHelper.createPanelWithBoxLayout();
 
         mainPanel.add(createSourceProductsPanel());
+        mainPanel.add(createRoiPanel());
+        mainPanel.add(createTargetDirPanel());
         setContent(mainPanel);
     }
 
@@ -80,6 +94,65 @@ public class NetCDFExportDialog extends ModalDialog {
         sourceProductPanel.add(fileEditor);
 
         return sourceProductPanel;
+    }
+
+    private JComponent createRoiPanel() {
+        final JRadioButton useGeometryButton = new JRadioButton("Geometry");
+        final PropertyDescriptor geometryDescriptor = propertyContainer.getDescriptor(BindingConstants.GEOMETRY);
+        if (geometryDescriptor.getValueSet() == null) {
+            useGeometryButton.setEnabled(false);
+        }
+
+        final JRadioButton useAreaButton = new JRadioButton("Area");
+        final Map<AbstractButton, Object> buttonGroupValueSet = new HashMap<AbstractButton, Object>();
+        buttonGroupValueSet.put(useGeometryButton, 0);
+        buttonGroupValueSet.put(useAreaButton, 1);
+
+        final ButtonGroup buttonGroup = new ButtonGroup();
+        buttonGroup.add(useGeometryButton);
+        buttonGroup.add(useAreaButton);
+        bindingContext.bind(BindingConstants.ROI_TYPE, buttonGroup, buttonGroupValueSet);
+
+        final TableLayout layout = GuiHelper.createWeightedTablelayout(1);
+        final JPanel roiPanel = new JPanel(layout);
+        roiPanel.setBorder(BorderFactory.createTitledBorder("Region of Interest"));
+
+        final JComboBox geometryComboBox = GuiHelper.creatGeometryComboBox(geometryDescriptor, bindingContext);
+
+        roiPanel.add(useGeometryButton);
+        roiPanel.add(geometryComboBox);
+        roiPanel.add(useAreaButton);
+        final Component latLonPanel = GuiHelper.createLatLonPanel(propertyContainer, bindingContext);
+        roiPanel.add(latLonPanel);
+
+        layout.setCellPadding(1, 0, new Insets(0, 24, 3, 3));
+        layout.setCellPadding(3, 0, new Insets(0, 24, 3, 3));
+
+        return roiPanel;
+    }
+
+    private JComponent createTargetDirPanel() {
+        final TableLayout layout = GuiHelper.createWeightedTablelayout(1);
+
+        final JPanel targetDirPanel = new JPanel(layout);
+        targetDirPanel.setBorder(BorderFactory.createTitledBorder("Target Directory"));
+
+        final JLabel label = new JLabel();
+        label.setText("Save files to directory:");
+        targetDirPanel.add(label);
+
+        final PropertyDescriptor targetDirectoryDescriptor = propertyContainer.getDescriptor(TARGET_DIRECTORY_BINDING);
+        final JComponent fileEditor = GuiHelper.createFileEditorComponent(targetDirectoryDescriptor, new DirectoryChooserFactory(), bindingContext);
+
+        layout.setCellPadding(2, 0, new Insets(0, 24, 3, 3));
+        targetDirPanel.add(fileEditor);
+
+        return targetDirPanel;
+    }
+
+    @Override
+    protected void onOK(){
+        System.out.println("OnOk");
     }
 
 }

@@ -6,11 +6,11 @@ import com.bc.ceres.binding.PropertyDescriptor;
 import com.bc.ceres.binding.ValidationException;
 import com.bc.ceres.binding.ValueSet;
 import com.bc.ceres.swing.TableLayout;
-import com.bc.ceres.swing.binding.Binding;
-import com.bc.ceres.swing.binding.BindingContext;
-import com.bc.ceres.swing.binding.ComponentAdapter;
+import com.bc.ceres.swing.binding.*;
 import com.bc.ceres.swing.binding.internal.AbstractButtonAdapter;
+import com.bc.ceres.swing.binding.internal.SingleSelectionEditor;
 import com.bc.ceres.swing.binding.internal.TextComponentAdapter;
+import com.bc.ceres.swing.binding.internal.TextFieldEditor;
 import org.esa.beam.framework.datamodel.PlainFeatureFactory;
 import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.framework.datamodel.ProductNodeGroup;
@@ -21,6 +21,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,6 +31,8 @@ import java.util.Map;
 public class GuiHelper {
 
     public static final String LAST_SOURCE_DIR_KEY = "org.esa.beam.smos.export.sourceDir";
+    public static final String LAST_TARGET_FILE_KEY = "org.esa.beam.smos.export.targetFile";
+    public static final String LAST_TARGET_DIR_KEY = "org.esa.beam.smos.export.targetDir";
 
     public static JPanel createPanelWithBoxLayout() {
         final JPanel mainPanel = new JPanel();
@@ -105,8 +109,16 @@ public class GuiHelper {
     }
 
     public static File getDefaultSourceDirectory(AppContext appContext) {
+        return getFileFromProperties(appContext, LAST_SOURCE_DIR_KEY);
+    }
+
+    public static File getDefaultTargetDirectory(AppContext appContext) {
+        return getFileFromProperties(appContext, LAST_TARGET_DIR_KEY);
+    }
+
+    private static File getFileFromProperties(AppContext appContext, String lastSourceDirKey) {
         final String def = System.getProperty("user.home", ".");
-        return new File(appContext.getPreferences().getPropertyString(LAST_SOURCE_DIR_KEY, def));
+        return new File(appContext.getPreferences().getPropertyString(lastSourceDirKey, def));
     }
 
     public static java.util.List<VectorDataNode> getGeometries(Product selectedProduct) {
@@ -130,5 +142,72 @@ public class GuiHelper {
 
         propertyContainer.setValue(BindingConstants.ROI_TYPE, 0);
         propertyContainer.getProperty(BindingConstants.GEOMETRY).setValue(geometryNodeList.get(0));
+    }
+
+    public static JComboBox creatGeometryComboBox(PropertyDescriptor geometryDescriptor, BindingContext bindingContext) {
+        final PropertyEditor selectionEditor = PropertyEditorRegistry.getInstance().getPropertyEditor(SingleSelectionEditor.class.getName());
+        final JComboBox geometryComboBox = (JComboBox) selectionEditor.createEditorComponent(geometryDescriptor, bindingContext);
+
+        final DefaultListCellRenderer listCellRenderer = new ProductNodeRenderer();
+        geometryComboBox.setRenderer(listCellRenderer);
+        return geometryComboBox;
+    }
+
+    public static Component createLatLonCoordinatePanel(String name, String displayName, int numColumns, PropertyContainer propertyContainer, BindingContext bindingContext) {
+        final PropertyEditor editor = PropertyEditorRegistry.getInstance().getPropertyEditor(TextFieldEditor.class.getName());
+        final JTextField textField = (JTextField) editor.createEditorComponent(propertyContainer.getDescriptor(name), bindingContext);
+
+        final JLabel nameLabel = new JLabel(displayName);
+        final JLabel unitLabel = new JLabel("\u00b0");
+        nameLabel.setEnabled(textField.isEnabled());
+        unitLabel.setEnabled(textField.isEnabled());
+
+        textField.setColumns(numColumns);
+        textField.addPropertyChangeListener("enabled", new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                final Boolean enabled = (Boolean) evt.getNewValue();
+                nameLabel.setEnabled(enabled);
+                unitLabel.setEnabled(enabled);
+            }
+        });
+
+        final JPanel panel = new JPanel(new FlowLayout());
+        panel.add(nameLabel);
+        panel.add(textField);
+        panel.add(unitLabel);
+
+        return panel;
+    }
+
+    public static Component createLatLonPanel(PropertyContainer propertyContainer, BindingContext bindingContext) {
+        final TableLayout layout = createTableLayout(3);
+
+        final JPanel areaPanel = new JPanel(layout);
+        final JLabel emptyLabel = new JLabel(" ");
+        areaPanel.add(emptyLabel);
+        final Component northPanel = createLatLonCoordinatePanel(BindingConstants.NORTH, "North:", 4, propertyContainer, bindingContext);
+        areaPanel.add(northPanel);
+        areaPanel.add(emptyLabel);
+
+        final Component westPanel = createLatLonCoordinatePanel(BindingConstants.WEST, "West:", 5, propertyContainer, bindingContext);
+        areaPanel.add(westPanel);
+        areaPanel.add(emptyLabel);
+        final Component eastPanel = createLatLonCoordinatePanel(BindingConstants.EAST, "East:", 5, propertyContainer, bindingContext);
+        areaPanel.add(eastPanel);
+
+        areaPanel.add(emptyLabel);
+        final Component southPanel = createLatLonCoordinatePanel(BindingConstants.SOUTH, "South:", 4, propertyContainer, bindingContext);
+        areaPanel.add(southPanel);
+        areaPanel.add(emptyLabel);
+
+        return areaPanel;
+    }
+
+    public static void bindLonLatPanelToRoiType(int roiTypeId, BindingContext bindingContext) {
+        bindingContext.bindEnabledState(BindingConstants.NORTH, true, BindingConstants.ROI_TYPE, roiTypeId);
+        bindingContext.bindEnabledState(BindingConstants.SOUTH, true, BindingConstants.ROI_TYPE, roiTypeId);
+        bindingContext.bindEnabledState(BindingConstants.EAST, true, BindingConstants.ROI_TYPE, roiTypeId);
+        bindingContext.bindEnabledState(BindingConstants.WEST, true, BindingConstants.ROI_TYPE, roiTypeId);
     }
 }
