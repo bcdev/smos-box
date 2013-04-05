@@ -216,7 +216,7 @@ class GridPointExportDialog extends ModalDialog {
         buttonGroup.add(useAreaButton);
         bindingContext.bind(BindingConstants.ROI_TYPE, buttonGroup, buttonGroupValueSet);
 
-        final JComboBox geometryComboBox = GuiHelper.creatGeometryComboBox(geometryDescriptor, bindingContext);
+        final JComboBox geometryComboBox = GuiHelper.createGeometryComboBox(geometryDescriptor, bindingContext);
 
         final TableLayout layout = GuiHelper.createWeightedTablelayout(1);
         final JPanel roiPanel = new JPanel(layout);

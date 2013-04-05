@@ -1,12 +1,15 @@
 package org.esa.beam.smos.ee2netcdf.visat;
 
 import org.esa.beam.framework.datamodel.VectorDataNode;
+import org.esa.beam.framework.gpf.annotations.Parameter;
+import org.esa.beam.smos.gui.BindingConstants;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.junit.Before;
 import org.junit.Test;
 import org.opengis.feature.simple.SimpleFeatureType;
 
 import java.io.File;
+import java.lang.reflect.Field;
 
 import static org.junit.Assert.*;
 
@@ -26,6 +29,13 @@ public class ExportParameterTest {
 
         parameter.setUseSelectedProduct(false);
         assertFalse(parameter.isUseSelectedProduct());
+    }
+
+    @Test
+    public void testSelectedProductAnnotation() throws NoSuchFieldException {
+        final Field selectedProductField = ExportParameter.class.getDeclaredField(BindingConstants.SELECTED_PRODUCT);
+        final Parameter parameter = selectedProductField.getAnnotation(Parameter.class);
+        assertEquals(BindingConstants.SELECTED_PRODUCT, parameter.alias());
     }
 
     @Test
@@ -83,6 +93,15 @@ public class ExportParameterTest {
     }
 
     @Test
+    public void testNorthAnnotation() throws NoSuchFieldException {
+        final Field northField = ExportParameter.class.getDeclaredField(BindingConstants.NORTH);
+        final Parameter parameter = northField.getAnnotation(Parameter.class);
+        assertEquals(BindingConstants.NORTH, parameter.alias());
+        assertEquals("90.0", parameter.defaultValue());
+        assertEquals("[-90.0, 90.0]", parameter.interval());
+    }
+
+    @Test
     public void testSetGetEast() {
         final double east_1 = 109.6;
         final double east_2 = -2.5;
@@ -92,6 +111,15 @@ public class ExportParameterTest {
 
         parameter.setEast(east_2);
         assertEquals(east_2, parameter.getEast(), 1e-8);
+    }
+
+    @Test
+    public void testEastAnnotation() throws NoSuchFieldException {
+        final Field eastField = ExportParameter.class.getDeclaredField(BindingConstants.EAST);
+        final Parameter parameter = eastField.getAnnotation(Parameter.class);
+        assertEquals(BindingConstants.EAST, parameter.alias());
+        assertEquals("180.0", parameter.defaultValue());
+        assertEquals("[-180.0, 180.0]", parameter.interval());
     }
 
     @Test
@@ -107,6 +135,15 @@ public class ExportParameterTest {
     }
 
     @Test
+    public void testSouthAnnotation() throws NoSuchFieldException {
+        final Field southField = ExportParameter.class.getDeclaredField(BindingConstants.SOUTH);
+        final Parameter parameter = southField.getAnnotation(Parameter.class);
+        assertEquals(BindingConstants.SOUTH, parameter.alias());
+        assertEquals("-90.0", parameter.defaultValue());
+        assertEquals("[-90.0, 90.0]", parameter.interval());
+    }
+
+    @Test
     public void testSetGetWest() {
         final double west_1 = 18.6;
         final double west_2 = -72.6;
@@ -116,6 +153,15 @@ public class ExportParameterTest {
 
         parameter.setWest(west_2);
         assertEquals(west_2, parameter.getWest(), 1e-8);
+    }
+
+    @Test
+    public void testWestAnnotation() throws NoSuchFieldException {
+        final Field westField = ExportParameter.class.getDeclaredField(BindingConstants.WEST);
+        final Parameter parameter = westField.getAnnotation(Parameter.class);
+        assertEquals(BindingConstants.WEST, parameter.alias());
+        assertEquals("-180.0", parameter.defaultValue());
+        assertEquals("[-180.0, 180.0]", parameter.interval());
     }
 
     @Test

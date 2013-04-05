@@ -43,10 +43,12 @@ public class NetCDFExportDialog extends ModalDialog {
         }
 
         bindingContext = new BindingContext(propertyContainer);
-        bindingContext.bindEnabledState(BindingConstants.GEOMETRY, true, BindingConstants.ROI_TYPE, 0);
-        GuiHelper.bindLonLatPanelToRoiType(1, bindingContext);
+        bindingContext.bindEnabledState(BindingConstants.GEOMETRY, true, BindingConstants.ROI_TYPE, BindingConstants.ROI_TYPE_GEOMETRY);
+        GuiHelper.bindLonLatPanelToRoiType(BindingConstants.ROI_TYPE_AREA, bindingContext);
 
         createUi();
+
+
     }
 
     private void init(PropertyContainer propertyContainer) throws ValidationException {
@@ -97,6 +99,8 @@ public class NetCDFExportDialog extends ModalDialog {
     }
 
     private JComponent createRoiPanel() {
+        final JRadioButton wholeProductButton = new JRadioButton("Whole Product");
+
         final JRadioButton useGeometryButton = new JRadioButton("Geometry");
         final PropertyDescriptor geometryDescriptor = propertyContainer.getDescriptor(BindingConstants.GEOMETRY);
         if (geometryDescriptor.getValueSet() == null) {
@@ -105,10 +109,12 @@ public class NetCDFExportDialog extends ModalDialog {
 
         final JRadioButton useAreaButton = new JRadioButton("Area");
         final Map<AbstractButton, Object> buttonGroupValueSet = new HashMap<AbstractButton, Object>();
-        buttonGroupValueSet.put(useGeometryButton, 0);
-        buttonGroupValueSet.put(useAreaButton, 1);
+        buttonGroupValueSet.put(wholeProductButton, BindingConstants.ROI_TYPE_PRODUCT);
+        buttonGroupValueSet.put(useGeometryButton, BindingConstants.ROI_TYPE_GEOMETRY);
+        buttonGroupValueSet.put(useAreaButton, BindingConstants.ROI_TYPE_AREA);
 
         final ButtonGroup buttonGroup = new ButtonGroup();
+        buttonGroup.add(wholeProductButton);
         buttonGroup.add(useGeometryButton);
         buttonGroup.add(useAreaButton);
         bindingContext.bind(BindingConstants.ROI_TYPE, buttonGroup, buttonGroupValueSet);
@@ -117,8 +123,9 @@ public class NetCDFExportDialog extends ModalDialog {
         final JPanel roiPanel = new JPanel(layout);
         roiPanel.setBorder(BorderFactory.createTitledBorder("Region of Interest"));
 
-        final JComboBox geometryComboBox = GuiHelper.creatGeometryComboBox(geometryDescriptor, bindingContext);
+        final JComboBox geometryComboBox = GuiHelper.createGeometryComboBox(geometryDescriptor, bindingContext);
 
+        roiPanel.add(wholeProductButton);
         roiPanel.add(useGeometryButton);
         roiPanel.add(geometryComboBox);
         roiPanel.add(useAreaButton);
@@ -142,7 +149,7 @@ public class NetCDFExportDialog extends ModalDialog {
         targetDirPanel.add(label);
 
         final PropertyDescriptor targetDirectoryDescriptor = propertyContainer.getDescriptor(TARGET_DIRECTORY_BINDING);
-        final JComponent fileEditor = GuiHelper.createFileEditorComponent(targetDirectoryDescriptor, new DirectoryChooserFactory(), bindingContext);
+        final JComponent fileEditor = GuiHelper.createFileEditorComponent(targetDirectoryDescriptor, new DirectoryChooserFactory(), bindingContext, false);
 
         layout.setCellPadding(2, 0, new Insets(0, 24, 3, 3));
         targetDirPanel.add(fileEditor);
@@ -151,8 +158,11 @@ public class NetCDFExportDialog extends ModalDialog {
     }
 
     @Override
-    protected void onOK(){
-        System.out.println("OnOk");
-    }
+    protected void onOK() {
+        final ConverterSwingWorker worker = new ConverterSwingWorker(appContext, exportParameter);
 
+        super.onOK();
+
+        worker.execute();
+    }
 }

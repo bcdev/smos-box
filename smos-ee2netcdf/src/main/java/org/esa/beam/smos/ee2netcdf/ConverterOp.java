@@ -10,6 +10,7 @@ import org.esa.beam.framework.dataio.ProductSubsetDef;
 import org.esa.beam.framework.datamodel.*;
 import org.esa.beam.framework.gpf.Operator;
 import org.esa.beam.framework.gpf.OperatorException;
+import org.esa.beam.framework.gpf.OperatorSpi;
 import org.esa.beam.framework.gpf.annotations.OperatorMetadata;
 import org.esa.beam.framework.gpf.annotations.Parameter;
 import org.esa.beam.framework.gpf.annotations.SourceProducts;
@@ -247,6 +248,13 @@ public class ConverterOp extends Operator implements Output {
         } catch (IOException e) {
             getLogger().severe("Failed to convert file: " + sourceProduct.getFileLocation());
             getLogger().severe(e.getMessage());
+        }
+    }
+
+    public static class Spi extends OperatorSpi {
+
+        public Spi() {
+            super(ConverterOp.class);
         }
     }
 }

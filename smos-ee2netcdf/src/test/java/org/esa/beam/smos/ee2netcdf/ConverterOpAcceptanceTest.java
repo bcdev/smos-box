@@ -25,11 +25,11 @@ import static org.junit.Assert.*;
 @RunWith(AcceptanceTestRunner.class)
 public class ConverterOpAcceptanceTest {
 
-    private final ConverterOpSpi spi;
+    private final ConverterOp.Spi spi;
     private final File targetDirectory;
 
     public ConverterOpAcceptanceTest() {
-        spi = new ConverterOpSpi();
+        spi = new ConverterOp.Spi();
         targetDirectory = new File("test_out");
     }
 

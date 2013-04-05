@@ -6,11 +6,11 @@ import org.junit.Test;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-public class ConverterOpSpiTest {
+public class ConverterOp_SpiTest {
 
     @Test
     public void testCreateOperator() {
-        final ConverterOpSpi spi = new ConverterOpSpi();
+        final ConverterOp.Spi spi = new ConverterOp.Spi();
 
         final Operator operator = spi.createOperator();
         assertNotNull(operator);

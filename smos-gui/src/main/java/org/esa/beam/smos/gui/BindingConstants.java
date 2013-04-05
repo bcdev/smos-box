@@ -12,4 +12,8 @@ public class BindingConstants {
     public static final String SOUTH = "south";
     public static final String EAST = "east";
     public static final String WEST = "west";
+
+    public static final int ROI_TYPE_PRODUCT = 0;
+    public static final int ROI_TYPE_GEOMETRY = 1;
+    public static final int ROI_TYPE_AREA = 2;
 }

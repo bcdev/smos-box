@@ -79,6 +79,10 @@ public class GuiHelper {
     }
 
     public static JComponent createFileEditorComponent(PropertyDescriptor descriptor, final ChooserFactory cf, BindingContext bindingContext) {
+        return createFileEditorComponent(descriptor, cf, bindingContext, true);
+    }
+
+    public static JComponent createFileEditorComponent(PropertyDescriptor descriptor, final ChooserFactory cf, BindingContext bindingContext, boolean bindEtcButton) {
         final JTextField textField = new JTextField();
         textField.setColumns(30);
         final ComponentAdapter adapter = new TextComponentAdapter(textField);
@@ -88,7 +92,9 @@ public class GuiHelper {
         final Dimension size = new Dimension(26, 16);
         etcButton.setPreferredSize(size);
         etcButton.setMinimumSize(size);
-        bindingContext.bind(BindingConstants.OPEN_FILE_DIALOG, new AbstractButtonAdapter(etcButton));
+        if (bindEtcButton) {
+            bindingContext.bind(BindingConstants.OPEN_FILE_DIALOG, new AbstractButtonAdapter(etcButton));
+        }
 
         final JPanel panel = new JPanel(new BorderLayout(2, 2));
         panel.add(textField, BorderLayout.CENTER);
@@ -103,7 +109,9 @@ public class GuiHelper {
                     binding.setPropertyValue(fileChooser.getSelectedFile());
                 }
             }
-        });
+        }
+
+        );
 
         return panel;
     }
@@ -140,11 +148,11 @@ public class GuiHelper {
         descriptor.setNotEmpty(true);
         descriptor.setValueSet(new ValueSet(geometryNodeList.toArray()));
 
-        propertyContainer.setValue(BindingConstants.ROI_TYPE, 0);
+        propertyContainer.setValue(BindingConstants.ROI_TYPE, 1);
         propertyContainer.getProperty(BindingConstants.GEOMETRY).setValue(geometryNodeList.get(0));
     }
 
-    public static JComboBox creatGeometryComboBox(PropertyDescriptor geometryDescriptor, BindingContext bindingContext) {
+    public static JComboBox createGeometryComboBox(PropertyDescriptor geometryDescriptor, BindingContext bindingContext) {
         final PropertyEditor selectionEditor = PropertyEditorRegistry.getInstance().getPropertyEditor(SingleSelectionEditor.class.getName());
         final JComboBox geometryComboBox = (JComboBox) selectionEditor.createEditorComponent(geometryDescriptor, bindingContext);
 

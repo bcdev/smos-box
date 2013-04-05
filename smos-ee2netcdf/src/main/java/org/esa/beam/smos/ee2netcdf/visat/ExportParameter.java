@@ -1,19 +1,27 @@
 package org.esa.beam.smos.ee2netcdf.visat;
 
 import org.esa.beam.framework.datamodel.VectorDataNode;
+import org.esa.beam.framework.gpf.annotations.Parameter;
+import org.esa.beam.smos.gui.BindingConstants;
 
 import java.io.File;
 
 public class ExportParameter {
 
+    @Parameter(alias = BindingConstants.SELECTED_PRODUCT)
     private boolean useSelectedProduct;
     private File sourceDirectory;
     private boolean openFileDialog;
     private VectorDataNode geometry;
     private int roiType;
+
+    @Parameter(alias = BindingConstants.NORTH, defaultValue = "90.0", interval = "[-90.0, 90.0]")
     private double north;
+    @Parameter(alias = BindingConstants.EAST, defaultValue = "180.0", interval = "[-180.0, 180.0]")
     private double east;
+    @Parameter(alias = BindingConstants.SOUTH, defaultValue = "-90.0", interval = "[-90.0, 90.0]")
     private double south;
+    @Parameter(alias = BindingConstants.WEST, defaultValue = "-180.0", interval = "[-180.0, 180.0]")
     private double west;
     private File targetDirectory;
 
