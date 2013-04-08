@@ -107,7 +107,6 @@ public class ConverterOp extends Operator implements Output {
         final ArrayList<Polygon> polygonList = new ArrayList<Polygon>();
         final GeometryFactory geometryFactory = new GeometryFactory();
 
-
         while (!pathIterator.isDone()) {
             final double[] coords = new double[6];
             final int segType = pathIterator.currentSegment(coords);

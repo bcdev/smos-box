@@ -145,7 +145,7 @@ class GridPointExportDialog extends ModalDialog {
         if (selectedProduct != null) {
             final List<VectorDataNode> geometryNodeList = GuiHelper.getGeometries(selectedProduct);
             if (!geometryNodeList.isEmpty()) {
-                GuiHelper.bindGeometries(geometryNodeList, propertyContainer);
+                GuiHelper.bindGeometryVectorDataNodes(geometryNodeList, propertyContainer);
             } else if (selectedProduct.getPinGroup().getNodeCount() != 0) {
                 propertyContainer.setValue(BindingConstants.ROI_TYPE, 1);
             }

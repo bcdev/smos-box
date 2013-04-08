@@ -2,6 +2,9 @@ package org.esa.beam.smos.ee2netcdf.visat;
 
 import com.bc.ceres.core.ProgressMonitor;
 import com.bc.ceres.swing.progress.ProgressMonitorSwingWorker;
+import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.geom.Polygon;
+import com.vividsolutions.jts.io.WKTWriter;
 import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.framework.gpf.GPF;
 import org.esa.beam.framework.ui.AppContext;
@@ -90,8 +93,21 @@ public class ConverterSwingWorker extends ProgressMonitorSwingWorker<List<Except
         final int roiType = exportParameter.getRoiType();
         if (roiType == BindingConstants.ROI_TYPE_AREA) {
             parameterMap.put("region", exportParameter.toAreaWKT());
+        } else if (roiType == BindingConstants.ROI_TYPE_GEOMETRY) {
+            // @todo 1 tb/tb write test 2013-04-08
+            addSelectedProductGeometry(exportParameter.getGeometry(), parameterMap);
+        } else if (roiType == BindingConstants.ROI_TYPE_PRODUCT) {
+            parameterMap.remove("region");
         }
 
         return parameterMap;
+    }
+
+    private static void addSelectedProductGeometry(Geometry geometry, HashMap<String, Object> parameterMap) {
+        if (geometry instanceof Polygon) {
+            final WKTWriter wktWriter = new WKTWriter();
+            final String multiPolygonWkt = wktWriter.write(geometry);
+            parameterMap.put("region", multiPolygonWkt);
+        }
     }
 }

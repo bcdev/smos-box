@@ -11,11 +11,21 @@ import com.bc.ceres.swing.binding.internal.AbstractButtonAdapter;
 import com.bc.ceres.swing.binding.internal.SingleSelectionEditor;
 import com.bc.ceres.swing.binding.internal.TextComponentAdapter;
 import com.bc.ceres.swing.binding.internal.TextFieldEditor;
+import com.bc.ceres.swing.selection.Selection;
+import com.bc.ceres.swing.selection.SelectionContext;
+import com.bc.ceres.swing.selection.SelectionManager;
+import com.vividsolutions.jts.geom.Geometry;
 import org.esa.beam.framework.datamodel.PlainFeatureFactory;
 import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.framework.datamodel.ProductNodeGroup;
 import org.esa.beam.framework.datamodel.VectorDataNode;
 import org.esa.beam.framework.ui.AppContext;
+import org.esa.beam.framework.ui.application.ApplicationPage;
+import org.esa.beam.framework.ui.product.SimpleFeatureShapeFigure;
+import org.geotools.feature.FeatureCollection;
+import org.geotools.feature.FeatureIterator;
+import org.opengis.feature.simple.SimpleFeature;
+import org.opengis.feature.simple.SimpleFeatureType;
 
 import javax.swing.*;
 import java.awt.*;
@@ -129,6 +139,27 @@ public class GuiHelper {
         return new File(appContext.getPreferences().getPropertyString(lastSourceDirKey, def));
     }
 
+    // @todo 3 tb/tb write test 2013-04-08
+    public static Geometry getSelectedGeometry(AppContext appContext) {
+        final ApplicationPage applicationPage = appContext.getApplicationPage();
+        if (applicationPage != null) {
+            final SelectionManager selectionManager = applicationPage.getSelectionManager();
+            if (selectionManager != null) {
+                final SelectionContext selectionContext = selectionManager.getSelectionContext();
+                if (selectionContext != null) {
+                    final Selection selection = selectionContext.getSelection();
+                    final Object selectedValue = selection.getSelectedValue();
+                    if (selectedValue instanceof SimpleFeatureShapeFigure) {
+                        final SimpleFeatureShapeFigure shapeFigure = (SimpleFeatureShapeFigure) selectedValue;
+                        return shapeFigure.getGeometry();
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+
     public static java.util.List<VectorDataNode> getGeometries(Product selectedProduct) {
         final java.util.List<VectorDataNode> geometryNodeList = new ArrayList<VectorDataNode>();
         final ProductNodeGroup<VectorDataNode> vectorDataGroup = selectedProduct.getVectorDataGroup();
@@ -142,7 +173,41 @@ public class GuiHelper {
         return geometryNodeList;
     }
 
-    public static void bindGeometries(java.util.List<VectorDataNode> geometryNodeList, PropertyContainer propertyContainer) throws ValidationException {
+    public static java.util.List<Geometry> getPolygonGeometries(Product selectedProduct) {
+        final java.util.List<Geometry> geometryNodeList = new ArrayList<Geometry>();
+        final ProductNodeGroup<VectorDataNode> vectorDataGroup = selectedProduct.getVectorDataGroup();
+        for (VectorDataNode node : vectorDataGroup.toArray(new VectorDataNode[vectorDataGroup.getNodeCount()])) {
+            if (node.getFeatureType().getTypeName().equals(PlainFeatureFactory.DEFAULT_TYPE_NAME)) {
+                final FeatureCollection<SimpleFeatureType, SimpleFeature> featureCollection = node.getFeatureCollection();
+                if (!featureCollection.isEmpty()) {
+                    final FeatureIterator<SimpleFeature> features = featureCollection.features();
+                    while (features.hasNext()) {
+                        final SimpleFeature next = features.next();
+                        final Object defaultGeometry = next.getDefaultGeometry();
+                        if (defaultGeometry instanceof Geometry) {
+                            final Geometry geometry = (Geometry) defaultGeometry;
+                            if (geometry instanceof com.vividsolutions.jts.geom.Polygon) {
+                                geometryNodeList.add(geometry);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return geometryNodeList;
+    }
+
+    public static void bindGeometryVectorDataNodes(java.util.List<VectorDataNode> geometryNodeList, PropertyContainer propertyContainer) throws ValidationException {
+        final PropertyDescriptor descriptor = propertyContainer.getDescriptor(BindingConstants.GEOMETRY);
+        descriptor.setNotNull(true);
+        descriptor.setNotEmpty(true);
+        descriptor.setValueSet(new ValueSet(geometryNodeList.toArray()));
+
+        propertyContainer.setValue(BindingConstants.ROI_TYPE, 1);
+        propertyContainer.getProperty(BindingConstants.GEOMETRY).setValue(geometryNodeList.get(0));
+    }
+
+    public static void bindGeometries(java.util.List<Geometry> geometryNodeList, PropertyContainer propertyContainer) throws ValidationException {
         final PropertyDescriptor descriptor = propertyContainer.getDescriptor(BindingConstants.GEOMETRY);
         descriptor.setNotNull(true);
         descriptor.setNotEmpty(true);

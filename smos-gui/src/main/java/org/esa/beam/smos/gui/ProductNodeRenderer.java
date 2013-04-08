@@ -1,5 +1,6 @@
 package org.esa.beam.smos.gui;
 
+import com.vividsolutions.jts.geom.Geometry;
 import org.esa.beam.framework.datamodel.ProductNode;
 
 import javax.swing.*;
@@ -17,6 +18,8 @@ public class ProductNodeRenderer extends DefaultListCellRenderer {
         final JLabel label = (JLabel) component;
         if (value instanceof ProductNode) {
             label.setText(((ProductNode) value).getDisplayName());
+        } else if (value instanceof Geometry) {
+            label.setText(((Geometry) value).toText().substring(0, 48).concat(" ..."));
         } else {
             label.setText("");
         }

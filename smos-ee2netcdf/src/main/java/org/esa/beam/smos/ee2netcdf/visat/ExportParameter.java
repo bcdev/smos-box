@@ -1,6 +1,6 @@
 package org.esa.beam.smos.ee2netcdf.visat;
 
-import org.esa.beam.framework.datamodel.VectorDataNode;
+import com.vividsolutions.jts.geom.Geometry;
 import org.esa.beam.framework.gpf.annotations.Parameter;
 import org.esa.beam.smos.gui.BindingConstants;
 
@@ -12,7 +12,7 @@ public class ExportParameter {
     private boolean useSelectedProduct;
     private File sourceDirectory;
     private boolean openFileDialog;
-    private VectorDataNode geometry;
+    private Geometry geometry;
     private int roiType;
 
     @Parameter(alias = BindingConstants.NORTH, defaultValue = "90.0", interval = "[-90.0, 90.0]")
@@ -56,11 +56,11 @@ public class ExportParameter {
         return openFileDialog;
     }
 
-    public void setGeometry(VectorDataNode geometry) {
+    public void setGeometry(Geometry geometry) {
         this.geometry = geometry;
     }
 
-    public VectorDataNode getGeometry() {
+    public Geometry getGeometry() {
         return geometry;
     }
 

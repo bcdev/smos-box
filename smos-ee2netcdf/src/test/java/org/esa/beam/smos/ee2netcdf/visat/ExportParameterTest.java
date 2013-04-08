@@ -1,12 +1,9 @@
 package org.esa.beam.smos.ee2netcdf.visat;
 
-import org.esa.beam.framework.datamodel.VectorDataNode;
 import org.esa.beam.framework.gpf.annotations.Parameter;
 import org.esa.beam.smos.gui.BindingConstants;
-import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.junit.Before;
 import org.junit.Test;
-import org.opengis.feature.simple.SimpleFeatureType;
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -55,18 +52,20 @@ public class ExportParameterTest {
         assertFalse(parameter.isOpenFileDialog());
     }
 
-    @Test
-    public void testSetGetGeometry() {
-        final SimpleFeatureTypeBuilder builder = new SimpleFeatureTypeBuilder();
-        builder.setName("sft");
-        builder.add("CAPITAL", String.class);
-        final SimpleFeatureType featureType = builder.buildFeatureType();
+    // @todo 1 tb/tb write test for geometry access 2013-04-08
+//    @Test
+//    public void testSetGetGeometry() {
+//        final SimpleFeatureTypeBuilder builder = new SimpleFeatureTypeBuilder();
+//        builder.setName("sft");
+//        builder.add("CAPITAL", String.class);
+//        final SimpleFeatureType featureType = builder.buildFeatureType();
+//
+//        final VectorDataNode dataNode = new VectorDataNode("test", featureType);
+//
+//        parameter.setGeometry(dataNode);
+//        assertEquals(dataNode, parameter.getGeometry());
+//    }
 
-        final VectorDataNode dataNode = new VectorDataNode("test", featureType);
-
-        parameter.setGeometry(dataNode);
-        assertEquals(dataNode, parameter.getGeometry());
-    }
 
     @Test
     public void testSetGetRoiType() {
@@ -174,10 +173,10 @@ public class ExportParameterTest {
 
     @Test
     public void testConstruction() {
-         assertEquals(90.0, parameter.getNorth(), 1e-8);
-         assertEquals(-90.0, parameter.getSouth(), 1e-8);
-         assertEquals(-180.0, parameter.getWest(), 1e-8);
-         assertEquals(180.0, parameter.getEast(), 1e-8);
+        assertEquals(90.0, parameter.getNorth(), 1e-8);
+        assertEquals(-90.0, parameter.getSouth(), 1e-8);
+        assertEquals(-180.0, parameter.getWest(), 1e-8);
+        assertEquals(180.0, parameter.getEast(), 1e-8);
     }
 
     @Test

@@ -43,10 +43,6 @@
 
     <categories>Processor,SMOS,Data Conversion</categories>
 
-    <!--<extension point="ceres-core:serviceProviders">-->
-        <!--<serviceProvider>org.esa.beam.framework.gpf.OperatorSpi</serviceProvider>-->
-    <!--</extension>-->
-
     <extension point="beam-ui:actions">
         <action>
             <id>smosEE2NetCDFExport</id>
@@ -57,4 +53,5 @@
             <mnemonic>N</mnemonic>
         </action>
     </extension>
+
 </module>

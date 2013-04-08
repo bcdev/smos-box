@@ -5,10 +5,10 @@ import com.bc.ceres.binding.PropertyDescriptor;
 import com.bc.ceres.binding.ValidationException;
 import com.bc.ceres.swing.TableLayout;
 import com.bc.ceres.swing.binding.BindingContext;
+import com.vividsolutions.jts.geom.Geometry;
 import org.esa.beam.framework.datamodel.Product;
-import org.esa.beam.framework.datamodel.VectorDataNode;
 import org.esa.beam.framework.ui.AppContext;
-import org.esa.beam.framework.ui.ModalDialog;
+import org.esa.beam.framework.ui.ModelessDialog;
 import org.esa.beam.smos.gui.BindingConstants;
 import org.esa.beam.smos.gui.DefaultChooserFactory;
 import org.esa.beam.smos.gui.DirectoryChooserFactory;
@@ -17,11 +17,12 @@ import org.esa.beam.smos.gui.GuiHelper;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class NetCDFExportDialog extends ModalDialog {
+public class NetCDFExportDialog extends ModelessDialog {
 
     private static final String TARGET_DIRECTORY_BINDING = "targetDirectory";
     private final ExportParameter exportParameter;
@@ -30,23 +31,24 @@ public class NetCDFExportDialog extends ModalDialog {
     private final BindingContext bindingContext;
 
     public NetCDFExportDialog(AppContext appContext, String helpId) {
-        super(appContext.getApplicationWindow(), "Convert SMOS EE File to NetCDF 4", ID_OK_CANCEL_HELP, helpId); /* I18N */
+        super(appContext.getApplicationWindow(), "Convert SMOS EE File to NetCDF 4", ID_OK | ID_CLOSE | ID_HELP, helpId); /* I18N */
 
         this.appContext = appContext;
         exportParameter = new ExportParameter();
 
         propertyContainer = PropertyContainer.createObjectBacked(exportParameter);
-        try {
-            init(propertyContainer);
-        } catch (ValidationException e) {
-            throw new IllegalStateException(e.getMessage());
-        }
 
         bindingContext = new BindingContext(propertyContainer);
         bindingContext.bindEnabledState(BindingConstants.GEOMETRY, true, BindingConstants.ROI_TYPE, BindingConstants.ROI_TYPE_GEOMETRY);
         GuiHelper.bindLonLatPanelToRoiType(BindingConstants.ROI_TYPE_AREA, bindingContext);
 
         createUi();
+
+        try {
+            init(propertyContainer);
+        } catch (ValidationException e) {
+            throw new IllegalStateException(e.getMessage());
+        }
     }
 
     private void init(PropertyContainer propertyContainer) throws ValidationException {
@@ -60,9 +62,16 @@ public class NetCDFExportDialog extends ModalDialog {
 
         final Product selectedSmosProduct = DialogHelper.getSelectedSmosProduct(appContext);
         if (selectedSmosProduct != null) {
-            final List<VectorDataNode> geometryNodeList = GuiHelper.getGeometries(selectedSmosProduct);
-            if (!geometryNodeList.isEmpty()) {
-                GuiHelper.bindGeometries(geometryNodeList, propertyContainer);
+            final Geometry selectedGeometry = GuiHelper.getSelectedGeometry(appContext);
+            if (selectedGeometry != null) {
+                final ArrayList<Geometry> geometries = new ArrayList<Geometry>();
+                geometries.add(selectedGeometry);
+                GuiHelper.bindGeometries(geometries, propertyContainer);
+            } else {
+                final List<Geometry> geometries = GuiHelper.getPolygonGeometries(selectedSmosProduct);
+                if (!geometries.isEmpty()) {
+                    GuiHelper.bindGeometries(geometries, propertyContainer);
+                }
             }
             propertyContainer.setValue(BindingConstants.SELECTED_PRODUCT, true);
         } else {
@@ -118,6 +127,9 @@ public class NetCDFExportDialog extends ModalDialog {
         bindingContext.bind(BindingConstants.ROI_TYPE, buttonGroup, buttonGroupValueSet);
 
         final TableLayout layout = GuiHelper.createWeightedTablelayout(1);
+        layout.setCellPadding(2, 0, new Insets(0, 24, 3, 3));
+        layout.setCellPadding(4, 0, new Insets(0, 24, 3, 3));
+
         final JPanel roiPanel = new JPanel(layout);
         roiPanel.setBorder(BorderFactory.createTitledBorder("Region of Interest"));
 
@@ -129,9 +141,6 @@ public class NetCDFExportDialog extends ModalDialog {
         roiPanel.add(useAreaButton);
         final Component latLonPanel = GuiHelper.createLatLonPanel(propertyContainer, bindingContext);
         roiPanel.add(latLonPanel);
-
-        layout.setCellPadding(1, 0, new Insets(0, 24, 3, 3));
-        layout.setCellPadding(3, 0, new Insets(0, 24, 3, 3));
 
         return roiPanel;
     }
@@ -149,7 +158,7 @@ public class NetCDFExportDialog extends ModalDialog {
         final PropertyDescriptor targetDirectoryDescriptor = propertyContainer.getDescriptor(TARGET_DIRECTORY_BINDING);
         final JComponent fileEditor = GuiHelper.createFileEditorComponent(targetDirectoryDescriptor, new DirectoryChooserFactory(), bindingContext, false);
 
-        layout.setCellPadding(2, 0, new Insets(0, 24, 3, 3));
+        //layout.setCellPadding(1, 0, new Insets(0, 24, 3, 3));
         targetDirPanel.add(fileEditor);
 
         return targetDirPanel;
