@@ -40,11 +40,8 @@ public class ConverterSwingWorker extends ProgressMonitorSwingWorker<List<Except
             final Product selectedProduct = appContext.getSelectedProduct();
             GPF.createProduct(ConverterOp.ALIAS, parameterMap, new Product[]{selectedProduct});
         } else {
-            // extract input path
-            // run GPF
+            GPF.createProduct(ConverterOp.ALIAS, parameterMap);
         }
-
-        //GPF.createProduct("SmosEE2NetCDF", );
 
         pm.done();
 

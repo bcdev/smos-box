@@ -17,7 +17,6 @@ import org.esa.beam.smos.gui.GuiHelper;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,11 +38,11 @@ public class NetCDFExportDialog extends ModelessDialog {
         propertyContainer = PropertyContainer.createObjectBacked(exportParameter);
 
         bindingContext = new BindingContext(propertyContainer);
-        bindingContext.bindEnabledState(BindingConstants.GEOMETRY, true, BindingConstants.ROI_TYPE, BindingConstants.ROI_TYPE_GEOMETRY);
-        GuiHelper.bindLonLatPanelToRoiType(BindingConstants.ROI_TYPE_AREA, bindingContext);
 
         createUi();
 
+        bindingContext.bindEnabledState(BindingConstants.GEOMETRY, true, BindingConstants.ROI_TYPE, BindingConstants.ROI_TYPE_GEOMETRY);
+        GuiHelper.bindLonLatPanelToRoiType(BindingConstants.ROI_TYPE_AREA, bindingContext);
         try {
             init(propertyContainer);
         } catch (ValidationException e) {
@@ -62,20 +61,22 @@ public class NetCDFExportDialog extends ModelessDialog {
 
         final Product selectedSmosProduct = DialogHelper.getSelectedSmosProduct(appContext);
         if (selectedSmosProduct != null) {
-            final Geometry selectedGeometry = GuiHelper.getSelectedGeometry(appContext);
-            if (selectedGeometry != null) {
-                final ArrayList<Geometry> geometries = new ArrayList<Geometry>();
-                geometries.add(selectedGeometry);
+            final List<Geometry> geometries = GuiHelper.getPolygonGeometries(selectedSmosProduct);
+            if (!geometries.isEmpty()) {
                 GuiHelper.bindGeometries(geometries, propertyContainer);
-            } else {
-                final List<Geometry> geometries = GuiHelper.getPolygonGeometries(selectedSmosProduct);
-                if (!geometries.isEmpty()) {
-                    GuiHelper.bindGeometries(geometries, propertyContainer);
-                }
             }
             propertyContainer.setValue(BindingConstants.SELECTED_PRODUCT, true);
+
+            setSelectionToSelectedGeometry(propertyContainer);
         } else {
             propertyContainer.setValue(BindingConstants.SELECTED_PRODUCT, false);
+        }
+    }
+
+    private void setSelectionToSelectedGeometry(PropertyContainer propertyContainer) {
+        final Geometry selectedGeometry = GuiHelper.getSelectedGeometry(appContext);
+        if (selectedGeometry != null) {
+            propertyContainer.setValue(BindingConstants.GEOMETRY, selectedGeometry);
         }
     }
 
@@ -158,7 +159,6 @@ public class NetCDFExportDialog extends ModelessDialog {
         final PropertyDescriptor targetDirectoryDescriptor = propertyContainer.getDescriptor(TARGET_DIRECTORY_BINDING);
         final JComponent fileEditor = GuiHelper.createFileEditorComponent(targetDirectoryDescriptor, new DirectoryChooserFactory(), bindingContext, false);
 
-        //layout.setCellPadding(1, 0, new Insets(0, 24, 3, 3));
         targetDirPanel.add(fileEditor);
 
         return targetDirPanel;
