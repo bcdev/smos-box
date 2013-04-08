@@ -179,5 +179,15 @@ public class ExportParameterTest {
          assertEquals(-180.0, parameter.getWest(), 1e-8);
          assertEquals(180.0, parameter.getEast(), 1e-8);
     }
+
+    @Test
+    public void testToAreaWKT() {
+        parameter.setNorth(2.0);
+        parameter.setEast(25.0);
+        parameter.setSouth(1.0);
+        parameter.setWest(24.0);
+
+        assertEquals("POLYGON((24.0 2.0,25.0 2.0,25.0 1.0,24.0 1.0,24.0 2.0))", parameter.toAreaWKT());
+    }
 }
 

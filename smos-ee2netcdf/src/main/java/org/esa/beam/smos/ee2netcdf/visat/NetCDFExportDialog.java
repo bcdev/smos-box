@@ -47,8 +47,6 @@ public class NetCDFExportDialog extends ModalDialog {
         GuiHelper.bindLonLatPanelToRoiType(BindingConstants.ROI_TYPE_AREA, bindingContext);
 
         createUi();
-
-
     }
 
     private void init(PropertyContainer propertyContainer) throws ValidationException {

@@ -5,6 +5,8 @@ import com.bc.ceres.swing.progress.ProgressMonitorSwingWorker;
 import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.framework.gpf.GPF;
 import org.esa.beam.framework.ui.AppContext;
+import org.esa.beam.smos.ee2netcdf.ConverterOp;
+import org.esa.beam.smos.gui.BindingConstants;
 
 import java.io.File;
 import java.text.MessageFormat;
@@ -33,7 +35,7 @@ public class ConverterSwingWorker extends ProgressMonitorSwingWorker<List<Except
 
         if (exportParameter.isUseSelectedProduct()) {
             final Product selectedProduct = appContext.getSelectedProduct();
-            GPF.createProduct("SmosEE2NetCDF", parameterMap, new Product[]{selectedProduct});
+            GPF.createProduct(ConverterOp.ALIAS, parameterMap, new Product[]{selectedProduct});
         } else {
             // extract input path
             // run GPF
@@ -83,6 +85,11 @@ public class ConverterSwingWorker extends ProgressMonitorSwingWorker<List<Except
         final File sourceDirectory = exportParameter.getSourceDirectory();
         if (sourceDirectory != null && !exportParameter.isUseSelectedProduct()) {
             parameterMap.put("sourceProductPaths", sourceDirectory.getAbsolutePath());
+        }
+
+        final int roiType = exportParameter.getRoiType();
+        if (roiType == BindingConstants.ROI_TYPE_AREA) {
+            parameterMap.put("region", exportParameter.toAreaWKT());
         }
 
         return parameterMap;

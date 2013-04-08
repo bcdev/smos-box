@@ -111,4 +111,26 @@ public class ExportParameter {
     public File getTargetDirectory() {
         return targetDirectory;
     }
+
+    public String toAreaWKT() {
+        final StringBuilder wktBuilder = new StringBuilder(128);
+        wktBuilder.append("POLYGON((");
+        appendCoordinate(wktBuilder, west, north, true);
+        appendCoordinate(wktBuilder, east, north, true);
+        appendCoordinate(wktBuilder, east, south, true);
+        appendCoordinate(wktBuilder, west, south, true);
+        appendCoordinate(wktBuilder, west, north, false);
+        wktBuilder.append("))");
+
+        return wktBuilder.toString();
+    }
+
+    private void appendCoordinate(StringBuilder wktBuilder, double x, double y, boolean appendComma) {
+        wktBuilder.append(x);
+        wktBuilder.append(" ");
+        wktBuilder.append(y);
+        if (appendComma) {
+            wktBuilder.append(",");
+        }
+    }
 }

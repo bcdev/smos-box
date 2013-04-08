@@ -146,6 +146,11 @@ public class ConverterOpTest {
         assertEquals("SM_OPER_MIR_BWLF1C_20111026T143206_20111026T152520_503_001_1.zip", iterator.next().getName());
     }
 
+    @Test
+    public void testAlias() {
+         assertEquals("SmosEE2NetCDF", ConverterOp.ALIAS);
+    }
+
     private String getResourcePath() {
         File testDir = new File("./smos-ee2netcdf/src/test/resources/org/esa/beam/smos/ee2netcdf/");
         if (!testDir.exists()) {

@@ -57,7 +57,7 @@ public class ConverterOpAcceptanceTest {
         try {
             product = ProductIO.readProduct(file);
 
-            GPF.createProduct("SmosEE2NetCDF",
+            GPF.createProduct(ConverterOp.ALIAS,
                     createDefaultParameterMap(),
                     new Product[]{product});
 
@@ -84,7 +84,7 @@ public class ConverterOpAcceptanceTest {
             defaultParameterMap.put("sourceProductPaths", file.getParent() + File.separator + "*BWLF1C*");
             defaultParameterMap.put("region", "POLYGON((3 -70,5 -70,5 -71,3 -71,3 -70))");
 
-            GPF.createProduct("SmosEE2NetCDF",
+            GPF.createProduct(ConverterOp.ALIAS,
                     defaultParameterMap);
 
             assertTrue(targetDirectory.isDirectory());
@@ -108,7 +108,7 @@ public class ConverterOpAcceptanceTest {
 
             final HashMap<String, Object> defaultParameterMap = createDefaultParameterMap();
             defaultParameterMap.put("region", "POLYGON((70 -9,85 -9,85 -12,70 -12,70 -9))");
-            GPF.createProduct("SmosEE2NetCDF",
+            GPF.createProduct(ConverterOp.ALIAS,
                     defaultParameterMap,
                     new Product[]{product});
 
@@ -133,7 +133,7 @@ public class ConverterOpAcceptanceTest {
 
             final HashMap<String, Object> defaultParameterMap = createDefaultParameterMap();
             defaultParameterMap.put("region", "POLYGON((100 30,105 30,105 32,100 32,100 30))");
-            GPF.createProduct("SmosEE2NetCDF",
+            GPF.createProduct(ConverterOp.ALIAS,
                     defaultParameterMap,
                     new Product[]{product});
 

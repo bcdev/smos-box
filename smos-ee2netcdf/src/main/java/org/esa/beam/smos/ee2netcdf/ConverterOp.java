@@ -29,12 +29,14 @@ import java.util.TreeSet;
 
 @SuppressWarnings("MismatchedReadAndWriteOfArray")
 @OperatorMetadata(
-        alias = "SmosEE2NetCDF",
+        alias = ConverterOp.ALIAS,
         version = "0.1",
         authors = "Tom Block",
         copyright = "(c) 2013 by Brockmann Consult",
         description = "Converts SMOS EE Products to NetCDF format.")
 public class ConverterOp extends Operator implements Output {
+
+    public static final String ALIAS = "SmosEE2NetCDF";
 
     // input product types:
     // MIR_SM_BWxD1C
