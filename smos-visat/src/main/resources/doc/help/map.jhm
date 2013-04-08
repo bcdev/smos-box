@@ -9,5 +9,6 @@
     <mapID target="smosDataModel" url="smosbox/DataModel.html"/>
     <mapID target="smosTools" url="smosbox/Tools.html"/>
     <mapID target="smosGridPointExport" url="smosbox/GridPointExport.html"/>
+    <mapID target="smosEE2NetCDFExport" url="smosbox/NetCDFExport.html"/>
 
 </map>
