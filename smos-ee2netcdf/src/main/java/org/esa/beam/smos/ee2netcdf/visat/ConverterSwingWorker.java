@@ -84,7 +84,11 @@ public class ConverterSwingWorker extends ProgressMonitorSwingWorker<List<Except
 
         final File sourceDirectory = exportParameter.getSourceDirectory();
         if (sourceDirectory != null && !exportParameter.isUseSelectedProduct()) {
-            parameterMap.put("sourceProductPaths", sourceDirectory.getAbsolutePath());
+            final StringBuilder sourcePath = new StringBuilder();
+            sourcePath.append(sourceDirectory.getAbsolutePath());
+            sourcePath.append(File.separator);
+            sourcePath.append("*");
+            parameterMap.put("sourceProductPaths", sourcePath.toString());
         }
 
         final int roiType = exportParameter.getRoiType();

@@ -38,7 +38,7 @@ public class ConverterOpTest {
         final Field sourceProductsField = ConverterOp.class.getDeclaredField("sourceProducts");
         final SourceProducts sourceProducts = sourceProductsField.getAnnotation(SourceProducts.class);
         assertEquals(0, sourceProducts.count());
-        assertEquals("MIR_BW[LS][DF]1C|MIR_SC[LS][DF]1C|MIR_OSUDP2|MIR_SMUPD2", sourceProducts.type());
+        assertEquals("MIR_BW[LS][DF]1C|MIR_SC[LS][DF]1C|MIR_OSUDP2|MIR_SMUDP2", sourceProducts.type());
         assertEquals(0, sourceProducts.bands().length);
         assertEquals("The source products to be converted. If not given, the parameter 'sourceProductPaths' must be provided.",
                 sourceProducts.description());

@@ -46,7 +46,7 @@ public class ConverterOp extends Operator implements Output {
     // MIR_SM_OSUDP2
     // MIR_SM_SMUDP2
 
-    @SourceProducts(type = "MIR_BW[LS][DF]1C|MIR_SC[LS][DF]1C|MIR_OSUDP2|MIR_SMUPD2",
+    @SourceProducts(type = "MIR_BW[LS][DF]1C|MIR_SC[LS][DF]1C|MIR_OSUDP2|MIR_SMUDP2",
             description = "The source products to be converted. If not given, the parameter 'sourceProductPaths' must be provided.")
     private Product[] sourceProducts;
 

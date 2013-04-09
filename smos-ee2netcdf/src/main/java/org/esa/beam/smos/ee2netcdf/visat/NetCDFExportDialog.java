@@ -72,10 +72,10 @@ public class NetCDFExportDialog extends ModelessDialog {
             propertyContainer.setValue(BindingConstants.SELECTED_PRODUCT, false);
         }
 
-        propertyContainer.setValue(BindingConstants.NORTH, exportParameter.getNorth());
-        propertyContainer.setValue(BindingConstants.EAST, exportParameter.getEast());
-        propertyContainer.setValue(BindingConstants.SOUTH, exportParameter.getSouth());
-        propertyContainer.setValue(BindingConstants.WEST, exportParameter.getWest());
+        propertyContainer.setValue(BindingConstants.NORTH, 90.0);
+        propertyContainer.setValue(BindingConstants.EAST, 180.0);
+        propertyContainer.setValue(BindingConstants.SOUTH, -180.0);
+        propertyContainer.setValue(BindingConstants.WEST, 90.0);
     }
 
     private void setSelectionToSelectedGeometry(PropertyContainer propertyContainer) {

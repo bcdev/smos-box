@@ -15,13 +15,9 @@ public class ExportParameter {
     private Geometry geometry;
     private int roiType;
 
-    @Parameter(alias = BindingConstants.NORTH, defaultValue = "90.0", interval = "[-90.0, 90.0]")
     private double north;
-    @Parameter(alias = BindingConstants.EAST, defaultValue = "180.0", interval = "[-180.0, 180.0]")
     private double east;
-    @Parameter(alias = BindingConstants.SOUTH, defaultValue = "-90.0", interval = "[-90.0, 90.0]")
     private double south;
-    @Parameter(alias = BindingConstants.WEST, defaultValue = "-180.0", interval = "[-180.0, 180.0]")
     private double west;
     private File targetDirectory;
 
