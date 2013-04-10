@@ -9,6 +9,7 @@ import com.vividsolutions.jts.geom.Geometry;
 import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.framework.ui.AppContext;
 import org.esa.beam.framework.ui.ModelessDialog;
+import org.esa.beam.framework.ui.RegionBoundsInputUI;
 import org.esa.beam.smos.gui.BindingConstants;
 import org.esa.beam.smos.gui.DefaultChooserFactory;
 import org.esa.beam.smos.gui.DirectoryChooserFactory;
@@ -16,6 +17,8 @@ import org.esa.beam.smos.gui.GuiHelper;
 
 import javax.swing.*;
 import java.awt.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
@@ -36,13 +39,13 @@ public class NetCDFExportDialog extends ModelessDialog {
         exportParameter = new ExportParameter();
 
         propertyContainer = PropertyContainer.createObjectBacked(exportParameter);
+        setAreaToGlobe(propertyContainer);
 
         bindingContext = new BindingContext(propertyContainer);
 
         createUi();
 
         bindingContext.bindEnabledState(BindingConstants.GEOMETRY, true, BindingConstants.ROI_TYPE, BindingConstants.ROI_TYPE_GEOMETRY);
-        GuiHelper.bindLonLatPanelToRoiType(BindingConstants.ROI_TYPE_AREA, bindingContext);
         try {
             init(propertyContainer);
         } catch (ValidationException e) {
@@ -51,8 +54,6 @@ public class NetCDFExportDialog extends ModelessDialog {
     }
 
     private void init(PropertyContainer propertyContainer) throws ValidationException {
-        propertyContainer.setDefaultValues();
-
         final File defaultSourceDirectory = GuiHelper.getDefaultSourceDirectory(appContext);
         propertyContainer.setValue(BindingConstants.SOURCE_DIRECTORY, defaultSourceDirectory);
 
@@ -70,12 +71,20 @@ public class NetCDFExportDialog extends ModelessDialog {
             setSelectionToSelectedGeometry(propertyContainer);
         } else {
             propertyContainer.setValue(BindingConstants.SELECTED_PRODUCT, false);
+            propertyContainer.setValue(BindingConstants.ROI_TYPE, BindingConstants.ROI_TYPE_PRODUCT);
         }
+    }
 
+    private void setAreaToGlobe(PropertyContainer propertyContainer) {
         propertyContainer.setValue(BindingConstants.NORTH, 90.0);
         propertyContainer.setValue(BindingConstants.EAST, 180.0);
-        propertyContainer.setValue(BindingConstants.SOUTH, -180.0);
-        propertyContainer.setValue(BindingConstants.WEST, 90.0);
+        propertyContainer.setValue(BindingConstants.SOUTH, -90.0);
+        propertyContainer.setValue(BindingConstants.WEST, -180.0);
+
+        propertyContainer.setValue(RegionBoundsInputUI.PROPERTY_NORTH_BOUND, 90.0);
+        propertyContainer.setValue(RegionBoundsInputUI.PROPERTY_EAST_BOUND, 180.0);
+        propertyContainer.setValue(RegionBoundsInputUI.PROPERTY_SOUTH_BOUND, -90.0);
+        propertyContainer.setValue(RegionBoundsInputUI.PROPERTY_WEST_BOUND, -180.0);
     }
 
     private void setSelectionToSelectedGeometry(PropertyContainer propertyContainer) {
@@ -91,6 +100,7 @@ public class NetCDFExportDialog extends ModelessDialog {
         mainPanel.add(createSourceProductsPanel());
         mainPanel.add(createRoiPanel());
         mainPanel.add(createTargetDirPanel());
+
         setContent(mainPanel);
     }
 
@@ -145,8 +155,21 @@ public class NetCDFExportDialog extends ModelessDialog {
         roiPanel.add(useGeometryButton);
         roiPanel.add(geometryComboBox);
         roiPanel.add(useAreaButton);
-        final Component latLonPanel = GuiHelper.createLatLonPanel(propertyContainer, bindingContext);
-        roiPanel.add(latLonPanel);
+
+        final RegionBoundsInputUI regionBoundsInputUI = new RegionBoundsInputUI(bindingContext);
+        bindingContext.addPropertyChangeListener(BindingConstants.ROI_TYPE, new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                final int roiType = (Integer) evt.getNewValue();
+                if (roiType == BindingConstants.ROI_TYPE_AREA) {
+                    regionBoundsInputUI.setEnabled(true);
+                } else {
+                    regionBoundsInputUI.setEnabled(false);
+                }
+            }
+        });
+        regionBoundsInputUI.setEnabled(false);
+        roiPanel.add(regionBoundsInputUI.getUI());
 
         return roiPanel;
     }

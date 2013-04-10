@@ -15,17 +15,17 @@ public class ExportParameter {
     private Geometry geometry;
     private int roiType;
 
-    private double north;
-    private double east;
-    private double south;
-    private double west;
     private File targetDirectory;
+    private double northBound;
+    private double eastBound;
+    private double southBound;
+    private double westBound;
 
     public ExportParameter() {
-        north = 90.0;
-        south = -90.0;
-        west = -180.0;
-        east = 180.0;
+        northBound = 90.0;
+        southBound = -90.0;
+        westBound = -180.0;
+        eastBound = 180.0;
     }
 
     public void setUseSelectedProduct(boolean useSelectedProduct) {
@@ -68,39 +68,7 @@ public class ExportParameter {
         return roiType;
     }
 
-    public void setNorth(double north) {
-        this.north = north;
-    }
-
-    public double getNorth() {
-        return north;
-    }
-
-    public void setEast(double east) {
-        this.east = east;
-    }
-
-    public double getEast() {
-        return east;
-    }
-
-    public void setSouth(double south) {
-        this.south = south;
-    }
-
-    public double getSouth() {
-        return south;
-    }
-
-    public void setWest(double west) {
-        this.west = west;
-    }
-
-    public double getWest() {
-        return west;
-    }
-
-    public void setTargetDirectory(File targetDirectory) {
+   public void setTargetDirectory(File targetDirectory) {
         this.targetDirectory = targetDirectory;
     }
 
@@ -111,11 +79,11 @@ public class ExportParameter {
     public String toAreaWKT() {
         final StringBuilder wktBuilder = new StringBuilder(128);
         wktBuilder.append("POLYGON((");
-        appendCoordinate(wktBuilder, west, north, true);
-        appendCoordinate(wktBuilder, east, north, true);
-        appendCoordinate(wktBuilder, east, south, true);
-        appendCoordinate(wktBuilder, west, south, true);
-        appendCoordinate(wktBuilder, west, north, false);
+        appendCoordinate(wktBuilder, westBound, northBound, true);
+        appendCoordinate(wktBuilder, eastBound, northBound, true);
+        appendCoordinate(wktBuilder, eastBound, southBound, true);
+        appendCoordinate(wktBuilder, westBound, southBound, true);
+        appendCoordinate(wktBuilder, westBound, northBound, false);
         wktBuilder.append("))");
 
         return wktBuilder.toString();
@@ -128,5 +96,37 @@ public class ExportParameter {
         if (appendComma) {
             wktBuilder.append(",");
         }
+    }
+
+    public void setNorthBound(double northBound) {
+        this.northBound = northBound;
+    }
+
+    public double getNorthBound() {
+        return northBound;
+    }
+
+    public void setEastBound(double eastBound) {
+        this.eastBound = eastBound;
+    }
+
+    public double getEastBound() {
+        return eastBound;
+    }
+
+    public void setSouthBound(double southBound) {
+        this.southBound = southBound;
+    }
+
+    public double getSouthBound() {
+        return southBound;
+    }
+
+    public void setWestBound(double westBound) {
+        this.westBound = westBound;
+    }
+
+    public double getWestBound() {
+        return westBound;
     }
 }

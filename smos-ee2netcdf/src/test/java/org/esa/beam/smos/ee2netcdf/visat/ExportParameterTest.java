@@ -80,51 +80,51 @@ public class ExportParameterTest {
     }
 
     @Test
-    public void testSetGetNorth() {
-        final double north_1 = 33.9;
-        final double north_2 = -11.3;
+    public void testSetGetNorthBound() {
+        final double northBound_1 = 43.9;
+        final double northBound_2 = -21.3;
 
-        parameter.setNorth(north_1);
-        assertEquals(north_1, parameter.getNorth(), 1e-8);
+        parameter.setNorthBound(northBound_1);
+        assertEquals(northBound_1, parameter.getNorthBound(), 1e-8);
 
-        parameter.setNorth(north_2);
-        assertEquals(north_2, parameter.getNorth(), 1e-8);
+        parameter.setNorthBound(northBound_2);
+        assertEquals(northBound_2, parameter.getNorthBound(), 1e-8);
     }
 
     @Test
-    public void testSetGetEast() {
-        final double east_1 = 109.6;
-        final double east_2 = -2.5;
+    public void testSetGetEastBound() {
+        final double eastBound_1 = 119.6;
+        final double eastBound_2 = -3.5;
 
-        parameter.setEast(east_1);
-        assertEquals(east_1, parameter.getEast(), 1e-8);
+        parameter.setEastBound(eastBound_1);
+        assertEquals(eastBound_1, parameter.getEastBound(), 1e-8);
 
-        parameter.setEast(east_2);
-        assertEquals(east_2, parameter.getEast(), 1e-8);
+        parameter.setEastBound(eastBound_2);
+        assertEquals(eastBound_2, parameter.getEastBound(), 1e-8);
     }
 
     @Test
-    public void testSetGetSouth() {
-        final double south_1 = 8.6;
-        final double south_2 = -42.6;
+    public void testSetGetSouthBound() {
+        final double southBound_1 = 9.6;
+        final double southBound_2 = -52.6;
 
-        parameter.setSouth(south_1);
-        assertEquals(south_1, parameter.getSouth(), 1e-8);
+        parameter.setSouthBound(southBound_1);
+        assertEquals(southBound_1, parameter.getSouthBound(), 1e-8);
 
-        parameter.setSouth(south_2);
-        assertEquals(south_2, parameter.getSouth(), 1e-8);
+        parameter.setSouthBound(southBound_2);
+        assertEquals(southBound_2, parameter.getSouthBound(), 1e-8);
     }
 
     @Test
-    public void testSetGetWest() {
-        final double west_1 = 18.6;
-        final double west_2 = -72.6;
+    public void testSetGetWestBound() {
+        final double westBound_1 = 28.6;
+        final double westBound_2 = -82.6;
 
-        parameter.setWest(west_1);
-        assertEquals(west_1, parameter.getWest(), 1e-8);
+        parameter.setWestBound(westBound_1);
+        assertEquals(westBound_1, parameter.getWestBound(), 1e-8);
 
-        parameter.setWest(west_2);
-        assertEquals(west_2, parameter.getWest(), 1e-8);
+        parameter.setWestBound(westBound_2);
+        assertEquals(westBound_2, parameter.getWestBound(), 1e-8);
     }
 
     @Test
@@ -137,18 +137,18 @@ public class ExportParameterTest {
 
     @Test
     public void testConstruction() {
-        assertEquals(90.0, parameter.getNorth(), 1e-8);
-        assertEquals(-90.0, parameter.getSouth(), 1e-8);
-        assertEquals(-180.0, parameter.getWest(), 1e-8);
-        assertEquals(180.0, parameter.getEast(), 1e-8);
+        assertEquals(90.0, parameter.getNorthBound(), 1e-8);
+        assertEquals(-90.0, parameter.getSouthBound(), 1e-8);
+        assertEquals(-180.0, parameter.getWestBound(), 1e-8);
+        assertEquals(180.0, parameter.getEastBound(), 1e-8);
     }
 
     @Test
     public void testToAreaWKT() {
-        parameter.setNorth(2.0);
-        parameter.setEast(25.0);
-        parameter.setSouth(1.0);
-        parameter.setWest(24.0);
+        parameter.setNorthBound(2.0);
+        parameter.setEastBound(25.0);
+        parameter.setSouthBound(1.0);
+        parameter.setWestBound(24.0);
 
         assertEquals("POLYGON((24.0 2.0,25.0 2.0,25.0 1.0,24.0 1.0,24.0 2.0))", parameter.toAreaWKT());
     }

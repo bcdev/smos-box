@@ -84,11 +84,8 @@ public class ConverterSwingWorker extends ProgressMonitorSwingWorker<List<Except
 
         final File sourceDirectory = exportParameter.getSourceDirectory();
         if (sourceDirectory != null && !exportParameter.isUseSelectedProduct()) {
-            final StringBuilder sourcePath = new StringBuilder();
-            sourcePath.append(sourceDirectory.getAbsolutePath());
-            sourcePath.append(File.separator);
-            sourcePath.append("*");
-            parameterMap.put("sourceProductPaths", sourcePath.toString());
+            final String sourcePath = createInputPathWildcards(sourceDirectory);
+            parameterMap.put("sourceProductPaths", sourcePath);
         }
 
         final int roiType = exportParameter.getRoiType();
@@ -102,6 +99,19 @@ public class ConverterSwingWorker extends ProgressMonitorSwingWorker<List<Except
         }
 
         return parameterMap;
+    }
+
+    // package access for testing only tb 2013-04-10
+    static String createInputPathWildcards(File sourceDirectory) {
+        final StringBuilder sourcePath = new StringBuilder();
+        final String absolutePath = sourceDirectory.getAbsolutePath();
+        sourcePath.append(absolutePath);
+        sourcePath.append(File.separator);
+        sourcePath.append("*.zip, ");
+        sourcePath.append(absolutePath);
+        sourcePath.append(File.separator);
+        sourcePath.append("*.dbl");
+        return sourcePath.toString();
     }
 
     private static void addSelectedProductGeometry(Geometry geometry, HashMap<String, Object> parameterMap) {

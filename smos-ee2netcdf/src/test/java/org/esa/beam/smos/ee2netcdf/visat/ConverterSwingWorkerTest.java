@@ -7,8 +7,9 @@ import org.junit.Test;
 import java.io.File;
 import java.util.HashMap;
 
+import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNull;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
 
 public class ConverterSwingWorkerTest {
 
@@ -26,7 +27,8 @@ public class ConverterSwingWorkerTest {
 
         final HashMap<String, Object> parameterMap = ConverterSwingWorker.createParameterMap(exportParameter);
         final String sourceDirectory = (String) parameterMap.get("sourceProductPaths");
-        assertEquals(expectedSourceDir.getAbsolutePath() + File.separator + "*", sourceDirectory);
+        final String absolutePath = expectedSourceDir.getAbsolutePath();
+        assertEquals(absolutePath + File.separator + "*.zip, " + absolutePath + File.separator + "*.dbl", sourceDirectory);
     }
 
     @Test
@@ -51,10 +53,10 @@ public class ConverterSwingWorkerTest {
 
     @Test
     public void testCreateMap_area() {
-        exportParameter.setNorth(22.9);
-        exportParameter.setEast(100.6);
-        exportParameter.setSouth(11.8);
-        exportParameter.setWest(98.06);
+        exportParameter.setNorthBound(22.9);
+        exportParameter.setEastBound(100.6);
+        exportParameter.setSouthBound(11.8);
+        exportParameter.setWestBound(98.06);
         exportParameter.setRoiType(BindingConstants.ROI_TYPE_AREA);
 
         final HashMap<String, Object> parameterMap = ConverterSwingWorker.createParameterMap(exportParameter);
@@ -67,5 +69,21 @@ public class ConverterSwingWorkerTest {
 
         final HashMap<String, Object> parameterMap = ConverterSwingWorker.createParameterMap(exportParameter);
         assertNull(parameterMap.get("region"));
+    }
+
+    @Test
+    public void testCreateInputPathWildcards() {
+        final File inputDir = new File("data");
+        final String pathWildcards = ConverterSwingWorker.createInputPathWildcards(inputDir);
+
+        final String absolutePath = inputDir.getAbsolutePath();
+        final StringBuilder expected = new StringBuilder();
+        expected.append(absolutePath);
+        expected.append(File.separator);
+        expected.append("*.zip, ");
+        expected.append(absolutePath);
+        expected.append(File.separator);
+        expected.append("*.dbl");
+        assertEquals(expected.toString(), pathWildcards);
     }
 }

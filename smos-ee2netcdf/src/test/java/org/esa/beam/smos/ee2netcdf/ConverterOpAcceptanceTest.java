@@ -64,6 +64,7 @@ public class ConverterOpAcceptanceTest {
             assertTrue(targetDirectory.isDirectory());
             final File expectedOutputFile = new File(targetDirectory, "SM_OPER_MIR_BWLF1C_20111026T143206_20111026T152520_503_001_1.nc");
             assertTrue(expectedOutputFile.isFile());
+            assertEquals(24079086, expectedOutputFile.length());
             // @todo 2 tb/tb more assertions 2013-03-25
         } finally {
             if (product != null) {
@@ -90,6 +91,8 @@ public class ConverterOpAcceptanceTest {
             assertTrue(targetDirectory.isDirectory());
             final File expectedOutputFile = new File(targetDirectory, "SM_OPER_MIR_BWLF1C_20111026T143206_20111026T152520_503_001_1.nc");
             assertTrue(expectedOutputFile.isFile());
+            assertEquals(255070, expectedOutputFile.length());
+
             // @todo 2 tb/tb more assertions 2013-03-25
         } finally {
             if (product != null) {
@@ -115,6 +118,8 @@ public class ConverterOpAcceptanceTest {
             assertTrue(targetDirectory.isDirectory());
             final File expectedOutputFile = new File(targetDirectory, "SM_OPER_MIR_OSUDP2_20091204T001853_20091204T011255_310_001_1.nc");
             assertTrue(expectedOutputFile.isFile());
+            assertEquals(1569057, expectedOutputFile.length());
+
             // @todo 2 tb/tb more assertions 2013-03-25
         } finally {
             if (product != null) {
