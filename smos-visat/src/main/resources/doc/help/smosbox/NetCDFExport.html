@@ -19,9 +19,6 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta name="generator" content=
-            "HTML Tidy for Mac OS X (vers 25 March 2009), see www.w3.org"/>
-
     <title>SMOS NetCDF Conversion</title>
     <link rel="stylesheet" href="../../style.css" type="text/css"/>
 </head>
@@ -32,7 +29,7 @@
         <td class="header">&nbsp; SMOS NetCDF Conversion</td>
 
         <td class="header" align="right"><a href="../../index.html"><img src="../images/BeamHeader.jpg"
-                                                                            border="0"/></a></td>
+                                                                         border="0"/></a></td>
     </tr>
 </table>
 
@@ -43,17 +40,37 @@
     SMOS products in Earth Explorer file format to NetCDF.
     This conversion process involves a re-sampling of the data from
     the original ISEA hexagonal data cells to a rectangular raster file format.
-    </p>
+</p>
 
 <h4>NetCDF Output File Format</h4>
-<!-- TODO write help text tb 2013-04-08-->
+
+<p>
+    The target file format for the conversion process is NetCDF-CF format using a compressed
+    NetCDF-4 file format. General information about the NetCDF-4 format can be found at
+    <br>
+    <a href="http://cf-pcmdi.llnl.gov/">UNIDATA NetCDF (Network Common Data Form)</a>
+    <br>
+    The CF (Climate and Forecast Metadata) format convention is described at
+    <br>
+    <a href="http://cf-pcmdi.llnl.gov/">CF Metadata</a>
+</p>
+<p>
+    All fields in the SMOS EE grid point data records are represented as single bands on a
+    rectangular pixel raster.
+    The raster is a Plate-Carree projection with a pixel size of 0.02197 degrees in both axes.
+    <br>
+    The Metadata of the original Earth-Explorer file is converted to a CF-compliant metadata
+    record and stored as global NetCDF attribute.
+</p>
 
 <h4>Conversion Process</h4>
-<!-- TODO write help text tb 2013-04-08-->
+<b>TODO</b> describe re-sampling, handling of L1C files ...
+<br>
+<b>TODO</b> emphasize the importance to process subsets ... lot of no-data-cells, slow ...
 
 <h4>NetCDF Conversion in VISAT</h4>
 
-<p><img src="images/GridPointExport.png" alt=
+<p><img src="images/EE2NetCDFGui.png" alt=
         "Grid Point Export"/></p>
 
 <p><b>Source Products:</b> Either the SMOS product selected in
@@ -61,99 +78,12 @@
     system can be used for exporting. The search for SMOS products
     may optionally include subdirectories.</p>
 
-<p><b>Region of Interest:</b> There are three possibilities for
-    specifying a region of interest (ROI) considered for export:</p>
+<b>TODO</b>
+Describe GUI components
 
-<ul>
-    <li>A ROI defined by a geometry</li>
+<b>TODO</b>
+Describe GPF integration and supply example for GPF-xml input format
 
-    <li>A ROI defined by the grid points under the pins of the SMOS
-        product selected in VISAT
-    </li>
 
-    <li>A ROI defined by a latitude-longitude box</li>
-</ul>
-
-<p><b>Target File:</b> The file, which receives the exported data.
-    For exporting as CSV, the target file must be a normal file while
-    for creating Earth Explorer subsets, it must be a directory. The
-    amount of data can be huge, depending on the ROI selected and the
-    number of source products traversed.</p>
-
-<p>The file name of each Earth Explorer subset is generated from
-    the file name of its source, with sensing start and stop times
-    matching the actual snapshots in the subset, if the source
-    contains the necessary snapshot information.
-</p>
-
-<h4>NetCDF Conversion as GPF Operator</h4>
-
-<p>The command line tool for exporting grid point data resides in
-    the <code>bin</code> directory of your BEAM installation.
-    Depending on your system platform, type</p>
-  <pre>
-    ${BEAM_HOME}/bin/export-grid-points.bat
-  
-</pre>
-  <pre>
-    ${BEAM_HOME}/bin/export-grid-points.sh
-  
-</pre>
-
-<p>or</p>
-  <pre>
-    ${BEAM_HOME}/bin/export-grid-points.command
-  
-</pre>
-
-<p>in order to obtain a usage message. The grid points, for which
-    data is exported can be defined by either a latitude-longitude
-    box or a latitude-longitude point. For instance, type</p>
-  <pre>
-    export-grid-points.sh -point 1.0 7.0 SM_TEST_MIR_SCLF1C_20070223T061043_20070223T061105_310_001_0
-  
-</pre>
-
-<p>for exporting the data of a single grid point. Type</p>
-  <pre>
-    export-grid-points.sh -box -10.0 10.0 -20.0 20.0 SM_TEST_MIR_SCLF1C_20070223T061043_20070223T061105_310_001_0
-  
-</pre>
-
-<p>for exporting all grid points contained in a
-    latitude-longitude box. The target file can defined by means of
-    the <code>-o</code> option. If a target file is not defined, the
-    output is printed to the console. For example, type</p>
-  <pre>
-    export-grid-points.sh -point 1.0 7.0 -o export.csv SM_TEST_MIR_SCLF1C_20070223T061043_20070223T061105_310_001_0
-  
-</pre>
-
-<p>If the target file is a directory, the grid point data are
-    exported in form of EE formatted files, which all reside in
-    the target directory. The file name of each subset product is
-    generated from the file name of its source product. For example,
-    type</p>
-  <pre>
-    export-grid-points.sh -point 1.0 7.0 -o exportDir SM_????_MIR_SCLD1C_2010*
-  
-</pre>
-
-<p>Using more than a single SMOS product as source is possible.
-    The usual shell completion can be used to specify multiple
-    product files. For example, type</p>
-  <pre>
-    export-grid-points.sh -point 1.0 7.0 -o export.csv SM_????_MIR_SCLD1C_2010*
-
-</pre>
-
-<p>or</p>
-  <pre>
-    export-grid-points.sh -point 1.0 7.0 -o exportDir SM_????_MIR_SCLD1C_2010*
-
-</pre>
-
-<p>to export only SMOS land dual-polarisation science products
-    for 2010.</p>
 </body>
 </html>
