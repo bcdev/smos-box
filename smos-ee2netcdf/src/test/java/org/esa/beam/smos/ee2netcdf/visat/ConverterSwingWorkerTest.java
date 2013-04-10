@@ -28,7 +28,7 @@ public class ConverterSwingWorkerTest {
         final HashMap<String, Object> parameterMap = ConverterSwingWorker.createParameterMap(exportParameter);
         final String sourceDirectory = (String) parameterMap.get("sourceProductPaths");
         final String absolutePath = expectedSourceDir.getAbsolutePath();
-        assertEquals(absolutePath + File.separator + "*.zip, " + absolutePath + File.separator + "*.dbl", sourceDirectory);
+        assertEquals(absolutePath + File.separator + "*.zip," + absolutePath + File.separator + "*.dbl", sourceDirectory);
     }
 
     @Test
@@ -80,7 +80,7 @@ public class ConverterSwingWorkerTest {
         final StringBuilder expected = new StringBuilder();
         expected.append(absolutePath);
         expected.append(File.separator);
-        expected.append("*.zip, ");
+        expected.append("*.zip,");
         expected.append(absolutePath);
         expected.append(File.separator);
         expected.append("*.dbl");

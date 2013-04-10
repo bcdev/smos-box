@@ -107,7 +107,7 @@ public class ConverterSwingWorker extends ProgressMonitorSwingWorker<List<Except
         final String absolutePath = sourceDirectory.getAbsolutePath();
         sourcePath.append(absolutePath);
         sourcePath.append(File.separator);
-        sourcePath.append("*.zip, ");
+        sourcePath.append("*.zip,");
         sourcePath.append(absolutePath);
         sourcePath.append(File.separator);
         sourcePath.append("*.dbl");

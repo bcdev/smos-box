@@ -76,11 +76,6 @@ public class NetCDFExportDialog extends ModelessDialog {
     }
 
     private void setAreaToGlobe(PropertyContainer propertyContainer) {
-        propertyContainer.setValue(BindingConstants.NORTH, 90.0);
-        propertyContainer.setValue(BindingConstants.EAST, 180.0);
-        propertyContainer.setValue(BindingConstants.SOUTH, -90.0);
-        propertyContainer.setValue(BindingConstants.WEST, -180.0);
-
         propertyContainer.setValue(RegionBoundsInputUI.PROPERTY_NORTH_BOUND, 90.0);
         propertyContainer.setValue(RegionBoundsInputUI.PROPERTY_EAST_BOUND, 180.0);
         propertyContainer.setValue(RegionBoundsInputUI.PROPERTY_SOUTH_BOUND, -90.0);

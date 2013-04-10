@@ -92,6 +92,7 @@ public class ConverterOp extends Operator implements Output {
         final TreeSet<File> sourceFileSet = new TreeSet<File>();
         try {
             for (String sourceProductPath : sourceProductPaths) {
+                sourceProductPath = sourceProductPath.trim();
                 WildcardMatcher.glob(sourceProductPath, sourceFileSet);
             }
         } catch (IOException e) {
