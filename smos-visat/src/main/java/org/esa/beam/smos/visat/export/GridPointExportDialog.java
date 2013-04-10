@@ -81,9 +81,9 @@ class GridPointExportDialog extends ModalDialog {
 
     @Override
     protected void onOK() {
-        final File sourceDirectory = (File) propertyContainer.getValue(BindingConstants.SOURCE_DIRECTORY);
-        final File targetFile = (File) propertyContainer.getValue(ALIAS_TARGET_FILE);
-        setDefaultSourceDirectory(sourceDirectory);
+        final File sourceDirectory = propertyContainer.getValue(BindingConstants.SOURCE_DIRECTORY);
+        final File targetFile = propertyContainer.getValue(ALIAS_TARGET_FILE);
+        GuiHelper.setDefaultSourceDirectory(sourceDirectory, appContext);
         setDefaultTargetFile(targetFile);
         if (targetFile.exists() && targetFile.isFile()) {
             final String message = MessageFormat.format(
@@ -287,10 +287,6 @@ class GridPointExportDialog extends ModalDialog {
             }
         });
         return targetFilePanel;
-    }
-
-    private void setDefaultSourceDirectory(File sourceDirectory) {
-        appContext.getPreferences().setPropertyString(GuiHelper.LAST_SOURCE_DIR_KEY, sourceDirectory.getPath());
     }
 
     private File getDefaultTargetFile() {

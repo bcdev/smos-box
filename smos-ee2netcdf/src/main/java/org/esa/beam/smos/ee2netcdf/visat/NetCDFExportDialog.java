@@ -193,6 +193,9 @@ public class NetCDFExportDialog extends ModelessDialog {
 
         super.onOK();
 
+        GuiHelper.setDefaultSourceDirectory(exportParameter.getSourceDirectory(), appContext);
+        GuiHelper.setDefaultTargetDirectory(exportParameter.getTargetDirectory(), appContext);
+
         worker.execute();
     }
 }

@@ -130,8 +130,16 @@ public class GuiHelper {
         return getFileFromProperties(appContext, LAST_SOURCE_DIR_KEY);
     }
 
+    public static void setDefaultSourceDirectory(File sourceDirectory, AppContext appContext) {
+        appContext.getPreferences().setPropertyString(LAST_SOURCE_DIR_KEY, sourceDirectory.getPath());
+    }
+
     public static File getDefaultTargetDirectory(AppContext appContext) {
         return getFileFromProperties(appContext, LAST_TARGET_DIR_KEY);
+    }
+
+    public static void setDefaultTargetDirectory(File targetDirectory, AppContext appContext) {
+        appContext.getPreferences().setPropertyString(LAST_TARGET_DIR_KEY, targetDirectory.getPath());
     }
 
     private static File getFileFromProperties(AppContext appContext, String lastSourceDirKey) {

@@ -43,6 +43,19 @@ public class GuiHelperTest {
     }
 
     @Test
+    public void testSetDefaultSourceDirectory_fromPreferences() {
+        assumeTrue(isGuiAvailable);
+
+        final DefaultAppContext appContext = new DefaultAppContext("bla");
+        final File file = new File("/default/source/directory");
+
+        GuiHelper.setDefaultSourceDirectory(file, appContext);
+
+        final String propertyString = appContext.getPreferences().getPropertyString("org.esa.beam.smos.export.sourceDir");
+        assertEquals(file.getPath(), propertyString);
+    }
+
+    @Test
     public void testGetDefaultTargetDirectory_fromUserHome() {
         assumeTrue(isGuiAvailable);
 
@@ -65,5 +78,18 @@ public class GuiHelperTest {
         appContext.getPreferences().setPropertyString("org.esa.beam.smos.export.targetDir", expected);
 
         assertEquals(expected, GuiHelper.getDefaultTargetDirectory(appContext).getPath());
+    }
+
+    @Test
+    public void testSetDefaultTargetDirectory() {
+        assumeTrue(isGuiAvailable);
+
+        final DefaultAppContext appContext = new DefaultAppContext("schwafel");
+        final File file = new File("/default/target/directory");
+
+        GuiHelper.setDefaultTargetDirectory(file, appContext);
+
+        final String propertyString = appContext.getPreferences().getPropertyString("org.esa.beam.smos.export.targetDir");
+        assertEquals(file.getPath(), propertyString);
     }
 }
