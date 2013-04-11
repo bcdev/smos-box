@@ -40,6 +40,22 @@
     SMOS products in Earth Explorer file format to NetCDF.
     This conversion process involves a re-sampling of the data from
     the original ISEA hexagonal data cells to a rectangular raster file format.
+    <br>
+    The export operator supports the following SMOS product types:
+<ul>
+    <li>MIR_SM_BWSD1C</li>
+    <li>MIR_SM_BWLD1C</li>
+    <li>MIR_SM_BWLF1C</li>
+    <li>MIR_SM_BWSF1C</li>
+    <li>MIR_SM_SCLD1C</li>
+    <li>MIR_SM_SCSD1C</li>
+    <li>MIR_SM_SCLF1C</li>
+    <li>MIR_SM_SCSF1C</li>
+    <li>MIR_SM_OSUDP2</li>
+    <li>MIR_SM_SMUDP2</li>
+</ul>
+The NetCDF Conversion Command is integrated into the BEAM framework in two different places.
+It can be either invoked from within Visat or be used as a GPF-Operator for batch-processing using the cmd-line.
 </p>
 
 <h4>NetCDF Output File Format</h4>
@@ -48,42 +64,164 @@
     The target file format for the conversion process is NetCDF-CF format using a compressed
     NetCDF-4 file format. General information about the NetCDF-4 format can be found at
     <br>
-    <a href="http://cf-pcmdi.llnl.gov/">UNIDATA NetCDF (Network Common Data Form)</a>
+    <a href="http://www.unidata.ucar.edu/software/netcdf/">UNIDATA NetCDF (Network Common Data Form)</a>
     <br>
     The CF (Climate and Forecast Metadata) format convention is described at
     <br>
     <a href="http://cf-pcmdi.llnl.gov/">CF Metadata</a>
 </p>
+
+<p>
+    The metadata of the original Earth-Explorer file is converted to a CF-compliant metadata
+    record and stored as global NetCDF attribute.
+</p>
+
 <p>
     All fields in the SMOS EE grid point data records are represented as single bands on a
     rectangular pixel raster.
     The raster is a Plate-Carree projection with a pixel size of 0.02197 degrees in both axes.
-    <br>
-    The Metadata of the original Earth-Explorer file is converted to a CF-compliant metadata
-    record and stored as global NetCDF attribute.
+    Each hexagonal ISEA data cell is represented by approximately 30 image pixels for equatorial
+    grid points of the SMOS discrete global grid. For details on the conversion process, please refer to the
+    <a href="DataModel.html">Data Model</a> description.
 </p>
 
-<h4>Conversion Process</h4>
-<b>TODO</b> describe re-sampling, handling of L1C files ...
-<br>
-<b>TODO</b> emphasize the importance to process subsets ... lot of no-data-cells, slow ...
+<p>
+    The size of the target NetCDF product covers the geometric bounding box of the original SMOS file.
+    This can lead to large products, especially when the SMOS dataset crosses the anti-meridian. All
+    pixels not covering a SMOS cell are filled with "NaN" values.
+    <br>
+    It is highly recommended to use the possibility to create regional subset products. This reduces the
+    size of the resulting NetCDF file and increases the conversion speed significantly.
+</p>
+
+<p>
+    The figure below shows a converted <i>MIR_SM_BWSD1C</i> product, band <i>BT_Value_X</i> without any subsetting
+    applied.
+</p>
+<img src="images/NetCDF-Grid.png" alt="NetCDF Grid">
+
+<p>
+    It can clearly be seen that most parts of the product contain no data.
+</p>
 
 <h4>NetCDF Conversion in VISAT</h4>
 
 <p><img src="images/EE2NetCDFGui.png" alt=
-        "Grid Point Export"/></p>
+        "NetCDF Conversion GUI"/></p>
+
+<p>
+    The NetCDF Conversion dialog can be invoked from within Visat using the "Tools" menu.
+</p>
 
 <p><b>Source Products:</b> Either the SMOS product selected in
     VISAT, or all SMOS products residing in a directory of the file
-    system can be used for exporting. The search for SMOS products
-    may optionally include subdirectories.</p>
+    system can be used for conversion. When a directory is selected,
+    the conversion process will convert all SMOS files in all subdirectories.
+    The software can handle zip-compressed products.
+</p>
 
-<b>TODO</b>
-Describe GUI components
+<p>
+    <b>Region of Interest:</b> There are three possibilities for
+    specifying a region of interest (ROI) considered for export:
+</p>
+<ul>
+    <li>Whole Product: the conversion process will automatically perform a subset that contains the geometric
+        boundary of the input file, i.e. all measurement data is converted.
+    </li>
 
-<b>TODO</b>
-Describe GPF integration and supply example for GPF-xml input format
+    <li>Geometry: the target product covers all pixels contained in a polygon defined in Visat.
+        Polygons can be selected using a drop-down list.
+    </li>
 
+    <li>Area: the target product covers all pixels contained in a rectangular area. The area can be defined by either
+        entering the
+        bounding coordinates in the text fields or by using the mouse to adjust the bounding rectangle on the map.
+    </li>
+</ul>
+
+<p>
+    <b>Target Directory:</b> all output files of the conversion process will be stored in the directory selected.
+</p>
+
+<h4>NetCDF Conversion as GPF operator</h4>
+
+The NetCDF conversion tool is implemented as a GPF operator.
+
+<h5>Overview</h5>
+<table>
+    <tr>
+        <td><b>Name:</b></td>
+        <td><code>SmosEE2NetCDF</code></td>
+    </tr>
+    <tr>
+        <td><b>Full name:</b></td>
+        <td><code>org.esa.beam.smos.ee2netcdf.ConverterOp</code></td>
+    </tr>
+    <tr>
+        <td><b>Purpose:</b></td>
+        <td>Convert SMOS products from Earth Explorer Format to NetCDF4.</td>
+    </tr>
+    <tr>
+        <td><b>Version:</b></td>
+        <td>2.3</td>
+    </tr>
+</table>
+<h5>Description</h5>
+This operator is used to convert SMOS data in Earth Explorer format to NetCDF-CF 4. It accepts either single input products or
+wildcard path expressions as input parameter. The conversion process can optionally take a bounding region into account.
+Only data contained in this region is used for the conversion process. If no bounding region is supplied, the operator automatically
+calculates the bounding box of the input SMOS data and applies the resulting geometry during the processing.
+<h2>Sources</h2>
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Type</th>
+    </tr>
+    <tr>
+        <td><code>sourceProduct</code></td>
+        <td>The source products to be converted. If not given, the parameter 'sourceProductPaths' must be provided.</td>
+        <td>MIR_BW[LS][DF]1C|MIR_SC[LS][DF]1C|MIR_OSUDP2|MIR_SMUDP2</td>
+    </tr>
+</table>
+<h5>Parameters</h5>
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Data Type</th>
+        <th>Default</th>
+        <th>Description</th>
+        <th>Constraints</th>
+    </tr>
+    <tr>
+        <td><code>sourceProductPaths</code></td>
+        <td><code>String[]</code></td>
+        <td><code></code></td>
+        <td>Comma-separated list of file paths specifying the source products.
+            Each path may contain the wildcards
+            '**' (matches recursively any directory),'*' (matches any character sequence in path names) and
+            '?' (matches any single character).
+        </td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><code>targetDirectory</code></td>
+        <td><code>File</code></td>
+        <td><code>.</code></td>
+        <td>The target directory for the converted data. If not existing, directory will be created.</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><code>region</code></td>
+        <td><code>Geometry</code></td>
+        <td><code></code></td>
+        <td>The geographical region as a polygon-geometry in well-known text format (WKT), i.e. <i>POLYGON((...))</i>.
+            If not given, the bounding box of the data is used.
+        </td>
+        <td></td>
+    </tr>
+
+</table>
 
 </body>
 </html>
