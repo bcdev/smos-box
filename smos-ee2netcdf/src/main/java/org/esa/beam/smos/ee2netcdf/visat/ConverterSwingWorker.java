@@ -32,7 +32,6 @@ public class ConverterSwingWorker extends ProgressMonitorSwingWorker<List<Except
     @Override
     protected List<Exception> doInBackground(ProgressMonitor pm) throws Exception {
         pm.beginTask("Converting product(s)", ProgressMonitor.UNKNOWN);
-        final List<Exception> problemList = new ArrayList<Exception>();
 
         final HashMap<String, Object> parameterMap = createParameterMap(exportParameter);
 
@@ -45,7 +44,7 @@ public class ConverterSwingWorker extends ProgressMonitorSwingWorker<List<Except
 
         pm.done();
 
-        return problemList;
+        return new ArrayList<Exception>();
     }
 
     @Override

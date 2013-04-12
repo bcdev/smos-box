@@ -90,7 +90,7 @@ It can be either invoked from within Visat or be used as a GPF-Operator for batc
     This can lead to large products, especially when the SMOS dataset crosses the anti-meridian. All
     pixels not covering a SMOS cell are filled with "NaN" values.
     <br>
-    It is highly recommended to use the possibility to create regional subset products. This reduces the
+    It is highly recommended to make use of the possibility to create regional subset products. This reduces the
     size of the resulting NetCDF file and increases the conversion speed significantly.
 </p>
 
@@ -116,7 +116,7 @@ It can be either invoked from within Visat or be used as a GPF-Operator for batc
 <p><b>Source Products:</b> Either the SMOS product selected in
     VISAT, or all SMOS products residing in a directory of the file
     system can be used for conversion. When a directory is selected,
-    the conversion process will convert all SMOS files in all subdirectories.
+    the conversion process will convert all SMOS files contained in the directory.
     The software can handle zip-compressed products.
 </p>
 
@@ -130,12 +130,13 @@ It can be either invoked from within Visat or be used as a GPF-Operator for batc
     </li>
 
     <li>Geometry: the target product covers all pixels contained in a polygon defined in Visat.
-        Polygons can be selected using a drop-down list.
+        Polygons can be selected using a drop-down list. Only products intersecting with the polygon will be converted.
     </li>
 
     <li>Area: the target product covers all pixels contained in a rectangular area. The area can be defined by either
         entering the
         bounding coordinates in the text fields or by using the mouse to adjust the bounding rectangle on the map.
+        Only products intersecting with the polygon will be converted.
     </li>
 </ul>
 

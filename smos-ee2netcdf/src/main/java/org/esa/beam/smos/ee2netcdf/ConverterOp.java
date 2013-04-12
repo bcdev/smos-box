@@ -210,10 +210,10 @@ public class ConverterOp extends Operator implements Output {
             final Product product = ProductIO.readProduct(inputFile);
             if (product != null) {
                 convertProduct(product);
-            }  else {
+            } else {
                 getLogger().warning("Unable to open file: " + inputFile.getAbsolutePath());
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             getLogger().severe("Failed to convert file: " + inputFile.getAbsolutePath());
             getLogger().severe(e.getMessage());
         }

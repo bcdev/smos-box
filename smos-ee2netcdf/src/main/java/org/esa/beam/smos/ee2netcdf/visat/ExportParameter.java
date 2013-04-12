@@ -68,7 +68,7 @@ public class ExportParameter {
         return roiType;
     }
 
-   public void setTargetDirectory(File targetDirectory) {
+    public void setTargetDirectory(File targetDirectory) {
         this.targetDirectory = targetDirectory;
     }
 
@@ -87,15 +87,6 @@ public class ExportParameter {
         wktBuilder.append("))");
 
         return wktBuilder.toString();
-    }
-
-    private void appendCoordinate(StringBuilder wktBuilder, double x, double y, boolean appendComma) {
-        wktBuilder.append(x);
-        wktBuilder.append(" ");
-        wktBuilder.append(y);
-        if (appendComma) {
-            wktBuilder.append(",");
-        }
     }
 
     public void setNorthBound(double northBound) {
@@ -128,5 +119,14 @@ public class ExportParameter {
 
     public double getWestBound() {
         return westBound;
+    }
+
+    private void appendCoordinate(StringBuilder wktBuilder, double x, double y, boolean appendComma) {
+        wktBuilder.append(x);
+        wktBuilder.append(" ");
+        wktBuilder.append(y);
+        if (appendComma) {
+            wktBuilder.append(",");
+        }
     }
 }
