@@ -78,7 +78,7 @@ It can be either invoked from within Visat or be used as a GPF-Operator for batc
 
 <p>
     All fields in the SMOS EE grid point data records are represented as single bands on a
-    rectangular pixel raster.
+    rectangular grid raster.
     The raster is a Plate-Carree projection with a pixel size of 0.02197 degrees in both axes.
     Each hexagonal ISEA data cell is represented by approximately 30 image pixels for equatorial
     grid points of the SMOS discrete global grid. For details on the conversion process, please refer to the
@@ -131,12 +131,14 @@ It can be either invoked from within Visat or be used as a GPF-Operator for batc
 
     <li>Geometry: the target product covers all pixels contained in a polygon defined in Visat.
         Polygons can be selected using a drop-down list. Only products intersecting with the polygon will be converted.
+        The target product will be tailored to the intersecting geometry.
     </li>
 
     <li>Area: the target product covers all pixels contained in a rectangular area. The area can be defined by either
         entering the
         bounding coordinates in the text fields or by using the mouse to adjust the bounding rectangle on the map.
-        Only products intersecting with the polygon will be converted.
+        Only products intersecting with the polygon will be converted. The target product will be tailored to the
+        intersecting geometry.
     </li>
 </ul>
 
@@ -168,9 +170,11 @@ The NetCDF conversion tool is implemented as a GPF operator.
     </tr>
 </table>
 <h5>Description</h5>
-This operator is used to convert SMOS data in Earth Explorer format to NetCDF-CF 4. It accepts either single input products or
+This operator is used to convert SMOS data in Earth Explorer format to NetCDF-CF 4. It accepts either single input
+products or
 wildcard path expressions as input parameter. The conversion process can optionally take a bounding region into account.
-Only data contained in this region is used for the conversion process. If no bounding region is supplied, the operator automatically
+Only data contained in this region is used for the conversion process. If no bounding region is supplied, the operator
+automatically
 calculates the bounding box of the input SMOS data and applies the resulting geometry during the processing.
 <h2>Sources</h2>
 <table>
