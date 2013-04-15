@@ -55,19 +55,25 @@
     <li>MIR_SM_SMUDP2</li>
 </ul>
 The NetCDF Conversion Command is integrated into the BEAM framework in two different places.
-It can be either invoked from within Visat or be used as a GPF-Operator for batch-processing using the cmd-line.
+It can be either invoked from within VISAT or be used as a GPF-Operator for batch-processing using the cmd-line.
 </p>
 
 <h4>NetCDF Output File Format</h4>
 
 <p>
     The target file format for the conversion process is NetCDF-4 (compressed) with Climate and Forecast (CF)
-    conventions. General information about the NetCDF-4 format can be found at
-    <br>
+    conventions. General information about the NetCDF-4 format can be found at:
+</p>
+
+<p>
     <a href="http://www.unidata.ucar.edu/software/netcdf/">UNIDATA NetCDF (Network Common Data Form)</a>
-    <br>
-    The CF format convention is described at
-    <br>
+</p>
+
+<p>
+    The CF format convention is described at:
+</p>
+
+<p>
     <a href="http://cf-pcmdi.llnl.gov/">CF Metadata</a>
 </p>
 
@@ -83,10 +89,8 @@ It can be either invoked from within Visat or be used as a GPF-Operator for batc
     Each hexagonal ISEA data cell is represented by approximately 30 image pixels for equatorial
     grid points of the SMOS discrete global grid. For details on the conversion process, please refer to the
     <a href="DataModel.html">Data Model</a> description.
-</p>
-
-<p>Note that the band data used for converting science products correspond to the browse view unless
-    a certain snapshot is selected in the <a href="Tools.html#snapshotInformationTool">Snapshot Information Tool</a>.
+    <br>
+    Note that the band data used for converting science products corresponds to the browse view.
 </p>
 
 <p>
@@ -114,7 +118,7 @@ It can be either invoked from within Visat or be used as a GPF-Operator for batc
         "NetCDF Conversion GUI"/></p>
 
 <p>
-    The NetCDF Conversion dialog can be invoked from within Visat using the "Tools" menu.
+    The NetCDF Conversion dialog can be invoked from within VISAT using the "Tools" menu.
 </p>
 
 <p><b>Source Products:</b> Either the SMOS product selected in
@@ -133,7 +137,7 @@ It can be either invoked from within Visat or be used as a GPF-Operator for batc
         boundary of the input file, i.e. all measurement data is converted.
     </li>
 
-    <li>Geometry: the target product covers all pixels contained in a polygon defined in Visat.
+    <li>Geometry: the target product covers all pixels contained in a polygon defined in VISAT.
         Polygons can be selected using a drop-down list. Only products intersecting with the polygon will be converted.
         The target product will be tailored to the intersecting geometry.
     </li>
@@ -152,7 +156,11 @@ It can be either invoked from within Visat or be used as a GPF-Operator for batc
 
 <h4>NetCDF Conversion as GPF operator</h4>
 
-The NetCDF conversion tool is implemented as a GPF operator.
+<p>
+The NetCDF conversion tool is implemented as a GPF operator. This allows to use the converter in batch mode using the
+GPT command line tool. Information about the Graph Processing Tool can be found in the VISAT main documentation,
+    chapter <i>Graph Processing Framework</i>.
+</p>
 
 <h5>Overview</h5>
 <table>
