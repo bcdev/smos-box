@@ -39,9 +39,9 @@
 <p>The NetCDF Conversion Command can be used to convert the data of
     SMOS products in Earth Explorer file format to NetCDF.
     This conversion process involves a re-sampling of the data from
-    the original ISEA hexagonal data cells to a rectangular raster file format.
+    the original ISEA4H-R9 hexagonal data cells to a rectangular raster file format.
     <br>
-    The export operator supports the following SMOS product types:
+    The conversion supports the following SMOS product types:
 <ul>
     <li>MIR_SM_BWSD1C</li>
     <li>MIR_SM_BWLD1C</li>
@@ -61,12 +61,12 @@ It can be either invoked from within Visat or be used as a GPF-Operator for batc
 <h4>NetCDF Output File Format</h4>
 
 <p>
-    The target file format for the conversion process is NetCDF-CF format using a compressed
-    NetCDF-4 file format. General information about the NetCDF-4 format can be found at
+    The target file format for the conversion process is NetCDF-4 (compressed) with Climate and Forecast (CF)
+    conventions. General information about the NetCDF-4 format can be found at
     <br>
     <a href="http://www.unidata.ucar.edu/software/netcdf/">UNIDATA NetCDF (Network Common Data Form)</a>
     <br>
-    The CF (Climate and Forecast Metadata) format convention is described at
+    The CF format convention is described at
     <br>
     <a href="http://cf-pcmdi.llnl.gov/">CF Metadata</a>
 </p>
@@ -85,10 +85,14 @@ It can be either invoked from within Visat or be used as a GPF-Operator for batc
     <a href="DataModel.html">Data Model</a> description.
 </p>
 
+<p>Note that the band data used for converting science products correspond to the browse view unless
+    a certain snapshot is selected in the <a href="Tools.html#snapshotInformationTool">Snapshot Information Tool</a>.
+</p>
+
 <p>
     The size of the target NetCDF product covers the geometric bounding box of the original SMOS file.
     This can lead to large products, especially when the SMOS dataset crosses the anti-meridian. All
-    pixels not covering a SMOS cell are filled with "NaN" values.
+    pixels not covering a SMOS cell are filled with "fill" values.
     <br>
     It is highly recommended to make use of the possibility to create regional subset products. This reduces the
     size of the resulting NetCDF file and increases the conversion speed significantly.
