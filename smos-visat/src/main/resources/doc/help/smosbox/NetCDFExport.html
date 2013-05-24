@@ -41,7 +41,7 @@
     This conversion process involves a re-sampling of the data from
     the original ISEA4H-R9 hexagonal data cells to a rectangular raster file format.
     <br>
-    The conversion supports the following SMOS product types:
+    The conversion tool supports the following SMOS product types:
 <ul>
     <li>MIR_SM_BWSD1C</li>
     <li>MIR_SM_BWLD1C</li>
@@ -55,7 +55,7 @@
     <li>MIR_SM_SMUDP2</li>
 </ul>
 The NetCDF Conversion Command is integrated into the BEAM framework in two different places.
-It can be either invoked from within VISAT or be used as a GPF-Operator for batch-processing using the cmd-line.
+It can be either invoked from within VISAT or be used as a GPT-Operator for batch-processing using the cmd-line.
 </p>
 
 <h4>NetCDF Output File Format</h4>
@@ -154,12 +154,14 @@ It can be either invoked from within VISAT or be used as a GPF-Operator for batc
     <b>Target Directory:</b> all output files of the conversion process will be stored in the directory selected.
 </p>
 
-<h4>NetCDF Conversion as GPF operator</h4>
+<h4>NetCDF Conversion as GPT operator</h4>
 
 <p>
-The NetCDF conversion tool is implemented as a GPF operator. This allows to use the converter in batch mode using the
-GPT command line tool. Information about the Graph Processing Tool can be found in the VISAT main documentation,
-    chapter <i>Graph Processing Framework</i>.
+    The NetCDF conversion tool is implemented as a GPT operator. This allows to use the converter in batch mode using
+    the
+    GPT command line tool. Information about the Graph Processing Tool can be found in the VISAT main documentation,
+    chapter <i>Graph Processing Framework</i> and online in the BEAM-Wiki:
+    <a href="http://www.brockmann-consult.de/beam-wiki/display/BEAM/Bulk+Processing+with+GPT">GPT bulk processing</a>.
 </p>
 
 <h5>Overview</h5>
@@ -188,7 +190,7 @@ wildcard path expressions as input parameter. The conversion process can optiona
 Only data contained in this region is used for the conversion process. If no bounding region is supplied, the operator
 automatically
 calculates the bounding box of the input SMOS data and applies the resulting geometry during the processing.
-<h2>Sources</h2>
+<h5>Sources</h5>
 <table>
     <tr>
         <th>Name</th>
@@ -239,6 +241,77 @@ calculates the bounding box of the input SMOS data and applies the resulting geo
     </tr>
 
 </table>
+
+<h4>GPT Conversion Examples</h4>
+The following section gives some examples on the usage of the <i>SmosEE2NetCDF</i> operator, covering the most important
+use cases.
+The GPT tool is invoked from the command-line. This section uses the tag <i>&lt;BEAM-HOME&gt;</i> for the installation
+directory of BEAM.
+
+<h5>Conversion of a single product</h5>
+The command:
+<br>
+<pre>    &lt;BEAM-HOME&gt;/bin&gt;gpt.bat SmosEE2NetCDF &lt;file-path&gt;</pre>
+<br>
+converts a single file located at <i>&lt;file-path&gt;</i> to NetCDF, using no geometric boundary.
+The target file will be located in the current working directory. i.e. <i>&lt;BEAM-HOME&gt;/bin</i>.
+
+<h5>Conversion of a single product with ROI</h5>
+
+To introduce a ROI into the conversion process, a so called <i>graph-xml</i> is used. This file contains the description
+of a processing graph and the parametrization of each node in the graph. An example that can be used to convert a single
+SMOS-EE file to a specific target directory using a ROI is displayed below:
+<pre>
+    &lt;graph id="SMOS test conversion"&gt;
+        &lt;version&gt;1.0&lt;/version&gt;
+        &lt;node id="smos-conversion"&gt;
+            &lt;operator&gt;SmosEE2NetCDF&lt;/operator&gt;
+
+            &lt;parameters&gt;
+                &lt;targetDirectory&gt;C:/Data/results&lt;/targetDirectory&gt;
+                &lt;region&gt;POLYGON((-80 20, -50 20,-50 -20,-80 -20, -80 20))&lt;/region&gt;
+            &lt;/parameters&gt;
+        &lt;/node&gt;
+    &lt;/graph&gt;
+</pre>
+
+Assuming this XML is written to a file named <i>roi-example.xml</i>, the command:
+<br>
+<pre>    &lt;BEAM-HOME&gt;/bin&gt;gpt.bat roi-example.xml &lt;file-path&gt;</pre>
+<br>
+converts a single file located at <i>&lt;file-path&gt;</i> to NetCDF, tailoring the target product to the polygon supplied.
+The target file will be located in <i>C:/Data/results</i>. If the input file does not intersect with the given geometry, no target file will be created.
+<br>
+<b>Note:</b> GPT either uses the operator name (as in the previous example) or a graph-xml file - as shown in this example.
+<br>
+<b>Note:</b>The parameters for region and target directory TODO!!!!!!!!!!!!!!!!!!
+
+<h5>Batch Conversion of multiple directories with ROI and wildcards</h5>
+
+To batch convert all SMOS-EE files of type <i>MIR_SMUDP2</i> located in multiple directories to a target directory using a ROI, the following
+graph-xml file can save as template:
+<pre>
+    &lt;graph id="SMOS test conversion"&gt;
+        &lt;version&gt;1.0&lt;/version&gt;
+        &lt;node id="smos-conversion"&gt;
+            &lt;operator&gt;SmosEE2NetCDF&lt;/operator&gt;
+
+            &lt;parameters&gt;
+                &lt;sourceProductPaths&gt;C:/Data/SMOS/*SMUPD2*,E:/Data/SMOS/*SMUDP2*&lt;/sourceProductPaths&gt;
+                &lt;targetDirectory&gt;C:/Data/results&lt;/targetDirectory&gt;
+                &lt;region&gt;POLYGON((-80 20, -50 20,-50 -20,-80 -20, -80 20))&lt;/region&gt;
+            &lt;/parameters&gt;
+        &lt;/node&gt;
+    &lt;/graph&gt;
+</pre>
+
+Assuming this XML is written to a file named <i>directories-example.xml</i>, the command:
+<br>
+<pre>    &lt;BEAM-HOME&gt;/bin&gt;gpt.bat directories-example.xml </pre>
+<br>
+converts all SMOS-EE Soil Moisture L2 files contained in the directories <i>C:/Data/SMOS</i> and <i>E:/Data/SMOS</i> to NetCDF,
+tailoring the target products to the polygon supplied. The target files will be located in <i>C:/Data/results</i>.
+If the input file does not intersect with the given geometry, no target file will be created.
 
 </body>
 </html>
