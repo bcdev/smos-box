@@ -264,8 +264,8 @@ public class NetCDFExportDialog extends ModelessDialog {
                 exportParameter.setOverwriteTarget(true);
             }
         } catch (IOException e) {
-            // @todo 1 tb/tb handle this 2013-05-27
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            showErrorDialog(e.getMessage());
+            return;
         }
 
 
