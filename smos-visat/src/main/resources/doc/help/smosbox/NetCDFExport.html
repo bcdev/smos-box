@@ -57,6 +57,10 @@
 The NetCDF Conversion Command is integrated into the BEAM framework in two different places.
 It can be either invoked from within VISAT or be used as a GPT-Operator for batch-processing using the cmd-line.
 </p>
+<p>
+    <b>Note:</b> The conversion tool converts the L1C data using the <i>browse-view</i> data representation as described
+    in the chapter <a href="DataModel.html">SMOS Data in BEAM</a>. The target product does not contain snapshot information anymore.
+</p>
 
 <h4>NetCDF Output File Format</h4>
 
@@ -239,6 +243,14 @@ calculates the bounding box of the input SMOS data and applies the resulting geo
         </td>
         <td></td>
     </tr>
+    <tr>
+        <td><code>overwriteTarget</code></td>
+        <td><code>boolean</code></td>
+        <td><code>false</code></td>
+        <td>Set true to overwrite already existing target files.
+        </td>
+        <td></td>
+    </tr>
 
 </table>
 
@@ -258,7 +270,7 @@ The target file will be located in the current working directory. i.e. <i>&lt;BE
 
 <h5>Conversion of a single product with ROI</h5>
 
-To introduce a ROI into the conversion process, a so called <i>graph-xml</i> is used. This file contains the description
+To introduce a ROI into the conversion process, this example uses a so called <i>graph-xml</i> file. This file contains the description
 of a processing graph and the parametrization of each node in the graph. An example that can be used to convert a single
 SMOS-EE file to a specific target directory using a ROI is displayed below:
 <pre>
@@ -282,9 +294,24 @@ Assuming this XML is written to a file named <i>roi-example.xml</i>, the command
 converts a single file located at <i>&lt;file-path&gt;</i> to NetCDF, tailoring the target product to the polygon supplied.
 The target file will be located in <i>C:/Data/results</i>. If the input file does not intersect with the given geometry, no target file will be created.
 <br>
+<br>
 <b>Note:</b> GPT either uses the operator name (as in the previous example) or a graph-xml file - as shown in this example.
 <br>
-<b>Note:</b>The parameters for region and target directory TODO!!!!!!!!!!!!!!!!!!
+<b>Note:</b> The parameters for region and target directory can also be supplied by other means. Parameters can either be supplied
+on the command line:
+<pre>
+    &lt;BEAM-HOME&gt;/bin&gt;gpt.bat SmosEE2NetCDF  "-PtargetDirectory=C:/Data/results"  "-Pregion=POLYGON((-80 20, -50 20,-50 -20,-80 -20, -80 20))"
+</pre>
+or using a parameter file:
+<pre>
+    &lt;BEAM-HOME&gt;/bin&gt;gpt.bat SmosEE2NetCDF -p convparam.txt
+</pre>
+where the file <i>convparam.txt</i> contains key/value pairs of the parameters:
+<pre>
+    targetDirectory = C:/Data/results
+    region  = POLYGON((-80 20, -50 20,-50 -20,-80 -20, -80 20))
+</pre>
+
 
 <h5>Batch Conversion of multiple directories with ROI and wildcards</h5>
 
