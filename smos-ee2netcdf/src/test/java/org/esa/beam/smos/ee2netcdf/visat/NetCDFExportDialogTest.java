@@ -24,7 +24,8 @@ public class NetCDFExportDialogTest {
         final List<File> targetFiles = NetCDFExportDialog.getTargetFiles(filePath, targetDir);
         assertNotNull(targetFiles);
         assertEquals(1, targetFiles.size());
-        assertEquals("/home/tom/target/SM_OPER_MIR_BWLF1C_20111026T143206_20111026T152520_503_001_1.nc", targetFiles.get(0).getAbsolutePath());
+        assertEquals(new File(targetDir, "SM_OPER_MIR_BWLF1C_20111026T143206_20111026T152520_503_001_1.nc").getAbsolutePath(),
+                targetFiles.get(0).getAbsolutePath());
     }
 
     @Test
@@ -36,8 +37,10 @@ public class NetCDFExportDialogTest {
         final List<File> targetFiles = NetCDFExportDialog.getTargetFiles(wildCardpath, targetDir);
         assertNotNull(targetFiles);
         assertEquals(2, targetFiles.size());
-        assertEquals("/home/tom/target/SM_OPER_MIR_BWLF1C_20111026T143206_20111026T152520_503_001_1.nc", targetFiles.get(0).getAbsolutePath());
-        assertEquals("/home/tom/target/SM_OPER_MIR_OSUDP2_20091204T001853_20091204T011255_310_001_1.nc", targetFiles.get(1).getAbsolutePath());
+        assertEquals(new File(targetDir, "SM_OPER_MIR_BWLF1C_20111026T143206_20111026T152520_503_001_1.nc").getAbsolutePath(),
+                targetFiles.get(0).getAbsolutePath());
+        assertEquals(new File(targetDir, "SM_OPER_MIR_OSUDP2_20091204T001853_20091204T011255_310_001_1.nc").getAbsolutePath(),
+                targetFiles.get(1).getAbsolutePath());
     }
 
     @Test
