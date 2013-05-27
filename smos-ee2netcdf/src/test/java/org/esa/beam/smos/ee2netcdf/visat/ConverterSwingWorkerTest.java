@@ -72,6 +72,19 @@ public class ConverterSwingWorkerTest {
     }
 
     @Test
+    public void testCreateMap_overwriteTarget() {
+        exportParameter.setOverwriteTarget(true);
+
+        HashMap<String, Object> parameterMap = ConverterSwingWorker.createParameterMap(exportParameter);
+        assertEquals("true", parameterMap.get("overwriteTarget"));
+
+        exportParameter.setOverwriteTarget(false);
+
+        parameterMap = ConverterSwingWorker.createParameterMap(exportParameter);
+        assertEquals("false", parameterMap.get("overwriteTarget"));
+    }
+
+    @Test
     public void testCreateInputPathWildcards() {
         final File inputDir = new File("data");
         final String pathWildcards = ConverterSwingWorker.createInputPathWildcards(inputDir);

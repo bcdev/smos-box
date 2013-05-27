@@ -141,6 +141,8 @@ public class ExportParameterTest {
         assertEquals(-90.0, parameter.getSouthBound(), 1e-8);
         assertEquals(-180.0, parameter.getWestBound(), 1e-8);
         assertEquals(180.0, parameter.getEastBound(), 1e-8);
+
+        assertFalse(parameter.isOverwriteTarget());
     }
 
     @Test
@@ -151,6 +153,15 @@ public class ExportParameterTest {
         parameter.setWestBound(24.0);
 
         assertEquals("POLYGON((24.0 2.0,25.0 2.0,25.0 1.0,24.0 1.0,24.0 2.0))", parameter.toAreaWKT());
+    }
+
+    @Test
+    public void testSetIsOverwriteTarget() {
+        parameter.setOverwriteTarget(true);
+        assertTrue(parameter.isOverwriteTarget());
+
+        parameter.setOverwriteTarget(false);
+        assertFalse(parameter.isOverwriteTarget());
     }
 }
 

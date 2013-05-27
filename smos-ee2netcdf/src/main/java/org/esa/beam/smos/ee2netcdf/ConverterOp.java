@@ -66,6 +66,11 @@ public class ConverterOp extends Operator implements Output {
             converter = JtsGeometryConverter.class)
     private Geometry region;
 
+    @Parameter(defaultValue = "false",
+            description = "Set true to overwrite already existing target files.")
+    private boolean overwriteTarget;
+
+
     @Override
     public void initialize() throws OperatorException {
         setDummyTargetProduct();
@@ -85,6 +90,12 @@ public class ConverterOp extends Operator implements Output {
                 convertFile(inputFile);
             }
         }
+    }
+
+    public static File getOutputFile(File dblFile, File targetDirectory) {
+        File outFile = new File(targetDirectory, dblFile.getName());
+        outFile = FileUtils.exchangeExtension(outFile, ".nc");
+        return outFile;
     }
 
     // package access for testing only tb 2013-03-27
@@ -177,13 +188,6 @@ public class ConverterOp extends Operator implements Output {
         return new Rectangle((int) min_x, (int) min_y, (int) (max_x - min_x), (int) (max_y - min_y));
     }
 
-    // package access for testing only - tb 2013-03-21
-    static File getOutputFile(File dblFile, File targetDirectory) {
-        File outFile = new File(targetDirectory, dblFile.getName());
-        outFile = FileUtils.exchangeExtension(outFile, ".nc");
-        return outFile;
-    }
-
     // package access for testing only - tb 2013-03-27
     static ProductSubsetDef createSubsetDef(Rectangle rectangle) {
         final ProductSubsetDef subsetDef = new ProductSubsetDef();
@@ -241,6 +245,11 @@ public class ConverterOp extends Operator implements Output {
             final Product subset = sourceProduct.createSubset(subsetDef, "", "");
 
             final File outFile = getOutputFile(explorerFile.getDblFile(), targetDirectory);
+            if (outFile.isFile() && overwriteTarget) {
+                if (!outFile.delete()) {
+                    throw new IOException("Unable to delete already existing product: " + outFile.getAbsolutePath());
+                }
+            }
             if (!outFile.createNewFile()) {
                 throw new IOException("Unable to create target product: " + outFile.getAbsolutePath());
             }

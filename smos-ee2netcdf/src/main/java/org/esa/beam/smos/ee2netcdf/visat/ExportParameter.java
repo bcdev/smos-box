@@ -20,6 +20,7 @@ public class ExportParameter {
     private double eastBound;
     private double southBound;
     private double westBound;
+    private boolean overwriteTarget;
 
     public ExportParameter() {
         northBound = 90.0;
@@ -119,6 +120,14 @@ public class ExportParameter {
 
     public double getWestBound() {
         return westBound;
+    }
+
+    public void setOverwriteTarget(boolean overwriteTarget) {
+        this.overwriteTarget = overwriteTarget;
+    }
+
+    public boolean isOverwriteTarget() {
+        return overwriteTarget;
     }
 
     private void appendCoordinate(StringBuilder wktBuilder, double x, double y, boolean appendComma) {

@@ -76,6 +76,14 @@ public class ConverterOpTest {
     }
 
     @Test
+    public void testParameterAnnotations_OverwriteTarget() throws NoSuchFieldException {
+        final Field regionField = ConverterOp.class.getDeclaredField("overwriteTarget");
+        final Parameter overwriteTargetFieldAnnotation = regionField.getAnnotation(Parameter.class);
+        assertEquals("false", overwriteTargetFieldAnnotation.defaultValue());
+        assertEquals("Set true to overwrite already existing target files.", overwriteTargetFieldAnnotation.description());
+    }
+
+    @Test
     public void testGetOutputFile() {
         final File input = new File("bla/bla/change_my_name.zip");
         final File targetDir = new File("/target/di/rectory");

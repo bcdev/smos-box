@@ -33,18 +33,25 @@ public class ConverterSwingWorker extends ProgressMonitorSwingWorker<List<Except
     protected List<Exception> doInBackground(ProgressMonitor pm) throws Exception {
         pm.beginTask("Converting product(s)", ProgressMonitor.UNKNOWN);
 
+        final ArrayList<Exception> exceptions = new ArrayList<Exception>();
+
         final HashMap<String, Object> parameterMap = createParameterMap(exportParameter);
 
-        if (exportParameter.isUseSelectedProduct()) {
-            final Product selectedProduct = appContext.getSelectedProduct();
-            GPF.createProduct(ConverterOp.ALIAS, parameterMap, new Product[]{selectedProduct});
-        } else {
-            GPF.createProduct(ConverterOp.ALIAS, parameterMap);
+        try {
+            if (exportParameter.isUseSelectedProduct()) {
+                final Product selectedProduct = appContext.getSelectedProduct();
+                GPF.createProduct(ConverterOp.ALIAS, parameterMap, new Product[]{selectedProduct});
+            } else {
+                GPF.createProduct(ConverterOp.ALIAS, parameterMap);
+            }
+        } catch (Exception e) {
+            exceptions.add(e);
         }
 
         pm.done();
 
-        return new ArrayList<Exception>();
+
+        return exceptions;
     }
 
     @Override
@@ -95,6 +102,12 @@ public class ConverterSwingWorker extends ProgressMonitorSwingWorker<List<Except
             addSelectedProductGeometry(exportParameter.getGeometry(), parameterMap);
         } else if (roiType == BindingConstants.ROI_TYPE_PRODUCT) {
             parameterMap.remove("region");
+        }
+
+        if (exportParameter.isOverwriteTarget()) {
+            parameterMap.put("overwriteTarget", "true");
+        } else {
+            parameterMap.put("overwriteTarget", "false");
         }
 
         return parameterMap;

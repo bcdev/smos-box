@@ -10,19 +10,22 @@ import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.framework.ui.AppContext;
 import org.esa.beam.framework.ui.ModelessDialog;
 import org.esa.beam.framework.ui.RegionBoundsInputUI;
+import org.esa.beam.smos.ee2netcdf.ConverterOp;
 import org.esa.beam.smos.gui.BindingConstants;
 import org.esa.beam.smos.gui.DefaultChooserFactory;
 import org.esa.beam.smos.gui.DirectoryChooserFactory;
 import org.esa.beam.smos.gui.GuiHelper;
+import org.esa.beam.util.io.WildcardMatcher;
 
 import javax.swing.*;
 import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
-import java.util.HashMap;
+import java.io.IOException;
+import java.text.MessageFormat;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 public class NetCDFExportDialog extends ModelessDialog {
 
@@ -51,6 +54,55 @@ public class NetCDFExportDialog extends ModelessDialog {
         } catch (ValidationException e) {
             throw new IllegalStateException(e.getMessage());
         }
+    }
+
+    // package access for testing only tb 2013-05-27
+    static List<File> getTargetFiles(String filePath, File targetDir) throws IOException {
+        final ArrayList<File> targetFiles = new ArrayList<File>();
+
+        final File file = new File(filePath);
+        if (file.isFile()) {
+            final File outputFile = ConverterOp.getOutputFile(file, targetDir);
+            targetFiles.add(outputFile);
+        } else {
+            final TreeSet<File> sourceFileSet = new TreeSet<File>();
+            WildcardMatcher.glob(filePath, sourceFileSet);
+            for (File aSourceFile : sourceFileSet) {
+                final File outputFile = ConverterOp.getOutputFile(aSourceFile, targetDir);
+                targetFiles.add(outputFile);
+            }
+        }
+
+        return targetFiles;
+    }
+
+    // package access for testing only tb 2013-05-27
+    static List<File> getExistingFiles(List<File> targetFiles) {
+        final ArrayList<File> existingFiles = new ArrayList<File>();
+
+        for (File targetFile : targetFiles) {
+            if (targetFile.isFile()) {
+                existingFiles.add(targetFile);
+            }
+
+        }
+        return existingFiles;
+    }
+
+    // package access for testing only tb 2013-05-27
+    static String listToString(List<File> targetFiles) {
+        int fileCount = 0;
+        final StringBuilder stringBuilder = new StringBuilder();
+        for (File targetFile : targetFiles) {
+            stringBuilder.append(targetFile.getAbsolutePath());
+            stringBuilder.append("\n");
+            fileCount++;
+            if (fileCount >= 10) {
+                stringBuilder.append("...");
+                break;
+            }
+        }
+        return stringBuilder.toString();
     }
 
     private void init(PropertyContainer propertyContainer) throws ValidationException {
@@ -189,6 +241,34 @@ public class NetCDFExportDialog extends ModelessDialog {
 
     @Override
     protected void onOK() {
+        try {
+            final List<File> targetFiles;
+            if (exportParameter.isUseSelectedProduct()) {
+                targetFiles = getTargetFiles(appContext.getSelectedProduct().getFileLocation().getAbsolutePath(), exportParameter.getTargetDirectory());
+            } else {
+                targetFiles = getTargetFiles(exportParameter.getSourceDirectory().getAbsolutePath() + File.separator + "*", exportParameter.getTargetDirectory());
+            }
+
+            final List<File> existingFiles = getExistingFiles(targetFiles);
+            if (!existingFiles.isEmpty()) {
+                final String files = listToString(existingFiles);
+                final String message = MessageFormat.format(
+                        "The selected target file(s) already exists.\n\nDo you want to overwrite the target file(s)?\n\n" +
+                                "{0}",
+                        files);
+                final int answer = JOptionPane.showConfirmDialog(getJDialog(), message, getTitle(),
+                        JOptionPane.YES_NO_OPTION);
+                if (answer == JOptionPane.NO_OPTION) {
+                    return;
+                }
+                exportParameter.setOverwriteTarget(true);
+            }
+        } catch (IOException e) {
+            // @todo 1 tb/tb handle this 2013-05-27
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+
+
         final ConverterSwingWorker worker = new ConverterSwingWorker(appContext, exportParameter);
 
         super.onOK();

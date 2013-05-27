@@ -51,7 +51,7 @@ public class ConverterOpAcceptanceTest {
 
     @Test
     public void testConvert_BWSD1C() throws IOException {
-        final File file = getResourceFile("SM_OPER_MIR_BWLF1C_20111026T143206_20111026T152520_503_001_1.zip");
+        final File file = TestHelper.getResourceFile("SM_OPER_MIR_BWLF1C_20111026T143206_20111026T152520_503_001_1.zip");
 
         Product product = null;
         try {
@@ -75,7 +75,7 @@ public class ConverterOpAcceptanceTest {
 
     @Test
     public void testConvert_BWSD1C_withRegion_andSourceProductPaths() throws IOException {
-        final File file = getResourceFile("SM_OPER_MIR_BWLF1C_20111026T143206_20111026T152520_503_001_1.zip");
+        final File file = TestHelper.getResourceFile("SM_OPER_MIR_BWLF1C_20111026T143206_20111026T152520_503_001_1.zip");
 
         Product product = null;
         try {
@@ -103,7 +103,7 @@ public class ConverterOpAcceptanceTest {
 
     @Test
     public void testConvert_OSUDP2_withRegion() throws IOException {
-        final File file = getResourceFile("SM_OPER_MIR_OSUDP2_20091204T001853_20091204T011255_310_001_1.zip");
+        final File file = TestHelper.getResourceFile("SM_OPER_MIR_OSUDP2_20091204T001853_20091204T011255_310_001_1.zip");
 
         Product product = null;
         try {
@@ -130,7 +130,7 @@ public class ConverterOpAcceptanceTest {
 
     @Test
     public void testConvert_OSUDP2_withRegion_noIntersection() throws IOException {
-        final File file = getResourceFile("SM_OPER_MIR_OSUDP2_20091204T001853_20091204T011255_310_001_1.zip");
+        final File file = TestHelper.getResourceFile("SM_OPER_MIR_OSUDP2_20091204T001853_20091204T011255_310_001_1.zip");
 
         Product product = null;
         try {
@@ -153,7 +153,7 @@ public class ConverterOpAcceptanceTest {
 
     @Test
     public void testGetDataBoundingRect() throws IOException {
-        final File file = getResourceFile("SM_OPER_MIR_BWLF1C_20111026T143206_20111026T152520_503_001_1.zip");
+        final File file = TestHelper.getResourceFile("SM_OPER_MIR_BWLF1C_20111026T143206_20111026T152520_503_001_1.zip");
 
         Product product = null;
         try {
@@ -179,7 +179,7 @@ public class ConverterOpAcceptanceTest {
 
     @Test
     public void testConvertToPolygon() throws IOException {
-        final File file = getResourceFile("SM_OPER_MIR_BWLF1C_20111026T143206_20111026T152520_503_001_1.zip");
+        final File file = TestHelper.getResourceFile("SM_OPER_MIR_BWLF1C_20111026T143206_20111026T152520_503_001_1.zip");
         Product product = null;
         try {
             product = ProductIO.readProduct(file);
@@ -195,14 +195,6 @@ public class ConverterOpAcceptanceTest {
             }
         }
 
-    }
-
-    static File getResourceFile(String filename) {
-        File testFile = new File("./smos-ee2netcdf/src/test/resources/org/esa/beam/smos/ee2netcdf/" + filename);
-        if (!testFile.exists()) {
-            testFile = new File("./src/test/resources/org/esa/beam/smos/ee2netcdf/" + filename);
-        }
-        return testFile;
     }
 
     private HashMap<String, Object> createDefaultParameterMap() {
