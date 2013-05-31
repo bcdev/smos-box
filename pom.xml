@@ -167,7 +167,7 @@
             <dependency>
                 <groupId>org.esa.beam</groupId>
                 <artifactId>beam-netcdf</artifactId>
-                <version>1.1.2-SNAPSHOT</version>
+                <version>1.1.2</version>
             </dependency>
 
             <!-- SMOS Libraries ############################################# -->
