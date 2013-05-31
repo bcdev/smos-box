@@ -3,7 +3,7 @@
 
     <symbolicName>smos-dgg</symbolicName>
     <name>SMOS Discrete Global Grid</name>
-    <version>2.3-SNAPSHOT</version>
+    <version>2.3</version>
     <description>
         This module provides the mapping between the SMOS Discrete Global
         Grid and VISAT image pixels.

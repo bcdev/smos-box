@@ -6,12 +6,11 @@
     <parent>
         <artifactId>smos-box</artifactId>
         <groupId>org.esa.beam.smos</groupId>
-        <version>2.3-SNAPSHOT</version>
+        <version>2.3</version>
     </parent>
 
     <packaging>jar</packaging>
 
-    <groupId>org.esa.beam.smos</groupId>
     <artifactId>smos-tools</artifactId>
     <name>SMOS Tools Package</name>
     <description>SMOS Tools</description>

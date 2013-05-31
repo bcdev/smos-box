@@ -258,7 +258,16 @@ calculates the bounding box of the input SMOS data and applies the resulting geo
 The following section gives some examples on the usage of the <i>SmosEE2NetCDF</i> operator, covering the most important
 use cases.
 The GPT tool is invoked from the command-line. This section uses the tag <i>&lt;BEAM-HOME&gt;</i> for the installation
-directory of BEAM.
+directory of BEAM. The following paragraphs use Windows specific notation; for Linux, please replace "gpt.bat" with "gpt.sh".
+<br>
+<br>
+<b>Note:</b> Region definitions in the examples below define polygon objects as WKT. A concise description and links
+to in-depth documentation can be found at:
+<br>
+<a href="http://en.wikipedia.org/wiki/Well-known_text">WKT at Wikipedia</a>
+<br>
+In short: the points of a polygon are ordered lon/lat, the last point in the polygon must match the first to close the polygon.
+
 
 <h5>Conversion of a single product</h5>
 The command:
@@ -324,7 +333,7 @@ graph-xml file can save as template:
             &lt;operator&gt;SmosEE2NetCDF&lt;/operator&gt;
 
             &lt;parameters&gt;
-                &lt;sourceProductPaths&gt;C:/Data/SMOS/*SMUPD2*,E:/Data/SMOS/*SMUDP2*&lt;/sourceProductPaths&gt;
+                &lt;sourceProductPaths&gt;C:/Data/SMOS/*SMUDP2*,E:/Data/SMOS/*SMUDP2*&lt;/sourceProductPaths&gt;
                 &lt;targetDirectory&gt;C:/Data/results&lt;/targetDirectory&gt;
                 &lt;region&gt;POLYGON((-80 20, -50 20,-50 -20,-80 -20, -80 20))&lt;/region&gt;
             &lt;/parameters&gt;

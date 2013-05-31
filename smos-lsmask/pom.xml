@@ -3,11 +3,10 @@
     <parent>
         <artifactId>smos-box</artifactId>
         <groupId>org.esa.beam.smos</groupId>
-        <version>2.3-SNAPSHOT</version>
+        <version>2.3</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.esa.beam.smos</groupId>
     <artifactId>smos-lsmask</artifactId>
     <name>SMOS Land/Sea Mask</name>
 
