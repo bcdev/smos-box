@@ -17,6 +17,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.esa.beam</groupId>
+            <artifactId>beam-reader-tests</artifactId>
+            <type>test-jar</type>
+        </dependency>
+        <dependency>
             <groupId>org.esa.beam.smos</groupId>
             <artifactId>smos-tools</artifactId>
         </dependency>
