@@ -19,6 +19,10 @@
         <dependency>
             <groupId>org.esa.beam</groupId>
             <artifactId>beam-reader-tests</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.esa.beam</groupId>
+            <artifactId>beam-reader-tests</artifactId>
             <type>test-jar</type>
         </dependency>
         <dependency>

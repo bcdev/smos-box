@@ -157,6 +157,11 @@
             <dependency>
                 <groupId>org.esa.beam</groupId>
                 <artifactId>beam-reader-tests</artifactId>
+                <version>${beam.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.esa.beam</groupId>
+                <artifactId>beam-reader-tests</artifactId>
                 <type>test-jar</type>
                 <scope>test</scope>
                 <version>${beam.version}</version>

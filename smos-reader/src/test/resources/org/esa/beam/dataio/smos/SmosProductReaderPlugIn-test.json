@@ -20,7 +20,7 @@
                     "geophysicalUnit": "K",
                     "noDataValue": "-999.0",
                     "noDataValueUsed": "true",
-                    "expectedPixel": [
+                    "expectedPixels": [
                         {
                             "x": "4014",
                             "y": "7021",
@@ -33,7 +33,7 @@
                     "geophysicalUnit": "K",
                     "noDataValue": "-999.0",
                     "noDataValueUsed": "true",
-                    "expectedPixel": [
+                    "expectedPixels": [
                         {
                             "x": "4682",
                             "y": "7447",
@@ -46,7 +46,7 @@
                     "geophysicalUnit": "deg",
                     "noDataValue": "0.0",
                     "noDataValueUsed": "true",
-                    "expectedPixel": [
+                    "expectedPixels": [
                         {
                             "x": "4682",
                             "y": "7447",
@@ -59,7 +59,7 @@
                     "geophysicalUnit": "deg",
                     "noDataValue": "0.0",
                     "noDataValueUsed": "true",
-                    "expectedPixel": [
+                    "expectedPixels": [
                         {
                             "x": "4682",
                             "y": "7447",
@@ -72,7 +72,7 @@
                     "geophysicalUnit": "km",
                     "noDataValue": "0.0",
                     "noDataValueUsed": "true",
-                    "expectedPixel": [
+                    "expectedPixels": [
                         {
                             "x": "4682",
                             "y": "7447",
@@ -85,7 +85,7 @@
                     "geophysicalUnit": "km",
                     "noDataValue": "0.0",
                     "noDataValueUsed": "true",
-                    "expectedPixel": [
+                    "expectedPixels": [
                         {
                             "x": "2977",
                             "y": "5726",
@@ -98,7 +98,7 @@
                     "geophysicalUnit": "km",
                     "noDataValue": "0.0",
                     "noDataValueUsed": "true",
-                    "expectedPixel": [
+                    "expectedPixels": [
                         {
                             "x": "2977",
                             "y": "5726",
@@ -111,7 +111,7 @@
                     "geophysicalUnit": "km",
                     "noDataValue": "0.0",
                     "noDataValueUsed": "true",
-                    "expectedPixel": [
+                    "expectedPixels": [
                         {
                             "x": "2977",
                             "y": "5726",
@@ -123,7 +123,7 @@
                     "name": "Flags_X",
                     "noDataValue": "0.0",
                     "noDataValueUsed": "true",
-                    "expectedPixel": [
+                    "expectedPixels": [
                         {
                             "x": "2977",
                             "y": "5726",
@@ -135,7 +135,7 @@
                     "name": "Flags_Y",
                     "noDataValue": "0.0",
                     "noDataValueUsed": "true",
-                    "expectedPixel": [
+                    "expectedPixels": [
                         {
                             "x": "2977",
                             "y": "5726",
@@ -153,7 +153,7 @@
                     "name": "Land_Sea_Mask",
                     "noDataValue": "0.0",
                     "noDataValueUsed": "true",
-                    "expectedPixel": [
+                    "expectedPixels": [
                         {
                             "x": "10236",
                             "y": "6920",
@@ -172,7 +172,7 @@
                     "geophysicalUnit": "K",
                     "noDataValue": "-999.0",
                     "noDataValueUsed": "true",
-                    "expectedPixel": [
+                    "expectedPixels": [
                         {
                             "x": "4014",
                             "y": "7021",
@@ -186,7 +186,7 @@
                     "geophysicalUnit": "K",
                     "noDataValue": "-999.0",
                     "noDataValueUsed": "true",
-                    "expectedPixel": [
+                    "expectedPixels": [
                         {
                             "x": "4682",
                             "y": "7447",
@@ -200,7 +200,7 @@
                     "geophysicalUnit": "deg",
                     "noDataValue": "0.0",
                     "noDataValueUsed": "true",
-                    "expectedPixel": [
+                    "expectedPixels": [
                         {
                             "x": "4682",
                             "y": "7447",
@@ -214,7 +214,7 @@
                     "geophysicalUnit": "deg",
                     "noDataValue": "0.0",
                     "noDataValueUsed": "true",
-                    "expectedPixel": [
+                    "expectedPixels": [
                         {
                             "x": "4682",
                             "y": "7447",
@@ -228,7 +228,7 @@
                     "geophysicalUnit": "km",
                     "noDataValue": "0.0",
                     "noDataValueUsed": "true",
-                    "expectedPixel": [
+                    "expectedPixels": [
                         {
                             "x": "4682",
                             "y": "7447",
@@ -242,7 +242,7 @@
                     "geophysicalUnit": "km",
                     "noDataValue": "0.0",
                     "noDataValueUsed": "true",
-                    "expectedPixel": [
+                    "expectedPixels": [
                         {
                             "x": "2977",
                             "y": "5726",
@@ -256,7 +256,7 @@
                     "geophysicalUnit": "km",
                     "noDataValue": "0.0",
                     "noDataValueUsed": "true",
-                    "expectedPixel": [
+                    "expectedPixels": [
                         {
                             "x": "2977",
                             "y": "5726",
@@ -270,7 +270,7 @@
                     "geophysicalUnit": "km",
                     "noDataValue": "0.0",
                     "noDataValueUsed": "true",
-                    "expectedPixel": [
+                    "expectedPixels": [
                         {
                             "x": "2977",
                             "y": "5726",
@@ -283,7 +283,7 @@
                     "description": "L1c flags applicable to the pixel for this particular integration time, antenna X polarisation",
                     "noDataValue": "0.0",
                     "noDataValueUsed": "true",
-                    "expectedPixel": [
+                    "expectedPixels": [
                         {
                             "x": "2977",
                             "y": "5726",
@@ -296,7 +296,7 @@
                     "description": "L1c flags applicable to the pixel for this particular integration time, antenna Y polarisation",
                     "noDataValue": "0.0",
                     "noDataValueUsed": "true",
-                    "expectedPixel": [
+                    "expectedPixels": [
                         {
                             "x": "2977",
                             "y": "5726",
@@ -315,7 +315,7 @@
                     "description": "Flag indicating Land/Sea USGS content, Coastline distance, and Ice content",
                     "noDataValue": "0.0",
                     "noDataValueUsed": "true",
-                    "expectedPixel": [
+                    "expectedPixels": [
                         {
                             "x": "10236",
                             "y": "6920",
@@ -334,7 +334,7 @@
                     "geophysicalUnit": "K",
                     "noDataValue": "-999.0",
                     "noDataValueUsed": "true",
-                    "expectedPixel": [
+                    "expectedPixels": [
                         {
                             "x": "4014",
                             "y": "7021",
@@ -348,7 +348,7 @@
                     "geophysicalUnit": "K",
                     "noDataValue": "-999.0",
                     "noDataValueUsed": "true",
-                    "expectedPixel": [
+                    "expectedPixels": [
                         {
                             "x": "4682",
                             "y": "7447",
@@ -362,7 +362,7 @@
                     "geophysicalUnit": "deg",
                     "noDataValue": "0.0",
                     "noDataValueUsed": "true",
-                    "expectedPixel": [
+                    "expectedPixels": [
                         {
                             "x": "4682",
                             "y": "7447",
@@ -376,7 +376,7 @@
                     "geophysicalUnit": "deg",
                     "noDataValue": "0.0",
                     "noDataValueUsed": "true",
-                    "expectedPixel": [
+                    "expectedPixels": [
                         {
                             "x": "4682",
                             "y": "7447",
@@ -390,7 +390,7 @@
                     "geophysicalUnit": "km",
                     "noDataValue": "0.0",
                     "noDataValueUsed": "true",
-                    "expectedPixel": [
+                    "expectedPixels": [
                         {
                             "x": "4682",
                             "y": "7447",
@@ -404,7 +404,7 @@
                     "geophysicalUnit": "km",
                     "noDataValue": "0.0",
                     "noDataValueUsed": "true",
-                    "expectedPixel": [
+                    "expectedPixels": [
                         {
                             "x": "2977",
                             "y": "5726",
@@ -418,7 +418,7 @@
                     "geophysicalUnit": "km",
                     "noDataValue": "0.0",
                     "noDataValueUsed": "true",
-                    "expectedPixel": [
+                    "expectedPixels": [
                         {
                             "x": "2977",
                             "y": "5726",
@@ -432,7 +432,7 @@
                     "geophysicalUnit": "km",
                     "noDataValue": "0.0",
                     "noDataValueUsed": "true",
-                    "expectedPixel": [
+                    "expectedPixels": [
                         {
                             "x": "2977",
                             "y": "5726",
@@ -445,7 +445,7 @@
                     "description": "L1c flags applicable to the pixel for this particular integration time, antenna X polarisation",
                     "noDataValue": "0.0",
                     "noDataValueUsed": "true",
-                    "expectedPixel": [
+                    "expectedPixels": [
                         {
                             "x": "2977",
                             "y": "5726",
@@ -458,7 +458,7 @@
                     "description": "L1c flags applicable to the pixel for this particular integration time, antenna Y polarisation",
                     "noDataValue": "0.0",
                     "noDataValueUsed": "true",
-                    "expectedPixel": [
+                    "expectedPixels": [
                         {
                             "x": "2977",
                             "y": "5726",
@@ -477,7 +477,7 @@
                     "description": "Flag indicating Land/Sea USGS content, Coastline distance, and Ice content",
                     "noDataValue": "0.0",
                     "noDataValueUsed": "true",
-                    "expectedPixel": [
+                    "expectedPixels": [
                         {
                             "x": "10236",
                             "y": "6920",
