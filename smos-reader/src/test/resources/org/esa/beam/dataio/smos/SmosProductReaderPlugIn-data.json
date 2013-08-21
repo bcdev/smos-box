@@ -1,19 +1,34 @@
 {
     "testProducts": [
         {
+            "id": "SM_OPER_MIR_BWLD1C_20100208T040959",
+            "relativePath": "SMOS/2010/SM_OPER_MIR_BWLD1C_20100208T040959_20100208T050400_324_001_1/SM_OPER_MIR_BWLD1C_20100208T040959_20100208T050400_324_001_1.HDR",
+            "description": "SMOS BWLD1C as directory with HDR file, schema version 201"
+        },
+        {
+            "id": "SM_OPER_MIR_BWLF1C_20100119T061841",
+            "relativePath": "SMOS/2010/SM_OPER_MIR_BWLF1C_20100119T061841_20100119T071243_324_003_1/SM_OPER_MIR_BWLF1C_20100119T061841_20100119T071243_324_003_1.DBL",
+            "description": "SMOS BWLF1C as directory with DBL file, schema version 201"
+        },
+        {
             "id": "SMOS_BWSD1C_DBL",
             "relativePath": "SMOS/SM_OPER_MIR_BWSD1C_20100201T134256_20100201T140057_324_001_1/SM_OPER_MIR_BWSD1C_20100201T134256_20100201T140057_324_001_1.DBL",
-            "description": "SMOS as directory with DBL file"
+            "description": "SMOS BWSD1C as directory with DBL file"
         },
         {
             "id": "SMOS_BWSD1C_AS_ZIP",
             "relativePath": "SMOS/SM_OPER_MIR_BWSD1C_20100201T134256_20100201T140057_324_001_1.zip",
-            "description": "SMOS as zipped file"
+            "description": "SMOS BWSD1C as zipped file"
         },
         {
             "id": "SMOS_BWSD1C_AS_ZIP_WITH_DIR",
-            "relativePath": "SMOS/SM_OPER_MIR_BWSD1C_20100201T134256_20100201T140057_324_001_1_with_dir.zip",
-            "description": "SMOS as zipped file with internal directory"
+            "relativePath": "SMOS/SM_OPER_MIR_BWSD1C_20100201T134256_20100201T140057_324_002_1.zip",
+            "description": "SMOS BWSD1C as zipped file with internal directory"
+        },
+        {
+            "id": "SM_OPER_MIR_BWSF1C_20100119T043836",
+            "relativePath": "SMOS/2010/SM_OPER_MIR_BWSF1C_20100119T043836_20100119T053238_324_001_1/SM_OPER_MIR_BWSF1C_20100119T043836_20100119T053238_324_001_1.DBL",
+            "description": "SMOS BWSF1C,  schema version 201"
         }
     ]
 }
