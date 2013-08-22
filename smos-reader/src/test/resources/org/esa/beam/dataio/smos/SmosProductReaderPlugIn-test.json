@@ -2912,6 +2912,10 @@
                 {
                     "path": "Variable_Header/Main_Product_Header/Orbit_Information/X_Position",
                     "value": "+2256504.892"
+                },
+                {
+                    "path": "Variable_Header/Specific_Product_Header/List_of_Data_Sets/Data_Set[4]/DS_Name",
+                    "value": "RFI_FILE"
                 }
             ]
         }
