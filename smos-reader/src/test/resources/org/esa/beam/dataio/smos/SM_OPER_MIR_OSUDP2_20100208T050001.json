@@ -1,0 +1,2695 @@
+{
+    "id": "SM_OPER_MIR_OSUDP2_20100208T050001",
+    "decodeQualification": "intended",
+    "expectedContent": {
+        "sceneWidth": 16384,
+        "sceneHeight": 8192,
+        "startTime": "08-FEB-2010 05:00:01.000000",
+        "endTime": "08-FEB-2010 05:54:03.000000",
+        "geoCoding": {
+            "coordinates": [
+                {
+                    "x": 7066.659,
+                    "y": 4403.7256,
+                    "lat": -6.7615485,
+                    "lon": -24.726727
+                }
+            ],
+            "reverseAccuracy": 0.01
+        },
+        "flagCodings": [
+            {
+                "name": "Control_Flags",
+                "samples": [
+                    {
+                        "name": "FG_CTRL_SEL_GP",
+                        "value": 1,
+                        "description": "Grid point selected according to land sea mask"
+                    },
+                    {
+                        "name": "FG_CTRL_RANGE",
+                        "value": 2,
+                        "description": "Retrieved values outside range"
+                    },
+                    {
+                        "name": "FG_CTRL_SIGMA",
+                        "value": 4,
+                        "description": "High retrieval sigma"
+                    },
+                    {
+                        "name": "FG_CTRL_CHI2",
+                        "value": 8,
+                        "description": "Poor fit quality"
+                    },
+                    {
+                        "name": "FG_CTRL_CHI2_P",
+                        "value": 16,
+                        "description": "Poor fit quality"
+                    },
+                    {
+                        "name": "FG_CTRL_QUALITY_SSS",
+                        "value": 32,
+                        "description": "At least one critical flag was raised during SSS1 retrieval"
+                    },
+                    {
+                        "name": "FG_CTRL_SUNGLINT",
+                        "value": 64,
+                        "description": "Grid point with number of measurements flagged for sunglint above threshold"
+                    },
+                    {
+                        "name": "FG_CTRL_MOONGLINT",
+                        "value": 128,
+                        "description": "Grid point with number of measurements flagged for moonglint above threshold"
+                    },
+                    {
+                        "name": "FG_CTRL_GAL_NOISE",
+                        "value": 256,
+                        "description": "Grid point with number of measurements flagged for galactic noise above threshold"
+                    },
+                    {
+                        "name": "FG_CTRL_GAL_NOISE_POL",
+                        "value": 512,
+                        "description": "Grid point with number of measurements flagged for polarised galactic noise above threshold"
+                    },
+                    {
+                        "name": "FG_CTRL_REACH_MAXITER",
+                        "value": 1024,
+                        "description": "Maximum number of iteration reached before convergence"
+                    },
+                    {
+                        "name": "FG_CTRL_NUM_MEAS_MIN",
+                        "value": 2048,
+                        "description": "Not processed due to too few valid measurements"
+                    },
+                    {
+                        "name": "FG_CTRL_NUM_MEAS_LOW",
+                        "value": 4096,
+                        "description": "Number of valid measurements used for retrieval is less than Tg_num_meas_valid"
+                    },
+                    {
+                        "name": "FG_CTRL_MANY_OUTLIERS",
+                        "value": 8192,
+                        "description": "If number of outliers Dg_num_outliers greater than Tg_num_outliers_max"
+                    },
+                    {
+                        "name": "FG_CTRL_MARQ",
+                        "value": 16384,
+                        "description": "Iterative loop ends because Marquardt increment is greather than lambdaMax"
+                    },
+                    {
+                        "name": "FG_CTRL_ROUGHNESS",
+                        "value": 32768,
+                        "description": "Roughness correction applied"
+                    },
+                    {
+                        "name": "FG_CTRL_FOAM",
+                        "value": 65536,
+                        "description": "Wind speed is less than Tg_WS_foam and foam contribution and foam fraction are set to zero"
+                    },
+                    {
+                        "name": "FG_CTRL_ECMWF",
+                        "value": 131072,
+                        "description": "Flag set to false if one or more ECMWF data is missing for the different models"
+                    },
+                    {
+                        "name": "FG_CTRL_VALID",
+                        "value": 262144,
+                        "description": "Flags raised if grid points pass grid point measurement discrimination tests"
+                    },
+                    {
+                        "name": "FG_CTRL_NO_SURFACE",
+                        "value": 524288,
+                        "description": "Flags raised if the 42.5° angle is not included in the dwell line for grid points"
+                    },
+                    {
+                        "name": "FG_CTRL_RANGE_ACARD",
+                        "value": 1048576,
+                        "description": "Flags raised if retrieved Acard is outside range"
+                    },
+                    {
+                        "name": "FG_CTRL_SIGMA_ACARD",
+                        "value": 2097152,
+                        "description": "Flags raised if retrieved Acard sigma is too high"
+                    },
+                    {
+                        "name": "FG_CTRL_QUALITY_ACARD",
+                        "value": 4194304,
+                        "description": "Flags raised if at least one critical flag was raised during Acard retrieval"
+                    }
+                ]
+            },
+            {
+                "name": "Science_Flags",
+                "samples": [
+                    {
+                        "name": "FG_SC_LAND_SEA_COAST1",
+                        "value": 1,
+                        "description": "Distance from coast to gridpoint is less than threshold Max1 in file AUX_DISTAN"
+                    },
+                    {
+                        "name": "FG_SC_LAND_SEA_COAST2",
+                        "value": 2,
+                        "description": "Distance from coast to gridpoint is less than threshold Max2 in file AUX_DISTAN"
+                    },
+                    {
+                        "name": "FG_SC_TEC_GRADIENT",
+                        "value": 4,
+                        "description": "High TEC gradient along dwell for a grid point"
+                    },
+                    {
+                        "name": "FG_SC_IN_CLIM_ICE",
+                        "value": 8,
+                        "description": "Gridpoint with maximum extend of sea ice accordy to monthly climatology"
+                    },
+                    {
+                        "name": "FG_SC_ICE",
+                        "value": 16,
+                        "description": "Ice concentration at gridpoint is above threshold Tg_ice_concentration"
+                    },
+                    {
+                        "name": "FG_SC_SUSPECT_ICE",
+                        "value": 32,
+                        "description": "Suspect ice on gridpoint"
+                    },
+                    {
+                        "name": "FG_SC_RAIN",
+                        "value": 64,
+                        "description": "Heavy rain suspected on gridpoint. Rain rate is above threshold Tg_max_rainfall"
+                    },
+                    {
+                        "name": "FG_SC_HIGH_WIND",
+                        "value": 128,
+                        "description": "High wind"
+                    },
+                    {
+                        "name": "FG_SC_LOW_WIND",
+                        "value": 256,
+                        "description": "Low wind"
+                    },
+                    {
+                        "name": "FG_SC_HIGHT_SST",
+                        "value": 512,
+                        "description": "High SST"
+                    },
+                    {
+                        "name": "FG_SC_LOW_SST",
+                        "value": 1024,
+                        "description": "Low SST"
+                    },
+                    {
+                        "name": "FG_SC_HIGH_SSS",
+                        "value": 2048,
+                        "description": "High SSS"
+                    },
+                    {
+                        "name": "FG_SC_LOW_SSS",
+                        "value": 4096,
+                        "description": "Low SSS"
+                    },
+                    {
+                        "name": "FG_SC_SEA_STATE_1",
+                        "value": 8192,
+                        "description": "Sea state class 1"
+                    },
+                    {
+                        "name": "FG_SC_SEA_STATE_2",
+                        "value": 16384,
+                        "description": "Sea state class 2"
+                    },
+                    {
+                        "name": "FG_SC_SEA_STATE_3",
+                        "value": 32768,
+                        "description": "Sea state class 3"
+                    },
+                    {
+                        "name": "FG_SC_SEA_STATE_4",
+                        "value": 65536,
+                        "description": "Sea state class 4"
+                    },
+                    {
+                        "name": "FG_SC_SEA_STATE_5",
+                        "value": 131072,
+                        "description": "Sea state class 5"
+                    },
+                    {
+                        "name": "FG_SC_SEA_STATE_6",
+                        "value": 262144,
+                        "description": "Sea state class 6"
+                    },
+                    {
+                        "name": "FG_SC_SST_FRONT",
+                        "value": 524288
+                    },
+                    {
+                        "name": "FG_SC_SSS_FRONT",
+                        "value": 1048576
+                    },
+                    {
+                        "name": "FG_SC_ICE_ACARD",
+                        "value": 2097152,
+                        "description": "Ice flag from cardioid"
+                    }
+                ]
+            },
+            {
+                "name": "Land_Sea_Mask_Flags",
+                "samples": [
+                    {
+                        "name": "USGS_SEA_FLAG",
+                        "value": 1,
+                        "description": "Water fraction is above 95 percent (1); below 95 percent (0)"
+                    },
+                    {
+                        "name": "USGS_LAND_FLAG",
+                        "value": 2,
+                        "description": "Water fraction is below 10 percent (1); above 10 percent (0)"
+                    },
+                    {
+                        "name": "USGS_MIXED_FLAG",
+                        "value": 4,
+                        "description": "Water fraction is above 10 and below 95 percent (1); below 10 or above 95 percent (0)"
+                    },
+                    {
+                        "name": "200_KM_COASTAL_FLAG",
+                        "value": 8,
+                        "description": "Distance to coastline is less than 200 km (1); greater than 200 km (0)"
+                    },
+                    {
+                        "name": "100_KM_COASTAL_FLAG",
+                        "value": 16,
+                        "description": "Distance to coastline is less than 100 km (1); greater than 100 km (0)"
+                    },
+                    {
+                        "name": "40_KM_COASTAL_FLAG",
+                        "value": 32,
+                        "description": "Distance to coastline is less than 40 km (1); greater than 40 km (0)"
+                    },
+                    {
+                        "name": "MIN_SEA_ICE_FLAG",
+                        "value": 64,
+                        "description": "Sea ice is present for all months (1); is not present for all months (0)"
+                    },
+                    {
+                        "name": "MAX_SEA_ICE_FLAG",
+                        "value": 128,
+                        "description": "Sea ice is present for any months (1); is not present for any months (0)"
+                    }
+                ]
+            }
+        ],
+        "bands": [
+            {
+                "name": "SSS1",
+                "description": "Sea surface salinity using Roughness Model 1",
+                "geophysicalUnit": "psu",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 12164,
+                        "y": 5315,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 854,
+                        "y": 1459,
+                        "value": 5.03995
+                    }
+                ]
+            },
+            {
+                "name": "Sigma_SSS1",
+                "description": "Theoretical uncertainty computed for SSS1",
+                "geophysicalUnit": "psu",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 1103,
+                        "y": 1523,
+                        "value": 39.819233
+                    },
+                    {
+                        "x": 4765,
+                        "y": 2104,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "SSS2",
+                "description": "Sea surface salinity using Roughness Model 2",
+                "geophysicalUnit": "psu",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 691,
+                        "y": 1765,
+                        "value": 3.2250192
+                    },
+                    {
+                        "x": 9011,
+                        "y": 6105,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Sigma_SSS2",
+                "description": "Theoretical uncertainty computed for SSS2",
+                "geophysicalUnit": "psu",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 1119,
+                        "y": 1927,
+                        "value": 1.0878307
+                    },
+                    {
+                        "x": 2593,
+                        "y": 5456,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "SSS3",
+                "description": "Sea surface salinity using Roughness Model 3",
+                "geophysicalUnit": "psu",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 833,
+                        "y": 2525,
+                        "value": 14.716526
+                    },
+                    {
+                        "x": 12388,
+                        "y": 3969,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Sigma_SSS3",
+                "description": "Theoretical uncertainty computed for SSS3",
+                "geophysicalUnit": "psu",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 387,
+                        "y": 3342,
+                        "value": 0.39346683
+                    },
+                    {
+                        "x": 5577,
+                        "y": 7368,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Acard",
+                "description": "Effective Acard retrieved with minimalistic model",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 354,
+                        "y": 4335,
+                        "value": 56.024864
+                    },
+                    {
+                        "x": 5364,
+                        "y": 1614,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Sigma_Acard",
+                "description": "Theoretical uncertainty computed for Acard",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 101,
+                        "y": 4246,
+                        "value": 0.89472073
+                    },
+                    {
+                        "x": 15916,
+                        "y": 4953,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "WS",
+                "description": "Equivalent neutral wind speed as derived from ECMWF",
+                "geophysicalUnit": "m s-1",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 179,
+                        "y": 5965,
+                        "value": 6.985934
+                    },
+                    {
+                        "x": 3800,
+                        "y": 4075,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Sigma_WS",
+                "description": "Theoretical uncertainty associated with WS",
+                "geophysicalUnit": "m s-1",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 18,
+                        "y": 6407,
+                        "value": 2.000001
+                    },
+                    {
+                        "x": 5867,
+                        "y": 4081,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "SST",
+                "description": "Sea Surface Temperature as derived from ECMWF",
+                "geophysicalUnit": "°C",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 16287,
+                        "y": 5075,
+                        "value": 26.436523
+                    },
+                    {
+                        "x": 9415,
+                        "y": 752,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Sigma_SST",
+                "description": "Theoretical uncertainty associated with SST",
+                "geophysicalUnit": "°C",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 16344,
+                        "y": 6388,
+                        "value": 0.9998838
+                    },
+                    {
+                        "x": 15977,
+                        "y": 3008,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "TBH",
+                "description": "Brightness temperature at surface level derived with default forward model and retrieved geophysical parameters, H polarisation direction",
+                "geophysicalUnit": "K",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 15832,
+                        "y": 6457,
+                        "value": 80.2473
+                    },
+                    {
+                        "x": 1817,
+                        "y": 3701,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Sigma_TBH",
+                "description": "Theoretical uncertainty computed for TBH",
+                "geophysicalUnit": "K",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 15461,
+                        "y": 7015,
+                        "value": 0.82262653
+                    },
+                    {
+                        "x": 8287,
+                        "y": 4272,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "TBV",
+                "description": "Brightness temperature at surface level derived with default forward model and retrieved geophysical parameters, V polarisation direction",
+                "geophysicalUnit": "K",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 16143,
+                        "y": 7127,
+                        "value": 121.54037
+                    },
+                    {
+                        "x": 236,
+                        "y": 3478,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Sigma_TBV",
+                "description": "Theoretical uncertainty computed for TBV",
+                "geophysicalUnit": "K",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 1569,
+                        "y": 1406,
+                        "value": 2.6485667
+                    },
+                    {
+                        "x": 4862,
+                        "y": 6103,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "TBX",
+                "description": "Brightness temperature at antenna level derived with default forward model and retrieved geophysical parameters, X polarisation direction",
+                "geophysicalUnit": "K",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 946,
+                        "y": 1824,
+                        "value": 83.90442
+                    },
+                    {
+                        "x": 13671,
+                        "y": 7745,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Sigma_TBX",
+                "description": "Theoretical uncertainty computed for TBX",
+                "geophysicalUnit": "K",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 553,
+                        "y": 2357,
+                        "value": 0.9025195
+                    },
+                    {
+                        "x": 10010,
+                        "y": 2130,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "TBY",
+                "description": "Brightness temperature at antenna level derived with default forward model and retrieved geophysical parameters, Y polarisation direction",
+                "geophysicalUnit": "K",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 884,
+                        "y": 2885,
+                        "value": 95.19336
+                    },
+                    {
+                        "x": 7790,
+                        "y": 4580,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Sigma_TBY",
+                "description": "Theoretical uncertainty computed for TBY",
+                "geophysicalUnit": "K",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 230,
+                        "y": 3705,
+                        "value": 0.80409
+                    },
+                    {
+                        "x": 1575,
+                        "y": 637,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Control_Flags_1",
+                "description": "Control Flags for SSS retrieval with Forward Model 1",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 579,
+                        "y": 3930,
+                        "value": 430137
+                    },
+                    {
+                        "x": 7619,
+                        "y": 7333,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Control_Flags_2",
+                "description": "Control Flags for SSS retrieval with Forward Model 2",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 525,
+                        "y": 3754,
+                        "value": 491579
+                    },
+                    {
+                        "x": 15762,
+                        "y": 3121,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Control_Flags_3",
+                "description": "Control Flags for SSS retrieval with Forward Model 3",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 110,
+                        "y": 4042,
+                        "value": 4331553
+                    },
+                    {
+                        "x": 12049,
+                        "y": 4873,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Control_Flags_4",
+                "description": "Control Flags for SSS retrieval with Cardioid Model",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 346,
+                        "y": 5519,
+                        "value": 4331553
+                    },
+                    {
+                        "x": 7543,
+                        "y": 2137,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Dg_chi2_1",
+                "description": "Retrieval fit quality index with Forward Model 1",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 53,
+                        "y": 5881,
+                        "value": 458
+                    },
+                    {
+                        "x": 10480,
+                        "y": 3584,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Dg_chi2_2",
+                "description": "Retrieval fit quality index with Forward Model 2",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 16309,
+                        "y": 5116,
+                        "value": 90
+                    },
+                    {
+                        "x": 6485,
+                        "y": 1751,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Dg_chi2_3",
+                "description": "Retrieval fit quality index with Forward Model 3",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 16123,
+                        "y": 6031,
+                        "value": 706
+                    },
+                    {
+                        "x": 15493,
+                        "y": 4751,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Dg_chi2_Acard",
+                "description": "Retrieval fit quality index with Cardiod Model",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 16075,
+                        "y": 6436,
+                        "value": 591
+                    },
+                    {
+                        "x": 9184,
+                        "y": 2382,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Dg_chi2_P_1",
+                "description": "Normalised chi2 high value acceptability probability with Forward Model 1, scaled by multiplying with 1000",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 15440,
+                        "y": 6823,
+                        "value": 844
+                    },
+                    {
+                        "x": 1771,
+                        "y": 7267,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Dg_chi2_P_2",
+                "description": "Normalised chi2 high value acceptability probability with Forward Model 2, scaled by multiplying with 1000",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 16089,
+                        "y": 7269,
+                        "value": 808
+                    },
+                    {
+                        "x": 2984,
+                        "y": 5672,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Dg_chi2_P_3",
+                "description": "Normalised chi2 high value acceptability probability with Forward Model 3, scaled by multiplying with 1000",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 946,
+                        "y": 1479,
+                        "value": 1000
+                    },
+                    {
+                        "x": 3370,
+                        "y": 2507,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Dg_chi2_P_Acard",
+                "description": "Normalised chi2 high value acceptability probability with Cardiod Model, scaled by multiplying with 1000",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 6722,
+                        "y": 7075,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 11497,
+                        "y": 7352,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Dg_quality_SSS1",
+                "description": "Quality index for SSS1",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 4875,
+                        "y": 8132,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 8965,
+                        "y": 956,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Dg_quality_SSS2",
+                "description": "Quality index for SSS2",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 3191,
+                        "y": 4596,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 7504,
+                        "y": 1055,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Dg_quality_SSS3",
+                "description": "Quality index for SSS3",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 13581,
+                        "y": 4692,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 1681,
+                        "y": 5543,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Dg_quality_Acard",
+                "description": "Quality index for Acard",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 11976,
+                        "y": 3867,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 2345,
+                        "y": 546,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Dg_num_iter_1",
+                "description": "Number of iterations for the retrieval of SSS with Forward Model 1",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 13787,
+                        "y": 2455,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 9703,
+                        "y": 7961,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Dg_num_iter_2",
+                "description": "Number of iterations for the retrieval of SSS with Forward Model 2",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 12736,
+                        "y": 224,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 3550,
+                        "y": 2018,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Dg_num_iter_3",
+                "description": "Number of iterations for the retrieval of SSS with Forward Model 3",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 5233,
+                        "y": 1587,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 4628,
+                        "y": 7235,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Dg_num_iter_4",
+                "description": "Number of iterations for the retrieval of SSS with Cardiod Model",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 16343,
+                        "y": 618,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 13417,
+                        "y": 4109,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Dg_num_meas_L1c",
+                "description": "Number of  measurements available in  L1c product",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 1027,
+                        "y": 3157,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 4543,
+                        "y": 4768,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Dg_num_meas_valid",
+                "description": "Number of valid measurement available for SSS retrieval",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 15214,
+                        "y": 1137,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 1713,
+                        "y": 1193,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Dg_border_fov",
+                "description": "Number of valid measurements with BORDER_FOV flag raised",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 14478,
+                        "y": 873,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 6062,
+                        "y": 7220,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Dg_eaf_fov",
+                "description": "Number of valid measurements with EAF_FOV flag raised",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 9586,
+                        "y": 4714,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 5532,
+                        "y": 2669,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Dg_af_fov",
+                "description": "Number of valid measurements with AF_FOV flag raised",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 6124,
+                        "y": 7014,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 5338,
+                        "y": 5611,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Dg_sun_tails",
+                "description": "Number of measurements with SUN_TAILS flag raised",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 10542,
+                        "y": 5532,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 8688,
+                        "y": 1068,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Dg_sun_glint_area",
+                "description": "Number of measurements with SUN_GLINT_AREA flag raised",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 7597,
+                        "y": 6559,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 13145,
+                        "y": 7389,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Dg_sun_glint_fov",
+                "description": "Number of measurements with SUN_GLINT_FOV flag raised",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 419,
+                        "y": 5722,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 14567,
+                        "y": 4719,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Dg_sun_glint_L2",
+                "description": "Number of  measurements with  L2 sunglint flag raised",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 10447,
+                        "y": 7435,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 16094,
+                        "y": 2645,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Dg_Suspect_ice",
+                "description": "Number of suspected ice contaminated measurements",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 5885,
+                        "y": 43,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 13755,
+                        "y": 4662,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Dg_galactic_Noise_Error",
+                "description": "Number of measurements discarded due to errors in galactic noise",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 9673,
+                        "y": 3261,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 6465,
+                        "y": 8097,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Dg_galactic_Noise_Pol",
+                "description": "Number of measurements with Fm_gal_noise_pol flag raised",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 3761,
+                        "y": 5874,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 15380,
+                        "y": 2363,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Dg_moonglint",
+                "description": "Number of measurements with L2 moonglint raised",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 5154,
+                        "y": 6979,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 5367,
+                        "y": 4332,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Science_Flags_1",
+                "description": "Science Flags for SSS retrieval with Forward Model 1",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 5868,
+                        "y": 6551,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 9183,
+                        "y": 1786,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Science_Flags_2",
+                "description": "Science Flags for SSS retrieval with Forward Model 2",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 1558,
+                        "y": 5771,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 11511,
+                        "y": 6513,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Science_Flags_3",
+                "description": "Science Flags for SSS retrieval with Forward Model 3",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 13829,
+                        "y": 557,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 13703,
+                        "y": 1859,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Science_Flags_4",
+                "description": "Science Flags for SSS retrieval with Cardioid Model",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 10692,
+                        "y": 7620,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 4392,
+                        "y": 7056,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Dg_sky",
+                "description": "Count measurements with specular direction toward a strong galactic source",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 6328,
+                        "y": 3038,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 15923,
+                        "y": 5575,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Grid_Point_ID",
+                "description": "Grid point ID",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 11875,
+                        "y": 3503,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 8172,
+                        "y": 1137,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Latitude",
+                "description": "Latitude (-90, 90)",
+                "geophysicalUnit": "deg",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 15874,
+                        "y": 1114,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 11812,
+                        "y": 4555,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Longitude",
+                "description": "Longitude (-180, 180)",
+                "geophysicalUnit": "deg",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 11564,
+                        "y": 8108,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 10498,
+                        "y": 7421,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Land_Sea_Mask",
+                "description": "Flag indicating Land/Sea USGS content, Coastline distance, and Ice content",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 13685,
+                        "y": 4349,
+                        "value": 57.0
+                    },
+                    {
+                        "x": 8191,
+                        "y": 7617,
+                        "value": 2.0
+                    }
+                ]
+            }
+        ],
+        "masks": [
+            {
+                "name": "Control_Flags_1_FG_CTRL_SEL_GP",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "246,182,21",
+                "description": "Grid point selected according to land sea mask"
+            },
+            {
+                "name": "Control_Flags_1_FG_CTRL_RANGE",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "95,92,204",
+                "description": "Retrieved values outside range"
+            },
+            {
+                "name": "Control_Flags_1_FG_CTRL_SIGMA",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "49,82,133",
+                "description": "High retrieval sigma"
+            },
+            {
+                "name": "Control_Flags_1_FG_CTRL_CHI2",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "169,175,146",
+                "description": "Poor fit quality"
+            },
+            {
+                "name": "Control_Flags_1_FG_CTRL_CHI2_P",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "156,188,14",
+                "description": "Poor fit quality"
+            },
+            {
+                "name": "Control_Flags_1_FG_CTRL_QUALITY_SSS",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "39,91,126",
+                "description": "At least one critical flag was raised during SSS1 retrieval"
+            },
+            {
+                "name": "Control_Flags_1_FG_CTRL_SUNGLINT",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "214,25,160",
+                "description": "Grid point with number of measurements flagged for sunglint above threshold"
+            },
+            {
+                "name": "Control_Flags_1_FG_CTRL_MOONGLINT",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "178,13,207",
+                "description": "Grid point with number of measurements flagged for moonglint above threshold"
+            },
+            {
+                "name": "Control_Flags_1_FG_CTRL_GAL_NOISE",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "208,249,67",
+                "description": "Grid point with number of measurements flagged for galactic noise above threshold"
+            },
+            {
+                "name": "Control_Flags_1_FG_CTRL_GAL_NOISE_POL",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "106,109,115",
+                "description": "Grid point with number of measurements flagged for polarised galactic noise above threshold"
+            },
+            {
+                "name": "Control_Flags_1_FG_CTRL_REACH_MAXITER",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "16,81,105",
+                "description": "Maximum number of iteration reached before convergence"
+            },
+            {
+                "name": "Control_Flags_1_FG_CTRL_NUM_MEAS_MIN",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "171,1,243",
+                "description": "Not processed due to too few valid measurements"
+            },
+            {
+                "name": "Control_Flags_1_FG_CTRL_NUM_MEAS_LOW",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "238,203,217",
+                "description": "Number of valid measurements used for retrieval is less than Tg_num_meas_valid"
+            },
+            {
+                "name": "Control_Flags_1_FG_CTRL_MANY_OUTLIERS",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "250,231,95",
+                "description": "If number of outliers Dg_num_outliers greater than Tg_num_outliers_max"
+            },
+            {
+                "name": "Control_Flags_1_FG_CTRL_MARQ",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "240,108,99",
+                "description": "Iterative loop ends because Marquardt increment is greather than lambdaMax"
+            },
+            {
+                "name": "Control_Flags_1_FG_CTRL_ROUGHNESS",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "115,141,245",
+                "description": "Roughness correction applied"
+            },
+            {
+                "name": "Control_Flags_1_FG_CTRL_FOAM",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "134,147,45",
+                "description": "Wind speed is less than Tg_WS_foam and foam contribution and foam fraction are set to zero"
+            },
+            {
+                "name": "Control_Flags_1_FG_CTRL_ECMWF",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "128,201,42",
+                "description": "Flag set to false if one or more ECMWF data is missing for the different models"
+            },
+            {
+                "name": "Control_Flags_1_FG_CTRL_VALID",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "168,104,12",
+                "description": "Flags raised if grid points pass grid point measurement discrimination tests"
+            },
+            {
+                "name": "Control_Flags_1_FG_CTRL_NO_SURFACE",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "143,245,6",
+                "description": "Flags raised if the 42.5° angle is not included in the dwell line for grid points"
+            },
+            {
+                "name": "Control_Flags_1_FG_CTRL_RANGE_ACARD",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "36,87,190",
+                "description": "Flags raised if retrieved Acard is outside range"
+            },
+            {
+                "name": "Control_Flags_1_FG_CTRL_SIGMA_ACARD",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "114,207,90",
+                "description": "Flags raised if retrieved Acard sigma is too high"
+            },
+            {
+                "name": "Control_Flags_1_FG_CTRL_QUALITY_ACARD",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "145,13,33",
+                "description": "Flags raised if at least one critical flag was raised during Acard retrieval"
+            },
+            {
+                "name": "Control_Flags_2_FG_CTRL_SEL_GP",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "246,182,21",
+                "description": "Grid point selected according to land sea mask"
+            },
+            {
+                "name": "Control_Flags_2_FG_CTRL_RANGE",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "95,92,204",
+                "description": "Retrieved values outside range"
+            },
+            {
+                "name": "Control_Flags_2_FG_CTRL_SIGMA",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "49,82,133",
+                "description": "High retrieval sigma"
+            },
+            {
+                "name": "Control_Flags_2_FG_CTRL_CHI2",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "169,175,146",
+                "description": "Poor fit quality"
+            },
+            {
+                "name": "Control_Flags_2_FG_CTRL_CHI2_P",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "156,188,14",
+                "description": "Poor fit quality"
+            },
+            {
+                "name": "Control_Flags_2_FG_CTRL_QUALITY_SSS",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "39,91,126",
+                "description": "At least one critical flag was raised during SSS1 retrieval"
+            },
+            {
+                "name": "Control_Flags_2_FG_CTRL_SUNGLINT",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "214,25,160",
+                "description": "Grid point with number of measurements flagged for sunglint above threshold"
+            },
+            {
+                "name": "Control_Flags_2_FG_CTRL_MOONGLINT",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "178,13,207",
+                "description": "Grid point with number of measurements flagged for moonglint above threshold"
+            },
+            {
+                "name": "Control_Flags_2_FG_CTRL_GAL_NOISE",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "208,249,67",
+                "description": "Grid point with number of measurements flagged for galactic noise above threshold"
+            },
+            {
+                "name": "Control_Flags_2_FG_CTRL_GAL_NOISE_POL",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "106,109,115",
+                "description": "Grid point with number of measurements flagged for polarised galactic noise above threshold"
+            },
+            {
+                "name": "Control_Flags_2_FG_CTRL_REACH_MAXITER",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "16,81,105",
+                "description": "Maximum number of iteration reached before convergence"
+            },
+            {
+                "name": "Control_Flags_2_FG_CTRL_NUM_MEAS_MIN",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "171,1,243",
+                "description": "Not processed due to too few valid measurements"
+            },
+            {
+                "name": "Control_Flags_2_FG_CTRL_NUM_MEAS_LOW",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "238,203,217",
+                "description": "Number of valid measurements used for retrieval is less than Tg_num_meas_valid"
+            },
+            {
+                "name": "Control_Flags_2_FG_CTRL_MANY_OUTLIERS",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "250,231,95",
+                "description": "If number of outliers Dg_num_outliers greater than Tg_num_outliers_max"
+            },
+            {
+                "name": "Control_Flags_2_FG_CTRL_MARQ",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "240,108,99",
+                "description": "Iterative loop ends because Marquardt increment is greather than lambdaMax"
+            },
+            {
+                "name": "Control_Flags_2_FG_CTRL_ROUGHNESS",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "115,141,245",
+                "description": "Roughness correction applied"
+            },
+            {
+                "name": "Control_Flags_2_FG_CTRL_FOAM",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "134,147,45",
+                "description": "Wind speed is less than Tg_WS_foam and foam contribution and foam fraction are set to zero"
+            },
+            {
+                "name": "Control_Flags_2_FG_CTRL_ECMWF",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "128,201,42",
+                "description": "Flag set to false if one or more ECMWF data is missing for the different models"
+            },
+            {
+                "name": "Control_Flags_2_FG_CTRL_VALID",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "168,104,12",
+                "description": "Flags raised if grid points pass grid point measurement discrimination tests"
+            },
+            {
+                "name": "Control_Flags_2_FG_CTRL_NO_SURFACE",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "143,245,6",
+                "description": "Flags raised if the 42.5° angle is not included in the dwell line for grid points"
+            },
+            {
+                "name": "Control_Flags_2_FG_CTRL_RANGE_ACARD",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "36,87,190",
+                "description": "Flags raised if retrieved Acard is outside range"
+            },
+            {
+                "name": "Control_Flags_2_FG_CTRL_SIGMA_ACARD",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "114,207,90",
+                "description": "Flags raised if retrieved Acard sigma is too high"
+            },
+            {
+                "name": "Control_Flags_2_FG_CTRL_QUALITY_ACARD",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "145,13,33",
+                "description": "Flags raised if at least one critical flag was raised during Acard retrieval"
+            },
+            {
+                "name": "Control_Flags_3_FG_CTRL_SEL_GP",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "246,182,21",
+                "description": "Grid point selected according to land sea mask"
+            },
+            {
+                "name": "Control_Flags_3_FG_CTRL_RANGE",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "95,92,204",
+                "description": "Retrieved values outside range"
+            },
+            {
+                "name": "Control_Flags_3_FG_CTRL_SIGMA",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "49,82,133",
+                "description": "High retrieval sigma"
+            },
+            {
+                "name": "Control_Flags_3_FG_CTRL_CHI2",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "169,175,146",
+                "description": "Poor fit quality"
+            },
+            {
+                "name": "Control_Flags_3_FG_CTRL_CHI2_P",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "156,188,14",
+                "description": "Poor fit quality"
+            },
+            {
+                "name": "Control_Flags_3_FG_CTRL_QUALITY_SSS",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "39,91,126",
+                "description": "At least one critical flag was raised during SSS1 retrieval"
+            },
+            {
+                "name": "Control_Flags_3_FG_CTRL_SUNGLINT",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "214,25,160",
+                "description": "Grid point with number of measurements flagged for sunglint above threshold"
+            },
+            {
+                "name": "Control_Flags_3_FG_CTRL_MOONGLINT",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "178,13,207",
+                "description": "Grid point with number of measurements flagged for moonglint above threshold"
+            },
+            {
+                "name": "Control_Flags_3_FG_CTRL_GAL_NOISE",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "208,249,67",
+                "description": "Grid point with number of measurements flagged for galactic noise above threshold"
+            },
+            {
+                "name": "Control_Flags_3_FG_CTRL_GAL_NOISE_POL",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "106,109,115",
+                "description": "Grid point with number of measurements flagged for polarised galactic noise above threshold"
+            },
+            {
+                "name": "Control_Flags_3_FG_CTRL_REACH_MAXITER",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "16,81,105",
+                "description": "Maximum number of iteration reached before convergence"
+            },
+            {
+                "name": "Control_Flags_3_FG_CTRL_NUM_MEAS_MIN",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "171,1,243",
+                "description": "Not processed due to too few valid measurements"
+            },
+            {
+                "name": "Control_Flags_3_FG_CTRL_NUM_MEAS_LOW",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "238,203,217",
+                "description": "Number of valid measurements used for retrieval is less than Tg_num_meas_valid"
+            },
+            {
+                "name": "Control_Flags_3_FG_CTRL_MANY_OUTLIERS",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "250,231,95",
+                "description": "If number of outliers Dg_num_outliers greater than Tg_num_outliers_max"
+            },
+            {
+                "name": "Control_Flags_3_FG_CTRL_MARQ",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "240,108,99",
+                "description": "Iterative loop ends because Marquardt increment is greather than lambdaMax"
+            },
+            {
+                "name": "Control_Flags_3_FG_CTRL_ROUGHNESS",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "115,141,245",
+                "description": "Roughness correction applied"
+            },
+            {
+                "name": "Control_Flags_3_FG_CTRL_FOAM",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "134,147,45",
+                "description": "Wind speed is less than Tg_WS_foam and foam contribution and foam fraction are set to zero"
+            },
+            {
+                "name": "Control_Flags_3_FG_CTRL_ECMWF",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "128,201,42",
+                "description": "Flag set to false if one or more ECMWF data is missing for the different models"
+            },
+            {
+                "name": "Control_Flags_3_FG_CTRL_VALID",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "168,104,12",
+                "description": "Flags raised if grid points pass grid point measurement discrimination tests"
+            },
+            {
+                "name": "Control_Flags_3_FG_CTRL_NO_SURFACE",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "143,245,6",
+                "description": "Flags raised if the 42.5° angle is not included in the dwell line for grid points"
+            },
+            {
+                "name": "Control_Flags_3_FG_CTRL_RANGE_ACARD",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "36,87,190",
+                "description": "Flags raised if retrieved Acard is outside range"
+            },
+            {
+                "name": "Control_Flags_3_FG_CTRL_SIGMA_ACARD",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "114,207,90",
+                "description": "Flags raised if retrieved Acard sigma is too high"
+            },
+            {
+                "name": "Control_Flags_3_FG_CTRL_QUALITY_ACARD",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "145,13,33",
+                "description": "Flags raised if at least one critical flag was raised during Acard retrieval"
+            },
+            {
+                "name": "Control_Flags_4_FG_CTRL_SEL_GP",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "246,182,21",
+                "description": "Grid point selected according to land sea mask"
+            },
+            {
+                "name": "Control_Flags_4_FG_CTRL_RANGE",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "95,92,204",
+                "description": "Retrieved values outside range"
+            },
+            {
+                "name": "Control_Flags_4_FG_CTRL_SIGMA",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "49,82,133",
+                "description": "High retrieval sigma"
+            },
+            {
+                "name": "Control_Flags_4_FG_CTRL_CHI2",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "169,175,146",
+                "description": "Poor fit quality"
+            },
+            {
+                "name": "Control_Flags_4_FG_CTRL_CHI2_P",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "156,188,14",
+                "description": "Poor fit quality"
+            },
+            {
+                "name": "Control_Flags_4_FG_CTRL_QUALITY_SSS",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "39,91,126",
+                "description": "At least one critical flag was raised during SSS1 retrieval"
+            },
+            {
+                "name": "Control_Flags_4_FG_CTRL_SUNGLINT",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "214,25,160",
+                "description": "Grid point with number of measurements flagged for sunglint above threshold"
+            },
+            {
+                "name": "Control_Flags_4_FG_CTRL_MOONGLINT",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "178,13,207",
+                "description": "Grid point with number of measurements flagged for moonglint above threshold"
+            },
+            {
+                "name": "Control_Flags_4_FG_CTRL_GAL_NOISE",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "208,249,67",
+                "description": "Grid point with number of measurements flagged for galactic noise above threshold"
+            },
+            {
+                "name": "Control_Flags_4_FG_CTRL_GAL_NOISE_POL",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "106,109,115",
+                "description": "Grid point with number of measurements flagged for polarised galactic noise above threshold"
+            },
+            {
+                "name": "Control_Flags_4_FG_CTRL_REACH_MAXITER",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "16,81,105",
+                "description": "Maximum number of iteration reached before convergence"
+            },
+            {
+                "name": "Control_Flags_4_FG_CTRL_NUM_MEAS_MIN",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "171,1,243",
+                "description": "Not processed due to too few valid measurements"
+            },
+            {
+                "name": "Control_Flags_4_FG_CTRL_NUM_MEAS_LOW",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "238,203,217",
+                "description": "Number of valid measurements used for retrieval is less than Tg_num_meas_valid"
+            },
+            {
+                "name": "Control_Flags_4_FG_CTRL_MANY_OUTLIERS",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "250,231,95",
+                "description": "If number of outliers Dg_num_outliers greater than Tg_num_outliers_max"
+            },
+            {
+                "name": "Control_Flags_4_FG_CTRL_MARQ",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "240,108,99",
+                "description": "Iterative loop ends because Marquardt increment is greather than lambdaMax"
+            },
+            {
+                "name": "Control_Flags_4_FG_CTRL_ROUGHNESS",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "115,141,245",
+                "description": "Roughness correction applied"
+            },
+            {
+                "name": "Control_Flags_4_FG_CTRL_FOAM",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "134,147,45",
+                "description": "Wind speed is less than Tg_WS_foam and foam contribution and foam fraction are set to zero"
+            },
+            {
+                "name": "Control_Flags_4_FG_CTRL_ECMWF",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "128,201,42",
+                "description": "Flag set to false if one or more ECMWF data is missing for the different models"
+            },
+            {
+                "name": "Control_Flags_4_FG_CTRL_VALID",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "168,104,12",
+                "description": "Flags raised if grid points pass grid point measurement discrimination tests"
+            },
+            {
+                "name": "Control_Flags_4_FG_CTRL_NO_SURFACE",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "143,245,6",
+                "description": "Flags raised if the 42.5° angle is not included in the dwell line for grid points"
+            },
+            {
+                "name": "Control_Flags_4_FG_CTRL_RANGE_ACARD",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "36,87,190",
+                "description": "Flags raised if retrieved Acard is outside range"
+            },
+            {
+                "name": "Control_Flags_4_FG_CTRL_SIGMA_ACARD",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "114,207,90",
+                "description": "Flags raised if retrieved Acard sigma is too high"
+            },
+            {
+                "name": "Control_Flags_4_FG_CTRL_QUALITY_ACARD",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "145,13,33",
+                "description": "Flags raised if at least one critical flag was raised during Acard retrieval"
+            },
+            {
+                "name": "Science_Flags_1_FG_SC_LAND_SEA_COAST1",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "246,182,21",
+                "description": "Distance from coast to gridpoint is less than threshold Max1 in file AUX_DISTAN"
+            },
+            {
+                "name": "Science_Flags_1_FG_SC_LAND_SEA_COAST2",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "95,92,204",
+                "description": "Distance from coast to gridpoint is less than threshold Max2 in file AUX_DISTAN"
+            },
+            {
+                "name": "Science_Flags_1_FG_SC_TEC_GRADIENT",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "49,82,133",
+                "description": "High TEC gradient along dwell for a grid point"
+            },
+            {
+                "name": "Science_Flags_1_FG_SC_IN_CLIM_ICE",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "169,175,146",
+                "description": "Gridpoint with maximum extend of sea ice accordy to monthly climatology"
+            },
+            {
+                "name": "Science_Flags_1_FG_SC_ICE",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "156,188,14",
+                "description": "Ice concentration at gridpoint is above threshold Tg_ice_concentration"
+            },
+            {
+                "name": "Science_Flags_1_FG_SC_SUSPECT_ICE",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "39,91,126",
+                "description": "Suspect ice on gridpoint"
+            },
+            {
+                "name": "Science_Flags_1_FG_SC_RAIN",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "214,25,160",
+                "description": "Heavy rain suspected on gridpoint. Rain rate is above threshold Tg_max_rainfall"
+            },
+            {
+                "name": "Science_Flags_1_FG_SC_HIGH_WIND",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "178,13,207",
+                "description": "High wind"
+            },
+            {
+                "name": "Science_Flags_1_FG_SC_LOW_WIND",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "208,249,67",
+                "description": "Low wind"
+            },
+            {
+                "name": "Science_Flags_1_FG_SC_HIGHT_SST",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "106,109,115",
+                "description": "High SST"
+            },
+            {
+                "name": "Science_Flags_1_FG_SC_LOW_SST",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "16,81,105",
+                "description": "Low SST"
+            },
+            {
+                "name": "Science_Flags_1_FG_SC_HIGH_SSS",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "171,1,243",
+                "description": "High SSS"
+            },
+            {
+                "name": "Science_Flags_1_FG_SC_LOW_SSS",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "238,203,217",
+                "description": "Low SSS"
+            },
+            {
+                "name": "Science_Flags_1_FG_SC_SEA_STATE_1",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "250,231,95",
+                "description": "Sea state class 1"
+            },
+            {
+                "name": "Science_Flags_1_FG_SC_SEA_STATE_2",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "240,108,99",
+                "description": "Sea state class 2"
+            },
+            {
+                "name": "Science_Flags_1_FG_SC_SEA_STATE_3",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "115,141,245",
+                "description": "Sea state class 3"
+            },
+            {
+                "name": "Science_Flags_1_FG_SC_SEA_STATE_4",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "134,147,45",
+                "description": "Sea state class 4"
+            },
+            {
+                "name": "Science_Flags_1_FG_SC_SEA_STATE_5",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "128,201,42",
+                "description": "Sea state class 5"
+            },
+            {
+                "name": "Science_Flags_1_FG_SC_SEA_STATE_6",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "168,104,12",
+                "description": "Sea state class 6"
+            },
+            {
+                "name": "Science_Flags_1_FG_SC_SST_FRONT",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "143,245,6"
+            },
+            {
+                "name": "Science_Flags_1_FG_SC_SSS_FRONT",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "36,87,190"
+            },
+            {
+                "name": "Science_Flags_1_FG_SC_ICE_ACARD",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "114,207,90",
+                "description": "Ice flag from cardioid"
+            },
+            {
+                "name": "Science_Flags_2_FG_SC_LAND_SEA_COAST1",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "246,182,21",
+                "description": "Distance from coast to gridpoint is less than threshold Max1 in file AUX_DISTAN"
+            },
+            {
+                "name": "Science_Flags_2_FG_SC_LAND_SEA_COAST2",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "95,92,204",
+                "description": "Distance from coast to gridpoint is less than threshold Max2 in file AUX_DISTAN"
+            },
+            {
+                "name": "Science_Flags_2_FG_SC_TEC_GRADIENT",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "49,82,133",
+                "description": "High TEC gradient along dwell for a grid point"
+            },
+            {
+                "name": "Science_Flags_2_FG_SC_IN_CLIM_ICE",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "169,175,146",
+                "description": "Gridpoint with maximum extend of sea ice accordy to monthly climatology"
+            },
+            {
+                "name": "Science_Flags_2_FG_SC_ICE",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "156,188,14",
+                "description": "Ice concentration at gridpoint is above threshold Tg_ice_concentration"
+            },
+            {
+                "name": "Science_Flags_2_FG_SC_SUSPECT_ICE",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "39,91,126",
+                "description": "Suspect ice on gridpoint"
+            },
+            {
+                "name": "Science_Flags_2_FG_SC_RAIN",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "214,25,160",
+                "description": "Heavy rain suspected on gridpoint. Rain rate is above threshold Tg_max_rainfall"
+            },
+            {
+                "name": "Science_Flags_2_FG_SC_HIGH_WIND",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "178,13,207",
+                "description": "High wind"
+            },
+            {
+                "name": "Science_Flags_2_FG_SC_LOW_WIND",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "208,249,67",
+                "description": "Low wind"
+            },
+            {
+                "name": "Science_Flags_2_FG_SC_HIGHT_SST",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "106,109,115",
+                "description": "High SST"
+            },
+            {
+                "name": "Science_Flags_2_FG_SC_LOW_SST",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "16,81,105",
+                "description": "Low SST"
+            },
+            {
+                "name": "Science_Flags_2_FG_SC_HIGH_SSS",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "171,1,243",
+                "description": "High SSS"
+            },
+            {
+                "name": "Science_Flags_2_FG_SC_LOW_SSS",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "238,203,217",
+                "description": "Low SSS"
+            },
+            {
+                "name": "Science_Flags_2_FG_SC_SEA_STATE_1",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "250,231,95",
+                "description": "Sea state class 1"
+            },
+            {
+                "name": "Science_Flags_2_FG_SC_SEA_STATE_2",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "240,108,99",
+                "description": "Sea state class 2"
+            },
+            {
+                "name": "Science_Flags_2_FG_SC_SEA_STATE_3",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "115,141,245",
+                "description": "Sea state class 3"
+            },
+            {
+                "name": "Science_Flags_2_FG_SC_SEA_STATE_4",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "134,147,45",
+                "description": "Sea state class 4"
+            },
+            {
+                "name": "Science_Flags_2_FG_SC_SEA_STATE_5",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "128,201,42",
+                "description": "Sea state class 5"
+            },
+            {
+                "name": "Science_Flags_2_FG_SC_SEA_STATE_6",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "168,104,12",
+                "description": "Sea state class 6"
+            },
+            {
+                "name": "Science_Flags_2_FG_SC_SST_FRONT",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "143,245,6"
+            },
+            {
+                "name": "Science_Flags_2_FG_SC_SSS_FRONT",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "36,87,190"
+            },
+            {
+                "name": "Science_Flags_2_FG_SC_ICE_ACARD",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "114,207,90",
+                "description": "Ice flag from cardioid"
+            },
+            {
+                "name": "Science_Flags_3_FG_SC_LAND_SEA_COAST1",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "246,182,21",
+                "description": "Distance from coast to gridpoint is less than threshold Max1 in file AUX_DISTAN"
+            },
+            {
+                "name": "Science_Flags_3_FG_SC_LAND_SEA_COAST2",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "95,92,204",
+                "description": "Distance from coast to gridpoint is less than threshold Max2 in file AUX_DISTAN"
+            },
+            {
+                "name": "Science_Flags_3_FG_SC_TEC_GRADIENT",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "49,82,133",
+                "description": "High TEC gradient along dwell for a grid point"
+            },
+            {
+                "name": "Science_Flags_3_FG_SC_IN_CLIM_ICE",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "169,175,146",
+                "description": "Gridpoint with maximum extend of sea ice accordy to monthly climatology"
+            },
+            {
+                "name": "Science_Flags_3_FG_SC_ICE",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "156,188,14",
+                "description": "Ice concentration at gridpoint is above threshold Tg_ice_concentration"
+            },
+            {
+                "name": "Science_Flags_3_FG_SC_SUSPECT_ICE",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "39,91,126",
+                "description": "Suspect ice on gridpoint"
+            },
+            {
+                "name": "Science_Flags_3_FG_SC_RAIN",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "214,25,160",
+                "description": "Heavy rain suspected on gridpoint. Rain rate is above threshold Tg_max_rainfall"
+            },
+            {
+                "name": "Science_Flags_3_FG_SC_HIGH_WIND",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "178,13,207",
+                "description": "High wind"
+            },
+            {
+                "name": "Science_Flags_3_FG_SC_LOW_WIND",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "208,249,67",
+                "description": "Low wind"
+            },
+            {
+                "name": "Science_Flags_3_FG_SC_HIGHT_SST",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "106,109,115",
+                "description": "High SST"
+            },
+            {
+                "name": "Science_Flags_3_FG_SC_LOW_SST",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "16,81,105",
+                "description": "Low SST"
+            },
+            {
+                "name": "Science_Flags_3_FG_SC_HIGH_SSS",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "171,1,243",
+                "description": "High SSS"
+            },
+            {
+                "name": "Science_Flags_3_FG_SC_LOW_SSS",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "238,203,217",
+                "description": "Low SSS"
+            },
+            {
+                "name": "Science_Flags_3_FG_SC_SEA_STATE_1",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "250,231,95",
+                "description": "Sea state class 1"
+            },
+            {
+                "name": "Science_Flags_3_FG_SC_SEA_STATE_2",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "240,108,99",
+                "description": "Sea state class 2"
+            },
+            {
+                "name": "Science_Flags_3_FG_SC_SEA_STATE_3",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "115,141,245",
+                "description": "Sea state class 3"
+            },
+            {
+                "name": "Science_Flags_3_FG_SC_SEA_STATE_4",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "134,147,45",
+                "description": "Sea state class 4"
+            },
+            {
+                "name": "Science_Flags_3_FG_SC_SEA_STATE_5",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "128,201,42",
+                "description": "Sea state class 5"
+            },
+            {
+                "name": "Science_Flags_3_FG_SC_SEA_STATE_6",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "168,104,12",
+                "description": "Sea state class 6"
+            },
+            {
+                "name": "Science_Flags_3_FG_SC_SST_FRONT",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "143,245,6"
+            },
+            {
+                "name": "Science_Flags_3_FG_SC_SSS_FRONT",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "36,87,190"
+            },
+            {
+                "name": "Science_Flags_3_FG_SC_ICE_ACARD",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "114,207,90",
+                "description": "Ice flag from cardioid"
+            },
+            {
+                "name": "Science_Flags_4_FG_SC_LAND_SEA_COAST1",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "246,182,21",
+                "description": "Distance from coast to gridpoint is less than threshold Max1 in file AUX_DISTAN"
+            },
+            {
+                "name": "Science_Flags_4_FG_SC_LAND_SEA_COAST2",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "95,92,204",
+                "description": "Distance from coast to gridpoint is less than threshold Max2 in file AUX_DISTAN"
+            },
+            {
+                "name": "Science_Flags_4_FG_SC_TEC_GRADIENT",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "49,82,133",
+                "description": "High TEC gradient along dwell for a grid point"
+            },
+            {
+                "name": "Science_Flags_4_FG_SC_IN_CLIM_ICE",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "169,175,146",
+                "description": "Gridpoint with maximum extend of sea ice accordy to monthly climatology"
+            },
+            {
+                "name": "Science_Flags_4_FG_SC_ICE",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "156,188,14",
+                "description": "Ice concentration at gridpoint is above threshold Tg_ice_concentration"
+            },
+            {
+                "name": "Science_Flags_4_FG_SC_SUSPECT_ICE",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "39,91,126",
+                "description": "Suspect ice on gridpoint"
+            },
+            {
+                "name": "Science_Flags_4_FG_SC_RAIN",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "214,25,160",
+                "description": "Heavy rain suspected on gridpoint. Rain rate is above threshold Tg_max_rainfall"
+            },
+            {
+                "name": "Science_Flags_4_FG_SC_HIGH_WIND",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "178,13,207",
+                "description": "High wind"
+            },
+            {
+                "name": "Science_Flags_4_FG_SC_LOW_WIND",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "208,249,67",
+                "description": "Low wind"
+            },
+            {
+                "name": "Science_Flags_4_FG_SC_HIGHT_SST",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "106,109,115",
+                "description": "High SST"
+            },
+            {
+                "name": "Science_Flags_4_FG_SC_LOW_SST",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "16,81,105",
+                "description": "Low SST"
+            },
+            {
+                "name": "Science_Flags_4_FG_SC_HIGH_SSS",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "171,1,243",
+                "description": "High SSS"
+            },
+            {
+                "name": "Science_Flags_4_FG_SC_LOW_SSS",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "238,203,217",
+                "description": "Low SSS"
+            },
+            {
+                "name": "Science_Flags_4_FG_SC_SEA_STATE_1",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "250,231,95",
+                "description": "Sea state class 1"
+            },
+            {
+                "name": "Science_Flags_4_FG_SC_SEA_STATE_2",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "240,108,99",
+                "description": "Sea state class 2"
+            },
+            {
+                "name": "Science_Flags_4_FG_SC_SEA_STATE_3",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "115,141,245",
+                "description": "Sea state class 3"
+            },
+            {
+                "name": "Science_Flags_4_FG_SC_SEA_STATE_4",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "134,147,45",
+                "description": "Sea state class 4"
+            },
+            {
+                "name": "Science_Flags_4_FG_SC_SEA_STATE_5",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "128,201,42",
+                "description": "Sea state class 5"
+            },
+            {
+                "name": "Science_Flags_4_FG_SC_SEA_STATE_6",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "168,104,12",
+                "description": "Sea state class 6"
+            },
+            {
+                "name": "Science_Flags_4_FG_SC_SST_FRONT",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "143,245,6"
+            },
+            {
+                "name": "Science_Flags_4_FG_SC_SSS_FRONT",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "36,87,190"
+            },
+            {
+                "name": "Science_Flags_4_FG_SC_ICE_ACARD",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "114,207,90",
+                "description": "Ice flag from cardioid"
+            },
+            {
+                "name": "Land_Sea_Mask_USGS_SEA_FLAG",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "0,0,255",
+                "description": "Water fraction is above 95 percent (1); below 95 percent (0)"
+            },
+            {
+                "name": "Land_Sea_Mask_USGS_LAND_FLAG",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "0,255,0",
+                "description": "Water fraction is below 10 percent (1); above 10 percent (0)"
+            },
+            {
+                "name": "Land_Sea_Mask_USGS_MIXED_FLAG",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "0,255,255",
+                "description": "Water fraction is above 10 and below 95 percent (1); below 10 or above 95 percent (0)"
+            },
+            {
+                "name": "Land_Sea_Mask_200_KM_COASTAL_FLAG",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "178,140,0",
+                "description": "Distance to coastline is less than 200 km (1); greater than 200 km (0)"
+            },
+            {
+                "name": "Land_Sea_Mask_100_KM_COASTAL_FLAG",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "255,200,0",
+                "description": "Distance to coastline is less than 100 km (1); greater than 100 km (0)"
+            },
+            {
+                "name": "Land_Sea_Mask_40_KM_COASTAL_FLAG",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "255,255,0",
+                "description": "Distance to coastline is less than 40 km (1); greater than 40 km (0)"
+            },
+            {
+                "name": "Land_Sea_Mask_MIN_SEA_ICE_FLAG",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "255,255,255",
+                "description": "Sea ice is present for all months (1); is not present for all months (0)"
+            },
+            {
+                "name": "Land_Sea_Mask_MAX_SEA_ICE_FLAG",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "240,240,240",
+                "description": "Sea ice is present for any months (1); is not present for any months (0)"
+            }
+        ],
+        "metadata": [
+            {
+                "path": "Variable_Header/Specific_Product_Header/List_of_Data_Sets/Data_Set/Num_DSR",
+                "value": "0000131337"
+            },
+            {
+                "path": "Variable_Header/Main_Product_Header/Orbit_Information/Abs_Orbit",
+                "value": "+01412"
+            }
+        ]
+    }
+}

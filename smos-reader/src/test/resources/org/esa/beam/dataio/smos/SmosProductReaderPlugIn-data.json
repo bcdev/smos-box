@@ -29,6 +29,16 @@
             "id": "SM_OPER_MIR_BWSF1C_20100119T043836",
             "relativePath": "SMOS/2010/SM_OPER_MIR_BWSF1C_20100119T043836_20100119T053238_324_001_1/SM_OPER_MIR_BWSF1C_20100119T043836_20100119T053238_324_001_1.DBL",
             "description": "SMOS BWSF1C,  schema version 201"
+        },
+        {
+            "id": "SM_OPER_MIR_OSDAP2_20120514T022742",
+            "relativePath": "SMOS/SMOS_DD_20120514/SM_OPER_MIR_OSDAP2_20120514T022742_20120514T032056_550_001_1.zip",
+            "description": "SMOS OSDAP2,  schema version 300"
+        },
+        {
+            "id": "SM_OPER_MIR_OSUDP2_20100208T050001",
+            "relativePath": "SMOS/2010/SM_OPER_MIR_OSUDP2_20100208T050001_20100208T055403_311_001_1/SM_OPER_MIR_OSUDP2_20100208T050001_20100208T055403_311_001_1.HDR",
+            "description": "SMOS OSUDP2,  schema version 200"
         }
     ]
 }
