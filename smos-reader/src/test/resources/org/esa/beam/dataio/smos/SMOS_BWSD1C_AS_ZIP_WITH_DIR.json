@@ -1,0 +1,165 @@
+{
+    "id": "SMOS_BWSD1C_AS_ZIP_WITH_DIR",
+    "decodeQualification": "intended",
+    "expectedContent": {
+        "bands": [
+            {
+                "name": "BT_Value_X",
+                "description": "Brightness temperature measurement over current Earth fixed grid point, obtained by DFT interpolation from L1b data, antenna X polarisation",
+                "geophysicalUnit": "K",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "expectedPixels": [
+                    {
+                        "x": "4014",
+                        "y": "7021",
+                        "value": "89.78162"
+                    }
+                ]
+            },
+            {
+                "name": "BT_Value_Y",
+                "description": "Brightness temperature measurement over current Earth fixed grid point, obtained by DFT interpolation from L1b data, antenna Y polarisation",
+                "geophysicalUnit": "K",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "expectedPixels": [
+                    {
+                        "x": "4682",
+                        "y": "7447",
+                        "value": "225.63861"
+                    }
+                ]
+            },
+            {
+                "name": "Azimuth_Angle_X",
+                "description": "Azimuth angle value corresponding to the measured BT value over current Earth fixed grid point, antenna X polarisation",
+                "geophysicalUnit": "deg",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "expectedPixels": [
+                    {
+                        "x": "4682",
+                        "y": "7447",
+                        "value": "163.1305"
+                    }
+                ]
+            },
+            {
+                "name": "Azimuth_Angle_Y",
+                "description": "Azimuth angle value corresponding to the measured BT value over current Earth fixed grid point, antenna Y polarisation",
+                "geophysicalUnit": "deg",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "expectedPixels": [
+                    {
+                        "x": "4682",
+                        "y": "7447",
+                        "value": "163.15247"
+                    }
+                ]
+            },
+            {
+                "name": "Footprint_Axis1_X",
+                "description": "Elliptical footprint major semi-axis value, antenna X polarisation",
+                "geophysicalUnit": "km",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "expectedPixels": [
+                    {
+                        "x": "4682",
+                        "y": "7447",
+                        "value": "28.862"
+                    }
+                ]
+            },
+            {
+                "name": "Footprint_Axis1_Y",
+                "description": "Elliptical footprint major semi-axis value, antenna Y polarisation",
+                "geophysicalUnit": "km",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "expectedPixels": [
+                    {
+                        "x": "2977",
+                        "y": "5726",
+                        "value": "28.35083"
+                    }
+                ]
+            },
+            {
+                "name": "Footprint_Axis2_X",
+                "description": "Elliptical footprint minor semi-axis value, antenna X polarisation",
+                "geophysicalUnit": "km",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "expectedPixels": [
+                    {
+                        "x": "2977",
+                        "y": "5726",
+                        "value": "20.67871"
+                    }
+                ]
+            },
+            {
+                "name": "Footprint_Axis2_Y",
+                "description": "Elliptical footprint minor semi-axis value, antenna Y polarisation",
+                "geophysicalUnit": "km",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "expectedPixels": [
+                    {
+                        "x": "2977",
+                        "y": "5726",
+                        "value": "20.68634"
+                    }
+                ]
+            },
+            {
+                "name": "Flags_X",
+                "description": "L1c flags applicable to the pixel for this particular integration time, antenna X polarisation",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "expectedPixels": [
+                    {
+                        "x": "2977",
+                        "y": "5726",
+                        "value": "3124"
+                    }
+                ]
+            },
+            {
+                "name": "Flags_Y",
+                "description": "L1c flags applicable to the pixel for this particular integration time, antenna Y polarisation",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "expectedPixels": [
+                    {
+                        "x": "2977",
+                        "y": "5726",
+                        "value": "3125"
+                    },
+                    {
+                        "x": "10236",
+                        "y": "6920",
+                        "value": "NaN"
+                    }
+
+                ]
+            },
+            {
+                "name": "Land_Sea_Mask",
+                "description": "Flag indicating Land/Sea USGS content, Coastline distance, and Ice content",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "expectedPixels": [
+                    {
+                        "x": "10236",
+                        "y": "6920",
+                        "value": "129"
+                    }
+                ]
+            }
+        ]
+    }
+}
