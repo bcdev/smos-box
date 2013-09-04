@@ -1,11 +1,11 @@
 {
-    "id": "SM_OPER_MIR_OSUDP2_20100208T050001",
+    "id": "SM_OPER_MIR_OSUDP2_20120514T181819",
     "decodeQualification": "intended",
     "expectedContent": {
         "sceneWidth": 16384,
         "sceneHeight": 8192,
-        "startTime": "08-FEB-2010 05:00:01.000000",
-        "endTime": "08-FEB-2010 05:54:03.000000",
+        "startTime": "14-MAY-2012 18:18:19.000000",
+        "endTime": "14-MAY-2012 19:11:37.000000",
         "geoCoding": {
             "coordinates": [
                 {
@@ -135,6 +135,31 @@
                         "name": "FG_CTRL_QUALITY_ACARD",
                         "value": 4194304,
                         "description": "Flags raised if at least one critical flag was raised during Acard retrieval"
+                    },
+                    {
+                        "name": "FG_CTRL_USED_FARATEC",
+                        "value": 8388608,
+                        "description": "Flags raised if TEC for this grid point was obtained from AUX_FARA_x"
+                    },
+                    {
+                        "name": "FG_CTRL_POOR_GEOPHYS",
+                        "value": 16777216,
+                        "description": "Flags set if this grid point probably has poor quality SSS due to geophysical problems (outliers, glint, etc), or FG_CTRL_VALID is false"
+                    },
+                    {
+                        "name": "FG_CTRL_POOR_RETRIEVAL",
+                        "value": 33554432,
+                        "description": "Flags set if this grid point poor SSS due to retrieval failure, poor quality convergence, or FG_CTRL_VALID is false. Poor SSS quality retrieval may be caused by retrieval problems"
+                    },
+                    {
+                        "name": "FG_CTRL_SUSPECT_RFI",
+                        "value": 67108864,
+                        "description": "Grid point is suspected of being contaminated by RFI. Flag set if Dg_RFI_L2 / Dg_num_meas_L1 > Tg_num_RFI_max"
+                    },
+                    {
+                        "name": "FG_CTRL_RETRIEV_FAIL",
+                        "value": 1073741824,
+                        "description": "Flags raised if iterative scheme returns an error"
                     }
                 ]
             },
@@ -308,14 +333,14 @@
                 "spectralBandwidth": "0.0",
                 "expectedPixels": [
                     {
-                        "x": 12164,
-                        "y": 5315,
-                        "value": "NaN"
+                        "x": 1026,
+                        "y": 7034,
+                        "value": 30.535654
                     },
                     {
                         "x": 854,
                         "y": 1459,
-                        "value": 5.03995
+                        "value": "NaN"
                     }
                 ]
             },
@@ -329,9 +354,9 @@
                 "spectralBandwidth": "0.0",
                 "expectedPixels": [
                     {
-                        "x": 1103,
-                        "y": 1523,
-                        "value": 39.819233
+                        "x": 155,
+                        "y": 6574,
+                        "value": 0.8991004
                     },
                     {
                         "x": 4765,
@@ -350,9 +375,9 @@
                 "spectralBandwidth": "0.0",
                 "expectedPixels": [
                     {
-                        "x": 691,
-                        "y": 1765,
-                        "value": 3.2250192
+                        "x": 173,
+                        "y": 5987,
+                        "value": 33.902134
                     },
                     {
                         "x": 9011,
@@ -371,9 +396,9 @@
                 "spectralBandwidth": "0.0",
                 "expectedPixels": [
                     {
-                        "x": 1119,
-                        "y": 1927,
-                        "value": 1.0878307
+                        "x": 80,
+                        "y": 5706,
+                        "value": 2.100847
                     },
                     {
                         "x": 2593,
@@ -392,9 +417,9 @@
                 "spectralBandwidth": "0.0",
                 "expectedPixels": [
                     {
-                        "x": 833,
-                        "y": 2525,
-                        "value": 14.716526
+                        "x": 3,
+                        "y": 5628,
+                        "value": 37.161144
                     },
                     {
                         "x": 12388,
@@ -413,9 +438,9 @@
                 "spectralBandwidth": "0.0",
                 "expectedPixels": [
                     {
-                        "x": 387,
-                        "y": 3342,
-                        "value": 0.39346683
+                        "x": 0,
+                        "y": 5198,
+                        "value": 1.960998
                     },
                     {
                         "x": 5577,
@@ -433,9 +458,9 @@
                 "spectralBandwidth": "0.0",
                 "expectedPixels": [
                     {
-                        "x": 354,
-                        "y": 4335,
-                        "value": 56.024864
+                        "x": 15270,
+                        "y": 1446,
+                        "value": 43.777725
                     },
                     {
                         "x": 5364,
@@ -453,9 +478,9 @@
                 "spectralBandwidth": "0.0",
                 "expectedPixels": [
                     {
-                        "x": 101,
-                        "y": 4246,
-                        "value": 0.89472073
+                        "x": 14825,
+                        "y": 1663,
+                        "value": 0.8070076
                     },
                     {
                         "x": 15916,
@@ -474,9 +499,9 @@
                 "spectralBandwidth": "0.0",
                 "expectedPixels": [
                     {
-                        "x": 179,
-                        "y": 5965,
-                        "value": 6.985934
+                        "x": 15537,
+                        "y": 2003,
+                        "value": 8.213903
                     },
                     {
                         "x": 3800,
@@ -495,9 +520,9 @@
                 "spectralBandwidth": "0.0",
                 "expectedPixels": [
                     {
-                        "x": 18,
-                        "y": 6407,
-                        "value": 2.000001
+                        "x": 15266,
+                        "y": 2597,
+                        "value": 2.8284285
                     },
                     {
                         "x": 5867,
@@ -516,9 +541,9 @@
                 "spectralBandwidth": "0.0",
                 "expectedPixels": [
                     {
-                        "x": 16287,
-                        "y": 5075,
-                        "value": 26.436523
+                        "x": 15749,
+                        "y": 2810,
+                        "value": 23.22763
                     },
                     {
                         "x": 9415,
@@ -537,9 +562,9 @@
                 "spectralBandwidth": "0.0",
                 "expectedPixels": [
                     {
-                        "x": 16344,
-                        "y": 6388,
-                        "value": 0.9998838
+                        "x": 15573,
+                        "y": 3654,
+                        "value": 1.000001
                     },
                     {
                         "x": 15977,
@@ -558,9 +583,9 @@
                 "spectralBandwidth": "0.0",
                 "expectedPixels": [
                     {
-                        "x": 15832,
-                        "y": 6457,
-                        "value": 80.2473
+                        "x": 15961,
+                        "y": 3878,
+                        "value": 77.213104
                     },
                     {
                         "x": 1817,
@@ -579,9 +604,9 @@
                 "spectralBandwidth": "0.0",
                 "expectedPixels": [
                     {
-                        "x": 15461,
-                        "y": 7015,
-                        "value": 0.82262653
+                        "x": 15803,
+                        "y": 4679,
+                        "value": 0.7433829
                     },
                     {
                         "x": 8287,
@@ -600,9 +625,9 @@
                 "spectralBandwidth": "0.0",
                 "expectedPixels": [
                     {
-                        "x": 16143,
-                        "y": 7127,
-                        "value": 121.54037
+                        "x": 7384,
+                        "y": 4759,
+                        "value": "NaN"
                     },
                     {
                         "x": 236,
@@ -621,9 +646,9 @@
                 "spectralBandwidth": "0.0",
                 "expectedPixels": [
                     {
-                        "x": 1569,
-                        "y": 1406,
-                        "value": 2.6485667
+                        "x": 1149,
+                        "y": 8133,
+                        "value": "NaN"
                     },
                     {
                         "x": 4862,
@@ -642,9 +667,9 @@
                 "spectralBandwidth": "0.0",
                 "expectedPixels": [
                     {
-                        "x": 946,
-                        "y": 1824,
-                        "value": 83.90442
+                        "x": 13165,
+                        "y": 6032,
+                        "value": "NaN"
                     },
                     {
                         "x": 13671,
@@ -663,9 +688,9 @@
                 "spectralBandwidth": "0.0",
                 "expectedPixels": [
                     {
-                        "x": 553,
-                        "y": 2357,
-                        "value": 0.9025195
+                        "x": 4073,
+                        "y": 4356,
+                        "value": "NaN"
                     },
                     {
                         "x": 10010,
@@ -684,9 +709,9 @@
                 "spectralBandwidth": "0.0",
                 "expectedPixels": [
                     {
-                        "x": 884,
-                        "y": 2885,
-                        "value": 95.19336
+                        "x": 9058,
+                        "y": 1236,
+                        "value": "NaN"
                     },
                     {
                         "x": 7790,
@@ -705,9 +730,9 @@
                 "spectralBandwidth": "0.0",
                 "expectedPixels": [
                     {
-                        "x": 230,
-                        "y": 3705,
-                        "value": 0.80409
+                        "x": 1563,
+                        "y": 6961,
+                        "value": "NaN"
                     },
                     {
                         "x": 1575,
@@ -725,9 +750,9 @@
                 "spectralBandwidth": "0.0",
                 "expectedPixels": [
                     {
-                        "x": 579,
-                        "y": 3930,
-                        "value": 430137
+                        "x": 7455,
+                        "y": 5540,
+                        "value": "NaN"
                     },
                     {
                         "x": 7619,
@@ -745,14 +770,14 @@
                 "spectralBandwidth": "0.0",
                 "expectedPixels": [
                     {
-                        "x": 525,
-                        "y": 3754,
-                        "value": 491579
+                        "x": 14212,
+                        "y": 4915,
+                        "value": "NaN"
                     },
                     {
                         "x": 15762,
                         "y": 3121,
-                        "value": "NaN"
+                        "value": 425985.0
                     }
                 ]
             },
@@ -765,9 +790,9 @@
                 "spectralBandwidth": "0.0",
                 "expectedPixels": [
                     {
-                        "x": 110,
-                        "y": 4042,
-                        "value": 4331553
+                        "x": 1439,
+                        "y": 4363,
+                        "value": "NaN"
                     },
                     {
                         "x": 12049,
@@ -785,9 +810,9 @@
                 "spectralBandwidth": "0.0",
                 "expectedPixels": [
                     {
-                        "x": 346,
-                        "y": 5519,
-                        "value": 4331553
+                        "x": 15993,
+                        "y": 1523,
+                        "value": "NaN"
                     },
                     {
                         "x": 7543,
@@ -805,9 +830,9 @@
                 "spectralBandwidth": "0.0",
                 "expectedPixels": [
                     {
-                        "x": 53,
-                        "y": 5881,
-                        "value": 458
+                        "x": 3753,
+                        "y": 5306,
+                        "value": "NaN"
                     },
                     {
                         "x": 10480,
@@ -825,9 +850,9 @@
                 "spectralBandwidth": "0.0",
                 "expectedPixels": [
                     {
-                        "x": 16309,
-                        "y": 5116,
-                        "value": 90
+                        "x": 8708,
+                        "y": 4646,
+                        "value": "NaN"
                     },
                     {
                         "x": 6485,
@@ -845,9 +870,9 @@
                 "spectralBandwidth": "0.0",
                 "expectedPixels": [
                     {
-                        "x": 16123,
-                        "y": 6031,
-                        "value": 706
+                        "x": 4571,
+                        "y": 7280,
+                        "value": "NaN"
                     },
                     {
                         "x": 15493,
@@ -865,9 +890,9 @@
                 "spectralBandwidth": "0.0",
                 "expectedPixels": [
                     {
-                        "x": 16075,
-                        "y": 6436,
-                        "value": 591
+                        "x": 12420,
+                        "y": 2688,
+                        "value": "NaN"
                     },
                     {
                         "x": 9184,
@@ -885,9 +910,9 @@
                 "spectralBandwidth": "0.0",
                 "expectedPixels": [
                     {
-                        "x": 15440,
-                        "y": 6823,
-                        "value": 844
+                        "x": 13586,
+                        "y": 7133,
+                        "value": "NaN"
                     },
                     {
                         "x": 1771,
@@ -905,9 +930,9 @@
                 "spectralBandwidth": "0.0",
                 "expectedPixels": [
                     {
-                        "x": 16089,
-                        "y": 7269,
-                        "value": 808
+                        "x": 5634,
+                        "y": 6669,
+                        "value": "NaN"
                     },
                     {
                         "x": 2984,
@@ -925,9 +950,9 @@
                 "spectralBandwidth": "0.0",
                 "expectedPixels": [
                     {
-                        "x": 946,
-                        "y": 1479,
-                        "value": 1000
+                        "x": 9706,
+                        "y": 4498,
+                        "value": "NaN"
                     },
                     {
                         "x": 3370,
@@ -945,9 +970,9 @@
                 "spectralBandwidth": "0.0",
                 "expectedPixels": [
                     {
-                        "x": 16003,
-                        "y": 7320,
-                        "value": 999
+                        "x": 6722,
+                        "y": 7075,
+                        "value": "NaN"
                     },
                     {
                         "x": 11497,
@@ -1045,9 +1070,9 @@
                 "spectralBandwidth": "0.0",
                 "expectedPixels": [
                     {
-                        "x": 15825,
-                        "y": 6571,
-                        "value": 11
+                        "x": 13787,
+                        "y": 2455,
+                        "value": "NaN"
                     },
                     {
                         "x": 9703,
@@ -1065,9 +1090,9 @@
                 "spectralBandwidth": "0.0",
                 "expectedPixels": [
                     {
-                        "x": 16059,
-                        "y": 5798,
-                        "value": 5
+                        "x": 12736,
+                        "y": 224,
+                        "value": "NaN"
                     },
                     {
                         "x": 3550,
@@ -1085,9 +1110,9 @@
                 "spectralBandwidth": "0.0",
                 "expectedPixels": [
                     {
-                        "x": 16358,
-                        "y": 5522,
-                        "value": 3
+                        "x": 5233,
+                        "y": 1587,
+                        "value": "NaN"
                     },
                     {
                         "x": 4628,
@@ -1105,9 +1130,9 @@
                 "spectralBandwidth": "0.0",
                 "expectedPixels": [
                     {
-                        "x": 16380,
-                        "y": 4642,
-                        "value": 7
+                        "x": 16343,
+                        "y": 618,
+                        "value": "NaN"
                     },
                     {
                         "x": 13417,
@@ -1177,8 +1202,8 @@
                 ]
             },
             {
-                "name": "Dg_eaf_fov",
-                "description": "Number of valid measurements with EAF_FOV flag raised",
+                "name": "Dg_RFI_L2",
+                "description": "Number of measurements suspected of being contaminated by RFI",
                 "noDataValue": "0.0",
                 "noDataValueUsed": "true",
                 "spectralWavelength": "0.0",
@@ -1427,7 +1452,7 @@
                     {
                         "x": 13829,
                         "y": 557,
-                        "value": "NaN"
+                        "value": 8601.0
                     },
                     {
                         "x": 13703,
@@ -1472,7 +1497,7 @@
                     {
                         "x": 15923,
                         "y": 5575,
-                        "value": "NaN"
+                        "value": 39.0
                     }
                 ]
             },
@@ -1699,6 +1724,36 @@
                 "description": "Flags raised if at least one critical flag was raised during Acard retrieval"
             },
             {
+                "name": "Control_Flags_1_FG_CTRL_USED_FARATEC",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "52,182,192",
+                "description": "Flags raised if TEC for this grid point was obtained from AUX_FARA_x"
+            },
+            {
+                "name": "Control_Flags_1_FG_CTRL_POOR_GEOPHYS",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "46,90,194",
+                "description": "Flags set if this grid point probably has poor quality SSS due to geophysical problems (outliers, glint, etc), or FG_CTRL_VALID is false"
+            },
+            {
+                "name": "Control_Flags_1_FG_CTRL_POOR_RETRIEVAL",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "0,15,39",
+                "description": "Flags set if this grid point poor SSS due to retrieval failure, poor quality convergence, or FG_CTRL_VALID is false. Poor SSS quality retrieval may be caused by retrieval problems"
+            },
+            {
+                "name": "Control_Flags_1_FG_CTRL_SUSPECT_RFI",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "160,208,135",
+                "description": "Grid point is suspected of being contaminated by RFI. Flag set if Dg_RFI_L2 / Dg_num_meas_L1 > Tg_num_RFI_max"
+            },
+            {
+                "name": "Control_Flags_1_FG_CTRL_RETRIEV_FAIL",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "55,46,12",
+                "description": "Flags raised if iterative scheme returns an error"
+            },
+            {
                 "name": "Control_Flags_2_FG_CTRL_SEL_GP",
                 "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
                 "color": "246,182,21",
@@ -1835,6 +1890,36 @@
                 "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
                 "color": "145,13,33",
                 "description": "Flags raised if at least one critical flag was raised during Acard retrieval"
+            },
+            {
+                "name": "Control_Flags_2_FG_CTRL_USED_FARATEC",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "52,182,192",
+                "description": "Flags raised if TEC for this grid point was obtained from AUX_FARA_x"
+            },
+            {
+                "name": "Control_Flags_2_FG_CTRL_POOR_GEOPHYS",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "46,90,194",
+                "description": "Flags set if this grid point probably has poor quality SSS due to geophysical problems (outliers, glint, etc), or FG_CTRL_VALID is false"
+            },
+            {
+                "name": "Control_Flags_2_FG_CTRL_POOR_RETRIEVAL",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "0,15,39",
+                "description": "Flags set if this grid point poor SSS due to retrieval failure, poor quality convergence, or FG_CTRL_VALID is false. Poor SSS quality retrieval may be caused by retrieval problems"
+            },
+            {
+                "name": "Control_Flags_2_FG_CTRL_SUSPECT_RFI",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "160,208,135",
+                "description": "Grid point is suspected of being contaminated by RFI. Flag set if Dg_RFI_L2 / Dg_num_meas_L1 > Tg_num_RFI_max"
+            },
+            {
+                "name": "Control_Flags_2_FG_CTRL_RETRIEV_FAIL",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "55,46,12",
+                "description": "Flags raised if iterative scheme returns an error"
             },
             {
                 "name": "Control_Flags_3_FG_CTRL_SEL_GP",
@@ -1975,6 +2060,36 @@
                 "description": "Flags raised if at least one critical flag was raised during Acard retrieval"
             },
             {
+                "name": "Control_Flags_3_FG_CTRL_USED_FARATEC",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "52,182,192",
+                "description": "Flags raised if TEC for this grid point was obtained from AUX_FARA_x"
+            },
+            {
+                "name": "Control_Flags_3_FG_CTRL_POOR_GEOPHYS",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "46,90,194",
+                "description": "Flags set if this grid point probably has poor quality SSS due to geophysical problems (outliers, glint, etc), or FG_CTRL_VALID is false"
+            },
+            {
+                "name": "Control_Flags_3_FG_CTRL_POOR_RETRIEVAL",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "0,15,39",
+                "description": "Flags set if this grid point poor SSS due to retrieval failure, poor quality convergence, or FG_CTRL_VALID is false. Poor SSS quality retrieval may be caused by retrieval problems"
+            },
+            {
+                "name": "Control_Flags_3_FG_CTRL_SUSPECT_RFI",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "160,208,135",
+                "description": "Grid point is suspected of being contaminated by RFI. Flag set if Dg_RFI_L2 / Dg_num_meas_L1 > Tg_num_RFI_max"
+            },
+            {
+                "name": "Control_Flags_3_FG_CTRL_RETRIEV_FAIL",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "55,46,12",
+                "description": "Flags raised if iterative scheme returns an error"
+            },
+            {
                 "name": "Control_Flags_4_FG_CTRL_SEL_GP",
                 "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
                 "color": "246,182,21",
@@ -2111,6 +2226,36 @@
                 "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
                 "color": "145,13,33",
                 "description": "Flags raised if at least one critical flag was raised during Acard retrieval"
+            },
+            {
+                "name": "Control_Flags_4_FG_CTRL_USED_FARATEC",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "52,182,192",
+                "description": "Flags raised if TEC for this grid point was obtained from AUX_FARA_x"
+            },
+            {
+                "name": "Control_Flags_4_FG_CTRL_POOR_GEOPHYS",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "46,90,194",
+                "description": "Flags set if this grid point probably has poor quality SSS due to geophysical problems (outliers, glint, etc), or FG_CTRL_VALID is false"
+            },
+            {
+                "name": "Control_Flags_4_FG_CTRL_POOR_RETRIEVAL",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "0,15,39",
+                "description": "Flags set if this grid point poor SSS due to retrieval failure, poor quality convergence, or FG_CTRL_VALID is false. Poor SSS quality retrieval may be caused by retrieval problems"
+            },
+            {
+                "name": "Control_Flags_4_FG_CTRL_SUSPECT_RFI",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "160,208,135",
+                "description": "Grid point is suspected of being contaminated by RFI. Flag set if Dg_RFI_L2 / Dg_num_meas_L1 > Tg_num_RFI_max"
+            },
+            {
+                "name": "Control_Flags_4_FG_CTRL_RETRIEV_FAIL",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "55,46,12",
+                "description": "Flags raised if iterative scheme returns an error"
             },
             {
                 "name": "Science_Flags_1_FG_SC_LAND_SEA_COAST1",
@@ -2684,11 +2829,11 @@
         "metadata": [
             {
                 "path": "Variable_Header/Specific_Product_Header/List_of_Data_Sets/Data_Set/Num_DSR",
-                "value": "0000131337"
+                "value": "0000133839"
             },
             {
                 "path": "Variable_Header/Main_Product_Header/Orbit_Information/Abs_Orbit",
-                "value": "+01412"
+                "value": "+13305"
             }
         ]
     }

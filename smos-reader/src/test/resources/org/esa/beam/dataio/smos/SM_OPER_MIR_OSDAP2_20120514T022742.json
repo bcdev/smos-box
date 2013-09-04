@@ -654,9 +654,9 @@
                 "spectralBandwidth": "0.0",
                 "expectedPixels": [
                     {
-                        "x": 5634,
-                        "y": 6669,
-                        "value": "NaN"
+                        "x": 842,
+                        "y": 7051,
+                        "value": 55.61116
                     },
                     {
                         "x": 2984,
@@ -674,9 +674,9 @@
                 "spectralBandwidth": "0.0",
                 "expectedPixels": [
                     {
-                        "x": 9706,
-                        "y": 4498,
-                        "value": "NaN"
+                        "x": 2391,
+                        "y": 1867,
+                        "value": 9.161064
                     },
                     {
                         "x": 3370,
@@ -694,9 +694,9 @@
                 "spectralBandwidth": "0.0",
                 "expectedPixels": [
                     {
-                        "x": 6722,
-                        "y": 7075,
-                        "value": "NaN"
+                        "x": 2326,
+                        "y": 2557,
+                        "value": 1.746411
                     },
                     {
                         "x": 11497,
@@ -714,9 +714,9 @@
                 "spectralBandwidth": "0.0",
                 "expectedPixels": [
                     {
-                        "x": 4875,
-                        "y": 8132,
-                        "value": "NaN"
+                        "x": 2157,
+                        "y": 2803,
+                        "value": 96.91502
                     },
                     {
                         "x": 8965,
@@ -734,9 +734,9 @@
                 "spectralBandwidth": "0.0",
                 "expectedPixels": [
                     {
-                        "x": 3191,
-                        "y": 4596,
-                        "value": "NaN"
+                        "x": 2448,
+                        "y": 3347,
+                        "value": 5.000001
                     },
                     {
                         "x": 7504,

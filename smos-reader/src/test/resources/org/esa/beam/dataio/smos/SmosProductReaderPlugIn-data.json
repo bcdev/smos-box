@@ -39,6 +39,11 @@
             "id": "SM_OPER_MIR_OSUDP2_20100208T050001",
             "relativePath": "SMOS/2010/SM_OPER_MIR_OSUDP2_20100208T050001_20100208T055403_311_001_1/SM_OPER_MIR_OSUDP2_20100208T050001_20100208T055403_311_001_1.HDR",
             "description": "SMOS OSUDP2,  schema version 200"
+        },
+        {
+            "id": "SM_OPER_MIR_OSUDP2_20120514T181819",
+            "relativePath": "SMOS/SMOS_DD_20120514/SM_OPER_MIR_OSUDP2_20120514T181819_20120514T191137_550_001_1.zip",
+            "description": "SMOS OSUDP2,  schema version 300"
         }
     ]
 }
