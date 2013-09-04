@@ -13,6 +13,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import ucar.nc2.util.DiskCache;
 
 import java.awt.*;
 import java.awt.geom.Area;
@@ -35,6 +36,10 @@ public class ConverterOpAcceptanceTest {
 
     @Before
     public void setUp() {
+        // need to move NetCDF cache dir to a directory that gets deleted  tb 2013-09-04
+        DiskCache.setRootDirectory(targetDirectory.getAbsolutePath());
+        DiskCache.setCachePolicy(true);
+
         GPF.getDefaultInstance().getOperatorSpiRegistry().addOperatorSpi(spi);
     }
 

@@ -210,8 +210,9 @@ public class ConverterOp extends Operator implements Output {
     }
 
     private void convertFile(File inputFile) {
+        Product product = null;
         try {
-            final Product product = ProductIO.readProduct(inputFile);
+            product = ProductIO.readProduct(inputFile);
             if (product != null) {
                 convertProduct(product);
             } else {
@@ -220,6 +221,10 @@ public class ConverterOp extends Operator implements Output {
         } catch (Exception e) {
             getLogger().severe("Failed to convert file: " + inputFile.getAbsolutePath());
             getLogger().severe(e.getMessage());
+        } finally {
+           if (product != null) {
+               product.dispose();
+           }
         }
     }
 
