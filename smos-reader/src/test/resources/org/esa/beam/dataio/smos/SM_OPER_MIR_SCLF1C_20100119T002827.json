@@ -1,0 +1,1097 @@
+{
+    "id": "SM_OPER_MIR_SCLF1C_20100119T002827",
+    "decodeQualification": "intended",
+    "expectedContent": {
+        "sceneWidth": 16384,
+        "sceneHeight": 8192,
+        "startTime": "19-JAN-2010 00:28:27.000000",
+        "endTime": "19-JAN-2010 01:22:26.000000",
+        "geoCoding": {
+            "coordinates": [
+                {
+                    "x": 7066.659,
+                    "y": 4403.7256,
+                    "lat": -6.7615485,
+                    "lon": -24.726727
+                }
+            ],
+            "reverseAccuracy": 0.01
+        },
+        "flagCodings": [
+            {
+                "name": "Flags",
+                "samples": [
+                    {
+                        "name": "POL_FLAG_1",
+                        "value": 1,
+                        "description": "Flag indicating antenna polarisation mode."
+                    },
+                    {
+                        "name": "POL_FLAG_2",
+                        "value": 2,
+                        "description": "Flag indicating antenna polarisation mode."
+                    },
+                    {
+                        "name": "SUN_FOV",
+                        "value": 4,
+                        "description": "Direct  Sun  correction  has  been  performed  during  image reconstruction of this pixel"
+                    },
+                    {
+                        "name": "SUN_GLINT_FOV",
+                        "value": 8,
+                        "description": "Reflected  Sun  correction  has  been  performed  during  image reconstruction of this pixel"
+                    },
+                    {
+                        "name": "MOON_GLINT_FOV",
+                        "value": 16,
+                        "description": "Direct  Moon  correction  has  been  performed  during  image reconstruction of this pixel"
+                    },
+                    {
+                        "name": "SINGLE_SNAPSHOT",
+                        "value": 32
+                    },
+                    {
+                        "name": "FTT",
+                        "value": 64,
+                        "description": "Flat Target  Transformation  has  been  performed  during  image reconstruction of this pixel"
+                    },
+                    {
+                        "name": "SUN_POINT",
+                        "value": 128,
+                        "description": "Pixel is located in a zone where a Sun alias was reconstructed (after Sun removal, measurement may be degraded)"
+                    },
+                    {
+                        "name": "SUN_GLINT_AREA",
+                        "value": 256,
+                        "description": "Pixel is located in a zone where Sun reflection has been detected"
+                    },
+                    {
+                        "name": "MOON_POINT",
+                        "value": 512,
+                        "description": "Pixel  is  located  in a zone where a Moon alias was reconstructed (after Moon removal, measurement may be degraded)"
+                    },
+                    {
+                        "name": "AF_FOV",
+                        "value": 1024,
+                        "description": "Pixel is inside the exclusive zone of Alias free (delimited by the six aliased unit circles)"
+                    },
+                    {
+                        "name": "EAF_FOV",
+                        "value": 2048,
+                        "description": "Pixel is inside the Extended Alias free zone (obtained after removing sky aliases)"
+                    },
+                    {
+                        "name": "BORDER_FOV",
+                        "value": 4096,
+                        "description": "Pixel is close to the border delimiting the Extended Alias free zone"
+                    },
+                    {
+                        "name": "SUN_TAILS",
+                        "value": 8192,
+                        "description": "Pixel is located in the hexagonal alias directions centred on a Sun alias (if Sun is not removed, measurement may be degraded in these directions)"
+                    },
+                    {
+                        "name": "RFI_1",
+                        "value": 16384,
+                        "description": "Pixel is affected by RFI effects (as detected in the L1b processing)"
+                    },
+                    {
+                        "name": "RFI_2",
+                        "value": 32768,
+                        "description": "Pixel is flagged as RFI in the AUX_RFI file"
+                    }
+                ]
+            },
+            {
+                "name": "Land_Sea_Mask_Flags",
+                "samples": [
+                    {
+                        "name": "USGS_SEA_FLAG",
+                        "value": 1,
+                        "description": "Water fraction is above 95 percent (1); below 95 percent (0)"
+                    },
+                    {
+                        "name": "USGS_LAND_FLAG",
+                        "value": 2,
+                        "description": "Water fraction is below 10 percent (1); above 10 percent (0)"
+                    },
+                    {
+                        "name": "USGS_MIXED_FLAG",
+                        "value": 4,
+                        "description": "Water fraction is above 10 and below 95 percent (1); below 10 or above 95 percent (0)"
+                    },
+                    {
+                        "name": "200_KM_COASTAL_FLAG",
+                        "value": 8,
+                        "description": "Distance to coastline is less than 200 km (1); greater than 200 km (0)"
+                    },
+                    {
+                        "name": "100_KM_COASTAL_FLAG",
+                        "value": 16,
+                        "description": "Distance to coastline is less than 100 km (1); greater than 100 km (0)"
+                    },
+                    {
+                        "name": "40_KM_COASTAL_FLAG",
+                        "value": 32,
+                        "description": "Distance to coastline is less than 40 km (1); greater than 40 km (0)"
+                    },
+                    {
+                        "name": "MIN_SEA_ICE_FLAG",
+                        "value": 64,
+                        "description": "Sea ice is present for all months (1); is not present for all months (0)"
+                    },
+                    {
+                        "name": "MAX_SEA_ICE_FLAG",
+                        "value": 128,
+                        "description": "Sea ice is present for any months (1); is not present for any months (0)"
+                    }
+                ]
+            }
+        ],
+        "bands": [
+            {
+                "name": "BT_Value_X",
+                "description": "Brightness temperature measurement over current Earth fixed grid point, obtained by DFT interpolation from L1b data, antenna X polarisation",
+                "geophysicalUnit": "K",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 5842,
+                        "y": 456,
+                        "value": 185.21974
+                    },
+                    {
+                        "x": 854,
+                        "y": 1459,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "BT_Value_Y",
+                "description": "Brightness temperature measurement over current Earth fixed grid point, obtained by DFT interpolation from L1b data, antenna Y polarisation",
+                "geophysicalUnit": "K",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 7044,
+                        "y": 215,
+                        "value": 264.1114
+                    },
+                    {
+                        "x": 4765,
+                        "y": 2104,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "BT_Value_XY_Real",
+                "description": "Brightness temperature measurement over current Earth fixed grid point, obtained by DFT interpolation from L1b data, antenna XY polarisation, real value",
+                "geophysicalUnit": "K",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 7507,
+                        "y": 540,
+                        "value": -3.912865
+                    },
+                    {
+                        "x": 9011,
+                        "y": 6105,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "BT_Value_XY_Imag",
+                "description": "Brightness temperature measurement over current Earth fixed grid point, obtained by DFT interpolation from L1b data, antenna XY polarisation, imaginary value",
+                "geophysicalUnit": "K",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 8801,
+                        "y": 489,
+                        "value": 5.711761
+                    },
+                    {
+                        "x": 2593,
+                        "y": 5456,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Pixel_Radiometric_Accuracy_X",
+                "description": "Error accuracy measurement in the Brightness Temperature, antenna X polarisation",
+                "geophysicalUnit": "K",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 8505,
+                        "y": 7483,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 12388,
+                        "y": 3969,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Pixel_Radiometric_Accuracy_Y",
+                "description": "Error accuracy measurement in the Brightness Temperature, antenna Y polarisation",
+                "geophysicalUnit": "K",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 15577,
+                        "y": 3980,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 5577,
+                        "y": 7368,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Pixel_Radiometric_Accuracy_XY",
+                "description": "Error accuracy measurement in the Brightness Temperature, antenna XY polarisation",
+                "geophysicalUnit": "K",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 163,
+                        "y": 3856,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 5364,
+                        "y": 1614,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Incidence_Angle_X",
+                "description": "Incidence angle value corresponding to the measured BT value over current Earth fixed grid point, antenna X polarisation",
+                "geophysicalUnit": "deg",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 4475,
+                        "y": 353,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 15916,
+                        "y": 4953,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Incidence_Angle_Y",
+                "description": "Incidence angle value corresponding to the measured BT value over current Earth fixed grid point, antenna Y polarisation",
+                "geophysicalUnit": "deg",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 9377,
+                        "y": 5871,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 3800,
+                        "y": 4075,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Incidence_Angle_XY",
+                "description": "Incidence angle value corresponding to the measured BT value over current Earth fixed grid point, antenna XY polarisation",
+                "geophysicalUnit": "deg",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 5260,
+                        "y": 5919,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 5867,
+                        "y": 4081,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Azimuth_Angle_X",
+                "description": "Azimuth angle value corresponding to the measured BT value over current Earth fixed grid point, antenna X polarisation",
+                "geophysicalUnit": "deg",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 6600,
+                        "y": 3623,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 9415,
+                        "y": 752,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Azimuth_Angle_Y",
+                "description": "Azimuth angle value corresponding to the measured BT value over current Earth fixed grid point, antenna Y polarisation",
+                "geophysicalUnit": "deg",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 10571,
+                        "y": 129,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 15977,
+                        "y": 3008,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Azimuth_Angle_XY",
+                "description": "Azimuth angle value corresponding to the measured BT value over current Earth fixed grid point, antenna XY polarisation",
+                "geophysicalUnit": "deg",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 15566,
+                        "y": 7752,
+                        "value": 111.934204
+                    },
+                    {
+                        "x": 1817,
+                        "y": 3701,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Faraday_Rotation_Angle_X",
+                "description": "Faraday rotation angle value corresponding to the measured BT value over current Earth fixed grid point, antenna X polarisation",
+                "geophysicalUnit": "deg",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 9353,
+                        "y": 4607,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 8287,
+                        "y": 4272,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Faraday_Rotation_Angle_Y",
+                "description": "Faraday rotation angle value corresponding to the measured BT value over current Earth fixed grid point, antenna Y polarisation",
+                "geophysicalUnit": "deg",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 7384,
+                        "y": 4759,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 236,
+                        "y": 3478,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Faraday_Rotation_Angle_XY",
+                "description": "Faraday rotation angle value corresponding to the measured BT value over current Earth fixed grid point, antenna XY polarisation",
+                "geophysicalUnit": "deg",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 1149,
+                        "y": 8133,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 4862,
+                        "y": 6103,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Geometric_Rotation_Angle_X",
+                "description": "Geometric rotation angle value corresponding to the measured BT value over current Earth fixed grid point, antenna X polarisation",
+                "geophysicalUnit": "deg",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 13165,
+                        "y": 6032,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 13671,
+                        "y": 7745,
+                        "value": 19.940186
+                    }
+                ]
+            },
+            {
+                "name": "Geometric_Rotation_Angle_Y",
+                "description": "Geometric rotation angle value corresponding to the measured BT value over current Earth fixed grid point, antenna Y polarisation",
+                "geophysicalUnit": "deg",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 4073,
+                        "y": 4356,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 10010,
+                        "y": 2130,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Geometric_Rotation_Angle_XY",
+                "description": "Geometric rotation angle value corresponding to the measured BT value over current Earth fixed grid point, antenna XY polarisation",
+                "geophysicalUnit": "deg",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 9058,
+                        "y": 1236,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 7790,
+                        "y": 4580,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Footprint_Axis1_X",
+                "description": "Elliptical footprint major semi-axis value, antenna X polarisation",
+                "geophysicalUnit": "km",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 1563,
+                        "y": 6961,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 1575,
+                        "y": 637,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Footprint_Axis1_Y",
+                "description": "Elliptical footprint major semi-axis value, antenna Y polarisation",
+                "geophysicalUnit": "km",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 7455,
+                        "y": 5540,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 7619,
+                        "y": 7333,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Footprint_Axis1_XY",
+                "description": "Elliptical footprint major semi-axis value, antenna XY polarisation",
+                "geophysicalUnit": "km",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 14212,
+                        "y": 4915,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 15762,
+                        "y": 3121,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Footprint_Axis2_X",
+                "description": "Elliptical footprint minor semi-axis value, antenna X polarisation",
+                "geophysicalUnit": "km",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 1439,
+                        "y": 4363,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 12049,
+                        "y": 4873,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Footprint_Axis2_Y",
+                "description": "Elliptical footprint minor semi-axis value, antenna Y polarisation",
+                "geophysicalUnit": "km",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 15993,
+                        "y": 1523,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 7543,
+                        "y": 2137,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Footprint_Axis2_XY",
+                "description": "Elliptical footprint minor semi-axis value, antenna XY polarisation",
+                "geophysicalUnit": "km",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 3753,
+                        "y": 5306,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 10480,
+                        "y": 3584,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Flags",
+                "description": "L1c flags applicable to the pixel for this particular integration time",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 8708,
+                        "y": 4646,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 6485,
+                        "y": 1751,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "BT_Value_H",
+                "description": "Brightness temperature measurement over current Earth fixed grid point, ground H polarisation",
+                "geophysicalUnit": "K",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 4571,
+                        "y": 7280,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 15493,
+                        "y": 4751,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "BT_Value_V",
+                "description": "Brightness temperature measurement over current Earth fixed grid point, ground V polarisation",
+                "geophysicalUnit": "K",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 12420,
+                        "y": 2688,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 9184,
+                        "y": 2382,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "BT_Value_HV_Real",
+                "description": "Brightness temperature measurement over current Earth fixed grid point, ground HV polarisation, real value",
+                "geophysicalUnit": "K",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 13586,
+                        "y": 7133,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 1771,
+                        "y": 7267,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "BT_Value_HV_Imag",
+                "description": "Brightness temperature measurement over current Earth fixed grid point, ground HV polarisation, imaginary value",
+                "geophysicalUnit": "K",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 5634,
+                        "y": 6669,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 2984,
+                        "y": 5672,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Pixel_Radiometric_Accuracy_H",
+                "description": "Error accuracy measurement in the Brightness Temperature, ground H polarisation",
+                "geophysicalUnit": "K",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 9706,
+                        "y": 4498,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 3370,
+                        "y": 2507,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Pixel_Radiometric_Accuracy_V",
+                "description": "Error accuracy measurement in the Brightness Temperature, ground V polarisation",
+                "geophysicalUnit": "K",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 6722,
+                        "y": 7075,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 11497,
+                        "y": 7352,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Pixel_Radiometric_Accuracy_HV",
+                "description": "Error accuracy measurement in the Brightness Temperature, ground HV polarisation",
+                "geophysicalUnit": "K",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 4875,
+                        "y": 8132,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 8965,
+                        "y": 956,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Stokes_1",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "false",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 3191,
+                        "y": 4596,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 7504,
+                        "y": 1055,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Stokes_2",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "false",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 13581,
+                        "y": 4692,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 1681,
+                        "y": 5543,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Stokes_3",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "false",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 11976,
+                        "y": 3867,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 2345,
+                        "y": 546,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Stokes_4",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "false",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 13787,
+                        "y": 2455,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 9703,
+                        "y": 7961,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Land_Sea_Mask",
+                "description": "Flag indicating Land/Sea USGS content, Coastline distance, and Ice content",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 12736,
+                        "y": 224,
+                        "value": 193.0
+                    },
+                    {
+                        "x": 3550,
+                        "y": 2018,
+                        "value": 10.0
+                    }
+                ]
+            }
+        ],
+        "masks": [
+            {
+                "name": "Flags_POL_FLAG_1",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "246,182,21",
+                "description": "Flag indicating antenna polarisation mode."
+            },
+            {
+                "name": "Flags_POL_FLAG_2",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "95,92,204",
+                "description": "Flag indicating antenna polarisation mode."
+            },
+            {
+                "name": "Flags_SUN_FOV",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "49,82,133",
+                "description": "Direct  Sun  correction  has  been  performed  during  image reconstruction of this pixel"
+            },
+            {
+                "name": "Flags_SUN_GLINT_FOV",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "169,175,146",
+                "description": "Reflected  Sun  correction  has  been  performed  during  image reconstruction of this pixel"
+            },
+            {
+                "name": "Flags_MOON_GLINT_FOV",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "156,188,14",
+                "description": "Direct  Moon  correction  has  been  performed  during  image reconstruction of this pixel"
+            },
+            {
+                "name": "Flags_SINGLE_SNAPSHOT",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "39,91,126"
+            },
+            {
+                "name": "Flags_FTT",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "214,25,160",
+                "description": "Flat Target  Transformation  has  been  performed  during  image reconstruction of this pixel"
+            },
+            {
+                "name": "Flags_SUN_POINT",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "178,13,207",
+                "description": "Pixel is located in a zone where a Sun alias was reconstructed (after Sun removal, measurement may be degraded)"
+            },
+            {
+                "name": "Flags_SUN_GLINT_AREA",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "208,249,67",
+                "description": "Pixel is located in a zone where Sun reflection has been detected"
+            },
+            {
+                "name": "Flags_MOON_POINT",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "106,109,115",
+                "description": "Pixel  is  located  in a zone where a Moon alias was reconstructed (after Moon removal, measurement may be degraded)"
+            },
+            {
+                "name": "Flags_AF_FOV",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "16,81,105",
+                "description": "Pixel is inside the exclusive zone of Alias free (delimited by the six aliased unit circles)"
+            },
+            {
+                "name": "Flags_EAF_FOV",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "171,1,243",
+                "description": "Pixel is inside the Extended Alias free zone (obtained after removing sky aliases)"
+            },
+            {
+                "name": "Flags_BORDER_FOV",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "238,203,217",
+                "description": "Pixel is close to the border delimiting the Extended Alias free zone"
+            },
+            {
+                "name": "Flags_SUN_TAILS",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "250,231,95",
+                "description": "Pixel is located in the hexagonal alias directions centred on a Sun alias (if Sun is not removed, measurement may be degraded in these directions)"
+            },
+            {
+                "name": "Flags_RFI_1",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "240,108,99",
+                "description": "Pixel is affected by RFI effects (as detected in the L1b processing)"
+            },
+            {
+                "name": "Flags_RFI_2",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "115,141,245",
+                "description": "Pixel is flagged as RFI in the AUX_RFI file"
+            },
+            {
+                "name": "Land_Sea_Mask_USGS_SEA_FLAG",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "0,0,255",
+                "description": "Water fraction is above 95 percent (1); below 95 percent (0)"
+            },
+            {
+                "name": "Land_Sea_Mask_USGS_LAND_FLAG",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "0,255,0",
+                "description": "Water fraction is below 10 percent (1); above 10 percent (0)"
+            },
+            {
+                "name": "Land_Sea_Mask_USGS_MIXED_FLAG",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "0,255,255",
+                "description": "Water fraction is above 10 and below 95 percent (1); below 10 or above 95 percent (0)"
+            },
+            {
+                "name": "Land_Sea_Mask_200_KM_COASTAL_FLAG",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "178,140,0",
+                "description": "Distance to coastline is less than 200 km (1); greater than 200 km (0)"
+            },
+            {
+                "name": "Land_Sea_Mask_100_KM_COASTAL_FLAG",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "255,200,0",
+                "description": "Distance to coastline is less than 100 km (1); greater than 100 km (0)"
+            },
+            {
+                "name": "Land_Sea_Mask_40_KM_COASTAL_FLAG",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "255,255,0",
+                "description": "Distance to coastline is less than 40 km (1); greater than 40 km (0)"
+            },
+            {
+                "name": "Land_Sea_Mask_MIN_SEA_ICE_FLAG",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "255,255,255",
+                "description": "Sea ice is present for all months (1); is not present for all months (0)"
+            },
+            {
+                "name": "Land_Sea_Mask_MAX_SEA_ICE_FLAG",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "240,240,240",
+                "description": "Sea ice is present for any months (1); is not present for any months (0)"
+            }
+        ],
+        "metadata": [
+            {
+                "path": "Fixed_Header/Validity_Period/Validity_Start",
+                "value": "UTC=2010-01-19T00:28:27"
+            },
+            {
+                "path": "Variable_Header/Specific_Product_Header/Main_Info/Time_Info/Stop_Time_ANX_T",
+                "value": "1525.106202"
+            }
+        ]
+    }
+}

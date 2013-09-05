@@ -49,6 +49,46 @@
             "id": "SM_OPER_MIR_SCLD1C_20100208T040959",
             "relativePath": "SMOS/2010/SM_OPER_MIR_SCLD1C_20100208T040959_20100208T050400_324_001_1/SM_OPER_MIR_SCLD1C_20100208T040959_20100208T050400_324_001_1.HDR",
             "description": "SMOS SCLD1C,  schema version 201"
+        },
+        {
+            "id": "SM_OPER_MIR_SCLF1C_20100119T002827",
+            "relativePath": "SMOS/2010/SM_OPER_MIR_SCLF1C_20100119T002827_20100119T012226_323_001_1/SM_OPER_MIR_SCLF1C_20100119T002827_20100119T012226_323_001_1.DBL",
+            "description": "SMOS SCLF1C,  schema version 201"
+        },
+        {
+            "id": "SM_OPER_MIR_SCLF1C_20120514T195822",
+            "relativePath": "SMOS/SMOS_DD_20120514/SM_OPER_MIR_SCLF1C_20120514T195822_20120514T205142_505_001_1.zip",
+            "description": "SMOS SCLF1C,  schema version 300"
+        },
+        {
+            "id": "SM_OPER_MIR_SCSD1C_20100208T064006",
+            "relativePath": "SMOS/2010/SM_OPER_MIR_SCSD1C_20100208T064006_20100208T073408_324_001_1/SM_OPER_MIR_SCSD1C_20100208T064006_20100208T073408_324_001_1.HDR",
+            "description": "SMOS SCSD1C,  schema version 201"
+        },
+        {
+            "id": "SM_OPER_MIR_SCSF1C_20100119T043836",
+            "relativePath": "SMOS/2010/SM_OPER_MIR_SCSF1C_20100119T043836_20100119T053238_324_001_1/SM_OPER_MIR_SCSF1C_20100119T043836_20100119T053238_324_001_1.DBL",
+            "description": "SMOS SCSD1C,  schema version 201"
+        },
+        {
+            "id": "SM_OPER_MIR_SCSF1C_20120514T013734",
+            "relativePath": "SMOS/SMOS_DD_20120514/SM_OPER_MIR_SCSF1C_20120514T013734_20120514T023053_505_001_1.zip",
+            "description": "SMOS SCSD1C,  schema version 300"
+        },
+        {
+            "id": "SM_REPR_MIR_SMDAP2_20101105T163013",
+            "relativePath": "SMOS/2011/SM_REPR_MIR_SMDAP2_20101105T163013_20101105T172413_400_001_9/SM_REPR_MIR_SMDAP2_20101105T163013_20101105T172413_400_001_9.HDR",
+            "description": "SMOS SMDAP2,  schema version 200"
+        },
+        {
+            "id": "SM_OPER_MIR_SMDAP2_20111026T075149",
+            "relativePath": "SMOS/AcceptanceTests_DataSet_052012/SM_OPER_MIR_SMDAP2_20111026T075149_20111026T084501_500_001_1.zip",
+            "description": "SMOS SMDAP2,  schema version 300"
+        },
+        {
+            "id": "SM_OPER_MIR_SMUDP2_20100207T212942",
+            "relativePath": "SMOS/2010/SM_OPER_MIR_SMUDP2_20100207T212942_20100207T222342_305_001_1/SM_OPER_MIR_SMUDP2_20100207T212942_20100207T222342_305_001_1.HDR",
+            "description": "SMOS SMUDP2,  schema version 200"
         }
     ]
 }
