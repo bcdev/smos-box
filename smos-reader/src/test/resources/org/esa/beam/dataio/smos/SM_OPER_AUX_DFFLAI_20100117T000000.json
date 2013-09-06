@@ -1,0 +1,133 @@
+{
+    "id": "SM_OPER_AUX_DFFLAI_20100117T000000",
+    "decodeQualification": "intended",
+    "expectedContent": {
+        "sceneWidth": 16384,
+        "sceneHeight": 8192,
+        "geoCoding": {
+            "coordinates": [
+                {
+                    "x": 7066.659,
+                    "y": 4403.7256,
+                    "lat": -6.7615485,
+                    "lon": -24.726727
+                }
+            ],
+            "reverseAccuracy": 0.01
+        },
+        "flagCodings": [
+            {
+                "name": "Flags",
+                "samples": [
+                    {
+                        "name": "MODIS_FLAG",
+                        "value": 1,
+                        "description": "Used to distinguish if LAI values come from the MODIS data (0) or come from AUX_ECOLAI static ADF (1)"
+                    },
+                    {
+                        "name": "AGE_FLAG",
+                        "value": 2,
+                        "description": "Used to distinguish the case where AUX_ECOLAI LAI appears because the last MODIS LAI value is too old (1) from the case that MODIS LAI value is updated recently (0)"
+                    },
+                    {
+                        "name": "WATER_FLAG",
+                        "value": 4,
+                        "description": "Derived from the Total_Water_Fraction defined in the AUX_ECOLAI"
+                    }
+                ]
+            }
+        ],
+        "bands": [
+            {
+                "name": "LAI",
+                "description": "Leaf area index used in computing vegetation cover optical opacity and contributions to the up- welling brightness temperature (0, 25.5)",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 12765,
+                        "y": 3235,
+                        "value": 4.9
+                    },
+                    {
+                        "x": 854,
+                        "y": 1459,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Days_Since_Last_MODIS_Update",
+                "description": "Number of days since a valid MODIS LAI value\telement\tvalue was available for this grid point",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 11224,
+                        "y": 6968,
+                        "value": 1842.0
+                    },
+                    {
+                        "x": 4765,
+                        "y": 2104,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Flags",
+                "description": "Flags to keep track of data quality issues",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 10002,
+                        "y": 2992,
+                        "value": 3.0
+                    },
+                    {
+                        "x": 9011,
+                        "y": 6105,
+                        "value": 5.0
+                    }
+                ]
+            }
+        ],
+        "masks": [
+            {
+                "name": "Flags_MODIS_FLAG",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "246,182,21",
+                "description": "Used to distinguish if LAI values come from the MODIS data (0) or come from AUX_ECOLAI static ADF (1)"
+            },
+            {
+                "name": "Flags_AGE_FLAG",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "95,92,204",
+                "description": "Used to distinguish the case where AUX_ECOLAI LAI appears because the last MODIS LAI value is too old (1) from the case that MODIS LAI value is updated recently (0)"
+            },
+            {
+                "name": "Flags_WATER_FLAG",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "49,82,133",
+                "description": "Derived from the Total_Water_Fraction defined in the AUX_ECOLAI"
+            }
+        ],
+        "metadata": [
+            {
+                "path": "Variable_Header/Specific_Product_Header/Main_SPH/Datablock_Schema",
+                "value": "DBL_SM_XXXX_AUX_DFFLAI_0200.binXschema.xml"
+            },
+            {
+                "path": "Variable_Header/Specific_Product_Header/List_of_Data_Sets/Data_Set[141]/Byte_Order",
+                "value": "0000"
+            }
+        ]
+    }
+}

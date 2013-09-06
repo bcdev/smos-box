@@ -1,0 +1,115 @@
+{
+    "id": "SM_OPER_AUX_DGGFLO_20110605T000000",
+    "decodeQualification": "intended",
+    "expectedContent":{
+        "sceneWidth": 16384,
+        "sceneHeight": 8192,
+        "startTime": "05-JUN-2011 00:00:00.000000",
+        "endTime": "08-JUN-2011 00:00:00.000000",
+        "geoCoding": {
+            "coordinates": [
+                {
+                    "x": 7066.659,
+                    "y": 4403.7256,
+                    "lat": -6.7615485,
+                    "lon": -24.726727
+                }
+            ],
+            "reverseAccuracy": 0.01
+        },
+        "bands": [
+            {
+                "name": "FL_Flood_Prob",
+                "description": "The probability of Flood Flag",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "false",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 12164,
+                        "y": 5315,
+                        "value": 0.0
+                    },
+                    {
+                        "x": 854,
+                        "y": 1459,
+                        "value": 0.0
+                    }
+                ]
+            },
+            {
+                "name": "Grid_Point_ID",
+                "description": "Unique identifier for Earth fixed grid point (1, 9262145)",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 11224,
+                        "y": 6968,
+                        "value": 7122038.0
+                    },
+                    {
+                        "x": 4765,
+                        "y": 2104,
+                        "value": 204763.0
+                    }
+                ]
+            },
+            {
+                "name": "Latitude",
+                "description": "Latitude (-90, 90)",
+                "geophysicalUnit": "deg",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 10002,
+                        "y": 2992,
+                        "value": 24.229
+                    },
+                    {
+                        "x": 9011,
+                        "y": 6105,
+                        "value": -44.082
+                    }
+                ]
+            },
+            {
+                "name": "Longitude",
+                "description": "Longitude (0, 360)",
+                "geophysicalUnit": "deg",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 9966,
+                        "y": 7605,
+                        "value": 39.08
+                    },
+                    {
+                        "x": 2593,
+                        "y": 5456,
+                        "value": 236.942
+                    }
+                ]
+            }
+        ],
+        "metadata": [
+            {
+                "path": "Variable_Header/Specific_Product_Header/List_of_Data_Sets/Data_Set[16]/Byte_Order",
+                "value": "0000"
+            },
+            {
+                "path": "Fixed_Header/Validity_Period/Validity_Stop",
+                "value": "UTC=2011-06-08T00:00:00"
+            }
+        ]
+    }
+}

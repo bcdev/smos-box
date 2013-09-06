@@ -243,9 +243,9 @@
                 "spectralBandwidth": "0.0",
                 "expectedPixels": [
                     {
-                        "x": 8505,
-                        "y": 7483,
-                        "value": "NaN"
+                        "x": 14960,
+                        "y": 7259,
+                        "value": 3.9039612
                     },
                     {
                         "x": 12388,
@@ -264,9 +264,9 @@
                 "spectralBandwidth": "0.0",
                 "expectedPixels": [
                     {
-                        "x": 15577,
-                        "y": 3980,
-                        "value": "NaN"
+                        "x": 16145,
+                        "y": 7334,
+                        "value": 2.9403687
                     },
                     {
                         "x": 5577,
@@ -285,9 +285,9 @@
                 "spectralBandwidth": "0.0",
                 "expectedPixels": [
                     {
-                        "x": 163,
-                        "y": 3856,
-                        "value": "NaN"
+                        "x": 16105,
+                        "y": 6773,
+                        "value": 2.1072388
                     },
                     {
                         "x": 5364,

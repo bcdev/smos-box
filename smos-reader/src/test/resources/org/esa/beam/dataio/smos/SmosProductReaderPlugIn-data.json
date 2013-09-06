@@ -89,6 +89,51 @@
             "id": "SM_OPER_MIR_SMUDP2_20100207T212942",
             "relativePath": "SMOS/2010/SM_OPER_MIR_SMUDP2_20100207T212942_20100207T222342_305_001_1/SM_OPER_MIR_SMUDP2_20100207T212942_20100207T222342_305_001_1.HDR",
             "description": "SMOS SMUDP2,  schema version 200"
+        },
+        {
+            "id": "SM_REPR_MIR_SMUDP2_20101105T195023",
+            "relativePath": "SMOS/2011/SM_REPR_MIR_SMUDP2_20101105T195023_20101105T204422_400_001_9/SM_REPR_MIR_SMUDP2_20101105T195023_20101105T204422_400_001_9.DBL",
+            "description": "SMOS SMUDP2,  schema version 201"
+        },
+        {
+            "id": "SM_OPER_MIR_SMUDP2_20120514T163815",
+            "relativePath": "SMOS/SMOS_DD_20120514/SM_OPER_MIR_SMUDP2_20120514T163815_20120514T173133_551_001_1.zip",
+            "description": "SMOS SMUDP2,  schema version 300"
+        },
+        {
+            "id": "SM_OPER_AUX_DFFLAI_20100117T000000",
+            "relativePath": "SMOS/2010/SM_OPER_AUX_DFFLAI_20100117T000000_20100216T000000_306_001_3/SM_OPER_AUX_DFFLAI_20100117T000000_20100216T000000_306_001_3.HDR",
+            "description": "AUX_DFFLAI, leaf area index, schema version 200"
+        },
+        {
+            "id": "SM_OPER_AUX_DGGFLO_20110605T000000",
+            "relativePath": "SMOS/2011/SM_OPER_AUX_DGGFLO_20110605T000000_20110608T000000_307_001_3/SM_OPER_AUX_DGGFLO_20110605T000000_20110608T000000_307_001_3.DBL",
+            "description": "AUX_DGGFLO, flood probability, schema version 200"
+        },
+        {
+            "id": "SM_OPER_AUX_DGGRFI_20110605T000000",
+            "relativePath": "SMOS/2011/SM_OPER_AUX_DGGRFI_20110605T000000_20110608T000000_307_001_3/SM_OPER_AUX_DGGRFI_20110605T000000_20110608T000000_307_001_3.HDR",
+            "description": "AUX_DGGRFI, radio frequency interference, schema version 200"
+        },
+        {
+            "id": "SM_OPER_AUX_DGGROU_20110605T000000",
+            "relativePath": "SMOS/2011/SM_OPER_AUX_DGGROU_20110605T000000_20110608T000000_307_001_3/SM_OPER_AUX_DGGROU_20110605T000000_20110608T000000_307_001_3.DBL",
+            "description": "AUX_DGGROU, land roughness, schema version 200"
+        },
+        {
+            "id": "SM_OPER_AUX_DGGTFO_20110605T000000",
+            "relativePath": "SMOS/2011/SM_OPER_AUX_DGGTFO_20110605T000000_20110608T000000_307_001_3/SM_OPER_AUX_DGGTFO_20110605T000000_20110608T000000_307_001_3.HDR",
+            "description": "AUX_DGGTFO, forest optical thickness, schema version 200"
+        },
+        {
+            "id": "SM_OPER_AUX_DGGTLV_20110605T000000",
+            "relativePath": "SMOS/2011/SM_OPER_AUX_DGGTLV_20110605T000000_20110608T000000_307_001_3/SM_OPER_AUX_DGGTLV_20110605T000000_20110608T000000_307_001_3.DBL",
+            "description": "AUX_DGGTLV, low vegetation optical thickness, schema version 200"
+        },
+        {
+            "id": "SM_OPER_AUX_ECMWF__20100208T045820",
+            "relativePath": "SMOS/2010/SM_OPER_AUX_ECMWF__20100208T045820_20100208T060050_306_001_3/SM_OPER_AUX_ECMWF__20100208T045820_20100208T060050_306_001_3.HDR",
+            "description": "AUX_ECMWF, schema version 200"
         }
     ]
 }

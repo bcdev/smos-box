@@ -1,11 +1,11 @@
 {
-    "id": "SM_OPER_MIR_SMUDP2_20100207T212942",
+    "id": "SM_OPER_AUX_ECMWF__20100208T045820",
     "decodeQualification": "intended",
-    "expectedContent" : {
+    "expectedContent": {
         "sceneWidth": 16384,
         "sceneHeight": 8192,
-        "startTime": "07-FEB-2010 21:29:42.000000",
-        "endTime": "07-FEB-2010 22:23:42.000000",
+        "startTime": "08-FEB-2010 04:58:20.000000",
+        "endTime": "08-FEB-2010 06:00:50.000000",
         "geoCoding": {
             "coordinates": [
                 {
@@ -19,247 +19,352 @@
         },
         "flagCodings": [
             {
-                "name": "Confidence_Flags",
+                "name": "F1",
                 "samples": [
                     {
-                        "name": "FL_RFI_PRONE_H",
-                        "value": 2,
-                        "description": "DGG Current RFI for H pol above threshold"
-                    },
-                    {
-                        "name": "FL_RFI_PRONE_V",
-                        "value": 4,
-                        "description": "DGG Current RFI for V pol above threshold"
-                    },
-                    {
-                        "name": "FL_NO_PROD",
-                        "value": 16,
-                        "description": "No products are generated"
-                    },
-                    {
-                        "name": "FL_RANGE",
-                        "value": 32,
-                        "description": "Retrieval values out off range"
-                    },
-                    {
-                        "name": "FL_DQX",
-                        "value": 64,
-                        "description": "High retrieval DQX"
-                    },
-                    {
-                        "name": "FL_CHI2_P",
-                        "value": 128,
-                        "description": "Poor fit quality"
-                    }
-                ]
-            },
-            {
-                "name": "Science_Flags",
-                "samples": [
-                    {
-                        "name": "FL_NON_NOM",
+                        "name": "CI_FLAG",
                         "value": 1,
-                        "description": "Presence of other than nominal soil"
+                        "description": "Quality flag: sea ice cover"
                     },
                     {
-                        "name": "FL_SCENE_T",
+                        "name": "SP_FLAG",
                         "value": 2,
-                        "description": "True (1) if any of scene flags is set (1)"
+                        "description": "Quality flag: surface pressure"
                     },
                     {
-                        "name": "FL_BARREN",
+                        "name": "2T_FLAG",
                         "value": 4,
-                        "description": "Scene flag indicating presence of rocks"
+                        "description": "Quality flag: air temperature 2m"
                     },
                     {
-                        "name": "FL_TOPO_S",
+                        "name": "SSTK_FLAG",
                         "value": 8,
-                        "description": "Scene flag indicating presence of strong topography"
+                        "description": "Quality flag: sea surface temperature"
                     },
                     {
-                        "name": "FL_TOPO_M",
+                        "name": "TCWV_FLAG",
                         "value": 16,
-                        "description": "Scene flag indicating presence of moderate topography"
+                        "description": "Quality flag: total column water vapour"
                     },
                     {
-                        "name": "FL_OW",
-                        "value": 32,
-                        "description": "Scene flag indicating presence of open water"
-                    },
-                    {
-                        "name": "FL_SNOW_MIX",
-                        "value": 64,
-                        "description": "Scene flag indicating presence of mixed snow"
-                    },
-                    {
-                        "name": "FL_SNOW_WET",
+                        "name": "RR_FLAG",
                         "value": 128,
-                        "description": "Scene flag indicating presence of wet snow"
+                        "description": "Quality flag: rain rate"
                     },
                     {
-                        "name": "FL_SNOW_DRY",
+                        "name": "SWVL1_FLAG",
                         "value": 256,
-                        "description": "Scene flag indicating presence of significant dry snow"
+                        "description": "Quality flag: volumetric soil water L1"
                     },
                     {
-                        "name": "FL_FOREST",
+                        "name": "SWVL2_FLAG",
                         "value": 512,
-                        "description": "Scene flag indicating presence of forest"
+                        "description": "Quality flag: volumetric soil water L2"
                     },
                     {
-                        "name": "FL_NOMINAL",
+                        "name": "SRC_FLAG",
                         "value": 1024,
-                        "description": "Scene flag indicating presence of nominal soil"
+                        "description": "Quality flag: skin reservoir content"
                     },
                     {
-                        "name": "FL_FROST",
+                        "name": "STL1_FLAG",
                         "value": 2048,
-                        "description": "Scene flag indicating presence of frost"
+                        "description": "Quality flag: soil temperature L1"
                     },
                     {
-                        "name": "FL_ICE",
+                        "name": "STL2_FLAG",
                         "value": 4096,
-                        "description": "Scene flag indicating presence of permanent ice/snow"
+                        "description": "Quality flag: soil temperature L2"
                     },
                     {
-                        "name": "FL_WETLANDS",
+                        "name": "STL3_FLAG",
                         "value": 8192,
-                        "description": "Scene flag indicating presence of wetlands"
+                        "description": "Quality flag: soil temperature L3"
                     },
                     {
-                        "name": "FL_FLOOD_PROB",
+                        "name": "STL4_FLAG",
                         "value": 16384,
-                        "description": "Scene flag indicating probable flooding risk"
+                        "description": "Quality flag: soil temperature L4"
                     },
                     {
-                        "name": "FL_URBAN_LOW",
+                        "name": "SKT_FLAG",
                         "value": 32768,
-                        "description": "Scene flag indicating presence of limited urban area"
+                        "description": "Quality flag: skin temperature"
                     },
                     {
-                        "name": "FL_URBAN_HIGH",
+                        "name": "TSN_FLAG",
                         "value": 65536,
-                        "description": "Scene flag indicating presence of large urban area"
+                        "description": "Quality flag: temperature snow layer"
                     },
                     {
-                        "name": "FL_SAND",
+                        "name": "ISTL1_FLAG",
                         "value": 131072,
-                        "description": "Scene flag indicating presence of high sand fraction"
+                        "description": "Quality flag: ice surface temperature"
                     },
                     {
-                        "name": "FL_SEA_ICE",
+                        "name": "SD_FLAG",
                         "value": 262144,
-                        "description": "Scene flag indicating presence of sea ice"
+                        "description": "Quality flag: snow depth"
                     },
                     {
-                        "name": "FL_COAST",
+                        "name": "SMLT_FLAG",
                         "value": 524288,
-                        "description": "Scene flag indicating presence of large tidal flag"
+                        "description": "Quality flag: accumulated water"
                     },
                     {
-                        "name": "FL_OCCUR_T",
+                        "name": "RSN_FLAG",
                         "value": 1048576,
-                        "description": "True (1) if any of occur flags is set (1)"
+                        "description": "Quality flag: Snow density"
                     },
                     {
-                        "name": "FL_LITTER",
+                        "name": "U_FLAG",
                         "value": 2097152,
-                        "description": "Occur flag indicating litter suspected"
+                        "description": "Quality flag: wind zonal lowest level"
                     },
                     {
-                        "name": "FL_PR",
+                        "name": "V_FLAG",
                         "value": 4194304,
-                        "description": "Occur flag indicating interception suspected (polarisation ratio)"
-                    },
-                    {
-                        "name": "FL_INTERCEP",
-                        "value": 8388608,
-                        "description": "Occur flag - ECMWF indicates interception)"
-                    },
-                    {
-                        "name": "FL_EXTERNAL",
-                        "value": 16777216,
-                        "description": "Any of the external flags on, or N_SKY counter not equal to zero"
-                    },
-                    {
-                        "name": "FL_RAIN",
-                        "value": 33554432,
-                        "description": "External flag indicating heavy rain suspected"
-                    },
-                    {
-                        "name": "FL_TEC",
-                        "value": 67108864,
-                        "description": "External flag indicating high ionospheric contributions"
-                    },
-                    {
-                        "name": "FL_TAU_FO",
-                        "value": 134217728,
-                        "description": "Scene flag indicating presence of thick forest"
-                    },
-                    {
-                        "name": "FL_WINTER_FOREST",
-                        "value": 268435456,
-                        "description": "Flag indicating that the winter forest case has been selected by the decision tree"
-                    },
-                    {
-                        "name": "FL_DUAL_RETR_FNO_FFO",
-                        "value": 536870912,
-                        "description": "Flag indicating dual retrieval is performed on the FNO and FFO fractions"
+                        "description": "Quality flag: wind meridional lowest level"
                     }
                 ]
             },
             {
-                "name": "Processing_Flags",
+                "name": "F2",
                 "samples": [
                     {
-                        "name": "FL_R4",
-                        "value": 1,
-                        "description": "True (1) if attempted, regardless of success"
-                    },
-                    {
-                        "name": "FL_R3",
-                        "value": 2,
-                        "description": "True (1) if attempted, regardless of success"
-                    },
-                    {
-                        "name": "FL_R2",
+                        "name": "CDWW_FLAG",
                         "value": 4,
-                        "description": "True (1) if attempted, regardless of success"
+                        "description": "Quality flag: drag coefficient with waves"
                     },
                     {
-                        "name": "FL_MD_A",
+                        "name": "WIND_FLAG",
                         "value": 8,
-                        "description": "True (1) if MDa failed"
-                    }
-                ]
-            },
-            {
-                "name": "DGG_Current_Flags",
-                "samples": [
-                    {
-                        "name": "FL_CURRENT_TAU_NADIR_LV",
-                        "value": 1,
-                        "description": "Flag driving request for updating the DGG_Current_Tau_Nadir_LV map after processing"
+                        "description": "Quality flag: wind 10m wave model"
                     },
                     {
-                        "name": "FL_CURRENT_TAU_NADIR_FO",
-                        "value": 2,
-                        "description": "Flag driving request for updating the DGG_Current_Tau_Nadir_FO map after processing"
-                    },
-                    {
-                        "name": "FL_CURRENT_HR",
-                        "value": 4,
-                        "description": "Flag driving request for updating the DGG_Current_HR map after processing"
-                    },
-                    {
-                        "name": "FL_CURRENT_RFI",
-                        "value": 8,
-                        "description": "Flag driving request for updating the DGG_Current_RFI map after processing"
-                    },
-                    {
-                        "name": "FL_CURRENT_FLOOD",
+                        "name": "PP1D_FLAG",
                         "value": 16,
-                        "description": "Flag driving request for updating the DGG_Current_Flood map after processing"
+                        "description": "Quality flag: peak period 1d"
+                    },
+                    {
+                        "name": "SWH_FLAG",
+                        "value": 32,
+                        "description": "Quality flag: significant wave height"
+                    },
+                    {
+                        "name": "MSQS_FLAG",
+                        "value": 64,
+                        "description": "Quality flag: mean square slope"
+                    },
+                    {
+                        "name": "MPWW_FLAG",
+                        "value": 128,
+                        "description": "Quality flag: mean period wind waves"
+                    },
+                    {
+                        "name": "SHWW_FLAG",
+                        "value": 256,
+                        "description": "Quality flag: significant height wind waves"
+                    },
+                    {
+                        "name": "UN10_FLAG",
+                        "value": 512,
+                        "description": "Quality flag: 10 m neutral equivalent wind  zonal"
+                    },
+                    {
+                        "name": "VN10_FLAG",
+                        "value": 1024,
+                        "description": "Quality flag: 10 m neutral equivalent wind  meridional"
+                    },
+                    {
+                        "name": "ZNT_FLAG",
+                        "value": 2048,
+                        "description": "Quality flag: roughness length"
+                    },
+                    {
+                        "name": "UST_FLAG",
+                        "value": 4096,
+                        "description": "Quality flag: friction velocity from surface model"
+                    },
+                    {
+                        "name": "UWAV_FLAG",
+                        "value": 8192,
+                        "description": "Quality flag: friction velocity from wave model"
+                    },
+                    {
+                        "name": "OMEGA_FLAG",
+                        "value": 16384,
+                        "description": "Quality flag: inverse wave age"
+                    }
+                ]
+            },
+            {
+                "name": "D1",
+                "samples": [
+                    {
+                        "name": "SP_FLAG",
+                        "value": 2,
+                        "description": "Degradation flag: surface pressure"
+                    },
+                    {
+                        "name": "2T_FLAG",
+                        "value": 4,
+                        "description": "Degradation flag: air temperature 2m"
+                    },
+                    {
+                        "name": "SSTK_FLAG",
+                        "value": 8,
+                        "description": "Degradation flag: sea surface temperature"
+                    },
+                    {
+                        "name": "TCWV_FLAG",
+                        "value": 16,
+                        "description": "Degradation flag: total column water vapour"
+                    },
+                    {
+                        "name": "SWVL1_FLAG",
+                        "value": 256,
+                        "description": "Degradation flag: volumetric soil water L1"
+                    },
+                    {
+                        "name": "SWVL2_FLAG",
+                        "value": 512,
+                        "description": "Degradation flag: volumetric soil water L2"
+                    },
+                    {
+                        "name": "SRC_FLAG",
+                        "value": 1024,
+                        "description": "Degradation flag: skin reservoir content"
+                    },
+                    {
+                        "name": "STL1_FLAG",
+                        "value": 2048,
+                        "description": "Degradation flag: soil temperature L1"
+                    },
+                    {
+                        "name": "STL2_FLAG",
+                        "value": 4096,
+                        "description": "Degradation flag: soil temperature L2"
+                    },
+                    {
+                        "name": "STL3_FLAG",
+                        "value": 8192,
+                        "description": "Degradation flag: soil temperature L3"
+                    },
+                    {
+                        "name": "STL4_FLAG",
+                        "value": 16384,
+                        "description": "Degradation flag: soil temperature L4"
+                    },
+                    {
+                        "name": "SKT_FLAG",
+                        "value": 32768,
+                        "description": "Degradation flag: skin temperature"
+                    },
+                    {
+                        "name": "TSN_FLAG",
+                        "value": 65536,
+                        "description": "Degradation flag: temperature snow layer"
+                    },
+                    {
+                        "name": "ISTL1_FLAG",
+                        "value": 131072,
+                        "description": "Degradation flag: ice surface temperature"
+                    },
+                    {
+                        "name": "SD_FLAG",
+                        "value": 262144,
+                        "description": "Degradation flag: snow depth"
+                    },
+                    {
+                        "name": "SMLT_FLAG",
+                        "value": 524288,
+                        "description": "Degradation flag: accumulated water"
+                    },
+                    {
+                        "name": "RSN_FLAG",
+                        "value": 1048576,
+                        "description": "Degradation flag: Snow density"
+                    },
+                    {
+                        "name": "U_FLAG",
+                        "value": 2097152,
+                        "description": "Degradation flag: wind zonal lowest level"
+                    },
+                    {
+                        "name": "V_FLAG",
+                        "value": 4194304,
+                        "description": "Degradation flag: wind meridional lowest level"
+                    }
+                ]
+            },
+            {
+                "name": "D2",
+                "samples": [
+                    {
+                        "name": "CDWW_FLAG",
+                        "value": 4,
+                        "description": "Degradation flag: drag coefficient with waves"
+                    },
+                    {
+                        "name": "WIND_FLAG",
+                        "value": 8,
+                        "description": "Degradation flag: wind 10m wave model"
+                    },
+                    {
+                        "name": "PP1D_FLAG",
+                        "value": 16,
+                        "description": "Degradation flag: peak period 1d"
+                    },
+                    {
+                        "name": "SWH_FLAG",
+                        "value": 32,
+                        "description": "Degradation flag: significant wave height"
+                    },
+                    {
+                        "name": "MSQS_FLAG",
+                        "value": 64,
+                        "description": "Degradation flag: mean square slope"
+                    },
+                    {
+                        "name": "MPWW_FLAG",
+                        "value": 128,
+                        "description": "Degradation flag: mean period wind waves"
+                    },
+                    {
+                        "name": "SHWW_FLAG",
+                        "value": 256,
+                        "description": "Degradation flag: significant height wind waves"
+                    },
+                    {
+                        "name": "UN10_FLAG",
+                        "value": 512,
+                        "description": "Degradation flag: 10 m neutral equivalent wind  zonal"
+                    },
+                    {
+                        "name": "VN10_FLAG",
+                        "value": 1024,
+                        "description": "Degradation flag: 10 m neutral equivalent wind  meridional"
+                    },
+                    {
+                        "name": "ZNT_FLAG",
+                        "value": 2048,
+                        "description": "Degradation flag: roughness length"
+                    },
+                    {
+                        "name": "UST_FLAG",
+                        "value": 4096,
+                        "description": "Degradation flag: friction velocity from surface model"
+                    },
+                    {
+                        "name": "UWAV_FLAG",
+                        "value": 8192,
+                        "description": "Degradation flag: friction velocity from wave model"
+                    },
+                    {
+                        "name": "OMEGA_FLAG",
+                        "value": 16384,
+                        "description": "Degradation flag: inverse wave age"
                     }
                 ]
             },
@@ -311,18 +416,17 @@
         ],
         "bands": [
             {
-                "name": "Soil_Moisture",
-                "description": "Retrieved soil moisture value",
-                "geophysicalUnit": "m3 m-3",
-                "noDataValue": "-999.0",
+                "name": "CI",
+                "description": "Sea ice cover (0, 1)",
+                "noDataValue": "0.0",
                 "noDataValueUsed": "true",
                 "spectralWavelength": "0.0",
                 "spectralBandwidth": "0.0",
                 "expectedPixels": [
                     {
-                        "x": 13223,
-                        "y": 2656,
-                        "value": 0.31417993
+                        "x": 727,
+                        "y": 7489,
+                        "value": 0.609375
                     },
                     {
                         "x": 854,
@@ -332,18 +436,18 @@
                 ]
             },
             {
-                "name": "Soil_Moisture_DQX",
-                "description": "DQX for soil moisture",
-                "geophysicalUnit": "m3 m-3",
-                "noDataValue": "-999.0",
+                "name": "SSTK",
+                "description": "Sea surface temperature (K)",
+                "geophysicalUnit": "K",
+                "noDataValue": "0.0",
                 "noDataValueUsed": "true",
                 "spectralWavelength": "0.0",
                 "spectralBandwidth": "0.0",
                 "expectedPixels": [
                     {
-                        "x": 12323,
-                        "y": 1297,
-                        "value": 0.55434906
+                        "x": 15864,
+                        "y": 5404,
+                        "value": 296.567
                     },
                     {
                         "x": 4765,
@@ -353,39 +457,38 @@
                 ]
             },
             {
-                "name": "Optical_Thickness_Nad",
-                "description": "Nadir optical thickness estimate for vegetation layer",
-                "geophysicalUnit": "Np",
-                "noDataValue": "-999.0",
-                "noDataValueUsed": "true",
+                "name": "LSM",
+                "description": "Land sea mask for atmospheric model (0-1)",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "false",
                 "spectralWavelength": "0.0",
                 "spectralBandwidth": "0.0",
                 "expectedPixels": [
                     {
-                        "x": 13644,
-                        "y": 4305,
-                        "value": 0.4831452
+                        "x": 6346,
+                        "y": 711,
+                        "value": 10
                     },
                     {
                         "x": 9011,
                         "y": 6105,
-                        "value": "NaN"
+                        "value": 0.0
                     }
                 ]
             },
             {
-                "name": "Optical_Thickness_Nad_DQX",
-                "description": "DQX for nadir optical thickness",
-                "geophysicalUnit": "Np",
-                "noDataValue": "-999.0",
+                "name": "U",
+                "description": "Wind - zonal component at lowest model level (m s-1)",
+                "geophysicalUnit": "m s-1",
+                "noDataValue": "0.0",
                 "noDataValueUsed": "true",
                 "spectralWavelength": "0.0",
                 "spectralBandwidth": "0.0",
                 "expectedPixels": [
                     {
-                        "x": 13686,
-                        "y": 4183,
-                        "value": 0.3571005
+                        "x": 9966,
+                        "y": 7605,
+                        "value": 4.0334263
                     },
                     {
                         "x": 2593,
@@ -395,18 +498,18 @@
                 ]
             },
             {
-                "name": "Surface_Temperature",
-                "description": "Surface temperature - may be a retrieved value or from an external source",
-                "geophysicalUnit": "K",
-                "noDataValue": "-999.0",
+                "name": "V",
+                "description": "Wind - meridional component at lowest model level (m s-1)",
+                "geophysicalUnit": "m s-1",
+                "noDataValue": "0.0",
                 "noDataValueUsed": "true",
                 "spectralWavelength": "0.0",
                 "spectralBandwidth": "0.0",
                 "expectedPixels": [
                     {
-                        "x": 13936,
-                        "y": 5181,
-                        "value": 304.5758
+                        "x": 8505,
+                        "y": 7483,
+                        "value": -7.119223
                     },
                     {
                         "x": 12388,
@@ -416,18 +519,18 @@
                 ]
             },
             {
-                "name": "Surface_Temperature_DQX",
-                "description": "DQX for surface temperature",
+                "name": "T",
+                "description": "Temperature at lowest model level (K)",
                 "geophysicalUnit": "K",
-                "noDataValue": "-999.0",
+                "noDataValue": "0.0",
                 "noDataValueUsed": "true",
                 "spectralWavelength": "0.0",
                 "spectralBandwidth": "0.0",
                 "expectedPixels": [
                     {
-                        "x": 13342,
-                        "y": 3626,
-                        "value": 2.4691944
+                        "x": 736,
+                        "y": 1063,
+                        "value": 253.0138
                     },
                     {
                         "x": 5577,
@@ -437,17 +540,18 @@
                 ]
             },
             {
-                "name": "TTH",
-                "description": "Optical thickness coefficient for polarisation H",
-                "noDataValue": "-999.0",
+                "name": "Q",
+                "description": "Specific humidity at lowest model level (kg/kg)",
+                "geophysicalUnit": "kg kg-1",
+                "noDataValue": "0.0",
                 "noDataValueUsed": "true",
                 "spectralWavelength": "0.0",
                 "spectralBandwidth": "0.0",
                 "expectedPixels": [
                     {
-                        "x": 13928,
-                        "y": 5013,
-                        "value": 1.0
+                        "x": 163,
+                        "y": 3856,
+                        "value": 0.016790295
                     },
                     {
                         "x": 5364,
@@ -457,9 +561,9 @@
                 ]
             },
             {
-                "name": "TTH_DQX",
-                "description": "DQX for TTH",
-                "noDataValue": "-999.0",
+                "name": "CHNK",
+                "description": "Charnock parameter (non-dimensional)",
+                "noDataValue": "0.0",
                 "noDataValueUsed": "true",
                 "spectralWavelength": "0.0",
                 "spectralBandwidth": "0.0",
@@ -467,7 +571,7 @@
                     {
                         "x": 4475,
                         "y": 353,
-                        "value": "NaN"
+                        "value": 0.017987812
                     },
                     {
                         "x": 15916,
@@ -477,17 +581,18 @@
                 ]
             },
             {
-                "name": "RTT",
-                "description": "Ratio of optical thickness coefficients TTH/TTV",
-                "noDataValue": "-999.0",
+                "name": "2T",
+                "description": "2 metre air temperature (K)",
+                "geophysicalUnit": "K",
+                "noDataValue": "0.0",
                 "noDataValueUsed": "true",
                 "spectralWavelength": "0.0",
                 "spectralBandwidth": "0.0",
                 "expectedPixels": [
                     {
-                        "x": 13531,
-                        "y": 2895,
-                        "value": 1.0
+                        "x": 894,
+                        "y": 3982,
+                        "value": 299.871
                     },
                     {
                         "x": 3800,
@@ -497,9 +602,10 @@
                 ]
             },
             {
-                "name": "RTT_DQX",
-                "description": "DQX for RTT",
-                "noDataValue": "-999.0",
+                "name": "2D",
+                "description": "2 metre dewpoint temperature (K)",
+                "geophysicalUnit": "K",
+                "noDataValue": "0.0",
                 "noDataValueUsed": "true",
                 "spectralWavelength": "0.0",
                 "spectralBandwidth": "0.0",
@@ -517,9 +623,10 @@
                 ]
             },
             {
-                "name": "Scattering_Albedo_H",
-                "description": "Scattering albedo for horizontal polarisation",
-                "noDataValue": "-999.0",
+                "name": "SP",
+                "description": "Surface pressure (Pa)",
+                "geophysicalUnit": "Pa",
+                "noDataValue": "0.0",
                 "noDataValueUsed": "true",
                 "spectralWavelength": "0.0",
                 "spectralBandwidth": "0.0",
@@ -537,9 +644,10 @@
                 ]
             },
             {
-                "name": "Scattering_Albedo_H_DQX",
-                "description": "DQX for scattering albedo for horizontal polarisation",
-                "noDataValue": "-999.0",
+                "name": "TCWV",
+                "description": "Total column water vapor (kg m2)",
+                "geophysicalUnit": "kg m2",
+                "noDataValue": "0.0",
                 "noDataValueUsed": "true",
                 "spectralWavelength": "0.0",
                 "spectralBandwidth": "0.0",
@@ -547,7 +655,7 @@
                     {
                         "x": 10571,
                         "y": 129,
-                        "value": "NaN"
+                        "value": 3.0506608
                     },
                     {
                         "x": 15977,
@@ -557,9 +665,10 @@
                 ]
             },
             {
-                "name": "DIFF_Albedos",
-                "description": "Difference of albedos H-V",
-                "noDataValue": "-999.0",
+                "name": "MSL",
+                "description": "Sea level pressure (Pa)",
+                "geophysicalUnit": "Pa",
+                "noDataValue": "0.0",
                 "noDataValueUsed": "true",
                 "spectralWavelength": "0.0",
                 "spectralBandwidth": "0.0",
@@ -567,7 +676,7 @@
                     {
                         "x": 15566,
                         "y": 7752,
-                        "value": 0.0
+                        "value": 99545.37
                     },
                     {
                         "x": 1817,
@@ -577,9 +686,10 @@
                 ]
             },
             {
-                "name": "DIFF_Albedos_DQX",
-                "description": "DQX for difference of albedos H-V",
-                "noDataValue": "-999.0",
+                "name": "LSP",
+                "description": "Large scale precipitation (m)",
+                "geophysicalUnit": "m",
+                "noDataValue": "0.0",
                 "noDataValueUsed": "true",
                 "spectralWavelength": "0.0",
                 "spectralBandwidth": "0.0",
@@ -597,10 +707,10 @@
                 ]
             },
             {
-                "name": "Roughness_Param",
-                "description": "Roughness parameter estimate",
-                "geophysicalUnit": "K",
-                "noDataValue": "-999.0",
+                "name": "CP",
+                "description": "Convective precipitation (m)",
+                "geophysicalUnit": "m",
+                "noDataValue": "0.0",
                 "noDataValueUsed": "true",
                 "spectralWavelength": "0.0",
                 "spectralBandwidth": "0.0",
@@ -613,15 +723,15 @@
                     {
                         "x": 236,
                         "y": 3478,
-                        "value": "NaN"
+                        "value": 3.9992097E-4
                     }
                 ]
             },
             {
-                "name": "Roughness_Param_DQX",
-                "description": "DQX for roughness parameter estimate",
-                "geophysicalUnit": "K",
-                "noDataValue": "-999.0",
+                "name": "RR",
+                "description": "Rain rate (m 3h-1)",
+                "geophysicalUnit": "m 3h-1",
+                "noDataValue": "0.0",
                 "noDataValueUsed": "true",
                 "spectralWavelength": "0.0",
                 "spectralBandwidth": "0.0",
@@ -639,11 +749,11 @@
                 ]
             },
             {
-                "name": "Dielect_Const_MD_RE",
-                "description": "Real part of the dielectric constant from MD",
-                "geophysicalUnit": "Fm-1",
-                "noDataValue": "-999.0",
-                "noDataValueUsed": "true",
+                "name": "NSSS",
+                "description": "North-South surface stress, accumulated since start of forecast (N m-2 s-1)",
+                "geophysicalUnit": "N m-2 s-1",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "false",
                 "spectralWavelength": "0.0",
                 "spectralBandwidth": "0.0",
                 "expectedPixels": [
@@ -655,16 +765,16 @@
                     {
                         "x": 13671,
                         "y": 7745,
-                        "value": "NaN"
+                        "value": 446.07294
                     }
                 ]
             },
             {
-                "name": "Dielect_Const_MD_RE_DQX",
-                "description": "DQX for the real part of the dielectric constant from MD",
-                "geophysicalUnit": "Fm-1",
-                "noDataValue": "-999.0",
-                "noDataValueUsed": "true",
+                "name": "EWSS",
+                "description": "East-West surface stress, accumulated since start of forecast (N m-2 s-1)",
+                "geophysicalUnit": "N m-2 s-1",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "false",
                 "spectralWavelength": "0.0",
                 "spectralBandwidth": "0.0",
                 "expectedPixels": [
@@ -681,11 +791,11 @@
                 ]
             },
             {
-                "name": "Dielect_Const_MD_IM",
-                "description": "Imaginary part of the dielectric constant from MD",
-                "geophysicalUnit": "Fm-1",
-                "noDataValue": "-999.0",
-                "noDataValueUsed": "true",
+                "name": "SSR",
+                "description": "Surface solar radiation: net downward shortwave flux at surface, accumulated since start of forecast (W m-2 s-1)",
+                "geophysicalUnit": "W m-2 s-1",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "false",
                 "spectralWavelength": "0.0",
                 "spectralBandwidth": "0.0",
                 "expectedPixels": [
@@ -702,11 +812,11 @@
                 ]
             },
             {
-                "name": "Dielect_Const_MD_IM_DQX",
-                "description": "DQX for the imaginary part of the dielectric constant from MD",
-                "geophysicalUnit": "Fm-1",
-                "noDataValue": "-999.0",
-                "noDataValueUsed": "true",
+                "name": "STR",
+                "description": "Surface thermal radiation: net downward thermal radiative flux at surface, accumulated since start of forecast (W m-2 s-1)",
+                "geophysicalUnit": "W m-2 s-1",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "false",
                 "spectralWavelength": "0.0",
                 "spectralBandwidth": "0.0",
                 "expectedPixels": [
@@ -718,16 +828,16 @@
                     {
                         "x": 1575,
                         "y": 637,
-                        "value": "NaN"
+                        "value": -45057.18
                     }
                 ]
             },
             {
-                "name": "Dielect_Const_Non_MD_RE",
-                "description": "Real part of the dielectric constant from retrieval models other than MD",
-                "geophysicalUnit": "Fm-1",
-                "noDataValue": "-999.0",
-                "noDataValueUsed": "true",
+                "name": "SSHF",
+                "description": "Net downward sensible heat flux, accumulated since start of forecast (W m-2 s-1)",
+                "geophysicalUnit": "W m-2 s-1",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "false",
                 "spectralWavelength": "0.0",
                 "spectralBandwidth": "0.0",
                 "expectedPixels": [
@@ -739,16 +849,16 @@
                     {
                         "x": 7619,
                         "y": 7333,
-                        "value": "NaN"
+                        "value": 108629.16
                     }
                 ]
             },
             {
-                "name": "Dielect_Const_Non_MD_RE_DQX",
-                "description": "DQX for the real part of the dielectric constant from retrieval models other than MD",
-                "geophysicalUnit": "Fm-1",
-                "noDataValue": "-999.0",
-                "noDataValueUsed": "true",
+                "name": "SLHF",
+                "description": "Net downward latent heat flux, accumulated since start of forecast (W m-2 s-1)",
+                "geophysicalUnit": "W m-2 s-1",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "false",
                 "spectralWavelength": "0.0",
                 "spectralBandwidth": "0.0",
                 "expectedPixels": [
@@ -765,10 +875,9 @@
                 ]
             },
             {
-                "name": "Dielect_Const_Non_MD_IM",
-                "description": "Imaginary part of the dielectric constant from retrieval models other than MD",
-                "geophysicalUnit": "Fm-1",
-                "noDataValue": "-999.0",
+                "name": "CDWW",
+                "description": "Coefficient of drag with waves (non-dimensional)",
+                "noDataValue": "0.0",
                 "noDataValueUsed": "true",
                 "spectralWavelength": "0.0",
                 "spectralBandwidth": "0.0",
@@ -786,10 +895,10 @@
                 ]
             },
             {
-                "name": "Dielect_Const_Non_MD_IM_DQX",
-                "description": "DQX for the imaginary part of the dielectric constant from retrieval models other than MD",
-                "geophysicalUnit": "Fm-1",
-                "noDataValue": "-999.0",
+                "name": "WIND",
+                "description": "Wave model 10 metre wind speed (m s-1)",
+                "geophysicalUnit": "m s-1",
+                "noDataValue": "0.0",
                 "noDataValueUsed": "true",
                 "spectralWavelength": "0.0",
                 "spectralBandwidth": "0.0",
@@ -807,10 +916,10 @@
                 ]
             },
             {
-                "name": "TB_ASL_Theta_B_H",
-                "description": "Surface level TB (corrected from sky/atmosphere contribution) computed from forward model with a specific incidence angle of 42.5°, and for H polarisation",
-                "geophysicalUnit": "K",
-                "noDataValue": "-999.0",
+                "name": "PP1D",
+                "description": "Peak period of 1D spectrum (s)",
+                "geophysicalUnit": "s",
+                "noDataValue": "0.0",
                 "noDataValueUsed": "true",
                 "spectralWavelength": "0.0",
                 "spectralBandwidth": "0.0",
@@ -828,10 +937,10 @@
                 ]
             },
             {
-                "name": "TB_ASL_Theta_B_H_DQX",
-                "description": "DQX for surface level TB for H polarisation",
-                "geophysicalUnit": "K",
-                "noDataValue": "-999.0",
+                "name": "SWH",
+                "description": "Significant wave height (m)",
+                "geophysicalUnit": "m",
+                "noDataValue": "0.0",
                 "noDataValueUsed": "true",
                 "spectralWavelength": "0.0",
                 "spectralBandwidth": "0.0",
@@ -849,10 +958,10 @@
                 ]
             },
             {
-                "name": "TB_ASL_Theta_B_V",
-                "description": "Surface level TB (corrected from sky/atmosphere contribution) computed from forward model with a specific incidence angle of 42.5°, and for V polarisation",
-                "geophysicalUnit": "K",
-                "noDataValue": "-999.0",
+                "name": "MSQS",
+                "description": "Mean square slope of waves (non-dimensional)",
+                "geophysicalUnit": "m",
+                "noDataValue": "0.0",
                 "noDataValueUsed": "true",
                 "spectralWavelength": "0.0",
                 "spectralBandwidth": "0.0",
@@ -870,10 +979,10 @@
                 ]
             },
             {
-                "name": "TB_ASL_Theta_B_V_DQX",
-                "description": "DQX for surface level TB for V polarisation",
-                "geophysicalUnit": "K",
-                "noDataValue": "-999.0",
+                "name": "MPWW",
+                "description": "Mean period of wind waves (s)",
+                "geophysicalUnit": "s",
+                "noDataValue": "0.0",
                 "noDataValueUsed": "true",
                 "spectralWavelength": "0.0",
                 "spectralBandwidth": "0.0",
@@ -891,10 +1000,10 @@
                 ]
             },
             {
-                "name": "TB_TOA_Theta_B_H",
-                "description": "Top of atmosphere TB computed from forward model at specific incidence angle of 42.5°, for H polarisation",
-                "geophysicalUnit": "K",
-                "noDataValue": "-999.0",
+                "name": "SHWW",
+                "description": "Significant height of wind waves (m)",
+                "geophysicalUnit": "m",
+                "noDataValue": "0.0",
                 "noDataValueUsed": "true",
                 "spectralWavelength": "0.0",
                 "spectralBandwidth": "0.0",
@@ -912,10 +1021,10 @@
                 ]
             },
             {
-                "name": "TB_TOA_Theta_B_H_DQX",
-                "description": "DQX for top of the atmosphere TB for H polarisation",
-                "geophysicalUnit": "K",
-                "noDataValue": "-999.0",
+                "name": "UN10",
+                "description": "10 metre Neutral equivalent wind zonal (m/s)",
+                "geophysicalUnit": "m s-1",
+                "noDataValue": "0.0",
                 "noDataValueUsed": "true",
                 "spectralWavelength": "0.0",
                 "spectralBandwidth": "0.0",
@@ -933,10 +1042,10 @@
                 ]
             },
             {
-                "name": "TB_TOA_Theta_B_V",
-                "description": "Top of atmosphere TB computed from forward model at specific incidence angle of 42.5°, for V polarisation",
-                "geophysicalUnit": "K",
-                "noDataValue": "-999.0",
+                "name": "VN10",
+                "description": "10 metre Neutral equivalent wind meridional (m/s)",
+                "geophysicalUnit": "m s-1",
+                "noDataValue": "0.0",
                 "noDataValueUsed": "true",
                 "spectralWavelength": "0.0",
                 "spectralBandwidth": "0.0",
@@ -954,10 +1063,10 @@
                 ]
             },
             {
-                "name": "TB_TOA_Theta_B_V_DQX",
-                "description": "DQX for top of the atmosphere TB for V polarisation",
-                "geophysicalUnit": "K",
-                "noDataValue": "-999.0",
+                "name": "ZNT",
+                "description": "Roughness length (m)",
+                "geophysicalUnit": "m",
+                "noDataValue": "0.0",
                 "noDataValueUsed": "true",
                 "spectralWavelength": "0.0",
                 "spectralBandwidth": "0.0",
@@ -970,13 +1079,14 @@
                     {
                         "x": 11497,
                         "y": 7352,
-                        "value": "NaN"
+                        "value": 0.0013078593
                     }
                 ]
             },
             {
-                "name": "Confidence_Flags",
-                "description": "Confidence flags",
+                "name": "UST",
+                "description": "Friction velocity from surface layer model (m/s)",
+                "geophysicalUnit": "m s-1",
                 "noDataValue": "0.0",
                 "noDataValueUsed": "true",
                 "spectralWavelength": "0.0",
@@ -995,8 +1105,9 @@
                 ]
             },
             {
-                "name": "GQX",
-                "description": "Global quality index",
+                "name": "UWAV",
+                "description": "Friction velocity from wave model (m/s)",
+                "geophysicalUnit": "m s-1",
                 "noDataValue": "0.0",
                 "noDataValueUsed": "true",
                 "spectralWavelength": "0.0",
@@ -1010,13 +1121,13 @@
                     {
                         "x": 7504,
                         "y": 1055,
-                        "value": "NaN"
+                        "value": 0.079284824
                     }
                 ]
             },
             {
-                "name": "Chi_2",
-                "description": "Retrieval fit quality index",
+                "name": "OMEGA",
+                "description": "Inverse wave age (non-dimensional)",
                 "noDataValue": "0.0",
                 "noDataValueUsed": "true",
                 "spectralWavelength": "0.0",
@@ -1035,8 +1146,8 @@
                 ]
             },
             {
-                "name": "Chi_2_P",
-                "description": "Chi square high value acceptability probability",
+                "name": "SWVL1",
+                "description": "Volumetric soil water layer 1 (m3 m-3)",
                 "noDataValue": "0.0",
                 "noDataValueUsed": "true",
                 "spectralWavelength": "0.0",
@@ -1055,8 +1166,8 @@
                 ]
             },
             {
-                "name": "N_Wild",
-                "description": "Number of times that wild data occurred",
+                "name": "SWVL2",
+                "description": "Volumetric soil water layer 2 (m3 m-3)",
                 "noDataValue": "0.0",
                 "noDataValueUsed": "true",
                 "spectralWavelength": "0.0",
@@ -1070,13 +1181,14 @@
                     {
                         "x": 9703,
                         "y": 7961,
-                        "value": "NaN"
+                        "value": 0.15566269
                     }
                 ]
             },
             {
-                "name": "M_AVA0",
-                "description": "Initial number of TB measurements available in L1c",
+                "name": "SRC",
+                "description": "Skin reservoir content (water) (m)",
+                "geophysicalUnit": "m",
                 "noDataValue": "0.0",
                 "noDataValueUsed": "true",
                 "spectralWavelength": "0.0",
@@ -1095,8 +1207,9 @@
                 ]
             },
             {
-                "name": "M_AVA",
-                "description": "Preprocessing - number of TB measurements available for retrieval",
+                "name": "STL1",
+                "description": "Soil temperature level 1 (K)",
+                "geophysicalUnit": "K",
                 "noDataValue": "0.0",
                 "noDataValueUsed": "true",
                 "spectralWavelength": "0.0",
@@ -1115,10 +1228,10 @@
                 ]
             },
             {
-                "name": "AFP",
-                "description": "Mean Surface of the antenna Footprint ellipses on Earth",
-                "geophysicalUnit": "km",
-                "noDataValue": "-999.0",
+                "name": "STL2",
+                "description": "Soil temperature level 2 (K)",
+                "geophysicalUnit": "K",
+                "noDataValue": "0.0",
                 "noDataValueUsed": "true",
                 "spectralWavelength": "0.0",
                 "spectralBandwidth": "0.0",
@@ -1126,18 +1239,19 @@
                     {
                         "x": 16343,
                         "y": 618,
-                        "value": "NaN"
+                        "value": 245.53993
                     },
                     {
                         "x": 13417,
                         "y": 4109,
-                        "value": 0.0
+                        "value": "NaN"
                     }
                 ]
             },
             {
-                "name": "N_AF_FOV",
-                "description": "Counter view - number of views that flag is set off to AF_FOV_flag",
+                "name": "STL3",
+                "description": "Soil temperature level 3 (K)",
+                "geophysicalUnit": "K",
                 "noDataValue": "0.0",
                 "noDataValueUsed": "true",
                 "spectralWavelength": "0.0",
@@ -1146,7 +1260,7 @@
                     {
                         "x": 1027,
                         "y": 3157,
-                        "value": "NaN"
+                        "value": 297.78033
                     },
                     {
                         "x": 4543,
@@ -1156,8 +1270,9 @@
                 ]
             },
             {
-                "name": "N_Sun_Tails",
-                "description": "Counter view - number of views that flag is set on to Sun_Tails flag",
+                "name": "STL4",
+                "description": "Soil temperature level 4 (K)",
+                "geophysicalUnit": "K",
                 "noDataValue": "0.0",
                 "noDataValueUsed": "true",
                 "spectralWavelength": "0.0",
@@ -1171,13 +1286,14 @@
                     {
                         "x": 1713,
                         "y": 1193,
-                        "value": "NaN"
+                        "value": 271.32352
                     }
                 ]
             },
             {
-                "name": "N_Sun_Glint_Area",
-                "description": "Counter view - number of views that flag is set on to Sun_Glint_Area flag",
+                "name": "SKT",
+                "description": "Skin temperature (K)",
+                "geophysicalUnit": "K",
                 "noDataValue": "0.0",
                 "noDataValueUsed": "true",
                 "spectralWavelength": "0.0",
@@ -1196,8 +1312,9 @@
                 ]
             },
             {
-                "name": "N_Sun_FOV",
-                "description": "Counter view - number of views that flag is set on Sun_FOV flag",
+                "name": "TSN",
+                "description": "Temperature of snow layer (K)",
+                "geophysicalUnit": "K",
                 "noDataValue": "0.0",
                 "noDataValueUsed": "true",
                 "spectralWavelength": "0.0",
@@ -1216,8 +1333,9 @@
                 ]
             },
             {
-                "name": "N_Instrument_Error",
-                "description": "This counts the number of TBs that pass the initial TB filtering and have the L1c Instrument_Error_Flag ON",
+                "name": "ISTL1",
+                "description": "Ice surface temperature layer 1 (K)",
+                "geophysicalUnit": "K",
                 "noDataValue": "0.0",
                 "noDataValueUsed": "true",
                 "spectralWavelength": "0.0",
@@ -1236,8 +1354,9 @@
                 ]
             },
             {
-                "name": "N_Software_Error",
-                "description": "This counts the number of TBs that pass the initial TB filtering and have the L1c Software_Error_flag ON",
+                "name": "SD",
+                "description": "Snow depth (meter of water equivalent) (m)",
+                "geophysicalUnit": "m",
                 "noDataValue": "0.0",
                 "noDataValueUsed": "true",
                 "spectralWavelength": "0.0",
@@ -1256,8 +1375,9 @@
                 ]
             },
             {
-                "name": "N_ADF_Error",
-                "description": "This counts the number of TBs that pass the initial TB filtering and have the L1c ADF_Error_flag on",
+                "name": "SMLT",
+                "description": "Snow melt: meter of water (accumulated) (m)",
+                "geophysicalUnit": "m",
                 "noDataValue": "0.0",
                 "noDataValueUsed": "true",
                 "spectralWavelength": "0.0",
@@ -1276,8 +1396,9 @@
                 ]
             },
             {
-                "name": "N_Calibration_Error",
-                "description": "This counts the number of TBs that pass the initial TB filtering and have the L1c Calibration_Error_flag ON",
+                "name": "RSN",
+                "description": "Snow density (kg m-3)",
+                "geophysicalUnit": "kg m-3",
                 "noDataValue": "0.0",
                 "noDataValueUsed": "true",
                 "spectralWavelength": "0.0",
@@ -1286,7 +1407,7 @@
                     {
                         "x": 419,
                         "y": 5722,
-                        "value": "NaN"
+                        "value": 99.999985
                     },
                     {
                         "x": 14567,
@@ -1296,8 +1417,8 @@
                 ]
             },
             {
-                "name": "N_X_Band",
-                "description": "This counts the number of TBs that pass the initial TB fitering and have L1c X-Band ON",
+                "name": "HLL",
+                "geophysicalUnit": "m",
                 "noDataValue": "0.0",
                 "noDataValueUsed": "true",
                 "spectralWavelength": "0.0",
@@ -1306,7 +1427,7 @@
                     {
                         "x": 10447,
                         "y": 7435,
-                        "value": "NaN"
+                        "value": 9.422523
                     },
                     {
                         "x": 16094,
@@ -1316,8 +1437,8 @@
                 ]
             },
             {
-                "name": "Science_Flags",
-                "description": "Science flags",
+                "name": "VTLL",
+                "geophysicalUnit": "K",
                 "noDataValue": "0.0",
                 "noDataValueUsed": "true",
                 "spectralWavelength": "0.0",
@@ -1326,98 +1447,98 @@
                     {
                         "x": 5885,
                         "y": 43,
-                        "value": "NaN"
+                        "value": 245.98615
                     },
                     {
                         "x": 13755,
                         "y": 4662,
-                        "value": 35.0
+                        "value": "NaN"
                     }
                 ]
             },
             {
-                "name": "N_Sky",
-                "description": "Strong galactic source",
+                "name": "F1",
+                "description": "Flags indicating the quality of the ECMWF data",
                 "noDataValue": "0.0",
-                "noDataValueUsed": "true",
+                "noDataValueUsed": "false",
                 "spectralWavelength": "0.0",
                 "spectralBandwidth": "0.0",
                 "expectedPixels": [
                     {
                         "x": 9673,
                         "y": 3261,
-                        "value": "NaN"
+                        "value": 0.0
                     },
                     {
                         "x": 6465,
                         "y": 8097,
-                        "value": "NaN"
+                        "value": 0.0
                     }
                 ]
             },
             {
-                "name": "Processing_Flags",
-                "description": "Processing flags",
+                "name": "F2",
+                "description": "Flags indicating the quality of the ECMWF data",
                 "noDataValue": "0.0",
-                "noDataValueUsed": "true",
+                "noDataValueUsed": "false",
                 "spectralWavelength": "0.0",
                 "spectralBandwidth": "0.0",
                 "expectedPixels": [
                     {
                         "x": 3761,
                         "y": 5874,
-                        "value": "NaN"
+                        "value": 0.0
                     },
                     {
                         "x": 15380,
                         "y": 2363,
-                        "value": "NaN"
+                        "value": 0.0
                     }
                 ]
             },
             {
-                "name": "S_Tree_1",
-                "description": "Branches of Decision Tree S",
+                "name": "D1",
+                "description": "Flags indicating degradation of the ECMWF data (use of the backup instead of the nominal interpolation method)",
                 "noDataValue": "0.0",
-                "noDataValueUsed": "true",
+                "noDataValueUsed": "false",
                 "spectralWavelength": "0.0",
                 "spectralBandwidth": "0.0",
                 "expectedPixels": [
                     {
                         "x": 5154,
                         "y": 6979,
-                        "value": "NaN"
+                        "value": 0.0
                     },
                     {
                         "x": 5367,
                         "y": 4332,
-                        "value": "NaN"
+                        "value": 0.0
                     }
                 ]
             },
             {
-                "name": "S_Tree_2",
-                "description": "Retrieval R2, R3 or R4",
+                "name": "D2",
+                "description": "Flags indicating degradation of the ECMWF data (use of the backup instead of the nominal interpolation method)",
                 "noDataValue": "0.0",
-                "noDataValueUsed": "true",
+                "noDataValueUsed": "false",
                 "spectralWavelength": "0.0",
                 "spectralBandwidth": "0.0",
                 "expectedPixels": [
                     {
                         "x": 5868,
                         "y": 6551,
-                        "value": "NaN"
+                        "value": 0.0
                     },
                     {
                         "x": 9183,
                         "y": 1786,
-                        "value": "NaN"
+                        "value": 0.0
                     }
                 ]
             },
             {
-                "name": "DGG_Current_Flags",
-                "description": "DGG current flags",
+                "name": "Grid_Point_ID",
+                "description": "Grid point ID",
                 "noDataValue": "0.0",
                 "noDataValueUsed": "true",
                 "spectralWavelength": "0.0",
@@ -1436,8 +1557,9 @@
                 ]
             },
             {
-                "name": "Tau_Cur_DQX",
-                "description": "This is a special tau DQX value computed using a special sigma corresponding to the case where tau nad is completely free",
+                "name": "Latitude",
+                "description": "Latitude (-90, 90)",
+                "geophysicalUnit": "deg",
                 "noDataValue": "-999.0",
                 "noDataValueUsed": "true",
                 "spectralWavelength": "0.0",
@@ -1456,8 +1578,9 @@
                 ]
             },
             {
-                "name": "HR_Cur_DQX",
-                "description": "This is a special HR DQX value computed using a special sigma corresponding to the case where HR is completely free",
+                "name": "Longitude",
+                "description": "Longitude (0, 360)",
+                "geophysicalUnit": "deg",
                 "noDataValue": "-999.0",
                 "noDataValueUsed": "true",
                 "spectralWavelength": "0.0",
@@ -1466,134 +1589,11 @@
                     {
                         "x": 10692,
                         "y": 7620,
-                        "value": "NaN"
+                        "value": 55.208
                     },
                     {
                         "x": 4392,
                         "y": 7056,
-                        "value": "NaN"
-                    }
-                ]
-            },
-            {
-                "name": "N_RFI_X",
-                "description": "Count of deleted TBs due to suspected RFI",
-                "noDataValue": "0.0",
-                "noDataValueUsed": "true",
-                "spectralWavelength": "0.0",
-                "spectralBandwidth": "0.0",
-                "expectedPixels": [
-                    {
-                        "x": 6328,
-                        "y": 3038,
-                        "value": "NaN"
-                    },
-                    {
-                        "x": 15923,
-                        "y": 5575,
-                        "value": "NaN"
-                    }
-                ]
-            },
-            {
-                "name": "N_RFI_Y",
-                "description": "Count of deleted TBs due to suspected RFI",
-                "noDataValue": "0.0",
-                "noDataValueUsed": "true",
-                "spectralWavelength": "0.0",
-                "spectralBandwidth": "0.0",
-                "expectedPixels": [
-                    {
-                        "x": 11875,
-                        "y": 3503,
-                        "value": "NaN"
-                    },
-                    {
-                        "x": 8172,
-                        "y": 1137,
-                        "value": "NaN"
-                    }
-                ]
-            },
-            {
-                "name": "Grid_Point_ID",
-                "description": "Grid point ID",
-                "noDataValue": "0.0",
-                "noDataValueUsed": "true",
-                "spectralWavelength": "0.0",
-                "spectralBandwidth": "0.0",
-                "expectedPixels": [
-                    {
-                        "x": 15874,
-                        "y": 1114,
-                        "value": "NaN"
-                    },
-                    {
-                        "x": 11812,
-                        "y": 4555,
-                        "value": "NaN"
-                    }
-                ]
-            },
-            {
-                "name": "Latitude",
-                "description": "Latitude (-90, 90)",
-                "geophysicalUnit": "deg",
-                "noDataValue": "-999.0",
-                "noDataValueUsed": "true",
-                "spectralWavelength": "0.0",
-                "spectralBandwidth": "0.0",
-                "expectedPixels": [
-                    {
-                        "x": 11564,
-                        "y": 8108,
-                        "value": "NaN"
-                    },
-                    {
-                        "x": 10498,
-                        "y": 7421,
-                        "value": "NaN"
-                    }
-                ]
-            },
-            {
-                "name": "Longitude",
-                "description": "Longitude (-180, 180)",
-                "geophysicalUnit": "deg",
-                "noDataValue": "-999.0",
-                "noDataValueUsed": "true",
-                "spectralWavelength": "0.0",
-                "spectralBandwidth": "0.0",
-                "expectedPixels": [
-                    {
-                        "x": 13685,
-                        "y": 4349,
-                        "value": 120.638
-                    },
-                    {
-                        "x": 8191,
-                        "y": 7617,
-                        "value": "NaN"
-                    }
-                ]
-            },
-            {
-                "name": "Altitude",
-                "description": "Altitude (-12000, 9000)",
-                "geophysicalUnit": "m",
-                "noDataValue": "-99999.0",
-                "noDataValueUsed": "true",
-                "spectralWavelength": "0.0",
-                "spectralBandwidth": "0.0",
-                "expectedPixels": [
-                    {
-                        "x": 9376,
-                        "y": 6327,
-                        "value": "NaN"
-                    },
-                    {
-                        "x": 15226,
-                        "y": 321,
                         "value": "NaN"
                     }
                 ]
@@ -1607,288 +1607,414 @@
                 "spectralBandwidth": "0.0",
                 "expectedPixels": [
                     {
-                        "x": 11536,
-                        "y": 5922,
+                        "x": 6328,
+                        "y": 3038,
                         "value": 1.0
                     },
                     {
-                        "x": 5689,
-                        "y": 56,
-                        "value": 193.0
+                        "x": 15923,
+                        "y": 5575,
+                        "value": 1.0
                     }
                 ]
             }
         ],
         "masks": [
             {
-                "name": "Confidence_Flags_FL_RFI_PRONE_H",
+                "name": "F1_CI_FLAG",
                 "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
                 "color": "246,182,21",
-                "description": "DGG Current RFI for H pol above threshold"
+                "description": "Quality flag: sea ice cover"
             },
             {
-                "name": "Confidence_Flags_FL_RFI_PRONE_V",
+                "name": "F1_SP_FLAG",
                 "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
                 "color": "95,92,204",
-                "description": "DGG Current RFI for V pol above threshold"
+                "description": "Quality flag: surface pressure"
             },
             {
-                "name": "Confidence_Flags_FL_NO_PROD",
+                "name": "F1_2T_FLAG",
                 "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
                 "color": "49,82,133",
-                "description": "No products are generated"
+                "description": "Quality flag: air temperature 2m"
             },
             {
-                "name": "Confidence_Flags_FL_RANGE",
+                "name": "F1_SSTK_FLAG",
                 "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
                 "color": "169,175,146",
-                "description": "Retrieval values out off range"
+                "description": "Quality flag: sea surface temperature"
             },
             {
-                "name": "Confidence_Flags_FL_DQX",
+                "name": "F1_TCWV_FLAG",
                 "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
                 "color": "156,188,14",
-                "description": "High retrieval DQX"
+                "description": "Quality flag: total column water vapour"
             },
             {
-                "name": "Confidence_Flags_FL_CHI2_P",
+                "name": "F1_RR_FLAG",
                 "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
                 "color": "39,91,126",
-                "description": "Poor fit quality"
+                "description": "Quality flag: rain rate"
             },
             {
-                "name": "Science_Flags_FL_NON_NOM",
-                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
-                "color": "246,182,21",
-                "description": "Presence of other than nominal soil"
-            },
-            {
-                "name": "Science_Flags_FL_SCENE_T",
-                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
-                "color": "95,92,204",
-                "description": "True (1) if any of scene flags is set (1)"
-            },
-            {
-                "name": "Science_Flags_FL_BARREN",
-                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
-                "color": "49,82,133",
-                "description": "Scene flag indicating presence of rocks"
-            },
-            {
-                "name": "Science_Flags_FL_TOPO_S",
-                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
-                "color": "169,175,146",
-                "description": "Scene flag indicating presence of strong topography"
-            },
-            {
-                "name": "Science_Flags_FL_TOPO_M",
-                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
-                "color": "156,188,14",
-                "description": "Scene flag indicating presence of moderate topography"
-            },
-            {
-                "name": "Science_Flags_FL_OW",
-                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
-                "color": "39,91,126",
-                "description": "Scene flag indicating presence of open water"
-            },
-            {
-                "name": "Science_Flags_FL_SNOW_MIX",
+                "name": "F1_SWVL1_FLAG",
                 "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
                 "color": "214,25,160",
-                "description": "Scene flag indicating presence of mixed snow"
+                "description": "Quality flag: volumetric soil water L1"
             },
             {
-                "name": "Science_Flags_FL_SNOW_WET",
+                "name": "F1_SWVL2_FLAG",
                 "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
                 "color": "178,13,207",
-                "description": "Scene flag indicating presence of wet snow"
+                "description": "Quality flag: volumetric soil water L2"
             },
             {
-                "name": "Science_Flags_FL_SNOW_DRY",
+                "name": "F1_SRC_FLAG",
                 "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
                 "color": "208,249,67",
-                "description": "Scene flag indicating presence of significant dry snow"
+                "description": "Quality flag: skin reservoir content"
             },
             {
-                "name": "Science_Flags_FL_FOREST",
+                "name": "F1_STL1_FLAG",
                 "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
                 "color": "106,109,115",
-                "description": "Scene flag indicating presence of forest"
+                "description": "Quality flag: soil temperature L1"
             },
             {
-                "name": "Science_Flags_FL_NOMINAL",
+                "name": "F1_STL2_FLAG",
                 "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
                 "color": "16,81,105",
-                "description": "Scene flag indicating presence of nominal soil"
+                "description": "Quality flag: soil temperature L2"
             },
             {
-                "name": "Science_Flags_FL_FROST",
+                "name": "F1_STL3_FLAG",
                 "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
                 "color": "171,1,243",
-                "description": "Scene flag indicating presence of frost"
+                "description": "Quality flag: soil temperature L3"
             },
             {
-                "name": "Science_Flags_FL_ICE",
+                "name": "F1_STL4_FLAG",
                 "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
                 "color": "238,203,217",
-                "description": "Scene flag indicating presence of permanent ice/snow"
+                "description": "Quality flag: soil temperature L4"
             },
             {
-                "name": "Science_Flags_FL_WETLANDS",
+                "name": "F1_SKT_FLAG",
                 "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
                 "color": "250,231,95",
-                "description": "Scene flag indicating presence of wetlands"
+                "description": "Quality flag: skin temperature"
             },
             {
-                "name": "Science_Flags_FL_FLOOD_PROB",
+                "name": "F1_TSN_FLAG",
                 "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
                 "color": "240,108,99",
-                "description": "Scene flag indicating probable flooding risk"
+                "description": "Quality flag: temperature snow layer"
             },
             {
-                "name": "Science_Flags_FL_URBAN_LOW",
+                "name": "F1_ISTL1_FLAG",
                 "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
                 "color": "115,141,245",
-                "description": "Scene flag indicating presence of limited urban area"
+                "description": "Quality flag: ice surface temperature"
             },
             {
-                "name": "Science_Flags_FL_URBAN_HIGH",
+                "name": "F1_SD_FLAG",
                 "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
                 "color": "134,147,45",
-                "description": "Scene flag indicating presence of large urban area"
+                "description": "Quality flag: snow depth"
             },
             {
-                "name": "Science_Flags_FL_SAND",
+                "name": "F1_SMLT_FLAG",
                 "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
                 "color": "128,201,42",
-                "description": "Scene flag indicating presence of high sand fraction"
+                "description": "Quality flag: accumulated water"
             },
             {
-                "name": "Science_Flags_FL_SEA_ICE",
+                "name": "F1_RSN_FLAG",
                 "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
                 "color": "168,104,12",
-                "description": "Scene flag indicating presence of sea ice"
+                "description": "Quality flag: Snow density"
             },
             {
-                "name": "Science_Flags_FL_COAST",
+                "name": "F1_U_FLAG",
                 "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
                 "color": "143,245,6",
-                "description": "Scene flag indicating presence of large tidal flag"
+                "description": "Quality flag: wind zonal lowest level"
             },
             {
-                "name": "Science_Flags_FL_OCCUR_T",
+                "name": "F1_V_FLAG",
                 "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
                 "color": "36,87,190",
-                "description": "True (1) if any of occur flags is set (1)"
+                "description": "Quality flag: wind meridional lowest level"
             },
             {
-                "name": "Science_Flags_FL_LITTER",
-                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
-                "color": "114,207,90",
-                "description": "Occur flag indicating litter suspected"
-            },
-            {
-                "name": "Science_Flags_FL_PR",
-                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
-                "color": "145,13,33",
-                "description": "Occur flag indicating interception suspected (polarisation ratio)"
-            },
-            {
-                "name": "Science_Flags_FL_INTERCEP",
-                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
-                "color": "52,182,192",
-                "description": "Occur flag - ECMWF indicates interception)"
-            },
-            {
-                "name": "Science_Flags_FL_EXTERNAL",
-                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
-                "color": "46,90,194",
-                "description": "Any of the external flags on, or N_SKY counter not equal to zero"
-            },
-            {
-                "name": "Science_Flags_FL_RAIN",
-                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
-                "color": "0,15,39",
-                "description": "External flag indicating heavy rain suspected"
-            },
-            {
-                "name": "Science_Flags_FL_TEC",
-                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
-                "color": "160,208,135",
-                "description": "External flag indicating high ionospheric contributions"
-            },
-            {
-                "name": "Science_Flags_FL_TAU_FO",
-                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
-                "color": "55,46,12",
-                "description": "Scene flag indicating presence of thick forest"
-            },
-            {
-                "name": "Science_Flags_FL_WINTER_FOREST",
-                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
-                "color": "214,207,170",
-                "description": "Flag indicating that the winter forest case has been selected by the decision tree"
-            },
-            {
-                "name": "Science_Flags_FL_DUAL_RETR_FNO_FFO",
-                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
-                "color": "47,83,139",
-                "description": "Flag indicating dual retrieval is performed on the FNO and FFO fractions"
-            },
-            {
-                "name": "Processing_Flags_FL_R4",
+                "name": "F2_CDWW_FLAG",
                 "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
                 "color": "246,182,21",
-                "description": "True (1) if attempted, regardless of success"
+                "description": "Quality flag: drag coefficient with waves"
             },
             {
-                "name": "Processing_Flags_FL_R3",
+                "name": "F2_WIND_FLAG",
                 "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
                 "color": "95,92,204",
-                "description": "True (1) if attempted, regardless of success"
+                "description": "Quality flag: wind 10m wave model"
             },
             {
-                "name": "Processing_Flags_FL_R2",
+                "name": "F2_PP1D_FLAG",
                 "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
                 "color": "49,82,133",
-                "description": "True (1) if attempted, regardless of success"
+                "description": "Quality flag: peak period 1d"
             },
             {
-                "name": "Processing_Flags_FL_MD_A",
+                "name": "F2_SWH_FLAG",
                 "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
                 "color": "169,175,146",
-                "description": "True (1) if MDa failed"
+                "description": "Quality flag: significant wave height"
             },
             {
-                "name": "DGG_Current_Flags_FL_CURRENT_TAU_NADIR_LV",
-                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
-                "color": "246,182,21",
-                "description": "Flag driving request for updating the DGG_Current_Tau_Nadir_LV map after processing"
-            },
-            {
-                "name": "DGG_Current_Flags_FL_CURRENT_TAU_NADIR_FO",
-                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
-                "color": "95,92,204",
-                "description": "Flag driving request for updating the DGG_Current_Tau_Nadir_FO map after processing"
-            },
-            {
-                "name": "DGG_Current_Flags_FL_CURRENT_HR",
-                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
-                "color": "49,82,133",
-                "description": "Flag driving request for updating the DGG_Current_HR map after processing"
-            },
-            {
-                "name": "DGG_Current_Flags_FL_CURRENT_RFI",
-                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
-                "color": "169,175,146",
-                "description": "Flag driving request for updating the DGG_Current_RFI map after processing"
-            },
-            {
-                "name": "DGG_Current_Flags_FL_CURRENT_FLOOD",
+                "name": "F2_MSQS_FLAG",
                 "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
                 "color": "156,188,14",
-                "description": "Flag driving request for updating the DGG_Current_Flood map after processing"
+                "description": "Quality flag: mean square slope"
+            },
+            {
+                "name": "F2_MPWW_FLAG",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "39,91,126",
+                "description": "Quality flag: mean period wind waves"
+            },
+            {
+                "name": "F2_SHWW_FLAG",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "214,25,160",
+                "description": "Quality flag: significant height wind waves"
+            },
+            {
+                "name": "F2_UN10_FLAG",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "178,13,207",
+                "description": "Quality flag: 10 m neutral equivalent wind  zonal"
+            },
+            {
+                "name": "F2_VN10_FLAG",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "208,249,67",
+                "description": "Quality flag: 10 m neutral equivalent wind  meridional"
+            },
+            {
+                "name": "F2_ZNT_FLAG",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "106,109,115",
+                "description": "Quality flag: roughness length"
+            },
+            {
+                "name": "F2_UST_FLAG",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "16,81,105",
+                "description": "Quality flag: friction velocity from surface model"
+            },
+            {
+                "name": "F2_UWAV_FLAG",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "171,1,243",
+                "description": "Quality flag: friction velocity from wave model"
+            },
+            {
+                "name": "F2_OMEGA_FLAG",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "238,203,217",
+                "description": "Quality flag: inverse wave age"
+            },
+            {
+                "name": "D1_SP_FLAG",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "246,182,21",
+                "description": "Degradation flag: surface pressure"
+            },
+            {
+                "name": "D1_2T_FLAG",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "95,92,204",
+                "description": "Degradation flag: air temperature 2m"
+            },
+            {
+                "name": "D1_SSTK_FLAG",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "49,82,133",
+                "description": "Degradation flag: sea surface temperature"
+            },
+            {
+                "name": "D1_TCWV_FLAG",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "169,175,146",
+                "description": "Degradation flag: total column water vapour"
+            },
+            {
+                "name": "D1_SWVL1_FLAG",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "156,188,14",
+                "description": "Degradation flag: volumetric soil water L1"
+            },
+            {
+                "name": "D1_SWVL2_FLAG",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "39,91,126",
+                "description": "Degradation flag: volumetric soil water L2"
+            },
+            {
+                "name": "D1_SRC_FLAG",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "214,25,160",
+                "description": "Degradation flag: skin reservoir content"
+            },
+            {
+                "name": "D1_STL1_FLAG",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "178,13,207",
+                "description": "Degradation flag: soil temperature L1"
+            },
+            {
+                "name": "D1_STL2_FLAG",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "208,249,67",
+                "description": "Degradation flag: soil temperature L2"
+            },
+            {
+                "name": "D1_STL3_FLAG",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "106,109,115",
+                "description": "Degradation flag: soil temperature L3"
+            },
+            {
+                "name": "D1_STL4_FLAG",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "16,81,105",
+                "description": "Degradation flag: soil temperature L4"
+            },
+            {
+                "name": "D1_SKT_FLAG",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "171,1,243",
+                "description": "Degradation flag: skin temperature"
+            },
+            {
+                "name": "D1_TSN_FLAG",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "238,203,217",
+                "description": "Degradation flag: temperature snow layer"
+            },
+            {
+                "name": "D1_ISTL1_FLAG",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "250,231,95",
+                "description": "Degradation flag: ice surface temperature"
+            },
+            {
+                "name": "D1_SD_FLAG",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "240,108,99",
+                "description": "Degradation flag: snow depth"
+            },
+            {
+                "name": "D1_SMLT_FLAG",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "115,141,245",
+                "description": "Degradation flag: accumulated water"
+            },
+            {
+                "name": "D1_RSN_FLAG",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "134,147,45",
+                "description": "Degradation flag: Snow density"
+            },
+            {
+                "name": "D1_U_FLAG",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "128,201,42",
+                "description": "Degradation flag: wind zonal lowest level"
+            },
+            {
+                "name": "D1_V_FLAG",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "168,104,12",
+                "description": "Degradation flag: wind meridional lowest level"
+            },
+            {
+                "name": "D2_CDWW_FLAG",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "246,182,21",
+                "description": "Degradation flag: drag coefficient with waves"
+            },
+            {
+                "name": "D2_WIND_FLAG",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "95,92,204",
+                "description": "Degradation flag: wind 10m wave model"
+            },
+            {
+                "name": "D2_PP1D_FLAG",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "49,82,133",
+                "description": "Degradation flag: peak period 1d"
+            },
+            {
+                "name": "D2_SWH_FLAG",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "169,175,146",
+                "description": "Degradation flag: significant wave height"
+            },
+            {
+                "name": "D2_MSQS_FLAG",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "156,188,14",
+                "description": "Degradation flag: mean square slope"
+            },
+            {
+                "name": "D2_MPWW_FLAG",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "39,91,126",
+                "description": "Degradation flag: mean period wind waves"
+            },
+            {
+                "name": "D2_SHWW_FLAG",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "214,25,160",
+                "description": "Degradation flag: significant height wind waves"
+            },
+            {
+                "name": "D2_UN10_FLAG",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "178,13,207",
+                "description": "Degradation flag: 10 m neutral equivalent wind  zonal"
+            },
+            {
+                "name": "D2_VN10_FLAG",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "208,249,67",
+                "description": "Degradation flag: 10 m neutral equivalent wind  meridional"
+            },
+            {
+                "name": "D2_ZNT_FLAG",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "106,109,115",
+                "description": "Degradation flag: roughness length"
+            },
+            {
+                "name": "D2_UST_FLAG",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "16,81,105",
+                "description": "Degradation flag: friction velocity from surface model"
+            },
+            {
+                "name": "D2_UWAV_FLAG",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "171,1,243",
+                "description": "Degradation flag: friction velocity from wave model"
+            },
+            {
+                "name": "D2_OMEGA_FLAG",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "238,203,217",
+                "description": "Degradation flag: inverse wave age"
             },
             {
                 "name": "Land_Sea_Mask_USGS_SEA_FLAG",
@@ -1941,12 +2067,12 @@
         ],
         "metadata": [
             {
-                "path": "Fixed_Header/Source/System",
-                "value": "DPGS"
+                "path": "Variable_Header/Specific_Product_Header/Quality_Information/Overall_Quality",
+                "value": "0"
             },
             {
-                "path": "Fixed_Header/Validity_Period/Validity_Start",
-                "value": "UTC=2010-02-07T21:29:42"
+                "path": "Variable_Header/Specific_Product_Header/L2_Product_Location/Stop_Long",
+                "value": "+016.766064"
             }
         ]
     }

@@ -1,11 +1,11 @@
 {
-    "id": "SM_OPER_MIR_SMUDP2_20100207T212942",
+    "id": "SM_REPR_MIR_SMUDP2_20101105T195023",
     "decodeQualification": "intended",
-    "expectedContent" : {
+    "expectedContent": {
         "sceneWidth": 16384,
         "sceneHeight": 8192,
-        "startTime": "07-FEB-2010 21:29:42.000000",
-        "endTime": "07-FEB-2010 22:23:42.000000",
+        "startTime": "05-NOV-2010 19:50:23.000000",
+        "endTime": "05-NOV-2010 20:44:22.000000",
         "geoCoding": {
             "coordinates": [
                 {
@@ -320,9 +320,9 @@
                 "spectralBandwidth": "0.0",
                 "expectedPixels": [
                     {
-                        "x": 13223,
-                        "y": 2656,
-                        "value": 0.31417993
+                        "x": 6497,
+                        "y": 4353,
+                        "value": 0.06049482
                     },
                     {
                         "x": 854,
@@ -341,9 +341,9 @@
                 "spectralBandwidth": "0.0",
                 "expectedPixels": [
                     {
-                        "x": 12323,
-                        "y": 1297,
-                        "value": 0.55434906
+                        "x": 6374,
+                        "y": 4382,
+                        "value": 0.05022327
                     },
                     {
                         "x": 4765,
@@ -362,9 +362,9 @@
                 "spectralBandwidth": "0.0",
                 "expectedPixels": [
                     {
-                        "x": 13644,
-                        "y": 4305,
-                        "value": 0.4831452
+                        "x": 6221,
+                        "y": 5102,
+                        "value": 0.69175375
                     },
                     {
                         "x": 9011,
@@ -383,9 +383,9 @@
                 "spectralBandwidth": "0.0",
                 "expectedPixels": [
                     {
-                        "x": 13686,
-                        "y": 4183,
-                        "value": 0.3571005
+                        "x": 6288,
+                        "y": 4787,
+                        "value": 0.035758834
                     },
                     {
                         "x": 2593,
@@ -404,9 +404,9 @@
                 "spectralBandwidth": "0.0",
                 "expectedPixels": [
                     {
-                        "x": 13936,
-                        "y": 5181,
-                        "value": 304.5758
+                        "x": 8505,
+                        "y": 7483,
+                        "value": "NaN"
                     },
                     {
                         "x": 12388,
@@ -425,9 +425,9 @@
                 "spectralBandwidth": "0.0",
                 "expectedPixels": [
                     {
-                        "x": 13342,
-                        "y": 3626,
-                        "value": 2.4691944
+                        "x": 15577,
+                        "y": 3980,
+                        "value": "NaN"
                     },
                     {
                         "x": 5577,
@@ -445,9 +445,9 @@
                 "spectralBandwidth": "0.0",
                 "expectedPixels": [
                     {
-                        "x": 13928,
-                        "y": 5013,
-                        "value": 1.0
+                        "x": 163,
+                        "y": 3856,
+                        "value": "NaN"
                     },
                     {
                         "x": 5364,
@@ -485,9 +485,9 @@
                 "spectralBandwidth": "0.0",
                 "expectedPixels": [
                     {
-                        "x": 13531,
-                        "y": 2895,
-                        "value": 1.0
+                        "x": 9377,
+                        "y": 5871,
+                        "value": "NaN"
                     },
                     {
                         "x": 3800,
@@ -567,7 +567,7 @@
                     {
                         "x": 15566,
                         "y": 7752,
-                        "value": 0.0
+                        "value": "NaN"
                     },
                     {
                         "x": 1817,
@@ -860,7 +860,7 @@
                     {
                         "x": 4571,
                         "y": 7280,
-                        "value": "NaN"
+                        "value": 197.6388
                     },
                     {
                         "x": 15493,
@@ -1110,7 +1110,7 @@
                     {
                         "x": 4628,
                         "y": 7235,
-                        "value": "NaN"
+                        "value": 29.0
                     }
                 ]
             },
@@ -1131,7 +1131,7 @@
                     {
                         "x": 13417,
                         "y": 4109,
-                        "value": 0.0
+                        "value": "NaN"
                     }
                 ]
             },
@@ -1216,8 +1216,7 @@
                 ]
             },
             {
-                "name": "N_Instrument_Error",
-                "description": "This counts the number of TBs that pass the initial TB filtering and have the L1c Instrument_Error_Flag ON",
+                "name": "N_RFI_Mitigations",
                 "noDataValue": "0.0",
                 "noDataValueUsed": "true",
                 "spectralWavelength": "0.0",
@@ -1236,8 +1235,7 @@
                 ]
             },
             {
-                "name": "N_Software_Error",
-                "description": "This counts the number of TBs that pass the initial TB filtering and have the L1c Software_Error_flag ON",
+                "name": "N_Strong_RFI",
                 "noDataValue": "0.0",
                 "noDataValueUsed": "true",
                 "spectralWavelength": "0.0",
@@ -1256,8 +1254,7 @@
                 ]
             },
             {
-                "name": "N_ADF_Error",
-                "description": "This counts the number of TBs that pass the initial TB filtering and have the L1c ADF_Error_flag on",
+                "name": "N_Point_Source_RFI",
                 "noDataValue": "0.0",
                 "noDataValueUsed": "true",
                 "spectralWavelength": "0.0",
@@ -1276,8 +1273,7 @@
                 ]
             },
             {
-                "name": "N_Calibration_Error",
-                "description": "This counts the number of TBs that pass the initial TB filtering and have the L1c Calibration_Error_flag ON",
+                "name": "N_Tails_Point_Source_RFI",
                 "noDataValue": "0.0",
                 "noDataValueUsed": "true",
                 "spectralWavelength": "0.0",
@@ -1296,8 +1292,8 @@
                 ]
             },
             {
-                "name": "N_X_Band",
-                "description": "This counts the number of TBs that pass the initial TB fitering and have L1c X-Band ON",
+                "name": "N_Instrument_Error",
+                "description": "This counts the number of TBs that pass the initial TB filtering and have the L1c Instrument_Error_Flag ON",
                 "noDataValue": "0.0",
                 "noDataValueUsed": "true",
                 "spectralWavelength": "0.0",
@@ -1316,8 +1312,8 @@
                 ]
             },
             {
-                "name": "Science_Flags",
-                "description": "Science flags",
+                "name": "N_Software_Error",
+                "description": "This counts the number of TBs that pass the initial TB filtering and have the L1c Software_Error_flag ON",
                 "noDataValue": "0.0",
                 "noDataValueUsed": "true",
                 "spectralWavelength": "0.0",
@@ -1331,13 +1327,13 @@
                     {
                         "x": 13755,
                         "y": 4662,
-                        "value": 35.0
+                        "value": "NaN"
                     }
                 ]
             },
             {
-                "name": "N_Sky",
-                "description": "Strong galactic source",
+                "name": "N_ADF_Error",
+                "description": "This counts the number of TBs that pass the initial TB filtering and have the L1c ADF_Error_flag on",
                 "noDataValue": "0.0",
                 "noDataValueUsed": "true",
                 "spectralWavelength": "0.0",
@@ -1356,8 +1352,8 @@
                 ]
             },
             {
-                "name": "Processing_Flags",
-                "description": "Processing flags",
+                "name": "N_Calibration_Error",
+                "description": "This counts the number of TBs that pass the initial TB filtering and have the L1c Calibration_Error_flag ON",
                 "noDataValue": "0.0",
                 "noDataValueUsed": "true",
                 "spectralWavelength": "0.0",
@@ -1376,8 +1372,8 @@
                 ]
             },
             {
-                "name": "S_Tree_1",
-                "description": "Branches of Decision Tree S",
+                "name": "N_X_Band",
+                "description": "This counts the number of TBs that pass the initial TB fitering and have L1c X-Band ON",
                 "noDataValue": "0.0",
                 "noDataValueUsed": "true",
                 "spectralWavelength": "0.0",
@@ -1396,8 +1392,8 @@
                 ]
             },
             {
-                "name": "S_Tree_2",
-                "description": "Retrieval R2, R3 or R4",
+                "name": "Science_Flags",
+                "description": "Science flags",
                 "noDataValue": "0.0",
                 "noDataValueUsed": "true",
                 "spectralWavelength": "0.0",
@@ -1416,8 +1412,8 @@
                 ]
             },
             {
-                "name": "DGG_Current_Flags",
-                "description": "DGG current flags",
+                "name": "N_Sky",
+                "description": "Strong galactic source",
                 "noDataValue": "0.0",
                 "noDataValueUsed": "true",
                 "spectralWavelength": "0.0",
@@ -1436,9 +1432,9 @@
                 ]
             },
             {
-                "name": "Tau_Cur_DQX",
-                "description": "This is a special tau DQX value computed using a special sigma corresponding to the case where tau nad is completely free",
-                "noDataValue": "-999.0",
+                "name": "Processing_Flags",
+                "description": "Processing flags",
+                "noDataValue": "0.0",
                 "noDataValueUsed": "true",
                 "spectralWavelength": "0.0",
                 "spectralBandwidth": "0.0",
@@ -1456,9 +1452,9 @@
                 ]
             },
             {
-                "name": "HR_Cur_DQX",
-                "description": "This is a special HR DQX value computed using a special sigma corresponding to the case where HR is completely free",
-                "noDataValue": "-999.0",
+                "name": "S_Tree_1",
+                "description": "Branches of Decision Tree S",
+                "noDataValue": "0.0",
                 "noDataValueUsed": "true",
                 "spectralWavelength": "0.0",
                 "spectralBandwidth": "0.0",
@@ -1476,8 +1472,8 @@
                 ]
             },
             {
-                "name": "N_RFI_X",
-                "description": "Count of deleted TBs due to suspected RFI",
+                "name": "S_Tree_2",
+                "description": "Retrieval R2, R3 or R4",
                 "noDataValue": "0.0",
                 "noDataValueUsed": "true",
                 "spectralWavelength": "0.0",
@@ -1496,8 +1492,8 @@
                 ]
             },
             {
-                "name": "N_RFI_Y",
-                "description": "Count of deleted TBs due to suspected RFI",
+                "name": "DGG_Current_Flags",
+                "description": "DGG current flags",
                 "noDataValue": "0.0",
                 "noDataValueUsed": "true",
                 "spectralWavelength": "0.0",
@@ -1516,9 +1512,9 @@
                 ]
             },
             {
-                "name": "Grid_Point_ID",
-                "description": "Grid point ID",
-                "noDataValue": "0.0",
+                "name": "Tau_Cur_DQX",
+                "description": "This is a special tau DQX value computed using a special sigma corresponding to the case where tau nad is completely free",
+                "noDataValue": "-999.0",
                 "noDataValueUsed": "true",
                 "spectralWavelength": "0.0",
                 "spectralBandwidth": "0.0",
@@ -1536,9 +1532,8 @@
                 ]
             },
             {
-                "name": "Latitude",
-                "description": "Latitude (-90, 90)",
-                "geophysicalUnit": "deg",
+                "name": "HR_Cur_DQX",
+                "description": "This is a special HR DQX value computed using a special sigma corresponding to the case where HR is completely free",
                 "noDataValue": "-999.0",
                 "noDataValueUsed": "true",
                 "spectralWavelength": "0.0",
@@ -1557,10 +1552,9 @@
                 ]
             },
             {
-                "name": "Longitude",
-                "description": "Longitude (-180, 180)",
-                "geophysicalUnit": "deg",
-                "noDataValue": "-999.0",
+                "name": "N_RFI_X",
+                "description": "Count of deleted TBs due to suspected RFI",
+                "noDataValue": "0.0",
                 "noDataValueUsed": "true",
                 "spectralWavelength": "0.0",
                 "spectralBandwidth": "0.0",
@@ -1568,7 +1562,7 @@
                     {
                         "x": 13685,
                         "y": 4349,
-                        "value": 120.638
+                        "value": "NaN"
                     },
                     {
                         "x": 8191,
@@ -1578,10 +1572,9 @@
                 ]
             },
             {
-                "name": "Altitude",
-                "description": "Altitude (-12000, 9000)",
-                "geophysicalUnit": "m",
-                "noDataValue": "-99999.0",
+                "name": "N_RFI_Y",
+                "description": "Count of deleted TBs due to suspected RFI",
+                "noDataValue": "0.0",
                 "noDataValueUsed": "true",
                 "spectralWavelength": "0.0",
                 "spectralBandwidth": "0.0",
@@ -1599,8 +1592,8 @@
                 ]
             },
             {
-                "name": "Land_Sea_Mask",
-                "description": "Flag indicating Land/Sea USGS content, Coastline distance, and Ice content",
+                "name": "Grid_Point_ID",
+                "description": "Grid point ID",
                 "noDataValue": "0.0",
                 "noDataValueUsed": "true",
                 "spectralWavelength": "0.0",
@@ -1609,12 +1602,95 @@
                     {
                         "x": 11536,
                         "y": 5922,
-                        "value": 1.0
+                        "value": "NaN"
                     },
                     {
                         "x": 5689,
                         "y": 56,
-                        "value": 193.0
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Latitude",
+                "description": "Latitude (-90, 90)",
+                "geophysicalUnit": "deg",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 3545,
+                        "y": 7048,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 2060,
+                        "y": 831,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Longitude",
+                "description": "Longitude (-180, 180)",
+                "geophysicalUnit": "deg",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 1412,
+                        "y": 938,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 11404,
+                        "y": 572,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Altitude",
+                "description": "Altitude (-12000, 9000)",
+                "geophysicalUnit": "m",
+                "noDataValue": "-99999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 7884,
+                        "y": 7111,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 2742,
+                        "y": 1937,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Land_Sea_Mask",
+                "description": "Flag indicating Land/Sea USGS content, Coastline distance, and Ice content",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 4114,
+                        "y": 7956,
+                        "value": 2.0
+                    },
+                    {
+                        "x": 11728,
+                        "y": 2783,
+                        "value": 2.0
                     }
                 ]
             }
@@ -1941,12 +2017,12 @@
         ],
         "metadata": [
             {
-                "path": "Fixed_Header/Source/System",
-                "value": "DPGS"
+                "path": "Variable_Header/Specific_Product_Header/List_of_Data_Sets/Data_Set[10]/DSR_Size",
+                "value": "00000000"
             },
             {
-                "path": "Fixed_Header/Validity_Period/Validity_Start",
-                "value": "UTC=2010-02-07T21:29:42"
+                "path": "Variable_Header/Specific_Product_Header/List_of_Data_Sets/Data_Set[16]/Num_DSR",
+                "value": "0000000000"
             }
         ]
     }

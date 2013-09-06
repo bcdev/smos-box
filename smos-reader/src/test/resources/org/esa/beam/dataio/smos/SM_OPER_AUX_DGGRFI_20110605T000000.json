@@ -1,0 +1,155 @@
+{
+    "id": "SM_OPER_AUX_DGGRFI_20110605T000000",
+    "decodeQualification": "intended",
+    "expectedContent": {
+        "sceneWidth": 16384,
+        "sceneHeight": 8192,
+        "startTime": "05-JUN-2011 00:00:00.000000",
+        "endTime": "08-JUN-2011 00:00:00.000000",
+        "geoCoding": {
+            "coordinates": [
+                {
+                    "x": 7066.659,
+                    "y": 4403.7256,
+                    "lat": -6.7615485,
+                    "lon": -24.726727
+                }
+            ],
+            "reverseAccuracy": 0.01
+        },
+        "bands": [
+            {
+                "name": "N_Snap",
+                "description": "Acummulated valid snapshots from the UDPs (sum of M_AVA) plus one plus the snapshots affected by RFI (H or V)",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 12164,
+                        "y": 5315,
+                        "value": 1.0
+                    },
+                    {
+                        "x": 854,
+                        "y": 1459,
+                        "value": 107709.0
+                    }
+                ]
+            },
+            {
+                "name": "N_RFI_H",
+                "description": "Number of FOVs considered significantly affected by RFI in horizontal polarization on specified DGG cell",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 11224,
+                        "y": 6968,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 4765,
+                        "y": 2104,
+                        "value": 1150.0
+                    }
+                ]
+            },
+            {
+                "name": "N_RFI_V",
+                "description": "Number of FOVs considered significantly affected by RFI in vertical polarization on specified DGG cell",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 10002,
+                        "y": 2992,
+                        "value": 6780.0
+                    },
+                    {
+                        "x": 9011,
+                        "y": 6105,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Grid_Point_ID",
+                "description": "Unique identifier for Earth fixed grid point (1, 9262145)",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 9966,
+                        "y": 7605,
+                        "value": 7097329.0
+                    },
+                    {
+                        "x": 2593,
+                        "y": 5456,
+                        "value": 5153769.0
+                    }
+                ]
+            },
+            {
+                "name": "Latitude",
+                "description": "Latitude (-90, 90)",
+                "geophysicalUnit": "deg",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 8505,
+                        "y": 7483,
+                        "value": -74.472
+                    },
+                    {
+                        "x": 12388,
+                        "y": 3969,
+                        "value": 2.759
+                    }
+                ]
+            },
+            {
+                "name": "Longitude",
+                "description": "Longitude (0, 360)",
+                "geophysicalUnit": "deg",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 15577,
+                        "y": 3980,
+                        "value": 162.307
+                    },
+                    {
+                        "x": 5577,
+                        "y": 7368,
+                        "value": 302.62
+                    }
+                ]
+            }
+        ],
+        "metadata": [
+            {
+                "path": "Fixed_Header/Validity_Period/Validity_Start",
+                "value": "UTC=2011-06-05T00:00:00"
+            },
+            {
+                "path": "Fixed_Header/Validity_Period/Validity_Start",
+                "value": "UTC=2011-06-05T00:00:00"
+            }
+        ]
+    }
+}
