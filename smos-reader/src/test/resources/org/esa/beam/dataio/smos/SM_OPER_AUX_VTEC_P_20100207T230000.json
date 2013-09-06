@@ -1,0 +1,29 @@
+{
+    "id": "SM_OPER_AUX_VTEC_P_20100207T230000",
+    "decodeQualification": "intended",
+    "expectedContent": {
+        "sceneWidth": 16384,
+        "sceneHeight": 8192,
+        "geoCoding": {
+            "coordinates": [
+                {
+                    "x": 7066.659,
+                    "y": 4403.7256,
+                    "lat": -6.7615485,
+                    "lon": -24.726727
+                }
+            ],
+            "reverseAccuracy": 0.01
+        },
+        "metadata": [
+            {
+                "path": "Variable_Header/Specific_Product_Header/Main_SPH/Ref_Doc",
+                "value": "SO-TN-IDR-GS-0005"
+            },
+            {
+                "path": "Variable_Header/Specific_Product_Header/IONEX_Descriptor/Height_Vector/Height_Vector_2nd",
+                "value": "0450.000"
+            }
+        ]
+    }
+}

@@ -19,6 +19,8 @@
     <licenseUrl>http://www.gnu.org/licenses/gpl.html</licenseUrl>
 
     <changelog><![CDATA[
+       <p> Changes in 2.4:<br>
+        [SBOX-50] Exception when opening AFP band of SMUDP2 products<br>
        <p> Changes in 2.2:<br>
         [SBOX-45] Update to BEAM 4.10<br>
         [SBOX-44] Prob_RFI that is not reported correctly<br>
