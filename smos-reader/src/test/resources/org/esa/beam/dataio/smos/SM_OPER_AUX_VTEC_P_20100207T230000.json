@@ -15,14 +15,276 @@
             ],
             "reverseAccuracy": 0.01
         },
-        "metadata": [
+        "tiePointGrids": [
             {
-                "path": "Variable_Header/Specific_Product_Header/Main_SPH/Ref_Doc",
-                "value": "SO-TN-IDR-GS-0005"
+                "name": "VTEC_P_1",
+                "description": "Vertical total electron content (TECU) for epoch Mon Feb 08 01:00:00 CET 2010",
+                "offsetX": "0.0",
+                "offsetY": "113.77778",
+                "subSamplingX": "227.55556",
+                "subSamplingY": "113.77778",
+                "expectedPixels": [
+                    {
+                        "x": 12164,
+                        "y": 5315,
+                        "value": 5.513347
+                    },
+                    {
+                        "x": 854,
+                        "y": 1459,
+                        "value": 7.7320337
+                    }
+                ]
             },
             {
-                "path": "Variable_Header/Specific_Product_Header/IONEX_Descriptor/Height_Vector/Height_Vector_2nd",
-                "value": "0450.000"
+                "name": "VTEC_P_2",
+                "description": "Vertical total electron content (TECU) for epoch Mon Feb 08 03:00:00 CET 2010",
+                "offsetX": "0.0",
+                "offsetY": "113.77778",
+                "subSamplingX": "227.55556",
+                "subSamplingY": "113.77778",
+                "expectedPixels": [
+                    {
+                        "x": 11224,
+                        "y": 6968,
+                        "value": 6.7079177
+                    },
+                    {
+                        "x": 4765,
+                        "y": 2104,
+                        "value": 3.508838
+                    }
+                ]
+            },
+            {
+                "name": "VTEC_P_3",
+                "description": "Vertical total electron content (TECU) for epoch Mon Feb 08 05:00:00 CET 2010",
+                "offsetX": "0.0",
+                "offsetY": "113.77778",
+                "subSamplingX": "227.55556",
+                "subSamplingY": "113.77778",
+                "expectedPixels": [
+                    {
+                        "x": 10002,
+                        "y": 2992,
+                        "value": 6.0851355
+                    },
+                    {
+                        "x": 9011,
+                        "y": 6105,
+                        "value": 5.757188
+                    }
+                ]
+            },
+            {
+                "name": "VTEC_P_4",
+                "description": "Vertical total electron content (TECU) for epoch Mon Feb 08 07:00:00 CET 2010",
+                "offsetX": "0.0",
+                "offsetY": "113.77778",
+                "subSamplingX": "227.55556",
+                "subSamplingY": "113.77778",
+                "expectedPixels": [
+                    {
+                        "x": 9966,
+                        "y": 7605,
+                        "value": 8.275805
+                    },
+                    {
+                        "x": 2593,
+                        "y": 5456,
+                        "value": 7.579831
+                    }
+                ]
+            },
+            {
+                "name": "VTEC_P_5",
+                "description": "Vertical total electron content (TECU) for epoch Mon Feb 08 09:00:00 CET 2010",
+                "offsetX": "0.0",
+                "offsetY": "113.77778",
+                "subSamplingX": "227.55556",
+                "subSamplingY": "113.77778",
+                "expectedPixels": [
+                    {
+                        "x": 8505,
+                        "y": 7483,
+                        "value": 9.5831785
+                    },
+                    {
+                        "x": 12388,
+                        "y": 3969,
+                        "value": 24.11623
+                    }
+                ]
+            },
+            {
+                "name": "VTEC_P_6",
+                "description": "Vertical total electron content (TECU) for epoch Mon Feb 08 11:00:00 CET 2010",
+                "offsetX": "0.0",
+                "offsetY": "113.77778",
+                "subSamplingX": "227.55556",
+                "subSamplingY": "113.77778",
+                "expectedPixels": [
+                    {
+                        "x": 15577,
+                        "y": 3980,
+                        "value": 11.327337
+                    },
+                    {
+                        "x": 5577,
+                        "y": 7368,
+                        "value": 8.028662
+                    }
+                ]
+            },
+            {
+                "name": "VTEC_P_7",
+                "description": "Vertical total electron content (TECU) for epoch Mon Feb 08 13:00:00 CET 2010",
+                "offsetX": "0.0",
+                "offsetY": "113.77778",
+                "subSamplingX": "227.55556",
+                "subSamplingY": "113.77778",
+                "expectedPixels": [
+                    {
+                        "x": 163,
+                        "y": 3856,
+                        "value": 5.4180408
+                    },
+                    {
+                        "x": 5364,
+                        "y": 1614,
+                        "value": 2.5022445
+                    }
+                ]
+            },
+            {
+                "name": "VTEC_P_8",
+                "description": "Vertical total electron content (TECU) for epoch Mon Feb 08 15:00:00 CET 2010",
+                "offsetX": "0.0",
+                "offsetY": "113.77778",
+                "subSamplingX": "227.55556",
+                "subSamplingY": "113.77778",
+                "expectedPixels": [
+                    {
+                        "x": 4475,
+                        "y": 353,
+                        "value": 2.8453858
+                    },
+                    {
+                        "x": 15916,
+                        "y": 4953,
+                        "value": 7.729745
+                    }
+                ]
+            },
+            {
+                "name": "VTEC_P_9",
+                "description": "Vertical total electron content (TECU) for epoch Mon Feb 08 17:00:00 CET 2010",
+                "offsetX": "0.0",
+                "offsetY": "113.77778",
+                "subSamplingX": "227.55556",
+                "subSamplingY": "113.77778",
+                "expectedPixels": [
+                    {
+                        "x": 9377,
+                        "y": 5871,
+                        "value": 10.399496
+                    },
+                    {
+                        "x": 3800,
+                        "y": 4075,
+                        "value": 15.289682
+                    }
+                ]
+            },
+            {
+                "name": "VTEC_P_10",
+                "description": "Vertical total electron content (TECU) for epoch Mon Feb 08 19:00:00 CET 2010",
+                "offsetX": "0.0",
+                "offsetY": "113.77778",
+                "subSamplingX": "227.55556",
+                "subSamplingY": "113.77778",
+                "expectedPixels": [
+                    {
+                        "x": 5260,
+                        "y": 5919,
+                        "value": 15.683574
+                    },
+                    {
+                        "x": 5867,
+                        "y": 4081,
+                        "value": 23.960264
+                    }
+                ]
+            },
+            {
+                "name": "VTEC_P_11",
+                "description": "Vertical total electron content (TECU) for epoch Mon Feb 08 21:00:00 CET 2010",
+                "offsetX": "0.0",
+                "offsetY": "113.77778",
+                "subSamplingX": "227.55556",
+                "subSamplingY": "113.77778",
+                "expectedPixels": [
+                    {
+                        "x": 6600,
+                        "y": 3623,
+                        "value": 19.199942
+                    },
+                    {
+                        "x": 9415,
+                        "y": 752,
+                        "value": 1.6619618
+                    }
+                ]
+            },
+            {
+                "name": "VTEC_P_12",
+                "description": "Vertical total electron content (TECU) for epoch Mon Feb 08 23:00:00 CET 2010",
+                "offsetX": "0.0",
+                "offsetY": "113.77778",
+                "subSamplingX": "227.55556",
+                "subSamplingY": "113.77778",
+                "expectedPixels": [
+                    {
+                        "x": 10571,
+                        "y": 129,
+                        "value": 2.1318603
+                    },
+                    {
+                        "x": 15977,
+                        "y": 3008,
+                        "value": 11.362474
+                    }
+                ]
+            },
+            {
+                "name": "VTEC_P_13",
+                "description": "Vertical total electron content (TECU) for epoch Tue Feb 09 01:00:00 CET 2010",
+                "offsetX": "0.0",
+                "offsetY": "113.77778",
+                "subSamplingX": "227.55556",
+                "subSamplingY": "113.77778",
+                "expectedPixels": [
+                    {
+                        "x": 15566,
+                        "y": 7752,
+                        "value": 9.368383
+                    },
+                    {
+                        "x": 1817,
+                        "y": 3701,
+                        "value": 26.135508
+                    }
+                ]
+            }
+        ],
+        "metadata": [
+            {
+                "path": "Variable_Header/Specific_Product_Header/List_of_QC_Data_Sets/QC_Data_Set[7]/Max_TEC",
+                "value": "276"
+            },
+            {
+                "path": "Variable_Header/Specific_Product_Header/IONEX_Descriptor/Height_Vector/Height_Vector_Increment",
+                "value": "0000.000"
             }
         ]
     }
