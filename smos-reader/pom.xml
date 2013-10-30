@@ -61,6 +61,15 @@
             <groupId>org.mockito</groupId>
             <artifactId>mockito-all</artifactId>
         </dependency>
+
+        <!-- for supporting BUFR format
+        <dependency>
+            <groupId>edu.ucar</groupId>
+            <artifactId>bufr</artifactId>
+            <version>4.3.19</version>
+        </dependency>
+        -->
+
     </dependencies>
 
 </project>

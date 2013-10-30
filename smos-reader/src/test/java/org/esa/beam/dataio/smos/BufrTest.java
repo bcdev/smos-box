@@ -1,4 +1,5 @@
-package org.esa.beam.dataio.smos;/*
+package org.esa.beam.dataio.smos;
+/*
  * Copyright (C) 2012 Brockmann Consult GmbH (info@brockmann-consult.de)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -25,6 +26,7 @@ import ucar.nc2.Attribute;
 import ucar.nc2.NetcdfFile;
 import ucar.nc2.Sequence;
 import ucar.nc2.Variable;
+import ucar.nc2.iosp.bufr.BufrIosp;
 
 import java.io.IOException;
 import java.util.List;
@@ -53,7 +55,7 @@ public class BufrTest {
 
     @Before
     public void registerBufrIosp() throws Exception {
-        NetcdfFile.registerIOProvider("ucar.nc2.iosp.bufr.BufrIosp");
+        NetcdfFile.registerIOProvider("ucar.nc2.iosp.bufr.BufrIosp"); // can be replaced with 'BufrIosp.class'
     }
 
     @Ignore
@@ -68,14 +70,41 @@ public class BufrTest {
         NetcdfFile dataset;
 
         dataset = NetcdfFile.open(
-                "ideas-nas.eo.esa.int/miras_20131028_002942_20131028_003302_smos_20947_t_20131028_033058_l1c.bufr");
+                "/Users/ralf/Desktop/ideas-nas.eo.esa.int/miras_20131028_002942_20131028_003302_smos_20947_t_20131028_033058_l1c.bufr");
 
         assertNotNull(dataset);
 
         performAssertions(dataset);
 
         dataset = NetcdfFile.open(
-                "ideas-nas.eo.esa.int/miras_20131028_003256_20131028_020943_smos_20947_o_20131028_031005_l1c.bufr");
+                "/Users/ralf/Desktop/ideas-nas.eo.esa.int/miras_20131028_003256_20131028_020943_smos_20947_o_20131028_031005_l1c.bufr");
+
+        assertNotNull(dataset);
+
+        performAssertions(dataset);
+    }
+
+    @Ignore
+    @Test
+    public void testCanReadBufrLightFiles() throws Exception {
+        NetcdfFile dataset;
+
+        dataset = NetcdfFile.open(
+                "/Users/ralf/Desktop/ideas-nas.eo.esa.int/W_ES-ESA-ESAC,SMOS,N256_C_LEMM_20131028030552_20131028003256_20131028020943_bufr_v505.bin");
+
+        assertNotNull(dataset);
+
+        performAssertions(dataset);
+
+        dataset = NetcdfFile.open(
+                "/Users/ralf/Desktop/ideas-nas.eo.esa.int/W_ES-ESA-ESAC,SMOS,N256_C_LEMM_20131028033037_20131028002942_20131028003302_bufr_v505.bin");
+
+        assertNotNull(dataset);
+
+        performAssertions(dataset);
+
+        dataset = NetcdfFile.open(
+                "/Users/ralf/Desktop/ideas-nas.eo.esa.int/W_ES-ESA-ESAC,SMOS,N256_C_LEMM_20131028044206_20131028020942_20131028034943_bufr_v505.bin");
 
         assertNotNull(dataset);
 
@@ -97,6 +126,8 @@ public class BufrTest {
             assertEquals(DataType.SEQUENCE, variable.getDataType());
 
             final Sequence sequence = (Sequence) variable;
+            assertEquals(33, sequence.getNumberOfMemberVariables());
+
             final StructureDataIterator structureIterator = sequence.getStructureIterator();
             assertNotNull(structureIterator);
 
@@ -104,10 +135,7 @@ public class BufrTest {
                 final StructureData structureData = structureIterator.next();
                 assertNotNull(structureData);
 
-                final StructureMembers structureMembers = structureData.getStructureMembers();
-                assertEquals(80, structureMembers.getStructureSize());
-
-                final List<StructureMembers.Member> members = structureMembers.getMembers();
+                final List<StructureMembers.Member> members = structureData.getMembers();
                 assertEquals(33, members.size());
 
                 for (StructureMembers.Member member : members) {
