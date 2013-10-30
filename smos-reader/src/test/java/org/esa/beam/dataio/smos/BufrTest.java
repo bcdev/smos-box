@@ -26,7 +26,6 @@ import ucar.nc2.Attribute;
 import ucar.nc2.NetcdfFile;
 import ucar.nc2.Sequence;
 import ucar.nc2.Variable;
-import ucar.nc2.iosp.bufr.BufrIosp;
 
 import java.io.IOException;
 import java.util.List;
