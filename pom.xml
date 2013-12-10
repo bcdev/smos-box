@@ -25,6 +25,11 @@
                 <checksumPolicy>warn</checksumPolicy>
             </snapshots>
         </repository>
+        <repository>
+            <id>maven-repository.unidata.ucar.edu</id>
+            <name>Unidata Repository</name>
+            <url>http://artifacts.unidata.ucar.edu/content/repositories/unidata-releases</url>
+        </repository>
     </repositories>
 
     <pluginRepositories>

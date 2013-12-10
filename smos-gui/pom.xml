@@ -15,35 +15,6 @@
     <name>SMOS Gui Tools</name>
     <description>SMOS Gui Tools Package</description>
 
-    <repositories>
-        <repository>
-            <id>bc-mvn-repo-public</id>
-            <name>Public Maven Repository at Brockmann-Consult</name>
-            <url>http://www.brockmann-consult.de/mvn/os</url>
-            <releases>
-                <enabled>true</enabled>
-                <checksumPolicy>warn</checksumPolicy>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-                <checksumPolicy>warn</checksumPolicy>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>bc-mvn-repo-closed</id>
-            <name>Private Maven Repository at Brockmann Consult</name>
-            <url>scp://www.brockmann-consult.de/home/maven-cs</url>
-            <releases>
-                <enabled>true</enabled>
-                <checksumPolicy>warn</checksumPolicy>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-                <checksumPolicy>warn</checksumPolicy>
-            </snapshots>
-        </repository>
-    </repositories>
-
     <dependencies>
         <dependency>
             <groupId>com.bc.ceres</groupId>
