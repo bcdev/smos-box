@@ -18,6 +18,7 @@ package org.esa.beam.dataio.smos;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import ucar.ma2.ArrayStructure;
 import ucar.ma2.DataType;
 import ucar.ma2.StructureData;
 import ucar.ma2.StructureDataIterator;
@@ -26,6 +27,7 @@ import ucar.nc2.Attribute;
 import ucar.nc2.NetcdfFile;
 import ucar.nc2.Sequence;
 import ucar.nc2.Variable;
+import ucar.nc2.iosp.bufr.BufrIosp;
 
 import java.io.IOException;
 import java.util.List;
@@ -49,18 +51,16 @@ import static org.junit.Assert.assertTrue;
  *
  * @author Ralf Quast
  */
-@Ignore
 public class BufrTest {
 
     @Before
     public void registerBufrIosp() throws Exception {
-        NetcdfFile.registerIOProvider("ucar.nc2.iosp.bufr.BufrIosp"); // can be replaced with 'BufrIosp.class'
+        NetcdfFile.registerIOProvider(BufrIosp.class);
     }
 
-    @Ignore
     @Test
     public void testBufrIosp() throws Exception {
-        assertTrue(NetcdfFile.iospRegistered(null)); // replace 'null' with 'BufrIosp.class'
+        assertTrue(NetcdfFile.iospRegistered(BufrIosp.class));
     }
 
     @Ignore
@@ -130,19 +130,29 @@ public class BufrTest {
             final StructureDataIterator structureIterator = sequence.getStructureIterator();
             assertNotNull(structureIterator);
 
+            int numberOfSnapshots = 0;
+
             while (structureIterator.hasNext()) {
+                numberOfSnapshots++;
                 final StructureData structureData = structureIterator.next();
                 assertNotNull(structureData);
 
                 final List<StructureMembers.Member> members = structureData.getMembers();
                 assertEquals(33, members.size());
 
-                for (StructureMembers.Member member : members) {
-                    assertNotNull(member.getFullName());
-                    final DataType dataType = member.getDataType();
-                    assertTrue(dataType.isNumeric() || dataType.isString() || dataType.isEnum());
-                }
+                final short numberOfGridPoints = structureData.getScalarShort("Number_of_grid_points");
+
+                final int[] gridPointIdentifiers = structureData.getJavaArrayInt("Grid_point_identifier");
+                assertNotNull(gridPointIdentifiers);
+                assertEquals(numberOfGridPoints, gridPointIdentifiers.length);
+
+                final short[] brightnessTemperatureRealPart = structureData.getJavaArrayShort(
+                        "Brightness_temperature_real_part");
+                assertNotNull(brightnessTemperatureRealPart);
+                assertEquals(numberOfGridPoints, brightnessTemperatureRealPart.length);
             }
+
+            System.out.println("numberOfSnapshots = " + numberOfSnapshots);
         }
     }
 }
