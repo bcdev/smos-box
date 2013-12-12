@@ -154,6 +154,32 @@
             "id": "SM_OPER_AUX_VTEC_P_20100207T230000",
             "relativePath": "sensors_platforms/SMOS/AUX_VTEC_P/SM_OPER_AUX_VTEC_P_20100207T230000_20100209T010000_306_001_3/SM_OPER_AUX_VTEC_P_20100207T230000_20100209T010000_306_001_3.HDR",
             "description": "AUX_VTEC_P, predicted vertical total electron content, schema version 202"
+        },
+        {
+            "id": "V2KRNS1___20050521F",
+            "relativePath": "sensors_platforms/SPOT_VGT/SPOT_S/S0010419_0611_0002.zip",
+            "description": "VGT PRODUCT FORMAT V1.7"
+        },
+        {
+            "id": "V1KRNP____20081201E174",
+            "relativePath": "sensors_platforms/SPOT_VGT/V1/C0029343_0001_0001.zip",
+            "description": "VGT PRODUCT FORMAT V1.7"
+        },
+        {
+            "id": "V2KRNP____20040101F003",
+            "relativePath": "sensors_platforms/SPOT_VGT/V2/V2KRNP____20040101F003.zip",
+            "description": "VGT PRODUCT FORMAT V1.7"
+        },
+        {
+            "id": "V2KRNP____20040101F001",
+            "relativePath": "sensors_platforms/SPOT_VGT/V2/V2KRNP____20040101F001.zip",
+            "description": "VGT PRODUCT FORMAT V1.7"
+        },
+        {
+            "id": "ATS_TOA_1PRBCM20111204_214526",
+            "relativePath": "sensors_platforms/AATSR/TOA/N1/ATS_TOA_1PRBCM20111204_214526_000005093109_00186_51062_0045.N1.zip",
+            "description": "AATSR Gridded brightness temperature and reflectance,SOFTWARE_VER: AATS/06.03, intersecting anti meridian"
         }
+
     ]
 }
