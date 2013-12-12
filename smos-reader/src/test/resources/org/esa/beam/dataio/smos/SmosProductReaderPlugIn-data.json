@@ -2,157 +2,157 @@
     "testProducts": [
         {
             "id": "SM_OPER_MIR_BWLD1C_20100208T040959",
-            "relativePath": "sensors_platforms/SMOSMIR_BWLD1C/SM_OPER_MIR_BWLD1C_20100208T040959_20100208T050400_324_001_1/SM_OPER_MIR_BWLD1C_20100208T040959_20100208T050400_324_001_1.HDR",
+            "relativePath": "sensors_platforms/SMOS/MIR_BWLD1C/SM_OPER_MIR_BWLD1C_20100208T040959_20100208T050400_324_001_1/SM_OPER_MIR_BWLD1C_20100208T040959_20100208T050400_324_001_1.HDR",
             "description": "SMOS BWLD1C as directory with HDR file, schema version 201"
         },
         {
             "id": "SM_OPER_MIR_BWLF1C_20100119T061841",
-            "relativePath": "sensors_platforms/SMOSMIR_BWLF1C/SM_OPER_MIR_BWLF1C_20100119T061841_20100119T071243_324_003_1/SM_OPER_MIR_BWLF1C_20100119T061841_20100119T071243_324_003_1.DBL",
+            "relativePath": "sensors_platforms/SMOS/MIR_BWLF1C/SM_OPER_MIR_BWLF1C_20100119T061841_20100119T071243_324_003_1/SM_OPER_MIR_BWLF1C_20100119T061841_20100119T071243_324_003_1.DBL",
             "description": "SMOS BWLF1C as directory with DBL file, schema version 201"
         },
         {
             "id": "SM_OPER_MIR_BWLF1C_20111026T143206",
-            "relativePath": "sensors_platforms/SMOSMIR_BWLF1C/SM_OPER_MIR_BWLF1C_20111026T143206_20111026T152520_503_001_1.zip",
+            "relativePath": "sensors_platforms/SMOS/MIR_BWLF1C/SM_OPER_MIR_BWLF1C_20111026T143206_20111026T152520_503_001_1.zip",
             "description": "SMOS BWLF1C as directory with DBL file, schema version 300"
         },
         {
             "id": "SMOS_BWSD1C_DBL",
-            "relativePath": "sensors_platforms/SMOSMIR_BWSD1C/SM_OPER_MIR_BWSD1C_20100201T134256_20100201T140057_324_001_1/SM_OPER_MIR_BWSD1C_20100201T134256_20100201T140057_324_001_1.DBL",
+            "relativePath": "sensors_platforms/SMOS/MIR_BWSD1C/SM_OPER_MIR_BWSD1C_20100201T134256_20100201T140057_324_001_1/SM_OPER_MIR_BWSD1C_20100201T134256_20100201T140057_324_001_1.DBL",
             "description": "SMOS BWSD1C as directory with DBL file"
         },
         {
             "id": "SMOS_BWSD1C_AS_ZIP",
-            "relativePath": "sensors_platforms/SMOSMIR_BWSD1C/SM_OPER_MIR_BWSD1C_20100201T134256_20100201T140057_324_001_1.zip",
+            "relativePath": "sensors_platforms/SMOS/MIR_BWSD1C/SM_OPER_MIR_BWSD1C_20100201T134256_20100201T140057_324_001_1.zip",
             "description": "SMOS BWSD1C as zipped file"
         },
         {
             "id": "SMOS_BWSD1C_AS_ZIP_WITH_DIR",
-            "relativePath": "sensors_platforms/SMOSMIR_BWSD1C/SM_OPER_MIR_BWSD1C_20100201T134256_20100201T140057_324_002_1.zip",
+            "relativePath": "sensors_platforms/SMOS/MIR_BWSD1C/SM_OPER_MIR_BWSD1C_20100201T134256_20100201T140057_324_002_1.zip",
             "description": "SMOS BWSD1C as zipped file with internal directory"
         },
         {
             "id": "SM_OPER_MIR_BWSF1C_20100119T043836",
-            "relativePath": "sensors_platforms/SMOSMIR_BWSF1C/SM_OPER_MIR_BWSF1C_20100119T043836_20100119T053238_324_001_1/SM_OPER_MIR_BWSF1C_20100119T043836_20100119T053238_324_001_1.DBL",
+            "relativePath": "sensors_platforms/SMOS/MIR_BWSF1C/SM_OPER_MIR_BWSF1C_20100119T043836_20100119T053238_324_001_1/SM_OPER_MIR_BWSF1C_20100119T043836_20100119T053238_324_001_1.DBL",
             "description": "SMOS BWSF1C,  schema version 201"
         },
         {
             "id": "SM_OPER_MIR_OSDAP2_20120514T022742",
-            "relativePath": "sensors_platforms/SMOSMIR_OSDAP2/SM_OPER_MIR_OSDAP2_20120514T022742_20120514T032056_550_001_1.zip",
+            "relativePath": "sensors_platforms/SMOS/MIR_OSDAP2/SM_OPER_MIR_OSDAP2_20120514T022742_20120514T032056_550_001_1.zip",
             "description": "SMOS OSDAP2,  schema version 300"
         },
         {
             "id": "SM_OPER_MIR_OSUDP2_20100208T050001",
-            "relativePath": "sensors_platforms/SMOSMIR_OSUDP2/SM_OPER_MIR_OSUDP2_20100208T050001_20100208T055403_311_001_1/SM_OPER_MIR_OSUDP2_20100208T050001_20100208T055403_311_001_1.HDR",
+            "relativePath": "sensors_platforms/SMOS/MIR_OSUDP2/SM_OPER_MIR_OSUDP2_20100208T050001_20100208T055403_311_001_1/SM_OPER_MIR_OSUDP2_20100208T050001_20100208T055403_311_001_1.HDR",
             "description": "SMOS OSUDP2,  schema version 200"
         },
         {
             "id": "SM_OPER_MIR_OSUDP2_20120514T181819",
-            "relativePath": "sensors_platforms/SMOSMIR_OSUDP2/SM_OPER_MIR_OSUDP2_20120514T181819_20120514T191137_550_001_1.zip",
+            "relativePath": "sensors_platforms/SMOS/MIR_OSUDP2/SM_OPER_MIR_OSUDP2_20120514T181819_20120514T191137_550_001_1.zip",
             "description": "SMOS OSUDP2,  schema version 300"
         },
         {
             "id": "SM_OPER_MIR_SCLD1C_20100208T040959",
-            "relativePath": "sensors_platforms/SMOSMIR_SCLD1C/SM_OPER_MIR_SCLD1C_20100208T040959_20100208T050400_324_001_1/SM_OPER_MIR_SCLD1C_20100208T040959_20100208T050400_324_001_1.HDR",
+            "relativePath": "sensors_platforms/SMOS/MIR_SCLD1C/SM_OPER_MIR_SCLD1C_20100208T040959_20100208T050400_324_001_1/SM_OPER_MIR_SCLD1C_20100208T040959_20100208T050400_324_001_1.HDR",
             "description": "SMOS SCLD1C,  schema version 201"
         },
         {
             "id": "SM_OPER_MIR_SCLF1C_20100119T002827",
-            "relativePath": "sensors_platforms/SMOSMIR_SCLF1C/SM_OPER_MIR_SCLF1C_20100119T002827_20100119T012226_323_001_1/SM_OPER_MIR_SCLF1C_20100119T002827_20100119T012226_323_001_1.DBL",
+            "relativePath": "sensors_platforms/SMOS/MIR_SCLF1C/SM_OPER_MIR_SCLF1C_20100119T002827_20100119T012226_323_001_1/SM_OPER_MIR_SCLF1C_20100119T002827_20100119T012226_323_001_1.DBL",
             "description": "SMOS SCLF1C,  schema version 201"
         },
         {
             "id": "SM_OPER_MIR_SCLF1C_20120514T195822",
-            "relativePath": "sensors_platforms/SMOSMIR_SCLF1C/SM_OPER_MIR_SCLF1C_20120514T195822_20120514T205142_505_001_1.zip",
+            "relativePath": "sensors_platforms/SMOS/MIR_SCLF1C/SM_OPER_MIR_SCLF1C_20120514T195822_20120514T205142_505_001_1.zip",
             "description": "SMOS SCLF1C,  schema version 300"
         },
         {
             "id": "SM_OPER_MIR_SCSD1C_20100208T064006",
-            "relativePath": "sensors_platforms/SMOSMIR_SCSD1C/SM_OPER_MIR_SCSD1C_20100208T064006_20100208T073408_324_001_1/SM_OPER_MIR_SCSD1C_20100208T064006_20100208T073408_324_001_1.HDR",
+            "relativePath": "sensors_platforms/SMOS/MIR_SCSD1C/SM_OPER_MIR_SCSD1C_20100208T064006_20100208T073408_324_001_1/SM_OPER_MIR_SCSD1C_20100208T064006_20100208T073408_324_001_1.HDR",
             "description": "SMOS SCSD1C,  schema version 201"
         },
         {
             "id": "SM_OPER_MIR_SCSF1C_20100119T043836",
-            "relativePath": "sensors_platforms/SMOSMIR_SCSF1C/SM_OPER_MIR_SCSF1C_20100119T043836_20100119T053238_324_001_1/SM_OPER_MIR_SCSF1C_20100119T043836_20100119T053238_324_001_1.DBL",
+            "relativePath": "sensors_platforms/SMOS/MIR_SCSF1C/SM_OPER_MIR_SCSF1C_20100119T043836_20100119T053238_324_001_1/SM_OPER_MIR_SCSF1C_20100119T043836_20100119T053238_324_001_1.DBL",
             "description": "SMOS SCSD1C,  schema version 201"
         },
         {
             "id": "SM_OPER_MIR_SCSF1C_20120514T013734",
-            "relativePath": "sensors_platforms/SMOSMIR_SCSF1C/SM_OPER_MIR_SCSF1C_20120514T013734_20120514T023053_505_001_1.zip",
+            "relativePath": "sensors_platforms/SMOS/MIR_SCSF1C/SM_OPER_MIR_SCSF1C_20120514T013734_20120514T023053_505_001_1.zip",
             "description": "SMOS SCSD1C,  schema version 300"
         },
         {
             "id": "SM_REPR_MIR_SMDAP2_20101105T163013",
-            "relativePath": "sensors_platforms/SMOSMIR_SMDAP2/SM_REPR_MIR_SMDAP2_20101105T163013_20101105T172413_400_001_9/SM_REPR_MIR_SMDAP2_20101105T163013_20101105T172413_400_001_9.HDR",
+            "relativePath": "sensors_platforms/SMOS/MIR_SMDAP2/SM_REPR_MIR_SMDAP2_20101105T163013_20101105T172413_400_001_9/SM_REPR_MIR_SMDAP2_20101105T163013_20101105T172413_400_001_9.HDR",
             "description": "SMOS SMDAP2,  schema version 200"
         },
         {
             "id": "SM_OPER_MIR_SMDAP2_20111026T075149",
-            "relativePath": "sensors_platforms/SMOSMIR_SMDAP2/SM_OPER_MIR_SMDAP2_20111026T075149_20111026T084501_500_001_1.zip",
+            "relativePath": "sensors_platforms/SMOS/MIR_SMDAP2/SM_OPER_MIR_SMDAP2_20111026T075149_20111026T084501_500_001_1.zip",
             "description": "SMOS SMDAP2,  schema version 300"
         },
         {
             "id": "SM_OPER_MIR_SMUDP2_20100207T212942",
-            "relativePath": "sensors_platforms/SMOSMIR_SMUDP2/SM_OPER_MIR_SMUDP2_20100207T212942_20100207T222342_305_001_1/SM_OPER_MIR_SMUDP2_20100207T212942_20100207T222342_305_001_1.HDR",
+            "relativePath": "sensors_platforms/SMOS/MIR_SMUDP2/SM_OPER_MIR_SMUDP2_20100207T212942_20100207T222342_305_001_1/SM_OPER_MIR_SMUDP2_20100207T212942_20100207T222342_305_001_1.HDR",
             "description": "SMOS SMUDP2,  schema version 200"
         },
         {
             "id": "SM_REPR_MIR_SMUDP2_20101105T195023",
-            "relativePath": "sensors_platforms/SMOSMIR_SMUDP2/SM_REPR_MIR_SMUDP2_20101105T195023_20101105T204422_400_001_9/SM_REPR_MIR_SMUDP2_20101105T195023_20101105T204422_400_001_9.DBL",
+            "relativePath": "sensors_platforms/SMOS/MIR_SMUDP2/SM_REPR_MIR_SMUDP2_20101105T195023_20101105T204422_400_001_9/SM_REPR_MIR_SMUDP2_20101105T195023_20101105T204422_400_001_9.DBL",
             "description": "SMOS SMUDP2,  schema version 201"
         },
         {
             "id": "SM_OPER_MIR_SMUDP2_20120514T163815",
-            "relativePath": "sensors_platforms/SMOSMIR_SMUDP2/SM_OPER_MIR_SMUDP2_20120514T163815_20120514T173133_551_001_1.zip",
+            "relativePath": "sensors_platforms/SMOS/MIR_SMUDP2/SM_OPER_MIR_SMUDP2_20120514T163815_20120514T173133_551_001_1.zip",
             "description": "SMOS SMUDP2,  schema version 300"
         },
         {
             "id": "SM_OPER_AUX_DFFLAI_20100117T000000",
-            "relativePath": "sensors_platforms/SMOSAUX_DFFLAI/SM_OPER_AUX_DFFLAI_20100117T000000_20100216T000000_306_001_3/SM_OPER_AUX_DFFLAI_20100117T000000_20100216T000000_306_001_3.HDR",
+            "relativePath": "sensors_platforms/SMOS/AUX_DFFLAI/SM_OPER_AUX_DFFLAI_20100117T000000_20100216T000000_306_001_3/SM_OPER_AUX_DFFLAI_20100117T000000_20100216T000000_306_001_3.HDR",
             "description": "AUX_DFFLAI, leaf area index, schema version 200"
         },
         {
             "id": "SM_OPER_AUX_DGGFLO_20110605T000000",
-            "relativePath": "sensors_platforms/SMOSAUX_DGGFLO/SM_OPER_AUX_DGGFLO_20110605T000000_20110608T000000_307_001_3/SM_OPER_AUX_DGGFLO_20110605T000000_20110608T000000_307_001_3.DBL",
+            "relativePath": "sensors_platforms/SMOS/AUX_DGGFLO/SM_OPER_AUX_DGGFLO_20110605T000000_20110608T000000_307_001_3/SM_OPER_AUX_DGGFLO_20110605T000000_20110608T000000_307_001_3.DBL",
             "description": "AUX_DGGFLO, flood probability, schema version 200"
         },
         {
             "id": "SM_OPER_AUX_DGGRFI_20110605T000000",
-            "relativePath": "sensors_platforms/SMOSAUX_DGGRFI/SM_OPER_AUX_DGGRFI_20110605T000000_20110608T000000_307_001_3/SM_OPER_AUX_DGGRFI_20110605T000000_20110608T000000_307_001_3.HDR",
+            "relativePath": "sensors_platforms/SMOS/AUX_DGGRFI/SM_OPER_AUX_DGGRFI_20110605T000000_20110608T000000_307_001_3/SM_OPER_AUX_DGGRFI_20110605T000000_20110608T000000_307_001_3.HDR",
             "description": "AUX_DGGRFI, radio frequency interference, schema version 200"
         },
         {
             "id": "SM_OPER_AUX_DGGROU_20110605T000000",
-            "relativePath": "sensors_platforms/SMOSAUX_DGGROU/SM_OPER_AUX_DGGROU_20110605T000000_20110608T000000_307_001_3/SM_OPER_AUX_DGGROU_20110605T000000_20110608T000000_307_001_3.DBL",
+            "relativePath": "sensors_platforms/SMOS/AUX_DGGROU/SM_OPER_AUX_DGGROU_20110605T000000_20110608T000000_307_001_3/SM_OPER_AUX_DGGROU_20110605T000000_20110608T000000_307_001_3.DBL",
             "description": "AUX_DGGROU, land roughness, schema version 200"
         },
         {
             "id": "SM_OPER_AUX_DGGTFO_20110605T000000",
-            "relativePath": "sensors_platforms/SMOSAUX_DGGTFO/SM_OPER_AUX_DGGTFO_20110605T000000_20110608T000000_307_001_3/SM_OPER_AUX_DGGTFO_20110605T000000_20110608T000000_307_001_3.HDR",
+            "relativePath": "sensors_platforms/SMOS/AUX_DGGTFO/SM_OPER_AUX_DGGTFO_20110605T000000_20110608T000000_307_001_3/SM_OPER_AUX_DGGTFO_20110605T000000_20110608T000000_307_001_3.HDR",
             "description": "AUX_DGGTFO, forest optical thickness, schema version 200"
         },
         {
             "id": "SM_OPER_AUX_DGGTLV_20110605T000000",
-            "relativePath": "sensors_platforms/SMOSAUX_DGGTLV/SM_OPER_AUX_DGGTLV_20110605T000000_20110608T000000_307_001_3/SM_OPER_AUX_DGGTLV_20110605T000000_20110608T000000_307_001_3.DBL",
+            "relativePath": "sensors_platforms/SMOS/AUX_DGGTLV/SM_OPER_AUX_DGGTLV_20110605T000000_20110608T000000_307_001_3/SM_OPER_AUX_DGGTLV_20110605T000000_20110608T000000_307_001_3.DBL",
             "description": "AUX_DGGTLV, low vegetation optical thickness, schema version 200"
         },
         {
             "id": "SM_OPER_AUX_ECMWF__20100208T045820",
-            "relativePath": "sensors_platforms/SMOSAUX_ECMWF_/SM_OPER_AUX_ECMWF__20100208T045820_20100208T060050_306_001_3/SM_OPER_AUX_ECMWF__20100208T045820_20100208T060050_306_001_3.HDR",
+            "relativePath": "sensors_platforms/SMOS/AUX_ECMWF_/SM_OPER_AUX_ECMWF__20100208T045820_20100208T060050_306_001_3/SM_OPER_AUX_ECMWF__20100208T045820_20100208T060050_306_001_3.HDR",
             "description": "AUX_ECMWF, schema version 200"
         },
         {
             "id": "SM_OPER_AUX_ECMWF__20120507T160755",
-            "relativePath": "sensors_platforms/SMOSAUX_ECMWF_/SM_OPER_AUX_ECMWF__20120507T160755_20120507T171050_315_001_3.zip",
+            "relativePath": "sensors_platforms/SMOS/AUX_ECMWF_/SM_OPER_AUX_ECMWF__20120507T160755_20120507T171050_315_001_3.zip",
             "description": "AUX_ECMWF, schema version 300"
         },
         {
             "id": "SM_OPER_AUX_VTEC_C_20100118T230000",
-            "relativePath": "sensors_platforms/SMOSAUX_VTEC_C/SM_OPER_AUX_VTEC_C_20100118T230000_20100120T010000_306_001_3/SM_OPER_AUX_VTEC_C_20100118T230000_20100120T010000_306_001_3.DBL",
+            "relativePath": "sensors_platforms/SMOS/AUX_VTEC_C/SM_OPER_AUX_VTEC_C_20100118T230000_20100120T010000_306_001_3/SM_OPER_AUX_VTEC_C_20100118T230000_20100120T010000_306_001_3.DBL",
             "description": "AUX_VTEC_C, consolidated vertical total electron content, schema version 202"
         },
         {
             "id": "SM_OPER_AUX_VTEC_P_20100207T230000",
-            "relativePath": "sensors_platforms/SMOSAUX_VTEC_P/SM_OPER_AUX_VTEC_P_20100207T230000_20100209T010000_306_001_3/SM_OPER_AUX_VTEC_P_20100207T230000_20100209T010000_306_001_3.HDR",
+            "relativePath": "sensors_platforms/SMOS/AUX_VTEC_P/SM_OPER_AUX_VTEC_P_20100207T230000_20100209T010000_306_001_3/SM_OPER_AUX_VTEC_P_20100207T230000_20100209T010000_306_001_3.HDR",
             "description": "AUX_VTEC_P, predicted vertical total electron content, schema version 202"
         }
     ]
