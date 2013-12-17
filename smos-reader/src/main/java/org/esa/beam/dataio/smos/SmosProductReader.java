@@ -113,19 +113,15 @@ public class SmosProductReader extends AbstractProductReader {
             }
         }
 
-        if (StringUtils.isNullOrEmpty(fileName)) {
-            throw new IOException(MessageFormat.format("File ''{0}'': unknown/unsupported SMOS data format.", virtualDir.getBasePath()));
+        if (fileName == null) {
+            return null;
         }
 
         final File hdrFile = virtualDir.getFile(listPath + fileName);
         File dblFile = FileUtils.exchangeExtension(hdrFile, ".DBL");
         dblFile = virtualDir.getFile(listPath + dblFile.getName());
 
-        final ExplorerFile explorerFile = createExplorerFile(hdrFile, dblFile);
-        if (explorerFile == null) {
-            throw new IOException(MessageFormat.format("File ''{0}'': unknown/unsupported SMOS data format.", hdrFile));
-        }
-        return explorerFile;
+        return createExplorerFile(hdrFile, dblFile);
     }
 
     SmosProductReader(ProductReaderPlugIn readerPlugIn) {
@@ -142,6 +138,9 @@ public class SmosProductReader extends AbstractProductReader {
                 explorerFile = createExplorerFile(inputFile);
             } else {
                 explorerFile = createExplorerFile(getInputVirtualDir());
+            }
+            if (explorerFile == null) {
+                return null;
             }
             final Product product = explorerFile.createProduct();
             if (virtualDir != null && virtualDir.isCompressed()) {
