@@ -15,6 +15,7 @@ package org.esa.beam.dataio.smos;
  * with this program; if not, see http://www.gnu.org/licenses/
  */
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -51,6 +52,7 @@ import static org.junit.Assert.assertTrue;
  *
  * @author Ralf Quast
  */
+@Ignore
 public class BufrTest {
 
     @Before
