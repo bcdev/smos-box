@@ -59,26 +59,26 @@ public class SmosProductReaderPlugIn implements ProductReaderPlugIn {
                 }
             }
         } else if (SmosUtils.isCompressedFile(file)) {
-            if (SmosUtils.isL1cType(fileName) || SmosUtils.isL2Type(fileName) || SmosUtils.isAuxECMWFType(fileName)) {
-                return DecodeQualification.INTENDED;
-            }
-
             ZipFile zipFile = null;
             try {
                 zipFile = new ZipFile(file);
                 final Enumeration<? extends ZipEntry> entries = zipFile.entries();
                 final String name1 = entries.nextElement().getName();
                 final String name2 = entries.nextElement().getName();
-                if (name1.endsWith(".HDR") && name2.endsWith(".DBL")) {
-                    return DecodeQualification.SUITABLE;
-                }
-                if (name1.endsWith(".DBL") && name2.endsWith(".HDR")) {
-                    return DecodeQualification.SUITABLE;
+                if ((name1.endsWith(".HDR") && name2.endsWith(".DBL")) ||
+                    (name1.endsWith(".DBL") && name2.endsWith(".HDR"))) {
+                    if (SmosUtils.isL1cType(fileName) ||
+                        SmosUtils.isL2Type(fileName) ||
+                        SmosUtils.isAuxECMWFType(fileName)) {
+                        return DecodeQualification.INTENDED;
+                    } else {
+                        return DecodeQualification.SUITABLE;
+                    }
                 }
             } catch (IOException e) {
-                return DecodeQualification.UNABLE;
+                // ignore
             } catch (NoSuchElementException e) {
-                return DecodeQualification.UNABLE;
+                // ignore
             } finally {
                 if (zipFile != null) {
                     try {
