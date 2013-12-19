@@ -23,7 +23,12 @@ import org.esa.beam.util.io.BeamFileFilter;
 import org.esa.beam.util.io.FileUtils;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.Enumeration;
 import java.util.Locale;
+import java.util.NoSuchElementException;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 /**
  * Plugin providing the SMOS product reader.
@@ -57,7 +62,32 @@ public class SmosProductReaderPlugIn implements ProductReaderPlugIn {
             if (SmosUtils.isL1cType(fileName) || SmosUtils.isL2Type(fileName) || SmosUtils.isAuxECMWFType(fileName)) {
                 return DecodeQualification.INTENDED;
             }
-            return DecodeQualification.SUITABLE;
+
+            ZipFile zipFile = null;
+            try {
+                zipFile = new ZipFile(file);
+                final Enumeration<? extends ZipEntry> entries = zipFile.entries();
+                final String name1 = entries.nextElement().getName();
+                final String name2 = entries.nextElement().getName();
+                if (name1.endsWith(".HDR") && name2.endsWith(".DBL")) {
+                    return DecodeQualification.SUITABLE;
+                }
+                if (name1.endsWith(".DBL") && name2.endsWith(".HDR")) {
+                    return DecodeQualification.SUITABLE;
+                }
+            } catch (IOException e) {
+                return DecodeQualification.UNABLE;
+            } catch (NoSuchElementException e) {
+                return DecodeQualification.UNABLE;
+            } finally {
+                if (zipFile != null) {
+                    try {
+                        zipFile.close();
+                    } catch (IOException e) {
+                        // ignore
+                    }
+                }
+            }
         }
 
         return DecodeQualification.UNABLE;
