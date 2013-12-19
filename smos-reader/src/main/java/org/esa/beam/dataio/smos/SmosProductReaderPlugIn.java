@@ -43,8 +43,8 @@ public class SmosProductReaderPlugIn implements ProductReaderPlugIn {
     @Override
     public DecodeQualification getDecodeQualification(Object input) {
         final File file = input instanceof File ? (File) input : new File(input.toString());
-
         final String fileName = file.getName();
+
         if (fileName.endsWith(".HDR") || fileName.endsWith(".DBL")) {
             final File hdrFile = FileUtils.exchangeExtension(file, ".HDR");
             final File dblFile = FileUtils.exchangeExtension(file, ".DBL");
@@ -59,32 +59,39 @@ public class SmosProductReaderPlugIn implements ProductReaderPlugIn {
                 }
             }
         } else if (SmosUtils.isCompressedFile(file)) {
-            ZipFile zipFile = null;
-            try {
-                zipFile = new ZipFile(file);
-                final Enumeration<? extends ZipEntry> entries = zipFile.entries();
-                final String name1 = entries.nextElement().getName();
-                final String name2 = entries.nextElement().getName();
-                if ((name1.endsWith(".HDR") && name2.endsWith(".DBL")) ||
-                    (name1.endsWith(".DBL") && name2.endsWith(".HDR"))) {
-                    if (SmosUtils.isL1cType(fileName) ||
-                        SmosUtils.isL2Type(fileName) ||
-                        SmosUtils.isAuxECMWFType(fileName)) {
-                        return DecodeQualification.INTENDED;
-                    } else {
-                        return DecodeQualification.SUITABLE;
+            if (SmosUtils.isL1cType(fileName) ||
+                SmosUtils.isL2Type(fileName) ||
+                SmosUtils.isAuxECMWFType(fileName)) {
+                return DecodeQualification.INTENDED;
+            } else {
+                ZipFile zipFile = null;
+                try {
+                    zipFile = new ZipFile(file);
+                    final Enumeration<? extends ZipEntry> entries = zipFile.entries();
+                    String name1 = entries.nextElement().getName();
+                    String name2 = entries.nextElement().getName();
+                    if (name1.endsWith("/")) {
+                        if (entries.hasMoreElements()) {
+                            name1 = entries.nextElement().getName();
+                        }
                     }
-                }
-            } catch (IOException e) {
-                // ignore
-            } catch (NoSuchElementException e) {
-                // ignore
-            } finally {
-                if (zipFile != null) {
-                    try {
-                        zipFile.close();
-                    } catch (IOException e) {
-                        // ignore
+                    if (!entries.hasMoreElements()) {
+                        if ((name1.endsWith(".HDR") && name2.endsWith(".DBL")) ||
+                            (name1.endsWith(".DBL") && name2.endsWith(".HDR"))) {
+                            return DecodeQualification.SUITABLE;
+                        }
+                    }
+                } catch (IOException e) {
+                    // ignore
+                } catch (NoSuchElementException e) {
+                    // ignore
+                } finally {
+                    if (zipFile != null) {
+                        try {
+                            zipFile.close();
+                        } catch (IOException e) {
+                            // ignore
+                        }
                     }
                 }
             }
