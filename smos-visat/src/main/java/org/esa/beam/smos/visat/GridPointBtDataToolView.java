@@ -37,12 +37,14 @@ import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingWorker;
 import java.awt.BorderLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 public abstract class GridPointBtDataToolView extends SmosToolView {
 
@@ -150,9 +152,8 @@ public abstract class GridPointBtDataToolView extends SmosToolView {
             clearGridPointBtDataComponent();
             return;
         }
-        L1cSmosFile l1cSmosFile = getL1cSmosFile();
+        final L1cSmosFile l1cSmosFile = getL1cSmosFile();
         final int gridPointIndex = l1cSmosFile != null ? l1cSmosFile.getGridPointIndex(selectedGridPointId) : -1;
-
         if (gridPointIndex >= 0) {
             setInfoText("" +
                         "<html>" +
@@ -160,12 +161,27 @@ public abstract class GridPointBtDataToolView extends SmosToolView {
                         "INDEX=<b>" + gridPointIndex + "</b>" +
                         "</html>");
 
-            try {
-                GridPointBtDataset ds = GridPointBtDataset.read(l1cSmosFile, gridPointIndex);
-                updateGridPointBtDataComponent(ds);
-            } catch (IOException e) {
-                updateGridPointBtDataComponent(e);
-            }
+            new SwingWorker<GridPointBtDataset, Void>() {
+
+                @Override
+                protected GridPointBtDataset doInBackground() throws ExecutionException {
+                    try {
+                        return GridPointBtDataset.read(l1cSmosFile, gridPointIndex);
+                    } catch (IOException e) {
+                        throw new ExecutionException(e);
+                    }
+                }
+
+                @Override
+                protected void done() {
+                    try {
+                        updateGridPointBtDataComponent(get());
+                    } catch (InterruptedException | ExecutionException e) {
+                        updateGridPointBtDataComponent(new IOException(e));
+                    }
+                }
+
+            }.execute();
         } else {
             setInfoText("No data");
             clearGridPointBtDataComponent();
