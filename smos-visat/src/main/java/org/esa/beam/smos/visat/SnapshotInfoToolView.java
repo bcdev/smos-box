@@ -705,6 +705,5 @@ public class SnapshotInfoToolView extends SmosToolView {
             raster.getGeophysicalImage().reset();
         }
         raster.setStx(null);
-        raster.fireProductNodeDataChanged();
     }
 }
