@@ -13,7 +13,7 @@ if [ -z "$BEAM4_HOME" ]; then
     echo Error:
     echo BEAM4_HOME does not exists in your environment. Please
     echo set the BEAM4_HOME variable in your environment to the
-    echo location of your BEAM 4.x installation.
+    echo location of your BEAM installation.
     echo
     exit 2
 fi
