@@ -1,0 +1,151 @@
+
+netcdf MIR_OSUDP2 {
+dimensions:
+    n_grid_points = unlimited ; // currently 2645
+variables:
+    unsigned int grid_point_id(n_grid_points) ;
+    float latitude(n_grid_points) ;
+        latitude:units = "degrees_north" ;
+        latitude:_FillValue = -999.f ;
+        latitude:valid_min = -90.f ;
+        latitude:valid_max = 90.f ;
+    float longitude(n_grid_points) ;
+        longitude:units = "degrees_east" ;
+        longitude:_FillValue = -999.f ;
+        longitude:valid_min = -180.f ;
+        longitude:valid_max = 180.f ;
+
+    // geophysical parameters…
+    float equiv_ftprt_diam(n_grid_points) ;
+        equiv_ftprt_diam:units = "m" ;
+        equiv_ftprt_diam:_FillValue = -999.f ;
+    float mean_acq_time(n_grid_points) ;
+        mean_acq_time:units = "dd" ;
+        mean_acq_time:_FillValue = -999.f ;
+    float sss1(n_grid_points) ;
+        sss1:units = "psu" ;
+        sss1:_FillValue = -999.f ;
+    float sigma_sss1(n_grid_points) ;
+        sigma_sss1:units = "psu" ;
+        sigma_sss1:_FillValue = -999.f ;
+    float sss2(n_grid_points) ;
+        sss2:units = "psu" ;
+        sss2:_FillValue = -999.f ;
+    float sigma_sss2(n_grid_points) ;
+        sigma_sss2:units = "psu" ;
+        sigma_sss2:_FillValue = -999.f ;
+    float sss3(n_grid_points) ;
+        sss3:units = "psu" ;
+        sss3:_FillValue = -999.f ;
+    float sigma_sss3(n_grid_points) ;
+        sigma_sss3:units = "psu" ;
+        sigma_sss3:_FillValue = -999.f ;
+    float a_card(n_grid_points) ;
+        a_card:_FillValue = -999.f ;
+    float sigma_a_card(n_grid_points) ;
+        sigma_a_card:_FillValue = -999.f ;
+    float ws(n_grid_points) ;
+        ws:units = "m s**-1" ;
+        ws:_FillValue = -999.f ;
+    float sigma_ws(n_grid_points) ;
+        sigma_ws:units = "m s**-1" ;
+        sigma_ws:_FillValue = -999.f ;
+    float sst(n_grid_points) ;
+        sst:units = "Celsius" ;
+        sst:_FillValue = -999.f ;
+    float sigma_sst(n_grid_points) ;
+        sigma_sst:units = "Celsius" ;
+        sigma_sst:_FillValue = -999.f ;
+    float tb_42.5h(n_grid_points) ;
+        tb_42.5h:units = "K" ;
+        tb_42.5h:_FillValue = -999.f ;
+    float sigma_tb_42.5h(n_grid_points) ;
+        sigma_tb_42.5h:units = "K" ;
+        sigma_tb_42.5h:_FillValue = -999.f ;
+    float tb_42.5v(n_grid_points) ;
+        tb_42.5v:units = "K" ;
+        tb_42.5v:_FillValue = -999.f ;
+    float sigma_tb_42.5v(n_grid_points) ;
+        sigma_tb_42.5v:units = "K" ;
+        sigma_tb_42.5v:_FillValue = -999.f ;
+    float tb_42.5x(n_grid_points) ;
+        tb_42.5x:units = "K" ;
+        tb_42.5x:_FillValue = -999.f ;
+    float sigma_tb_42.5x(n_grid_points) ;
+        sigma_tb_42.5x:units = "K" ;
+        sigma_tb_42.5x:_FillValue = -999.f ;
+    float tb_42.5y(n_grid_points) ;
+        tb_42.5y:units = "K" ;
+        tb_42.5y:_FillValue = -999.f ;
+    float sigma_tb_42.5y(n_grid_points) ;
+        sigma_tb_42.5y:units = "K" ;
+        sigma_tb_42.5y:_FillValue = -999.f ;
+
+    unsigned integer control_flags_1(n_grid_points) ;
+        control_flags_1:flag_masks = 1, 2, 4, … ;
+        control_flags_1:flag_meanings = "fg_ctrl_sel_gp fg_ctrl_range fg_ctrl_sigma …" ;
+    unsigned integer control_flags_2(n_grid_points) ;
+        control_flags_1:flag_masks = 1, 2, 4, … ;
+        control_flags_1:flag_meanings = "fg_ctrl_sel_gp fg_ctrl_range fg_ctrl_sigma …" ;
+    unsigned integer control_flags_3(n_grid_points) ;
+        control_flags_1:flag_masks = 1, 2, 4, … ;
+        control_flags_1:flag_meanings = "fg_ctrl_sel_gp fg_ctrl_range fg_ctrl_sigma …" ;
+    unsigned integer control_flags_4(n_grid_points) ;
+        control_flags_1:flag_masks = 1, 2, 4, … ;
+        control_flags_1:flag_meanings = "fg_ctrl_sel_gp fg_ctrl_range fg_ctrl_sigma …" ;
+
+    // confidence descriptors
+    unsigned short dg_chi2_1(n_grid_points) ;
+    unsigned short dg_chi2_2(n_grid_points) ;
+    unsigned short dg_chi2_3(n_grid_points) ;
+    unsigned short dg_chi2_acard(n_grid_points) ;
+    unsigned short dg_chi2_p_1(n_grid_points) ;
+    unsigned short dg_chi2_p_2(n_grid_points) ;
+    unsigned short dg_chi2_p_3(n_grid_points) ;
+    unsigned short dg_chi2_p_acard(n_grid_points) ;
+    unsigned short dg_quality_sss_1(n_grid_points) ;
+    unsigned short dg_quality_sss_2(n_grid_points) ;
+    unsigned short dg_quality_sss_3(n_grid_points) ;
+    unsigned short dg_quality_sss_acard(n_grid_points) ;
+    unsigned byte dg_num_iter_1(n_grid_points) ;
+    unsigned byte dg_num_iter_2(n_grid_points) ;
+    unsigned byte dg_num_iter_3(n_grid_points) ;
+    unsigned byte dg_num_iter_4(n_grid_points) ;
+    unsigned short dg_num_meas_l1c(n_grid_points) ;
+    unsigned short dg_num_meas_valid(n_grid_points) ;
+    unsigned short dg_border_fov(n_grid_points) ;
+    unsigned short dg_rfi_l2(n_grid_points) ;
+    unsigned short dg_af_fov(n_grid_points) ;
+    unsigned short dg_sun_tails(n_grid_points) ;
+    unsigned short dg_sun_glint_area(n_grid_points) ;
+    unsigned short dg_sun_glint_fov(n_grid_points) ;
+    unsigned short dg_sun_fov(n_grid_points) ;
+    unsigned short dg_sun_glint_l2(n_grid_points) ;
+    unsigned short dg_suspect_ice(n_grid_points) ;
+    unsigned short dg_galactic_noise_error(n_grid_points) ;
+    unsigned short dg_galactic_noise_pol(n_grid_points) ;
+    unsigned short dg_moonlight(n_grid_points) ;
+
+    unsigned integer science_flags_1(n_grid_points) ;
+        science_flags_1:flag_masks = 1, 2, 3, … ;
+        science_flags_1:flag_meanings = "condition_1 condition_2 condition_3 …" ;
+    unsigned integer science_flags_2(n_grid_points) ;
+        science_flags_1:flag_masks = 1, 2, 3, … ;
+        science_flags_1:flag_meanings = "condition_1 condition_2 condition_3 …" ;
+    unsigned integer science_flags_3(n_grid_points) ;
+        science_flags_1:flag_masks = 1, 2, 3, … ;
+        science_flags_1:flag_meanings = "condition_1 condition_2 condition_3 …" ;
+    unsigned integer science_flags_4(n_grid_points) ;
+        science_flags_1:flag_masks = 1, 2, 3, … ;
+        science_flags_1:flag_meanings = "condition_1 condition_2 condition_3 …" ;
+
+    // science descriptors
+    unsigned short dg_sky(n_grid_points) ;
+
+// global attributes:
+        :title = "TBD" ;
+        :institution = "TBD" ;
+        :contact = "TBD" ;
+        :creation_date = "Tue Mar 18 11:35:05 UTC 2014" ;
+        :total_number_of_grid_points = 2645 ;
+}

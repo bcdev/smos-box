@@ -1,0 +1,36 @@
+
+netcdf MIR_BWLD1C {
+dimensions:
+    grid_point_counter = unlimited ; // currently 2645
+    bt_data_counter = 255 ;
+variables:
+    unsigned int grid_point_id(grid_point_counter) ;
+    float grid_point_latitude(grid_point_counter) ;
+        grid_point_latitude:units = "degrees_north" ;
+        grid_point_latitude:_FillValue = -999.f ;
+        grid_point_latitude:valid_min = -90.f ;
+        grid_point_latitude:valid_max = 90.f ;
+    float grid_point_longitude(grid_point_counter) ;
+        grid_point_longitude:units = "degrees_east" ;
+        grid_point_longitude:_FillValue = -999.f ;
+        grid_point_longitude:valid_min = -180.f ;
+        grid_point_longitude:valid_max = 180.f ;
+    float grid_point_altitude(grid_point_counter) ;
+        grid_point_altitude:units = “m” ;
+        grid_point_altitude:_FillValue = -999.f ;
+    unsigned byte grid_point_mask(grid_point_counter) ;
+    unsigned byte bt_data_counter(grid_point_counter) ;    
+    unsigned short flags(grid_point_counter, bt_data_counter) ;    
+    unsigned float bt_value(grid_point_counter, bt_data_counter) ;    
+    unsigned short radiometric_accuracy_of_pixel(grid_point_counter, bt_data_counter) ;    
+    unsigned short azimuth_angle(grid_point_counter, bt_data_counter) ;    
+    unsigned short footprint_axis_1(grid_point_counter, bt_data_counter) ;    
+    unsigned short footprint_axis_2(grid_point_counter, bt_data_counter) ;    
+
+// global attributes:
+        :title = "TBD" ;
+        :institution = "TBD" ;
+        :contact = "TBD" ;
+        :creation_date = "Tue Mar 18 11:35:05 UTC 2014" ;
+        :total_number_of_grid_points = 2645 ;
+}

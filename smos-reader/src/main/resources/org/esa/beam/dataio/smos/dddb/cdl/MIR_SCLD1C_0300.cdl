@@ -1,0 +1,73 @@
+
+netcdf MIR_SCLD1C {
+dimensions:
+    grid_point_counter = unlimited ; // currently 2645, actual value is the umber of grid points in original file
+    bt_data_counter = 65535 ; // always this value
+    snapshot_counter = 4231 ; // actual value is the number of snapshots in original file
+    radiometric_accuracy_counter = 2; // always this value
+variables:
+    unsigned int grid_point_id(grid_point_counter) ;
+    float grid_point_latitude(grid_point_counter) ;
+        grid_point_latitude:units = "degrees_north" ;
+        grid_point_latitude:_FillValue = -999.f ;
+        grid_point_latitude:valid_min = -90.f ;
+        grid_point_latitude:valid_max = 90.f ;
+    float grid_point_longitude(grid_point_counter) ;
+        grid_point_longitude:units = "degrees_east" ;
+        grid_point_longitude:_FillValue = -999.f ;
+        grid_point_longitude:valid_min = -180.f ;
+        grid_point_longitude:valid_max = 180.f ;
+    float grid_point_altitude(grid_point_counter) ;
+        grid_point_altitude:units = “m” ;
+        grid_point_altitude:_FillValue = -999.f ;
+    unsigned byte grid_point_mask(grid_point_counter) ;
+    unsigned short bt_data_counter(grid_point_counter) ;    
+    unsigned short flags(grid_point_counter, bt_data_counter) ;    
+    unsigned float bt_value(grid_point_counter, bt_data_counter) ;    
+    unsigned short pixel_radiometric_accuracy(grid_point_counter, bt_data_counter) ;    
+    unsigned short incidence_angle(grid_point_counter, bt_data_counter) ;    
+    unsigned short azimuth_angle(grid_point_counter, bt_data_counter) ;    
+    unsigned short faraday_rotation_angle(grid_point_counter, bt_data_counter) ;    
+    unsigned short geometric_rotation_angle(grid_point_counter, bt_data_counter) ;    
+    unsigned int snapshot_id_of_pixel(grid_point_counter, bt_data_counter) ;    
+    unsigned short footprint_axis_1(grid_point_counter, bt_data_counter) ;    
+    unsigned short footprint_axis_2(grid_point_counter, bt_data_counter) ;    
+
+    int snapshot_time_days(snapshot_counter) ;
+    unsigned int snapshot_time_seconds(snapshot_counter) ;
+    unsigned int snapshot_time_microseconds(snapshot_counter) ;
+    unsigned int snapshot_id(snapshot_counter) ;
+    unsigned long long snapshot_obet(snapshot_counter) ;    
+    double x_position(snapshot_counter);
+    double y_position(snapshot_counter);
+    double z_position(snapshot_counter);
+    double x_velocity(snapshot_counter);
+    double y_velocity(snapshot_counter);
+    double z_velocity(snapshot_counter);
+    unsigned byte vector_source(snapshot_counter);
+    double q0(snapshot_counter);
+    double q1(snapshot_counter);
+    double q2(snapshot_counter);
+    double q3(snapshot_counter);
+    double tec(snapshot_counter);
+    double geomag_f(snapshot_counter);
+    double geomag_d(snapshot_counter);
+    double geomag_i(snapshot_counter);
+    float sun_ra(snapshot_counter);
+    float sun_dec(snapshot_counter);
+    float sun_bt(snapshot_counter);
+    float accuracy(snapshot_counter);
+    float radiometric_accuracy(snapshot_counter, radiometric_accuracy_counter);
+    unsigned byte x_band(snapshot_counter);
+    unsigned byte software_error_flag(snapshot_counter);
+    unsigned byte instrument_error_flag(snapshot_counter);
+    unsigned byte adf_error_flag(snapshot_counter);
+    unsigned byte calibration_error_flag(snapshot_counter);
+
+// global attributes:
+        :title = “TBD ;
+        :institution = “TBD ;
+        :contact = “TBD” ;
+        :creation_date = "Tue Mar 18 11:35:05 UTC 2014" ;
+        :total_number_of_grid_points = 2645 ;
+}
