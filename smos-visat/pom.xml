@@ -6,7 +6,7 @@
     <parent>
         <artifactId>smos-box</artifactId>
         <groupId>org.esa.beam.smos</groupId>
-        <version>2.4-SNAPSHOT</version>
+        <version>3.0.0-SNAPSHOT</version>
     </parent>
 
     <packaging>jar</packaging>
@@ -19,7 +19,8 @@
         <dependency>
             <groupId>org.esa.beam</groupId>
             <artifactId>blue-marble-worldmap</artifactId>
-            <scope>runtime</scope>
+            <!--<scope>runtime</scope>-->
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.esa.beam</groupId>
@@ -36,6 +37,14 @@
         <dependency>
             <groupId>org.esa.beam.smos</groupId>
             <artifactId>smos-gui</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.esa.beam.smos</groupId>
+            <artifactId>smos-tools</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.bc.ceres</groupId>
+            <artifactId>ceres-binio</artifactId>
         </dependency>
     </dependencies>
 

@@ -97,12 +97,12 @@ class ProductHelper {
         if (descriptor.hasTypicalMin()) {
             min = descriptor.getTypicalMin();
         } else {
-            min = band.getStx().getMin();
+            min = band.getStx().getMinimum();
         }
         if (descriptor.hasTypicalMax()) {
             max = descriptor.getTypicalMax();
         } else {
-            max = band.getStx().getMax();
+            max = band.getStx().getMaximum();
         }
 
         final ColorPaletteDef.Point[] points = new ColorPaletteDef.Point[colors.length];

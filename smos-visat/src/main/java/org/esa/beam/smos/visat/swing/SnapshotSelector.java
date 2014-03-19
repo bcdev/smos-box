@@ -19,6 +19,8 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JSlider;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.beans.PropertyChangeEvent;
 
 class SnapshotSelector {
@@ -33,6 +35,13 @@ class SnapshotSelector {
         spinner = new JSpinner();
         slider = new JSlider();
         slider.setSnapToTicks(true);
+        slider.addMouseWheelListener(new MouseWheelListener() {
+            @Override
+            public void mouseWheelMoved(MouseWheelEvent e) {
+                int currentValue = slider.getModel().getValue();
+                slider.getModel().setValue(currentValue + e.getWheelRotation());
+            }
+        });
         sliderInfo = new JTextField(10);
         sliderInfo.setEditable(false);
     }

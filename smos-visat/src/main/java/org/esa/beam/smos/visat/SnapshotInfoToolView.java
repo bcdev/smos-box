@@ -186,9 +186,7 @@ public class SnapshotInfoToolView extends SmosToolView {
                         try {
                             final TableModel tableModel = get();
                             snapshotTable.setModel(tableModel);
-                        } catch (InterruptedException e) {
-                            snapshotTable.setModel(NULL_MODEL);
-                        } catch (ExecutionException e) {
+                        } catch (InterruptedException | ExecutionException e) {
                             snapshotTable.setModel(NULL_MODEL);
                         }
                     }
@@ -203,7 +201,7 @@ public class SnapshotInfoToolView extends SmosToolView {
     private TableModel createSnapshotTableModel(CompoundData data) {
         final CompoundType compoundType = data.getType();
         final int memberCount = data.getMemberCount();
-        final ArrayList<Object[]> list = new ArrayList<Object[]>(memberCount);
+        final ArrayList<Object[]> list = new ArrayList<>(memberCount);
 
         for (int i = 0; i < memberCount; i++) {
             final Object[] entry = new Object[2];
@@ -579,6 +577,7 @@ public class SnapshotInfoToolView extends SmosToolView {
         setToolViewComponent(centerPanel);
         final ProgressMonitor progressMonitor = new ProgressBarProgressMonitor(progressBar, message);
         final SwingWorker worker = new PolModeWaiter(smosView, smosFile, progressMonitor);
+        progressMonitor.beginTask("Indexing snapshots and polarisation modes...", 100);
         worker.execute();
     }
 
@@ -596,7 +595,6 @@ public class SnapshotInfoToolView extends SmosToolView {
 
         @Override
         protected Object doInBackground() throws InterruptedException {
-            pm.beginTask("Indexing snapshots and polarisation modes...", 100);
             try {
                 while (!smosFile.hasSnapshotInfo()) {
                     Thread.sleep(100);
@@ -705,6 +703,5 @@ public class SnapshotInfoToolView extends SmosToolView {
             raster.getGeophysicalImage().reset();
         }
         raster.setStx(null);
-        raster.fireProductNodeDataChanged();
     }
 }
