@@ -113,6 +113,8 @@ public class BufrTest {
     }
 
     private static void performAssertions(NetcdfFile dataset) throws IOException {
+        dataset.writeCDL(System.out, false);
+
         final List<Attribute> globalAttributes = dataset.getGlobalAttributes();
         for (Attribute globalAttribute : globalAttributes) {
             assertNotNull(globalAttribute.getFullName());
