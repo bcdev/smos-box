@@ -1,37 +1,37 @@
 
-netcdf MIR_SCLD1C {
+netcdf mir_scld1c_organised_by_snapshot {
 dimensions:
-    grid_point_counter = unlimited ; // actual value is the umber of grid points in original file
-    bt_data_counter = 65535 ; // always this value
-    snapshot_counter = 4231 ; // actual value is the number of snapshots in original file
+    snapshot_counter = unlimited ; // actual value is the number of snapshots in original file
+    grid_point_counter = 2400 ; // or whatever the maximum number of grid points per snapshot is, always this value
     radiometric_accuracy_counter = 2; // always this value
 variables:
-    unsigned int grid_point_id(grid_point_counter) ;
-    float grid_point_latitude(grid_point_counter) ;
+    unsigned short grid_point_counter(snapshot_counter) ;
+    unsigned int grid_point_id(snapshot_counter, grid_point_counter) ;
+    float grid_point_latitude(snapshot_counter, grid_point_counter) ;
         grid_point_latitude:units = "degrees_north" ;
         grid_point_latitude:_FillValue = -999.f ;
         grid_point_latitude:valid_min = -90.f ;
         grid_point_latitude:valid_max = 90.f ;
-    float grid_point_longitude(grid_point_counter) ;
+    float grid_point_longitude(snapshot_counter, grid_point_counter) ;
         grid_point_longitude:units = "degrees_east" ;
         grid_point_longitude:_FillValue = -999.f ;
         grid_point_longitude:valid_min = -180.f ;
         grid_point_longitude:valid_max = 180.f ;
-    float grid_point_altitude(grid_point_counter) ;
+    float grid_point_altitude(snapshot_counter, grid_point_counter) ;
         grid_point_altitude:units = “m” ;
         grid_point_altitude:_FillValue = -999.f ;
-    unsigned byte grid_point_mask(grid_point_counter) ;
-    unsigned short bt_data_counter(grid_point_counter) ;    
-    unsigned short flags(grid_point_counter, bt_data_counter) ;    
-    unsigned float bt_value(grid_point_counter, bt_data_counter) ;    
-    unsigned short pixel_radiometric_accuracy(grid_point_counter, bt_data_counter) ;    
-    unsigned short incidence_angle(grid_point_counter, bt_data_counter) ;    
-    unsigned short azimuth_angle(grid_point_counter, bt_data_counter) ;    
-    unsigned short faraday_rotation_angle(grid_point_counter, bt_data_counter) ;    
-    unsigned short geometric_rotation_angle(grid_point_counter, bt_data_counter) ;    
-    unsigned int snapshot_id_of_pixel(grid_point_counter, bt_data_counter) ;    
-    unsigned short footprint_axis_1(grid_point_counter, bt_data_counter) ;    
-    unsigned short footprint_axis_2(grid_point_counter, bt_data_counter) ;    
+    unsigned byte grid_point_mask(snapshot_counter, grid_point_counter) ;
+    unsigned short bt_data_counter(snapshot_counter, grid_point_counter) ;
+    unsigned short flags(snapshot_counter, grid_point_counter) ;
+    unsigned float bt_value(snapshot_counter, grid_point_counter) ;
+    unsigned short pixel_radiometric_accuracy(snapshot_counter, grid_point_counter) ;
+    unsigned short incidence_angle(snapshot_counter, grid_point_counter) ;
+    unsigned short azimuth_angle(snapshot_counter, grid_point_counter) ;
+    unsigned short faraday_rotation_angle(snapshot_counter, grid_point_counter) ;
+    unsigned short geometric_rotation_angle(snapshot_counter, grid_point_counter) ;
+    // unsigned int snapshot_id_of_pixel(snapshot_counter, grid_point_counter) ;
+    unsigned short footprint_axis_1(snapshot_counter, grid_point_counter) ;
+    unsigned short footprint_axis_2(snapshot_counter, grid_point_counter) ;
 
     int snapshot_time_days(snapshot_counter) ;
     unsigned int snapshot_time_seconds(snapshot_counter) ;
