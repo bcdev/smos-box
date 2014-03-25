@@ -192,49 +192,49 @@
             <dependency>
                 <groupId>org.esa.beam.smos</groupId>
                 <artifactId>smos-dgg</artifactId>
-                <version>${version}</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>org.esa.beam.smos</groupId>
                 <artifactId>smos-lsmask</artifactId>
-                <version>${version}</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>org.esa.beam.smos</groupId>
                 <artifactId>smos-reader</artifactId>
-                <version>${version}</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>org.esa.beam.smos</groupId>
                 <artifactId>smos-visat</artifactId>
-                <version>${version}</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>org.esa.beam.smos</groupId>
                 <artifactId>smos-tools</artifactId>
-                <version>${version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.esa.beam.smos</groupId>
                 <artifactId>smos-tools</artifactId>
                 <type>test-jar</type>
-                <version>${version}</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>org.esa.beam.smos</groupId>
                 <artifactId>smos-gui</artifactId>
-                <version>${version}</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>org.esa.beam.smos</groupId>
                 <artifactId>smos-ee2netcdf</artifactId>
-                <version>${version}</version>
+                <version>${project.version}</version>
             </dependency>
 
             <!-- JUnit Libraries ############################################# -->
@@ -242,7 +242,7 @@
             <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
-                <version>4.8.2</version>
+                <version>4.11</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
