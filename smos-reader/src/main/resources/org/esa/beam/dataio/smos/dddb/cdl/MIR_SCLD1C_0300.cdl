@@ -1,73 +1,99 @@
-
 netcdf MIR_SCLD1C {
 dimensions:
-    grid_point_counter = unlimited ; // actual value is the umber of grid points in original file
-    bt_data_counter = 65535 ; // always this value
-    snapshot_counter = 4231 ; // actual value is the number of snapshots in original file
-    radiometric_accuracy_counter = 2; // always this value
+    grid_point_count = unlimited ; // actual value is the umber of grid points in original file
+    snapshot_count = 4231 ; // actual value is the number of snapshots in original file
+    bt_data_count = 300 ; // always this value TODO - check maximum value
+    radiometric_accuracy_count = 2; // always this value
 variables:
-    unsigned int grid_point_id(grid_point_counter) ;
-    float grid_point_latitude(grid_point_counter) ;
-        grid_point_latitude:units = "degrees_north" ;
-        grid_point_latitude:_FillValue = -999.f ;
-        grid_point_latitude:valid_min = -90.f ;
-        grid_point_latitude:valid_max = 90.f ;
-    float grid_point_longitude(grid_point_counter) ;
-        grid_point_longitude:units = "degrees_east" ;
-        grid_point_longitude:_FillValue = -999.f ;
-        grid_point_longitude:valid_min = -180.f ;
-        grid_point_longitude:valid_max = 180.f ;
-    float grid_point_altitude(grid_point_counter) ;
-        grid_point_altitude:units = “m” ;
+    unsigned int grid_point_id(grid_point_count) ;
+    float lat(grid_point_count) ;
+        lat:units = "degrees_north" ;
+        lat:_FillValue = -999.f ;
+        lat:valid_min = -90.f ;
+        lat:valid_max = 90.f ;
+        lat:original_name = "grid_point_latitude" ;
+        lat:standard_name = "latitude" ;
+    float lon(grid_point_count) ;
+        lon:units = "degrees_east" ;
+        lon:_FillValue = -999.f ;
+        lon:valid_min = -180.f ;
+        lon:valid_max = 180.f ;
+        lon:original_name = "grid_point_longitude" ;
+        lon:standard_name = "longitude" ;
+    float grid_point_altitude(grid_point_count) ;
+        grid_point_altitude:units = "m" ;
         grid_point_altitude:_FillValue = -999.f ;
-    unsigned byte grid_point_mask(grid_point_counter) ;
-    unsigned short bt_data_counter(grid_point_counter) ;    
-    unsigned short flags(grid_point_counter, bt_data_counter) ;    
-    unsigned float bt_value(grid_point_counter, bt_data_counter) ;    
-    unsigned short pixel_radiometric_accuracy(grid_point_counter, bt_data_counter) ;    
-    unsigned short incidence_angle(grid_point_counter, bt_data_counter) ;    
-    unsigned short azimuth_angle(grid_point_counter, bt_data_counter) ;    
-    unsigned short faraday_rotation_angle(grid_point_counter, bt_data_counter) ;    
-    unsigned short geometric_rotation_angle(grid_point_counter, bt_data_counter) ;    
-    unsigned int snapshot_id_of_pixel(grid_point_counter, bt_data_counter) ;    
-    unsigned short footprint_axis_1(grid_point_counter, bt_data_counter) ;    
-    unsigned short footprint_axis_2(grid_point_counter, bt_data_counter) ;    
+    unsigned byte grid_point_mask(grid_point_count) ;
+    unsigned short bt_data_count(grid_point_count) ;
+    unsigned short flags(grid_point_count, bt_data_count) ;
+        flags:flag_masks = 3, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768 ;
+        flags:flag_values = 0, 1, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768 ;
+        flags:flag_meanings = "pol_xx pol_yy sun_fov sun_glint_fov moon_glint_fov single_snapshot rfi_x sun_point sun_glint_area moon_point af_fov rfi_tails border_fov sun_tails rfi_y rfi_point_source" ;
+    unsigned byte error_flags(grid_point_count, bt_data_count) ;
+        error_flags:flag_masks = 1, 2, 4, 8 ;
+        error_flags:flag_meanings = "software_error instrument_error adf_error calibration_error" ;
+    float bt_value(grid_point_count, bt_data_count) ;
+        bt_value:units = "K" ;
+        bt_value:_FillValue = "-999.f" ;
+    unsigned short pixel_radiometric_accuracy(grid_point_count, bt_data_count) ;
+        pixel_radiometric_accuracy:units = "K" ;
+        pixel_radiometric_accuracy:scale_factor = "0.000762939453125" ;
+    unsigned short incidence_angle(grid_point_count, bt_data_count) ;
+        incidence_angle:units = "degree" ;
+        incidence_angle:scale_factor = "0.001373291015625" ;
+    unsigned short azimuth_angle(grid_point_count, bt_data_count) ;
+        azimuth_angle:units = "degree" ;
+        azimuth_angle:scale_factor = "0.0054931640625" ;
+    unsigned short faraday_rotation_angle(grid_point_count, bt_data_count) ;
+        faraday_rotation_angle:units = "degree" ;
+        faraday_rotation_angle:scale_factor = "0054931640625" ;
+    unsigned short geometric_rotation_angle(grid_point_count, bt_data_count) ;
+        geometric_rotation_angle:units = "degree" ;
+        geometric_rotation_angle:scale_factor = "geometric_rotation_angle";
+    unsigned int snapshot_id_of_pixel(grid_point_count, bt_data_count) ;
+    unsigned short footprint_axis_1(grid_point_count, bt_data_count) ;
+        footprint_axis_1:units = "km" ;
+        footprint_axis_1:scale_factor = "00152587890625" ;
+    unsigned short footprint_axis_2(grid_point_count, bt_data_count) ;
+        footprint_axis_2:units = "km" ;
+        footprint_axis_2:scale_factor = "00152587890625" ;
 
-    int snapshot_time_days(snapshot_counter) ;
-    unsigned int snapshot_time_seconds(snapshot_counter) ;
-    unsigned int snapshot_time_microseconds(snapshot_counter) ;
-    unsigned int snapshot_id(snapshot_counter) ;
-    unsigned long long snapshot_obet(snapshot_counter) ;    
-    double x_position(snapshot_counter);
-    double y_position(snapshot_counter);
-    double z_position(snapshot_counter);
-    double x_velocity(snapshot_counter);
-    double y_velocity(snapshot_counter);
-    double z_velocity(snapshot_counter);
-    unsigned byte vector_source(snapshot_counter);
-    double q0(snapshot_counter);
-    double q1(snapshot_counter);
-    double q2(snapshot_counter);
-    double q3(snapshot_counter);
-    double tec(snapshot_counter);
-    double geomag_f(snapshot_counter);
-    double geomag_d(snapshot_counter);
-    double geomag_i(snapshot_counter);
-    float sun_ra(snapshot_counter);
-    float sun_dec(snapshot_counter);
-    float sun_bt(snapshot_counter);
-    float accuracy(snapshot_counter);
-    float radiometric_accuracy(snapshot_counter, radiometric_accuracy_counter);
-    unsigned byte x_band(snapshot_counter);
-    unsigned byte software_error_flag(snapshot_counter);
-    unsigned byte instrument_error_flag(snapshot_counter);
-    unsigned byte adf_error_flag(snapshot_counter);
-    unsigned byte calibration_error_flag(snapshot_counter);
+    int snapshot_time_days(snapshot_count) ;
+    unsigned int snapshot_time_seconds(snapshot_count) ;
+    unsigned int snapshot_time_microseconds(snapshot_count) ;
+    unsigned int snapshot_id(snapshot_count) ;
+    unsigned long long snapshot_obet(snapshot_count) ;
+    double x_position(snapshot_count);
+    double y_position(snapshot_count);
+    double z_position(snapshot_count);
+    double x_velocity(snapshot_count);
+    double y_velocity(snapshot_count);
+    double z_velocity(snapshot_count);
+    unsigned byte vector_source(snapshot_count);
+    double q0(snapshot_count);
+    double q1(snapshot_count);
+    double q2(snapshot_count);
+    double q3(snapshot_count);
+    double tec(snapshot_count);
+    double geomag_f(snapshot_count);
+    double geomag_d(snapshot_count);
+    double geomag_i(snapshot_count);
+    float sun_ra(snapshot_count);
+    float sun_dec(snapshot_count);
+    float sun_bt(snapshot_count);
+    float accuracy(snapshot_count);
+    float radiometric_accuracy(snapshot_count, radiometric_accuracy_count);
+    unsigned byte x_band(snapshot_count);
+    unsigned byte software_error_flag(snapshot_count);
+    unsigned byte instrument_error_flag(snapshot_count);
+    unsigned byte adf_error_flag(snapshot_count);
+    unsigned byte calibration_error_flag(snapshot_count);
 
 // global attributes:
-        :title = “TBD ;
-        :institution = “TBD ;
-        :contact = “TBD” ;
+        :Conventions = "CF-1.6" ;
+        :title = "TBD" ;
+        :institution = "TBD" ;
+        :contact = "TBD" ;
         :creation_date = "Tue Mar 18 11:35:05 UTC 2014" ;
         :total_number_of_grid_points = 2645 ;
 }

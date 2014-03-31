@@ -1,33 +1,52 @@
 
 netcdf MIR_BWLD1C {
 dimensions:
-    grid_point_counter = unlimited ; // currently 2645
-    bt_data_counter = 255 ;
+    grid_point_count = unlimited ; // currently 2645
+    bt_data_count = 255 ;
 variables:
-    unsigned int grid_point_id(grid_point_counter) ;
-    float grid_point_latitude(grid_point_counter) ;
-        grid_point_latitude:units = "degrees_north" ;
-        grid_point_latitude:_FillValue = -999.f ;
-        grid_point_latitude:valid_min = -90.f ;
-        grid_point_latitude:valid_max = 90.f ;
-    float grid_point_longitude(grid_point_counter) ;
-        grid_point_longitude:units = "degrees_east" ;
-        grid_point_longitude:_FillValue = -999.f ;
-        grid_point_longitude:valid_min = -180.f ;
-        grid_point_longitude:valid_max = 180.f ;
-    float grid_point_altitude(grid_point_counter) ;
-        grid_point_altitude:units = “m” ;
+    unsigned int grid_point_id(grid_point_count) ;
+    float lat(grid_point_count) ;
+        lat:units = "degrees_north" ;
+        lat:_FillValue = -999.f ;
+        lat:valid_min = -90.f ;
+        lat:valid_max = 90.f ;
+        lat:original_name = "grid_point_latitude" ;
+        lat:standard_name = "latitude" ;
+    float lon(grid_point_count) ;
+        lon:units = "degrees_east" ;
+        lon:_FillValue = -999.f ;
+        lon:valid_min = -180.f ;
+        lon:valid_max = 180.f ;
+        lon:original_name = "grid_point_longitude" ;
+        lon:standard_name = "longitude" ;
+    float grid_point_altitude(grid_point_count) ;
+        grid_point_altitude:units = "m" ;
         grid_point_altitude:_FillValue = -999.f ;
-    unsigned byte grid_point_mask(grid_point_counter) ;
-    unsigned byte bt_data_counter(grid_point_counter) ;    
-    unsigned short flags(grid_point_counter, bt_data_counter) ;    
-    unsigned float bt_value(grid_point_counter, bt_data_counter) ;    
-    unsigned short radiometric_accuracy_of_pixel(grid_point_counter, bt_data_counter) ;    
-    unsigned short azimuth_angle(grid_point_counter, bt_data_counter) ;    
-    unsigned short footprint_axis_1(grid_point_counter, bt_data_counter) ;    
-    unsigned short footprint_axis_2(grid_point_counter, bt_data_counter) ;    
+    unsigned byte grid_point_mask(grid_point_count) ;
+    unsigned byte bt_data_count(grid_point_count) ;
+    unsigned short flags(grid_point_count, bt_data_count) ;
+        flags:flag_masks = 3, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768 ;
+        flags:flag_values = 0, 1, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768 ;
+        flags:flag_meanings = "pol_xx pol_yy sun_fov sun_glint_fov moon_glint_fov single_snapshot rfi_x sun_point sun_glint_area moon_point af_fov rfi_tails border_fov sun_tails rfi_y rfi_point_source" ;
+    float bt_value(grid_point_count, bt_data_count) ;
+        bt_value:units = "K" ;
+        bt_value:_FillValue = "-999.f" ;
+    unsigned short pixel_radiometric_accuracy(grid_point_count, bt_data_count) ;
+        pixel_radiometric_accuracy:units = "K" ;
+        pixel_radiometric_accuracy:scale_factor = "0.000762939453125" ;
+        pixel_radiometric_accuracy:original_name = "radiometric_accuracy_of_pixel" ;
+    unsigned short azimuth_angle(grid_point_count, bt_data_count) ;
+        azimuth_angle:units = "degree" ;
+        azimuth_angle:scale_factor = "0.0054931640625" ;
+    unsigned short footprint_axis_1(grid_point_count, bt_data_count) ;
+        footprint_axis_1:units = "km" ;
+        footprint_axis_1:scale_factor = "00152587890625" ;
+    unsigned short footprint_axis_2(grid_point_count, bt_data_count) ;
+        footprint_axis_2:units = "km" ;
+        footprint_axis_2:scale_factor = "00152587890625" ;
 
 // global attributes:
+        :Conventions = "CF-1.6" ;
         :title = "TBD" ;
         :institution = "TBD" ;
         :contact = "TBD" ;

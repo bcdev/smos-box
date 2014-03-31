@@ -82,17 +82,17 @@ variables:
         sigma_tb_42.5y:_FillValue = -999.f ;
 
     unsigned integer control_flags_1(n_grid_points) ;
-        control_flags_1:flag_masks = 1, 2, 4, … ;
-        control_flags_1:flag_meanings = "fg_ctrl_sel_gp fg_ctrl_range fg_ctrl_sigma …" ;
+        control_flags_1:flag_masks = 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072, 262144, 524288, 1048576, 2097152, 4194304, 8388608, 16777216, 33554432, 67108864, 107341824 ;
+        control_flags_1:flag_meanings = "fg_ctrl_sel_gp fg_ctrl_range fg_ctrl_sigma fg_ctrl_chi2 fg_ctrl_chi2_p fg_ctrl_quality_sss fg_ctrl_sunglint fg_ctrl_moonglint fg_ctrl_gal_noise fg_ctrl_gal_noise_pol fg_ctrl_reach_maxiter fg_ctrl_num_meas_min fg_ctrl_num_meas_low fg_ctrl_many_outliers fg_ctrl_marq fg_ctrl_roughness fg_ctrl_foam fg_ctrl_ecmwf fg_ctrl_valid fg_ctrl_no_surface fg_ctrl_range_acard fg_ctrl_sigma_acard fg_ctrl_quality_acard fg_ctrl_used_faratec fg_ctrl_poor_geophys fg_ctrl_poor_retrieval fg_ctrl_suspect_rfi fg_ctrl_retriev_fail" ;
     unsigned integer control_flags_2(n_grid_points) ;
-        control_flags_1:flag_masks = 1, 2, 4, … ;
-        control_flags_1:flag_meanings = "fg_ctrl_sel_gp fg_ctrl_range fg_ctrl_sigma …" ;
+        control_flags_2:flag_masks = 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072, 262144, 524288, 1048576, 2097152, 4194304, 8388608, 16777216, 33554432, 67108864, 107341824 ;
+        control_flags_2:flag_meanings = "fg_ctrl_sel_gp fg_ctrl_range fg_ctrl_sigma fg_ctrl_chi2 fg_ctrl_chi2_p fg_ctrl_quality_sss fg_ctrl_sunglint fg_ctrl_moonglint fg_ctrl_gal_noise fg_ctrl_gal_noise_pol fg_ctrl_reach_maxiter fg_ctrl_num_meas_min fg_ctrl_num_meas_low fg_ctrl_many_outliers fg_ctrl_marq fg_ctrl_roughness fg_ctrl_foam fg_ctrl_ecmwf fg_ctrl_valid fg_ctrl_no_surface fg_ctrl_range_acard fg_ctrl_sigma_acard fg_ctrl_quality_acard fg_ctrl_used_faratec fg_ctrl_poor_geophys fg_ctrl_poor_retrieval fg_ctrl_suspect_rfi fg_ctrl_retriev_fail" ;
     unsigned integer control_flags_3(n_grid_points) ;
-        control_flags_1:flag_masks = 1, 2, 4, … ;
-        control_flags_1:flag_meanings = "fg_ctrl_sel_gp fg_ctrl_range fg_ctrl_sigma …" ;
+        control_flags_3:flag_masks = 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072, 262144, 524288, 1048576, 2097152, 4194304, 8388608, 16777216, 33554432, 67108864, 107341824 ;
+        control_flags_3:flag_meanings = "fg_ctrl_sel_gp fg_ctrl_range fg_ctrl_sigma fg_ctrl_chi2 fg_ctrl_chi2_p fg_ctrl_quality_sss fg_ctrl_sunglint fg_ctrl_moonglint fg_ctrl_gal_noise fg_ctrl_gal_noise_pol fg_ctrl_reach_maxiter fg_ctrl_num_meas_min fg_ctrl_num_meas_low fg_ctrl_many_outliers fg_ctrl_marq fg_ctrl_roughness fg_ctrl_foam fg_ctrl_ecmwf fg_ctrl_valid fg_ctrl_no_surface fg_ctrl_range_acard fg_ctrl_sigma_acard fg_ctrl_quality_acard fg_ctrl_used_faratec fg_ctrl_poor_geophys fg_ctrl_poor_retrieval fg_ctrl_suspect_rfi fg_ctrl_retriev_fail" ;
     unsigned integer control_flags_4(n_grid_points) ;
-        control_flags_1:flag_masks = 1, 2, 4, … ;
-        control_flags_1:flag_meanings = "fg_ctrl_sel_gp fg_ctrl_range fg_ctrl_sigma …" ;
+        control_flags_3:flag_masks = 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072, 262144, 524288, 1048576, 2097152, 4194304, 8388608, 16777216, 33554432, 67108864, 107341824 ;
+        control_flags_4:flag_meanings = "fg_ctrl_sel_gp fg_ctrl_range fg_ctrl_sigma fg_ctrl_chi2 fg_ctrl_chi2_p fg_ctrl_quality_sss fg_ctrl_sunglint fg_ctrl_moonglint fg_ctrl_gal_noise fg_ctrl_gal_noise_pol fg_ctrl_reach_maxiter fg_ctrl_num_meas_min fg_ctrl_num_meas_low fg_ctrl_many_outliers fg_ctrl_marq fg_ctrl_roughness fg_ctrl_foam fg_ctrl_ecmwf fg_ctrl_valid fg_ctrl_no_surface fg_ctrl_range_acard fg_ctrl_sigma_acard fg_ctrl_quality_acard fg_ctrl_used_faratec fg_ctrl_poor_geophys fg_ctrl_poor_retrieval fg_ctrl_suspect_rfi fg_ctrl_retriev_fail" ;
 
     // confidence descriptors
     unsigned short dg_chi2_1(n_grid_points) ;
@@ -127,22 +127,23 @@ variables:
     unsigned short dg_moonlight(n_grid_points) ;
 
     unsigned integer science_flags_1(n_grid_points) ;
-        science_flags_1:flag_masks = 1, 2, 3, … ;
-        science_flags_1:flag_meanings = "condition_1 condition_2 condition_3 …" ;
+        science_flags_1:flag_masks = 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072, 262144, 524288, 1048576, 2097152 ;
+        science_flags_1:flag_meanings = "fg_sc_land_sea_coast1 fg_sc_land_sea_coast2 fg_sc_tec_gradient fg_sc_in_clim_ice fg_sc_ice fg_sc_suspect_ice fg_sc_rain fg_sc_high_wind fg_sc_low_wind fg_sc_hight_sst fg_sc_low_sst fg_sc_high_sss fg_sc_low_sss fg_sc_sea_state_1 fg_sc_sea_state_2 fg_sc_sea_state_3 fg_sc_sea_state_4 fg_sc_sea_state_5 fg_sc_sea_state_6 fg_sc_sst_front fg_sc_sss_front fg_sc_ice_acard" ;
     unsigned integer science_flags_2(n_grid_points) ;
-        science_flags_1:flag_masks = 1, 2, 3, … ;
-        science_flags_1:flag_meanings = "condition_1 condition_2 condition_3 …" ;
+        science_flags_2:flag_masks = 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072, 262144, 524288, 1048576, 2097152 ;
+        science_flags_2:flag_meanings = "fg_sc_land_sea_coast1 fg_sc_land_sea_coast2 fg_sc_tec_gradient fg_sc_in_clim_ice fg_sc_ice fg_sc_suspect_ice fg_sc_rain fg_sc_high_wind fg_sc_low_wind fg_sc_hight_sst fg_sc_low_sst fg_sc_high_sss fg_sc_low_sss fg_sc_sea_state_1 fg_sc_sea_state_2 fg_sc_sea_state_3 fg_sc_sea_state_4 fg_sc_sea_state_5 fg_sc_sea_state_6 fg_sc_sst_front fg_sc_sss_front fg_sc_ice_acard" ;
     unsigned integer science_flags_3(n_grid_points) ;
-        science_flags_1:flag_masks = 1, 2, 3, … ;
-        science_flags_1:flag_meanings = "condition_1 condition_2 condition_3 …" ;
+        science_flags_3:flag_masks = 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072, 262144, 524288, 1048576, 2097152 ;
+        science_flags_3:flag_meanings = "fg_sc_land_sea_coast1 fg_sc_land_sea_coast2 fg_sc_tec_gradient fg_sc_in_clim_ice fg_sc_ice fg_sc_suspect_ice fg_sc_rain fg_sc_high_wind fg_sc_low_wind fg_sc_hight_sst fg_sc_low_sst fg_sc_high_sss fg_sc_low_sss fg_sc_sea_state_1 fg_sc_sea_state_2 fg_sc_sea_state_3 fg_sc_sea_state_4 fg_sc_sea_state_5 fg_sc_sea_state_6 fg_sc_sst_front fg_sc_sss_front fg_sc_ice_acard" ;
     unsigned integer science_flags_4(n_grid_points) ;
-        science_flags_1:flag_masks = 1, 2, 3, … ;
-        science_flags_1:flag_meanings = "condition_1 condition_2 condition_3 …" ;
+        science_flags_4:flag_masks = 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072, 262144, 524288, 1048576, 2097152 ;
+        science_flags_4:flag_meanings = "fg_sc_land_sea_coast1 fg_sc_land_sea_coast2 fg_sc_tec_gradient fg_sc_in_clim_ice fg_sc_ice fg_sc_suspect_ice fg_sc_rain fg_sc_high_wind fg_sc_low_wind fg_sc_hight_sst fg_sc_low_sst fg_sc_high_sss fg_sc_low_sss fg_sc_sea_state_1 fg_sc_sea_state_2 fg_sc_sea_state_3 fg_sc_sea_state_4 fg_sc_sea_state_5 fg_sc_sea_state_6 fg_sc_sst_front fg_sc_sss_front fg_sc_ice_acard" ;
 
     // science descriptors
     unsigned short dg_sky(n_grid_points) ;
 
 // global attributes:
+        :Conventions = "CF-1.6" ;
         :title = "TBD" ;
         :institution = "TBD" ;
         :contact = "TBD" ;
