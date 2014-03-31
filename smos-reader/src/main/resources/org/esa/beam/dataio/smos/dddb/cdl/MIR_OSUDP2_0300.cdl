@@ -3,17 +3,21 @@ netcdf MIR_OSUDP2 {
 dimensions:
     n_grid_points = unlimited ; // currently 2645
 variables:
-    unsigned int grid_point_id(n_grid_points) ;
-    float latitude(n_grid_points) ;
-        latitude:units = "degrees_north" ;
-        latitude:_FillValue = -999.f ;
-        latitude:valid_min = -90.f ;
-        latitude:valid_max = 90.f ;
-    float longitude(n_grid_points) ;
-        longitude:units = "degrees_east" ;
-        longitude:_FillValue = -999.f ;
-        longitude:valid_min = -180.f ;
-        longitude:valid_max = 180.f ;
+    uint grid_point_id(n_grid_points) ;
+    float lat(n_grid_points) ;
+        lat:units = "degrees_north" ;
+        lat:_FillValue = -999.f ;
+        lat:valid_min = -90.f ;
+        lat:valid_max = 90.f ;
+        lat:original_name = "latitude" ;
+        lat:standard_name = "latitude" ;
+    float lon(n_grid_points) ;
+        lon:units = "degrees_east" ;
+        lon:_FillValue = -999.f ;
+        lon:valid_min = -180.f ;
+        lon:valid_max = 180.f ;
+        lon:original_name = "longitude" ;
+        lon:standard_name = "longitude" ;
 
     // geophysical parameters…
     float equiv_ftprt_diam(n_grid_points) ;
@@ -81,66 +85,66 @@ variables:
         sigma_tb_42.5y:units = "K" ;
         sigma_tb_42.5y:_FillValue = -999.f ;
 
-    unsigned integer control_flags_1(n_grid_points) ;
+    uint control_flags_1(n_grid_points) ;
         control_flags_1:flag_masks = 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072, 262144, 524288, 1048576, 2097152, 4194304, 8388608, 16777216, 33554432, 67108864, 107341824 ;
         control_flags_1:flag_meanings = "fg_ctrl_sel_gp fg_ctrl_range fg_ctrl_sigma fg_ctrl_chi2 fg_ctrl_chi2_p fg_ctrl_quality_sss fg_ctrl_sunglint fg_ctrl_moonglint fg_ctrl_gal_noise fg_ctrl_gal_noise_pol fg_ctrl_reach_maxiter fg_ctrl_num_meas_min fg_ctrl_num_meas_low fg_ctrl_many_outliers fg_ctrl_marq fg_ctrl_roughness fg_ctrl_foam fg_ctrl_ecmwf fg_ctrl_valid fg_ctrl_no_surface fg_ctrl_range_acard fg_ctrl_sigma_acard fg_ctrl_quality_acard fg_ctrl_used_faratec fg_ctrl_poor_geophys fg_ctrl_poor_retrieval fg_ctrl_suspect_rfi fg_ctrl_retriev_fail" ;
-    unsigned integer control_flags_2(n_grid_points) ;
+    uint control_flags_2(n_grid_points) ;
         control_flags_2:flag_masks = 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072, 262144, 524288, 1048576, 2097152, 4194304, 8388608, 16777216, 33554432, 67108864, 107341824 ;
         control_flags_2:flag_meanings = "fg_ctrl_sel_gp fg_ctrl_range fg_ctrl_sigma fg_ctrl_chi2 fg_ctrl_chi2_p fg_ctrl_quality_sss fg_ctrl_sunglint fg_ctrl_moonglint fg_ctrl_gal_noise fg_ctrl_gal_noise_pol fg_ctrl_reach_maxiter fg_ctrl_num_meas_min fg_ctrl_num_meas_low fg_ctrl_many_outliers fg_ctrl_marq fg_ctrl_roughness fg_ctrl_foam fg_ctrl_ecmwf fg_ctrl_valid fg_ctrl_no_surface fg_ctrl_range_acard fg_ctrl_sigma_acard fg_ctrl_quality_acard fg_ctrl_used_faratec fg_ctrl_poor_geophys fg_ctrl_poor_retrieval fg_ctrl_suspect_rfi fg_ctrl_retriev_fail" ;
-    unsigned integer control_flags_3(n_grid_points) ;
+    uint control_flags_3(n_grid_points) ;
         control_flags_3:flag_masks = 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072, 262144, 524288, 1048576, 2097152, 4194304, 8388608, 16777216, 33554432, 67108864, 107341824 ;
         control_flags_3:flag_meanings = "fg_ctrl_sel_gp fg_ctrl_range fg_ctrl_sigma fg_ctrl_chi2 fg_ctrl_chi2_p fg_ctrl_quality_sss fg_ctrl_sunglint fg_ctrl_moonglint fg_ctrl_gal_noise fg_ctrl_gal_noise_pol fg_ctrl_reach_maxiter fg_ctrl_num_meas_min fg_ctrl_num_meas_low fg_ctrl_many_outliers fg_ctrl_marq fg_ctrl_roughness fg_ctrl_foam fg_ctrl_ecmwf fg_ctrl_valid fg_ctrl_no_surface fg_ctrl_range_acard fg_ctrl_sigma_acard fg_ctrl_quality_acard fg_ctrl_used_faratec fg_ctrl_poor_geophys fg_ctrl_poor_retrieval fg_ctrl_suspect_rfi fg_ctrl_retriev_fail" ;
-    unsigned integer control_flags_4(n_grid_points) ;
+    uint control_flags_4(n_grid_points) ;
         control_flags_3:flag_masks = 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072, 262144, 524288, 1048576, 2097152, 4194304, 8388608, 16777216, 33554432, 67108864, 107341824 ;
         control_flags_4:flag_meanings = "fg_ctrl_sel_gp fg_ctrl_range fg_ctrl_sigma fg_ctrl_chi2 fg_ctrl_chi2_p fg_ctrl_quality_sss fg_ctrl_sunglint fg_ctrl_moonglint fg_ctrl_gal_noise fg_ctrl_gal_noise_pol fg_ctrl_reach_maxiter fg_ctrl_num_meas_min fg_ctrl_num_meas_low fg_ctrl_many_outliers fg_ctrl_marq fg_ctrl_roughness fg_ctrl_foam fg_ctrl_ecmwf fg_ctrl_valid fg_ctrl_no_surface fg_ctrl_range_acard fg_ctrl_sigma_acard fg_ctrl_quality_acard fg_ctrl_used_faratec fg_ctrl_poor_geophys fg_ctrl_poor_retrieval fg_ctrl_suspect_rfi fg_ctrl_retriev_fail" ;
 
     // confidence descriptors
-    unsigned short dg_chi2_1(n_grid_points) ;
-    unsigned short dg_chi2_2(n_grid_points) ;
-    unsigned short dg_chi2_3(n_grid_points) ;
-    unsigned short dg_chi2_acard(n_grid_points) ;
-    unsigned short dg_chi2_p_1(n_grid_points) ;
-    unsigned short dg_chi2_p_2(n_grid_points) ;
-    unsigned short dg_chi2_p_3(n_grid_points) ;
-    unsigned short dg_chi2_p_acard(n_grid_points) ;
-    unsigned short dg_quality_sss_1(n_grid_points) ;
-    unsigned short dg_quality_sss_2(n_grid_points) ;
-    unsigned short dg_quality_sss_3(n_grid_points) ;
-    unsigned short dg_quality_sss_acard(n_grid_points) ;
-    unsigned byte dg_num_iter_1(n_grid_points) ;
-    unsigned byte dg_num_iter_2(n_grid_points) ;
-    unsigned byte dg_num_iter_3(n_grid_points) ;
-    unsigned byte dg_num_iter_4(n_grid_points) ;
-    unsigned short dg_num_meas_l1c(n_grid_points) ;
-    unsigned short dg_num_meas_valid(n_grid_points) ;
-    unsigned short dg_border_fov(n_grid_points) ;
-    unsigned short dg_rfi_l2(n_grid_points) ;
-    unsigned short dg_af_fov(n_grid_points) ;
-    unsigned short dg_sun_tails(n_grid_points) ;
-    unsigned short dg_sun_glint_area(n_grid_points) ;
-    unsigned short dg_sun_glint_fov(n_grid_points) ;
-    unsigned short dg_sun_fov(n_grid_points) ;
-    unsigned short dg_sun_glint_l2(n_grid_points) ;
-    unsigned short dg_suspect_ice(n_grid_points) ;
-    unsigned short dg_galactic_noise_error(n_grid_points) ;
-    unsigned short dg_galactic_noise_pol(n_grid_points) ;
-    unsigned short dg_moonlight(n_grid_points) ;
+    ushort dg_chi2_1(n_grid_points) ;
+    ushort dg_chi2_2(n_grid_points) ;
+    ushort dg_chi2_3(n_grid_points) ;
+    ushort dg_chi2_acard(n_grid_points) ;
+    ushort dg_chi2_p_1(n_grid_points) ;
+    ushort dg_chi2_p_2(n_grid_points) ;
+    ushort dg_chi2_p_3(n_grid_points) ;
+    ushort dg_chi2_p_acard(n_grid_points) ;
+    ushort dg_quality_sss_1(n_grid_points) ;
+    ushort dg_quality_sss_2(n_grid_points) ;
+    ushort dg_quality_sss_3(n_grid_points) ;
+    ushort dg_quality_sss_acard(n_grid_points) ;
+    ubyte dg_num_iter_1(n_grid_points) ;
+    ubyte dg_num_iter_2(n_grid_points) ;
+    ubyte dg_num_iter_3(n_grid_points) ;
+    ubyte dg_num_iter_4(n_grid_points) ;
+    ushort dg_num_meas_l1c(n_grid_points) ;
+    ushort dg_num_meas_valid(n_grid_points) ;
+    ushort dg_border_fov(n_grid_points) ;
+    ushort dg_rfi_l2(n_grid_points) ;
+    ushort dg_af_fov(n_grid_points) ;
+    ushort dg_sun_tails(n_grid_points) ;
+    ushort dg_sun_glint_area(n_grid_points) ;
+    ushort dg_sun_glint_fov(n_grid_points) ;
+    ushort dg_sun_fov(n_grid_points) ;
+    ushort dg_sun_glint_l2(n_grid_points) ;
+    ushort dg_suspect_ice(n_grid_points) ;
+    ushort dg_galactic_noise_error(n_grid_points) ;
+    ushort dg_galactic_noise_pol(n_grid_points) ;
+    ushort dg_moonlight(n_grid_points) ;
 
-    unsigned integer science_flags_1(n_grid_points) ;
+    uint science_flags_1(n_grid_points) ;
         science_flags_1:flag_masks = 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072, 262144, 524288, 1048576, 2097152 ;
         science_flags_1:flag_meanings = "fg_sc_land_sea_coast1 fg_sc_land_sea_coast2 fg_sc_tec_gradient fg_sc_in_clim_ice fg_sc_ice fg_sc_suspect_ice fg_sc_rain fg_sc_high_wind fg_sc_low_wind fg_sc_hight_sst fg_sc_low_sst fg_sc_high_sss fg_sc_low_sss fg_sc_sea_state_1 fg_sc_sea_state_2 fg_sc_sea_state_3 fg_sc_sea_state_4 fg_sc_sea_state_5 fg_sc_sea_state_6 fg_sc_sst_front fg_sc_sss_front fg_sc_ice_acard" ;
-    unsigned integer science_flags_2(n_grid_points) ;
+    uint science_flags_2(n_grid_points) ;
         science_flags_2:flag_masks = 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072, 262144, 524288, 1048576, 2097152 ;
         science_flags_2:flag_meanings = "fg_sc_land_sea_coast1 fg_sc_land_sea_coast2 fg_sc_tec_gradient fg_sc_in_clim_ice fg_sc_ice fg_sc_suspect_ice fg_sc_rain fg_sc_high_wind fg_sc_low_wind fg_sc_hight_sst fg_sc_low_sst fg_sc_high_sss fg_sc_low_sss fg_sc_sea_state_1 fg_sc_sea_state_2 fg_sc_sea_state_3 fg_sc_sea_state_4 fg_sc_sea_state_5 fg_sc_sea_state_6 fg_sc_sst_front fg_sc_sss_front fg_sc_ice_acard" ;
-    unsigned integer science_flags_3(n_grid_points) ;
+    uint science_flags_3(n_grid_points) ;
         science_flags_3:flag_masks = 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072, 262144, 524288, 1048576, 2097152 ;
         science_flags_3:flag_meanings = "fg_sc_land_sea_coast1 fg_sc_land_sea_coast2 fg_sc_tec_gradient fg_sc_in_clim_ice fg_sc_ice fg_sc_suspect_ice fg_sc_rain fg_sc_high_wind fg_sc_low_wind fg_sc_hight_sst fg_sc_low_sst fg_sc_high_sss fg_sc_low_sss fg_sc_sea_state_1 fg_sc_sea_state_2 fg_sc_sea_state_3 fg_sc_sea_state_4 fg_sc_sea_state_5 fg_sc_sea_state_6 fg_sc_sst_front fg_sc_sss_front fg_sc_ice_acard" ;
-    unsigned integer science_flags_4(n_grid_points) ;
+    uint science_flags_4(n_grid_points) ;
         science_flags_4:flag_masks = 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072, 262144, 524288, 1048576, 2097152 ;
         science_flags_4:flag_meanings = "fg_sc_land_sea_coast1 fg_sc_land_sea_coast2 fg_sc_tec_gradient fg_sc_in_clim_ice fg_sc_ice fg_sc_suspect_ice fg_sc_rain fg_sc_high_wind fg_sc_low_wind fg_sc_hight_sst fg_sc_low_sst fg_sc_high_sss fg_sc_low_sss fg_sc_sea_state_1 fg_sc_sea_state_2 fg_sc_sea_state_3 fg_sc_sea_state_4 fg_sc_sea_state_5 fg_sc_sea_state_6 fg_sc_sst_front fg_sc_sss_front fg_sc_ice_acard" ;
 
     // science descriptors
-    unsigned short dg_sky(n_grid_points) ;
+    ushort dg_sky(n_grid_points) ;
 
 // global attributes:
         :Conventions = "CF-1.6" ;
