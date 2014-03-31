@@ -213,7 +213,9 @@ public class L1cScienceSmosFile extends L1cSmosFile {
             btData = btDataList.getCompound(i);
             if (btData.getLong(snapshotIdOfPixelIndex) == snapshotId) {
                 final int flags = btData.getInt(flagsIndex);
-                if (polarization == 4 || polarization == (flags & 1) || (polarization & flags & 2) != 0) {
+                if (polarization == 4 || // for flags (they do not depend on polarisation)
+                    polarization == (flags & 1) || // for x or y polarisation (dual pol)
+                    (polarization & flags & 2) != 0) { // for xy polarisation (full pol, real and imaginary)
                     return btData;
                 }
             }
