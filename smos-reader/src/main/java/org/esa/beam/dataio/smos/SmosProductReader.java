@@ -268,7 +268,7 @@ public class SmosProductReader extends AbstractProductReader {
         return formatName.contains("AUX_DGGTLV");
     }
 
-    private static ExplorerFile createExplorerFile(File hdrFile, File dblFile) throws IOException {
+    public static ExplorerFile createExplorerFile(File hdrFile, File dblFile) throws IOException {
         final DataFormat format = Dddb.getInstance().getDataFormat(hdrFile);
         if (format == null) {
             return null;
