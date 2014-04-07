@@ -2,18 +2,22 @@ package org.esa.beam.smos.ee2netcdf;
 
 
 import org.esa.beam.dataio.netcdf.util.NetcdfFileOpener;
+import org.esa.beam.dataio.smos.util.DateTimeUtils;
 import org.esa.beam.framework.dataio.ProductIO;
 import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.util.io.FileUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import ucar.nc2.Attribute;
 import ucar.nc2.Dimension;
 import ucar.nc2.NetcdfFile;
 import ucar.nc2.util.DiskCache;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -44,7 +48,7 @@ public class GridPointFormatExporterTest {
     }
 
     @Test
-    public void testExportBWLF1C() throws IOException {
+    public void testExportBWLF1C() throws IOException, ParseException {
         final File file = TestHelper.getResourceFile("SM_OPER_MIR_BWLF1C_20111026T143206_20111026T152520_503_001_1.zip");
         final File outputFile = new File(targetDirectory, "BWLF1C.nc");
 
@@ -56,6 +60,13 @@ public class GridPointFormatExporterTest {
 
             assertTrue(outputFile.isFile());
             targetFile = NetcdfFileOpener.open(outputFile);
+            assertGlobalAttribute("Conventions", "CF-1.6", targetFile);
+            assertGlobalAttribute("title", "TBD", targetFile);
+            assertGlobalAttribute("institution", "TBD", targetFile);
+            assertGlobalAttribute("contact", "TBD", targetFile);
+            assertCreationDateWithinLast5Minutes(targetFile);
+            assertGlobalAttribute("total_number_of_grid_points", "84045", targetFile);
+
             assertDimension("grid_point_count", 84045, targetFile);
             assertDimension("bt_data_count", 255, targetFile);
 
@@ -70,7 +81,7 @@ public class GridPointFormatExporterTest {
     }
 
     @Test
-    public void testExportOSUDP2() throws IOException {
+    public void testExportOSUDP2() throws IOException, ParseException {
         final File file = TestHelper.getResourceFile("SM_OPER_MIR_OSUDP2_20091204T001853_20091204T011255_310_001_1.zip");
         final File outputFile = new File(targetDirectory, "OSUDP2.nc");
 
@@ -82,6 +93,14 @@ public class GridPointFormatExporterTest {
 
             assertTrue(outputFile.isFile());
             targetFile = NetcdfFileOpener.open(outputFile);
+
+            assertGlobalAttribute("Conventions", "CF-1.6", targetFile);
+            assertGlobalAttribute("title", "TBD", targetFile);
+            assertGlobalAttribute("institution", "TBD", targetFile);
+            assertGlobalAttribute("contact", "TBD", targetFile);
+            assertCreationDateWithinLast5Minutes(targetFile);
+            assertGlobalAttribute("total_number_of_grid_points", "98564", targetFile);
+
             assertDimension("grid_point_count", 98564, targetFile);
             assertNoDimension("bt_data_count", targetFile);
         } finally {
@@ -94,22 +113,35 @@ public class GridPointFormatExporterTest {
         }
     }
 
+    private void assertCreationDateWithinLast5Minutes(NetcdfFile targetFile) throws ParseException {
+        final List<Attribute> globalAttributes = targetFile.getGlobalAttributes();
+
+        for(final Attribute globalAttribute: globalAttributes) {
+            if (globalAttribute.getFullName().equals("creation_date")) {
+                final Date dateFromFile = DateTimeUtils.fromFixedHeaderFormat(globalAttribute.getStringValue());
+                final Date now = new Date();
+                assertTrue((now.getTime() - dateFromFile.getTime()< 300000));
+            }
+
+        }
+    }
+
     // @todo 1 tb/tb test for L1C files
     // Dimensions
-    // - grid_point_count = unlimited
-    // - snapshot_count = 4231
-    // - bt_data_count = 300
     // - radiometric_accuracy_count = 2
+    // - bt_data_count = 300
+    // - snapshot_count = 4231
+    // - grid_point_count = unlimited
 
-    private static void assertNoDimension(String dimensionName, NetcdfFile targetFile) {
-        final List<Dimension> dimensions = targetFile.getDimensions();
-
-        for (final Dimension dimension: dimensions) {
-            if (dimension.getFullName().equals(dimensionName)) {
-                fail("Product contains dimension: '" + dimensionName + "' but shouldn't");
+    private static void assertGlobalAttribute(String attributeName, String attributeValue, NetcdfFile targetFile) {
+        final List<Attribute> globalAttributes = targetFile.getGlobalAttributes();
+        for(final Attribute globalAttribute: globalAttributes) {
+            if (globalAttribute.getFullName().equals(attributeName)) {
+                assertEquals(attributeValue, globalAttribute.getStringValue());
                 return;
             }
         }
+        fail("Global attribute: '" + attributeName + "' not present");
     }
 
     private static void assertDimension(String dimensionName, int dimensionLength, NetcdfFile targetFile) {
@@ -121,5 +153,16 @@ public class GridPointFormatExporterTest {
             }
         }
         fail("file does not contain dimension: " + dimensionName);
+    }
+
+    private static void assertNoDimension(String dimensionName, NetcdfFile targetFile) {
+        final List<Dimension> dimensions = targetFile.getDimensions();
+
+        for (final Dimension dimension: dimensions) {
+            if (dimension.getFullName().equals(dimensionName)) {
+                fail("Product contains dimension: '" + dimensionName + "' but shouldn't");
+                return;
+            }
+        }
     }
 }

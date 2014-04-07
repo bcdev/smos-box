@@ -2,6 +2,7 @@ package org.esa.beam.dataio.smos.util;
 
 import org.junit.Test;
 
+import java.text.ParseException;
 import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
@@ -78,6 +79,15 @@ public class DateTimeUtilsTest {
         date = DateTimeUtils.cfiDateToUtc(0, 0, 1000);
         variableHeaderFormat = DateTimeUtils.toFixedHeaderFormat(date);
         assertEquals("UTC=2000-01-01T00:00:00", variableHeaderFormat);
+    }
+
+    @Test
+    public void testFromFixedHeaderFormat() throws ParseException {
+        Date date = DateTimeUtils.fromFixedHeaderFormat("UTC=2000-01-01T00:00:00");
+        assertEquals(946684800000L, date.getTime());
+
+        date = DateTimeUtils.fromFixedHeaderFormat("UTC=2000-01-01T00:00:01");
+        assertEquals(946684801000L, date.getTime());
     }
 
     @Test

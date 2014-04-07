@@ -1,5 +1,6 @@
 package org.esa.beam.dataio.smos.util;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -53,6 +54,10 @@ public class DateTimeUtils {
 
     public static String toFixedHeaderFormat(Date date) {
         return FIXED_HEADER_FORMAT.format(date);
+    }
+
+    public static Date fromFixedHeaderFormat(String dateString) throws ParseException {
+        return FIXED_HEADER_FORMAT.parse(dateString);
     }
 
     public static String toFileNameFormat(Date date) {
