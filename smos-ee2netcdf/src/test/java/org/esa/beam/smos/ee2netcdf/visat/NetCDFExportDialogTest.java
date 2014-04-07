@@ -8,9 +8,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class NetCDFExportDialogTest {
 
@@ -84,7 +82,7 @@ public class NetCDFExportDialogTest {
         final File file_1 = TestHelper.getResourceFile("SM_OPER_MIR_BWLF1C_20111026T143206_20111026T152520_503_001_1.zip");
         final File file_2 = TestHelper.getResourceFile("SM_OPER_MIR_OSUDP2_20091204T001853_20091204T011255_310_001_1.zip");
 
-        final ArrayList<File> targetFiles = new ArrayList<File>();
+        final ArrayList<File> targetFiles = new ArrayList<>();
         targetFiles.add(file_1);
         targetFiles.add(file_2);
 
@@ -94,7 +92,7 @@ public class NetCDFExportDialogTest {
     @Test
     public void testListToString_ellipseAfterTenFiles() {
 
-        final ArrayList<File> targetFiles = new ArrayList<File>();
+        final ArrayList<File> targetFiles = new ArrayList<>();
         for (int i = 0; i < 14; i++) {
             targetFiles.add(new File("blabla_" + i));
         }
