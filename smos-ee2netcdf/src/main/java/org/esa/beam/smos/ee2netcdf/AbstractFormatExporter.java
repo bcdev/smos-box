@@ -13,11 +13,12 @@ import java.util.Date;
 abstract class AbstractFormatExporter implements FormatExporter {
 
     protected int gridPointCount;
+    protected SmosFile explorerFile;
 
     @Override
     public void initialize(Product product) {
         final SmosProductReader smosReader = (SmosProductReader) product.getProductReader();
-        final SmosFile explorerFile = (SmosFile) smosReader.getExplorerFile();
+        explorerFile = (SmosFile) smosReader.getExplorerFile();
         gridPointCount = explorerFile.getGridPointCount();
     }
 

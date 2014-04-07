@@ -69,6 +69,8 @@ public class GridPointFormatExporterTest {
 
             assertDimension("grid_point_count", 84045, targetFile);
             assertDimension("bt_data_count", 255, targetFile);
+            assertNoDimension("radiometric_accuracy_count", targetFile);
+            assertNoDimension("snapshot_count", targetFile);
 
         } finally {
             if (targetFile != null) {
@@ -102,6 +104,8 @@ public class GridPointFormatExporterTest {
 
             assertDimension("grid_point_count", 42, targetFile);
             assertDimension("bt_data_count", 300, targetFile);
+            assertDimension("radiometric_accuracy_count", 2, targetFile);
+            assertDimension("snapshot_count", 172, targetFile);
 
         } finally {
             if (targetFile != null) {
@@ -136,6 +140,8 @@ public class GridPointFormatExporterTest {
 
             assertDimension("grid_point_count", 98564, targetFile);
             assertNoDimension("bt_data_count", targetFile);
+            assertNoDimension("radiometric_accuracy_count", targetFile);
+            assertNoDimension("snapshot_count", targetFile);
         } finally {
             if (targetFile != null) {
                 targetFile.close();
@@ -163,7 +169,7 @@ public class GridPointFormatExporterTest {
     // Dimensions
     // - radiometric_accuracy_count = 2
     // - bt_data_count = 300
-    // - snapshot_count = 4231
+    // -  snapshot_count= 4231
     // - grid_point_count = unlimited
 
     private static void assertGlobalAttribute(String attributeName, String attributeValue, NetcdfFile targetFile) {
