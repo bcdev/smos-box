@@ -12,4 +12,9 @@ class L2FormatExporter extends AbstractFormatExporter {
     public void addDimensions(NFileWriteable nFileWriteable) throws IOException {
         nFileWriteable.addDimension("grid_point_count", gridPointCount);
     }
+
+    @Override
+    public void addVariables(NFileWriteable nFileWriteable) throws IOException {
+
+    }
 }

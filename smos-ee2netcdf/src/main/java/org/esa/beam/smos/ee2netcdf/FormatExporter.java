@@ -10,4 +10,5 @@ interface FormatExporter {
      void initialize(Product product);
      void addGlobalAttributes(NFileWriteable nFileWriteable) throws IOException;
      void addDimensions(NFileWriteable nFileWriteable) throws IOException;
+     void addVariables(NFileWriteable nFileWriteable) throws IOException;
 }

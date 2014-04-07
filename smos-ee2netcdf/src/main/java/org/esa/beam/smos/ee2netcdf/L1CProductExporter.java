@@ -27,4 +27,9 @@ class L1CProductExporter extends AbstractFormatExporter {
         nFileWriteable.addDimension("radiometric_accuracy_count", 2);
         nFileWriteable.addDimension("snapshot_count", numSnapshots);
     }
+
+    @Override
+    public void addVariables(NFileWriteable nFileWriteable) throws IOException {
+
+    }
 }
