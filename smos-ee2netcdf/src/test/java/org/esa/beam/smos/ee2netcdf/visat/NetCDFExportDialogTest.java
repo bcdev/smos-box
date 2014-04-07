@@ -36,16 +36,18 @@ public class NetCDFExportDialogTest {
         final String wildCardpath = resourceDirectory.getAbsolutePath() + File.separator + "*";
         final List<File> targetFiles = NetCDFExportDialog.getTargetFiles(wildCardpath, targetDir);
         assertNotNull(targetFiles);
-        assertEquals(2, targetFiles.size());
+        assertEquals(3, targetFiles.size());
         assertEquals(new File(targetDir, "SM_OPER_MIR_BWLF1C_20111026T143206_20111026T152520_503_001_1.nc").getAbsolutePath(),
                 targetFiles.get(0).getAbsolutePath());
         assertEquals(new File(targetDir, "SM_OPER_MIR_OSUDP2_20091204T001853_20091204T011255_310_001_1.nc").getAbsolutePath(),
                 targetFiles.get(1).getAbsolutePath());
+        assertEquals(new File(targetDir, "SM_REPB_MIR_SCLF1C_20110201T151254_20110201T151308_505_152_1.nc").getAbsolutePath(),
+                targetFiles.get(2).getAbsolutePath());
     }
 
     @Test
     public void testGetExistingFiles_noneExists() {
-        final ArrayList<File> targetFiles = new ArrayList<File>();
+        final ArrayList<File> targetFiles = new ArrayList<>();
         targetFiles.add(new File("/fantasy/location/target/file"));
         targetFiles.add(new File("/not/existing/file"));
 
@@ -56,7 +58,7 @@ public class NetCDFExportDialogTest {
 
     @Test
     public void testGetExistingFiles_oneExists() {
-        final ArrayList<File> targetFiles = new ArrayList<File>();
+        final ArrayList<File> targetFiles = new ArrayList<>();
         targetFiles.add(new File("/fantasy/location/target/file"));
         targetFiles.add(TestHelper.getResourceFile("SM_OPER_MIR_OSUDP2_20091204T001853_20091204T011255_310_001_1.zip"));
 
@@ -67,7 +69,7 @@ public class NetCDFExportDialogTest {
 
     @Test
     public void testGetExistingFiles_twoExists() {
-        final ArrayList<File> targetFiles = new ArrayList<File>();
+        final ArrayList<File> targetFiles = new ArrayList<>();
         targetFiles.add(TestHelper.getResourceFile("SM_OPER_MIR_BWLF1C_20111026T143206_20111026T152520_503_001_1.zip"));
         targetFiles.add(new File("/fantasy/location/target/file"));
         targetFiles.add(TestHelper.getResourceFile("SM_OPER_MIR_OSUDP2_20091204T001853_20091204T011255_310_001_1.zip"));

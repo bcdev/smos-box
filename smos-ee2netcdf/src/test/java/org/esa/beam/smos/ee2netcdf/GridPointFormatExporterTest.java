@@ -81,6 +81,39 @@ public class GridPointFormatExporterTest {
     }
 
     @Test
+    public void testExportSCLF1C() throws IOException, ParseException {
+        final File file = TestHelper.getResourceFile("SM_REPB_MIR_SCLF1C_20110201T151254_20110201T151308_505_152_1.zip");
+        final File outputFile = new File(targetDirectory, "SCLF1C.nc");
+
+        Product product = null;
+        NetcdfFile targetFile = null;
+        try {
+            product = ProductIO.readProduct(file);
+            gridPointFormatExporter.write(product, outputFile);
+
+            assertTrue(outputFile.isFile());
+            targetFile = NetcdfFileOpener.open(outputFile);
+            assertGlobalAttribute("Conventions", "CF-1.6", targetFile);
+            assertGlobalAttribute("title", "TBD", targetFile);
+            assertGlobalAttribute("institution", "TBD", targetFile);
+            assertGlobalAttribute("contact", "TBD", targetFile);
+            assertCreationDateWithinLast5Minutes(targetFile);
+            assertGlobalAttribute("total_number_of_grid_points", "42", targetFile);
+
+            assertDimension("grid_point_count", 42, targetFile);
+            assertDimension("bt_data_count", 300, targetFile);
+
+        } finally {
+            if (targetFile != null) {
+                targetFile.close();
+            }
+            if (product != null) {
+                product.dispose();
+            }
+        }
+    }
+
+    @Test
     public void testExportOSUDP2() throws IOException, ParseException {
         final File file = TestHelper.getResourceFile("SM_OPER_MIR_OSUDP2_20091204T001853_20091204T011255_310_001_1.zip");
         final File outputFile = new File(targetDirectory, "OSUDP2.nc");
@@ -113,7 +146,7 @@ public class GridPointFormatExporterTest {
         }
     }
 
-    private void assertCreationDateWithinLast5Minutes(NetcdfFile targetFile) throws ParseException {
+    private static void assertCreationDateWithinLast5Minutes(NetcdfFile targetFile) throws ParseException {
         final List<Attribute> globalAttributes = targetFile.getGlobalAttributes();
 
         for(final Attribute globalAttribute: globalAttributes) {
