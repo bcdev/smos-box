@@ -342,6 +342,17 @@ public class SmosUtilsTest {
     }
 
     @Test
+    public void testIsBrowseFormat() {
+        assertTrue(SmosUtils.isBrowseFormat("SM_OPER_MIR_BWLD1C_20100405T143038_20100405T152439_330_001_1.HDR"));
+        assertTrue(SmosUtils.isBrowseFormat("SM_OPER_MIR_BWSD1C_20100201T134256_20100201T140057_324_001_1.HDR"));
+        assertTrue(SmosUtils.isBrowseFormat("SM_OPER_MIR_BWLF1C_20100201T134256_20100201T140057_324_001_1.HDR"));
+        assertTrue(SmosUtils.isBrowseFormat("SM_OPER_MIR_BWSF1C_20100201T134256_20100201T140057_324_001_1.HDR"));
+
+        assertFalse(SmosUtils.isBrowseFormat("SM_TEST_MIR_OSDAP2_20070225T041815_20070225T050750_306_001_8.DBL"));
+        assertFalse(SmosUtils.isBrowseFormat("SM_OPER_MIR_OSUDP2_20091204T001853_20091204T011255_310_001_1.zip"));
+    }
+
+    @Test
     public void testIsCompressedFile() {
         final File fileWithoutExtension = new File("a_file_without_extension");
         assertFalse(SmosUtils.isCompressedFile(fileWithoutExtension));

@@ -240,6 +240,13 @@ public class SmosUtils {
                 || formatName.contains("MIR_BWND1C");
     }
 
+    public static boolean isBrowseFormat(String formatName) {
+        return isDualPolBrowseFormat(formatName)
+                || formatName.contains("MIR_BWLF1C")
+                || formatName.contains("MIR_BWSF1C")
+                || formatName.contains("MIR_BWNF1C");
+    }
+
     public static boolean isCompressedFile(File file) {
         final String extension = FileUtils.getExtension(file);
         if (StringUtils.isNullOrEmpty(extension)) {

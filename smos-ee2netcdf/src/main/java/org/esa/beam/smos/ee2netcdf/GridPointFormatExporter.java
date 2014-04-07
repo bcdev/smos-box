@@ -2,11 +2,10 @@ package org.esa.beam.smos.ee2netcdf;
 
 import org.esa.beam.dataio.netcdf.nc.N4FileWriteable;
 import org.esa.beam.dataio.netcdf.nc.NFileWriteable;
-import org.esa.beam.dataio.smos.ExplorerFile;
 import org.esa.beam.dataio.smos.SmosFile;
 import org.esa.beam.dataio.smos.SmosProductReader;
-import org.esa.beam.framework.dataio.ProductReader;
 import org.esa.beam.framework.datamodel.Product;
+import org.esa.beam.smos.SmosUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,6 +20,10 @@ public class GridPointFormatExporter {
 
         final NFileWriteable nFileWriteable = N4FileWriteable.create(outputFile.getPath());
         nFileWriteable.addDimension("grid_point_count", gridPointCount);
+        final String name = product.getFileLocation().getName();
+        if (SmosUtils.isBrowseFormat(name)) {
+            nFileWriteable.addDimension("bt_data_count", 255);
+        }
         nFileWriteable.create();
 
         nFileWriteable.close();

@@ -16,9 +16,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 public class GridPointFormatExporterTest {
 
@@ -59,6 +57,7 @@ public class GridPointFormatExporterTest {
             assertTrue(outputFile.isFile());
             targetFile = NetcdfFileOpener.open(outputFile);
             assertDimension("grid_point_count", 84045, targetFile);
+            assertDimension("bt_data_count", 255, targetFile);
 
         } finally {
             if (targetFile != null) {
@@ -84,6 +83,7 @@ public class GridPointFormatExporterTest {
             assertTrue(outputFile.isFile());
             targetFile = NetcdfFileOpener.open(outputFile);
             assertDimension("grid_point_count", 98564, targetFile);
+            assertNoDimension("bt_data_count", targetFile);
         } finally {
             if (targetFile != null) {
                 targetFile.close();
@@ -94,10 +94,28 @@ public class GridPointFormatExporterTest {
         }
     }
 
+    // @todo 1 tb/tb test for L1C files
+    // Dimensions
+    // - grid_point_count = unlimited
+    // - snapshot_count = 4231
+    // - bt_data_count = 300
+    // - radiometric_accuracy_count = 2
+
+    private static void assertNoDimension(String dimensionName, NetcdfFile targetFile) {
+        final List<Dimension> dimensions = targetFile.getDimensions();
+
+        for (final Dimension dimension: dimensions) {
+            if (dimension.getFullName().equals(dimensionName)) {
+                fail("Product contains dimension: '" + dimensionName + "' but shouldn't");
+                return;
+            }
+        }
+    }
+
     private static void assertDimension(String dimensionName, int dimensionLength, NetcdfFile targetFile) {
         final List<Dimension> dimensions = targetFile.getDimensions();
-        for (final Dimension dimension: dimensions) {
-            if (dimension.getFullName().equals(dimensionName)){
+        for (final Dimension dimension : dimensions) {
+            if (dimension.getFullName().equals(dimensionName)) {
                 assertEquals(dimensionLength, dimension.getLength());
                 return;
             }
