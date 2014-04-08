@@ -9,6 +9,8 @@ import org.esa.beam.util.io.FileUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import ucar.ma2.Array;
+import ucar.ma2.InvalidRangeException;
 import ucar.nc2.Attribute;
 import ucar.nc2.Dimension;
 import ucar.nc2.NetcdfFile;
@@ -49,7 +51,7 @@ public class GridPointFormatExporterTest {
     }
 
     @Test
-    public void testExportBWLF1C() throws IOException, ParseException {
+    public void testExportBWLF1C() throws IOException, ParseException, InvalidRangeException {
         final File file = TestHelper.getResourceFile("SM_OPER_MIR_BWLF1C_20111026T143206_20111026T152520_503_001_1.zip");
         final File outputFile = new File(targetDirectory, "BWLF1C.nc");
 
@@ -68,8 +70,10 @@ public class GridPointFormatExporterTest {
             assertNoDimension("radiometric_accuracy_count", targetFile);
             assertNoDimension("snapshot_count", targetFile);
 
-            // @todo 1 tb/tb continue here tb 2014-04-07
-            //final Variable gridPointIdVariable = getVariable("grid_point_id", targetFile);
+            final Variable gridPointIdVariable = getVariable("grid_point_id", targetFile);
+            final Array array = gridPointIdVariable.read(new int[]{346}, new int[]{2});
+            assertEquals(4098190, array.getInt(0));
+            assertEquals(4098191, array.getInt(1));
 
 
         } finally {

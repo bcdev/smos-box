@@ -17,4 +17,9 @@ class L2FormatExporter extends AbstractFormatExporter {
     public void addVariables(NFileWriteable nFileWriteable) throws IOException {
 
     }
+
+    @Override
+    public void writeData(NFileWriteable nFileWriteable) throws IOException {
+
+    }
 }

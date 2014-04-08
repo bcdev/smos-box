@@ -21,6 +21,8 @@ public class GridPointFormatExporter {
 
         nFileWriteable.create();
 
+        exporter.writeData(nFileWriteable);
+
         nFileWriteable.close();
     }
 }

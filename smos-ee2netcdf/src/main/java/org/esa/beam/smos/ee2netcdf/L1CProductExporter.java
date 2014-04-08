@@ -32,4 +32,9 @@ class L1CProductExporter extends AbstractFormatExporter {
     public void addVariables(NFileWriteable nFileWriteable) throws IOException {
 
     }
+
+    @Override
+    public void writeData(NFileWriteable nFileWriteable) throws IOException {
+
+    }
 }
