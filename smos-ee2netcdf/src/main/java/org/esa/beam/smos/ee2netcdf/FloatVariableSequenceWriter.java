@@ -7,22 +7,22 @@ import ucar.ma2.Array;
 
 import java.io.IOException;
 
-class IntVariableSequenceWriter implements VariableWriter {
+public class FloatVariableSequenceWriter implements VariableWriter {
 
     private final Array array;
     private final NVariable variable;
     private final int memberIndex;
 
-    IntVariableSequenceWriter(NVariable variable, int arraySize, int memberIndex) {
+    public FloatVariableSequenceWriter(NVariable variable, int arraySize, int memberIndex) {
         this.variable = variable;
         this.memberIndex = memberIndex;
-        array = Array.factory(new int[arraySize]);
+        array = Array.factory(new float[arraySize]);
     }
 
     @Override
     public void write(CompoundData gridPointData, SequenceData btDataList, int index) throws IOException {
-        final int data = btDataList.getCompound(0).getInt(memberIndex);
-        array.setInt(index, data);
+        final float data = btDataList.getCompound(0).getFloat(memberIndex);
+        array.setFloat(index, data);
     }
 
     @Override

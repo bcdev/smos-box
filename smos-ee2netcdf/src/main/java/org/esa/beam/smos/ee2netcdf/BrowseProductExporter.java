@@ -26,8 +26,8 @@ class BrowseProductExporter extends AbstractFormatExporter {
         variableDescriptors.put("lat", new VariableDescriptor("Latitude", true, true, DataType.FLOAT));       // this ia a dddb mapping name, real name is: Grid_Point_Latitude
         variableDescriptors.put("lon", new VariableDescriptor("Longitude", true, true, DataType.FLOAT));      // this ia a dddb mapping name, real name is: Grid_Point_Longitude
         variableDescriptors.put("grid_point_altitude", new VariableDescriptor("Altitude", true, true, DataType.FLOAT));   // this ia a dddb mapping name, real name is: Grid_Point_Altitude
-        variableDescriptors.put("grid_point_mask", new VariableDescriptor("Grid_Point_Mask", true, false, DataType.CHAR));
-        variableDescriptors.put("bt_data_count", new VariableDescriptor("BT_Data_Counter", true, false, DataType.CHAR));
+        variableDescriptors.put("grid_point_mask", new VariableDescriptor("Grid_Point_Mask", true, false, DataType.BYTE));
+        variableDescriptors.put("bt_data_count", new VariableDescriptor("BT_Data_Counter", true, false, DataType.BYTE));
         variableDescriptors.put("flags", new VariableDescriptor("Flags", false, false, DataType.SHORT));
         variableDescriptors.put("bt_value", new VariableDescriptor("BT_Value", false, true, DataType.FLOAT));
         variableDescriptors.put("pixel_radiometric_accuracy", new VariableDescriptor("Radiometric_Accuracy_of_Pixel", false, false, DataType.SHORT));
@@ -48,35 +48,13 @@ class BrowseProductExporter extends AbstractFormatExporter {
         for (final String ncVariableName : variableNameKeys) {
             final VariableDescriptor variableDescriptor = variableDescriptors.get(ncVariableName);
             // @todo 1 tb/tb replace datatype, unsigned, dimensionality and dimension names with real data tb 2014-04-08
-            if (variableDescriptor.isFloatValue() && variableDescriptor.isGridPointData()) {
-                // @todo 1 tb/tb remove grid point constraint tb 2014-04-09
-                nFileWriteable.addVariable(ncVariableName, DataType.FLOAT, true, null, "n_grid_points");
-            } else {
-                nFileWriteable.addVariable(ncVariableName, DataType.INT, true, null, "n_grid_points");
-            }
+            nFileWriteable.addVariable(ncVariableName, variableDescriptor.getDataType(), true, null, "n_grid_points");
         }
     }
 
     @Override
     public void writeData(NFileWriteable nFileWriteable) throws IOException {
-        final Set<String> variableNameKeys = variableDescriptors.keySet();
-        final VariableWriter[] variableWriters = new VariableWriter[variableNameKeys.size()];
-        int index = 0;
-        for (final String ncVariableName : variableNameKeys) {
-            final NVariable nVariable = nFileWriteable.findVariable(ncVariableName);
-            final VariableDescriptor variableDescriptor = variableDescriptors.get(ncVariableName);
-            if (variableDescriptor.isGridPointData()) {
-                if (variableDescriptor.isFloatValue()) {
-                    variableWriters[index] = new FloatVariableGridPointWriter(nVariable, variableDescriptor.getName(), gridPointCount);
-                } else {
-                    variableWriters[index] = new IntVariableGridPointWriter(nVariable, variableDescriptor.getName(), gridPointCount);
-                }
-            } else {
-                // @todo 1 tb/tb move member index to VariableDescriptor tb 2014-04-09
-                variableWriters[index] = new IntVariableSequenceWriter(nVariable, gridPointCount, 0);
-            }
-            index++;
-        }
+        final VariableWriter[] variableWriters = createVariableWriters(nFileWriteable);
 
         final L1cBrowseSmosFile browseFile = (L1cBrowseSmosFile) explorerFile;
 
@@ -91,5 +69,41 @@ class BrowseProductExporter extends AbstractFormatExporter {
         for (VariableWriter writer : variableWriters) {
             writer.close();
         }
+    }
+
+    private VariableWriter[] createVariableWriters(NFileWriteable nFileWriteable) {
+        final Set<String> variableNameKeys = variableDescriptors.keySet();
+        final VariableWriter[] variableWriters = new VariableWriter[variableNameKeys.size()];
+        int index = 0;
+        for (final String ncVariableName : variableNameKeys) {
+            final NVariable nVariable = nFileWriteable.findVariable(ncVariableName);
+            final VariableDescriptor variableDescriptor = variableDescriptors.get(ncVariableName);
+            final DataType dataType = variableDescriptor.getDataType();
+            if (variableDescriptor.isGridPointData()) {
+                if (dataType == DataType.FLOAT) {
+                    variableWriters[index] = new FloatVariableGridPointWriter(nVariable, variableDescriptor.getName(), gridPointCount);
+                } else if (dataType == DataType.INT) {
+                    variableWriters[index] = new IntVariableGridPointWriter(nVariable, variableDescriptor.getName(), gridPointCount);
+                } else if (dataType == DataType.SHORT) {
+                    variableWriters[index] = new ShortVariableGridPointWriter(nVariable, variableDescriptor.getName(), gridPointCount);
+                } else {
+                    variableWriters[index] = new ByteVariableGridPointWriter(nVariable, variableDescriptor.getName(), gridPointCount);
+                }
+            } else {
+                if (dataType == DataType.FLOAT) {
+                    // @todo 1 tb/tb move member index to VariableDescriptor tb 2014-04-09
+                    variableWriters[index] = new FloatVariableSequenceWriter(nVariable, gridPointCount, 0);
+                } else if (dataType == DataType.INT) {
+                    // @todo 1 tb/tb move member index to VariableDescriptor tb 2014-04-09
+                    variableWriters[index] = new IntVariableSequenceWriter(nVariable, gridPointCount, 0);
+                } else {
+                    // @todo 1 tb/tb move member index to VariableDescriptor tb 2014-04-09
+                    variableWriters[index] = new ShortVariableSequenceWriter(nVariable, gridPointCount, 0);
+                }
+
+            }
+            index++;
+        }
+        return variableWriters;
     }
 }

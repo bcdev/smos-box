@@ -10,6 +10,7 @@ class VariableDescriptor {
     private boolean floatValue;
     private DataType dataType;
 
+    //@todo 1 tb/tb remove floatValue property tb 2014-04-09
     public VariableDescriptor(String name, boolean gridPointData, boolean floatValue, DataType dataType) {
         this.name = name;
         this.gridPointData = gridPointData;
