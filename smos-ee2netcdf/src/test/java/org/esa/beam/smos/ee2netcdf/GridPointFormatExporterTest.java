@@ -67,7 +67,7 @@ public class GridPointFormatExporterTest {
             assertCorrectGlobalAttributes(targetFile, 84045);
 
             assertDimension("n_grid_points", 84045, targetFile);
-            assertDimension("n_bt_data", 255, targetFile);
+            assertDimension("n_bt_data", 4, targetFile);
             assertNoDimension("n_radiometric_accuracy", targetFile);
             assertNoDimension("n_snapshots", targetFile);
 
@@ -94,6 +94,18 @@ public class GridPointFormatExporterTest {
             array = altitudeVariable.read(new int[]{619}, new int[]{2});
             assertEquals(-0.708, array.getFloat(0), 1e-8);
             assertEquals(0.0, array.getFloat(1), 1e-8);
+
+            final Variable gridPointMaskVariable = getVariable("grid_point_mask", targetFile);
+            assertEquals(DataType.BYTE, gridPointMaskVariable.getDataType());
+            array = gridPointMaskVariable.read(new int[]{743}, new int[]{2});
+            assertEquals(-39, array.getByte(0)); // @todo 2 tb/tb these should be unsigned values - resolve problem tb 2014-04-09
+            assertEquals(-39, array.getByte(1));
+
+            final Variable btDataCountVariable = getVariable("bt_data_count", targetFile);
+            assertEquals(DataType.BYTE, btDataCountVariable.getDataType());
+            array = btDataCountVariable.read(new int[]{833}, new int[]{2});
+            assertEquals(4, array.getByte(0)); // @todo 2 tb/tb these should be unsigned values - resolve problem tb 2014-04-09
+            assertEquals(4, array.getByte(1));
 
 
         } finally {
