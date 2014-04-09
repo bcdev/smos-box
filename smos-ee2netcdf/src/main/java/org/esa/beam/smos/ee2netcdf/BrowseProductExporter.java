@@ -2,8 +2,6 @@ package org.esa.beam.smos.ee2netcdf;
 
 
 import com.bc.ceres.binio.CompoundData;
-import com.bc.ceres.binio.CompoundMember;
-import com.bc.ceres.binio.CompoundType;
 import com.bc.ceres.binio.SequenceData;
 import org.esa.beam.dataio.netcdf.nc.NFileWriteable;
 import org.esa.beam.dataio.netcdf.nc.NVariable;
@@ -16,36 +14,26 @@ import java.util.Map;
 import java.util.Set;
 
 class BrowseProductExporter extends AbstractFormatExporter {
-    private final Map<String, String> variableNames;
-
-    // ncVariableName               compound member name
-    // grid_point_id                Grid_Point_ID
-    // lat                          Grid_Point_Latitude
-    // lon                          Grid_Point_Longitude
-    // grid_point_altitude          Grid_Point_Altitude
-    // grid_point_mask              Grid_Point_Mask
-    // bt_data_count                BT_Data_Counter
-    // flags                        Flags
-    // bt_value                     BT_Value
-    // pixel_radiometric_accuracy   Radiometric_Accuracy_of_Pixel
-    // azimuth_angle                Azimuth_Angle
-    // footprint_axis_1             Footprint_Axis1
-    // footprint_axis_2             Footprint_Axis2
+    private Map<String, VariableDescriptor> variableDescriptors;
 
     BrowseProductExporter() {
-        variableNames = new HashMap<>();
-        variableNames.put("grid_point_id", "Grid_Point_ID");
-        variableNames.put("lat", "Latitude");       // this ia a dddb mapping name, real name is: Grid_Point_Latitude
-        variableNames.put("lon", "Longitude");      // this ia a dddb mapping name, real name is: Grid_Point_Longitude
-        variableNames.put("grid_point_altitude", "Altitude");   // this ia a dddb mapping name, real name is: Grid_Point_Altitude
-        variableNames.put("grid_point_mask", "Grid_Point_Mask");
-        variableNames.put("bt_data_count", "BT_Data_Counter");
-        variableNames.put("flags", "Flags");
-        variableNames.put("bt_value", "BT_Value");
-        variableNames.put("pixel_radiometric_accuracy", "Radiometric_Accuracy_of_Pixel");
-        variableNames.put("azimuth_angle", "Azimuth_Angle");
-        variableNames.put("footprint_axis_1", "Footprint_Axis1");
-        variableNames.put("footprint_axis_2", "Footprint_Axis2");
+        createVariableMap();
+    }
+
+    private void createVariableMap() {
+        variableDescriptors = new HashMap<>();
+        variableDescriptors.put("grid_point_id", new VariableDescriptor("Grid_Point_ID", true));
+        variableDescriptors.put("lat", new VariableDescriptor("Latitude", true));       // this ia a dddb mapping name, real name is: Grid_Point_Latitude
+        variableDescriptors.put("lon", new VariableDescriptor("Longitude", true));      // this ia a dddb mapping name, real name is: Grid_Point_Longitude
+        variableDescriptors.put("grid_point_altitude", new VariableDescriptor("Altitude", true));   // this ia a dddb mapping name, real name is: Grid_Point_Altitude
+        variableDescriptors.put("grid_point_mask", new VariableDescriptor("Grid_Point_Mask", true));
+        //variableDescriptors.put("bt_data_count", new VariableDescriptor("BT_Data_Counter", true));
+        variableDescriptors.put("flags", new VariableDescriptor("Flags", false));
+        variableDescriptors.put("bt_value", new VariableDescriptor("BT_Value", false));
+        variableDescriptors.put("pixel_radiometric_accuracy", new VariableDescriptor("Radiometric_Accuracy_of_Pixel", false));
+        variableDescriptors.put("azimuth_angle", new VariableDescriptor("Azimuth_Angle", false));
+        variableDescriptors.put("footprint_axis_1", new VariableDescriptor("Footprint_Axis1", false));
+        variableDescriptors.put("footprint_axis_2", new VariableDescriptor("Footprint_Axis2", false));
     }
 
     @Override
@@ -56,9 +44,8 @@ class BrowseProductExporter extends AbstractFormatExporter {
 
     @Override
     public void addVariables(NFileWriteable nFileWriteable) throws IOException {
-        final Set<String> variableNameKeys = variableNames.keySet();
+        final Set<String> variableNameKeys = variableDescriptors.keySet();
         for (final String ncVariableName : variableNameKeys) {
-            final String s = variableNames.get(ncVariableName);
             // @todo 1 tb/tb replace datatype, unsigned, dimensionality and dimension names with real data tb 2014-04-08
             nFileWriteable.addVariable(ncVariableName, DataType.INT, true, null, "grid_point_count");
         }
@@ -66,12 +53,18 @@ class BrowseProductExporter extends AbstractFormatExporter {
 
     @Override
     public void writeData(NFileWriteable nFileWriteable) throws IOException {
-        final Set<String> variableNameKeys = variableNames.keySet();
-        final IntVariableWriter[] variableWriters = new IntVariableWriter[variableNameKeys.size()];
+        final Set<String> variableNameKeys = variableDescriptors.keySet();
+        final VariableWriter[] variableWriters = new VariableWriter[variableNameKeys.size()];
         int index = 0;
-        for (final String ncVariableName: variableNameKeys) {
+        for (final String ncVariableName : variableNameKeys) {
             final NVariable nVariable = nFileWriteable.findVariable(ncVariableName);
-            variableWriters[index] = new IntVariableWriter(nVariable, variableNames.get(ncVariableName), gridPointCount);
+            final VariableDescriptor variableDescriptor = variableDescriptors.get(ncVariableName);
+            if (variableDescriptor.isGridPointData()) {
+                variableWriters[index] = new IntVariableGridPointWriter(nVariable, variableDescriptor.getName(), gridPointCount);
+            } else {
+                // @todo 1 tb/tb move member index to VariableDescriptor tb 2014-04-09
+                variableWriters[index] = new IntVariableSequenceWriter(nVariable, gridPointCount, 0);
+            }
             index++;
         }
 
@@ -80,12 +73,12 @@ class BrowseProductExporter extends AbstractFormatExporter {
         for (int i = 0; i < gridPointCount; i++) {
             final SequenceData btDataList = browseFile.getBtDataList(i);
             final CompoundData gridPointData = explorerFile.getGridPointData(i);
-            for (IntVariableWriter writer : variableWriters) {
-                writer.write(gridPointData, i);
+            for (VariableWriter writer : variableWriters) {
+                writer.write(gridPointData, btDataList, i);
             }
         }
 
-        for (IntVariableWriter writer : variableWriters) {
+        for (VariableWriter writer : variableWriters) {
             writer.close();
         }
     }

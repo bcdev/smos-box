@@ -8,7 +8,6 @@ import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.util.io.FileUtils;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import ucar.ma2.Array;
 import ucar.ma2.InvalidRangeException;
@@ -52,7 +51,6 @@ public class GridPointFormatExporterTest {
     }
 
     @Test
-    @Ignore // @todo 1 tb/tb enable again tb 2014-04-08
     public void testExportBWLF1C() throws IOException, ParseException, InvalidRangeException {
         final File file = TestHelper.getResourceFile("SM_OPER_MIR_BWLF1C_20111026T143206_20111026T152520_503_001_1.zip");
         final File outputFile = new File(targetDirectory, "BWLF1C.nc");
