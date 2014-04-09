@@ -22,18 +22,18 @@ class BrowseProductExporter extends AbstractFormatExporter {
 
     private void createVariableMap() {
         variableDescriptors = new HashMap<>();
-        variableDescriptors.put("grid_point_id", new VariableDescriptor("Grid_Point_ID", true, false, DataType.INT));
-        variableDescriptors.put("lat", new VariableDescriptor("Latitude", true, true, DataType.FLOAT));       // this ia a dddb mapping name, real name is: Grid_Point_Latitude
-        variableDescriptors.put("lon", new VariableDescriptor("Longitude", true, true, DataType.FLOAT));      // this ia a dddb mapping name, real name is: Grid_Point_Longitude
-        variableDescriptors.put("grid_point_altitude", new VariableDescriptor("Altitude", true, true, DataType.FLOAT));   // this ia a dddb mapping name, real name is: Grid_Point_Altitude
-        variableDescriptors.put("grid_point_mask", new VariableDescriptor("Grid_Point_Mask", true, false, DataType.BYTE));
-        variableDescriptors.put("bt_data_count", new VariableDescriptor("BT_Data_Counter", true, false, DataType.BYTE));
-        variableDescriptors.put("flags", new VariableDescriptor("Flags", false, false, DataType.SHORT));
-        variableDescriptors.put("bt_value", new VariableDescriptor("BT_Value", false, true, DataType.FLOAT));
-        variableDescriptors.put("pixel_radiometric_accuracy", new VariableDescriptor("Radiometric_Accuracy_of_Pixel", false, false, DataType.SHORT));
-        variableDescriptors.put("azimuth_angle", new VariableDescriptor("Azimuth_Angle", false, false, DataType.SHORT));
-        variableDescriptors.put("footprint_axis_1", new VariableDescriptor("Footprint_Axis1", false, false, DataType.SHORT));
-        variableDescriptors.put("footprint_axis_2", new VariableDescriptor("Footprint_Axis2", false, false, DataType.SHORT));
+        variableDescriptors.put("grid_point_id", new VariableDescriptor("Grid_Point_ID", true, DataType.INT));
+        variableDescriptors.put("lat", new VariableDescriptor("Latitude", true, DataType.FLOAT));       // this ia a dddb mapping name, real name is: Grid_Point_Latitude
+        variableDescriptors.put("lon", new VariableDescriptor("Longitude", true, DataType.FLOAT));      // this ia a dddb mapping name, real name is: Grid_Point_Longitude
+        variableDescriptors.put("grid_point_altitude", new VariableDescriptor("Altitude", true, DataType.FLOAT));   // this ia a dddb mapping name, real name is: Grid_Point_Altitude
+        variableDescriptors.put("grid_point_mask", new VariableDescriptor("Grid_Point_Mask", true, DataType.BYTE));
+        variableDescriptors.put("bt_data_count", new VariableDescriptor("BT_Data_Counter", true, DataType.BYTE));
+        variableDescriptors.put("flags", new VariableDescriptor("Flags", false, DataType.SHORT));
+        variableDescriptors.put("bt_value", new VariableDescriptor("BT_Value", false, DataType.FLOAT));
+        variableDescriptors.put("pixel_radiometric_accuracy", new VariableDescriptor("Radiometric_Accuracy_of_Pixel", false, DataType.SHORT));
+        variableDescriptors.put("azimuth_angle", new VariableDescriptor("Azimuth_Angle", false, DataType.SHORT));
+        variableDescriptors.put("footprint_axis_1", new VariableDescriptor("Footprint_Axis1", false, DataType.SHORT));
+        variableDescriptors.put("footprint_axis_2", new VariableDescriptor("Footprint_Axis2", false, DataType.SHORT));
     }
 
     @Override

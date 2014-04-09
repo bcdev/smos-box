@@ -7,14 +7,11 @@ class VariableDescriptor {
 
     private String name;
     private boolean gridPointData;
-    private boolean floatValue;
     private DataType dataType;
 
-    //@todo 1 tb/tb remove floatValue property tb 2014-04-09
-    public VariableDescriptor(String name, boolean gridPointData, boolean floatValue, DataType dataType) {
+    public VariableDescriptor(String name, boolean gridPointData, DataType dataType) {
         this.name = name;
         this.gridPointData = gridPointData;
-        this.floatValue = floatValue;
         this.dataType = dataType;
     }
 
@@ -32,14 +29,6 @@ class VariableDescriptor {
 
     public void setGridPointData(boolean gridPointData) {
         this.gridPointData = gridPointData;
-    }
-
-    public boolean isFloatValue() {
-        return floatValue;
-    }
-
-    public void setFloatValue(boolean floatValue) {
-        this.floatValue = floatValue;
     }
 
     public DataType getDataType() {
