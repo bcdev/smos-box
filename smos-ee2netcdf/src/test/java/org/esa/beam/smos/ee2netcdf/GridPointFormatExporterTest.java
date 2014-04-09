@@ -10,6 +10,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import ucar.ma2.Array;
+import ucar.ma2.DataType;
 import ucar.ma2.InvalidRangeException;
 import ucar.nc2.Attribute;
 import ucar.nc2.Dimension;
@@ -65,27 +66,31 @@ public class GridPointFormatExporterTest {
             targetFile = NetcdfFileOpener.open(outputFile);
             assertCorrectGlobalAttributes(targetFile, 84045);
 
-            assertDimension("grid_point_count", 84045, targetFile);
-            assertDimension("bt_data_count", 255, targetFile);
-            assertNoDimension("radiometric_accuracy_count", targetFile);
-            assertNoDimension("snapshot_count", targetFile);
+            assertDimension("n_grid_points", 84045, targetFile);
+            assertDimension("n_bt_data", 255, targetFile);
+            assertNoDimension("n_radiometric_accuracy", targetFile);
+            assertNoDimension("n_snapshots", targetFile);
 
             final Variable gridPointIdVariable = getVariable("grid_point_id", targetFile);
+            assertEquals(DataType.INT, gridPointIdVariable.getDataType());
             Array array = gridPointIdVariable.read(new int[]{346}, new int[]{2});
             assertEquals(4098190, array.getInt(0));
             assertEquals(4098191, array.getInt(1));
 
             final Variable latVariable = getVariable("lat", targetFile);
+            assertEquals(DataType.FLOAT, latVariable.getDataType());
             array = latVariable.read(new int[]{467}, new int[]{2});
             assertEquals(78.56900024, array.getFloat(0), 1e-8);
             assertEquals(78.6760025, array.getFloat(1), 1e-8);
 
             final Variable lonVariable = getVariable("lon", targetFile);
+            assertEquals(DataType.FLOAT, lonVariable.getDataType());
             array = lonVariable.read(new int[]{582}, new int[]{2});
             assertEquals(101.25, array.getFloat(0), 1e-8);
             assertEquals(100.994003295, array.getFloat(1), 1e-8);
 
             final Variable altitudeVariable = getVariable("grid_point_altitude", targetFile);
+            assertEquals(DataType.FLOAT, altitudeVariable.getDataType());
             array = altitudeVariable.read(new int[]{619}, new int[]{2});
             assertEquals(-0.708, array.getFloat(0), 1e-8);
             assertEquals(0.0, array.getFloat(1), 1e-8);
@@ -99,17 +104,6 @@ public class GridPointFormatExporterTest {
                 product.dispose();
             }
         }
-    }
-
-    private Variable getVariable(String variableName, NetcdfFile targetFile) {
-        final List<Variable> variables = targetFile.getVariables();
-        for (final Variable variable : variables) {
-            if (variable.getFullName().equals(variableName)) {
-                return variable;
-            }
-        }
-        fail("Variable '" + variableName + "' not in file");
-        return null;
     }
 
     @Test
@@ -128,10 +122,10 @@ public class GridPointFormatExporterTest {
             targetFile = NetcdfFileOpener.open(outputFile);
             assertCorrectGlobalAttributes(targetFile, numGridPoints);
 
-            assertDimension("grid_point_count", numGridPoints, targetFile);
-            assertDimension("bt_data_count", 300, targetFile);
-            assertDimension("radiometric_accuracy_count", 2, targetFile);
-            assertDimension("snapshot_count", 172, targetFile);
+            assertDimension("n_grid_points", numGridPoints, targetFile);
+            assertDimension("n_bt_data", 300, targetFile);
+            assertDimension("n_radiometric_accuracy", 2, targetFile);
+            assertDimension("n_snapshots", 172, targetFile);
 
         } finally {
             if (targetFile != null) {
@@ -160,10 +154,10 @@ public class GridPointFormatExporterTest {
             final int numGridPoints = 98564;
             assertCorrectGlobalAttributes(targetFile, numGridPoints);
 
-            assertDimension("grid_point_count", numGridPoints, targetFile);
-            assertNoDimension("bt_data_count", targetFile);
-            assertNoDimension("radiometric_accuracy_count", targetFile);
-            assertNoDimension("snapshot_count", targetFile);
+            assertDimension("n_grid_points", numGridPoints, targetFile);
+            assertNoDimension("n_bt_data", targetFile);
+            assertNoDimension("n_radiometric_accuracy", targetFile);
+            assertNoDimension("n_snapshots", targetFile);
         } finally {
             if (targetFile != null) {
                 targetFile.close();
@@ -172,6 +166,17 @@ public class GridPointFormatExporterTest {
                 product.dispose();
             }
         }
+    }
+
+    private Variable getVariable(String variableName, NetcdfFile targetFile) {
+        final List<Variable> variables = targetFile.getVariables();
+        for (final Variable variable : variables) {
+            if (variable.getFullName().equals(variableName)) {
+                return variable;
+            }
+        }
+        fail("Variable '" + variableName + "' not in file");
+        return null;
     }
 
     private void assertCorrectGlobalAttributes(NetcdfFile targetFile, int numGridPoints) throws ParseException {
@@ -195,13 +200,6 @@ public class GridPointFormatExporterTest {
 
         }
     }
-
-    // @todo 1 tb/tb test for L1C files
-    // Dimensions
-    // - radiometric_accuracy_count = 2
-    // - bt_data_count = 300
-    // -  snapshot_count= 4231
-    // - grid_point_count = unlimited
 
     private static void assertGlobalAttribute(String attributeName, String attributeValue, NetcdfFile targetFile) {
         final List<Attribute> globalAttributes = targetFile.getGlobalAttributes();

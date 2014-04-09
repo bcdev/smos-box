@@ -1,7 +1,7 @@
 
 netcdf MIR_OSUDP2 {
 dimensions:
-    n_grid_points = unlimited ; // currently 2645
+    n_grid_points = unlimited ; // read from EE file
 variables:
     uint grid_point_id(n_grid_points) ;
     float lat(n_grid_points) ;

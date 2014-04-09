@@ -1,93 +1,93 @@
 netcdf MIR_SCLD1C {
 dimensions:
-    grid_point_count = unlimited ; // actual value is the umber of grid points in original file
-    snapshot_count = 4231 ; // actual value is the number of snapshots in original file
-    bt_data_count = 300 ; // always this value, shall be the maximum number of BT measurements that can be acquired per grid point
-    radiometric_accuracy_count = 2; // always this value
+    n_grid_points = unlimited ; // actual value is the umber of grid points in original file
+    n_snapshots = 4231 ; // actual value is the number of snapshots in original file
+    n_bt_data = 300 ; // always this value, shall be the maximum number of BT measurements that can be acquired per grid point
+    n_radiometric_accuracy = 2; // always this value
 variables:
-    uint grid_point_id(grid_point_count) ;
-    float lat(grid_point_count) ;
+    uint grid_point_id(n_grid_points) ;
+    float lat(n_grid_points) ;
         lat:units = "degrees_north" ;
         lat:_FillValue = -999.f ;
         lat:valid_min = -90.f ;
         lat:valid_max = 90.f ;
         lat:original_name = "grid_point_latitude" ;
         lat:standard_name = "latitude" ;
-    float lon(grid_point_count) ;
+    float lon(n_grid_points) ;
         lon:units = "degrees_east" ;
         lon:_FillValue = -999.f ;
         lon:valid_min = -180.f ;
         lon:valid_max = 180.f ;
         lon:original_name = "grid_point_longitude" ;
         lon:standard_name = "longitude" ;
-    float grid_point_altitude(grid_point_count) ;
+    float grid_point_altitude(n_grid_points) ;
         grid_point_altitude:units = "m" ;
         grid_point_altitude:_FillValue = -999.f ;
-    ubyte grid_point_mask(grid_point_count) ;
-    ushort bt_data_count(grid_point_count) ;
-    ushort flags(grid_point_count, bt_data_count) ;
+    ubyte grid_point_mask(n_grid_points) ;
+    ushort bt_data_count(n_grid_points) ;
+    ushort flags(n_grid_points, n_bt_data) ;
         flags:flag_masks = 3, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768 ;
         flags:flag_values = 0, 1, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768 ;
         flags:flag_meanings = "pol_xx pol_yy sun_fov sun_glint_fov moon_glint_fov single_snapshot rfi_x sun_point sun_glint_area moon_point af_fov rfi_tails border_fov sun_tails rfi_y rfi_point_source" ;
-    ubyte error_flags(grid_point_count, bt_data_count) ;
+    ubyte error_flags(n_grid_points, n_bt_data) ;
         error_flags:flag_masks = 1, 2, 4, 8 ;
         error_flags:flag_meanings = "software_error instrument_error adf_error calibration_error" ;
-    float bt_value(grid_point_count, bt_data_count) ;
+    float bt_value(n_grid_points, n_bt_data) ;
         bt_value:units = "K" ;
         bt_value:_FillValue = "-999.f" ;
-    ushort pixel_radiometric_accuracy(grid_point_count, bt_data_count) ;
+    ushort pixel_radiometric_accuracy(n_grid_points, n_bt_data) ;
         pixel_radiometric_accuracy:units = "K" ;
         pixel_radiometric_accuracy:scale_factor = "0.000762939453125" ;
-    ushort incidence_angle(grid_point_count, bt_data_count) ;
+    ushort incidence_angle(n_grid_points, n_bt_data) ;
         incidence_angle:units = "degree" ;
         incidence_angle:scale_factor = "0.001373291015625" ;
-    ushort azimuth_angle(grid_point_count, bt_data_count) ;
+    ushort azimuth_angle(n_grid_points, n_bt_data) ;
         azimuth_angle:units = "degree" ;
         azimuth_angle:scale_factor = "0.0054931640625" ;
-    ushort faraday_rotation_angle(grid_point_count, bt_data_count) ;
+    ushort faraday_rotation_angle(n_grid_points, n_bt_data) ;
         faraday_rotation_angle:units = "degree" ;
         faraday_rotation_angle:scale_factor = "0054931640625" ;
-    ushort geometric_rotation_angle(grid_point_count, bt_data_count) ;
+    ushort geometric_rotation_angle(n_grid_points, n_bt_data) ;
         geometric_rotation_angle:units = "degree" ;
         geometric_rotation_angle:scale_factor = "geometric_rotation_angle";
-    uint snapshot_id_of_pixel(grid_point_count, bt_data_count) ;
-    ushort footprint_axis_1(grid_point_count, bt_data_count) ;
+    uint snapshot_id_of_pixel(n_grid_points, n_bt_data) ;
+    ushort footprint_axis_1(n_grid_points, n_bt_data) ;
         footprint_axis_1:units = "km" ;
         footprint_axis_1:scale_factor = "00152587890625" ;
-    ushort footprint_axis_2(grid_point_count, bt_data_count) ;
+    ushort footprint_axis_2(n_grid_points, n_bt_data) ;
         footprint_axis_2:units = "km" ;
         footprint_axis_2:scale_factor = "00152587890625" ;
 
-    int snapshot_time_days(snapshot_count) ;
-    uint snapshot_time_seconds(snapshot_count) ;
-    uint snapshot_time_microseconds(snapshot_count) ;
-    uint snapshot_id(snapshot_count) ;
-    uint64 snapshot_obet(snapshot_count) ;
-    double x_position(snapshot_count);
-    double y_position(snapshot_count);
-    double z_position(snapshot_count);
-    double x_velocity(snapshot_count);
-    double y_velocity(snapshot_count);
-    double z_velocity(snapshot_count);
-    ubyte vector_source(snapshot_count);
-    double q0(snapshot_count);
-    double q1(snapshot_count);
-    double q2(snapshot_count);
-    double q3(snapshot_count);
-    double tec(snapshot_count);
-    double geomag_f(snapshot_count);
-    double geomag_d(snapshot_count);
-    double geomag_i(snapshot_count);
-    float sun_ra(snapshot_count);
-    float sun_dec(snapshot_count);
-    float sun_bt(snapshot_count);
-    float accuracy(snapshot_count);
-    float radiometric_accuracy(snapshot_count, radiometric_accuracy_count);
-    ubyte x_band(snapshot_count);
-    ubyte software_error_flag(snapshot_count);
-    ubyte instrument_error_flag(snapshot_count);
-    ubyte adf_error_flag(snapshot_count);
-    ubyte calibration_error_flag(snapshot_count);
+    int snapshot_time_days(n_snapshots) ;
+    uint snapshot_time_seconds(n_snapshots) ;
+    uint snapshot_time_microseconds(n_snapshots) ;
+    uint snapshot_id(n_snapshots) ;
+    uint64 snapshot_obet(n_snapshots) ;
+    double x_position(n_snapshots);
+    double y_position(n_snapshots);
+    double z_position(n_snapshots);
+    double x_velocity(n_snapshots);
+    double y_velocity(n_snapshots);
+    double z_velocity(n_snapshots);
+    ubyte vector_source(n_snapshots);
+    double q0(n_snapshots);
+    double q1(n_snapshots);
+    double q2(n_snapshots);
+    double q3(n_snapshots);
+    double tec(n_snapshots);
+    double geomag_f(n_snapshots);
+    double geomag_d(n_snapshots);
+    double geomag_i(n_snapshots);
+    float sun_ra(n_snapshots);
+    float sun_dec(n_snapshots);
+    float sun_bt(n_snapshots);
+    float accuracy(n_snapshots);
+    float radiometric_accuracy(n_snapshots, n_radiometric_accuracy);
+    ubyte x_band(n_snapshots);
+    ubyte software_error_flag(n_snapshots);
+    ubyte instrument_error_flag(n_snapshots);
+    ubyte adf_error_flag(n_snapshots);
+    ubyte calibration_error_flag(n_snapshots);
 
 // global attributes:
         :Conventions = "CF-1.6" ;

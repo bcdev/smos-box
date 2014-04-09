@@ -22,24 +22,24 @@ class BrowseProductExporter extends AbstractFormatExporter {
 
     private void createVariableMap() {
         variableDescriptors = new HashMap<>();
-        variableDescriptors.put("grid_point_id", new VariableDescriptor("Grid_Point_ID", true, false));
-        variableDescriptors.put("lat", new VariableDescriptor("Latitude", true, true));       // this ia a dddb mapping name, real name is: Grid_Point_Latitude
-        variableDescriptors.put("lon", new VariableDescriptor("Longitude", true, true));      // this ia a dddb mapping name, real name is: Grid_Point_Longitude
-        variableDescriptors.put("grid_point_altitude", new VariableDescriptor("Altitude", true, true));   // this ia a dddb mapping name, real name is: Grid_Point_Altitude
-        variableDescriptors.put("grid_point_mask", new VariableDescriptor("Grid_Point_Mask", true, false));
-        //variableDescriptors.put("bt_data_count", new VariableDescriptor("BT_Data_Counter", true));
-        variableDescriptors.put("flags", new VariableDescriptor("Flags", false, false));
-        variableDescriptors.put("bt_value", new VariableDescriptor("BT_Value", false, true));
-        variableDescriptors.put("pixel_radiometric_accuracy", new VariableDescriptor("Radiometric_Accuracy_of_Pixel", false, false));
-        variableDescriptors.put("azimuth_angle", new VariableDescriptor("Azimuth_Angle", false, false));
-        variableDescriptors.put("footprint_axis_1", new VariableDescriptor("Footprint_Axis1", false, false));
-        variableDescriptors.put("footprint_axis_2", new VariableDescriptor("Footprint_Axis2", false, false));
+        variableDescriptors.put("grid_point_id", new VariableDescriptor("Grid_Point_ID", true, false, DataType.INT));
+        variableDescriptors.put("lat", new VariableDescriptor("Latitude", true, true, DataType.FLOAT));       // this ia a dddb mapping name, real name is: Grid_Point_Latitude
+        variableDescriptors.put("lon", new VariableDescriptor("Longitude", true, true, DataType.FLOAT));      // this ia a dddb mapping name, real name is: Grid_Point_Longitude
+        variableDescriptors.put("grid_point_altitude", new VariableDescriptor("Altitude", true, true, DataType.FLOAT));   // this ia a dddb mapping name, real name is: Grid_Point_Altitude
+        variableDescriptors.put("grid_point_mask", new VariableDescriptor("Grid_Point_Mask", true, false, DataType.CHAR));
+        variableDescriptors.put("bt_data_count", new VariableDescriptor("BT_Data_Counter", true, false, DataType.CHAR));
+        variableDescriptors.put("flags", new VariableDescriptor("Flags", false, false, DataType.SHORT));
+        variableDescriptors.put("bt_value", new VariableDescriptor("BT_Value", false, true, DataType.FLOAT));
+        variableDescriptors.put("pixel_radiometric_accuracy", new VariableDescriptor("Radiometric_Accuracy_of_Pixel", false, false, DataType.SHORT));
+        variableDescriptors.put("azimuth_angle", new VariableDescriptor("Azimuth_Angle", false, false, DataType.SHORT));
+        variableDescriptors.put("footprint_axis_1", new VariableDescriptor("Footprint_Axis1", false, false, DataType.SHORT));
+        variableDescriptors.put("footprint_axis_2", new VariableDescriptor("Footprint_Axis2", false, false, DataType.SHORT));
     }
 
     @Override
     public void addDimensions(NFileWriteable nFileWriteable) throws IOException {
-        nFileWriteable.addDimension("grid_point_count", gridPointCount);
-        nFileWriteable.addDimension("bt_data_count", 255);
+        nFileWriteable.addDimension("n_grid_points", gridPointCount);
+        nFileWriteable.addDimension("n_bt_data", 255);
     }
 
     @Override
@@ -50,9 +50,9 @@ class BrowseProductExporter extends AbstractFormatExporter {
             // @todo 1 tb/tb replace datatype, unsigned, dimensionality and dimension names with real data tb 2014-04-08
             if (variableDescriptor.isFloatValue() && variableDescriptor.isGridPointData()) {
                 // @todo 1 tb/tb remove grid point constraint tb 2014-04-09
-                nFileWriteable.addVariable(ncVariableName, DataType.FLOAT, true, null, "grid_point_count");
+                nFileWriteable.addVariable(ncVariableName, DataType.FLOAT, true, null, "n_grid_points");
             } else {
-                nFileWriteable.addVariable(ncVariableName, DataType.INT, true, null, "grid_point_count");
+                nFileWriteable.addVariable(ncVariableName, DataType.INT, true, null, "n_grid_points");
             }
         }
     }

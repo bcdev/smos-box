@@ -22,10 +22,10 @@ class L1CProductExporter extends AbstractFormatExporter {
 
     @Override
     public void addDimensions(NFileWriteable nFileWriteable) throws IOException {
-        nFileWriteable.addDimension("grid_point_count", gridPointCount);
-        nFileWriteable.addDimension("bt_data_count", 300);
-        nFileWriteable.addDimension("radiometric_accuracy_count", 2);
-        nFileWriteable.addDimension("snapshot_count", numSnapshots);
+        nFileWriteable.addDimension("n_grid_points", gridPointCount);
+        nFileWriteable.addDimension("n_bt_data", 300);
+        nFileWriteable.addDimension("n_radiometric_accuracy", 2);
+        nFileWriteable.addDimension("n_snapshots", numSnapshots);
     }
 
     @Override
