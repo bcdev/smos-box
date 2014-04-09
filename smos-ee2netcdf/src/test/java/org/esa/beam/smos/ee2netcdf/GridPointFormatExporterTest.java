@@ -71,9 +71,24 @@ public class GridPointFormatExporterTest {
             assertNoDimension("snapshot_count", targetFile);
 
             final Variable gridPointIdVariable = getVariable("grid_point_id", targetFile);
-            final Array array = gridPointIdVariable.read(new int[]{346}, new int[]{2});
+            Array array = gridPointIdVariable.read(new int[]{346}, new int[]{2});
             assertEquals(4098190, array.getInt(0));
             assertEquals(4098191, array.getInt(1));
+
+            final Variable latVariable = getVariable("lat", targetFile);
+            array = latVariable.read(new int[]{467}, new int[]{2});
+            assertEquals(78.56900024, array.getFloat(0), 1e-8);
+            assertEquals(78.6760025, array.getFloat(1), 1e-8);
+
+            final Variable lonVariable = getVariable("lon", targetFile);
+            array = lonVariable.read(new int[]{582}, new int[]{2});
+            assertEquals(101.25, array.getFloat(0), 1e-8);
+            assertEquals(100.994003295, array.getFloat(1), 1e-8);
+
+            final Variable altitudeVariable = getVariable("grid_point_altitude", targetFile);
+            array = altitudeVariable.read(new int[]{619}, new int[]{2});
+            assertEquals(-0.708, array.getFloat(0), 1e-8);
+            assertEquals(0.0, array.getFloat(1), 1e-8);
 
 
         } finally {

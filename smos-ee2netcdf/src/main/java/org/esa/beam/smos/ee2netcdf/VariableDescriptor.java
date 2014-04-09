@@ -5,10 +5,12 @@ class VariableDescriptor {
 
     private String name;
     private boolean gridPointData;
+    private boolean floatValue;
 
-    public VariableDescriptor(String name, boolean gridPointData) {
+    public VariableDescriptor(String name, boolean gridPointData, boolean floatValue) {
         this.name = name;
         this.gridPointData = gridPointData;
+        this.floatValue = floatValue;
     }
 
     public String getName() {
@@ -25,5 +27,13 @@ class VariableDescriptor {
 
     public void setGridPointData(boolean gridPointData) {
         this.gridPointData = gridPointData;
+    }
+
+    public boolean isFloatValue() {
+        return floatValue;
+    }
+
+    public void setFloatValue(boolean floatValue) {
+        this.floatValue = floatValue;
     }
 }
