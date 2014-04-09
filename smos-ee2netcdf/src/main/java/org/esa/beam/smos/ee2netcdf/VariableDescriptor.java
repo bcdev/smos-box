@@ -10,13 +10,15 @@ class VariableDescriptor {
     private DataType dataType;
     private String dimensionNames;
     private boolean is2d;
+    private int btDataMemberIndex;
 
-    public VariableDescriptor(String name, boolean gridPointData, DataType dataType, String dimensionNames, boolean is2d) {
+    public VariableDescriptor(String name, boolean gridPointData, DataType dataType, String dimensionNames, boolean is2d, int btDataMemberIndex) {
         this.name = name;
         this.gridPointData = gridPointData;
         this.dataType = dataType;
         this.is2d = is2d;
         this.dimensionNames = dimensionNames;
+        this.btDataMemberIndex = btDataMemberIndex;
     }
 
     public String getName() {
@@ -57,5 +59,13 @@ class VariableDescriptor {
 
     public void setIs2d(boolean is2d) {
         this.is2d = is2d;
+    }
+
+    public int getBtDataMemberIndex() {
+        return btDataMemberIndex;
+    }
+
+    public void setBtDataMemberIndex(int btDataMemberIndex) {
+        this.btDataMemberIndex = btDataMemberIndex;
     }
 }

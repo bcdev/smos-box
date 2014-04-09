@@ -26,18 +26,18 @@ class BrowseProductExporter extends AbstractFormatExporter {
 
     private void createVariableMap() {
         variableDescriptors = new HashMap<>();
-        variableDescriptors.put("grid_point_id", new VariableDescriptor("Grid_Point_ID", true, DataType.INT, "n_grid_points", false));
-        variableDescriptors.put("lat", new VariableDescriptor("Latitude", true, DataType.FLOAT, "n_grid_points", false));       // this ia a dddb mapping name, real name is: Grid_Point_Latitude
-        variableDescriptors.put("lon", new VariableDescriptor("Longitude", true, DataType.FLOAT, "n_grid_points", false));      // this ia a dddb mapping name, real name is: Grid_Point_Longitude
-        variableDescriptors.put("grid_point_altitude", new VariableDescriptor("Altitude", true, DataType.FLOAT, "n_grid_points", false));   // this ia a dddb mapping name, real name is: Grid_Point_Altitude
-        variableDescriptors.put("grid_point_mask", new VariableDescriptor("Grid_Point_Mask", true, DataType.BYTE, "n_grid_points", false));
-        variableDescriptors.put("bt_data_count", new VariableDescriptor("BT_Data_Counter", true, DataType.BYTE, "n_grid_points", false));
-        variableDescriptors.put("flags", new VariableDescriptor("Flags", false, DataType.SHORT, "n_grid_points n_bt_data", true));
-        variableDescriptors.put("bt_value", new VariableDescriptor("BT_Value", false, DataType.FLOAT, "n_grid_points n_bt_data", true));
-        variableDescriptors.put("pixel_radiometric_accuracy", new VariableDescriptor("Radiometric_Accuracy_of_Pixel", false, DataType.SHORT, "n_grid_points n_bt_data", true));
-        variableDescriptors.put("azimuth_angle", new VariableDescriptor("Azimuth_Angle", false, DataType.SHORT, "n_grid_points n_bt_data", true));
-        variableDescriptors.put("footprint_axis_1", new VariableDescriptor("Footprint_Axis1", false, DataType.SHORT, "n_grid_points n_bt_data", true));
-        variableDescriptors.put("footprint_axis_2", new VariableDescriptor("Footprint_Axis2", false, DataType.SHORT, "n_grid_points n_bt_data", true));
+        variableDescriptors.put("grid_point_id", new VariableDescriptor("Grid_Point_ID", true, DataType.INT, "n_grid_points", false, -1));
+        variableDescriptors.put("lat", new VariableDescriptor("Latitude", true, DataType.FLOAT, "n_grid_points", false, -1));       // this ia a dddb mapping name, real name is: Grid_Point_Latitude
+        variableDescriptors.put("lon", new VariableDescriptor("Longitude", true, DataType.FLOAT, "n_grid_points", false, -1));      // this ia a dddb mapping name, real name is: Grid_Point_Longitude
+        variableDescriptors.put("grid_point_altitude", new VariableDescriptor("Altitude", true, DataType.FLOAT, "n_grid_points", false, -1));   // this ia a dddb mapping name, real name is: Grid_Point_Altitude
+        variableDescriptors.put("grid_point_mask", new VariableDescriptor("Grid_Point_Mask", true, DataType.BYTE, "n_grid_points", false, -1));
+        variableDescriptors.put("bt_data_count", new VariableDescriptor("BT_Data_Counter", true, DataType.BYTE, "n_grid_points", false, -1));
+        variableDescriptors.put("flags", new VariableDescriptor("Flags", false, DataType.SHORT, "n_grid_points n_bt_data", true, 0));
+        variableDescriptors.put("bt_value", new VariableDescriptor("BT_Value", false, DataType.FLOAT, "n_grid_points n_bt_data", true, 1));
+        variableDescriptors.put("pixel_radiometric_accuracy", new VariableDescriptor("Radiometric_Accuracy_of_Pixel", false, DataType.SHORT, "n_grid_points n_bt_data", true, 2));
+        variableDescriptors.put("azimuth_angle", new VariableDescriptor("Azimuth_Angle", false, DataType.SHORT, "n_grid_points n_bt_data", true, 3));
+        variableDescriptors.put("footprint_axis_1", new VariableDescriptor("Footprint_Axis1", false, DataType.SHORT, "n_grid_points n_bt_data", true, 4));
+        variableDescriptors.put("footprint_axis_2", new VariableDescriptor("Footprint_Axis2", false, DataType.SHORT, "n_grid_points n_bt_data", true, 5));
     }
 
     @Override
@@ -112,22 +112,17 @@ class BrowseProductExporter extends AbstractFormatExporter {
             } else {
                 if (dataType == DataType.FLOAT) {
                     if (variableDescriptor.isIs2d()) {
-                        // @todo 1 tb/tb move member index to VariableDescriptor tb 2014-04-09
-                        variableWriters[index] = new FloatVariableSequence2DWriter(nVariable, gridPointCount, nBtData, 0);
+                        variableWriters[index] = new FloatVariableSequence2DWriter(nVariable, gridPointCount, nBtData, variableDescriptor.getBtDataMemberIndex());
                     } else {
-                        // @todo 1 tb/tb move member index to VariableDescriptor tb 2014-04-09
-                        variableWriters[index] = new FloatVariableSequenceWriter(nVariable, gridPointCount, 0);
+                        variableWriters[index] = new FloatVariableSequenceWriter(nVariable, gridPointCount, variableDescriptor.getBtDataMemberIndex());
                     }
                 } else if (dataType == DataType.INT) {
-                    // @todo 1 tb/tb move member index to VariableDescriptor tb 2014-04-09
-                    variableWriters[index] = new IntVariableSequenceWriter(nVariable, gridPointCount, 0);
+                    variableWriters[index] = new IntVariableSequenceWriter(nVariable, gridPointCount, variableDescriptor.getBtDataMemberIndex());
                 } else {
                     if (variableDescriptor.isIs2d()) {
-                        // @todo 1 tb/tb move member index to VariableDescriptor tb 2014-04-09
-                        variableWriters[index] = new ShortVariableSequence2DWriter(nVariable, gridPointCount, nBtData, 0);
+                        variableWriters[index] = new ShortVariableSequence2DWriter(nVariable, gridPointCount, nBtData, variableDescriptor.getBtDataMemberIndex());
                     } else {
-                        // @todo 1 tb/tb move member index to VariableDescriptor tb 2014-04-09
-                        variableWriters[index] = new ShortVariableSequenceWriter(nVariable, gridPointCount, 0);
+                        variableWriters[index] = new ShortVariableSequenceWriter(nVariable, gridPointCount, variableDescriptor.getBtDataMemberIndex());
                     }
                 }
 

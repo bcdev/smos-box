@@ -107,6 +107,20 @@ public class GridPointFormatExporterTest {
             assertEquals(4, array.getByte(0)); // @todo 2 tb/tb these should be unsigned values - resolve problem tb 2014-04-09
             assertEquals(4, array.getByte(1));
 
+            final Variable flagsVariable = getVariable("flags", targetFile);
+            assertEquals(DataType.SHORT, flagsVariable.getDataType());
+            array = flagsVariable.read(new int[]{945, 1}, new int[]{2, 1});
+            assertEquals(1045, array.getShort(0));
+            assertEquals(1045, array.getShort(1));
+
+            final Variable btValueVariable = getVariable("bt_value", targetFile);
+            assertEquals(DataType.FLOAT, btValueVariable.getDataType());
+            array = btValueVariable.read(new int[]{1034, 2}, new int[]{2, 2});
+            assertEquals(6.868230819702148, array.getFloat(0), 1e-8);
+            assertEquals(0.9826292991638184, array.getFloat(1), 1e-8);
+            assertEquals(6.454884052276611, array.getFloat(2), 1e-8);
+            assertEquals(-0.10488655418157578, array.getFloat(3), 1e-8);
+
 
         } finally {
             if (targetFile != null) {
