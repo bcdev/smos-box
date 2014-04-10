@@ -40,7 +40,7 @@ import java.util.TreeSet;
         authors = "Tom Block",
         copyright = "(c) 2013 by Brockmann Consult",
         description = "Converts SMOS EE Products to NetCDF format.",
-        preventAutoWrite = true)
+        autoWriteDisabled = true)
 public class ConverterOp extends Operator {
 
     public static final String ALIAS = "SmosEE2NetCDF";
