@@ -85,6 +85,9 @@ class BrowseProductExporter extends AbstractFormatExporter {
             if (variableDescriptor.isScaleFactorPresent()) {
                 nVariable.addAttribute("scale_factor", variableDescriptor.getScaleFactor());
             }
+            if (variableDescriptor.isUnsigned())                                            {
+                nVariable.addAttribute("_Unsigned", "true");
+            }
         }
     }
 
@@ -122,6 +125,7 @@ class BrowseProductExporter extends AbstractFormatExporter {
     private void createVariableMap() {
         variableDescriptors = new HashMap<>();
         final VariableDescriptor gpIdDescriptor = new VariableDescriptor("Grid_Point_ID", true, DataType.INT, "n_grid_points", false, -1);
+        gpIdDescriptor.setUnsigned(true);
         variableDescriptors.put("grid_point_id", gpIdDescriptor);
 
         final VariableDescriptor latDescriptor = new VariableDescriptor("Latitude", true, DataType.FLOAT, "n_grid_points", false, -1);
@@ -154,6 +158,7 @@ class BrowseProductExporter extends AbstractFormatExporter {
         flagsDescriptor.setFlagMasks(new int[]{3, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768});
         flagsDescriptor.setFlagValues(new int[]{0, 1, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768});
         flagsDescriptor.setFlagMeanings("pol_xx pol_yy sun_fov sun_glint_fov moon_glint_fov single_snapshot rfi_x sun_point sun_glint_area moon_point af_fov rfi_tails border_fov sun_tails rfi_y rfi_point_source");
+        flagsDescriptor.setUnsigned(true);
         variableDescriptors.put("flags", flagsDescriptor);
 
         final VariableDescriptor btValueDescriptor = new VariableDescriptor("BT_Value", false, DataType.FLOAT, "n_grid_points n_bt_data", true, 1);
@@ -165,21 +170,25 @@ class BrowseProductExporter extends AbstractFormatExporter {
         radAccDescriptor.setUnit("K");
         radAccDescriptor.setOriginalName("Radiometric_Accuracy_of_Pixel");
         radAccDescriptor.setScaleFactor(0.000762939453125);
+        radAccDescriptor.setUnsigned(true);
         variableDescriptors.put("pixel_radiometric_accuracy", radAccDescriptor);
 
         final VariableDescriptor azimuthAngleDescriptor = new VariableDescriptor("Azimuth_Angle", false, DataType.SHORT, "n_grid_points n_bt_data", true, 3);
         azimuthAngleDescriptor.setUnit("degree");
         azimuthAngleDescriptor.setScaleFactor(0.0054931640625);
+        azimuthAngleDescriptor.setUnsigned(true);
         variableDescriptors.put("azimuth_angle", azimuthAngleDescriptor);
 
         final VariableDescriptor fpAxis1Descriptor = new VariableDescriptor("Footprint_Axis1", false, DataType.SHORT, "n_grid_points n_bt_data", true, 4);
         fpAxis1Descriptor.setUnit("km");
         fpAxis1Descriptor.setScaleFactor(0.00152587890625);
+        fpAxis1Descriptor.setUnsigned(true);
         variableDescriptors.put("footprint_axis_1", fpAxis1Descriptor);
 
         final VariableDescriptor fpAxis2Descriptor = new VariableDescriptor("Footprint_Axis2", false, DataType.SHORT, "n_grid_points n_bt_data", true, 5);
         fpAxis2Descriptor.setUnit("km");
         fpAxis2Descriptor.setScaleFactor(0.00152587890625);
+        fpAxis2Descriptor.setUnsigned(true);
         variableDescriptors.put("footprint_axis_2", fpAxis2Descriptor);
     }
 
