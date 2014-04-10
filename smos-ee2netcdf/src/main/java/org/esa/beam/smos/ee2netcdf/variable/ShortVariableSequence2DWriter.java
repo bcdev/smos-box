@@ -1,4 +1,4 @@
-package org.esa.beam.smos.ee2netcdf;
+package org.esa.beam.smos.ee2netcdf.variable;
 
 import com.bc.ceres.binio.CompoundData;
 import com.bc.ceres.binio.SequenceData;
@@ -8,14 +8,14 @@ import ucar.ma2.Index;
 
 import java.io.IOException;
 
-class ShortVariableSequence2DWriter implements VariableWriter {
+public class ShortVariableSequence2DWriter implements VariableWriter {
 
     private final Array array;
     private final NVariable variable;
     private final int memberIndex;
     private int height;
 
-    ShortVariableSequence2DWriter(NVariable variable, int width, int height, int memberIndex) {
+    public ShortVariableSequence2DWriter(NVariable variable, int width, int height, int memberIndex) {
         this.variable = variable;
         this.memberIndex = memberIndex;
         this.height = height;

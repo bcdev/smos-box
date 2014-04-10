@@ -1,9 +1,9 @@
-package org.esa.beam.smos.ee2netcdf;
+package org.esa.beam.smos.ee2netcdf.variable;
 
 
 import ucar.ma2.DataType;
 
-class VariableDescriptor {
+public class VariableDescriptor {
 
     private String name;
     private boolean gridPointData;

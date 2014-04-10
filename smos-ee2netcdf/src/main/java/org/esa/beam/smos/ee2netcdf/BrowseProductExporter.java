@@ -9,6 +9,7 @@ import org.esa.beam.dataio.netcdf.nc.NVariable;
 import org.esa.beam.dataio.smos.L1cBrowseSmosFile;
 import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.smos.SmosUtils;
+import org.esa.beam.smos.ee2netcdf.variable.*;
 import ucar.ma2.DataType;
 
 import java.io.IOException;

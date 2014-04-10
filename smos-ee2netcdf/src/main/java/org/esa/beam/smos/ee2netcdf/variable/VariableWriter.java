@@ -1,4 +1,4 @@
-package org.esa.beam.smos.ee2netcdf;
+package org.esa.beam.smos.ee2netcdf.variable;
 
 
 import com.bc.ceres.binio.CompoundData;
@@ -6,7 +6,7 @@ import com.bc.ceres.binio.SequenceData;
 
 import java.io.IOException;
 
-interface VariableWriter {
+public interface VariableWriter {
 
     void write(CompoundData gridPointData, SequenceData btDataList, int index) throws IOException;
 

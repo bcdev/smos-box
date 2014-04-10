@@ -1,4 +1,5 @@
-package org.esa.beam.smos.ee2netcdf;
+package org.esa.beam.smos.ee2netcdf.variable;
+
 
 import com.bc.ceres.binio.CompoundData;
 import com.bc.ceres.binio.SequenceData;
@@ -7,25 +8,23 @@ import ucar.ma2.Array;
 
 import java.io.IOException;
 
-public class FloatVariableSequenceWriter implements VariableWriter {
+public class IntVariableGridPointWriter implements VariableWriter{
 
+    private final String compoundName;
     private final Array array;
     private final NVariable variable;
-    private final int memberIndex;
 
-    public FloatVariableSequenceWriter(NVariable variable, int arraySize, int memberIndex) {
+    public IntVariableGridPointWriter(NVariable variable, String compoundName, int arraySize) {
+        this.compoundName = compoundName;
+        array = Array.factory(new int[arraySize]);
         this.variable = variable;
-        this.memberIndex = memberIndex;
-        array = Array.factory(new float[arraySize]);
     }
 
-    @Override
     public void write(CompoundData gridPointData, SequenceData btDataList, int index) throws IOException {
-        final float data = btDataList.getCompound(0).getFloat(memberIndex);
-        array.setFloat(index, data);
+        final int gpInt = gridPointData.getInt(compoundName);
+        array.setInt(index, gpInt);
     }
 
-    @Override
     public void close() throws IOException {
         variable.writeFully(array);
     }
