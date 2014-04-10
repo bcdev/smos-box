@@ -31,14 +31,8 @@ class BrowseProductExporter extends AbstractFormatExporter {
         super.initialize(product);
 
         // @todo 2 tb/tb extract method and write tests tb 2014-04-09
-        final String productType = SmosUtils.getProductType(product.getName());
-        if ("MIR_BWLF1C".equalsIgnoreCase(productType) || "MIR_BWNF1C".equalsIgnoreCase(productType)) {
-            nBtData = 4;
-        } else if ("MIR_BWLD1C".equalsIgnoreCase(productType) || "MIR_BWND1C".equalsIgnoreCase(productType)) {
-            nBtData = 2;
-        } else {
-            throw new IllegalArgumentException("unsupported product: " + product.getName());
-        }
+        final String productName = product.getName();
+        nBtData = getBtDataDimension(productName);
 
     }
 
@@ -84,6 +78,18 @@ class BrowseProductExporter extends AbstractFormatExporter {
 
         for (VariableWriter writer : variableWriters) {
             writer.close();
+        }
+    }
+
+    // static access for testing only tb 2014-04-10
+    static int getBtDataDimension(String productName) {
+        final String productType = SmosUtils.getProductType(productName);
+        if ("MIR_BWLF1C".equalsIgnoreCase(productType) || "MIR_BWNF1C".equalsIgnoreCase(productType)) {
+            return 4;
+        } else if ("MIR_BWLD1C".equalsIgnoreCase(productType) || "MIR_BWND1C".equalsIgnoreCase(productType)) {
+            return  2;
+        } else {
+            throw new IllegalArgumentException("unsupported product: " + productName);
         }
     }
 
