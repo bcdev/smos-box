@@ -62,6 +62,9 @@ class BrowseProductExporter extends AbstractFormatExporter {
             if (variableDescriptor.isFillValuePresent()) {
                 nVariable.addAttribute("_FillValue", variableDescriptor.getFillValue());
             }
+            if (variableDescriptor.isValidMinPresent()) {
+                nVariable.addAttribute("valid_min", variableDescriptor.getValidMin());
+            }
         }
     }
 
@@ -92,11 +95,13 @@ class BrowseProductExporter extends AbstractFormatExporter {
         final VariableDescriptor latDescriptor = new VariableDescriptor("Latitude", true, DataType.FLOAT, "n_grid_points", false, -1);
         latDescriptor.setUnit("degrees_north");
         latDescriptor.setFillValue(-999.f);
+        latDescriptor.setValidMin(-90.f);
         variableDescriptors.put("lat", latDescriptor);       // this ia a dddb mapping name, real name is: Grid_Point_Latitude
 
         final VariableDescriptor lonDescriptor = new VariableDescriptor("Longitude", true, DataType.FLOAT, "n_grid_points", false, -1);
         lonDescriptor.setUnit("degrees_north");
         lonDescriptor.setFillValue(-999.f);
+        lonDescriptor.setValidMin(-180.f);
         variableDescriptors.put("lon", lonDescriptor);      // this ia a dddb mapping name, real name is: Grid_Point_Longitude
 
         final VariableDescriptor altitudeDescriptor = new VariableDescriptor("Altitude", true, DataType.FLOAT, "n_grid_points", false, -1);

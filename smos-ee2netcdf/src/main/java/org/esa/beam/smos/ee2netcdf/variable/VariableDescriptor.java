@@ -14,6 +14,8 @@ public class VariableDescriptor {
     private String unit;
     private float fillValue;
     private boolean fillValuePresent;
+    private boolean validMinPresent;
+    private float validMin;
 
     public VariableDescriptor(String name, boolean gridPointData, DataType dataType, String dimensionNames, boolean is2d, int btDataMemberIndex) {
         this();
@@ -27,6 +29,7 @@ public class VariableDescriptor {
 
     public VariableDescriptor() {
         fillValue = Float.NaN;
+        validMin = Float.NaN;
     }
 
     public String getName() {
@@ -96,5 +99,18 @@ public class VariableDescriptor {
     public void setFillValue(float fillValue) {
         this.fillValue = fillValue;
         fillValuePresent = true;
+    }
+
+    public boolean isValidMinPresent() {
+        return validMinPresent;
+    }
+
+    public float getValidMin() {
+        return validMin;
+    }
+
+    public void setValidMin(float validMin) {
+        this.validMin = validMin;
+        validMinPresent = true;
     }
 }
