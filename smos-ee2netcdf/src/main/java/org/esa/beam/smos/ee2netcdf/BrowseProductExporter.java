@@ -70,11 +70,11 @@ class BrowseProductExporter extends AbstractFormatExporter {
             if (StringUtils.isNotBlank(standardName)) {
                 nVariable.addAttribute("standard_name", standardName);
             }
-            final int[] flagMasks = variableDescriptor.getFlagMasks();
+            final short[] flagMasks = variableDescriptor.getFlagMasks();
             if (flagMasks != null) {
                 nVariable.addAttribute("flag_masks", Array.factory(flagMasks));
             }
-            final int[] flagValues = variableDescriptor.getFlagValues();
+            final short[] flagValues = variableDescriptor.getFlagValues();
             if (flagValues != null) {
                 nVariable.addAttribute("flag_values", Array.factory(flagValues));
             }
@@ -155,8 +155,8 @@ class BrowseProductExporter extends AbstractFormatExporter {
         variableDescriptors.put("bt_data_count", new VariableDescriptor("BT_Data_Counter", true, DataType.BYTE, "n_grid_points", false, -1));
 
         final VariableDescriptor flagsDescriptor = new VariableDescriptor("Flags", false, DataType.SHORT, "n_grid_points n_bt_data", true, 0);
-        flagsDescriptor.setFlagMasks(new int[]{3, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768});
-        flagsDescriptor.setFlagValues(new int[]{0, 1, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768});
+        flagsDescriptor.setFlagMasks(new short[]{3, 3, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, (short)32768});
+        flagsDescriptor.setFlagValues(new short[]{0, 1, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, (short)32768});
         flagsDescriptor.setFlagMeanings("pol_xx pol_yy sun_fov sun_glint_fov moon_glint_fov single_snapshot rfi_x sun_point sun_glint_area moon_point af_fov rfi_tails border_fov sun_tails rfi_y rfi_point_source");
         flagsDescriptor.setUnsigned(true);
         variableDescriptors.put("flags", flagsDescriptor);

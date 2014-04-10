@@ -20,7 +20,7 @@ public class VariableDescriptor {
     private float validMax;
     private String originalName;
     private String standardName;
-    private int[] flagMasks;
+    private short[] flagMasks;
     private String flagMeanings;
     double scaleFactor;
     private boolean scaleFactorPresent;
@@ -51,23 +51,23 @@ public class VariableDescriptor {
         this.flagMeanings = flagMeanings;
     }
 
-    public int[] getFlagValues() {
+    public short[] getFlagValues() {
         return flagValues;
     }
 
-    public void setFlagValues(int[] flagValues) {
+    public void setFlagValues(short[] flagValues) {
         this.flagValues = flagValues;
     }
 
-    private int[] flagValues
+    private short[] flagValues
 
             ;
 
-    public int[] getFlagMasks() {
+    public short[] getFlagMasks() {
         return flagMasks;
     }
 
-    public void setFlagMasks(int[] flagMasks) {
+    public void setFlagMasks(short[] flagMasks) {
         this.flagMasks = flagMasks;
     }
 

@@ -44,11 +44,11 @@ public class GridPointFormatExporterTest {
 
     @After
     public void tearDown() {
-        if (targetDirectory.isDirectory()) {
-            if (!FileUtils.deleteTree(targetDirectory)) {
-                fail("Unable to delete test directory");
-            }
-        }
+//        if (targetDirectory.isDirectory()) {
+//            if (!FileUtils.deleteTree(targetDirectory)) {
+//                fail("Unable to delete test directory");
+//            }
+//        }
     }
 
     @Test
@@ -181,8 +181,8 @@ public class GridPointFormatExporterTest {
             assertNoAttribute("valid_max", flagsVariable);
             assertNoAttribute("orignal_name", flagsVariable);
             assertNoAttribute("standard_name", flagsVariable);
-            assertAttribute("flag_masks", new int[]{3, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768}, flagsVariable);
-            assertAttribute("flag_values", new int[]{0, 1, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768}, flagsVariable);
+            assertAttribute("flag_masks", new short[]{3, 3, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, (short)32768}, flagsVariable);
+            assertAttribute("flag_values", new short[]{0, 1, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, (short)32768}, flagsVariable);
             assertAttribute("flag_meanings", "pol_xx pol_yy sun_fov sun_glint_fov moon_glint_fov single_snapshot rfi_x sun_point sun_glint_area moon_point af_fov rfi_tails border_fov sun_tails rfi_y rfi_point_source", flagsVariable);
             assertNoAttribute("scale_factor", flagsVariable);
             assertAttribute("_Unsigned", "true", flagsVariable);
@@ -367,12 +367,12 @@ public class GridPointFormatExporterTest {
         fail("attribute '" + attributeName + "' is missing at variable '" + variable.getFullName() + "'");
     }
 
-    private void assertAttribute(String attributeName, int[] attributeValue, Variable variable) {
+    private void assertAttribute(String attributeName, short[] attributeValue, Variable variable) {
         final List<Attribute> attributes = variable.getAttributes();
         for (final Attribute attribute : attributes) {
             if (attribute.getFullName().equals(attributeName)) {
                 final Array values = attribute.getValues();
-                assertArrayEquals(attributeValue, (int[]) values.get1DJavaArray(Integer.class));
+                assertArrayEquals(attributeValue, (short[]) values.get1DJavaArray(Short.class));
                 return;
             }
         }

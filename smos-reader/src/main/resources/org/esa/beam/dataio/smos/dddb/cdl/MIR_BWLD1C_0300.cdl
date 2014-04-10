@@ -28,7 +28,7 @@ variables:
     byte bt_data_count(n_grid_points) ;
         bt_data_count:_Unsigned = "true" ;
     short flags(n_grid_points, n_bt_data) ;
-        flags:flag_masks = 3, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768 ;
+        flags:flag_masks = 3, 3, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768 ;
         flags:flag_values = 0, 1, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768 ;
         flags:flag_meanings = "pol_xx pol_yy sun_fov sun_glint_fov moon_glint_fov single_snapshot rfi_x sun_point sun_glint_area moon_point af_fov rfi_tails border_fov sun_tails rfi_y rfi_point_source" ;
         flags:_Unsigned = "true" ;
