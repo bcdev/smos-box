@@ -82,7 +82,6 @@
             <text>SMOS Earth Explorer Format (EEF)</text>
             <mnemonic/>
             <shortDescr>Import a SMOS Earth Explorer Format (EEF) data product or product subset.</shortDescr>
-            <description>Import a SMOS Earth Explorer Format (EEF) data product or product subset.</description>
         </action>
     </extension>
 
