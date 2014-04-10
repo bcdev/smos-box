@@ -33,8 +33,8 @@ public class SnapshotSelectionService {
 
     public SnapshotSelectionService(SceneViewSelectionService smosViewSelectionService) {
         this.smosViewSelectionService = smosViewSelectionService;
-        this.selectionListenerList = new ArrayList<SelectionListener>();
-        this.snapshotIdMap = new WeakHashMap<RasterDataNode, Long>();
+        this.selectionListenerList = new ArrayList<>();
+        this.snapshotIdMap = new WeakHashMap<>();
         this.smosViewSelectionListener = new SceneViewSelectionService.SelectionListener() {
             @Override
             public void handleSceneViewSelectionChanged(ProductSceneView oldView, ProductSceneView newView) {
@@ -82,14 +82,6 @@ public class SnapshotSelectionService {
                 }
             }
         }
-    }
-
-    public synchronized void addSnapshotIdChangeListener(SelectionListener selectionListener) {
-        selectionListenerList.add(selectionListener);
-    }
-
-    public synchronized void removeSnapshotIdChangeListener(SelectionListener selectionListener) {
-        selectionListenerList.remove(selectionListener);
     }
 
     private void fireSelectionChange(ProductSceneView newView, long newId) {

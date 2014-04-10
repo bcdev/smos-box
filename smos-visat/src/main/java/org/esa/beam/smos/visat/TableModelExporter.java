@@ -81,12 +81,9 @@ class TableModelExporter {
      * @param out the stream to export the table model to.
      */
     public void export(OutputStream out) {
-        final PrintWriter writer = new PrintWriter(out);
-        try {
+        try (PrintWriter writer = new PrintWriter(out)) {
             writeHeaderRow(writer);
             writeDataRows(writer);
-        } finally {
-            writer.close();
         }
     }
 

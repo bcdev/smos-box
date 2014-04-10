@@ -16,35 +16,45 @@
 
 package org.esa.beam.smos.visat;
 
-import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import java.io.ByteArrayOutputStream;
 
+import static org.junit.Assert.assertTrue;
+
 public class TableModelExporterTest {
+
+    private ByteArrayOutputStream stream;
+
+    @Before
+    public void setUp() {
+        stream = new ByteArrayOutputStream();
+    }
 
     @Test
     public void testUninitializedModel() {
         final DefaultTableModel tableModel = new DefaultTableModel(2, 3);
         final TableModelExporter exporter = new TableModelExporter(tableModel);
         exporter.setSeparator('\t');
-        final ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        exporter.export(stream);
-        final String actual = stream.toString();
-        Assert.assertTrue(actual.contains("A\tB\tC"));
-        Assert.assertTrue(actual.contains("null\tnull\tnull"));
-    }
 
+        exporter.export(stream);
+
+        final String actual = stream.toString();
+        assertTrue(actual.contains("A\tB\tC"));
+        assertTrue(actual.contains("null\tnull\tnull"));
+    }
 
     @Test
     public void testSimpleModel() {
         final TableModel tableModel = createTableModel();
         final TableModelExporter exporter = new TableModelExporter(tableModel);
         exporter.setSeparator('\t');
-        final ByteArrayOutputStream stream = new ByteArrayOutputStream();
+
         exporter.export(stream);
+
         final String actual = stream.toString();
         assertTableModel(actual);
     }
@@ -59,14 +69,14 @@ public class TableModelExporterTest {
                 return columnIndex != 1;
             }
         });
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        exporter.export(stream);
-        final String actual = stream.toString();
-        Assert.assertTrue(actual.contains("Bibo\tSamson"));
-        Assert.assertTrue(actual.contains("12\t45.456"));
-        Assert.assertTrue(actual.contains("11\t129.5678"));
-        Assert.assertTrue(actual.contains("2\t0.1"));
 
+        exporter.export(stream);
+
+        final String actual = stream.toString();
+        assertTrue(actual.contains("Bibo\tSamson"));
+        assertTrue(actual.contains("12\t45.456"));
+        assertTrue(actual.contains("11\t129.5678"));
+        assertTrue(actual.contains("2\t0.1"));
     }
 
     @Test
@@ -79,16 +89,17 @@ public class TableModelExporterTest {
                 return false;
             }
         });
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+
         exporter.export(stream);
-        Assert.assertTrue(stream.toString().trim().isEmpty());
+
+        assertTrue(stream.toString().trim().isEmpty());
     }
 
     private void assertTableModel(String actual) {
-        Assert.assertTrue(actual.contains("Bibo\tTiffy\tSamson"));
-        Assert.assertTrue(actual.contains("12\tCat\t45.456"));
-        Assert.assertTrue(actual.contains("11\tMouse\t129.5678"));
-        Assert.assertTrue(actual.contains("2\tDog\t0.1"));
+        assertTrue(actual.contains("Bibo\tTiffy\tSamson"));
+        assertTrue(actual.contains("12\tCat\t45.456"));
+        assertTrue(actual.contains("11\tMouse\t129.5678"));
+        assertTrue(actual.contains("2\tDog\t0.1"));
     }
 
     private TableModel createTableModel() {

@@ -218,11 +218,7 @@ public class SnapshotInfoToolView extends SmosToolView {
             } else {
                 if ("Snapshot_Time".equals(compoundType.getMemberName(i))) {
                     try {
-                        final CompoundData utcData = data.getCompound(0);
-                        final int days = utcData.getInt(0);
-                        final long seconds = utcData.getUInt(1);
-                        final long microSeconds = utcData.getUInt(2);
-                        entry[1] = DateTimeUtils.cfiDateToUtc(days, seconds, microSeconds);
+                        entry[1] = DateTimeUtils.cfiDateToUtc(data.getCompound(0));
                     } catch (IOException e) {
                         entry[1] = "Failed reading data";
                     }

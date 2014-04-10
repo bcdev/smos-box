@@ -1,11 +1,15 @@
 package org.esa.beam.dataio.smos.util;
 
+import com.bc.ceres.binio.CompoundData;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class DateTimeUtilsTest {
 
@@ -24,6 +28,23 @@ public class DateTimeUtilsTest {
         date = DateTimeUtils.cfiDateToUtc(1, 10, 100000);    // last argument is microsecond, date can only handle millis ...
         assertEquals("Sun Jan 02 01:00:10 CET 2000", date.toString());
         assertEquals(timeWithoutMillis + 100, date.getTime());
+    }
+
+    @Test
+    public void testCfiDateToUtc_formCompound() throws IOException {
+        final CompoundData compoundData = mock(CompoundData.class);
+        when(compoundData.getInt(0)).thenReturn(187);
+        when(compoundData.getUInt(1)).thenReturn(78765L);
+        when(compoundData.getUInt(2)).thenReturn(1007L);
+
+        Date date = DateTimeUtils.cfiDateToUtc(compoundData);
+        assertEquals("Thu Jul 06 23:52:45 CEST 2000", date.toString());
+
+        when(compoundData.getInt(0)).thenReturn(0);
+        when(compoundData.getUInt(1)).thenReturn(0L);
+        when(compoundData.getUInt(2)).thenReturn(0L);
+        date = DateTimeUtils.cfiDateToUtc(compoundData);
+        assertEquals("Sat Jan 01 01:00:00 CET 2000", date.toString());
     }
 
     @Test

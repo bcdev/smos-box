@@ -1,5 +1,8 @@
 package org.esa.beam.dataio.smos.util;
 
+import com.bc.ceres.binio.CompoundData;
+
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -37,6 +40,13 @@ public class DateTimeUtils {
         calendar.add(Calendar.MILLISECOND, (int) (microseconds * 0.001));
 
         return calendar.getTime();
+    }
+
+    public static Date cfiDateToUtc(CompoundData compoundData) throws IOException {
+        final int days = compoundData.getInt(0);
+        final long seconds = compoundData.getUInt(1);
+        final long microSeconds = compoundData.getUInt(2);
+        return cfiDateToUtc(days, seconds, microSeconds);
     }
 
     public static Date mjdFloatDateToUtc(float mjd) {

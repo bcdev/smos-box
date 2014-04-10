@@ -54,7 +54,7 @@ class EEExportGridPointHandler implements GridPointHandler {
     EEExportGridPointHandler(DataContext targetContext, GridPointFilter targetFilter) {
         this.targetContext = targetContext;
         this.targetFilter = targetFilter;
-        snapshotIdTimeMap = new HashMap<Long, Date>();
+        snapshotIdTimeMap = new HashMap<>();
         timeTracker = new TimeTracker();
         geometryTracker = new GeometryTracker();
 
@@ -204,11 +204,7 @@ class EEExportGridPointHandler implements GridPointHandler {
         final int snapshotCount = snapshotData.getElementCount();
         for (int i = 0; i < snapshotCount; i++) {
             final CompoundData snapshot = snapshotData.getCompound(i);
-            final CompoundData utcData = snapshot.getCompound(0);
-            final int days = utcData.getInt(0);
-            final long seconds = utcData.getUInt(1);
-            final long microSeconds = utcData.getUInt(2);
-            final Date snapshotTime = DateTimeUtils.cfiDateToUtc(days, seconds, microSeconds);
+            final Date snapshotTime = DateTimeUtils.cfiDateToUtc(snapshot.getCompound(0));
             final long snapshotId = snapshot.getUInt(1);
 
             snapshotIdTimeMap.put(snapshotId, snapshotTime);
