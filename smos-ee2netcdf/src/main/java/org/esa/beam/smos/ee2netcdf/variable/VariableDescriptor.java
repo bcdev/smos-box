@@ -16,6 +16,8 @@ public class VariableDescriptor {
     private boolean fillValuePresent;
     private boolean validMinPresent;
     private float validMin;
+    private boolean validMaxPresent;
+    private float validMax;
 
     public VariableDescriptor(String name, boolean gridPointData, DataType dataType, String dimensionNames, boolean is2d, int btDataMemberIndex) {
         this();
@@ -30,6 +32,7 @@ public class VariableDescriptor {
     public VariableDescriptor() {
         fillValue = Float.NaN;
         validMin = Float.NaN;
+        validMax = Float.NaN;
     }
 
     public String getName() {
@@ -112,5 +115,18 @@ public class VariableDescriptor {
     public void setValidMin(float validMin) {
         this.validMin = validMin;
         validMinPresent = true;
+    }
+
+    public boolean isValidMaxPresent() {
+        return validMaxPresent;
+    }
+
+    public float getValidMax() {
+        return validMax;
+    }
+
+    public void setValidMax(float validMax) {
+        this.validMax = validMax;
+        validMaxPresent = true;
     }
 }

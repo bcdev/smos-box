@@ -35,4 +35,14 @@ public class VariableDescriptorTest {
         assertTrue(variableDescriptor.isValidMinPresent());
         assertEquals(983.f, variableDescriptor.getValidMin(), 1e-8);
     }
+
+    @Test
+    public void testSettingValidMaxTriggersPresentIndicator() {
+        assertFalse(variableDescriptor.isValidMaxPresent());
+        assertEquals(Float.NaN, variableDescriptor.getValidMax(), 1e-8);
+
+        variableDescriptor.setValidMax(984.f);
+        assertTrue(variableDescriptor.isValidMaxPresent());
+        assertEquals(984.f, variableDescriptor.getValidMax(), 1e-8);
+    }
 }
