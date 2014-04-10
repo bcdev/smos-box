@@ -19,7 +19,7 @@ package org.esa.beam.dataio.smos;
 import com.bc.ceres.binio.CompoundData;
 import com.bc.ceres.binio.DataFormat;
 import com.bc.ceres.binio.SequenceData;
-import org.esa.beam.dataio.smos.util.DateTimeUtils;
+import org.esa.beam.smos.DateTimeUtils;
 import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.framework.datamodel.TiePointGrid;
 import org.esa.beam.util.io.FileUtils;

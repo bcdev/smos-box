@@ -1,4 +1,4 @@
-package org.esa.beam.dataio.smos.util;
+package org.esa.beam.smos;
 
 import com.bc.ceres.binio.CompoundData;
 

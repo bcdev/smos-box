@@ -2,7 +2,7 @@ package org.esa.beam.smos.ee2netcdf;
 
 
 import org.esa.beam.dataio.netcdf.util.NetcdfFileOpener;
-import org.esa.beam.dataio.smos.util.DateTimeUtils;
+import org.esa.beam.smos.DateTimeUtils;
 import org.esa.beam.framework.dataio.ProductIO;
 import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.util.io.FileUtils;

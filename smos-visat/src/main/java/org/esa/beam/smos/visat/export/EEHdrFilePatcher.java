@@ -16,7 +16,7 @@
 
 package org.esa.beam.smos.visat.export;
 
-import org.esa.beam.dataio.smos.util.DateTimeUtils;
+import org.esa.beam.smos.DateTimeUtils;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;

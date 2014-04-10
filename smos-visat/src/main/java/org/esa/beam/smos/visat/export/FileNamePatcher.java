@@ -16,7 +16,7 @@
 
 package org.esa.beam.smos.visat.export;
 
-import org.esa.beam.dataio.smos.util.DateTimeUtils;
+import org.esa.beam.smos.DateTimeUtils;
 
 import java.text.DecimalFormat;
 import java.util.Date;

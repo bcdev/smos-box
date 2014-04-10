@@ -18,7 +18,7 @@ package org.esa.beam.smos.visat.export;
 
 import com.bc.ceres.binio.*;
 import org.esa.beam.dataio.smos.SmosConstants;
-import org.esa.beam.dataio.smos.util.DateTimeUtils;
+import org.esa.beam.smos.DateTimeUtils;
 import org.esa.beam.smos.SmosUtils;
 
 import java.awt.geom.Point2D;
