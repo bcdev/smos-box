@@ -7,10 +7,9 @@ import ucar.ma2.Array;
 
 import java.io.IOException;
 
-public class ShortVariableSequenceWriter implements VariableWriter {
+public class ShortVariableSequenceWriter extends AbstractVariableWriter {
 
-    private final Array array;
-    private final NVariable variable;
+
     private final int memberIndex;
 
     public ShortVariableSequenceWriter(NVariable variable, int arraySize, int memberIndex) {
@@ -23,10 +22,5 @@ public class ShortVariableSequenceWriter implements VariableWriter {
     public void write(CompoundData gridPointData, SequenceData btDataList, int index) throws IOException {
         final short data = btDataList.getCompound(0).getShort(memberIndex);
         array.setShort(index, data);
-    }
-
-    @Override
-    public void close() throws IOException {
-        variable.writeFully(array);
     }
 }

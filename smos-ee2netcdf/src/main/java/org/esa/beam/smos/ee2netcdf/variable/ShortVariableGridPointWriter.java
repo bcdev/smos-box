@@ -7,11 +7,9 @@ import ucar.ma2.Array;
 
 import java.io.IOException;
 
-public class ShortVariableGridPointWriter implements VariableWriter {
+public class ShortVariableGridPointWriter extends AbstractVariableWriter {
 
     private final String compoundName;
-    private final Array array;
-    private final NVariable variable;
 
     public ShortVariableGridPointWriter(NVariable variable, String compoundName, int arraySize) {
         this.compoundName = compoundName;
@@ -23,10 +21,5 @@ public class ShortVariableGridPointWriter implements VariableWriter {
     public void write(CompoundData gridPointData, SequenceData btDataList, int index) throws IOException {
         final short gpShort = gridPointData.getShort(compoundName);
         array.setShort(index, gpShort);
-    }
-
-    @Override
-    public void close() throws IOException {
-        variable.writeFully(array);
     }
 }

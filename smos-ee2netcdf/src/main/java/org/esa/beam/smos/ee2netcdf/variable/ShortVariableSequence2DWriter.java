@@ -8,10 +8,8 @@ import ucar.ma2.Index;
 
 import java.io.IOException;
 
-public class ShortVariableSequence2DWriter implements VariableWriter {
+public class ShortVariableSequence2DWriter extends AbstractVariableWriter {
 
-    private final Array array;
-    private final NVariable variable;
     private final int memberIndex;
     private int height;
 
@@ -30,10 +28,5 @@ public class ShortVariableSequence2DWriter implements VariableWriter {
             arrayIndex.set(index, i);
             array.setShort(arrayIndex, data);
         }
-    }
-
-    @Override
-    public void close() throws IOException {
-        variable.writeFully(array);
     }
 }

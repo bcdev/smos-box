@@ -7,11 +7,9 @@ import ucar.ma2.Array;
 
 import java.io.IOException;
 
-public class FloatVariableGridPointWriter implements VariableWriter {
+public class FloatVariableGridPointWriter extends AbstractVariableWriter {
 
     private final String compoundName;
-    private final Array array;
-    private final NVariable variable;
 
     public FloatVariableGridPointWriter(NVariable variable, String compoundName, int arraySize) {
         this.compoundName = compoundName;
@@ -24,10 +22,5 @@ public class FloatVariableGridPointWriter implements VariableWriter {
         final float gpFloat = gridPointData.getFloat(compoundName);
         array.setFloat(index, gpFloat);
 
-    }
-
-    @Override
-    public void close() throws IOException {
-        variable.writeFully(array);
     }
 }
