@@ -77,6 +77,7 @@ public class GridPointFormatExporterTest {
             assertNoAttribute("_FillValue", gridPointIdVariable);
             assertNoAttribute("valid_min", gridPointIdVariable);
             assertNoAttribute("valid_max", gridPointIdVariable);
+            assertNoAttribute("orignal_name", gridPointIdVariable);
             Array array = gridPointIdVariable.read(new int[]{346}, new int[]{2});
             assertEquals(4098190, array.getInt(0));
             assertEquals(4098191, array.getInt(1));
@@ -87,6 +88,7 @@ public class GridPointFormatExporterTest {
             assertAttribute("_FillValue", -999.0, latVariable);
             assertAttribute("valid_min", -90.0, latVariable);
             assertAttribute("valid_max", 90.0, latVariable);
+            assertAttribute("original_name", "Grid_Point_Latitude", latVariable);
             array = latVariable.read(new int[]{467}, new int[]{2});
             assertEquals(78.56900024, array.getFloat(0), 1e-8);
             assertEquals(78.6760025, array.getFloat(1), 1e-8);
@@ -97,6 +99,7 @@ public class GridPointFormatExporterTest {
             assertAttribute("_FillValue", -999.0, lonVariable);
             assertAttribute("valid_min", -180.0, lonVariable);
             assertAttribute("valid_max", 180.0, lonVariable);
+            assertAttribute("original_name", "Grid_Point_Longitude", lonVariable);
             array = lonVariable.read(new int[]{582}, new int[]{2});
             assertEquals(101.25, array.getFloat(0), 1e-8);
             assertEquals(100.994003295, array.getFloat(1), 1e-8);
@@ -107,6 +110,7 @@ public class GridPointFormatExporterTest {
             assertAttribute("_FillValue", -999.0, altitudeVariable);
             assertNoAttribute("valid_min", altitudeVariable);
             assertNoAttribute("valid_max", altitudeVariable);
+            assertNoAttribute("orignal_name", altitudeVariable);
             array = altitudeVariable.read(new int[]{619}, new int[]{2});
             assertEquals(-0.708, array.getFloat(0), 1e-8);
             assertEquals(0.0, array.getFloat(1), 1e-8);
@@ -117,6 +121,7 @@ public class GridPointFormatExporterTest {
             assertNoAttribute("_FillValue", gridPointMaskVariable);
             assertNoAttribute("valid_min", gridPointMaskVariable);
             assertNoAttribute("valid_max", gridPointMaskVariable);
+            assertNoAttribute("orignal_name", gridPointMaskVariable);
             array = gridPointMaskVariable.read(new int[]{743}, new int[]{2});
             assertEquals(-39, array.getByte(0)); // @todo 2 tb/tb these should be unsigned values - resolve problem tb 2014-04-09
             assertEquals(-39, array.getByte(1));
@@ -127,6 +132,7 @@ public class GridPointFormatExporterTest {
             assertNoAttribute("_FillValue", btDataCountVariable);
             assertNoAttribute("valid_min", btDataCountVariable);
             assertNoAttribute("valid_max", btDataCountVariable);
+            assertNoAttribute("orignal_name", btDataCountVariable);
             array = btDataCountVariable.read(new int[]{833}, new int[]{2});
             assertEquals(4, array.getByte(0)); // @todo 2 tb/tb these should be unsigned values - resolve problem tb 2014-04-09
             assertEquals(4, array.getByte(1));
@@ -137,6 +143,7 @@ public class GridPointFormatExporterTest {
             assertNoAttribute("_FillValue", flagsVariable);
             assertNoAttribute("valid_min", flagsVariable);
             assertNoAttribute("valid_max", flagsVariable);
+            assertNoAttribute("orignal_name", flagsVariable);
             array = flagsVariable.read(new int[]{945, 1}, new int[]{2, 1});
             assertEquals(1045, array.getShort(0));
             assertEquals(1045, array.getShort(1));
@@ -147,6 +154,7 @@ public class GridPointFormatExporterTest {
             assertAttribute("_FillValue", -999.0, btValueVariable);
             assertNoAttribute("valid_min", btValueVariable);
             assertNoAttribute("valid_max", btValueVariable);
+            assertNoAttribute("orignal_name", btValueVariable);
             array = btValueVariable.read(new int[]{1034, 2}, new int[]{2, 2});
             assertEquals(6.868230819702148, array.getFloat(0), 1e-8);
             assertEquals(0.9826292991638184, array.getFloat(1), 1e-8);
@@ -159,6 +167,7 @@ public class GridPointFormatExporterTest {
             assertNoAttribute("_FillValue", radAccVariable);
             assertNoAttribute("valid_min", radAccVariable);
             assertNoAttribute("valid_max", radAccVariable);
+            assertAttribute("original_name", "Radiometric_Accuracy_of_Pixel", radAccVariable);
             array = radAccVariable.read(new int[]{1175, 0}, new int[]{2, 2});
             assertEquals(3547, array.getShort(0));
             assertEquals(3704, array.getShort(1));
@@ -171,6 +180,7 @@ public class GridPointFormatExporterTest {
             assertNoAttribute("_FillValue", azimuthAngleVariable);
             assertNoAttribute("valid_min", azimuthAngleVariable);
             assertNoAttribute("valid_max", azimuthAngleVariable);
+            assertNoAttribute("orignal_name", azimuthAngleVariable);
             array = azimuthAngleVariable.read(new int[]{1261, 1}, new int[]{2, 2});
             assertEquals(8169, array.getShort(0));
             assertEquals(8170, array.getShort(1));
@@ -183,6 +193,7 @@ public class GridPointFormatExporterTest {
             assertNoAttribute("_FillValue", footAxis1Variable);
             assertNoAttribute("valid_min", footAxis1Variable);
             assertNoAttribute("valid_max", footAxis1Variable);
+            assertNoAttribute("orignal_name", footAxis1Variable);
             array = footAxis1Variable.read(new int[]{1394, 2}, new int[]{2, 2});
             assertEquals(18489, array.getShort(0));
             assertEquals(18489, array.getShort(1));
@@ -195,6 +206,7 @@ public class GridPointFormatExporterTest {
             assertNoAttribute("_FillValue", footAxis2Variable);
             assertNoAttribute("valid_min", footAxis2Variable);
             assertNoAttribute("valid_max", footAxis2Variable);
+            assertNoAttribute("orignal_name", footAxis2Variable);
             array = footAxis2Variable.read(new int[]{1417, 0}, new int[]{2, 2});
             assertEquals(13625, array.getShort(0));
             assertEquals(13631, array.getShort(1));

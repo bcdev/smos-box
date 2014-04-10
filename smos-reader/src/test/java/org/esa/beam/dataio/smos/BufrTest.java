@@ -15,11 +15,9 @@ package org.esa.beam.dataio.smos;
  * with this program; if not, see http://www.gnu.org/licenses/
  */
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import ucar.ma2.ArrayStructure;
 import ucar.ma2.DataType;
 import ucar.ma2.StructureData;
 import ucar.ma2.StructureDataIterator;
@@ -33,9 +31,7 @@ import ucar.nc2.iosp.bufr.BufrIosp;
 import java.io.IOException;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * Tests for trying out reading SMOS BUFR formatted files obtained from 'ideas-nas.eo.esa.int'.
@@ -134,10 +130,7 @@ public class BufrTest {
             final StructureDataIterator structureIterator = sequence.getStructureIterator();
             assertNotNull(structureIterator);
 
-            int numberOfSnapshots = 0;
-
             while (structureIterator.hasNext()) {
-                numberOfSnapshots++;
                 final StructureData structureData = structureIterator.next();
                 assertNotNull(structureData);
 
@@ -155,8 +148,6 @@ public class BufrTest {
                 assertNotNull(brightnessTemperatureRealPart);
                 assertEquals(numberOfGridPoints, brightnessTemperatureRealPart.length);
             }
-
-            System.out.println("numberOfSnapshots = " + numberOfSnapshots);
         }
     }
 }

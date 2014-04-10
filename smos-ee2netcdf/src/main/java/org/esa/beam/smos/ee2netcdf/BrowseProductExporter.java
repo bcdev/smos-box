@@ -62,6 +62,10 @@ class BrowseProductExporter extends AbstractFormatExporter {
             if (variableDescriptor.isValidMaxPresent()) {
                 nVariable.addAttribute("valid_max", variableDescriptor.getValidMax());
             }
+            final String originalName = variableDescriptor.getOriginalName();
+            if (StringUtils.isNotBlank(originalName)) {
+                nVariable.addAttribute("original_name", originalName);
+            }
         }
     }
 
@@ -106,19 +110,21 @@ class BrowseProductExporter extends AbstractFormatExporter {
         latDescriptor.setFillValue(-999.f);
         latDescriptor.setValidMin(-90.f);
         latDescriptor.setValidMax(90.f);
-        variableDescriptors.put("lat", latDescriptor);       // this ia a dddb mapping name, real name is: Grid_Point_Latitude
+        latDescriptor.setOriginalName("Grid_Point_Latitude");
+        variableDescriptors.put("lat", latDescriptor);
 
         final VariableDescriptor lonDescriptor = new VariableDescriptor("Longitude", true, DataType.FLOAT, "n_grid_points", false, -1);
         lonDescriptor.setUnit("degrees_north");
         lonDescriptor.setFillValue(-999.f);
         lonDescriptor.setValidMin(-180.f);
         lonDescriptor.setValidMax(180.f);
-        variableDescriptors.put("lon", lonDescriptor);      // this ia a dddb mapping name, real name is: Grid_Point_Longitude
+        lonDescriptor.setOriginalName("Grid_Point_Longitude");
+        variableDescriptors.put("lon", lonDescriptor);
 
         final VariableDescriptor altitudeDescriptor = new VariableDescriptor("Altitude", true, DataType.FLOAT, "n_grid_points", false, -1);
         altitudeDescriptor.setUnit("m");
         altitudeDescriptor.setFillValue(-999.f);
-        variableDescriptors.put("grid_point_altitude", altitudeDescriptor);   // this ia a dddb mapping name, real name is: Grid_Point_Altitude
+        variableDescriptors.put("grid_point_altitude", altitudeDescriptor);
 
         variableDescriptors.put("grid_point_mask", new VariableDescriptor("Grid_Point_Mask", true, DataType.BYTE, "n_grid_points", false, -1));
         variableDescriptors.put("bt_data_count", new VariableDescriptor("BT_Data_Counter", true, DataType.BYTE, "n_grid_points", false, -1));
@@ -131,6 +137,7 @@ class BrowseProductExporter extends AbstractFormatExporter {
 
         final VariableDescriptor radAccDescriptor = new VariableDescriptor("Radiometric_Accuracy_of_Pixel", false, DataType.SHORT, "n_grid_points n_bt_data", true, 2);
         radAccDescriptor.setUnit("K");
+        radAccDescriptor.setOriginalName("Radiometric_Accuracy_of_Pixel");
         variableDescriptors.put("pixel_radiometric_accuracy", radAccDescriptor);
 
         final VariableDescriptor azimuthAngleDescriptor = new VariableDescriptor("Azimuth_Angle", false, DataType.SHORT, "n_grid_points n_bt_data", true, 3);

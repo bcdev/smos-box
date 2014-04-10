@@ -169,7 +169,6 @@ public class ConverterOpAcceptanceTest {
             final Geometry polygon = ConverterOp.convertToPolygon(dataArea);
 
             final Rectangle dataBoundingRect = ConverterOp.getDataBoundingRect(product, polygon);
-            System.out.println("dataBoundingRect = " + dataBoundingRect);
             assertNotNull(dataBoundingRect);
             assertEquals(4608, dataBoundingRect.x);
             assertEquals(0, dataBoundingRect.y);

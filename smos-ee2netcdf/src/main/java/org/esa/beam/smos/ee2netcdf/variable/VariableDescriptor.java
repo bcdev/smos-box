@@ -18,6 +18,15 @@ public class VariableDescriptor {
     private float validMin;
     private boolean validMaxPresent;
     private float validMax;
+    private String originalName;
+
+    public String getOriginalName() {
+        return originalName;
+    }
+
+    public void setOriginalName(String originalName) {
+        this.originalName = originalName;
+    }
 
     public VariableDescriptor(String name, boolean gridPointData, DataType dataType, String dimensionNames, boolean is2d, int btDataMemberIndex) {
         this();
