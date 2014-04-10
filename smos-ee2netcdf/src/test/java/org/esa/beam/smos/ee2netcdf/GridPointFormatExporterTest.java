@@ -79,6 +79,9 @@ public class GridPointFormatExporterTest {
             assertNoAttribute("valid_max", gridPointIdVariable);
             assertNoAttribute("orignal_name", gridPointIdVariable);
             assertNoAttribute("standard_name", gridPointIdVariable);
+            assertNoAttribute("flag_masks", gridPointIdVariable);
+            assertNoAttribute("flag_values", gridPointIdVariable);
+            assertNoAttribute("flag_meanings", gridPointIdVariable);
             Array array = gridPointIdVariable.read(new int[]{346}, new int[]{2});
             assertEquals(4098190, array.getInt(0));
             assertEquals(4098191, array.getInt(1));
@@ -91,6 +94,9 @@ public class GridPointFormatExporterTest {
             assertAttribute("valid_max", 90.0, latVariable);
             assertAttribute("original_name", "Grid_Point_Latitude", latVariable);
             assertAttribute("standard_name", "latitude", latVariable);
+            assertNoAttribute("flag_masks", latVariable);
+            assertNoAttribute("flag_values", latVariable);
+            assertNoAttribute("flag_meanings", latVariable);
             array = latVariable.read(new int[]{467}, new int[]{2});
             assertEquals(78.56900024, array.getFloat(0), 1e-8);
             assertEquals(78.6760025, array.getFloat(1), 1e-8);
@@ -103,6 +109,9 @@ public class GridPointFormatExporterTest {
             assertAttribute("valid_max", 180.0, lonVariable);
             assertAttribute("original_name", "Grid_Point_Longitude", lonVariable);
             assertAttribute("standard_name", "longitude", lonVariable);
+            assertNoAttribute("flag_masks", lonVariable);
+            assertNoAttribute("flag_values", lonVariable);
+            assertNoAttribute("flag_meanings", lonVariable);
             array = lonVariable.read(new int[]{582}, new int[]{2});
             assertEquals(101.25, array.getFloat(0), 1e-8);
             assertEquals(100.994003295, array.getFloat(1), 1e-8);
@@ -115,6 +124,9 @@ public class GridPointFormatExporterTest {
             assertNoAttribute("valid_max", altitudeVariable);
             assertNoAttribute("orignal_name", altitudeVariable);
             assertNoAttribute("standard_name", altitudeVariable);
+            assertNoAttribute("flag_masks", altitudeVariable);
+            assertNoAttribute("flag_values", altitudeVariable);
+            assertNoAttribute("flag_meanings", altitudeVariable);
             array = altitudeVariable.read(new int[]{619}, new int[]{2});
             assertEquals(-0.708, array.getFloat(0), 1e-8);
             assertEquals(0.0, array.getFloat(1), 1e-8);
@@ -127,6 +139,9 @@ public class GridPointFormatExporterTest {
             assertNoAttribute("valid_max", gridPointMaskVariable);
             assertNoAttribute("orignal_name", gridPointMaskVariable);
             assertNoAttribute("standard_name", gridPointMaskVariable);
+            assertNoAttribute("flag_masks", gridPointMaskVariable);
+            assertNoAttribute("flag_values", gridPointMaskVariable);
+            assertNoAttribute("flag_meanings", gridPointMaskVariable);
             array = gridPointMaskVariable.read(new int[]{743}, new int[]{2});
             assertEquals(-39, array.getByte(0)); // @todo 2 tb/tb these should be unsigned values - resolve problem tb 2014-04-09
             assertEquals(-39, array.getByte(1));
@@ -139,6 +154,9 @@ public class GridPointFormatExporterTest {
             assertNoAttribute("valid_max", btDataCountVariable);
             assertNoAttribute("orignal_name", btDataCountVariable);
             assertNoAttribute("standard_name", btDataCountVariable);
+            assertNoAttribute("flag_masks", btDataCountVariable);
+            assertNoAttribute("flag_values", btDataCountVariable);
+            assertNoAttribute("flag_meanings", btDataCountVariable);
             array = btDataCountVariable.read(new int[]{833}, new int[]{2});
             assertEquals(4, array.getByte(0)); // @todo 2 tb/tb these should be unsigned values - resolve problem tb 2014-04-09
             assertEquals(4, array.getByte(1));
@@ -151,6 +169,9 @@ public class GridPointFormatExporterTest {
             assertNoAttribute("valid_max", flagsVariable);
             assertNoAttribute("orignal_name", flagsVariable);
             assertNoAttribute("standard_name", flagsVariable);
+            assertAttribute("flag_masks", new int[]{3, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768}, flagsVariable);
+            assertAttribute("flag_values", new int[]{0, 1, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768}, flagsVariable);
+            assertAttribute("flag_meanings", "pol_xx pol_yy sun_fov sun_glint_fov moon_glint_fov single_snapshot rfi_x sun_point sun_glint_area moon_point af_fov rfi_tails border_fov sun_tails rfi_y rfi_point_source", flagsVariable);
             array = flagsVariable.read(new int[]{945, 1}, new int[]{2, 1});
             assertEquals(1045, array.getShort(0));
             assertEquals(1045, array.getShort(1));
@@ -163,6 +184,9 @@ public class GridPointFormatExporterTest {
             assertNoAttribute("valid_max", btValueVariable);
             assertNoAttribute("orignal_name", btValueVariable);
             assertNoAttribute("standard_name", btValueVariable);
+            assertNoAttribute("flag_masks", btValueVariable);
+            assertNoAttribute("flag_values", btValueVariable);
+            assertNoAttribute("flag_meanings", btValueVariable);
             array = btValueVariable.read(new int[]{1034, 2}, new int[]{2, 2});
             assertEquals(6.868230819702148, array.getFloat(0), 1e-8);
             assertEquals(0.9826292991638184, array.getFloat(1), 1e-8);
@@ -177,6 +201,9 @@ public class GridPointFormatExporterTest {
             assertNoAttribute("valid_max", radAccVariable);
             assertAttribute("original_name", "Radiometric_Accuracy_of_Pixel", radAccVariable);
             assertNoAttribute("standard_name", radAccVariable);
+            assertNoAttribute("flag_masks", radAccVariable);
+            assertNoAttribute("flag_values", radAccVariable);
+            assertNoAttribute("flag_meanings", radAccVariable);
             array = radAccVariable.read(new int[]{1175, 0}, new int[]{2, 2});
             assertEquals(3547, array.getShort(0));
             assertEquals(3704, array.getShort(1));
@@ -191,6 +218,9 @@ public class GridPointFormatExporterTest {
             assertNoAttribute("valid_max", azimuthAngleVariable);
             assertNoAttribute("orignal_name", azimuthAngleVariable);
             assertNoAttribute("standard_name", azimuthAngleVariable);
+            assertNoAttribute("flag_masks", azimuthAngleVariable);
+            assertNoAttribute("flag_values", azimuthAngleVariable);
+            assertNoAttribute("flag_meanings", azimuthAngleVariable);
             array = azimuthAngleVariable.read(new int[]{1261, 1}, new int[]{2, 2});
             assertEquals(8169, array.getShort(0));
             assertEquals(8170, array.getShort(1));
@@ -205,6 +235,9 @@ public class GridPointFormatExporterTest {
             assertNoAttribute("valid_max", footAxis1Variable);
             assertNoAttribute("orignal_name", footAxis1Variable);
             assertNoAttribute("standard_name", footAxis1Variable);
+            assertNoAttribute("flag_masks", footAxis1Variable);
+            assertNoAttribute("flag_values", footAxis1Variable);
+            assertNoAttribute("flag_meanings", footAxis1Variable);
             array = footAxis1Variable.read(new int[]{1394, 2}, new int[]{2, 2});
             assertEquals(18489, array.getShort(0));
             assertEquals(18489, array.getShort(1));
@@ -219,6 +252,9 @@ public class GridPointFormatExporterTest {
             assertNoAttribute("valid_max", footAxis2Variable);
             assertNoAttribute("orignal_name", footAxis2Variable);
             assertNoAttribute("standard_name", footAxis2Variable);
+            assertNoAttribute("flag_masks", footAxis2Variable);
+            assertNoAttribute("flag_values", footAxis2Variable);
+            assertNoAttribute("flag_meanings", footAxis2Variable);
             array = footAxis2Variable.read(new int[]{1417, 0}, new int[]{2, 2});
             assertEquals(13625, array.getShort(0));
             assertEquals(13631, array.getShort(1));
@@ -298,7 +334,7 @@ public class GridPointFormatExporterTest {
 
     private void assertAttribute(String attributeName, String attributeValue, Variable variable) {
         final List<Attribute> attributes = variable.getAttributes();
-        for(final Attribute attribute: attributes) {
+        for (final Attribute attribute : attributes) {
             if (attribute.getFullName().equals(attributeName)) {
                 assertEquals(attributeValue, attribute.getStringValue());
                 return;
@@ -307,9 +343,21 @@ public class GridPointFormatExporterTest {
         fail("attribute '" + attributeName + "' is missing at variable '" + variable.getFullName() + "'");
     }
 
+    private void assertAttribute(String attributeName, int[] attributeValue, Variable variable) {
+        final List<Attribute> attributes = variable.getAttributes();
+        for (final Attribute attribute : attributes) {
+            if (attribute.getFullName().equals(attributeName)) {
+                final Array values = attribute.getValues();
+                assertArrayEquals(attributeValue, (int[]) values.get1DJavaArray(Integer.class));
+                return;
+            }
+        }
+        fail("attribute '" + attributeName + "' is missing at variable '" + variable.getFullName() + "'");
+    }
+
     private void assertAttribute(String attributeName, double attributeValue, Variable variable) {
         final List<Attribute> attributes = variable.getAttributes();
-        for(final Attribute attribute: attributes) {
+        for (final Attribute attribute : attributes) {
             if (attribute.getFullName().equals(attributeName)) {
                 assertEquals(attributeValue, attribute.getNumericValue().doubleValue(), 1e-8);
                 return;
@@ -320,7 +368,7 @@ public class GridPointFormatExporterTest {
 
     private void assertNoAttribute(String attributeName, Variable variable) {
         final List<Attribute> attributes = variable.getAttributes();
-        for(final Attribute attribute: attributes) {
+        for (final Attribute attribute : attributes) {
             if (attribute.getFullName().equals(attributeName)) {
                 fail("attribute '" + attributeName + "' is present at variable '" + variable.getFullName() + "' but should not");
             }

@@ -20,6 +20,36 @@ public class VariableDescriptor {
     private float validMax;
     private String originalName;
     private String standardName;
+    private int[] flagMasks;
+    private String flagMeanings;
+
+    public String getFlagMeanings() {
+        return flagMeanings;
+    }
+
+    public void setFlagMeanings(String flagMeanings) {
+        this.flagMeanings = flagMeanings;
+    }
+
+    public int[] getFlagValues() {
+        return flagValues;
+    }
+
+    public void setFlagValues(int[] flagValues) {
+        this.flagValues = flagValues;
+    }
+
+    private int[] flagValues
+
+            ;
+
+    public int[] getFlagMasks() {
+        return flagMasks;
+    }
+
+    public void setFlagMasks(int[] flagMasks) {
+        this.flagMasks = flagMasks;
+    }
 
     public String getStandardName() {
         return standardName;

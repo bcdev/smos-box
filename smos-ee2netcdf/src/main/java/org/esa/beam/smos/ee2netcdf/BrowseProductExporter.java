@@ -10,6 +10,7 @@ import org.esa.beam.dataio.smos.L1cBrowseSmosFile;
 import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.smos.SmosUtils;
 import org.esa.beam.smos.ee2netcdf.variable.*;
+import ucar.ma2.Array;
 import ucar.ma2.DataType;
 
 import java.io.IOException;
@@ -70,6 +71,18 @@ class BrowseProductExporter extends AbstractFormatExporter {
             if (StringUtils.isNotBlank(standardName)) {
                 nVariable.addAttribute("standard_name", standardName);
             }
+            final int[] flagMasks = variableDescriptor.getFlagMasks();
+            if (flagMasks != null) {
+                nVariable.addAttribute("flag_masks", Array.factory(flagMasks));
+            }
+            final int[] flagValues = variableDescriptor.getFlagValues();
+            if (flagValues != null) {
+                nVariable.addAttribute("flag_values", Array.factory(flagValues));
+            }
+            final String flagMeanings = variableDescriptor.getFlagMeanings();
+            if (StringUtils.isNotBlank(flagMeanings))                 {
+                nVariable.addAttribute("flag_meanings", flagMeanings);
+            }
         }
     }
 
@@ -98,7 +111,7 @@ class BrowseProductExporter extends AbstractFormatExporter {
         if ("MIR_BWLF1C".equalsIgnoreCase(productType) || "MIR_BWNF1C".equalsIgnoreCase(productType)) {
             return 4;
         } else if ("MIR_BWLD1C".equalsIgnoreCase(productType) || "MIR_BWND1C".equalsIgnoreCase(productType)) {
-            return  2;
+            return 2;
         } else {
             throw new IllegalArgumentException("unsupported product: " + productName);
         }
@@ -134,7 +147,12 @@ class BrowseProductExporter extends AbstractFormatExporter {
 
         variableDescriptors.put("grid_point_mask", new VariableDescriptor("Grid_Point_Mask", true, DataType.BYTE, "n_grid_points", false, -1));
         variableDescriptors.put("bt_data_count", new VariableDescriptor("BT_Data_Counter", true, DataType.BYTE, "n_grid_points", false, -1));
-        variableDescriptors.put("flags", new VariableDescriptor("Flags", false, DataType.SHORT, "n_grid_points n_bt_data", true, 0));
+
+        final VariableDescriptor flagsDescriptor = new VariableDescriptor("Flags", false, DataType.SHORT, "n_grid_points n_bt_data", true, 0);
+        flagsDescriptor.setFlagMasks(new int[]{3, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768});
+        flagsDescriptor.setFlagValues(new int[]{0, 1, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768});
+        flagsDescriptor.setFlagMeanings("pol_xx pol_yy sun_fov sun_glint_fov moon_glint_fov single_snapshot rfi_x sun_point sun_glint_area moon_point af_fov rfi_tails border_fov sun_tails rfi_y rfi_point_source");
+        variableDescriptors.put("flags", flagsDescriptor);
 
         final VariableDescriptor btValueDescriptor = new VariableDescriptor("BT_Value", false, DataType.FLOAT, "n_grid_points n_bt_data", true, 1);
         btValueDescriptor.setUnit("K");
