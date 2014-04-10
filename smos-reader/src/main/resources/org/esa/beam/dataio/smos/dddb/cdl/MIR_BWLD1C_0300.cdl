@@ -4,7 +4,8 @@ dimensions:
     n_grid_points = unlimited ;// read from EE file
     n_bt_data = unlimited ;   // depending on file type: 2 for dual polarisation, 4 for full polarisation
 variables:
-    uint grid_point_id(n_grid_points) ;
+    int grid_point_id(n_grid_points) ;
+        grid_point_id:_Unsigned = "true" ;
     float lat(n_grid_points) ;
         lat:units = "degrees_north" ;
         lat:_FillValue = -999.f ;
@@ -22,28 +23,35 @@ variables:
     float grid_point_altitude(n_grid_points) ;
         grid_point_altitude:units = "m" ;
         grid_point_altitude:_FillValue = -999.f ;
-    ubyte grid_point_mask(n_grid_points) ;
-    ubyte bt_data_count(n_grid_points) ;
-    ushort flags(n_grid_points, n_bt_data) ;
+    byte grid_point_mask(n_grid_points) ;
+        grid_point_mask:_Unsigned = "true" ;
+    byte bt_data_count(n_grid_points) ;
+        bt_data_count:_Unsigned = "true" ;
+    short flags(n_grid_points, n_bt_data) ;
         flags:flag_masks = 3, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768 ;
         flags:flag_values = 0, 1, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768 ;
         flags:flag_meanings = "pol_xx pol_yy sun_fov sun_glint_fov moon_glint_fov single_snapshot rfi_x sun_point sun_glint_area moon_point af_fov rfi_tails border_fov sun_tails rfi_y rfi_point_source" ;
+        flags:_Unsigned = "true" ;
     float bt_value(n_grid_point, n_bt_data) ;
         bt_value:units = "K" ;
         bt_value:_FillValue = "-999.f" ;
-    ushort pixel_radiometric_accuracy(n_grid_points, n_bt_data) ;
+    short pixel_radiometric_accuracy(n_grid_points, n_bt_data) ;
         pixel_radiometric_accuracy:units = "K" ;
         pixel_radiometric_accuracy:scale_factor = 0.000762939453125 ;
         pixel_radiometric_accuracy:original_name = "radiometric_accuracy_of_pixel" ;
-    ushort azimuth_angle(n_grid_points, n_bt_data) ;
+        pixel_radiometric_accuracy:_Unsigned = "true" ;
+    short azimuth_angle(n_grid_points, n_bt_data) ;
         azimuth_angle:units = "degree" ;
         azimuth_angle:scale_factor = 0.0054931640625 ;
-    ushort footprint_axis_1(n_grid_points, n_bt_data) ;
+        azimuth_angle:_Unsigned = "true" ;
+    short footprint_axis_1(n_grid_points, n_bt_data) ;
         footprint_axis_1:units = "km" ;
         footprint_axis_1:scale_factor = 0.00152587890625 ;
-    ushort footprint_axis_2(n_grid_points, n_bt_data) ;
+        footprint_axis_1:_Unsigned = "true" ;
+    short footprint_axis_2(n_grid_points, n_bt_data) ;
         footprint_axis_2:units = "km" ;
         footprint_axis_2:scale_factor = 0.00152587890625 ;
+        footprint_axis_2:_Unsigned = "true" ;
 
 // global attributes:
         :Conventions = "CF-1.6" ;
