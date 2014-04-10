@@ -3,6 +3,7 @@ package org.esa.beam.smos.ee2netcdf;
 
 import com.bc.ceres.binio.CompoundData;
 import com.bc.ceres.binio.SequenceData;
+import org.apache.commons.lang.StringUtils;
 import org.esa.beam.dataio.netcdf.nc.NFileWriteable;
 import org.esa.beam.dataio.netcdf.nc.NVariable;
 import org.esa.beam.dataio.smos.L1cBrowseSmosFile;
@@ -22,22 +23,6 @@ class BrowseProductExporter extends AbstractFormatExporter {
 
     BrowseProductExporter() {
         createVariableMap();
-    }
-
-    private void createVariableMap() {
-        variableDescriptors = new HashMap<>();
-        variableDescriptors.put("grid_point_id", new VariableDescriptor("Grid_Point_ID", true, DataType.INT, "n_grid_points", false, -1));
-        variableDescriptors.put("lat", new VariableDescriptor("Latitude", true, DataType.FLOAT, "n_grid_points", false, -1));       // this ia a dddb mapping name, real name is: Grid_Point_Latitude
-        variableDescriptors.put("lon", new VariableDescriptor("Longitude", true, DataType.FLOAT, "n_grid_points", false, -1));      // this ia a dddb mapping name, real name is: Grid_Point_Longitude
-        variableDescriptors.put("grid_point_altitude", new VariableDescriptor("Altitude", true, DataType.FLOAT, "n_grid_points", false, -1));   // this ia a dddb mapping name, real name is: Grid_Point_Altitude
-        variableDescriptors.put("grid_point_mask", new VariableDescriptor("Grid_Point_Mask", true, DataType.BYTE, "n_grid_points", false, -1));
-        variableDescriptors.put("bt_data_count", new VariableDescriptor("BT_Data_Counter", true, DataType.BYTE, "n_grid_points", false, -1));
-        variableDescriptors.put("flags", new VariableDescriptor("Flags", false, DataType.SHORT, "n_grid_points n_bt_data", true, 0));
-        variableDescriptors.put("bt_value", new VariableDescriptor("BT_Value", false, DataType.FLOAT, "n_grid_points n_bt_data", true, 1));
-        variableDescriptors.put("pixel_radiometric_accuracy", new VariableDescriptor("Radiometric_Accuracy_of_Pixel", false, DataType.SHORT, "n_grid_points n_bt_data", true, 2));
-        variableDescriptors.put("azimuth_angle", new VariableDescriptor("Azimuth_Angle", false, DataType.SHORT, "n_grid_points n_bt_data", true, 3));
-        variableDescriptors.put("footprint_axis_1", new VariableDescriptor("Footprint_Axis1", false, DataType.SHORT, "n_grid_points n_bt_data", true, 4));
-        variableDescriptors.put("footprint_axis_2", new VariableDescriptor("Footprint_Axis2", false, DataType.SHORT, "n_grid_points n_bt_data", true, 5));
     }
 
     @Override
@@ -68,7 +53,11 @@ class BrowseProductExporter extends AbstractFormatExporter {
         for (final String ncVariableName : variableNameKeys) {
             final VariableDescriptor variableDescriptor = variableDescriptors.get(ncVariableName);
             // @todo 1 tb/tb replace unsigned with real data tb 2014-04-08
-            nFileWriteable.addVariable(ncVariableName, variableDescriptor.getDataType(), true, null, variableDescriptor.getDimensionNames());
+            final NVariable nVariable = nFileWriteable.addVariable(ncVariableName, variableDescriptor.getDataType(), true, null, variableDescriptor.getDimensionNames());
+            final String unitValue = variableDescriptor.getUnit();
+            if (StringUtils.isNotBlank(unitValue)) {
+                nVariable.addAttribute("units", unitValue);
+            }
         }
     }
 
@@ -89,6 +78,48 @@ class BrowseProductExporter extends AbstractFormatExporter {
         for (VariableWriter writer : variableWriters) {
             writer.close();
         }
+    }
+
+    private void createVariableMap() {
+        variableDescriptors = new HashMap<>();
+        final VariableDescriptor gpIdDescriptor = new VariableDescriptor("Grid_Point_ID", true, DataType.INT, "n_grid_points", false, -1);
+        variableDescriptors.put("grid_point_id", gpIdDescriptor);
+
+        final VariableDescriptor latDescriptor = new VariableDescriptor("Latitude", true, DataType.FLOAT, "n_grid_points", false, -1);
+        latDescriptor.setUnit("degrees_north");
+        variableDescriptors.put("lat", latDescriptor);       // this ia a dddb mapping name, real name is: Grid_Point_Latitude
+
+        final VariableDescriptor lonDescriptor = new VariableDescriptor("Longitude", true, DataType.FLOAT, "n_grid_points", false, -1);
+        lonDescriptor.setUnit("degrees_north");
+        variableDescriptors.put("lon", lonDescriptor);      // this ia a dddb mapping name, real name is: Grid_Point_Longitude
+
+        final VariableDescriptor altitudeDescriptor = new VariableDescriptor("Altitude", true, DataType.FLOAT, "n_grid_points", false, -1);
+        altitudeDescriptor.setUnit("m");
+        variableDescriptors.put("grid_point_altitude", altitudeDescriptor);   // this ia a dddb mapping name, real name is: Grid_Point_Altitude
+
+        variableDescriptors.put("grid_point_mask", new VariableDescriptor("Grid_Point_Mask", true, DataType.BYTE, "n_grid_points", false, -1));
+        variableDescriptors.put("bt_data_count", new VariableDescriptor("BT_Data_Counter", true, DataType.BYTE, "n_grid_points", false, -1));
+        variableDescriptors.put("flags", new VariableDescriptor("Flags", false, DataType.SHORT, "n_grid_points n_bt_data", true, 0));
+
+        final VariableDescriptor btValueDescriptor = new VariableDescriptor("BT_Value", false, DataType.FLOAT, "n_grid_points n_bt_data", true, 1);
+        btValueDescriptor.setUnit("K");
+        variableDescriptors.put("bt_value", btValueDescriptor);
+
+        final VariableDescriptor radAccDescriptor = new VariableDescriptor("Radiometric_Accuracy_of_Pixel", false, DataType.SHORT, "n_grid_points n_bt_data", true, 2);
+        radAccDescriptor.setUnit("K");
+        variableDescriptors.put("pixel_radiometric_accuracy", radAccDescriptor);
+
+        final VariableDescriptor azimuthAngleDescriptor = new VariableDescriptor("Azimuth_Angle", false, DataType.SHORT, "n_grid_points n_bt_data", true, 3);
+        azimuthAngleDescriptor.setUnit("degree");
+        variableDescriptors.put("azimuth_angle", azimuthAngleDescriptor);
+
+        final VariableDescriptor fpAxis1Descriptor = new VariableDescriptor("Footprint_Axis1", false, DataType.SHORT, "n_grid_points n_bt_data", true, 4);
+        fpAxis1Descriptor.setUnit("km");
+        variableDescriptors.put("footprint_axis_1", fpAxis1Descriptor);
+
+        final VariableDescriptor fpAxis2Descriptor = new VariableDescriptor("Footprint_Axis2", false, DataType.SHORT, "n_grid_points n_bt_data", true, 5);
+        fpAxis2Descriptor.setUnit("km");
+        variableDescriptors.put("footprint_axis_2", fpAxis2Descriptor);
     }
 
     private VariableWriter[] createVariableWriters(NFileWriteable nFileWriteable) {

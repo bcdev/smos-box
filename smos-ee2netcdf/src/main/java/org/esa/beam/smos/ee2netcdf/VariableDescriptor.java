@@ -11,6 +11,7 @@ class VariableDescriptor {
     private String dimensionNames;
     private boolean is2d;
     private int btDataMemberIndex;
+    private String unit;
 
     public VariableDescriptor(String name, boolean gridPointData, DataType dataType, String dimensionNames, boolean is2d, int btDataMemberIndex) {
         this.name = name;
@@ -67,5 +68,13 @@ class VariableDescriptor {
 
     public void setBtDataMemberIndex(int btDataMemberIndex) {
         this.btDataMemberIndex = btDataMemberIndex;
+    }
+
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
     }
 }
