@@ -45,4 +45,14 @@ public class VariableDescriptorTest {
         assertTrue(variableDescriptor.isValidMaxPresent());
         assertEquals(984.f, variableDescriptor.getValidMax(), 1e-8);
     }
+
+    @Test
+    public void testSettingScaleFactorTriggersPresentIndicator() {
+        assertFalse(variableDescriptor.isScaleFactorPresent());
+        assertEquals(Double.NaN, variableDescriptor.getScaleFactor(), 1e-8);
+
+        variableDescriptor.setScaleFactor(985.0);
+        assertTrue(variableDescriptor.isScaleFactorPresent());
+        assertEquals(985.0, variableDescriptor.getScaleFactor(), 1e-8);
+    }
 }

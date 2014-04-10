@@ -82,6 +82,7 @@ public class GridPointFormatExporterTest {
             assertNoAttribute("flag_masks", gridPointIdVariable);
             assertNoAttribute("flag_values", gridPointIdVariable);
             assertNoAttribute("flag_meanings", gridPointIdVariable);
+            assertNoAttribute("scale_factor", gridPointIdVariable);
             Array array = gridPointIdVariable.read(new int[]{346}, new int[]{2});
             assertEquals(4098190, array.getInt(0));
             assertEquals(4098191, array.getInt(1));
@@ -97,6 +98,7 @@ public class GridPointFormatExporterTest {
             assertNoAttribute("flag_masks", latVariable);
             assertNoAttribute("flag_values", latVariable);
             assertNoAttribute("flag_meanings", latVariable);
+            assertNoAttribute("scale_factor", latVariable);
             array = latVariable.read(new int[]{467}, new int[]{2});
             assertEquals(78.56900024, array.getFloat(0), 1e-8);
             assertEquals(78.6760025, array.getFloat(1), 1e-8);
@@ -112,6 +114,7 @@ public class GridPointFormatExporterTest {
             assertNoAttribute("flag_masks", lonVariable);
             assertNoAttribute("flag_values", lonVariable);
             assertNoAttribute("flag_meanings", lonVariable);
+            assertNoAttribute("scale_factor", lonVariable);
             array = lonVariable.read(new int[]{582}, new int[]{2});
             assertEquals(101.25, array.getFloat(0), 1e-8);
             assertEquals(100.994003295, array.getFloat(1), 1e-8);
@@ -127,6 +130,7 @@ public class GridPointFormatExporterTest {
             assertNoAttribute("flag_masks", altitudeVariable);
             assertNoAttribute("flag_values", altitudeVariable);
             assertNoAttribute("flag_meanings", altitudeVariable);
+            assertNoAttribute("scale_factor", altitudeVariable);
             array = altitudeVariable.read(new int[]{619}, new int[]{2});
             assertEquals(-0.708, array.getFloat(0), 1e-8);
             assertEquals(0.0, array.getFloat(1), 1e-8);
@@ -142,6 +146,7 @@ public class GridPointFormatExporterTest {
             assertNoAttribute("flag_masks", gridPointMaskVariable);
             assertNoAttribute("flag_values", gridPointMaskVariable);
             assertNoAttribute("flag_meanings", gridPointMaskVariable);
+            assertNoAttribute("scale_factor", gridPointMaskVariable);
             array = gridPointMaskVariable.read(new int[]{743}, new int[]{2});
             assertEquals(-39, array.getByte(0)); // @todo 2 tb/tb these should be unsigned values - resolve problem tb 2014-04-09
             assertEquals(-39, array.getByte(1));
@@ -157,6 +162,7 @@ public class GridPointFormatExporterTest {
             assertNoAttribute("flag_masks", btDataCountVariable);
             assertNoAttribute("flag_values", btDataCountVariable);
             assertNoAttribute("flag_meanings", btDataCountVariable);
+            assertNoAttribute("scale_factor", btDataCountVariable);
             array = btDataCountVariable.read(new int[]{833}, new int[]{2});
             assertEquals(4, array.getByte(0)); // @todo 2 tb/tb these should be unsigned values - resolve problem tb 2014-04-09
             assertEquals(4, array.getByte(1));
@@ -172,6 +178,7 @@ public class GridPointFormatExporterTest {
             assertAttribute("flag_masks", new int[]{3, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768}, flagsVariable);
             assertAttribute("flag_values", new int[]{0, 1, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768}, flagsVariable);
             assertAttribute("flag_meanings", "pol_xx pol_yy sun_fov sun_glint_fov moon_glint_fov single_snapshot rfi_x sun_point sun_glint_area moon_point af_fov rfi_tails border_fov sun_tails rfi_y rfi_point_source", flagsVariable);
+            assertNoAttribute("scale_factor", flagsVariable);
             array = flagsVariable.read(new int[]{945, 1}, new int[]{2, 1});
             assertEquals(1045, array.getShort(0));
             assertEquals(1045, array.getShort(1));
@@ -187,6 +194,7 @@ public class GridPointFormatExporterTest {
             assertNoAttribute("flag_masks", btValueVariable);
             assertNoAttribute("flag_values", btValueVariable);
             assertNoAttribute("flag_meanings", btValueVariable);
+            assertNoAttribute("scale_factor", btValueVariable);
             array = btValueVariable.read(new int[]{1034, 2}, new int[]{2, 2});
             assertEquals(6.868230819702148, array.getFloat(0), 1e-8);
             assertEquals(0.9826292991638184, array.getFloat(1), 1e-8);
@@ -204,6 +212,7 @@ public class GridPointFormatExporterTest {
             assertNoAttribute("flag_masks", radAccVariable);
             assertNoAttribute("flag_values", radAccVariable);
             assertNoAttribute("flag_meanings", radAccVariable);
+            assertAttribute("scale_factor", 0.000762939453125, radAccVariable);
             array = radAccVariable.read(new int[]{1175, 0}, new int[]{2, 2});
             assertEquals(3547, array.getShort(0));
             assertEquals(3704, array.getShort(1));
@@ -221,6 +230,7 @@ public class GridPointFormatExporterTest {
             assertNoAttribute("flag_masks", azimuthAngleVariable);
             assertNoAttribute("flag_values", azimuthAngleVariable);
             assertNoAttribute("flag_meanings", azimuthAngleVariable);
+            assertAttribute("scale_factor", 0.0054931640625, azimuthAngleVariable);
             array = azimuthAngleVariable.read(new int[]{1261, 1}, new int[]{2, 2});
             assertEquals(8169, array.getShort(0));
             assertEquals(8170, array.getShort(1));
@@ -238,6 +248,7 @@ public class GridPointFormatExporterTest {
             assertNoAttribute("flag_masks", footAxis1Variable);
             assertNoAttribute("flag_values", footAxis1Variable);
             assertNoAttribute("flag_meanings", footAxis1Variable);
+            assertAttribute("scale_factor", 0.00152587890625, footAxis1Variable);
             array = footAxis1Variable.read(new int[]{1394, 2}, new int[]{2, 2});
             assertEquals(18489, array.getShort(0));
             assertEquals(18489, array.getShort(1));
@@ -255,6 +266,7 @@ public class GridPointFormatExporterTest {
             assertNoAttribute("flag_masks", footAxis2Variable);
             assertNoAttribute("flag_values", footAxis2Variable);
             assertNoAttribute("flag_meanings", footAxis2Variable);
+            assertAttribute("scale_factor", 0.00152587890625, footAxis2Variable);
             array = footAxis2Variable.read(new int[]{1417, 0}, new int[]{2, 2});
             assertEquals(13625, array.getShort(0));
             assertEquals(13631, array.getShort(1));

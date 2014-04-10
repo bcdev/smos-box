@@ -33,17 +33,17 @@ variables:
         bt_value:_FillValue = "-999.f" ;
     ushort pixel_radiometric_accuracy(n_grid_points, n_bt_data) ;
         pixel_radiometric_accuracy:units = "K" ;
-        pixel_radiometric_accuracy:scale_factor = "0.000762939453125" ;
+        pixel_radiometric_accuracy:scale_factor = 0.000762939453125 ;
         pixel_radiometric_accuracy:original_name = "radiometric_accuracy_of_pixel" ;
     ushort azimuth_angle(n_grid_points, n_bt_data) ;
         azimuth_angle:units = "degree" ;
-        azimuth_angle:scale_factor = "0.0054931640625" ;
+        azimuth_angle:scale_factor = 0.0054931640625 ;
     ushort footprint_axis_1(n_grid_points, n_bt_data) ;
         footprint_axis_1:units = "km" ;
-        footprint_axis_1:scale_factor = "00152587890625" ;
+        footprint_axis_1:scale_factor = 0.00152587890625 ;
     ushort footprint_axis_2(n_grid_points, n_bt_data) ;
         footprint_axis_2:units = "km" ;
-        footprint_axis_2:scale_factor = "00152587890625" ;
+        footprint_axis_2:scale_factor = 0.00152587890625 ;
 
 // global attributes:
         :Conventions = "CF-1.6" ;

@@ -22,6 +22,26 @@ public class VariableDescriptor {
     private String standardName;
     private int[] flagMasks;
     private String flagMeanings;
+    double scaleFactor;
+    private boolean scaleFactorPresent;
+    private boolean unsigned;
+
+    public boolean isUnsigned() {
+        return unsigned;
+    }
+
+    public void setUnsigned(boolean unsigned) {
+        this.unsigned = unsigned;
+    }
+
+    public double getScaleFactor() {
+        return scaleFactor;
+    }
+
+    public void setScaleFactor(double scaleFactor) {
+        this.scaleFactor = scaleFactor;
+        scaleFactorPresent = true;
+    }
 
     public String getFlagMeanings() {
         return flagMeanings;
@@ -81,6 +101,7 @@ public class VariableDescriptor {
         fillValue = Float.NaN;
         validMin = Float.NaN;
         validMax = Float.NaN;
+        scaleFactor = Double.NaN;
     }
 
     public String getName() {
@@ -176,5 +197,9 @@ public class VariableDescriptor {
     public void setValidMax(float validMax) {
         this.validMax = validMax;
         validMaxPresent = true;
+    }
+
+    public boolean isScaleFactorPresent() {
+        return scaleFactorPresent;
     }
 }

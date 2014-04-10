@@ -48,7 +48,6 @@ class BrowseProductExporter extends AbstractFormatExporter {
         final Set<String> variableNameKeys = variableDescriptors.keySet();
         for (final String ncVariableName : variableNameKeys) {
             final VariableDescriptor variableDescriptor = variableDescriptors.get(ncVariableName);
-            // @todo 1 tb/tb replace unsigned with real data tb 2014-04-08
             final NVariable nVariable = nFileWriteable.addVariable(ncVariableName, variableDescriptor.getDataType(), true, null, variableDescriptor.getDimensionNames());
             final String unitValue = variableDescriptor.getUnit();
             if (StringUtils.isNotBlank(unitValue)) {
@@ -82,6 +81,9 @@ class BrowseProductExporter extends AbstractFormatExporter {
             final String flagMeanings = variableDescriptor.getFlagMeanings();
             if (StringUtils.isNotBlank(flagMeanings))                 {
                 nVariable.addAttribute("flag_meanings", flagMeanings);
+            }
+            if (variableDescriptor.isScaleFactorPresent()) {
+                nVariable.addAttribute("scale_factor", variableDescriptor.getScaleFactor());
             }
         }
     }
@@ -162,18 +164,22 @@ class BrowseProductExporter extends AbstractFormatExporter {
         final VariableDescriptor radAccDescriptor = new VariableDescriptor("Radiometric_Accuracy_of_Pixel", false, DataType.SHORT, "n_grid_points n_bt_data", true, 2);
         radAccDescriptor.setUnit("K");
         radAccDescriptor.setOriginalName("Radiometric_Accuracy_of_Pixel");
+        radAccDescriptor.setScaleFactor(0.000762939453125);
         variableDescriptors.put("pixel_radiometric_accuracy", radAccDescriptor);
 
         final VariableDescriptor azimuthAngleDescriptor = new VariableDescriptor("Azimuth_Angle", false, DataType.SHORT, "n_grid_points n_bt_data", true, 3);
         azimuthAngleDescriptor.setUnit("degree");
+        azimuthAngleDescriptor.setScaleFactor(0.0054931640625);
         variableDescriptors.put("azimuth_angle", azimuthAngleDescriptor);
 
         final VariableDescriptor fpAxis1Descriptor = new VariableDescriptor("Footprint_Axis1", false, DataType.SHORT, "n_grid_points n_bt_data", true, 4);
         fpAxis1Descriptor.setUnit("km");
+        fpAxis1Descriptor.setScaleFactor(0.00152587890625);
         variableDescriptors.put("footprint_axis_1", fpAxis1Descriptor);
 
         final VariableDescriptor fpAxis2Descriptor = new VariableDescriptor("Footprint_Axis2", false, DataType.SHORT, "n_grid_points n_bt_data", true, 5);
         fpAxis2Descriptor.setUnit("km");
+        fpAxis2Descriptor.setScaleFactor(0.00152587890625);
         variableDescriptors.put("footprint_axis_2", fpAxis2Descriptor);
     }
 
