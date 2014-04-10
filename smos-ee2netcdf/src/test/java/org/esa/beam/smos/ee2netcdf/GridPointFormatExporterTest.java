@@ -44,11 +44,11 @@ public class GridPointFormatExporterTest {
 
     @After
     public void tearDown() {
-//        if (targetDirectory.isDirectory()) {
-//            if (!FileUtils.deleteTree(targetDirectory)) {
-//                fail("Unable to delete test directory");
-//            }
-//        }
+        if (targetDirectory.isDirectory()) {
+            if (!FileUtils.deleteTree(targetDirectory)) {
+                fail("Unable to delete test directory");
+            }
+        }
     }
 
     @Test
