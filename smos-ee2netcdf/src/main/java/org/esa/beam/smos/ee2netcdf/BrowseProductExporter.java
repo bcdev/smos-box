@@ -59,6 +59,9 @@ class BrowseProductExporter extends AbstractFormatExporter {
             if (StringUtils.isNotBlank(unitValue)) {
                 nVariable.addAttribute("units", unitValue);
             }
+            if (variableDescriptor.isFillValuePresent()) {
+                nVariable.addAttribute("_FillValue", variableDescriptor.getFillValue());
+            }
         }
     }
 
@@ -88,14 +91,17 @@ class BrowseProductExporter extends AbstractFormatExporter {
 
         final VariableDescriptor latDescriptor = new VariableDescriptor("Latitude", true, DataType.FLOAT, "n_grid_points", false, -1);
         latDescriptor.setUnit("degrees_north");
+        latDescriptor.setFillValue(-999.f);
         variableDescriptors.put("lat", latDescriptor);       // this ia a dddb mapping name, real name is: Grid_Point_Latitude
 
         final VariableDescriptor lonDescriptor = new VariableDescriptor("Longitude", true, DataType.FLOAT, "n_grid_points", false, -1);
         lonDescriptor.setUnit("degrees_north");
+        lonDescriptor.setFillValue(-999.f);
         variableDescriptors.put("lon", lonDescriptor);      // this ia a dddb mapping name, real name is: Grid_Point_Longitude
 
         final VariableDescriptor altitudeDescriptor = new VariableDescriptor("Altitude", true, DataType.FLOAT, "n_grid_points", false, -1);
         altitudeDescriptor.setUnit("m");
+        altitudeDescriptor.setFillValue(-999.f);
         variableDescriptors.put("grid_point_altitude", altitudeDescriptor);   // this ia a dddb mapping name, real name is: Grid_Point_Altitude
 
         variableDescriptors.put("grid_point_mask", new VariableDescriptor("Grid_Point_Mask", true, DataType.BYTE, "n_grid_points", false, -1));
@@ -104,6 +110,7 @@ class BrowseProductExporter extends AbstractFormatExporter {
 
         final VariableDescriptor btValueDescriptor = new VariableDescriptor("BT_Value", false, DataType.FLOAT, "n_grid_points n_bt_data", true, 1);
         btValueDescriptor.setUnit("K");
+        btValueDescriptor.setFillValue(-999.f);
         variableDescriptors.put("bt_value", btValueDescriptor);
 
         final VariableDescriptor radAccDescriptor = new VariableDescriptor("Radiometric_Accuracy_of_Pixel", false, DataType.SHORT, "n_grid_points n_bt_data", true, 2);

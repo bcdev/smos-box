@@ -12,14 +12,21 @@ public class VariableDescriptor {
     private boolean is2d;
     private int btDataMemberIndex;
     private String unit;
+    private float fillValue;
+    private boolean fillValuePresent;
 
     public VariableDescriptor(String name, boolean gridPointData, DataType dataType, String dimensionNames, boolean is2d, int btDataMemberIndex) {
+        this();
         this.name = name;
         this.gridPointData = gridPointData;
         this.dataType = dataType;
         this.is2d = is2d;
         this.dimensionNames = dimensionNames;
         this.btDataMemberIndex = btDataMemberIndex;
+    }
+
+    public VariableDescriptor() {
+        fillValue = Float.NaN;
     }
 
     public String getName() {
@@ -76,5 +83,18 @@ public class VariableDescriptor {
 
     public void setUnit(String unit) {
         this.unit = unit;
+    }
+
+    public boolean isFillValuePresent() {
+        return fillValuePresent;
+    }
+
+    public float getFillValue() {
+        return fillValue;
+    }
+
+    public void setFillValue(float fillValue) {
+        this.fillValue = fillValue;
+        fillValuePresent = true;
     }
 }
