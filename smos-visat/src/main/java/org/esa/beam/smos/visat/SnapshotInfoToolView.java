@@ -269,6 +269,21 @@ public class SnapshotInfoToolView extends SmosToolView {
         }
     }
 
+    // package access for testing only tb 2014-04-10
+    static boolean isXPolarized(Band band) {
+        return band.getName().endsWith("_X");
+    }
+
+    // package access for testing only tb 2014-04-10
+    static boolean isYPolarized(Band band) {
+        return band.getName().endsWith("_Y");
+    }
+
+    // package access for testing only tb 2014-04-10
+    static boolean isXYPolarized(Band band) {
+        return band.getName().contains("_XY");
+    }
+
     private class SnapshotIdListener implements ChangeListener {
 
         private SnapshotRegionOverlay overlay = new SnapshotRegionOverlay();
@@ -374,11 +389,11 @@ public class SnapshotInfoToolView extends SmosToolView {
             }
             if (band instanceof VirtualBand) {
                 resetRasterImages(band);
-            } else if (band.getName().endsWith("_X")) {
+            } else if (isXPolarized(band)) {
                 updateSnapshotImage(band, xPolId);
-            } else if (band.getName().endsWith("_Y")) {
+            } else if (isYPolarized(band)) {
                 updateSnapshotImage(band, yPolId);
-            } else if (band.getName().contains("_XY")) {
+            } else if (isXYPolarized(band)) {
                 updateSnapshotImage(band, crossPolId);
             } else if (band.isFlagBand()) {
                 updateSnapshotImage(band, snapshotId);
@@ -392,11 +407,11 @@ public class SnapshotInfoToolView extends SmosToolView {
             }
             if (band instanceof VirtualBand) {
                 updateViews(band, snapshotId);
-            } else if (band.getName().endsWith("_X")) {
+            } else if (isXPolarized(band)) {
                 updateViews(band, xPolId);
-            } else if (band.getName().endsWith("_Y")) {
+            } else if (isYPolarized(band)) {
                 updateViews(band, yPolId);
-            } else if (band.getName().contains("_XY")) {
+            } else if (isXYPolarized(band)) {
                 updateViews(band, crossPolId);
             } else {
                 updateViews(band, snapshotId);
@@ -408,11 +423,11 @@ public class SnapshotInfoToolView extends SmosToolView {
             }
             if (band instanceof VirtualBand) {
                 setSelectedSnapshotId(band, snapshotId);
-            } else if (band.getName().endsWith("_X")) {
+            } else if (isXPolarized(band)) {
                 setSelectedSnapshotId(band, xPolId);
-            } else if (band.getName().endsWith("_Y")) {
+            } else if (isYPolarized(band)) {
                 setSelectedSnapshotId(band, yPolId);
-            } else if (band.getName().contains("_XY")) {
+            } else if (isXYPolarized(band)) {
                 setSelectedSnapshotId(band, crossPolId);
             } else {
                 setSelectedSnapshotId(band, snapshotId);
