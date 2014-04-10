@@ -19,6 +19,15 @@ public class VariableDescriptor {
     private boolean validMaxPresent;
     private float validMax;
     private String originalName;
+    private String standardName;
+
+    public String getStandardName() {
+        return standardName;
+    }
+
+    public void setStandardName(String standardName) {
+        this.standardName = standardName;
+    }
 
     public String getOriginalName() {
         return originalName;

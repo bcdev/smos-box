@@ -66,6 +66,10 @@ class BrowseProductExporter extends AbstractFormatExporter {
             if (StringUtils.isNotBlank(originalName)) {
                 nVariable.addAttribute("original_name", originalName);
             }
+            final String standardName = variableDescriptor.getStandardName();
+            if (StringUtils.isNotBlank(standardName)) {
+                nVariable.addAttribute("standard_name", standardName);
+            }
         }
     }
 
@@ -111,6 +115,7 @@ class BrowseProductExporter extends AbstractFormatExporter {
         latDescriptor.setValidMin(-90.f);
         latDescriptor.setValidMax(90.f);
         latDescriptor.setOriginalName("Grid_Point_Latitude");
+        latDescriptor.setStandardName("latitude");
         variableDescriptors.put("lat", latDescriptor);
 
         final VariableDescriptor lonDescriptor = new VariableDescriptor("Longitude", true, DataType.FLOAT, "n_grid_points", false, -1);
@@ -119,6 +124,7 @@ class BrowseProductExporter extends AbstractFormatExporter {
         lonDescriptor.setValidMin(-180.f);
         lonDescriptor.setValidMax(180.f);
         lonDescriptor.setOriginalName("Grid_Point_Longitude");
+        lonDescriptor.setStandardName("longitude");
         variableDescriptors.put("lon", lonDescriptor);
 
         final VariableDescriptor altitudeDescriptor = new VariableDescriptor("Altitude", true, DataType.FLOAT, "n_grid_points", false, -1);
