@@ -28,7 +28,6 @@ import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.framework.datamodel.ProductData;
 import org.esa.beam.smos.SmosUtils;
 import org.esa.beam.smos.lsmask.SmosLsMask;
-import org.esa.beam.util.StringUtils;
 import org.esa.beam.util.io.FileUtils;
 
 import java.awt.*;
@@ -279,9 +278,8 @@ public class SmosProductReader extends AbstractProductReader {
             return new L1cBrowseSmosFile(hdrFile, dblFile, format);
         } else if (isFullPolBrowseFormat(formatName)) {
             return new L1cBrowseSmosFile(hdrFile, dblFile, format);
-        } else if (isDualPolScienceFormat(formatName)) {
-            return new L1cScienceSmosFile(hdrFile, dblFile, format);
-        } else if (isFullPolScienceFormat(formatName)) {
+        } else if (isDualPolScienceFormat(formatName) ||
+                isFullPolScienceFormat(formatName)) {
             return new L1cScienceSmosFile(hdrFile, dblFile, format);
         } else if (SmosUtils.isOsUserFormat(formatName)) {
             return new SmosFile(hdrFile, dblFile, format);
