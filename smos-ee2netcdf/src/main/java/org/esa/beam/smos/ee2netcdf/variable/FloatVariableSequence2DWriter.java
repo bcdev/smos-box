@@ -13,7 +13,7 @@ class FloatVariableSequence2DWriter extends AbstractVariableWriter {
     private final int memberIndex;
     private int height;
 
-    public FloatVariableSequence2DWriter(NVariable variable, int width, int height, int memberIndex) {
+    FloatVariableSequence2DWriter(NVariable variable, int width, int height, int memberIndex) {
         this.variable = variable;
         this.memberIndex = memberIndex;
         this.height = height;

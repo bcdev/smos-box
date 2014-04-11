@@ -11,7 +11,7 @@ class FloatVariableGridPointWriter extends AbstractVariableWriter {
 
     private final String compoundName;
 
-    public FloatVariableGridPointWriter(NVariable variable, String compoundName, int arraySize) {
+    FloatVariableGridPointWriter(NVariable variable, String compoundName, int arraySize) {
         this.compoundName = compoundName;
         array = Array.factory(new float[arraySize]);
         this.variable = variable;

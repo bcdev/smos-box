@@ -8,12 +8,12 @@ import ucar.ma2.Index;
 
 import java.io.IOException;
 
-public class ShortVariableSequence2DWriter extends AbstractVariableWriter {
+class ShortVariableSequence2DWriter extends AbstractVariableWriter {
 
     private final int memberIndex;
     private int height;
 
-    public ShortVariableSequence2DWriter(NVariable variable, int width, int height, int memberIndex) {
+    ShortVariableSequence2DWriter(NVariable variable, int width, int height, int memberIndex) {
         this.variable = variable;
         this.memberIndex = memberIndex;
         this.height = height;

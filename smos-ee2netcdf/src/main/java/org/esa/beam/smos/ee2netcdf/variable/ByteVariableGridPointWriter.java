@@ -11,7 +11,7 @@ class ByteVariableGridPointWriter extends AbstractVariableWriter {
 
     private final String compoundName;
 
-    public ByteVariableGridPointWriter(NVariable variable, String compoundName, int arraySize) {
+    ByteVariableGridPointWriter(NVariable variable, String compoundName, int arraySize) {
         this.compoundName = compoundName;
         array = Array.factory(new byte[arraySize]);
         this.variable = variable;

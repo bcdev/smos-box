@@ -7,11 +7,11 @@ import ucar.ma2.Array;
 
 import java.io.IOException;
 
-public class FloatVariableSequenceWriter extends AbstractVariableWriter {
+class FloatVariableSequenceWriter extends AbstractVariableWriter {
 
     private final int memberIndex;
 
-    public FloatVariableSequenceWriter(NVariable variable, int arraySize, int memberIndex) {
+    FloatVariableSequenceWriter(NVariable variable, int arraySize, int memberIndex) {
         this.variable = variable;
         this.memberIndex = memberIndex;
         array = Array.factory(new float[arraySize]);

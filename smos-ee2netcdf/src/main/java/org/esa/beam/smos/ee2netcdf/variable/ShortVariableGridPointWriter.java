@@ -7,11 +7,11 @@ import ucar.ma2.Array;
 
 import java.io.IOException;
 
-public class ShortVariableGridPointWriter extends AbstractVariableWriter {
+class ShortVariableGridPointWriter extends AbstractVariableWriter {
 
     private final String compoundName;
 
-    public ShortVariableGridPointWriter(NVariable variable, String compoundName, int arraySize) {
+    ShortVariableGridPointWriter(NVariable variable, String compoundName, int arraySize) {
         this.compoundName = compoundName;
         array = Array.factory(new short[arraySize]);
         this.variable = variable;

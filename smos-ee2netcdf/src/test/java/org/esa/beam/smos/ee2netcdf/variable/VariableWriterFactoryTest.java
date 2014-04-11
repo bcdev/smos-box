@@ -39,12 +39,70 @@ public class VariableWriterFactoryTest {
     }
 
     @Test
-    public void testCreateFloatVariableSequence2DPointWriter() {
+    public void testCreateFloatVariableSequence2DWriter() {
         variableDescriptor.setDataType(DataType.FLOAT);
         variableDescriptor.setIs2d(true);
         variableDescriptor.setGridPointData(false);
 
         final VariableWriter writer = VariableWriterFactory.create(nVariable, variableDescriptor, 14, 15);
         assertTrue(writer instanceof FloatVariableSequence2DWriter);
+    }
+
+    @Test
+    public void testCreateFloatVariableSequenceWriter() {
+        variableDescriptor.setDataType(DataType.FLOAT);
+        variableDescriptor.setIs2d(false);
+        variableDescriptor.setGridPointData(false);
+
+        final VariableWriter writer = VariableWriterFactory.create(nVariable, variableDescriptor, 15, 16);
+        assertTrue(writer instanceof FloatVariableSequenceWriter);
+    }
+
+    @Test
+    public void testCreateIntVariableGridPointWriter() {
+        variableDescriptor.setDataType(DataType.INT);
+        variableDescriptor.setGridPointData(true);
+
+        final VariableWriter writer = VariableWriterFactory.create(nVariable, variableDescriptor, 16, 17);
+        assertTrue(writer instanceof IntVariableGridPointWriter);
+    }
+
+    @Test
+    public void testCreateIntVariableSequenceWriter() {
+        variableDescriptor.setDataType(DataType.INT);
+        variableDescriptor.setIs2d(false);
+        variableDescriptor.setGridPointData(false);
+
+        final VariableWriter writer = VariableWriterFactory.create(nVariable, variableDescriptor, 17, 18);
+        assertTrue(writer instanceof IntVariableSequenceWriter);
+    }
+
+    @Test
+    public void testCreateShortVariableGridPointWriter() {
+        variableDescriptor.setDataType(DataType.SHORT);
+        variableDescriptor.setGridPointData(true);
+
+        final VariableWriter writer = VariableWriterFactory.create(nVariable, variableDescriptor, 18, 19);
+        assertTrue(writer instanceof ShortVariableGridPointWriter);
+    }
+
+    @Test
+    public void testCreateShortVariableSequence2DWriter() {
+        variableDescriptor.setDataType(DataType.SHORT);
+        variableDescriptor.setIs2d(true);
+        variableDescriptor.setGridPointData(false);
+
+        final VariableWriter writer = VariableWriterFactory.create(nVariable, variableDescriptor, 19, 20);
+        assertTrue(writer instanceof ShortVariableSequence2DWriter);
+    }
+
+    @Test
+    public void testCreateShortVariableSequenceWriter() {
+        variableDescriptor.setDataType(DataType.SHORT);
+        variableDescriptor.setIs2d(false);
+        variableDescriptor.setGridPointData(false);
+
+        final VariableWriter writer = VariableWriterFactory.create(nVariable, variableDescriptor, 19, 20);
+        assertTrue(writer instanceof ShortVariableSequenceWriter);
     }
 }

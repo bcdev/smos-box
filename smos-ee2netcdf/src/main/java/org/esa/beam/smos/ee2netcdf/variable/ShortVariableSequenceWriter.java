@@ -7,12 +7,11 @@ import ucar.ma2.Array;
 
 import java.io.IOException;
 
-public class ShortVariableSequenceWriter extends AbstractVariableWriter {
-
+class ShortVariableSequenceWriter extends AbstractVariableWriter {
 
     private final int memberIndex;
 
-    public ShortVariableSequenceWriter(NVariable variable, int arraySize, int memberIndex) {
+    ShortVariableSequenceWriter(NVariable variable, int arraySize, int memberIndex) {
         this.variable = variable;
         this.memberIndex = memberIndex;
         array = Array.factory(new short[arraySize]);
