@@ -17,7 +17,7 @@ variables:
         lon:_FillValue = -999.f ;
         lon:valid_min = -180.f ;
         lon:valid_max = 180.f ;
-        lon:original_name = "longitude" ;
+        lon:original_name = "Longitude" ;
         lon:standard_name = "longitude" ;
 
     // geophysical parameters…

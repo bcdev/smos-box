@@ -107,7 +107,7 @@ public class GridPointFormatExporterTest {
 
             final Variable lonVariable = getVariable("lon", targetFile);
             assertEquals(DataType.FLOAT, lonVariable.getDataType());
-            assertAttribute("units", "degrees_north", lonVariable);
+            assertAttribute("units", "degrees_east", lonVariable);
             assertAttribute("_FillValue", -999.0, lonVariable);
             assertAttribute("valid_min", -180.0, lonVariable);
             assertAttribute("valid_max", 180.0, lonVariable);
@@ -356,16 +356,29 @@ public class GridPointFormatExporterTest {
 
             final Variable latVariable = getVariable("lat", targetFile);
             assertEquals(DataType.FLOAT, latVariable.getDataType());
-            assertNoAttribute("_Unsigned", latVariable);
             assertAttribute("units", "degrees_north", latVariable);
             assertAttribute("_FillValue", -999.0, latVariable);
             assertAttribute("valid_min", -90.0, latVariable);
             assertAttribute("valid_max", 90.0, latVariable);
             assertAttribute("original_name", "Latitude", latVariable);
             assertAttribute("standard_name", "latitude", latVariable);
+            assertNoAttribute("_Unsigned", latVariable);
             array = latVariable.read(new int[]{672}, new int[]{2});
             assertEquals(-76.871002197, array.getFloat(0), 1e-8);
             assertEquals(-76.870002747, array.getFloat(1), 1e-8);
+
+            final Variable lonVariable = getVariable("lon", targetFile);
+            assertEquals(DataType.FLOAT, lonVariable.getDataType());
+            assertAttribute("units", "degrees_east", lonVariable);
+            assertAttribute("_FillValue", -999.0, lonVariable);
+            assertAttribute("valid_min", -180.0, lonVariable);
+            assertAttribute("valid_max", 180.0, lonVariable);
+            assertAttribute("original_name", "Longitude", lonVariable);
+            assertAttribute("standard_name", "longitude", lonVariable);
+            assertNoAttribute("_Unsigned", lonVariable);
+            array = lonVariable.read(new int[]{718}, new int[]{2});
+            assertEquals(168.957000732, array.getFloat(0), 1e-8);
+            assertEquals(160.537002563, array.getFloat(1), 1e-8);
         } finally {
             if (targetFile != null) {
                 targetFile.close();

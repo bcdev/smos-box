@@ -86,7 +86,7 @@ class BrowseProductExporter extends AbstractFormatExporter {
         variableDescriptors.put("lat", latDescriptor);
 
         final VariableDescriptor lonDescriptor = new VariableDescriptor("Longitude", true, DataType.FLOAT, "n_grid_points", false, -1);
-        lonDescriptor.setUnit("degrees_north");
+        lonDescriptor.setUnit("degrees_east");
         lonDescriptor.setFillValue(-999.f);
         lonDescriptor.setValidMin(-180.f);
         lonDescriptor.setValidMax(180.f);
