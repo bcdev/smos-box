@@ -200,7 +200,7 @@ class BrowseProductExporter extends AbstractFormatExporter {
             final NVariable nVariable = nFileWriteable.findVariable(ncVariableName);
             final VariableDescriptor variableDescriptor = variableDescriptors.get(ncVariableName);
 
-            variableWriters[index] = VariableWriterFactory.createVariableWriter(nVariable, variableDescriptor, gridPointCount, nBtData);
+            variableWriters[index] = VariableWriterFactory.create(nVariable, variableDescriptor, gridPointCount, nBtData);
             index++;
         }
         return variableWriters;

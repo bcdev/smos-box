@@ -6,8 +6,8 @@ import ucar.ma2.DataType;
 
 public class VariableWriterFactory {
 
-    public static VariableWriter createVariableWriter(NVariable nVariable,
-                                           VariableDescriptor variableDescriptor, int gridPointCount, int btDataCount) {
+    public static VariableWriter create(NVariable nVariable,
+                                        VariableDescriptor variableDescriptor, int gridPointCount, int btDataCount) {
         final DataType dataType = variableDescriptor.getDataType();
         if (variableDescriptor.isGridPointData()) {
             final String name = variableDescriptor.getName();
@@ -20,6 +20,7 @@ public class VariableWriterFactory {
             } else {
                 return new ByteVariableGridPointWriter(nVariable, name, gridPointCount);
             }
+            // @todo 2 tb/tb throw exception on unknown/unsupported format tb 2014-04-11
         } else {
             final boolean is2d = variableDescriptor.isIs2d();
             final int memberIndex = variableDescriptor.getBtDataMemberIndex();

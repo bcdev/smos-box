@@ -46,6 +46,12 @@
             <groupId>org.esa.beam.smos</groupId>
             <artifactId>smos-gui</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
 </project>

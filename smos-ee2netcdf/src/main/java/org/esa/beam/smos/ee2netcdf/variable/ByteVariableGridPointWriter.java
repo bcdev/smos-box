@@ -7,7 +7,7 @@ import ucar.ma2.Array;
 
 import java.io.IOException;
 
-public class ByteVariableGridPointWriter extends AbstractVariableWriter {
+class ByteVariableGridPointWriter extends AbstractVariableWriter {
 
     private final String compoundName;
 
