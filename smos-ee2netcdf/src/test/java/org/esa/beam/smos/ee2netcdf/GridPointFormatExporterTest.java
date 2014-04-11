@@ -428,6 +428,36 @@ public class GridPointFormatExporterTest {
             assertEquals(-999.0, array.getFloat(0), 1e-8);
             assertEquals(-999.0, array.getFloat(1), 1e-8);
 
+            final Variable sss3Variable = getVariable("sss3", targetFile);
+            assertEquals(DataType.FLOAT, sss3Variable.getDataType());
+            assertAttribute("units", "psu", sss3Variable);
+            assertAttribute("_FillValue", -999.0, sss3Variable);
+            array = sss3Variable.read(new int[]{1428}, new int[]{2});
+            assertEquals(-999.0, array.getFloat(0), 1e-8);
+            assertEquals(-999.0, array.getFloat(1), 1e-8);
+
+            final Variable sigmaSss3Variable = getVariable("sigma_sss3", targetFile);
+            assertEquals(DataType.FLOAT, sigmaSss3Variable.getDataType());
+            assertAttribute("units", "psu", sigmaSss3Variable);
+            assertAttribute("_FillValue", -999.0, sigmaSss3Variable);
+            array = sigmaSss3Variable.read(new int[]{1527}, new int[]{2});
+            assertEquals(-999.0, array.getFloat(0), 1e-8);
+            assertEquals(-999.0, array.getFloat(1), 1e-8);
+
+            final Variable aCardVariable = getVariable("a_card", targetFile);
+            assertEquals(DataType.FLOAT, aCardVariable.getDataType());
+            assertAttribute("_FillValue", -999.0, aCardVariable);
+            array = aCardVariable.read(new int[]{1694}, new int[]{2});
+            assertEquals(-999.0, array.getFloat(0), 1e-8);
+            assertEquals(-999.0, array.getFloat(1), 1e-8);
+
+            final Variable sigmaACardVariable = getVariable("sigma_a_card", targetFile);
+            assertEquals(DataType.FLOAT, sigmaACardVariable.getDataType());
+            assertAttribute("_FillValue", -999.0, sigmaACardVariable);
+            array = sigmaACardVariable.read(new int[]{1762}, new int[]{2});
+            assertEquals(-999.0, array.getFloat(0), 1e-8);
+            assertEquals(-999.0, array.getFloat(1), 1e-8);
+
         } finally {
             if (targetFile != null) {
                 targetFile.close();
