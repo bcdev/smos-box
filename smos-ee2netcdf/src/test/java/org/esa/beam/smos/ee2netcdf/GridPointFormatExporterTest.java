@@ -379,6 +379,31 @@ public class GridPointFormatExporterTest {
             array = lonVariable.read(new int[]{718}, new int[]{2});
             assertEquals(168.957000732, array.getFloat(0), 1e-8);
             assertEquals(160.537002563, array.getFloat(1), 1e-8);
+
+            final Variable ftprtDiamVariable = getVariable("equiv_ftprt_diam", targetFile);
+            assertEquals(DataType.FLOAT, ftprtDiamVariable.getDataType());
+            assertAttribute("units", "m", ftprtDiamVariable);
+            assertAttribute("_FillValue", -999.0, ftprtDiamVariable);
+            array = ftprtDiamVariable.read(new int[]{837}, new int[]{2});
+            assertEquals(-999.0, array.getFloat(0), 1e-8);
+            assertEquals(-999.0, array.getFloat(1), 1e-8);
+
+            final Variable acqTimeVariable = getVariable("mean_acq_time", targetFile);
+            assertEquals(DataType.FLOAT, acqTimeVariable.getDataType());
+            assertAttribute("units", "dd", acqTimeVariable);
+            assertAttribute("_FillValue", -999.0, acqTimeVariable);
+            array = acqTimeVariable.read(new int[]{923}, new int[]{2});
+            assertEquals(-999.0, array.getFloat(0), 1e-8);
+            assertEquals(-999.0, array.getFloat(1), 1e-8);
+
+            final Variable sss1Variable = getVariable("sss1", targetFile);
+            assertEquals(DataType.FLOAT, sss1Variable.getDataType());
+            assertAttribute("units", "psu", sss1Variable);
+            assertAttribute("_FillValue", -999.0, sss1Variable);
+            array = sss1Variable.read(new int[]{1062}, new int[]{2});
+            assertEquals(-999.0, array.getFloat(0), 1e-8);
+            assertEquals(-999.0, array.getFloat(1), 1e-8);
+
         } finally {
             if (targetFile != null) {
                 targetFile.close();

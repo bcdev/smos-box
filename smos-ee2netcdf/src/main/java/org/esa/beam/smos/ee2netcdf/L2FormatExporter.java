@@ -64,6 +64,22 @@ class L2FormatExporter extends AbstractFormatExporter {
         lonDescriptor.setOriginalName("Longitude");
         lonDescriptor.setStandardName("longitude");
         variableDescriptors.put("lon", lonDescriptor);
+
+        final VariableDescriptor ftprtDiamDescriptor = new VariableDescriptor("Equiv_ftprt_diam", true, DataType.FLOAT, "n_grid_points", false, -1);
+        ftprtDiamDescriptor.setUnit("m");
+        ftprtDiamDescriptor.setFillValue(-999.f);
+        variableDescriptors.put("equiv_ftprt_diam", ftprtDiamDescriptor);
+
+        // @todo 3 tb/** mismatch between StructMember name and name in schema file - check and resolve tb 2014-04-11
+        final VariableDescriptor acqTimeDescriptor = new VariableDescriptor("Mean_Acq_Time", true, DataType.FLOAT, "n_grid_points", false, -1);
+        acqTimeDescriptor.setUnit("dd");
+        acqTimeDescriptor.setFillValue(-999.f);
+        variableDescriptors.put("mean_acq_time", acqTimeDescriptor);
+
+        final VariableDescriptor sss1Descriptor = new VariableDescriptor("SSS1", true, DataType.FLOAT, "n_grid_points", false, -1);
+        sss1Descriptor.setUnit("psu");
+        sss1Descriptor.setFillValue(-999.f);
+        variableDescriptors.put("sss1", sss1Descriptor);
     }
 
     private VariableWriter[] createVariableWriters(NFileWriteable nFileWriteable) {
