@@ -37,4 +37,14 @@ public class VariableWriterFactoryTest {
         final VariableWriter writer = VariableWriterFactory.create(nVariable, variableDescriptor, 13, 14);
         assertTrue(writer instanceof FloatVariableGridPointWriter);
     }
+
+    @Test
+    public void testCreateFloatVariableSequence2DPointWriter() {
+        variableDescriptor.setDataType(DataType.FLOAT);
+        variableDescriptor.setIs2d(true);
+        variableDescriptor.setGridPointData(false);
+
+        final VariableWriter writer = VariableWriterFactory.create(nVariable, variableDescriptor, 14, 15);
+        assertTrue(writer instanceof FloatVariableSequence2DWriter);
+    }
 }
