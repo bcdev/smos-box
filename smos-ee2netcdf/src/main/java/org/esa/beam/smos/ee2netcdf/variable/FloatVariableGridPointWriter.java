@@ -7,7 +7,7 @@ import ucar.ma2.Array;
 
 import java.io.IOException;
 
-public class FloatVariableGridPointWriter extends AbstractVariableWriter {
+class FloatVariableGridPointWriter extends AbstractVariableWriter {
 
     private final String compoundName;
 
@@ -21,6 +21,5 @@ public class FloatVariableGridPointWriter extends AbstractVariableWriter {
     public void write(CompoundData gridPointData, SequenceData btDataList, int index) throws IOException {
         final float gpFloat = gridPointData.getFloat(compoundName);
         array.setFloat(index, gpFloat);
-
     }
 }
