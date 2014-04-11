@@ -199,37 +199,11 @@ class BrowseProductExporter extends AbstractFormatExporter {
         for (final String ncVariableName : variableNameKeys) {
             final NVariable nVariable = nFileWriteable.findVariable(ncVariableName);
             final VariableDescriptor variableDescriptor = variableDescriptors.get(ncVariableName);
-            final DataType dataType = variableDescriptor.getDataType();
-            if (variableDescriptor.isGridPointData()) {
-                if (dataType == DataType.FLOAT) {
-                    variableWriters[index] = new FloatVariableGridPointWriter(nVariable, variableDescriptor.getName(), gridPointCount);
-                } else if (dataType == DataType.INT) {
-                    variableWriters[index] = new IntVariableGridPointWriter(nVariable, variableDescriptor.getName(), gridPointCount);
-                } else if (dataType == DataType.SHORT) {
-                    variableWriters[index] = new ShortVariableGridPointWriter(nVariable, variableDescriptor.getName(), gridPointCount);
-                } else {
-                    variableWriters[index] = new ByteVariableGridPointWriter(nVariable, variableDescriptor.getName(), gridPointCount);
-                }
-            } else {
-                if (dataType == DataType.FLOAT) {
-                    if (variableDescriptor.isIs2d()) {
-                        variableWriters[index] = new FloatVariableSequence2DWriter(nVariable, gridPointCount, nBtData, variableDescriptor.getBtDataMemberIndex());
-                    } else {
-                        variableWriters[index] = new FloatVariableSequenceWriter(nVariable, gridPointCount, variableDescriptor.getBtDataMemberIndex());
-                    }
-                } else if (dataType == DataType.INT) {
-                    variableWriters[index] = new IntVariableSequenceWriter(nVariable, gridPointCount, variableDescriptor.getBtDataMemberIndex());
-                } else {
-                    if (variableDescriptor.isIs2d()) {
-                        variableWriters[index] = new ShortVariableSequence2DWriter(nVariable, gridPointCount, nBtData, variableDescriptor.getBtDataMemberIndex());
-                    } else {
-                        variableWriters[index] = new ShortVariableSequenceWriter(nVariable, gridPointCount, variableDescriptor.getBtDataMemberIndex());
-                    }
-                }
 
-            }
+            variableWriters[index] = VariableWriterFactory.createVariableWriter(nVariable, variableDescriptor, gridPointCount, nBtData);
             index++;
         }
         return variableWriters;
     }
+
 }
