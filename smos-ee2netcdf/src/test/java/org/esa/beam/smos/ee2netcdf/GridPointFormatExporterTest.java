@@ -353,6 +353,19 @@ public class GridPointFormatExporterTest {
             Array array = gridPointIdVariable.read(new int[]{584}, new int[]{2});
             assertEquals(7188459, array.getInt(0));
             assertEquals(7188465, array.getInt(1));
+
+            final Variable latVariable = getVariable("lat", targetFile);
+            assertEquals(DataType.FLOAT, latVariable.getDataType());
+            assertNoAttribute("_Unsigned", latVariable);
+            assertAttribute("units", "degrees_north", latVariable);
+            assertAttribute("_FillValue", -999.0, latVariable);
+            assertAttribute("valid_min", -90.0, latVariable);
+            assertAttribute("valid_max", 90.0, latVariable);
+            assertAttribute("original_name", "Latitude", latVariable);
+            assertAttribute("standard_name", "latitude", latVariable);
+            array = latVariable.read(new int[]{672}, new int[]{2});
+            assertEquals(-76.871002197, array.getFloat(0), 1e-8);
+            assertEquals(-76.870002747, array.getFloat(1), 1e-8);
         } finally {
             if (targetFile != null) {
                 targetFile.close();

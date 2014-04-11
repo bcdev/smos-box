@@ -46,6 +46,15 @@ class L2FormatExporter extends AbstractFormatExporter {
         final VariableDescriptor gpIdDescriptor = new VariableDescriptor("Grid_Point_ID", true, DataType.INT, "n_grid_points", false, -1);
         gpIdDescriptor.setUnsigned(true);
         variableDescriptors.put("grid_point_id", gpIdDescriptor);
+
+        final VariableDescriptor latDescriptor = new VariableDescriptor("Latitude", true, DataType.FLOAT, "n_grid_points", false, -1);
+        latDescriptor.setUnit("degrees_north");
+        latDescriptor.setFillValue(-999.f);
+        latDescriptor.setValidMin(-90.f);
+        latDescriptor.setValidMax(90.f);
+        latDescriptor.setOriginalName("Latitude");
+        latDescriptor.setStandardName("latitude");
+        variableDescriptors.put("lat", latDescriptor);
     }
 
     private VariableWriter[] createVariableWriters(NFileWriteable nFileWriteable) {

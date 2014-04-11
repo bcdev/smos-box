@@ -10,7 +10,7 @@ variables:
         lat:_FillValue = -999.f ;
         lat:valid_min = -90.f ;
         lat:valid_max = 90.f ;
-        lat:original_name = "latitude" ;
+        lat:original_name = "Latitude" ;
         lat:standard_name = "latitude" ;
     float lon(n_grid_points) ;
         lon:units = "degrees_east" ;
