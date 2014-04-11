@@ -3,92 +3,40 @@ package org.esa.beam.smos.ee2netcdf;
 
 import com.bc.ceres.binio.CompoundData;
 import com.bc.ceres.binio.SequenceData;
-import org.apache.commons.lang.StringUtils;
 import org.esa.beam.dataio.netcdf.nc.NFileWriteable;
 import org.esa.beam.dataio.netcdf.nc.NVariable;
 import org.esa.beam.dataio.smos.L1cBrowseSmosFile;
 import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.smos.SmosUtils;
-import org.esa.beam.smos.ee2netcdf.variable.*;
-import ucar.ma2.Array;
+import org.esa.beam.smos.ee2netcdf.variable.VariableDescriptor;
+import org.esa.beam.smos.ee2netcdf.variable.VariableWriter;
+import org.esa.beam.smos.ee2netcdf.variable.VariableWriterFactory;
 import ucar.ma2.DataType;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 
 class BrowseProductExporter extends AbstractFormatExporter {
 
-    private Map<String, VariableDescriptor> variableDescriptors;
     private int nBtData;
 
     BrowseProductExporter() {
-        createVariableMap();
+        createVariableDescriptors();
     }
 
     @Override
     public void initialize(Product product) {
         super.initialize(product);
 
-        // @todo 2 tb/tb extract method and write tests tb 2014-04-09
         final String productName = product.getName();
         nBtData = getBtDataDimension(productName);
-
     }
 
     @Override
     public void addDimensions(NFileWriteable nFileWriteable) throws IOException {
         nFileWriteable.addDimension("n_grid_points", gridPointCount);
         nFileWriteable.addDimension("n_bt_data", nBtData);
-    }
-
-    @Override
-    public void addVariables(NFileWriteable nFileWriteable) throws IOException {
-        final Set<String> variableNameKeys = variableDescriptors.keySet();
-        for (final String ncVariableName : variableNameKeys) {
-            final VariableDescriptor variableDescriptor = variableDescriptors.get(ncVariableName);
-            final NVariable nVariable = nFileWriteable.addVariable(ncVariableName, variableDescriptor.getDataType(), true, null, variableDescriptor.getDimensionNames());
-            final String unitValue = variableDescriptor.getUnit();
-            if (StringUtils.isNotBlank(unitValue)) {
-                nVariable.addAttribute("units", unitValue);
-            }
-            if (variableDescriptor.isFillValuePresent()) {
-                nVariable.addAttribute("_FillValue", variableDescriptor.getFillValue());
-            }
-            if (variableDescriptor.isValidMinPresent()) {
-                nVariable.addAttribute("valid_min", variableDescriptor.getValidMin());
-            }
-            if (variableDescriptor.isValidMaxPresent()) {
-                nVariable.addAttribute("valid_max", variableDescriptor.getValidMax());
-            }
-            final String originalName = variableDescriptor.getOriginalName();
-            if (StringUtils.isNotBlank(originalName)) {
-                nVariable.addAttribute("original_name", originalName);
-            }
-            final String standardName = variableDescriptor.getStandardName();
-            if (StringUtils.isNotBlank(standardName)) {
-                nVariable.addAttribute("standard_name", standardName);
-            }
-            final short[] flagMasks = variableDescriptor.getFlagMasks();
-            if (flagMasks != null) {
-                nVariable.addAttribute("flag_masks", Array.factory(flagMasks));
-            }
-            final short[] flagValues = variableDescriptor.getFlagValues();
-            if (flagValues != null) {
-                nVariable.addAttribute("flag_values", Array.factory(flagValues));
-            }
-            final String flagMeanings = variableDescriptor.getFlagMeanings();
-            if (StringUtils.isNotBlank(flagMeanings))                 {
-                nVariable.addAttribute("flag_meanings", flagMeanings);
-            }
-            if (variableDescriptor.isScaleFactorPresent()) {
-                nVariable.addAttribute("scale_factor", variableDescriptor.getScaleFactor());
-            }
-            if (variableDescriptor.isUnsigned())                                            {
-                nVariable.addAttribute("_Unsigned", "true");
-            }
-        }
     }
 
     @Override
@@ -122,7 +70,7 @@ class BrowseProductExporter extends AbstractFormatExporter {
         }
     }
 
-    private void createVariableMap() {
+    void createVariableDescriptors() {
         variableDescriptors = new HashMap<>();
         final VariableDescriptor gpIdDescriptor = new VariableDescriptor("Grid_Point_ID", true, DataType.INT, "n_grid_points", false, -1);
         gpIdDescriptor.setUnsigned(true);
@@ -155,8 +103,8 @@ class BrowseProductExporter extends AbstractFormatExporter {
         variableDescriptors.put("bt_data_count", new VariableDescriptor("BT_Data_Counter", true, DataType.BYTE, "n_grid_points", false, -1));
 
         final VariableDescriptor flagsDescriptor = new VariableDescriptor("Flags", false, DataType.SHORT, "n_grid_points n_bt_data", true, 0);
-        flagsDescriptor.setFlagMasks(new short[]{3, 3, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, (short)32768});
-        flagsDescriptor.setFlagValues(new short[]{0, 1, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, (short)32768});
+        flagsDescriptor.setFlagMasks(new short[]{3, 3, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, (short) 32768});
+        flagsDescriptor.setFlagValues(new short[]{0, 1, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, (short) 32768});
         flagsDescriptor.setFlagMeanings("pol_xx pol_yy sun_fov sun_glint_fov moon_glint_fov single_snapshot rfi_x sun_point sun_glint_area moon_point af_fov rfi_tails border_fov sun_tails rfi_y rfi_point_source");
         flagsDescriptor.setUnsigned(true);
         variableDescriptors.put("flags", flagsDescriptor);
@@ -205,5 +153,4 @@ class BrowseProductExporter extends AbstractFormatExporter {
         }
         return variableWriters;
     }
-
 }

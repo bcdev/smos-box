@@ -326,7 +326,7 @@ public class GridPointFormatExporterTest {
     }
 
     @Test
-    public void testExportOSUDP2() throws IOException, ParseException {
+    public void testExportOSUDP2() throws IOException, ParseException, InvalidRangeException {
         final File file = TestHelper.getResourceFile("SM_OPER_MIR_OSUDP2_20091204T001853_20091204T011255_310_001_1.zip");
         final File outputFile = new File(targetDirectory, "OSUDP2.nc");
 
@@ -346,6 +346,13 @@ public class GridPointFormatExporterTest {
             assertNoDimension("n_bt_data", targetFile);
             assertNoDimension("n_radiometric_accuracy", targetFile);
             assertNoDimension("n_snapshots", targetFile);
+
+            final Variable gridPointIdVariable = getVariable("grid_point_id", targetFile);
+            assertEquals(DataType.INT, gridPointIdVariable.getDataType());
+            assertAttribute("_Unsigned", "true", gridPointIdVariable);
+            Array array = gridPointIdVariable.read(new int[]{584}, new int[]{2});
+            assertEquals(7188459, array.getInt(0));
+            assertEquals(7188465, array.getInt(1));
         } finally {
             if (targetFile != null) {
                 targetFile.close();

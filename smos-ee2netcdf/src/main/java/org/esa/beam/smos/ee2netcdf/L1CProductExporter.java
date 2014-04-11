@@ -6,10 +6,15 @@ import org.esa.beam.dataio.smos.SnapshotInfo;
 import org.esa.beam.framework.datamodel.Product;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 class L1CProductExporter extends AbstractFormatExporter {
 
     private int numSnapshots;
+
+    L1CProductExporter() {
+        createVariableDescriptors();
+    }
 
     @Override
     public void initialize(Product product) {
@@ -29,12 +34,11 @@ class L1CProductExporter extends AbstractFormatExporter {
     }
 
     @Override
-    public void addVariables(NFileWriteable nFileWriteable) throws IOException {
+    public void writeData(NFileWriteable nFileWriteable) throws IOException {
 
     }
 
-    @Override
-    public void writeData(NFileWriteable nFileWriteable) throws IOException {
-
+    void createVariableDescriptors() {
+        variableDescriptors = new HashMap<>();
     }
 }

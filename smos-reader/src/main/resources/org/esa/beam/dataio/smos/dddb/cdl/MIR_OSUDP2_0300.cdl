@@ -3,7 +3,8 @@ netcdf MIR_OSUDP2 {
 dimensions:
     n_grid_points = unlimited ; // read from EE file
 variables:
-    uint grid_point_id(n_grid_points) ;
+    int grid_point_id(n_grid_points) ;
+        grid_point_id:_Unsigned = "true" ;
     float lat(n_grid_points) ;
         lat:units = "degrees_north" ;
         lat:_FillValue = -999.f ;
