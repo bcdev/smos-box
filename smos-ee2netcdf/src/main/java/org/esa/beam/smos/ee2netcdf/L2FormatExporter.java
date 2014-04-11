@@ -80,6 +80,21 @@ class L2FormatExporter extends AbstractFormatExporter {
         sss1Descriptor.setUnit("psu");
         sss1Descriptor.setFillValue(-999.f);
         variableDescriptors.put("sss1", sss1Descriptor);
+
+        final VariableDescriptor sigmaSss1Descriptor = new VariableDescriptor("Sigma_SSS1", true, DataType.FLOAT, "n_grid_points", false, -1);
+        sigmaSss1Descriptor.setUnit("psu");
+        sigmaSss1Descriptor.setFillValue(-999.f);
+        variableDescriptors.put("sigma_sss1", sigmaSss1Descriptor);
+
+        final VariableDescriptor sss2Descriptor = new VariableDescriptor("SSS2", true, DataType.FLOAT, "n_grid_points", false, -1);
+        sss2Descriptor.setUnit("psu");
+        sss2Descriptor.setFillValue(-999.f);
+        variableDescriptors.put("sss2", sss2Descriptor);
+
+        final VariableDescriptor sigmaSss2Descriptor = new VariableDescriptor("Sigma_SSS2", true, DataType.FLOAT, "n_grid_points", false, -1);
+        sigmaSss2Descriptor.setUnit("psu");
+        sigmaSss2Descriptor.setFillValue(-999.f);
+        variableDescriptors.put("sigma_sss2", sigmaSss2Descriptor);
     }
 
     private VariableWriter[] createVariableWriters(NFileWriteable nFileWriteable) {

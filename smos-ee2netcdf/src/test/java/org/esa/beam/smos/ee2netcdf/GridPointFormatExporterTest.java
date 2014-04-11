@@ -404,6 +404,30 @@ public class GridPointFormatExporterTest {
             assertEquals(-999.0, array.getFloat(0), 1e-8);
             assertEquals(-999.0, array.getFloat(1), 1e-8);
 
+            final Variable sigmaSss1Variable = getVariable("sigma_sss1", targetFile);
+            assertEquals(DataType.FLOAT, sigmaSss1Variable.getDataType());
+            assertAttribute("units", "psu", sigmaSss1Variable);
+            assertAttribute("_FillValue", -999.0, sigmaSss1Variable);
+            array = sigmaSss1Variable.read(new int[]{1173}, new int[]{2});
+            assertEquals(-999.0, array.getFloat(0), 1e-8);
+            assertEquals(-999.0, array.getFloat(1), 1e-8);
+
+            final Variable sss2Variable = getVariable("sss2", targetFile);
+            assertEquals(DataType.FLOAT, sss2Variable.getDataType());
+            assertAttribute("units", "psu", sss2Variable);
+            assertAttribute("_FillValue", -999.0, sss2Variable);
+            array = sss2Variable.read(new int[]{1216}, new int[]{2});
+            assertEquals(-999.0, array.getFloat(0), 1e-8);
+            assertEquals(-999.0, array.getFloat(1), 1e-8);
+
+            final Variable sigmaSss2Variable = getVariable("sigma_sss2", targetFile);
+            assertEquals(DataType.FLOAT, sigmaSss2Variable.getDataType());
+            assertAttribute("units", "psu", sigmaSss2Variable);
+            assertAttribute("_FillValue", -999.0, sigmaSss2Variable);
+            array = sigmaSss2Variable.read(new int[]{1382}, new int[]{2});
+            assertEquals(-999.0, array.getFloat(0), 1e-8);
+            assertEquals(-999.0, array.getFloat(1), 1e-8);
+
         } finally {
             if (targetFile != null) {
                 targetFile.close();
