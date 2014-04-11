@@ -17,10 +17,9 @@ public class VariableWriterFactory {
                 return new IntVariableGridPointWriter(nVariable, name, gridPointCount);
             } else if (dataType == DataType.SHORT) {
                 return new ShortVariableGridPointWriter(nVariable, name, gridPointCount);
-            } else {
+            } else if (dataType == DataType.BYTE) {
                 return new ByteVariableGridPointWriter(nVariable, name, gridPointCount);
             }
-            // @todo 2 tb/tb throw exception on unknown/unsupported format tb 2014-04-11
         } else {
             final boolean is2d = variableDescriptor.isIs2d();
             final int memberIndex = variableDescriptor.getBtDataMemberIndex();
@@ -32,7 +31,7 @@ public class VariableWriterFactory {
                 }
             } else if (dataType == DataType.INT) {
                 return new IntVariableSequenceWriter(nVariable, gridPointCount, memberIndex);
-            } else {
+            } else if (dataType == DataType.SHORT) {
                 if (is2d) {
                     return new ShortVariableSequence2DWriter(nVariable, gridPointCount, btDataCount, memberIndex);
                 } else {
@@ -40,5 +39,6 @@ public class VariableWriterFactory {
                 }
             }
         }
+        throw new IllegalArgumentException("Unsupported data type for writer: " + dataType);
     }
 }

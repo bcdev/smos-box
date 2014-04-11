@@ -7,6 +7,7 @@ import org.junit.Test;
 import ucar.ma2.DataType;
 
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 
 public class VariableWriterFactoryTest {
@@ -104,5 +105,24 @@ public class VariableWriterFactoryTest {
 
         final VariableWriter writer = VariableWriterFactory.create(nVariable, variableDescriptor, 19, 20);
         assertTrue(writer instanceof ShortVariableSequenceWriter);
+    }
+
+    @Test
+    public void testCreateVariableWithUnsupportedDataTypeThrowsException() {
+        variableDescriptor.setDataType(DataType.BOOLEAN);
+        variableDescriptor.setGridPointData(true);
+        try {
+            VariableWriterFactory.create(nVariable, variableDescriptor, 19, 20);
+            fail("IllegalArgumentException expected");
+        } catch (IllegalArgumentException expected) {
+        }
+
+        variableDescriptor.setDataType(DataType.ENUM2);
+        variableDescriptor.setGridPointData(false);
+        try {
+            VariableWriterFactory.create(nVariable, variableDescriptor, 19, 20);
+            fail("IllegalArgumentException expected");
+        } catch (IllegalArgumentException expected) {
+        }
     }
 }
