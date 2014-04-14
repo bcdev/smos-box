@@ -1,5 +1,6 @@
 package org.esa.beam.smos;
 
+import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.util.StringUtils;
 import org.esa.beam.util.io.FileUtils;
 

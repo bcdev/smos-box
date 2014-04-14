@@ -1,0 +1,13 @@
+Dimensions
+----------
+n_grid_points = Data_Block->N_Grid_Points
+
+Variables
+---------
+export-name     | dimension_names   | original_name | data_type
+
+grid_point_id   | n_grid_points     | Grid_Point_ID | unsignedInteger-32
+lat             | n_grid_points     | Latitude      | float-32
+lon             | n_grid_points     | Longitude     | float-32
+altitude        | n_grid_points     | Altitude      | float-32
+

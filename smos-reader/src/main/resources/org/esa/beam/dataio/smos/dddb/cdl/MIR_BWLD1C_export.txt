@@ -1,0 +1,14 @@
+Dimensions
+----------
+n_grid_points = Data_Block->Grid_Point_Counter
+n_bt_data = from polarisation dual=2, full=4
+
+Variables
+---------
+export_name         | dimension_names   | original_name         | data_type
+
+grid_point_id       | n_grid_points     | Grid_Point_ID         | unsignedInteger-32
+lat                 | n_grid_points     | Grid_Point_Latitude   | float-32
+lon                 | n_grid_points     | Grid_Point_Longitude  | float-32
+grid_point_altitude | n_grid_points     | Grid_Point_Altitude   | float-32
+grid_point_mask     | n_grid_points     | Grid_Point_Mask       | unsignedByte-8

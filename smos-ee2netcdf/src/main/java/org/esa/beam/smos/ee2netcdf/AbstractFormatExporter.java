@@ -24,8 +24,7 @@ abstract class AbstractFormatExporter implements FormatExporter {
 
     @Override
     public void initialize(Product product) {
-        final SmosProductReader smosReader = (SmosProductReader) product.getProductReader();
-        explorerFile = (SmosFile) smosReader.getExplorerFile();
+        explorerFile = GridPointFormatExporter.getSmosFile(product);
         gridPointCount = explorerFile.getGridPointCount();
     }
 
@@ -90,7 +89,7 @@ abstract class AbstractFormatExporter implements FormatExporter {
     @Override
     abstract public void addDimensions(NFileWriteable nFileWriteable) throws IOException;
 
-    // @todo 3 tb/tb rethink this. I want to force derived classe to implement this method - as a reminder to create the map.
+    // @todo 3 tb/tb rethink this. I want to force derived classes to implement this method - as a reminder to create the map.
     // But the method should be private ... tb 014-04-11
     abstract void createVariableDescriptors();
 }

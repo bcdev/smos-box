@@ -138,8 +138,9 @@ public class ConverterOpTest {
         final String resourcePath = getResourcePath();
         final TreeSet<File> inputFileSet = ConverterOp.createInputFileSet(new String[]{resourcePath + File.separator + "*"});
         assertNotNull(inputFileSet);
-        assertEquals(3, inputFileSet.size());
+        assertEquals(4, inputFileSet.size());
         final Iterator<File> iterator = inputFileSet.iterator();
+        assertEquals("SM_OPEB_MIR_SMUDP2_20140413T185915_20140413T195227_551_026_1.zip", iterator.next().getName());
         assertEquals("SM_OPER_MIR_BWLF1C_20111026T143206_20111026T152520_503_001_1.zip", iterator.next().getName());
         assertEquals("SM_OPER_MIR_OSUDP2_20091204T001853_20091204T011255_310_001_1.zip", iterator.next().getName());
         assertEquals("SM_REPB_MIR_SCLF1C_20110201T151254_20110201T151308_505_152_1.zip", iterator.next().getName());

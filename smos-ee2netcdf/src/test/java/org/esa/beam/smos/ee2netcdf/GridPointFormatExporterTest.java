@@ -2,9 +2,9 @@ package org.esa.beam.smos.ee2netcdf;
 
 
 import org.esa.beam.dataio.netcdf.util.NetcdfFileOpener;
-import org.esa.beam.smos.DateTimeUtils;
 import org.esa.beam.framework.dataio.ProductIO;
 import org.esa.beam.framework.datamodel.Product;
+import org.esa.beam.smos.DateTimeUtils;
 import org.esa.beam.util.io.FileUtils;
 import org.junit.After;
 import org.junit.Before;
@@ -71,22 +71,7 @@ public class GridPointFormatExporterTest {
             assertNoDimension("n_radiometric_accuracy", targetFile);
             assertNoDimension("n_snapshots", targetFile);
 
-            final Variable gridPointIdVariable = getVariable("grid_point_id", targetFile);
-            assertEquals(DataType.INT, gridPointIdVariable.getDataType());
-            assertNoAttribute("units", gridPointIdVariable);
-            assertNoAttribute("_FillValue", gridPointIdVariable);
-            assertNoAttribute("valid_min", gridPointIdVariable);
-            assertNoAttribute("valid_max", gridPointIdVariable);
-            assertNoAttribute("orignal_name", gridPointIdVariable);
-            assertNoAttribute("standard_name", gridPointIdVariable);
-            assertNoAttribute("flag_masks", gridPointIdVariable);
-            assertNoAttribute("flag_values", gridPointIdVariable);
-            assertNoAttribute("flag_meanings", gridPointIdVariable);
-            assertNoAttribute("scale_factor", gridPointIdVariable);
-            assertAttribute("_Unsigned", "true", gridPointIdVariable);
-            Array array = gridPointIdVariable.read(new int[]{346}, new int[]{2});
-            assertEquals(4098190, array.getInt(0));
-            assertEquals(4098191, array.getInt(1));
+            assertGridPointIdVariable(targetFile, 346, new int[]{4098190, 4098191});
 
             final Variable latVariable = getVariable("lat", targetFile);
             assertEquals(DataType.FLOAT, latVariable.getDataType());
@@ -101,7 +86,7 @@ public class GridPointFormatExporterTest {
             assertNoAttribute("flag_meanings", latVariable);
             assertNoAttribute("scale_factor", latVariable);
             assertNoAttribute("_Unsigned", latVariable);
-            array = latVariable.read(new int[]{467}, new int[]{2});
+            Array array = latVariable.read(new int[]{467}, new int[]{2});
             assertEquals(78.56900024, array.getFloat(0), 1e-8);
             assertEquals(78.6760025, array.getFloat(1), 1e-8);
 
@@ -181,8 +166,8 @@ public class GridPointFormatExporterTest {
             assertNoAttribute("valid_max", flagsVariable);
             assertNoAttribute("orignal_name", flagsVariable);
             assertNoAttribute("standard_name", flagsVariable);
-            assertAttribute("flag_masks", new short[]{3, 3, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, (short)32768}, flagsVariable);
-            assertAttribute("flag_values", new short[]{0, 1, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, (short)32768}, flagsVariable);
+            assertAttribute("flag_masks", new short[]{3, 3, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, (short) 32768}, flagsVariable);
+            assertAttribute("flag_values", new short[]{0, 1, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, (short) 32768}, flagsVariable);
             assertAttribute("flag_meanings", "pol_xx pol_yy sun_fov sun_glint_fov moon_glint_fov single_snapshot rfi_x sun_point sun_glint_area moon_point af_fov rfi_tails border_fov sun_tails rfi_y rfi_point_source", flagsVariable);
             assertNoAttribute("scale_factor", flagsVariable);
             assertAttribute("_Unsigned", "true", flagsVariable);
@@ -295,7 +280,7 @@ public class GridPointFormatExporterTest {
     }
 
     @Test
-    public void testExportSCLF1C() throws IOException, ParseException {
+    public void testExportSCLF1C() throws IOException, ParseException, InvalidRangeException {
         final File file = TestHelper.getResourceFile("SM_REPB_MIR_SCLF1C_20110201T151254_20110201T151308_505_152_1.zip");
         final File outputFile = new File(targetDirectory, "SCLF1C.nc");
 
@@ -314,6 +299,8 @@ public class GridPointFormatExporterTest {
             assertDimension("n_bt_data", 300, targetFile);
             assertDimension("n_radiometric_accuracy", 2, targetFile);
             assertDimension("n_snapshots", 172, targetFile);
+
+            assertGridPointIdVariable(targetFile, 32, new int[]{6247647, 6248159});
 
         } finally {
             if (targetFile != null) {
@@ -347,12 +334,7 @@ public class GridPointFormatExporterTest {
             assertNoDimension("n_radiometric_accuracy", targetFile);
             assertNoDimension("n_snapshots", targetFile);
 
-            final Variable gridPointIdVariable = getVariable("grid_point_id", targetFile);
-            assertEquals(DataType.INT, gridPointIdVariable.getDataType());
-            assertAttribute("_Unsigned", "true", gridPointIdVariable);
-            Array array = gridPointIdVariable.read(new int[]{584}, new int[]{2});
-            assertEquals(7188459, array.getInt(0));
-            assertEquals(7188465, array.getInt(1));
+            assertGridPointIdVariable(targetFile, 584, new int[]{7188459, 7188465});
 
             final Variable latVariable = getVariable("lat", targetFile);
             assertEquals(DataType.FLOAT, latVariable.getDataType());
@@ -363,7 +345,7 @@ public class GridPointFormatExporterTest {
             assertAttribute("original_name", "Latitude", latVariable);
             assertAttribute("standard_name", "latitude", latVariable);
             assertNoAttribute("_Unsigned", latVariable);
-            array = latVariable.read(new int[]{672}, new int[]{2});
+            Array array = latVariable.read(new int[]{672}, new int[]{2});
             assertEquals(-76.871002197, array.getFloat(0), 1e-8);
             assertEquals(-76.870002747, array.getFloat(1), 1e-8);
 
@@ -465,6 +447,36 @@ public class GridPointFormatExporterTest {
             if (product != null) {
                 product.dispose();
             }
+        }
+    }
+
+//    @Test
+//    public void testExportSMUDP2() throws IOException {
+//        final File file = TestHelper.getResourceFile("SM_OPEB_MIR_SMUDP2_20140413T185915_20140413T195227_551_026_1.zip");
+//        final File outputFile = new File(targetDirectory, "SMUDP2.nc");
+//
+//        Product product = null;
+//        NetcdfFile targetFile = null;
+//        try {
+//            product = ProductIO.readProduct(file);
+//            gridPointFormatExporter.write(product, outputFile);
+//        } finally {
+//            if (targetFile != null) {
+//                targetFile.close();
+//            }
+//            if (product != null) {
+//                product.dispose();
+//            }
+//        }
+//    }
+
+    private void assertGridPointIdVariable(NetcdfFile targetFile, int offset, int[] expected) throws IOException, InvalidRangeException {
+        final Variable gridPointIdVariable = getVariable("grid_point_id", targetFile);
+        assertEquals(DataType.INT, gridPointIdVariable.getDataType());
+        assertAttribute("_Unsigned", "true", gridPointIdVariable);
+        Array array = gridPointIdVariable.read(new int[]{offset}, new int[]{2});
+        for (int i = 0; i < 2; i++) {
+            assertEquals(expected[i], array.getInt(i));
         }
     }
 

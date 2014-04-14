@@ -41,6 +41,7 @@ class L2FormatExporter extends AbstractFormatExporter {
     }
 
     void createVariableDescriptors() {
+        // @todo 1 tb/tb differentiate between OS and SM tb 2014-04-14
         variableDescriptors = new HashMap<>();
 
         final VariableDescriptor gpIdDescriptor = new VariableDescriptor("Grid_Point_ID", true, DataType.INT, "n_grid_points", false, -1);
