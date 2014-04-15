@@ -146,6 +146,11 @@
             "description": "AUX_DGGTFO, forest optical thickness, schema version 200"
         },
         {
+            "id": "SM_OPER_AUX_DGGTFO_20140411T001616",
+            "relativePath": "sensors_platforms/SMOS/AUX_DGGTFO/SM_OPER_AUX_DGGTFO_20140411T001616_20500101T000000_400_001_1/SM_OPER_AUX_DGGTFO_20140411T001616_20500101T000000_400_001_1.HDR",
+            "description": "AUX_DGGTFO, forest optical thickness, schema version 300"
+        },
+        {
             "id": "SM_OPER_AUX_DGGTLV_20110605T000000",
             "relativePath": "sensors_platforms/SMOS/AUX_DGGTLV/SM_OPER_AUX_DGGTLV_20110605T000000_20110608T000000_307_001_3/SM_OPER_AUX_DGGTLV_20110605T000000_20110608T000000_307_001_3.DBL",
             "description": "AUX_DGGTLV, low vegetation optical thickness, schema version 200"
