@@ -136,6 +136,11 @@
             "description": "AUX_DGGROU, land roughness, schema version 200"
         },
         {
+            "id": "SM_OPER_AUX_DGGROU_20140412T002715",
+            "relativePath": "sensors_platforms/SMOS/AUX_DGGROU/SM_OPER_AUX_DGGROU_20140412T002715_20500101T000000_400_001_1/SM_OPER_AUX_DGGROU_20140412T002715_20500101T000000_400_001_1.HDR",
+            "description": "AUX_DGGROU, land roughness, schema version 300"
+        },
+        {
             "id": "SM_OPER_AUX_DGGTFO_20110605T000000",
             "relativePath": "sensors_platforms/SMOS/AUX_DGGTFO/SM_OPER_AUX_DGGTFO_20110605T000000_20110608T000000_307_001_3/SM_OPER_AUX_DGGTFO_20110605T000000_20110608T000000_307_001_3.HDR",
             "description": "AUX_DGGTFO, forest optical thickness, schema version 200"
