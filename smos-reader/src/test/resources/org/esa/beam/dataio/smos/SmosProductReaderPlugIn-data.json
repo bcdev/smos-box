@@ -118,12 +118,17 @@
         {
             "id": "SM_OPER_AUX_DGGFLO_20140413T003825",
             "relativePath": "sensors_platforms/SMOS/AUX_DGGFLO/SM_OPER_AUX_DGGFLO_20140413T003825_20500101T000000_400_001_1/SM_OPER_AUX_DGGFLO_20140413T003825_20500101T000000_400_001_1.HDR",
-            "description": "AUX_DGGFLO, flood probability, schema version 400"
+            "description": "AUX_DGGFLO, flood probability, schema version 300"
         },
         {
             "id": "SM_OPER_AUX_DGGRFI_20110605T000000",
             "relativePath": "sensors_platforms/SMOS/AUX_DGGRFI/SM_OPER_AUX_DGGRFI_20110605T000000_20110608T000000_307_001_3/SM_OPER_AUX_DGGRFI_20110605T000000_20110608T000000_307_001_3.HDR",
             "description": "AUX_DGGRFI, radio frequency interference, schema version 200"
+        },
+        {
+            "id": "SM_OPER_AUX_DGGRFI_20140413T003825",
+            "relativePath": "sensors_platforms/SMOS/AUX_DGGRFI/SM_OPER_AUX_DGGRFI_20140413T003825_20500101T000000_400_001_1/SM_OPER_AUX_DGGRFI_20140413T003825_20500101T000000_400_001_1.HDR",
+            "description": "AUX_DGGRFI, radio frequency interference, schema version 300"
         },
         {
             "id": "SM_OPER_AUX_DGGROU_20110605T000000",
