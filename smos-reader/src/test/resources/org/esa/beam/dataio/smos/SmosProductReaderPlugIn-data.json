@@ -156,6 +156,11 @@
             "description": "AUX_DGGTLV, low vegetation optical thickness, schema version 200"
         },
         {
+            "id": "SM_OPER_AUX_DGGTLV_20140413T003825",
+            "relativePath": "sensors_platforms/SMOS/AUX_DGGTLV/SM_OPER_AUX_DGGTLV_20140413T003825_20500101T000000_400_001_1/SM_OPER_AUX_DGGTLV_20140413T003825_20500101T000000_400_001_1.DBL",
+            "description": "AUX_DGGTLV, low vegetation optical thickness, schema version 200"
+        },
+        {
             "id": "SM_OPER_AUX_ECMWF__20100208T045820",
             "relativePath": "sensors_platforms/SMOS/AUX_ECMWF_/SM_OPER_AUX_ECMWF__20100208T045820_20100208T060050_306_001_3/SM_OPER_AUX_ECMWF__20100208T045820_20100208T060050_306_001_3.HDR",
             "description": "AUX_ECMWF, schema version 200"

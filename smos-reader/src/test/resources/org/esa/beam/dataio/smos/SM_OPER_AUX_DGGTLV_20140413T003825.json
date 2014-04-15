@@ -1,11 +1,11 @@
 {
-    "id": "SM_OPER_AUX_DGGTLV_20110605T000000",
+    "id": "SM_OPER_AUX_DGGTLV_20140413T003825",
     "decodeQualification": "INTENDED",
     "expectedContent": {
         "sceneWidth": 16384,
         "sceneHeight": 8192,
-        "startTime": "05-JUN-2011 00:00:00.000000",
-        "endTime": "08-JUN-2011 00:00:00.000000",
+        "startTime": "13-APR-2014 00:38:25.000000",
+        "endTime": "01-JAN-2050 00:00:00.000000",
         "geoCoding": {
             "coordinates": [
                 {
@@ -53,7 +53,7 @@
                     {
                         "x": 4765,
                         "y": 2104,
-                        "value": "NaN"
+                        "value": 0.03125
                     },
                     {
                         "x": 10002,
@@ -172,7 +172,7 @@
             },
             {
                 "path": "Fixed_Header/Validity_Period/Validity_Stop",
-                "value": "UTC=2011-06-08T00:00:00"
+                "value": "UTC=2050-01-01T00:00:00"
             }
         ]
     }
