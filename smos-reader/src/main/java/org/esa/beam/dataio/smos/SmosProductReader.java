@@ -139,7 +139,7 @@ public class SmosProductReader extends AbstractProductReader {
                 explorerFile = createExplorerFile(getInputVirtualDir());
             }
             if (explorerFile == null) {
-                return null;
+                throw new IOException(MessageFormat.format("File ''{0}'': unknown/unsupported SMOS data format.", inputFile));
             }
             final Product product = explorerFile.createProduct();
             if (virtualDir != null && virtualDir.isCompressed()) {
