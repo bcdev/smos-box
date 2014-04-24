@@ -30,6 +30,10 @@ public class SmosUtilsTest {
         inputFiles = new File[]{new File("murks.txt"), new File("blärks.dbl")};
         dblFile = SmosUtils.findDblFile(inputFiles);
         assertEquals("blärks.dbl", dblFile.getName());
+
+        inputFiles = new File[]{new File("hoppla.dbl")};
+        dblFile = SmosUtils.findDblFile(inputFiles);
+        assertEquals("hoppla.dbl", dblFile.getName());
     }
 
     @Test
@@ -42,6 +46,12 @@ public class SmosUtilsTest {
 
         assertEquals("2010-10-19T05:01:11", df.format(startTime));
         assertEquals("2010-10-19T05:55:10", df.format(stopTime));
+    }
+
+    @Test
+    public void testGetSensingTimesFromFilename_InvalidDateFormat() {
+        assertNull(SmosUtils.getSensingStartTimeFromFilename("SM_OPER_MIR_SMUDP2_20101MART050111_20101019T055510_309_002_1.zip"));
+        assertNull(SmosUtils.getSensingStopTimeFromFilename("SM_OPER_MIR_SMUDP2_20101019T050111_20101SEPT055510_309_002_1.zip"));
     }
 
     @Test

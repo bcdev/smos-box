@@ -28,6 +28,7 @@ public class EEFilePairTest {
         assertEquals(file_2.getName(), eeFilePair.getHdrFile().getName());
     }
 
+    @Test
     public void testSetGetDblFile() {
         final File file_1 = new File("schulze.dbl");
         final File file_2 = new File("shultze.dbl");
