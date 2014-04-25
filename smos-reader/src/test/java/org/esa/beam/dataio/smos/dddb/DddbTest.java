@@ -18,7 +18,7 @@ package org.esa.beam.dataio.smos.dddb;
 
 import org.junit.Test;
 
-import static junit.framework.Assert.*;
+import static org.junit.Assert.*;
 
 public class DddbTest {
 
@@ -109,19 +109,25 @@ public class DddbTest {
     @Test
     public void testGetOSDAP2_v0200Descriptors() {
         final Family<BandDescriptor> descriptors = Dddb.getInstance().getBandDescriptors(DBL_SM_XXXX_MIR_OSDAP2_0200);
-        assertEquals(132, descriptors.asList().size());
+        assertEquals(133, descriptors.asList().size());
 
         final BandDescriptor param2_sigma_m3 = descriptors.getMember("Param2_sigma_M3");
         assertNotNull(param2_sigma_m3);
+
+        final BandDescriptor param6_sigma_m2 = descriptors.getMember("Param6_sigma_M2");
+        assertNotNull(param6_sigma_m2);
     }
 
     @Test
     public void testGetOSDAP2_v0300Descriptors() {
         final Family<BandDescriptor> descriptors = Dddb.getInstance().getBandDescriptors(DBL_SM_XXXX_MIR_OSDAP2_0300);
-        assertEquals(132, descriptors.asList().size());
+        assertEquals(133, descriptors.asList().size());
 
         final BandDescriptor out_of_lut_flags_4 = descriptors.getMember("Out_of_LUT_flags_4");
         assertNotNull(out_of_lut_flags_4);
+
+        final BandDescriptor diff_tb_1 = descriptors.getMember("Diff_TB_1");
+        assertNotNull(diff_tb_1);
     }
 
     @Test

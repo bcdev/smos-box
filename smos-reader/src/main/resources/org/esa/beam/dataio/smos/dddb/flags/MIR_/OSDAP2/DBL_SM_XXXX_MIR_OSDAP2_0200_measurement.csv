@@ -1,0 +1,23 @@
+# visible | name                         | mask     | color | transparency | description
+  *       | FM_SUSPECT_ICE               | 00000001 | *     | *            | True if difference between measured brightness temperature and flat sea model > Tm_DT_ice
+  *       | FM_L1C_ERROR                 | 00000002 | *     | *            | True if L1c BT value is invalid (NaN) or any of the L1c snapshot quality error flags are non-zero
+  *       | FM_OUT_OF_RANGE              | 00000004 | *     | *            | True if difference between measured brightness temperature and that derived with default forward model > Tm_out_of_range
+  *       | FM_FARA_INTERP               | 00000008 | *     | *            | True if interpolation used to calculate TEC from AUX_FARA_x
+  *       | FM_L1C_SUN                   | 00000010 | *     | *            | True if any of the L1c flags sun point, sun tails, or sun glint fov are true.
+  *       | FM_HIGH_SUN_GLINT            | 00000020 | *     | *            | *
+  *       | FM_LOW_SUN_GLINT             | 00000040 | *     | *            | *
+  *       | FM_OTT                       | 00000080 | *     | *            | True if Ocean Target Transformation has been applied to this measurement
+  *       | FM_MOON_SPEC_DIR             | 00000100 | *     | *            | True if difference between specular direction and target to moon direction < Tm_angle_moon
+  *       | FM_GAL_NOISE_ERROR           | 00000200 | *     | *            | True if uncertainty on galactic noise source > Tm_max_gal_noise_error
+  *       | FM_HIGH_GAL_NOISE            | 00000400 | *     | *            | True if galactic noise > Tm_high_gal_noise
+# *       | not used                     | 00000800 | *     | *            | *
+  *       | FM_OUTLIER                   | 00001000 | *     | *            | True if outlier measurement; if false, not outlier measurement
+  *       | FM_RESOL                     | 00002000 | *     | *            | True if major axis of the footprint ellipse is greater than threshold Tg_resol_max_ocean
+  *       | FM_VALID                     | 00004000 | *     | *            | Flag set if measurement is valid according to decision tree criteria PRP_12-1
+  *       | FM_LOST_DATA                 | 00008000 | *     | *            | Flag set if measurement not used due to lack of companion polarization
+  *       | FM_L1C_RFI                   | 00010000 | *     | *            | True if measurement is flagged as contaminated by RFI in L1c
+  *       | FM_L1C_SOFTWARE_ERROR        | 00020000 | *     | *            | Flag set if L1c Software_Error_flag is set
+  *       | FM_L1C_INSTRUMENT_ERROR      | 00040000 | *     | *            | Flag set if L1c Instrument_Error_flag is set
+  *       | FM_L1C_ADF_ERROR             | 00080000 | *     | *            | Flag set if L1c ADF_Error_flag is set
+  *       | FM_L1C_CALIBRATION_ERROR     | 00100000 | *     | *            | Flag set if L1c Calibration_Error_flag is set
+  *       | FM_L2_RFI                    | 00200000 | *     | *            | Flag set if measurement is suspected of being contaminated by RFI
