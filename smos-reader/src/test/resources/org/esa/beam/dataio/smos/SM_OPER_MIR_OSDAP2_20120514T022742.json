@@ -19,6 +19,146 @@
         },
         "flagCodings": [
             {
+                "name": "Out_Of_Lut_Flags",
+                "samples": [
+                    {
+                        "name": "FG_OOR_LUT_ROUGH_DIM1",
+                        "value": 1,
+                        "description": "Raised if SST value falls outside the acceptable limits"
+                    },
+                    {
+                        "name": "FG_OOR_LUT_ROUGH_DIM2",
+                        "value": 2,
+                        "description": "Raised if 2nd LUT parameter falls outside the acceptable LUT range."
+                    },
+                    {
+                        "name": "FG_OOR_LUT_ROUGH_DIM3",
+                        "value": 4,
+                        "description": "Raised if 3rd LUT parameter falls outside the acceptable LUT range."
+                    },
+                    {
+                        "name": "FG_OOR_LUT_ROUGH_DIM4",
+                        "value": 8,
+                        "description": "Raised if 4th LUT parameter falls outside the acceptable LUT range."
+                    },
+                    {
+                        "name": "FG_OOR_LUT_ROUGH_DIM5",
+                        "value": 16,
+                        "description": "Raised if 5th LUT parameter falls outside the acceptable LUT range."
+                    },
+                    {
+                        "name": "FG_OOR_LUT_GAM1_RA",
+                        "value": 512,
+                        "description": "Raised if at least one of the measurements of a dwell has a right ascension value which falls outside the acceptable interval limits"
+                    },
+                    {
+                        "name": "FG_OOR_LUT_GAM1_DEC",
+                        "value": 1024,
+                        "description": "Raised if at least one of the measurements of a dwell has a declination value which falls outside the acceptable interval limits"
+                    },
+                    {
+                        "name": "FG_OOR_LUT_SUNGLINT_THETASUN",
+                        "value": 2048,
+                        "description": "Raised if at least one of the measurements of a dwell has a theta value which falls outside the acceptable interval limits"
+                    },
+                    {
+                        "name": "FG_OOR_LUT_SUNGLINT_PHISMOS",
+                        "value": 4096,
+                        "description": "Raised if at least one of the measurements of a dwell has a phi smos value which falls outside the acceptable interval limits"
+                    },
+                    {
+                        "name": "FG_OOR_LUT_SUNGLINT_THETA",
+                        "value": 8192,
+                        "description": "Raised if at least one of the measurements of a dwell has a theta value which falls outside the acceptable interval limits"
+                    },
+                    {
+                        "name": "FG_OOR_LUT_SUNGLINT_WS",
+                        "value": 16384,
+                        "description": "Raised if WSn value falls outside the acceptable interval limits"
+                    },
+                    {
+                        "name": "FG_OOR_LUT_FOAM_WS",
+                        "value": 32768,
+                        "description": "Raised if WS value falls outside the acceptable interval limits"
+                    },
+                    {
+                        "name": "FG_OOR_LUT_FOAM_TSEAAIR",
+                        "value": 65536,
+                        "description": "Raised if Tsea_air value falls outside the acceptable interval limits"
+                    },
+                    {
+                        "name": "FG_OOR_LUT_FOAM_SSS",
+                        "value": 131072,
+                        "description": "Raised if SSS value falls outside the acceptable interval limits"
+                    },
+                    {
+                        "name": "FG_OOR_LUT_FOAM_SST",
+                        "value": 262144,
+                        "description": "Raised if SST value falls outside the acceptable interval limits"
+                    },
+                    {
+                        "name": "FG_OOR_LUT_FOAM_THETA",
+                        "value": 524288,
+                        "description": "Raised if at least one of the measurements of a dwell has a theta value which falls outside the acceptable interval limits"
+                    },
+                    {
+                        "name": "FG_OOR_GAM2_DEC",
+                        "value": 1048576,
+                        "description": "Dec went out of LUT range during retrieval"
+                    },
+                    {
+                        "name": "FG_OOR_GAM2_RA",
+                        "value": 2097152,
+                        "description": "Ra went out of LUT range during retrieval"
+                    },
+                    {
+                        "name": "FG_OOR_GAM2_WSN",
+                        "value": 4194304,
+                        "description": "WSn went out of LUT range during retrieval"
+                    },
+                    {
+                        "name": "FG_OOR_GAM2_THETA",
+                        "value": 8388608,
+                        "description": "Theta went out of LUT range during retrieval"
+                    },
+                    {
+                        "name": "FG_OOR_GAM2_PSI",
+                        "value": 16777216,
+                        "description": "Psi went out of LUT range during retrieval"
+                    },
+                    {
+                        "name": "FG_OOR_LUT_AGDPT_LAT",
+                        "value": 33554432,
+                        "description": "Raised if latitude of the grid point falls outside the acceptable interval limits of LUTs in file AUX_AGDPT_"
+                    },
+                    {
+                        "name": "FG_OOR_LUT_AGDPT_LON",
+                        "value": 67108864,
+                        "description": "Raised if longitude of the grid point falls outside the acceptable interval limits of LUTs in file AUX_AGDPT_"
+                    },
+                    {
+                        "name": "FG_OOR_LUT_AGDPT_MONTH",
+                        "value": 134217728,
+                        "description": "Raised if acquisition time of the gridpoint falls outside the acceptable interval limits of LUTs in file AUX_AGDPT___. Only used by prototype processor."
+                    },
+                    {
+                        "name": "FG_OOR_LUT_AGDPT_PARAM",
+                        "value": 268435456,
+                        "description": "Raised if param value of the gridpoint falls outside the acceptable interval limits of LUTs in file AUX_AGDPT___. Only used by prototype processor."
+                    },
+                    {
+                        "name": "FG_OOR_OTT_XI",
+                        "value": 536870912,
+                        "description": "Raised if xi value of the measurement falls outside the LUT limits of AUX_OTTxD/F_"
+                    },
+                    {
+                        "name": "FG_OOR_OTT_ETA",
+                        "value": 1073741824,
+                        "description": "Raised if eta value of the measurement falls outside the LUT limits of AUX_OTTxD/F_"
+                    }
+                ]
+            },
+            {
                 "name": "Land_Sea_Mask_Flags",
                 "samples": [
                     {
@@ -2609,6 +2749,654 @@
             }
         ],
         "masks": [
+            {
+                "name": "Out_of_LUT_flags_1_FG_OOR_LUT_ROUGH_DIM1",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "246,182,21",
+                "description": "Raised if SST value falls outside the acceptable limits"
+            },
+            {
+                "name": "Out_of_LUT_flags_1_FG_OOR_LUT_ROUGH_DIM2",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "95,92,204",
+                "description": "Raised if 2nd LUT parameter falls outside the acceptable LUT range."
+            },
+            {
+                "name": "Out_of_LUT_flags_1_FG_OOR_LUT_ROUGH_DIM3",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "49,82,133",
+                "description": "Raised if 3rd LUT parameter falls outside the acceptable LUT range."
+            },
+            {
+                "name": "Out_of_LUT_flags_1_FG_OOR_LUT_ROUGH_DIM4",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "169,175,146",
+                "description": "Raised if 4th LUT parameter falls outside the acceptable LUT range."
+            },
+            {
+                "name": "Out_of_LUT_flags_1_FG_OOR_LUT_ROUGH_DIM5",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "156,188,14",
+                "description": "Raised if 5th LUT parameter falls outside the acceptable LUT range."
+            },
+            {
+                "name": "Out_of_LUT_flags_1_FG_OOR_LUT_GAM1_RA",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "39,91,126",
+                "description": "Raised if at least one of the measurements of a dwell has a right ascension value which falls outside the acceptable interval limits"
+            },
+            {
+                "name": "Out_of_LUT_flags_1_FG_OOR_LUT_GAM1_DEC",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "214,25,160",
+                "description": "Raised if at least one of the measurements of a dwell has a declination value which falls outside the acceptable interval limits"
+            },
+            {
+                "name": "Out_of_LUT_flags_1_FG_OOR_LUT_SUNGLINT_THETASUN",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "178,13,207",
+                "description": "Raised if at least one of the measurements of a dwell has a theta value which falls outside the acceptable interval limits"
+            },
+            {
+                "name": "Out_of_LUT_flags_1_FG_OOR_LUT_SUNGLINT_PHISMOS",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "208,249,67",
+                "description": "Raised if at least one of the measurements of a dwell has a phi smos value which falls outside the acceptable interval limits"
+            },
+            {
+                "name": "Out_of_LUT_flags_1_FG_OOR_LUT_SUNGLINT_THETA",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "106,109,115",
+                "description": "Raised if at least one of the measurements of a dwell has a theta value which falls outside the acceptable interval limits"
+            },
+            {
+                "name": "Out_of_LUT_flags_1_FG_OOR_LUT_SUNGLINT_WS",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "16,81,105",
+                "description": "Raised if WSn value falls outside the acceptable interval limits"
+            },
+            {
+                "name": "Out_of_LUT_flags_1_FG_OOR_LUT_FOAM_WS",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "171,1,243",
+                "description": "Raised if WS value falls outside the acceptable interval limits"
+            },
+            {
+                "name": "Out_of_LUT_flags_1_FG_OOR_LUT_FOAM_TSEAAIR",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "238,203,217",
+                "description": "Raised if Tsea_air value falls outside the acceptable interval limits"
+            },
+            {
+                "name": "Out_of_LUT_flags_1_FG_OOR_LUT_FOAM_SSS",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "250,231,95",
+                "description": "Raised if SSS value falls outside the acceptable interval limits"
+            },
+            {
+                "name": "Out_of_LUT_flags_1_FG_OOR_LUT_FOAM_SST",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "240,108,99",
+                "description": "Raised if SST value falls outside the acceptable interval limits"
+            },
+            {
+                "name": "Out_of_LUT_flags_1_FG_OOR_LUT_FOAM_THETA",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "115,141,245",
+                "description": "Raised if at least one of the measurements of a dwell has a theta value which falls outside the acceptable interval limits"
+            },
+            {
+                "name": "Out_of_LUT_flags_1_FG_OOR_GAM2_DEC",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "134,147,45",
+                "description": "Dec went out of LUT range during retrieval"
+            },
+            {
+                "name": "Out_of_LUT_flags_1_FG_OOR_GAM2_RA",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "128,201,42",
+                "description": "Ra went out of LUT range during retrieval"
+            },
+            {
+                "name": "Out_of_LUT_flags_1_FG_OOR_GAM2_WSN",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "168,104,12",
+                "description": "WSn went out of LUT range during retrieval"
+            },
+            {
+                "name": "Out_of_LUT_flags_1_FG_OOR_GAM2_THETA",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "143,245,6",
+                "description": "Theta went out of LUT range during retrieval"
+            },
+            {
+                "name": "Out_of_LUT_flags_1_FG_OOR_GAM2_PSI",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "36,87,190",
+                "description": "Psi went out of LUT range during retrieval"
+            },
+            {
+                "name": "Out_of_LUT_flags_1_FG_OOR_LUT_AGDPT_LAT",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "114,207,90",
+                "description": "Raised if latitude of the grid point falls outside the acceptable interval limits of LUTs in file AUX_AGDPT_"
+            },
+            {
+                "name": "Out_of_LUT_flags_1_FG_OOR_LUT_AGDPT_LON",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "145,13,33",
+                "description": "Raised if longitude of the grid point falls outside the acceptable interval limits of LUTs in file AUX_AGDPT_"
+            },
+            {
+                "name": "Out_of_LUT_flags_1_FG_OOR_LUT_AGDPT_MONTH",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "52,182,192",
+                "description": "Raised if acquisition time of the gridpoint falls outside the acceptable interval limits of LUTs in file AUX_AGDPT___. Only used by prototype processor."
+            },
+            {
+                "name": "Out_of_LUT_flags_1_FG_OOR_LUT_AGDPT_PARAM",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "46,90,194",
+                "description": "Raised if param value of the gridpoint falls outside the acceptable interval limits of LUTs in file AUX_AGDPT___. Only used by prototype processor."
+            },
+            {
+                "name": "Out_of_LUT_flags_1_FG_OOR_OTT_XI",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "0,15,39",
+                "description": "Raised if xi value of the measurement falls outside the LUT limits of AUX_OTTxD/F_"
+            },
+            {
+                "name": "Out_of_LUT_flags_1_FG_OOR_OTT_ETA",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "160,208,135",
+                "description": "Raised if eta value of the measurement falls outside the LUT limits of AUX_OTTxD/F_"
+            },
+            {
+                "name": "Out_of_LUT_flags_2_FG_OOR_LUT_ROUGH_DIM1",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "246,182,21",
+                "description": "Raised if SST value falls outside the acceptable limits"
+            },
+            {
+                "name": "Out_of_LUT_flags_2_FG_OOR_LUT_ROUGH_DIM2",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "95,92,204",
+                "description": "Raised if 2nd LUT parameter falls outside the acceptable LUT range."
+            },
+            {
+                "name": "Out_of_LUT_flags_2_FG_OOR_LUT_ROUGH_DIM3",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "49,82,133",
+                "description": "Raised if 3rd LUT parameter falls outside the acceptable LUT range."
+            },
+            {
+                "name": "Out_of_LUT_flags_2_FG_OOR_LUT_ROUGH_DIM4",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "169,175,146",
+                "description": "Raised if 4th LUT parameter falls outside the acceptable LUT range."
+            },
+            {
+                "name": "Out_of_LUT_flags_2_FG_OOR_LUT_ROUGH_DIM5",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "156,188,14",
+                "description": "Raised if 5th LUT parameter falls outside the acceptable LUT range."
+            },
+            {
+                "name": "Out_of_LUT_flags_2_FG_OOR_LUT_GAM1_RA",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "39,91,126",
+                "description": "Raised if at least one of the measurements of a dwell has a right ascension value which falls outside the acceptable interval limits"
+            },
+            {
+                "name": "Out_of_LUT_flags_2_FG_OOR_LUT_GAM1_DEC",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "214,25,160",
+                "description": "Raised if at least one of the measurements of a dwell has a declination value which falls outside the acceptable interval limits"
+            },
+            {
+                "name": "Out_of_LUT_flags_2_FG_OOR_LUT_SUNGLINT_THETASUN",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "178,13,207",
+                "description": "Raised if at least one of the measurements of a dwell has a theta value which falls outside the acceptable interval limits"
+            },
+            {
+                "name": "Out_of_LUT_flags_2_FG_OOR_LUT_SUNGLINT_PHISMOS",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "208,249,67",
+                "description": "Raised if at least one of the measurements of a dwell has a phi smos value which falls outside the acceptable interval limits"
+            },
+            {
+                "name": "Out_of_LUT_flags_2_FG_OOR_LUT_SUNGLINT_THETA",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "106,109,115",
+                "description": "Raised if at least one of the measurements of a dwell has a theta value which falls outside the acceptable interval limits"
+            },
+            {
+                "name": "Out_of_LUT_flags_2_FG_OOR_LUT_SUNGLINT_WS",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "16,81,105",
+                "description": "Raised if WSn value falls outside the acceptable interval limits"
+            },
+            {
+                "name": "Out_of_LUT_flags_2_FG_OOR_LUT_FOAM_WS",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "171,1,243",
+                "description": "Raised if WS value falls outside the acceptable interval limits"
+            },
+            {
+                "name": "Out_of_LUT_flags_2_FG_OOR_LUT_FOAM_TSEAAIR",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "238,203,217",
+                "description": "Raised if Tsea_air value falls outside the acceptable interval limits"
+            },
+            {
+                "name": "Out_of_LUT_flags_2_FG_OOR_LUT_FOAM_SSS",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "250,231,95",
+                "description": "Raised if SSS value falls outside the acceptable interval limits"
+            },
+            {
+                "name": "Out_of_LUT_flags_2_FG_OOR_LUT_FOAM_SST",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "240,108,99",
+                "description": "Raised if SST value falls outside the acceptable interval limits"
+            },
+            {
+                "name": "Out_of_LUT_flags_2_FG_OOR_LUT_FOAM_THETA",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "115,141,245",
+                "description": "Raised if at least one of the measurements of a dwell has a theta value which falls outside the acceptable interval limits"
+            },
+            {
+                "name": "Out_of_LUT_flags_2_FG_OOR_GAM2_DEC",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "134,147,45",
+                "description": "Dec went out of LUT range during retrieval"
+            },
+            {
+                "name": "Out_of_LUT_flags_2_FG_OOR_GAM2_RA",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "128,201,42",
+                "description": "Ra went out of LUT range during retrieval"
+            },
+            {
+                "name": "Out_of_LUT_flags_2_FG_OOR_GAM2_WSN",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "168,104,12",
+                "description": "WSn went out of LUT range during retrieval"
+            },
+            {
+                "name": "Out_of_LUT_flags_2_FG_OOR_GAM2_THETA",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "143,245,6",
+                "description": "Theta went out of LUT range during retrieval"
+            },
+            {
+                "name": "Out_of_LUT_flags_2_FG_OOR_GAM2_PSI",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "36,87,190",
+                "description": "Psi went out of LUT range during retrieval"
+            },
+            {
+                "name": "Out_of_LUT_flags_2_FG_OOR_LUT_AGDPT_LAT",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "114,207,90",
+                "description": "Raised if latitude of the grid point falls outside the acceptable interval limits of LUTs in file AUX_AGDPT_"
+            },
+            {
+                "name": "Out_of_LUT_flags_2_FG_OOR_LUT_AGDPT_LON",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "145,13,33",
+                "description": "Raised if longitude of the grid point falls outside the acceptable interval limits of LUTs in file AUX_AGDPT_"
+            },
+            {
+                "name": "Out_of_LUT_flags_2_FG_OOR_LUT_AGDPT_MONTH",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "52,182,192",
+                "description": "Raised if acquisition time of the gridpoint falls outside the acceptable interval limits of LUTs in file AUX_AGDPT___. Only used by prototype processor."
+            },
+            {
+                "name": "Out_of_LUT_flags_2_FG_OOR_LUT_AGDPT_PARAM",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "46,90,194",
+                "description": "Raised if param value of the gridpoint falls outside the acceptable interval limits of LUTs in file AUX_AGDPT___. Only used by prototype processor."
+            },
+            {
+                "name": "Out_of_LUT_flags_2_FG_OOR_OTT_XI",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "0,15,39",
+                "description": "Raised if xi value of the measurement falls outside the LUT limits of AUX_OTTxD/F_"
+            },
+            {
+                "name": "Out_of_LUT_flags_2_FG_OOR_OTT_ETA",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "160,208,135",
+                "description": "Raised if eta value of the measurement falls outside the LUT limits of AUX_OTTxD/F_"
+            },
+            {
+                "name": "Out_of_LUT_flags_3_FG_OOR_LUT_ROUGH_DIM1",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "246,182,21",
+                "description": "Raised if SST value falls outside the acceptable limits"
+            },
+            {
+                "name": "Out_of_LUT_flags_3_FG_OOR_LUT_ROUGH_DIM2",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "95,92,204",
+                "description": "Raised if 2nd LUT parameter falls outside the acceptable LUT range."
+            },
+            {
+                "name": "Out_of_LUT_flags_3_FG_OOR_LUT_ROUGH_DIM3",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "49,82,133",
+                "description": "Raised if 3rd LUT parameter falls outside the acceptable LUT range."
+            },
+            {
+                "name": "Out_of_LUT_flags_3_FG_OOR_LUT_ROUGH_DIM4",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "169,175,146",
+                "description": "Raised if 4th LUT parameter falls outside the acceptable LUT range."
+            },
+            {
+                "name": "Out_of_LUT_flags_3_FG_OOR_LUT_ROUGH_DIM5",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "156,188,14",
+                "description": "Raised if 5th LUT parameter falls outside the acceptable LUT range."
+            },
+            {
+                "name": "Out_of_LUT_flags_3_FG_OOR_LUT_GAM1_RA",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "39,91,126",
+                "description": "Raised if at least one of the measurements of a dwell has a right ascension value which falls outside the acceptable interval limits"
+            },
+            {
+                "name": "Out_of_LUT_flags_3_FG_OOR_LUT_GAM1_DEC",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "214,25,160",
+                "description": "Raised if at least one of the measurements of a dwell has a declination value which falls outside the acceptable interval limits"
+            },
+            {
+                "name": "Out_of_LUT_flags_3_FG_OOR_LUT_SUNGLINT_THETASUN",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "178,13,207",
+                "description": "Raised if at least one of the measurements of a dwell has a theta value which falls outside the acceptable interval limits"
+            },
+            {
+                "name": "Out_of_LUT_flags_3_FG_OOR_LUT_SUNGLINT_PHISMOS",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "208,249,67",
+                "description": "Raised if at least one of the measurements of a dwell has a phi smos value which falls outside the acceptable interval limits"
+            },
+            {
+                "name": "Out_of_LUT_flags_3_FG_OOR_LUT_SUNGLINT_THETA",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "106,109,115",
+                "description": "Raised if at least one of the measurements of a dwell has a theta value which falls outside the acceptable interval limits"
+            },
+            {
+                "name": "Out_of_LUT_flags_3_FG_OOR_LUT_SUNGLINT_WS",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "16,81,105",
+                "description": "Raised if WSn value falls outside the acceptable interval limits"
+            },
+            {
+                "name": "Out_of_LUT_flags_3_FG_OOR_LUT_FOAM_WS",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "171,1,243",
+                "description": "Raised if WS value falls outside the acceptable interval limits"
+            },
+            {
+                "name": "Out_of_LUT_flags_3_FG_OOR_LUT_FOAM_TSEAAIR",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "238,203,217",
+                "description": "Raised if Tsea_air value falls outside the acceptable interval limits"
+            },
+            {
+                "name": "Out_of_LUT_flags_3_FG_OOR_LUT_FOAM_SSS",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "250,231,95",
+                "description": "Raised if SSS value falls outside the acceptable interval limits"
+            },
+            {
+                "name": "Out_of_LUT_flags_3_FG_OOR_LUT_FOAM_SST",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "240,108,99",
+                "description": "Raised if SST value falls outside the acceptable interval limits"
+            },
+            {
+                "name": "Out_of_LUT_flags_3_FG_OOR_LUT_FOAM_THETA",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "115,141,245",
+                "description": "Raised if at least one of the measurements of a dwell has a theta value which falls outside the acceptable interval limits"
+            },
+            {
+                "name": "Out_of_LUT_flags_3_FG_OOR_GAM2_DEC",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "134,147,45",
+                "description": "Dec went out of LUT range during retrieval"
+            },
+            {
+                "name": "Out_of_LUT_flags_3_FG_OOR_GAM2_RA",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "128,201,42",
+                "description": "Ra went out of LUT range during retrieval"
+            },
+            {
+                "name": "Out_of_LUT_flags_3_FG_OOR_GAM2_WSN",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "168,104,12",
+                "description": "WSn went out of LUT range during retrieval"
+            },
+            {
+                "name": "Out_of_LUT_flags_3_FG_OOR_GAM2_THETA",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "143,245,6",
+                "description": "Theta went out of LUT range during retrieval"
+            },
+            {
+                "name": "Out_of_LUT_flags_3_FG_OOR_GAM2_PSI",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "36,87,190",
+                "description": "Psi went out of LUT range during retrieval"
+            },
+            {
+                "name": "Out_of_LUT_flags_3_FG_OOR_LUT_AGDPT_LAT",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "114,207,90",
+                "description": "Raised if latitude of the grid point falls outside the acceptable interval limits of LUTs in file AUX_AGDPT_"
+            },
+            {
+                "name": "Out_of_LUT_flags_3_FG_OOR_LUT_AGDPT_LON",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "145,13,33",
+                "description": "Raised if longitude of the grid point falls outside the acceptable interval limits of LUTs in file AUX_AGDPT_"
+            },
+            {
+                "name": "Out_of_LUT_flags_3_FG_OOR_LUT_AGDPT_MONTH",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "52,182,192",
+                "description": "Raised if acquisition time of the gridpoint falls outside the acceptable interval limits of LUTs in file AUX_AGDPT___. Only used by prototype processor."
+            },
+            {
+                "name": "Out_of_LUT_flags_3_FG_OOR_LUT_AGDPT_PARAM",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "46,90,194",
+                "description": "Raised if param value of the gridpoint falls outside the acceptable interval limits of LUTs in file AUX_AGDPT___. Only used by prototype processor."
+            },
+            {
+                "name": "Out_of_LUT_flags_3_FG_OOR_OTT_XI",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "0,15,39",
+                "description": "Raised if xi value of the measurement falls outside the LUT limits of AUX_OTTxD/F_"
+            },
+            {
+                "name": "Out_of_LUT_flags_3_FG_OOR_OTT_ETA",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "160,208,135",
+                "description": "Raised if eta value of the measurement falls outside the LUT limits of AUX_OTTxD/F_"
+            },
+            {
+                "name": "Out_of_LUT_flags_4_FG_OOR_LUT_ROUGH_DIM1",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "246,182,21",
+                "description": "Raised if SST value falls outside the acceptable limits"
+            },
+            {
+                "name": "Out_of_LUT_flags_4_FG_OOR_LUT_ROUGH_DIM2",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "95,92,204",
+                "description": "Raised if 2nd LUT parameter falls outside the acceptable LUT range."
+            },
+            {
+                "name": "Out_of_LUT_flags_4_FG_OOR_LUT_ROUGH_DIM3",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "49,82,133",
+                "description": "Raised if 3rd LUT parameter falls outside the acceptable LUT range."
+            },
+            {
+                "name": "Out_of_LUT_flags_4_FG_OOR_LUT_ROUGH_DIM4",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "169,175,146",
+                "description": "Raised if 4th LUT parameter falls outside the acceptable LUT range."
+            },
+            {
+                "name": "Out_of_LUT_flags_4_FG_OOR_LUT_ROUGH_DIM5",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "156,188,14",
+                "description": "Raised if 5th LUT parameter falls outside the acceptable LUT range."
+            },
+            {
+                "name": "Out_of_LUT_flags_4_FG_OOR_LUT_GAM1_RA",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "39,91,126",
+                "description": "Raised if at least one of the measurements of a dwell has a right ascension value which falls outside the acceptable interval limits"
+            },
+            {
+                "name": "Out_of_LUT_flags_4_FG_OOR_LUT_GAM1_DEC",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "214,25,160",
+                "description": "Raised if at least one of the measurements of a dwell has a declination value which falls outside the acceptable interval limits"
+            },
+            {
+                "name": "Out_of_LUT_flags_4_FG_OOR_LUT_SUNGLINT_THETASUN",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "178,13,207",
+                "description": "Raised if at least one of the measurements of a dwell has a theta value which falls outside the acceptable interval limits"
+            },
+            {
+                "name": "Out_of_LUT_flags_4_FG_OOR_LUT_SUNGLINT_PHISMOS",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "208,249,67",
+                "description": "Raised if at least one of the measurements of a dwell has a phi smos value which falls outside the acceptable interval limits"
+            },
+            {
+                "name": "Out_of_LUT_flags_4_FG_OOR_LUT_SUNGLINT_THETA",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "106,109,115",
+                "description": "Raised if at least one of the measurements of a dwell has a theta value which falls outside the acceptable interval limits"
+            },
+            {
+                "name": "Out_of_LUT_flags_4_FG_OOR_LUT_SUNGLINT_WS",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "16,81,105",
+                "description": "Raised if WSn value falls outside the acceptable interval limits"
+            },
+            {
+                "name": "Out_of_LUT_flags_4_FG_OOR_LUT_FOAM_WS",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "171,1,243",
+                "description": "Raised if WS value falls outside the acceptable interval limits"
+            },
+            {
+                "name": "Out_of_LUT_flags_4_FG_OOR_LUT_FOAM_TSEAAIR",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "238,203,217",
+                "description": "Raised if Tsea_air value falls outside the acceptable interval limits"
+            },
+            {
+                "name": "Out_of_LUT_flags_4_FG_OOR_LUT_FOAM_SSS",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "250,231,95",
+                "description": "Raised if SSS value falls outside the acceptable interval limits"
+            },
+            {
+                "name": "Out_of_LUT_flags_4_FG_OOR_LUT_FOAM_SST",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "240,108,99",
+                "description": "Raised if SST value falls outside the acceptable interval limits"
+            },
+            {
+                "name": "Out_of_LUT_flags_4_FG_OOR_LUT_FOAM_THETA",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "115,141,245",
+                "description": "Raised if at least one of the measurements of a dwell has a theta value which falls outside the acceptable interval limits"
+            },
+            {
+                "name": "Out_of_LUT_flags_4_FG_OOR_GAM2_DEC",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "134,147,45",
+                "description": "Dec went out of LUT range during retrieval"
+            },
+            {
+                "name": "Out_of_LUT_flags_4_FG_OOR_GAM2_RA",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "128,201,42",
+                "description": "Ra went out of LUT range during retrieval"
+            },
+            {
+                "name": "Out_of_LUT_flags_4_FG_OOR_GAM2_WSN",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "168,104,12",
+                "description": "WSn went out of LUT range during retrieval"
+            },
+            {
+                "name": "Out_of_LUT_flags_4_FG_OOR_GAM2_THETA",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "143,245,6",
+                "description": "Theta went out of LUT range during retrieval"
+            },
+            {
+                "name": "Out_of_LUT_flags_4_FG_OOR_GAM2_PSI",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "36,87,190",
+                "description": "Psi went out of LUT range during retrieval"
+            },
+            {
+                "name": "Out_of_LUT_flags_4_FG_OOR_LUT_AGDPT_LAT",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "114,207,90",
+                "description": "Raised if latitude of the grid point falls outside the acceptable interval limits of LUTs in file AUX_AGDPT_"
+            },
+            {
+                "name": "Out_of_LUT_flags_4_FG_OOR_LUT_AGDPT_LON",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "145,13,33",
+                "description": "Raised if longitude of the grid point falls outside the acceptable interval limits of LUTs in file AUX_AGDPT_"
+            },
+            {
+                "name": "Out_of_LUT_flags_4_FG_OOR_LUT_AGDPT_MONTH",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "52,182,192",
+                "description": "Raised if acquisition time of the gridpoint falls outside the acceptable interval limits of LUTs in file AUX_AGDPT___. Only used by prototype processor."
+            },
+            {
+                "name": "Out_of_LUT_flags_4_FG_OOR_LUT_AGDPT_PARAM",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "46,90,194",
+                "description": "Raised if param value of the gridpoint falls outside the acceptable interval limits of LUTs in file AUX_AGDPT___. Only used by prototype processor."
+            },
+            {
+                "name": "Out_of_LUT_flags_4_FG_OOR_OTT_XI",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "0,15,39",
+                "description": "Raised if xi value of the measurement falls outside the LUT limits of AUX_OTTxD/F_"
+            },
+            {
+                "name": "Out_of_LUT_flags_4_FG_OOR_OTT_ETA",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "160,208,135",
+                "description": "Raised if eta value of the measurement falls outside the LUT limits of AUX_OTTxD/F_"
+            },
             {
                 "name": "Land_Sea_Mask_USGS_SEA_FLAG",
                 "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
