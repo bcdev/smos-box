@@ -26,9 +26,7 @@ import java.util.Map;
 abstract class FP extends AbstractValueProvider {
 
     private final AbstractValueProvider frxProvider;
-    private final AbstractValueProvider fryProvider;
     private final AbstractValueProvider grxProvider;
-    private final AbstractValueProvider gryProvider;
     private final AbstractValueProvider btxProvider;
     private final AbstractValueProvider btyProvider;
     private final AbstractValueProvider btxyProvider;
@@ -42,9 +40,7 @@ abstract class FP extends AbstractValueProvider {
         this.imaginary = imaginary;
 
         frxProvider = getValueProvider(product.getBand("Faraday_Rotation_Angle_X"), valueProviderMap);
-        fryProvider = getValueProvider(product.getBand("Faraday_Rotation_Angle_Y"), valueProviderMap);
         grxProvider = getValueProvider(product.getBand("Geometric_Rotation_Angle_X"), valueProviderMap);
-        gryProvider = getValueProvider(product.getBand("Geometric_Rotation_Angle_Y"), valueProviderMap);
 
         final String quantity;
         if (accuracy) {
@@ -116,13 +112,10 @@ abstract class FP extends AbstractValueProvider {
     protected final float getFloat(int gridPointIndex) throws IOException {
         final float frx = frxProvider.getFloat(gridPointIndex);
         final float grx = grxProvider.getFloat(gridPointIndex);
-        final float fry = fryProvider.getFloat(gridPointIndex);
-        final float gry = gryProvider.getFloat(gridPointIndex);
 
-        final double alphaX = Math.toRadians(frx - grx);
-        final double alphaY = Math.toRadians(fry - gry);
-        final double a = (Math.cos(alphaX) + Math.cos(alphaY)) / 2.0;
-        final double b = (Math.sin(alphaX) + Math.sin(alphaY)) / 2.0;
+        final double alpha = Math.toRadians(frx - grx);
+        final double a = Math.cos(alpha);
+        final double b = Math.sin(alpha);
         final double aa = a * a;
         final double ab = a * b;
         final double bb = b * b;
