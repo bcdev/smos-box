@@ -133,7 +133,7 @@ public class DddbTest {
     @Test
     public void testGetSMUPD2_v0200Descriptors() {
         final Family<BandDescriptor> descriptors = Dddb.getInstance().getBandDescriptors(DBL_SM_XXXX_MIR_SMUDP2_0200);
-        assertEquals(63, descriptors.asList().size());
+        assertEquals(66, descriptors.asList().size());
 
         final BandDescriptor n_instrument_error = descriptors.getMember("N_Instrument_Error");
         assertNotNull(n_instrument_error);
