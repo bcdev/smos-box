@@ -82,7 +82,7 @@ public class DddbTest {
     @Test
     public void testGetSMDAP2_v0200Descriptors() {
         final Family<BandDescriptor> descriptors = Dddb.getInstance().getBandDescriptors(DBL_SM_XXXX_MIR_SMDAP2_0200);
-        assertEquals(69, descriptors.asList().size());
+        assertEquals(70, descriptors.asList().size());
 
         final BandDescriptor x_swath = descriptors.getMember("X_Swath");
         assertNotNull(x_swath);
@@ -91,7 +91,7 @@ public class DddbTest {
     @Test
     public void testGetSMDAP2_v0201Descriptors() {
         final Family<BandDescriptor> descriptors = Dddb.getInstance().getBandDescriptors(DBL_SM_XXXX_MIR_SMDAP2_0201);
-        assertEquals(69, descriptors.asList().size());
+        assertEquals(70, descriptors.asList().size());
 
         final BandDescriptor tSurf_init_std = descriptors.getMember("TSurf_Init_Std");
         assertNotNull(tSurf_init_std);
@@ -100,7 +100,7 @@ public class DddbTest {
     @Test
     public void testGetSMDAP2_v0300Descriptors() {
         final Family<BandDescriptor> descriptors = Dddb.getInstance().getBandDescriptors(DBL_SM_XXXX_MIR_SMDAP2_0300);
-        assertEquals(69, descriptors.asList().size());
+        assertEquals(70, descriptors.asList().size());
 
         final BandDescriptor hr_in_dqx = descriptors.getMember("HR_IN_DQX");
         assertNotNull(hr_in_dqx);

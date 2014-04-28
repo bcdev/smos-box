@@ -1,0 +1,27 @@
+# visible | name                    | mask     | color | transparency | description
+  *       | FL_DATA_MISS       | 00000001 | *     | *            | Check fall back options
+  *       | FL_MVAL0           | 00000002 | *     | *            | Flag to indicate no more retrieval to be done. True if MVAL0< TH_Mmin0
+  *       | FL_MVAL            | 00000004 | *     | *            | Flag to indicate no more retrieval to be done. True if MVAL < TH_Mmin1
+  *       | FL_R4_NITM         | 00000008 | *     | *            | Flag indicating that R4 was attempted, but failed with NITM
+  *       | FL_R4_KDIA         | 00000010 | *     | *            | Flag indicating R4 was attempted, but failed with KDIA
+  *       | FL_R4_COND         | 00000020 | *     | *            | Flag to indicate R4 attempted, but failed COND
+  *       | FL_R3_NITM         | 00000040 | *     | *            | Flag to indicate R37 attempted, failed NITM
+  *       | FL_R3_KDIA         | 00000080 | *     | *            | Flag to indicate failed KDIA
+  *       | FL_R3_COND         | 00000100 | *     | *            | Flag to indicate R3 attempted, but failed COND
+  *       | FL_R2_NITM         | 00000200 | *     | *            | Flag to indicate R2 attempted, but failed NITM
+  *       | FL_R2_KDIA         | 00000400 | *     | *            | Flag to indicate failed KDIA
+  *       | FL_R2_COND         | 00000800 | *     | *            | Flag to indicate R2 attempted, but failed COND
+  *       | FL_MD_NITM         | 00001000 | *     | *            | Flag to indicate additional MD retrieval failed NITM
+  *       | FL_MD_KDIA         | 00002000 | *     | *            | Flag to indicate failed KDIA
+  *       | FL_MD_COND         | 00004000 | *     | *            | Flag to indicate Mda failed COND
+  *       | FL_CE              | 00008000 | *     | *            | Computational exceptions
+  *       | FL_SUN_POINT_C     | 00010000 | *     | *            | Used to exclude view
+  *       | FL_SUN_GLINT_FOV_C | 00020000 | *     | *            | Indicator of possible sun glint effects. Not relevant for SM computations
+  *       | FL_R4_RANGE        | 00040000 | *     | *            | Set to ON if a retrieved value is outside the extended valid range in R4 retrieval
+  *       | FL_R4_RSTD         | 00080000 | *     | *            | Set to ON if a retrieved value DQX is greater than the threshold in R4 retrieval
+  *       | FL_R3_RANGE        | 00100000 | *     | *            | Set to ON if a retrieved value is outside the extended valid range in R3 retrieval
+  *       | FL_R3_RSTD         | 00200000 | *     | *            | Set to ON if a retrieved value DQX is greater than the threshold in R3 retrieval
+  *       | FL_R2_RANGE        | 00400000 | *     | *            | Set to ON if a retrieved value is outside the extended valid range in R2 retrieval
+  *       | FL_R2_RSTD         | 00800000 | *     | *            | Set to ON if a retrieved value DQX is greater than the threshold in R2 retrieval
+  *       | FL_MDA_RANGE       | 01000000 | *     | *            | Set to ON if a retrieved value is outside the extended valid range
+  *       | FL_MDA_RSTD        | 02000000 | *     | *            | Set to ON if a retrieved value DQX is greater than the threshold in Mda retrieval
