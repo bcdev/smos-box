@@ -56,7 +56,7 @@ public class L1cScienceSmosFile extends L1cSmosFile {
     private static final double MIN_BROWSE_INCIDENCE_ANGLE = 37.5;
     private static final double MAX_BROWSE_INCIDENCE_ANGLE = 52.5;
 
-    private final Map<String, AbstractValueProvider> valueProviderMap = new HashMap<String, AbstractValueProvider>(17);
+    private final Map<String, AbstractValueProvider> valueProviderMap = new HashMap<>(17);
     private final int flagsIndex;
     private final int incidenceAngleIndex;
     private final int snapshotIdOfPixelIndex;
@@ -309,12 +309,12 @@ public class L1cScienceSmosFile extends L1cSmosFile {
     }
 
     private SnapshotInfo createSnapshotInfo() throws IOException {
-        final Set<Long> all = new TreeSet<Long>();
-        final Set<Long> x = new TreeSet<Long>();
-        final Set<Long> y = new TreeSet<Long>();
-        final Set<Long> xy = new TreeSet<Long>();
+        final Set<Long> all = new TreeSet<>();
+        final Set<Long> x = new TreeSet<>();
+        final Set<Long> y = new TreeSet<>();
+        final Set<Long> xy = new TreeSet<>();
 
-        final Map<Long, Rectangle2D> snapshotAreaMap = new TreeMap<Long, Rectangle2D>();
+        final Map<Long, Rectangle2D> snapshotAreaMap = new TreeMap<>();
         final int latIndex = getGridPointType().getMemberIndex("Latitude");
         final int lonIndex = getGridPointType().getMemberIndex("Longitude");
 
@@ -368,7 +368,7 @@ public class L1cScienceSmosFile extends L1cSmosFile {
             }
         }
 
-        final Map<Long, Integer> snapshotIndexMap = new TreeMap<Long, Integer>();
+        final Map<Long, Integer> snapshotIndexMap = new TreeMap<>();
         final int snapshotIdIndex = snapshotType.getMemberIndex(SmosConstants.SNAPSHOT_ID_NAME);
         final int snapshotCount = snapshotList.getElementCount();
 
