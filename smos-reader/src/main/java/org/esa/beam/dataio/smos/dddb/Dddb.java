@@ -26,7 +26,6 @@ import org.jdom.Namespace;
 import org.jdom.filter.Filter;
 import org.jdom.input.SAXBuilder;
 
-import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -35,13 +34,7 @@ import java.net.URL;
 import java.nio.ByteOrder;
 import java.nio.charset.Charset;
 import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -494,55 +487,6 @@ public class Dddb {
         @Override
         public final Family<FlagDescriptor> getFlagDescriptors() {
             return flagDescriptors;
-        }
-    }
-
-    private static class FlagDescriptorImpl implements FlagDescriptor {
-
-        private final boolean visible;
-        private final String flagName;
-        private final int mask;
-        private final Color color;
-        private final double transparency;
-        private final String description;
-
-        FlagDescriptorImpl(String[] tokens) {
-            visible = TokenParser.parseBoolean(tokens[1], false);
-            flagName = TokenParser.parseString(tokens[1]);
-            mask = TokenParser.parseHex(tokens[2], 0);
-            color = TokenParser.parseColor(tokens[3], null);
-            transparency = TokenParser.parseDouble(tokens[4], 0.5);
-            description = TokenParser.parseString(tokens[5], "");
-        }
-
-        @Override
-        public final String getFlagName() {
-            return flagName;
-        }
-
-        @Override
-        public final int getMask() {
-            return mask;
-        }
-
-        @Override
-        public final boolean isVisible() {
-            return visible;
-        }
-
-        @Override
-        public final Color getColor() {
-            return color;
-        }
-
-        @Override
-        public final double getTransparency() {
-            return transparency;
-        }
-
-        @Override
-        public final String getDescription() {
-            return description;
         }
     }
 }
