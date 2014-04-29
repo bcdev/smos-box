@@ -20,6 +20,11 @@ import com.bc.ceres.binio.DataFormat;
 import com.bc.ceres.binio.SequenceData;
 import com.bc.ceres.binio.SequenceType;
 import com.bc.ceres.binio.Type;
+import org.esa.beam.dataio.smos.dddb.BandDescriptor;
+import org.esa.beam.framework.datamodel.Band;
+import org.jdom.Document;
+import org.jdom.Element;
+import org.jdom.Namespace;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,9 +41,19 @@ public class L1cSmosFile extends SmosFile {
 
     private final int btDataListIndex;
     private final CompoundType btDataType;
+    private final double radiometricAccuracyScale;
+    private final double pixelFootprintScale;
 
     protected L1cSmosFile(File hdrFile, File dblFile, DataFormat format) throws IOException {
         super(hdrFile, dblFile, format);
+
+        final Document document = getDocument();
+        final Namespace namespace = document.getRootElement().getNamespace();
+        final Element specificProductHeader = getElement(document.getRootElement(), TAG_SPECIFIC_PRODUCT_HEADER);
+
+        radiometricAccuracyScale = Double.valueOf(
+                specificProductHeader.getChildText("Radiometric_Accuracy_Scale", namespace));
+        pixelFootprintScale = Double.valueOf(specificProductHeader.getChildText("Pixel_Footprint_Scale", namespace));
 
         btDataListIndex = getGridPointType().getMemberIndex(SmosConstants.BT_DATA_LIST_NAME);
         if (btDataListIndex == -1) {
@@ -58,6 +73,20 @@ public class L1cSmosFile extends SmosFile {
         }
 
         btDataType = (CompoundType) elementType;
+    }
+
+    @Override
+    protected void setScaling(Band band, BandDescriptor descriptor) {
+        final String memberName = descriptor.getMemberName();
+        if (memberName.startsWith("Footprint_Axis")) {
+            band.setScalingFactor(descriptor.getScalingFactor() * pixelFootprintScale);
+        } else if (memberName.startsWith("Pixel_Radiometric_Accuracy")) {
+            band.setScalingFactor(descriptor.getScalingFactor() * radiometricAccuracyScale);
+        } else if (memberName.startsWith("Radiometric_Accuracy_of_Pixel")) { // does not occur, is mapped to Pixel_Radiometric_Accuracy
+            band.setScalingFactor(descriptor.getScalingFactor() * radiometricAccuracyScale);
+        } else {
+            super.setScaling(band, descriptor);
+        }
     }
 
     public final CompoundType getBtDataType() {

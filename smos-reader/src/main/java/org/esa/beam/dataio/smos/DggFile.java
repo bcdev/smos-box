@@ -236,7 +236,7 @@ public class DggFile extends ExplorerFile {
             final Band band = product.addBand(descriptor.getBandName(), dataType);
 
             band.setScalingOffset(descriptor.getScalingOffset());
-            band.setScalingFactor(descriptor.getScalingFactor());
+            setScaling(band, descriptor);
             if (descriptor.hasFillValue()) {
                 band.setNoDataValueUsed(true);
                 band.setNoDataValue(descriptor.getFillValue());
@@ -259,6 +259,10 @@ public class DggFile extends ExplorerFile {
             band.setSourceImage(createSourceImage(band, valueProvider));
             band.setImageInfo(ProductHelper.createImageInfo(band, descriptor));
         }
+    }
+
+    protected void setScaling(Band band, BandDescriptor descriptor) {
+        band.setScalingFactor(descriptor.getScalingFactor());
     }
 
     protected AbstractValueProvider createValueProvider(BandDescriptor descriptor) {
