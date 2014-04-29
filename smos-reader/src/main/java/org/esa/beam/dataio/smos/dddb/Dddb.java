@@ -26,7 +26,6 @@ import org.jdom.Namespace;
 import org.jdom.filter.Filter;
 import org.jdom.input.SAXBuilder;
 
-import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -35,13 +34,7 @@ import java.net.URL;
 import java.nio.ByteOrder;
 import java.nio.charset.Charset;
 import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -331,8 +324,8 @@ public class Dddb {
         private final Map<String, FlagDescriptor> descriptorMap;
 
         FlagDescriptors(List<String[]> recordList) {
-            descriptorList = new ArrayList<FlagDescriptor>(recordList.size());
-            descriptorMap = new HashMap<String, FlagDescriptor>(recordList.size());
+            descriptorList = new ArrayList<>(recordList.size());
+            descriptorMap = new HashMap<>(recordList.size());
 
             for (final String[] tokens : recordList) {
                 final FlagDescriptorImpl record = new FlagDescriptorImpl(tokens);
@@ -372,25 +365,25 @@ public class Dddb {
         private final Family<FlagDescriptor> flagDescriptors;
 
         private BandDescriptorImpl(String[] tokens) {
-            visible = parseBoolean(tokens[0], true);
-            bandName = parseString(tokens[1]);
-            memberName = parseString(tokens[2], bandName);
-            polarization = parseInt(tokens[3], -1);
-            sampleModel = parseInt(tokens[4], 0);
+            visible = TokenParser.parseBoolean(tokens[0], true);
+            bandName = TokenParser.parseString(tokens[1]);
+            memberName = TokenParser.parseString(tokens[2], bandName);
+            polarization = TokenParser.parseInt(tokens[3], -1);
+            sampleModel = TokenParser.parseInt(tokens[4], 0);
 
-            scalingOffset = parseDouble(tokens[5], 0.0);
-            scalingFactor = parseDouble(tokens[6], 1.0);
+            scalingOffset = TokenParser.parseDouble(tokens[5], 0.0);
+            scalingFactor = TokenParser.parseDouble(tokens[6], 1.0);
 
-            typicalMin = parseDouble(tokens[7], Double.NEGATIVE_INFINITY);
-            typicalMax = parseDouble(tokens[8], Double.POSITIVE_INFINITY);
-            cyclic = parseBoolean(tokens[9], false);
+            typicalMin = TokenParser.parseDouble(tokens[7], Double.NEGATIVE_INFINITY);
+            typicalMax = TokenParser.parseDouble(tokens[8], Double.POSITIVE_INFINITY);
+            cyclic = TokenParser.parseBoolean(tokens[9], false);
 
-            fillValue = parseDouble(tokens[10], Double.NaN);
-            validPixelExpression = parseString(tokens[11], "").replaceAll("x", bandName);
+            fillValue = TokenParser.parseDouble(tokens[10], Double.NaN);
+            validPixelExpression = TokenParser.parseString(tokens[11], "").replaceAll("x", bandName);
 
-            unit = parseString(tokens[12], "");
-            description = parseString(tokens[13], "");
-            flagCodingName = parseString(tokens[14], "");
+            unit = TokenParser.parseString(tokens[12], "");
+            description = TokenParser.parseString(tokens[13], "");
+            flagCodingName = TokenParser.parseString(tokens[14], "");
             flagDescriptors = getFlagDescriptors(tokens[15]);
         }
 
@@ -398,7 +391,7 @@ public class Dddb {
             if (flagCodingName.isEmpty()) {
                 return null;
             }
-            return getInstance().getFlagDescriptors(parseString(token));
+            return getInstance().getFlagDescriptors(TokenParser.parseString(token));
         }
 
         @Override
@@ -495,102 +488,5 @@ public class Dddb {
         public final Family<FlagDescriptor> getFlagDescriptors() {
             return flagDescriptors;
         }
-    }
-
-    private static class FlagDescriptorImpl implements FlagDescriptor {
-
-        private final boolean visible;
-        private final String flagName;
-        private final int mask;
-        private final Color color;
-        private final double transparency;
-        private final String description;
-
-        FlagDescriptorImpl(String[] tokens) {
-            visible = parseBoolean(tokens[1], false);
-            flagName = parseString(tokens[1]);
-            mask = parseHex(tokens[2], 0);
-            color = parseColor(tokens[3], null);
-            transparency = parseDouble(tokens[4], 0.5);
-            description = parseString(tokens[5], "");
-        }
-
-        @Override
-        public final String getFlagName() {
-            return flagName;
-        }
-
-        @Override
-        public final int getMask() {
-            return mask;
-        }
-
-        @Override
-        public final boolean isVisible() {
-            return visible;
-        }
-
-        @Override
-        public final Color getColor() {
-            return color;
-        }
-
-        @Override
-        public final double getTransparency() {
-            return transparency;
-        }
-
-        @Override
-        public final String getDescription() {
-            return description;
-        }
-    }
-
-    @SuppressWarnings({"SimplifiableIfStatement"})
-    private static boolean parseBoolean(String token, boolean defaultValue) {
-        if ("*".equals(token.trim())) {
-            return defaultValue;
-        }
-        return Boolean.parseBoolean(token);
-    }
-
-    private static Color parseColor(String token, Color defaultColor) {
-        if ("*".equals(token.trim())) {
-            return defaultColor;
-        }
-
-        return new Color(Integer.parseInt(token, 16));
-    }
-
-    private static double parseDouble(String token, double defaultValue) {
-        if ("*".equals(token.trim())) {
-            return defaultValue;
-        }
-        return Double.parseDouble(token);
-    }
-
-    private static int parseHex(String token, int defaultValue) {
-        if ("*".equals(token.trim())) {
-            return defaultValue;
-        }
-        return Integer.parseInt(token, 16);
-    }
-
-    private static int parseInt(String token, int defaultValue) {
-        if ("*".equals(token.trim())) {
-            return defaultValue;
-        }
-        return Integer.parseInt(token);
-    }
-
-    private static String parseString(String token) {
-        return token.trim();
-    }
-
-    private static String parseString(String token, String defaultValue) {
-        if ("*".equals(token.trim())) {
-            return defaultValue;
-        }
-        return token.trim();
     }
 }
