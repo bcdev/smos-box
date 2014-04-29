@@ -81,4 +81,23 @@ abstract class AbstractValueProvider implements ValueProvider {
     protected abstract int getInt(int gridPointIndex) throws IOException;
 
     protected abstract float getFloat(int gridPointIndex) throws IOException;
+
+    protected static double angularAverage(double angle1, double angle2) {
+        if (inQuadrant1(angle1) && inQuadrant4(angle2)) {
+            angle2 = angle2 - 360.0;
+        } else if (inQuadrant1(angle2) && inQuadrant4(angle1)) {
+            angle1 = angle1 - 360.0;
+        }
+        return (angle1 + angle2) / 2.0;
+    }
+
+    private static boolean inQuadrant1(double angle) {
+        return angle >= 0.0 && angle < 90.0;
+    }
+
+    private static boolean inQuadrant4(double angle) {
+        return angle > 270.0 && angle <= 360.0;
+    }
+
+
 }
