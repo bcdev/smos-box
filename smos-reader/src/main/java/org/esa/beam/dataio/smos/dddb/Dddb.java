@@ -61,15 +61,17 @@ public class Dddb {
     private final Charset charset = Charset.forName("UTF-8");
     private final char[] separators = new char[]{'|'};
 
-    private final ResourcePathBuilder pathBuilder = new ResourcePathBuilder();
+    private final ResourcePathBuilder pathBuilder;
     private final ConcurrentMap<String, DataFormat> dataFormatMap;
     private final ConcurrentMap<String, BandDescriptors> bandDescriptorMap;
     private final ConcurrentMap<String, FlagDescriptors> flagDescriptorMap;
 
     private Dddb() {
-        dataFormatMap = new ConcurrentHashMap<String, DataFormat>(17);
-        bandDescriptorMap = new ConcurrentHashMap<String, BandDescriptors>(17);
-        flagDescriptorMap = new ConcurrentHashMap<String, FlagDescriptors>(17);
+        dataFormatMap = new ConcurrentHashMap<>(17);
+        bandDescriptorMap = new ConcurrentHashMap<>(17);
+        flagDescriptorMap = new ConcurrentHashMap<>(17);
+
+        pathBuilder = new ResourcePathBuilder();
     }
 
     public static Dddb getInstance() {
@@ -136,8 +138,8 @@ public class Dddb {
         }
     }
 
-    public BandDescriptor findBandDescriptorForMember(String identifier, String memberName) {
-        final Family<BandDescriptor> descriptors = getBandDescriptors(identifier);
+    public BandDescriptor findBandDescriptorForMember(String formatName, String memberName) {
+        final Family<BandDescriptor> descriptors = getBandDescriptors(formatName);
         if (descriptors != null) {
             for (final BandDescriptor descriptor : descriptors.asList()) {
                 if (descriptor.getMemberName().equals(memberName)) {
@@ -289,20 +291,6 @@ public class Dddb {
         return getClass().getResourceAsStream(pathBuilder.buildPath(identifier, "flags", ".csv"));
     }
 
-    private static class ResourcePathBuilder {
-
-        String buildPath(String identifier, String root, String appendix) {
-            final String fc = identifier.substring(12, 16);
-            final String sd = identifier.substring(16, 22);
-
-            final StringBuilder pathBuilder = new StringBuilder();
-            pathBuilder.append(root).append("/").append(fc).append("/").append(sd).append("/").append(identifier);
-            pathBuilder.append(appendix);
-
-            return pathBuilder.toString();
-        }
-    }
-
     // Initialization on demand holder idiom
 
     private static class Holder {
@@ -316,8 +304,8 @@ public class Dddb {
         private final Map<String, BandDescriptor> descriptorMap;
 
         BandDescriptors(List<String[]> recordList) {
-            descriptorList = new ArrayList<BandDescriptor>(recordList.size());
-            descriptorMap = new HashMap<String, BandDescriptor>(recordList.size());
+            descriptorList = new ArrayList<>(recordList.size());
+            descriptorMap = new HashMap<>(recordList.size());
 
             for (final String[] tokens : recordList) {
                 final BandDescriptorImpl descriptor = new BandDescriptorImpl(tokens);
