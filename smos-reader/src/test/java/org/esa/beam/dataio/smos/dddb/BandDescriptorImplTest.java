@@ -16,7 +16,7 @@ public class BandDescriptorImplTest {
     public void testConstruction() {
         final String[] tokens = new String[] {"false", "theBand", "theMember", "18", "19", "20.0", "21.1", "22.2", "23.3", "true", "24.4", "pixelExpression", "unit", "description", "codingName", "flagDescriptors"};
         final Dddb dddb = mock(Dddb.class);
-        when(dddb.getFlagDescriptors(anyString())).thenReturn(new Dddb.FlagDescriptors(new ArrayList<String[]>()));
+        when(dddb.getFlagDescriptors(anyString())).thenReturn(new FlagDescriptors(new ArrayList<String[]>()));
 
         final BandDescriptorImpl descriptor = new BandDescriptorImpl(tokens, dddb);
         assertFalse(descriptor.isVisible());
