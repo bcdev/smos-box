@@ -284,7 +284,7 @@ public class SmosProductReader extends AbstractProductReader {
         } else if (SmosUtils.isOsUserFormat(formatName)) {
             return new SmosFile(hdrFile, dblFile, format);
         } else if (SmosUtils.isSmUserFormat(formatName)) {
-            return new SmosFile(hdrFile, dblFile, format);
+            return new SmUserSmosFile(hdrFile, dblFile, format);
         } else if (SmosUtils.isOsAnalysisFormat(formatName)) {
             return new SmosFile(hdrFile, dblFile, format);
         } else if (SmosUtils.isSmAnalysisFormat(formatName)) {
