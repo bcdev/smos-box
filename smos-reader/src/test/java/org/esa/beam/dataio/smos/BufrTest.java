@@ -18,7 +18,10 @@ package org.esa.beam.dataio.smos;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import ucar.ma2.Array;
+import ucar.ma2.ArrayStructure;
 import ucar.ma2.DataType;
+import ucar.ma2.InvalidRangeException;
 import ucar.ma2.StructureData;
 import ucar.ma2.StructureDataIterator;
 import ucar.ma2.StructureMembers;
@@ -31,7 +34,9 @@ import ucar.nc2.iosp.bufr.BufrIosp;
 import java.io.IOException;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests for trying out reading SMOS BUFR formatted files obtained from 'ideas-nas.eo.esa.int'.
@@ -48,7 +53,6 @@ import static org.junit.Assert.*;
  *
  * @author Ralf Quast
  */
-@Ignore
 public class BufrTest {
 
     @Before
@@ -81,7 +85,6 @@ public class BufrTest {
         performAssertions(dataset);
     }
 
-    @Ignore
     @Test
     public void testCanReadBufrLightFiles() throws Exception {
         NetcdfFile dataset;
@@ -93,6 +96,7 @@ public class BufrTest {
 
         performAssertions(dataset);
 
+        /*
         dataset = NetcdfFile.open(
                 "/Users/ralf/Desktop/ideas-nas.eo.esa.int/W_ES-ESA-ESAC,SMOS,N256_C_LEMM_20131028033037_20131028002942_20131028003302_bufr_v505.bin");
 
@@ -106,10 +110,11 @@ public class BufrTest {
         assertNotNull(dataset);
 
         performAssertions(dataset);
+        */
     }
 
-    private static void performAssertions(NetcdfFile dataset) throws IOException {
-        dataset.writeCDL(System.out, false);
+    private static void performAssertions(NetcdfFile dataset) throws IOException, InvalidRangeException {
+        //dataset.writeCDL(System.out, false);
 
         final List<Attribute> globalAttributes = dataset.getGlobalAttributes();
         for (Attribute globalAttribute : globalAttributes) {
@@ -119,35 +124,49 @@ public class BufrTest {
         final List<Variable> variables = dataset.getVariables();
         assertEquals(1, variables.size());
 
-        for (Variable variable : variables) {
-            assertEquals("obs", variable.getFullName());
-            assertTrue(variable.isVariableLength());
-            assertEquals(DataType.SEQUENCE, variable.getDataType());
+        final Variable variable = variables.get(0);
+        assertEquals("obs", variable.getFullName());
+        assertTrue(variable.isVariableLength());
+        assertEquals(DataType.SEQUENCE, variable.getDataType());
 
-            final Sequence sequence = (Sequence) variable;
-            assertEquals(33, sequence.getNumberOfMemberVariables());
+        final Sequence sequence = (Sequence) variable;
+        final StructureDataIterator structureIterator = sequence.getStructureIterator();
+        assertNotNull(structureIterator);
 
-            final StructureDataIterator structureIterator = sequence.getStructureIterator();
-            assertNotNull(structureIterator);
+        final List<Variable> variableList = sequence.getVariables();
+        final Variable listVariable = variableList.get(3);
+        final Array array = listVariable.read();
+        assertNotNull(array);
 
-            while (structureIterator.hasNext()) {
-                final StructureData structureData = structureIterator.next();
-                assertNotNull(structureData);
+        /*
+        int count = 0;
+        while (structureIterator.hasNext()) {
+            count++;
+            final StructureData structureData = structureIterator.next();
+            assertNotNull(structureData);
 
-                final List<StructureMembers.Member> members = structureData.getMembers();
-                assertEquals(33, members.size());
+            final List<StructureMembers.Member> members = structureData.getMembers();
+            assertEquals(33, members.size());
 
-                final short numberOfGridPoints = structureData.getScalarShort("Number_of_grid_points");
+            final Array gridPointCountData = structureData.getArray("Number_of_grid_points");
+            assertNotNull(gridPointCountData);
 
-                final int[] gridPointIdentifiers = structureData.getJavaArrayInt("Grid_point_identifier");
-                assertNotNull(gridPointIdentifiers);
-                assertEquals(numberOfGridPoints, gridPointIdentifiers.length);
+            final int gridPointCount = gridPointCountData.getInt(0);
 
-                final short[] brightnessTemperatureRealPart = structureData.getJavaArrayShort(
-                        "Brightness_temperature_real_part");
-                assertNotNull(brightnessTemperatureRealPart);
-                assertEquals(numberOfGridPoints, brightnessTemperatureRealPart.length);
-            }
+            final Array gridPointIdentifierData = structureData.getArray("Grid_point_identifier");
+            assertNotNull(gridPointIdentifierData);
+            assertEquals(1, gridPointIdentifierData.getSize());
+
+            final Array snapshotIdentifierData = structureData.getArray("Snapshot_identifier");
+            assertNotNull(snapshotIdentifierData);
+            assertEquals(1, snapshotIdentifierData.getSize());
+
+            final Array brightnessTemperatureRealPartData = structureData.getArray("Brightness_temperature_real_part");
+            assertNotNull(brightnessTemperatureRealPartData);
+            assertEquals(1, brightnessTemperatureRealPartData.getSize());
         }
+
+        System.out.println("count = " + count);
+        */
     }
 }
