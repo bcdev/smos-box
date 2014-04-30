@@ -258,7 +258,7 @@ public class Dddb {
         final CsvReader reader = new CsvReader(new InputStreamReader(inputStream, charset), separators, true, "#");
         final List<String[]> recordList = reader.readStringRecords();
 
-        return new BandDescriptors(recordList);
+        return new BandDescriptors(recordList, this);
     }
 
     private FlagDescriptors readFlagDescriptors(InputStream inputStream) throws IOException {
@@ -287,34 +287,6 @@ public class Dddb {
     // Initialization on demand holder idiom
 
     private static class Holder {
-
         private static final Dddb INSTANCE = new Dddb();
-    }
-
-    private static class BandDescriptors implements Family<BandDescriptor> {
-
-        private final List<BandDescriptor> descriptorList;
-        private final Map<String, BandDescriptor> descriptorMap;
-
-        BandDescriptors(List<String[]> recordList) {
-            descriptorList = new ArrayList<>(recordList.size());
-            descriptorMap = new HashMap<>(recordList.size());
-
-            for (final String[] tokens : recordList) {
-                final BandDescriptorImpl bandDescriptor = new BandDescriptorImpl(tokens, getInstance());
-                descriptorList.add(bandDescriptor);
-                descriptorMap.put(bandDescriptor.getBandName(), bandDescriptor);
-            }
-        }
-
-        @Override
-        public final List<BandDescriptor> asList() {
-            return Collections.unmodifiableList(descriptorList);
-        }
-
-        @Override
-        public final BandDescriptor getMember(String bandName) {
-            return descriptorMap.get(bandName);
-        }
     }
 }
