@@ -119,9 +119,7 @@ class ProductHelper {
         final AffineTransform transform = SmosDgg.getInstance().getImageToMapTransform();
         try {
             return new CrsGeoCoding(DefaultGeographicCRS.WGS84, new Rectangle(dimension), transform);
-        } catch (FactoryException e) {
-            throw new IllegalArgumentException("dimension");
-        } catch (TransformException e) {
+        } catch (FactoryException | TransformException e) {
             throw new IllegalArgumentException("dimension");
         }
     }
@@ -170,16 +168,16 @@ class ProductHelper {
         final Document document;
 
         try {
-            document = new SAXBuilder().build(explorerFile.getHdrFile());
+            document = new SAXBuilder().build(explorerFile.getHeaderFile());
         } catch (JDOMException e) {
             throw new IOException(MessageFormat.format(
-                    "File ''{0}'': Invalid document", explorerFile.getHdrFile().getPath()), e);
+                    "File ''{0}'': Invalid document", explorerFile.getHeaderFile().getPath()), e);
         }
 
         final Namespace namespace = document.getRootElement().getNamespace();
         if (namespace == null) {
             throw new IOException(MessageFormat.format(
-                    "File ''{0}'': Missing namespace", explorerFile.getHdrFile().getPath()));
+                    "File ''{0}'': Missing namespace", explorerFile.getHeaderFile().getPath()));
         }
 
         addMetadata(metadataElement, document.getRootElement(), namespace);
