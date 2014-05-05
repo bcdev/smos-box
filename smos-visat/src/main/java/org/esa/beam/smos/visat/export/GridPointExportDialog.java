@@ -21,7 +21,7 @@ import com.bc.ceres.binding.PropertyDescriptor;
 import com.bc.ceres.binding.ValidationException;
 import com.bc.ceres.swing.TableLayout;
 import com.bc.ceres.swing.binding.BindingContext;
-import org.esa.beam.dataio.smos.ExplorerFile;
+import org.esa.beam.dataio.smos.ProductFile;
 import org.esa.beam.dataio.smos.SmosFile;
 import org.esa.beam.dataio.smos.SmosProductReader;
 import org.esa.beam.framework.dataio.ProductReader;
@@ -305,8 +305,8 @@ class GridPointExportDialog extends ModalDialog {
             final ProductReader productReader = selectedProduct.getProductReader();
             if (productReader instanceof SmosProductReader) {
                 final SmosProductReader smosProductReader = (SmosProductReader) productReader;
-                final ExplorerFile explorerFile = smosProductReader.getExplorerFile();
-                if (explorerFile instanceof SmosFile) {
+                final ProductFile productFile = smosProductReader.getProductFile();
+                if (productFile instanceof SmosFile) {
                     return selectedProduct;
                 }
             }

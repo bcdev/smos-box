@@ -47,7 +47,7 @@ public class EEExporter {
 
         final SmosFile smosFile;
         try {
-            smosFile = (SmosFile) SmosProductReader.createExplorerFile(sourceFile);
+            smosFile = (SmosFile) SmosProductReader.createProductFile(sourceFile);
         } catch (Exception e) {
             e.printStackTrace();
             return;

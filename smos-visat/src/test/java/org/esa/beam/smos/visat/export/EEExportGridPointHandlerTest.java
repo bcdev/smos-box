@@ -43,9 +43,9 @@ public class EEExportGridPointHandlerTest {
 
     @Test
     public void handleGridPointsForScenario27() throws URISyntaxException, IOException {
-        final ExplorerFile explorerFile = SmosProductReader.createExplorerFile(getResourceAsFile(SCENARIO_27_DBL_NAME));
-        assertTrue(explorerFile instanceof SmosFile);
-        final SmosFile sourceFile = (SmosFile) explorerFile;
+        final ProductFile productFile = SmosProductReader.createProductFile(getResourceAsFile(SCENARIO_27_DBL_NAME));
+        assertTrue(productFile instanceof SmosFile);
+        final SmosFile sourceFile = (SmosFile) productFile;
 
         final GridPointList sourceGridPointList = sourceFile.getGridPointList();
         assertEquals(5533, sourceGridPointList.getElementCount());

@@ -48,8 +48,8 @@ public class EEExportStream implements GridPointFilterStream {
 
     @Override
     public void startFile(SmosFile sourceFile) throws IOException {
-        targetDblFile = getTargetDblFile(sourceFile.getDblFile());
-        targetHdrFile = getTargetHdrFile(sourceFile.getHdrFile());
+        targetDblFile = getTargetDblFile(sourceFile.getFile());
+        targetHdrFile = getTargetHdrFile(sourceFile.getHeaderFile());
         final DataFormat targetFormat = sourceFile.getDataFormat();
 
         //noinspection ResultOfMethodCallIgnored
@@ -81,7 +81,7 @@ public class EEExportStream implements GridPointFilterStream {
             if (validArea) {
                 hdrFilePatcher.setArea(targetGridPointHandler.getArea());
             }
-            hdrFilePatcher.patch(sourceFile.getHdrFile(), targetHdrFile);
+            hdrFilePatcher.patch(sourceFile.getHeaderFile(), targetHdrFile);
         } finally {
             try {
                 close();

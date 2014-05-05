@@ -65,18 +65,17 @@ public class BufrTest {
         assertTrue(NetcdfFile.iospRegistered(BufrIosp.class));
     }
 
-    @Ignore
     @Test
     public void testCanReadBufrFiles() throws Exception {
         NetcdfFile dataset;
-
+        /*
         dataset = NetcdfFile.open(
                 "/Users/ralf/Desktop/ideas-nas.eo.esa.int/miras_20131028_002942_20131028_003302_smos_20947_t_20131028_033058_l1c.bufr");
 
         assertNotNull(dataset);
 
         performAssertions(dataset);
-
+        */
         dataset = NetcdfFile.open(
                 "/Users/ralf/Desktop/ideas-nas.eo.esa.int/miras_20131028_003256_20131028_020943_smos_20947_o_20131028_031005_l1c.bufr");
 
@@ -89,6 +88,7 @@ public class BufrTest {
     public void testCanReadBufrLightFiles() throws Exception {
         NetcdfFile dataset;
 
+
         dataset = NetcdfFile.open(
                 "/Users/ralf/Desktop/ideas-nas.eo.esa.int/W_ES-ESA-ESAC,SMOS,N256_C_LEMM_20131028030552_20131028003256_20131028020943_bufr_v505.bin");
 
@@ -96,7 +96,7 @@ public class BufrTest {
 
         performAssertions(dataset);
 
-        /*
+
         dataset = NetcdfFile.open(
                 "/Users/ralf/Desktop/ideas-nas.eo.esa.int/W_ES-ESA-ESAC,SMOS,N256_C_LEMM_20131028033037_20131028002942_20131028003302_bufr_v505.bin");
 
@@ -104,6 +104,7 @@ public class BufrTest {
 
         performAssertions(dataset);
 
+        /*
         dataset = NetcdfFile.open(
                 "/Users/ralf/Desktop/ideas-nas.eo.esa.int/W_ES-ESA-ESAC,SMOS,N256_C_LEMM_20131028044206_20131028020942_20131028034943_bufr_v505.bin");
 
@@ -138,7 +139,6 @@ public class BufrTest {
         final Array array = listVariable.read();
         assertNotNull(array);
 
-        /*
         int count = 0;
         while (structureIterator.hasNext()) {
             count++;
@@ -167,6 +167,5 @@ public class BufrTest {
         }
 
         System.out.println("count = " + count);
-        */
     }
 }

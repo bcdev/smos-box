@@ -20,7 +20,6 @@ import com.bc.ceres.binio.CompoundData;
 import com.bc.ceres.binio.DataContext;
 import com.bc.ceres.binio.DataFormat;
 import org.esa.beam.dataio.smos.dddb.Dddb;
-import org.esa.beam.framework.datamodel.Product;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -32,12 +31,8 @@ import java.io.File;
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.Iterator;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
-public abstract class ExplorerFile {
+public abstract class ExplorerFile implements ProductFile {
 
     public static final String TAG_SPECIFIC_PRODUCT_HEADER = "Specific_Product_Header";
 
@@ -55,11 +50,11 @@ public abstract class ExplorerFile {
         dataBlock = dataContext.getData();
     }
 
-    public final File getHdrFile() {
+    public final File getHeaderFile() {
         return hdrFile;
     }
 
-    public final File getDblFile() {
+    public final File getFile() {
         return dblFile;
     }
 
@@ -75,7 +70,7 @@ public abstract class ExplorerFile {
         return dataBlock;
     }
 
-    abstract protected Area getArea();
+    protected  abstract Area getArea();
 
     public void close() {
         dataContext.dispose();
@@ -108,9 +103,7 @@ public abstract class ExplorerFile {
         if (descendants.hasNext()) {
             return (Element) descendants.next();
         } else {
-            throw new IOException(MessageFormat.format("File ''{0}'': Missing element ''{1}''.", getHdrFile().getPath(), name));
+            throw new IOException(MessageFormat.format("File ''{0}'': Missing element ''{1}''.", getHeaderFile().getPath(), name));
         }
     }
-
-    protected abstract Product createProduct() throws IOException;
 }

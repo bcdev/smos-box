@@ -1,6 +1,5 @@
 package org.esa.beam.smos;
 
-import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.util.StringUtils;
 import org.esa.beam.util.io.FileUtils;
 
@@ -134,6 +133,12 @@ public class SmosUtils {
         return fileName.matches("SM_.{4}_MIR_SC[LS][DF]1[Cc]_.{45}") ||
                 fileName.matches("SM_.{4}_MIR_BW[LS][DF]1[Cc]_.{45}");
     }
+
+    public static boolean isLightBufrType(String fileName) {
+        return fileName.matches(
+                "W_ES-ESA-ESAC,SMOS,N256_C_LEMM_[0-9]{14}_[0-9]{14}_[0-9]{14}_bufr_v[0-9]{3}\\.bin");
+    }
+
 
     public static boolean isL2Type(String fileName) {
         return fileName.matches("SO_.{4}_MIR_TSM_2__.{45}") ||

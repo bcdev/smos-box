@@ -45,7 +45,10 @@ public class SmosProductReaderPlugIn implements ProductReaderPlugIn {
         final File file = input instanceof File ? (File) input : new File(input.toString());
         final String fileName = file.getName();
 
-        if (fileName.endsWith(".HDR") || fileName.endsWith(".DBL")) {
+        if (SmosUtils.isLightBufrType(fileName)) {
+            return DecodeQualification.INTENDED;
+        }
+        if (fileName.endsWith(".DBL")) {
             final File hdrFile = FileUtils.exchangeExtension(file, ".HDR");
             final File dblFile = FileUtils.exchangeExtension(file, ".DBL");
 
@@ -81,9 +84,7 @@ public class SmosProductReaderPlugIn implements ProductReaderPlugIn {
                             return DecodeQualification.SUITABLE;
                         }
                     }
-                } catch (IOException e) {
-                    // ignore
-                } catch (NoSuchElementException e) {
+                } catch (IOException | NoSuchElementException e) {
                     // ignore
                 } finally {
                     if (zipFile != null) {
@@ -107,7 +108,7 @@ public class SmosProductReaderPlugIn implements ProductReaderPlugIn {
 
     @Override
     public String[] getDefaultFileExtensions() {
-        return new String[]{".HDR", ".DBL", ".zip", ".ZIP"};
+        return new String[]{".DBL", ".zip", ".ZIP", ".bin"};
     }
 
     @Override

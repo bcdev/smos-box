@@ -2,7 +2,7 @@ package org.esa.beam.smos.ee2netcdf;
 
 import com.vividsolutions.jts.geom.Geometry;
 import org.esa.beam.dataio.smos.DggFile;
-import org.esa.beam.dataio.smos.ExplorerFile;
+import org.esa.beam.dataio.smos.ProductFile;
 import org.esa.beam.dataio.smos.SmosProductReader;
 import org.esa.beam.framework.dataio.ProductIO;
 import org.esa.beam.framework.datamodel.Product;
@@ -164,8 +164,9 @@ public class ConverterOpAcceptanceTest {
         try {
             product = ProductIO.readProduct(file);
             final SmosProductReader productReader = (SmosProductReader) product.getProductReader();
-            final ExplorerFile explorerFile = productReader.getExplorerFile();
-            final Area dataArea = DggFile.computeArea((DggFile) explorerFile);
+            final ProductFile productFile = productReader.getProductFile();
+            assertTrue(productFile instanceof DggFile);
+            final Area dataArea = DggFile.computeArea((DggFile) productFile);
             final Geometry polygon = ConverterOp.convertToPolygon(dataArea);
 
             final Rectangle dataBoundingRect = ConverterOp.getDataBoundingRect(product, polygon);
@@ -188,8 +189,9 @@ public class ConverterOpAcceptanceTest {
         try {
             product = ProductIO.readProduct(file);
             final SmosProductReader productReader = (SmosProductReader) product.getProductReader();
-            final ExplorerFile explorerFile = productReader.getExplorerFile();
-            final Area dataArea = DggFile.computeArea((DggFile) explorerFile);
+            final ProductFile productFile = productReader.getProductFile();
+            assertTrue(productFile instanceof DggFile);
+            final Area dataArea = DggFile.computeArea((DggFile) productFile);
             final Geometry polygon = ConverterOp.convertToPolygon(dataArea);
             assertEquals("MULTIPOLYGON (((-78.75 -90, -78.75 -78.75, -67.5 -78.75, -67.5 -67.5, 22.5 -67.5, 22.5 -56.25, 33.75 -56.25, 33.75 -45, 33.75 -33.75, 22.5 -33.75, 22.5 -22.5, 33.75 -22.5, 33.75 -11.25, 33.75 0, 33.75 11.25, 33.75 22.5, 33.75 33.75, 45 33.75, 45 45, 45 56.25, 45 67.5, 56.25 67.5, 56.25 78.75, 56.25 90, 123.75 90, 123.75 78.75, 146.25 78.75, 146.25 67.5, 90 67.5, 90 56.25, 78.75 56.25, 78.75 45, 67.5 45, 67.5 33.75, 67.5 22.5, 56.25 22.5, 56.25 11.25, 56.25 0, 56.25 -11.25, 56.25 -22.5, 56.25 -33.75, 45 -33.75, 45 -45, 45 -56.25, 45 -67.5, 45 -78.75, 33.75 -78.75, 33.75 -90, -78.75 -90)))",
                     polygon.toString());

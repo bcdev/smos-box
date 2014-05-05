@@ -19,9 +19,9 @@ package org.esa.beam.smos.visat;
 import com.bc.ceres.core.Assert;
 import com.bc.ceres.glayer.support.ImageLayer;
 import com.bc.ceres.glevel.MultiLevelImage;
+import org.esa.beam.dataio.smos.ProductFile;
 import org.esa.beam.dataio.smos.SmosFile;
 import org.esa.beam.dataio.smos.SmosProductReader;
-import org.esa.beam.dataio.smos.ExplorerFile;
 import org.esa.beam.framework.dataio.ProductReader;
 import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.framework.ui.PixelPositionListener;
@@ -91,9 +91,9 @@ public class SceneViewSelectionService {
         if (product != null) {
             final ProductReader productReader = product.getProductReader();
             Assert.state(productReader instanceof SmosProductReader, "productReader instanceof SmosProductReader");
-            final ExplorerFile smosFile = ((SmosProductReader) productReader).getExplorerFile();
-            if (smosFile instanceof SmosFile) {
-                return (SmosFile) smosFile;
+            final ProductFile productFile = ((SmosProductReader) productReader).getProductFile();
+            if (productFile instanceof SmosFile) {
+                return (SmosFile) productFile;
             }
         }
         

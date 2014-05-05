@@ -18,7 +18,7 @@ package org.esa.beam.smos.visat.export;
 import com.bc.ceres.core.CanceledException;
 import com.bc.ceres.core.ProgressMonitor;
 import com.bc.ceres.core.SubProgressMonitor;
-import org.esa.beam.dataio.smos.ExplorerFile;
+import org.esa.beam.dataio.smos.ProductFile;
 import org.esa.beam.dataio.smos.SmosFile;
 import org.esa.beam.dataio.smos.SmosProductReader;
 import org.esa.beam.framework.dataio.ProductReader;
@@ -44,9 +44,9 @@ class GridPointFilterStreamHandler {
         final ProductReader productReader = product.getProductReader();
         if (productReader instanceof SmosProductReader) {
             final SmosProductReader smosProductReader = (SmosProductReader) productReader;
-            final ExplorerFile explorerFile = smosProductReader.getExplorerFile();
-            if (explorerFile instanceof SmosFile) {
-                smosFileProcessor.process((SmosFile) explorerFile, pm);
+            final ProductFile productFile = smosProductReader.getProductFile();
+            if (productFile instanceof SmosFile) {
+                smosFileProcessor.process((SmosFile) productFile, pm);
             }
         }
     }
@@ -59,18 +59,18 @@ class GridPointFilterStreamHandler {
         pm.beginTask("Exporting grid point data...", sourceFileList.size());
         try {
             for (final File sourceFile : sourceFileList) {
-                ExplorerFile explorerFile = null;
+                ProductFile productFile = null;
                 try {
                     try {
-                        explorerFile = SmosProductReader.createExplorerFile(sourceFile);
+                        productFile = SmosProductReader.createProductFile(sourceFile);
                     } catch (IOException e) {
                         // ignore, file is skipped anyway
                     }
-                    if (explorerFile instanceof SmosFile) {
+                    if (productFile instanceof SmosFile) {
                         pm.setSubTaskName(MessageFormat.format(
-                                "Processing file ''{0}''...", explorerFile.getDblFile().getName()));
+                                "Processing file ''{0}''...", productFile.getFile().getName()));
                         try {
-                            smosFileProcessor.process((SmosFile) explorerFile, SubProgressMonitor.create(pm, 1));
+                            smosFileProcessor.process((SmosFile) productFile, SubProgressMonitor.create(pm, 1));
                         } catch (Exception e) {
                             problemList.add(e);
                         }
@@ -81,8 +81,11 @@ class GridPointFilterStreamHandler {
                         throw new CanceledException();
                     }
                 } finally {
-                    if (explorerFile != null) {
-                        explorerFile.close();
+                    if (productFile != null) {
+                        try {
+                            productFile.close();
+                        } catch (IOException ignored) {
+                        }
                     }
                 }
             }

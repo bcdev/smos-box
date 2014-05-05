@@ -43,7 +43,7 @@ public class SmosFileProcessor {
         final int gridPointCount = smosFile.getGridPointCount();
 
         pm.beginTask(MessageFormat.format(
-                "Processing file ''{0}''...", smosFile.getDblFile().getName()), gridPointCount);
+                "Processing file ''{0}''...", smosFile.getFile().getName()), gridPointCount);
         long intersectingGridPointsCounter = 0;
         try {
             for (int i = 0; i < gridPointCount; i++) {

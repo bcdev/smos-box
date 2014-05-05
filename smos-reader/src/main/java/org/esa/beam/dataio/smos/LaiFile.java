@@ -104,13 +104,13 @@ class LaiFile extends ExplorerFile {
     }
 
     @Override
-    protected Product createProduct() throws IOException {
-        final String productName = FileUtils.getFilenameWithoutExtension(getHdrFile());
+    public Product createProduct() throws IOException {
+        final String productName = FileUtils.getFilenameWithoutExtension(getHeaderFile());
         final String productType = getDataFormat().getName().substring(12, 22);
         final Dimension dimension = ProductHelper.getSceneRasterDimension();
         final Product product = new Product(productName, productType, dimension.width, dimension.height);
 
-        product.setFileLocation(getDblFile());
+        product.setFileLocation(getFile());
         product.setPreferredTileSize(512, 512);
         ProductHelper.addMetadata(product.getMetadataRoot(), this);
 
@@ -284,7 +284,7 @@ class LaiFile extends ExplorerFile {
         final SequenceData zoneSequenceData = getDataBlock().getSequence(DFFG_LAI_NAME);
         if (zoneSequenceData == null) {
             throw new IllegalStateException(MessageFormat.format(
-                    "SMOS File ''{0}'': Missing zone data.", getDblFile().getPath()));
+                    "SMOS File ''{0}'': Missing zone data.", getFile().getPath()));
         }
         final ArrayList<Dffg> gridList = new ArrayList<Dffg>(
                 zoneSequenceData.getElementCount());

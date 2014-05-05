@@ -194,13 +194,13 @@ public class DggFile extends ExplorerFile {
     }
 
     @Override
-    protected final Product createProduct() throws IOException {
-        final String productName = FileUtils.getFilenameWithoutExtension(getHdrFile());
+    public final Product createProduct() throws IOException {
+        final String productName = FileUtils.getFilenameWithoutExtension(getHeaderFile());
         final String productType = getDataFormat().getName().substring(12, 22);
         final Dimension dimension = ProductHelper.getSceneRasterDimension();
         final Product product = new Product(productName, productType, dimension.width, dimension.height);
 
-        product.setFileLocation(getDblFile());
+        product.setFileLocation(getFile());
         product.setPreferredTileSize(512, 512);
         ProductHelper.addMetadata(product.getMetadataRoot(), this);
 

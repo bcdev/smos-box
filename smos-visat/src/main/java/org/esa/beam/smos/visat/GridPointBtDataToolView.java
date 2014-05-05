@@ -16,8 +16,8 @@
 
 package org.esa.beam.smos.visat;
 
-import org.esa.beam.dataio.smos.ExplorerFile;
 import org.esa.beam.dataio.smos.L1cSmosFile;
+import org.esa.beam.dataio.smos.ProductFile;
 import org.esa.beam.dataio.smos.SmosFile;
 import org.esa.beam.dataio.smos.SmosProductReader;
 import org.esa.beam.framework.dataio.ProductReader;
@@ -238,10 +238,10 @@ public abstract class GridPointBtDataToolView extends SmosToolView {
         for (final Product product : products) {
             final ProductReader productReader = product.getProductReader();
             if (productReader instanceof SmosProductReader) {
-                final ExplorerFile smosFile = ((SmosProductReader) productReader).getExplorerFile();
-                if (smosFile instanceof L1cSmosFile) {
+                final ProductFile productFile = ((SmosProductReader) productReader).getProductFile();
+                if (productFile instanceof L1cSmosFile) {
                     if (referredFileName.equalsIgnoreCase(trimVersionNumber(product.getName()))) {
-                        return (L1cSmosFile) smosFile;
+                        return (L1cSmosFile) productFile;
                     }
                 }
             }

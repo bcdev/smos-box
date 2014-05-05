@@ -19,6 +19,13 @@ package org.esa.beam.dataio.smos;
 import com.bc.ceres.binio.DataFormat;
 import com.bc.ceres.core.ProgressMonitor;
 import com.bc.ceres.core.VirtualDir;
+import com.bc.ceres.glevel.MultiLevelImage;
+import com.bc.ceres.glevel.MultiLevelModel;
+import com.bc.ceres.glevel.MultiLevelSource;
+import com.bc.ceres.glevel.support.AbstractMultiLevelSource;
+import com.bc.ceres.glevel.support.DefaultMultiLevelImage;
+import org.esa.beam.dataio.netcdf.util.DataTypeUtils;
+import org.esa.beam.dataio.netcdf.util.MetadataUtils;
 import org.esa.beam.dataio.smos.dddb.BandDescriptor;
 import org.esa.beam.dataio.smos.dddb.Dddb;
 import org.esa.beam.framework.dataio.AbstractProductReader;
@@ -26,40 +33,51 @@ import org.esa.beam.framework.dataio.ProductReaderPlugIn;
 import org.esa.beam.framework.datamodel.Band;
 import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.framework.datamodel.ProductData;
+import org.esa.beam.jai.ImageManager;
+import org.esa.beam.jai.ResolutionLevel;
+import org.esa.beam.jai.SingleBandedOpImage;
 import org.esa.beam.smos.SmosUtils;
+import org.esa.beam.smos.dgg.SmosDgg;
 import org.esa.beam.smos.lsmask.SmosLsMask;
 import org.esa.beam.util.io.FileUtils;
+import ucar.ma2.Array;
+import ucar.nc2.Attribute;
+import ucar.nc2.NetcdfFile;
+import ucar.nc2.Sequence;
+import ucar.nc2.Variable;
 
-import java.awt.*;
+import java.awt.Dimension;
+import java.awt.Rectangle;
 import java.awt.image.Raster;
 import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
 import java.text.MessageFormat;
+import java.util.List;
 
 public class SmosProductReader extends AbstractProductReader {
 
     private static final String LSMASK_SCHEMA_NAME = "DBL_SM_XXXX_AUX_LSMASK_0200";
 
-    private ExplorerFile explorerFile;
+    private ProductFile productFile;
     private VirtualDir virtualDir;
 
     public static boolean isDualPolScienceFormat(String formatName) {
         return formatName.contains("MIR_SCLD1C")
-                || formatName.contains("MIR_SCSD1C")
-                || formatName.contains("MIR_SCND1C");
+               || formatName.contains("MIR_SCSD1C")
+               || formatName.contains("MIR_SCND1C");
     }
 
     public static boolean isFullPolBrowseFormat(String formatName) {
         return formatName.contains("MIR_BWLF1C")
-                || formatName.contains("MIR_BWSF1C")
-                || formatName.contains("MIR_BWNF1C");
+               || formatName.contains("MIR_BWSF1C")
+               || formatName.contains("MIR_BWNF1C");
     }
 
     public static boolean isFullPolScienceFormat(String formatName) {
         return formatName.contains("MIR_SCLF1C")
-                || formatName.contains("MIR_SCSF1C")
-                || formatName.contains("MIR_SCNF1C");
+               || formatName.contains("MIR_SCSF1C")
+               || formatName.contains("MIR_SCNF1C");
     }
 
     public static boolean isDffLaiFormat(String formatName) {
@@ -68,35 +86,33 @@ public class SmosProductReader extends AbstractProductReader {
 
     public static boolean isVTecFormat(String formatName) {
         return formatName.contains("AUX_VTEC_C")
-                || formatName.contains("AUX_VTEC_P");
+               || formatName.contains("AUX_VTEC_P");
     }
 
     public static boolean isLsMaskFormat(String formatName) {
         return formatName.contains("AUX_LSMASK");
     }
 
-    public ExplorerFile getExplorerFile() {
-        return explorerFile;
+    public ProductFile getProductFile() {
+        return productFile;
     }
 
-    public static ExplorerFile createExplorerFile(File file) throws IOException {
+    public static ProductFile createProductFile(File file) throws IOException {
         if (file.isDirectory()) {
             final File[] files = file.listFiles(new ExplorerFilenameFilter());
             if (files != null && files.length == 2) {
                 file = files[0];
             }
         }
-        final File hdrFile = FileUtils.exchangeExtension(file, ".HDR");
-        final File dblFile = FileUtils.exchangeExtension(file, ".DBL");
 
-        final ExplorerFile explorerFile = createExplorerFile(hdrFile, dblFile);
-        if (explorerFile == null) {
+        final ProductFile productFile = createProductFile2(file);
+        if (productFile == null) {
             throw new IOException(MessageFormat.format("File ''{0}'': unknown/unsupported SMOS data format.", file));
         }
-        return explorerFile;
+        return productFile;
     }
 
-    public static ExplorerFile createExplorerFile(VirtualDir virtualDir) throws IOException {
+    private static ProductFile createProductFile(VirtualDir virtualDir) throws IOException {
         String listPath = "";
         String[] list = virtualDir.list(listPath);
         if (list.length == 1) {
@@ -120,7 +136,7 @@ public class SmosProductReader extends AbstractProductReader {
         File dblFile = FileUtils.exchangeExtension(hdrFile, ".DBL");
         dblFile = virtualDir.getFile(listPath + dblFile.getName());
 
-        return createExplorerFile(hdrFile, dblFile);
+        return createProductFile2(dblFile);
     }
 
     SmosProductReader(ProductReaderPlugIn readerPlugIn) {
@@ -130,25 +146,25 @@ public class SmosProductReader extends AbstractProductReader {
     @Override
     protected final Product readProductNodesImpl() throws IOException {
         synchronized (this) {
-
             final File inputFile = getInputFile();
             final String inputFileName = inputFile.getName();
-            if (SmosUtils.isDblFileName(inputFileName) || SmosUtils.isHdrFileName(inputFileName)) {
-                explorerFile = createExplorerFile(inputFile);
+            if (SmosUtils.isDblFileName(inputFileName) || SmosUtils.isLightBufrType(inputFileName)) {
+                productFile = createProductFile(inputFile);
             } else {
-                explorerFile = createExplorerFile(getInputVirtualDir());
+                productFile = createProductFile(getInputVirtualDir());
             }
-            if (explorerFile == null) {
-                throw new IOException(MessageFormat.format("File ''{0}'': unknown/unsupported SMOS data format.", inputFile));
+            if (productFile == null) {
+                throw new IOException(
+                        MessageFormat.format("File ''{0}'': unknown/unsupported SMOS data format.", inputFile));
             }
-            final Product product = explorerFile.createProduct();
+            final Product product = productFile.createProduct();
             if (virtualDir != null && virtualDir.isCompressed()) {
                 final String path = virtualDir.getBasePath();
                 product.setFileLocation(new File(path));
             } else {
-                product.setFileLocation(explorerFile.getDblFile());
+                product.setFileLocation(productFile.getFile());
             }
-            if (explorerFile instanceof SmosFile) {
+            if (productFile instanceof SmosFile) {
                 addLandSeaMask(product);
             }
             return product;
@@ -181,7 +197,7 @@ public class SmosProductReader extends AbstractProductReader {
     @Override
     public void close() throws IOException {
         synchronized (this) {
-            explorerFile.close();
+            productFile.close();
             if (virtualDir != null) {
                 virtualDir.close();
             }
@@ -240,7 +256,7 @@ public class SmosProductReader extends AbstractProductReader {
         }
         if (descriptor.getFlagDescriptors() != null) {
             ProductHelper.addFlagsAndMasks(product, band, descriptor.getFlagCodingName(),
-                    descriptor.getFlagDescriptors());
+                                           descriptor.getFlagDescriptors());
         }
 
         band.setSourceImage(SmosLsMask.getInstance().getMultiLevelImage());
@@ -267,7 +283,14 @@ public class SmosProductReader extends AbstractProductReader {
         return formatName.contains("AUX_DGGTLV");
     }
 
-    public static ExplorerFile createExplorerFile(File hdrFile, File dblFile) throws IOException {
+    private static ProductFile createProductFile2(File file) throws IOException {
+        if (SmosUtils.isLightBufrType(file.getName())) {
+            return new LightBufrFile(file);
+        }
+
+        final File hdrFile = FileUtils.exchangeExtension(file, ".HDR");
+        final File dblFile = FileUtils.exchangeExtension(file, ".DBL");
+
         final DataFormat format = Dddb.getInstance().getDataFormat(hdrFile);
         if (format == null) {
             return null;
@@ -279,7 +302,7 @@ public class SmosProductReader extends AbstractProductReader {
         } else if (isFullPolBrowseFormat(formatName)) {
             return new L1cBrowseSmosFile(hdrFile, dblFile, format);
         } else if (isDualPolScienceFormat(formatName) ||
-                isFullPolScienceFormat(formatName)) {
+                   isFullPolScienceFormat(formatName)) {
             return new L1cScienceSmosFile(hdrFile, dblFile, format);
         } else if (SmosUtils.isOsUserFormat(formatName)) {
             return new SmosFile(hdrFile, dblFile, format);
@@ -311,4 +334,161 @@ public class SmosProductReader extends AbstractProductReader {
 
         return null;
     }
+
+    private static class LightBufrFile implements ProductFile {
+
+        private final NetcdfFile ncfile;
+
+        public LightBufrFile(File file) throws IOException {
+            ncfile = NetcdfFile.open(file.getPath());
+        }
+
+        @Override
+        public void close() throws IOException {
+            ncfile.close();
+        }
+
+        @Override
+        public Product createProduct() throws IOException {
+            final Sequence sequence = getObservationSequence();
+            final Variable lonVariable = sequence.findVariable("Longitude_high_accuracy");
+            final Variable latVariable = sequence.findVariable("Latitude_high_accuracy");
+            final Array lonData = lonVariable.read();
+            final Array latData = latVariable.read();
+            final int[] seqnums = new int[lonVariable.getShape(0)];
+            final double lonScalingOffset = getAttributeValue(lonVariable, "add_offset", 0.0);
+            final double latScalingOffset = getAttributeValue(latVariable, "add_offset", 0.0);
+            final double lonScalingFactor = getAttributeValue(lonVariable, "scale_factor", 1.0);
+            final double latScalingFactor = getAttributeValue(latVariable, "scale_factor", 1.0);
+            final double lonMissingValue = getAttributeValue(lonVariable, "missing_value");
+            final double latMissingValue = getAttributeValue(latVariable, "missing_value");
+
+            // TODO - establish mapping from (lon, lat, snapshot) to index
+
+            final String productName = FileUtils.getFilenameWithoutExtension(getFile());
+            final String productType = "W_ES-ESA-ESAC,SMOS,N256";
+            final Dimension dimension = ProductHelper.getSceneRasterDimension();
+            final Product product = new Product(productName, productType, dimension.width, dimension.height);
+
+            product.setFileLocation(getFile());
+            product.setPreferredTileSize(512, 512);
+            final List<Attribute> globalAttributes = ncfile.getGlobalAttributes();
+            product.getMetadataRoot().addElement(
+                    MetadataUtils.readAttributeList(globalAttributes, "Global_Attributes"));
+            final List<Variable> variables = sequence.getVariables();
+            product.getMetadataRoot().addElement(
+                    MetadataUtils.readVariableDescriptions(variables, "Variable_Attributes", 100));
+            product.setGeoCoding(ProductHelper.createGeoCoding(dimension));
+
+
+            addBands(product);
+            //setTimes(product);
+
+            return product;
+        }
+
+        private static double getAttributeValue(Variable lonVariable, String attributeName, double defaultValue) {
+            final Attribute attribute = lonVariable.findAttribute(attributeName);
+            if (attribute == null) {
+                return defaultValue;
+            }
+            return attribute.getNumericValue().doubleValue();
+        }
+
+        private static double getAttributeValue(Variable lonVariable, String attributeName) {
+            final Attribute attribute = lonVariable.findAttribute(attributeName);
+            if (attribute == null) {
+                throw new IllegalArgumentException(
+                        MessageFormat.format("Variable ''{0}'' does not exhibit requested attribute ''{1}''.",
+                                             lonVariable.getShortName(), attributeName)
+                );
+            }
+            return attribute.getNumericValue().doubleValue();
+        }
+
+        private void addBands(Product product) {
+            final Sequence sequence = getObservationSequence();
+            final List<Variable> variables = sequence.getVariables();
+            for (final Variable v : variables) {
+                if (v.getDataType().isEnum()) {
+                    final int dataType = ProductData.TYPE_UINT8;
+                    addBand(product, v, dataType);
+                } else {
+                    final int dataType = DataTypeUtils.getRasterDataType(v);
+                    if (dataType != -1) {
+                        addBand(product, v, dataType);
+                    }
+                }
+            }
+        }
+
+        private void addBand(Product product, Variable v, int dataType) {
+            final Band band = product.addBand(v.getShortName(), dataType);
+            final Attribute units = v.findAttribute("units");
+            if (units != null) {
+                band.setUnit(units.getStringValue());
+            }
+            final Attribute addOffset = v.findAttribute("add_offset");
+            if (addOffset != null) {
+                band.setScalingOffset(addOffset.getNumericValue().doubleValue());
+            }
+            final Attribute scaleFactor = v.findAttribute("scale_factor");
+            if (scaleFactor != null) {
+                band.setScalingFactor(scaleFactor.getNumericValue().doubleValue());
+            }
+            final Attribute missingValue = v.findAttribute("missing_value");
+            if (missingValue != null) {
+                band.setNoDataValue(missingValue.getNumericValue().doubleValue());
+                band.setNoDataValueUsed(true);
+            }
+            final LightBufrValueProvider valueProvider = createValueProvider(v);
+            band.setSourceImage(createSourceImage(band, valueProvider));
+        }
+
+        private MultiLevelImage createSourceImage(final Band band, final LightBufrValueProvider valueProvider) {
+            return new DefaultMultiLevelImage(createMultiLevelSource(band, valueProvider));
+        }
+
+        private MultiLevelSource createMultiLevelSource(final Band band, final LightBufrValueProvider valueProvider) {
+            return new AbstractMultiLevelSource(SmosDgg.getInstance().getMultiLevelImage().getModel()) {
+                @Override
+                protected RenderedImage createImage(int level) {
+                    return new LightBufrOpImage(valueProvider, band, getModel(),
+                                                ResolutionLevel.create(getModel(), level));
+                }
+            };
+        }
+
+        private LightBufrValueProvider createValueProvider(Variable v) {
+            return null;
+        }
+
+        @Override
+        public File getFile() {
+            return new File(ncfile.getLocation());
+        }
+
+        private Sequence getObservationSequence() {
+            return (Sequence) ncfile.findVariable("obs");
+        }
+
+    }
+
+    private static class LightBufrValueProvider {
+
+    }
+
+    private static class LightBufrOpImage extends SingleBandedOpImage {
+
+        public LightBufrOpImage(LightBufrValueProvider valueProvider, Band band, MultiLevelModel model,
+                                ResolutionLevel level) {
+            super(ImageManager.getDataBufferType(band.getDataType()),
+                  band.getSceneRasterWidth(),
+                  band.getSceneRasterHeight(),
+                  band.getProduct().getPreferredTileSize(),
+                  null, // no configuration
+                  level);
+        }
+    }
+
 }

@@ -6,7 +6,7 @@ import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.MultiPolygon;
 import com.vividsolutions.jts.geom.Polygon;
 import org.esa.beam.dataio.smos.DggFile;
-import org.esa.beam.dataio.smos.ExplorerFile;
+import org.esa.beam.dataio.smos.ProductFile;
 import org.esa.beam.dataio.smos.SmosProductReader;
 import org.esa.beam.framework.dataio.ProductIO;
 import org.esa.beam.framework.dataio.ProductSubsetDef;
@@ -54,27 +54,27 @@ public class ConverterOp extends Operator {
     // MIR_SM_SMUDP2
 
     @SourceProducts(type = "MIR_BW[LS][DF]1C|MIR_SC[LS][DF]1C|MIR_OSUDP2|MIR_SMUDP2",
-            description = "The source products to be converted. If not given, the parameter 'sourceProductPaths' must be provided.")
+                    description = "The source products to be converted. If not given, the parameter 'sourceProductPaths' must be provided.")
     private Product[] sourceProducts;
 
     @Parameter(description = "Comma-separated list of file paths specifying the source products.\n" +
-            "Each path may contain the wildcards '**' (matches recursively any directory),\n" +
-            "'*' (matches any character sequence in path names) and\n" +
-            "'?' (matches any single character).")
+                             "Each path may contain the wildcards '**' (matches recursively any directory),\n" +
+                             "'*' (matches any character sequence in path names) and\n" +
+                             "'?' (matches any single character).")
     private String[] sourceProductPaths;
 
     @Parameter(description = "The target directory for the converted data. If not existing, directory will be created.",
-            defaultValue = ".",
-            notEmpty = true,
-            notNull = true)
+               defaultValue = ".",
+               notEmpty = true,
+               notNull = true)
     private File targetDirectory;
 
     @Parameter(description = "The geographical region as a geometry in well-known text format (WKT).",
-            converter = JtsGeometryConverter.class)
+               converter = JtsGeometryConverter.class)
     private Geometry region;
 
     @Parameter(defaultValue = "false",
-            description = "Set true to overwrite already existing target files.")
+               description = "Set true to overwrite already existing target files.")
     private boolean overwriteTarget;
 
 
@@ -133,7 +133,8 @@ public class ConverterOp extends Operator {
                 coordList.add(coordList.get(0));
                 final Coordinate[] coordinates = convert(coordList);
 
-                final Polygon polygon = geometryFactory.createPolygon(geometryFactory.createLinearRing(coordinates), null);
+                final Polygon polygon = geometryFactory.createPolygon(geometryFactory.createLinearRing(coordinates),
+                                                                      null);
                 polygonList.add(polygon);
 
                 coordList.clear();
@@ -229,45 +230,50 @@ public class ConverterOp extends Operator {
             getLogger().severe("Failed to convert file: " + inputFile.getAbsolutePath());
             getLogger().severe(e.getMessage());
         } finally {
-           if (product != null) {
-               product.dispose();
-           }
+            if (product != null) {
+                product.dispose();
+            }
         }
     }
 
     private void convertProduct(Product sourceProduct) {
         try {
             final SmosProductReader productReader = (SmosProductReader) sourceProduct.getProductReader();
-            final ExplorerFile explorerFile = productReader.getExplorerFile();
+            final ProductFile productFile = productReader.getProductFile();
 
-            final Area dataArea = DggFile.computeArea((DggFile) explorerFile);
-            Geometry polygon = convertToPolygon(dataArea);
+            if (productFile instanceof DggFile) {
+                final Area dataArea = DggFile.computeArea((DggFile) productFile);
+                Geometry polygon = convertToPolygon(dataArea);
 
-            if (region != null) {
-                polygon = region.intersection(polygon);
-            }
-
-            if (polygon.isEmpty()) {
-                getLogger().info("No geometric intersection: " + sourceProduct.getFileLocation());
-                return;
-            }
-
-            final Rectangle x_y_subset = getDataBoundingRect(sourceProduct, polygon);
-            final ProductSubsetDef subsetDef = createSubsetDef(x_y_subset);
-            final Product subset = sourceProduct.createSubset(subsetDef, "", "");
-
-            final File outFile = getOutputFile(explorerFile.getDblFile(), targetDirectory);
-            if (outFile.isFile() && overwriteTarget) {
-                if (!outFile.delete()) {
-                    throw new IOException("Unable to delete already existing product: " + outFile.getAbsolutePath());
+                if (region != null) {
+                    polygon = region.intersection(polygon);
                 }
-            }
-            if (!outFile.createNewFile()) {
-                throw new IOException("Unable to create target product: " + outFile.getAbsolutePath());
-            }
 
-            ProductIO.writeProduct(subset, outFile, "NetCDF4-CF", false);
-            getLogger().info("Successfully converted: " + sourceProduct.getFileLocation());
+                if (polygon.isEmpty()) {
+                    getLogger().info("No geometric intersection: " + sourceProduct.getFileLocation());
+                    return;
+                }
+
+                final Rectangle x_y_subset = getDataBoundingRect(sourceProduct, polygon);
+                final ProductSubsetDef subsetDef = createSubsetDef(x_y_subset);
+                final Product subset = sourceProduct.createSubset(subsetDef, "", "");
+
+                final File outFile = getOutputFile(productFile.getFile(), targetDirectory);
+                if (outFile.isFile() && overwriteTarget) {
+                    if (!outFile.delete()) {
+                        throw new IOException(
+                                "Unable to delete already existing product: " + outFile.getAbsolutePath());
+                    }
+                }
+                if (!outFile.createNewFile()) {
+                    throw new IOException("Unable to create target product: " + outFile.getAbsolutePath());
+                }
+
+                ProductIO.writeProduct(subset, outFile, "NetCDF4-CF", false);
+                getLogger().info("Successfully converted: " + sourceProduct.getFileLocation());
+            } else {
+                getLogger().warning("Cannot convert file: " + sourceProduct.getFileLocation());
+            }
         } catch (IOException e) {
             getLogger().severe("Failed to convert file: " + sourceProduct.getFileLocation());
             getLogger().severe(e.getMessage());
