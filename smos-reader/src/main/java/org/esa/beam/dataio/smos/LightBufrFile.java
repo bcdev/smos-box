@@ -25,20 +25,22 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
-import java.text.MessageFormat;
+import java.util.Arrays;
 import java.util.List;
 
 /**
-* @author Ralf Quast
-*/
+ * @author Ralf Quast
+ */
 class LightBufrFile implements ProductFile {
 
     private final NetcdfFile ncfile;
     private final ReducedGaussianGrid grid;
+    private int[] indexes;
 
     public LightBufrFile(File file) throws IOException {
         ncfile = NetcdfFile.open(file.getPath());
         grid = new ReducedGaussianGrid(512);
+        indexes = new int[(int) grid.getNumBins()];
     }
 
     @Override
@@ -53,15 +55,26 @@ class LightBufrFile implements ProductFile {
         final Variable latVariable = sequence.findVariable("Latitude_high_accuracy");
         final Array lonData = lonVariable.read();
         final Array latData = latVariable.read();
-        final int[] seqnums = new int[lonVariable.getShape(0)];
-        final double lonScalingOffset = getAttributeValue(lonVariable, "add_offset", 0.0);
-        final double latScalingOffset = getAttributeValue(latVariable, "add_offset", 0.0);
-        final double lonScalingFactor = getAttributeValue(lonVariable, "scale_factor", 1.0);
-        final double latScalingFactor = getAttributeValue(latVariable, "scale_factor", 1.0);
-        final double lonMissingValue = getAttributeValue(lonVariable, "missing_value");
-        final double latMissingValue = getAttributeValue(latVariable, "missing_value");
+        final Number missingValueLon = getAttributeValue(lonVariable, "missing_value");
+        final Number missingValueLat = getAttributeValue(latVariable, "missing_value");
+        final double addOffsetLon = getAttributeValue(lonVariable, "add_offset", 0.0);
+        final double addOffsetLat = getAttributeValue(latVariable, "add_offset", 0.0);
+        final double scaleFactorLon = getAttributeValue(lonVariable, "scale_factor", 1.0);
+        final double scaleFactorLat = getAttributeValue(latVariable, "scale_factor", 1.0);
+        final int elementCount = (int) lonData.getSize();
 
-        // TODO - establish mapping from (lon, lat, snapshot) to index
+        // TODO - establish mapping from cell-index to array-index
+        Arrays.fill(indexes, -1);
+        for (int i = 0; i < 700; i++) {
+            final double rawLon = lonData.getDouble(i);
+            final double rawLat = latData.getDouble(i);
+            if ((missingValueLon == null || rawLon != missingValueLon.doubleValue()) && (missingValueLat == null || rawLat != missingValueLat.doubleValue())) {
+                final double lon = rawLon * scaleFactorLon + addOffsetLon;
+                final double lat = rawLat * scaleFactorLat + addOffsetLat;
+                final int binIndex = (int) grid.getBinIndex(lat, lon);
+                indexes[binIndex] = i;
+            }
+        }
 
         final String productName = FileUtils.getFilenameWithoutExtension(getFile());
         final String productType = "W_ES-ESA-ESAC,SMOS,N256";
@@ -98,18 +111,15 @@ class LightBufrFile implements ProductFile {
         return attribute.getNumericValue().doubleValue();
     }
 
-    private static double getAttributeValue(Variable lonVariable, String attributeName) {
+    private static Number getAttributeValue(Variable lonVariable, String attributeName) {
         final Attribute attribute = lonVariable.findAttribute(attributeName);
         if (attribute == null) {
-            throw new IllegalArgumentException(
-                    MessageFormat.format("Variable ''{0}'' does not exhibit requested attribute ''{1}''.",
-                                         lonVariable.getShortName(), attributeName)
-            );
+            return null;
         }
-        return attribute.getNumericValue().doubleValue();
+        return attribute.getNumericValue();
     }
 
-    private void addBands(Product product) {
+    private void addBands(Product product) throws IOException {
         final Sequence sequence = getObservationSequence();
         final List<Variable> variables = sequence.getVariables();
         for (final Variable v : variables) {
@@ -125,26 +135,26 @@ class LightBufrFile implements ProductFile {
         }
     }
 
-    private void addBand(Product product, Variable v, int dataType) {
-        final Band band = product.addBand(v.getShortName(), dataType);
-        final Attribute units = v.findAttribute("units");
+    private void addBand(Product product, Variable variable, int dataType) throws IOException {
+        final Band band = product.addBand(variable.getShortName(), dataType);
+        final Attribute units = variable.findAttribute("units");
         if (units != null) {
             band.setUnit(units.getStringValue());
         }
-        final Attribute addOffset = v.findAttribute("add_offset");
-        if (addOffset != null) {
-            band.setScalingOffset(addOffset.getNumericValue().doubleValue());
+        final double addOffset = getAttributeValue(variable, "add_offset", 0.0);
+        if (addOffset != 0.0) {
+            band.setScalingOffset(addOffset);
         }
-        final Attribute scaleFactor = v.findAttribute("scale_factor");
-        if (scaleFactor != null) {
-            band.setScalingFactor(scaleFactor.getNumericValue().doubleValue());
+        final double scaleFactor = getAttributeValue(variable, "scale_factor", 1.0);
+        if (scaleFactor != 1.0) {
+            band.setScalingFactor(scaleFactor);
         }
-        final Attribute missingValue = v.findAttribute("missing_value");
+        final Attribute missingValue = variable.findAttribute("missing_value");
         if (missingValue != null) {
             band.setNoDataValue(missingValue.getNumericValue().doubleValue());
             band.setNoDataValueUsed(true);
         }
-        final CellValueProvider valueProvider = createValueProvider(v);
+        final CellValueProvider valueProvider = createValueProvider(variable);
         band.setSourceImage(createSourceImage(band, valueProvider));
     }
 
@@ -161,8 +171,8 @@ class LightBufrFile implements ProductFile {
         };
     }
 
-    private CellValueProvider createValueProvider(Variable v) {
-        return new LightBufrValueProvider();
+    private CellValueProvider createValueProvider(Variable v) throws IOException {
+        return new LightBufrValueProvider(v);
     }
 
     @Override
@@ -176,6 +186,24 @@ class LightBufrFile implements ProductFile {
 
     private final class LightBufrValueProvider implements CellValueProvider {
 
+        private final Variable variable;
+        private volatile Array array;
+
+        private LightBufrValueProvider(Variable variable) {
+            this.variable = variable;
+        }
+
+        private Array getArray() throws IOException {
+            if (array == null) {
+                synchronized (this) {
+                    if (array == null) {
+                        array = variable.read();
+                    }
+                }
+            }
+            return array;
+        }
+
         @Override
         public Area getArea() {
             return LightBufrFile.this.getArea();
@@ -188,22 +216,54 @@ class LightBufrFile implements ProductFile {
 
         @Override
         public byte getValue(long cellIndex, byte noDataValue) {
-            return 0;
+            final int index = LightBufrFile.this.indexes[(int) cellIndex];
+            if (index == -1) {
+                return noDataValue;
+            }
+            try {
+                return getArray().getByte(index);
+            } catch (IOException e) {
+                return noDataValue;
+            }
         }
 
         @Override
         public short getValue(long cellIndex, short noDataValue) {
-            return 0;
+            final int index = LightBufrFile.this.indexes[(int) cellIndex];
+            if (index == -1) {
+                return noDataValue;
+            }
+            try {
+                return getArray().getShort(index);
+            } catch (IOException e) {
+                return noDataValue;
+            }
         }
 
         @Override
         public int getValue(long cellIndex, int noDataValue) {
-            return 0;
+            final int index = LightBufrFile.this.indexes[(int) cellIndex];
+            if (index == -1) {
+                return noDataValue;
+            }
+            try {
+                return getArray().getInt(index);
+            } catch (IOException e) {
+                return noDataValue;
+            }
         }
 
         @Override
         public float getValue(long cellIndex, float noDataValue) {
-            return 0;
+            final int index = LightBufrFile.this.indexes[(int) cellIndex];
+            if (index == -1) {
+                return noDataValue;
+            }
+            try {
+                return getArray().getFloat(index);
+            } catch (IOException e) {
+                return noDataValue;
+            }
         }
     }
 }
