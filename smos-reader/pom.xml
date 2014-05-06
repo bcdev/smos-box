@@ -64,13 +64,25 @@
 
         <dependency>
             <groupId>org.esa.beam</groupId>
-            <artifactId>beam-netcdf</artifactId>
+            <artifactId>beam-binning</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.esa.beam</groupId>
+                    <artifactId>beam-ui</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.esa.beam</groupId>
+                    <artifactId>beam-gpf</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.esa.beam</groupId>
+                    <artifactId>beam-visat-rcp</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
-
         <dependency>
-            <groupId>edu.ucar</groupId>
-            <artifactId>netcdf</artifactId>
-            <version>4.3.21</version>
+            <groupId>org.esa.beam</groupId>
+            <artifactId>beam-netcdf</artifactId>
         </dependency>
 
         <dependency>
