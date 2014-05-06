@@ -78,6 +78,7 @@ public class Dddb {
                     final DataFormat format = createBinX(formatName).readDataFormat(url.toURI(), formatName);
                     format.setByteOrder(ByteOrder.LITTLE_ENDIAN);
                     dataFormatMap.putIfAbsent(formatName, format);
+                    return format;
                 }
             } catch (Throwable e) {
                 throw new IllegalStateException(MessageFormat.format("Schema resource ''{0}'': {1}", formatName, e.getMessage()));
