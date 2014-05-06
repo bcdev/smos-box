@@ -441,15 +441,15 @@ public class SmosProductReader extends AbstractProductReader {
                 band.setNoDataValue(missingValue.getNumericValue().doubleValue());
                 band.setNoDataValueUsed(true);
             }
-            final LightBufrValueProvider valueProvider = createValueProvider(v);
+            final CellValueProvider valueProvider = createValueProvider(v);
             band.setSourceImage(createSourceImage(band, valueProvider));
         }
 
-        private MultiLevelImage createSourceImage(final Band band, final LightBufrValueProvider valueProvider) {
+        private MultiLevelImage createSourceImage(final Band band, final CellValueProvider valueProvider) {
             return new DefaultMultiLevelImage(createMultiLevelSource(band, valueProvider));
         }
 
-        private MultiLevelSource createMultiLevelSource(final Band band, final LightBufrValueProvider valueProvider) {
+        private MultiLevelSource createMultiLevelSource(final Band band, final CellValueProvider valueProvider) {
             return new AbstractMultiLevelSource(SmosDgg.getInstance().getMultiLevelImage().getModel()) {
                 @Override
                 protected RenderedImage createImage(int level) {
@@ -459,7 +459,7 @@ public class SmosProductReader extends AbstractProductReader {
             };
         }
 
-        private LightBufrValueProvider createValueProvider(Variable v) {
+        private CellValueProvider createValueProvider(Variable v) {
             return null;
         }
 
@@ -474,13 +474,9 @@ public class SmosProductReader extends AbstractProductReader {
 
     }
 
-    private static class LightBufrValueProvider {
-
-    }
-
     private static class LightBufrOpImage extends SingleBandedOpImage {
 
-        public LightBufrOpImage(LightBufrValueProvider valueProvider, Band band, MultiLevelModel model,
+        public LightBufrOpImage(CellValueProvider valueProvider, Band band, MultiLevelModel model,
                                 ResolutionLevel level) {
             super(ImageManager.getDataBufferType(band.getDataType()),
                   band.getSceneRasterWidth(),

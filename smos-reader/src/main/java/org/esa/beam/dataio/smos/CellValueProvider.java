@@ -18,7 +18,7 @@ package org.esa.beam.dataio.smos;
 
 import java.awt.geom.Area;
 
-interface LaiValueProvider {
+interface CellValueProvider {
 
     Area getArea();
 

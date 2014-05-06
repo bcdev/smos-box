@@ -169,16 +169,16 @@ class LaiFile extends ExplorerFile {
                                                descriptor.getFlagDescriptors());
             }
 
-            final LaiValueProvider valueProvider = createLaiValueProvider(descriptor);
+            final CellValueProvider valueProvider = createLaiValueProvider(descriptor);
             band.setSourceImage(createSourceImage(band, valueProvider));
             band.setImageInfo(ProductHelper.createImageInfo(band, descriptor));
         }
     }
 
-    private LaiValueProvider createLaiValueProvider(BandDescriptor descriptor) {
+    private CellValueProvider createLaiValueProvider(BandDescriptor descriptor) {
         final int memberIndex = getCellType().getMemberIndex(descriptor.getMemberName());
 
-        return new LaiValueProvider() {
+        return new CellValueProvider() {
 
             @Override
             public final Area getArea() {
@@ -240,11 +240,11 @@ class LaiFile extends ExplorerFile {
         };
     }
 
-    private MultiLevelImage createSourceImage(Band band, LaiValueProvider valueProvider) {
+    private MultiLevelImage createSourceImage(Band band, CellValueProvider valueProvider) {
         return new DefaultMultiLevelImage(createMultiLevelSource(band, valueProvider));
     }
 
-    private MultiLevelSource createMultiLevelSource(final Band band, final LaiValueProvider valueProvider) {
+    private MultiLevelSource createMultiLevelSource(final Band band, final CellValueProvider valueProvider) {
         return new AbstractMultiLevelSource(SmosDgg.getInstance().getMultiLevelImage().getModel()) {
             @Override
             protected RenderedImage createImage(int level) {

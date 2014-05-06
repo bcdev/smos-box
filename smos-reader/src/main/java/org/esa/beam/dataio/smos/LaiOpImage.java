@@ -37,14 +37,14 @@ import java.util.Arrays;
 
 class LaiOpImage extends SingleBandedOpImage {
 
-    private final LaiValueProvider valueProvider;
+    private final CellValueProvider valueProvider;
     private final MultiLevelModel model;
     private final double noDataValue;
 
     private volatile Area area;
     private volatile NoDataRaster noDataRaster;
 
-    LaiOpImage(LaiValueProvider valueProvider, RasterDataNode rasterDataNode, MultiLevelModel model,
+    LaiOpImage(CellValueProvider valueProvider, RasterDataNode rasterDataNode, MultiLevelModel model,
                ResolutionLevel level) {
         super(ImageManager.getDataBufferType(rasterDataNode.getDataType()),
               rasterDataNode.getSceneRasterWidth(),
