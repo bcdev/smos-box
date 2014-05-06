@@ -3,12 +3,10 @@ package org.esa.beam.dataio.smos.dddb;
 
 import org.esa.beam.util.StringUtils;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Properties;
 
 class ResourceHandler {
 
@@ -36,12 +34,23 @@ class ResourceHandler {
         return getClass().getResourceAsStream(path);
     }
 
-    public URL getResourceUrl(String path) throws MalformedURLException {
+    URL getResourceUrl(String path) throws MalformedURLException {
         final String dddbDirFromProperty = System.getProperty(SMOS_DDDB_DIR_PROPERTY_NAME);
         if (StringUtils.isNotNullAndNotEmpty(dddbDirFromProperty)) {
             final File resourceFile = new File(dddbDirFromProperty, path);
             return new URL("file", "", 0, resourceFile.getAbsolutePath());
         }
         return getClass().getResource(path);
+    }
+
+    Properties getResourceAsProperties(String path) throws IOException {
+        final Properties properties = new Properties();
+        final InputStream is = getResourceStream(path);
+
+        if (is != null) {
+            properties.load(is);
+            is.close();
+        }
+        return properties;
     }
 }

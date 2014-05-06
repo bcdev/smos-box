@@ -212,7 +212,7 @@
                     {
                         "x": 9259,
                         "y": 8090,
-                        "value": 22244
+                        "value": 712.79638671875
                     },
                     {
                         "x": 854,
@@ -252,7 +252,7 @@
                     {
                         "x": 10584,
                         "y": 7628,
-                        "value": 170
+                        "value": 0.6666666865348816
                     },
                     {
                         "x": 9011,
@@ -324,7 +324,7 @@
             {
                 "name": "PR_Index",
                 "description": "Polarisation ratio Index",
-                "noDataValue": "0.0",
+                "noDataValue": 1.0078740157480315,
                 "noDataValueUsed": "true",
                 "spectralWavelength": "0.0",
                 "spectralBandwidth": "0.0",
@@ -332,7 +332,7 @@
                     {
                         "x": 552,
                         "y": 918,
-                        "value": 255
+                        "value": "NaN"
                     },
                     {
                         "x": 5364,

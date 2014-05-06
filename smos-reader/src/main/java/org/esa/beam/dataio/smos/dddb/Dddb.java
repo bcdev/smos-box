@@ -34,7 +34,6 @@ import java.nio.charset.Charset;
 import java.text.MessageFormat;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -76,18 +75,13 @@ public class Dddb {
             try {
                 final URL url = getSchemaResource(formatName);
                 if (url != null) {
-                    final DataFormat format;
-
-
-                    format = createBinX(formatName).readDataFormat(url.toURI(), formatName);
-
-
+                    final DataFormat format = createBinX(formatName).readDataFormat(url.toURI(), formatName);
                     format.setByteOrder(ByteOrder.LITTLE_ENDIAN);
                     dataFormatMap.putIfAbsent(formatName, format);
+                    return format;
                 }
             } catch (Throwable e) {
-                throw new IllegalStateException(
-                        MessageFormat.format("Schema resource ''{0}'': {1}", formatName, e.getMessage()));
+                throw new IllegalStateException(MessageFormat.format("Schema resource ''{0}'': {1}", formatName, e.getMessage()));
             }
         }
 
@@ -213,47 +207,35 @@ public class Dddb {
 
         try {
             if (name.contains("AUX_ECMWF_")) {
-                binX.setVarNameMappings(getResourceAsProperties("mappings_AUX_ECMWF_.properties"));
+                binX.setVarNameMappings(resourceHandler.getResourceAsProperties("mappings_AUX_ECMWF_.properties"));
             }
             if (name.matches("DBL_\\w{2}_\\w{4}_MIR_\\w{4}1C_\\d{4}")) {
-                binX.setVarNameMappings(getResourceAsProperties("mappings_MIR_XXXX1C.properties"));
+                binX.setVarNameMappings(resourceHandler.getResourceAsProperties("mappings_MIR_XXXX1C.properties"));
                 if (name.matches("DBL_\\w{2}_\\w{4}_MIR_SC\\w{2}1C_\\d{4}")) {
-                    binX.setTypeMembersInlined(getResourceAsProperties("structs_MIR_SCXX1C.properties"));
+                    binX.setTypeMembersInlined(resourceHandler.getResourceAsProperties("structs_MIR_SCXX1C.properties"));
                 }
             }
             if (name.contains("MIR_OSDAP2")) {
-                binX.setVarNameMappings(getResourceAsProperties("mappings_MIR_OSDAP2.properties"));
-                binX.setTypeMembersInlined(getResourceAsProperties("structs_MIR_OSDAP2.properties"));
+                binX.setVarNameMappings(resourceHandler.getResourceAsProperties("mappings_MIR_OSDAP2.properties"));
+                binX.setTypeMembersInlined(resourceHandler.getResourceAsProperties("structs_MIR_OSDAP2.properties"));
             }
             if (name.contains("MIR_OSUDP2")) {
-                binX.setVarNameMappings(getResourceAsProperties("mappings_MIR_OSUDP2.properties"));
-                binX.setTypeMembersInlined(getResourceAsProperties("structs_MIR_OSUDP2.properties"));
+                binX.setVarNameMappings(resourceHandler.getResourceAsProperties("mappings_MIR_OSUDP2.properties"));
+                binX.setTypeMembersInlined(resourceHandler.getResourceAsProperties("structs_MIR_OSUDP2.properties"));
             }
             if (name.contains("MIR_SMDAP2")) {
-                binX.setVarNameMappings(getResourceAsProperties("mappings_MIR_SMDAP2.properties"));
-                binX.setTypeMembersInlined(getResourceAsProperties("structs_MIR_SMDAP2.properties"));
+                binX.setVarNameMappings(resourceHandler.getResourceAsProperties("mappings_MIR_SMDAP2.properties"));
+                binX.setTypeMembersInlined(resourceHandler.getResourceAsProperties("structs_MIR_SMDAP2.properties"));
             }
             if (name.contains("MIR_SMUDP2")) {
-                binX.setVarNameMappings(getResourceAsProperties("mappings_MIR_SMUDP2.properties"));
-                binX.setTypeMembersInlined(getResourceAsProperties("structs_MIR_SMUDP2.properties"));
+                binX.setVarNameMappings(resourceHandler.getResourceAsProperties("mappings_MIR_SMUDP2.properties"));
+                binX.setTypeMembersInlined(resourceHandler.getResourceAsProperties("structs_MIR_SMUDP2.properties"));
             }
         } catch (IOException e) {
             throw new IllegalStateException(e.getMessage());
         }
 
         return binX;
-    }
-
-    // @todo 2 tb/tb move to resource handler class tb 2014-05-06
-    private Properties getResourceAsProperties(String name) throws IOException {
-        final Properties properties = new Properties();
-        final InputStream is = resourceHandler.getResourceStream(name);
-
-        if (is != null) {
-            properties.load(is);
-        }
-
-        return properties;
     }
 
     private BandDescriptors readBandDescriptors(InputStream inputStream) throws IOException {
