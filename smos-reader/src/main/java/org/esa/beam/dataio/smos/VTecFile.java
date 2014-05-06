@@ -102,7 +102,7 @@ class VTecFile extends ExplorerFile {
     }
 
     @Override
-    protected Area getArea() {
+    public final Area getArea() {
         return new Area(new Rectangle2D.Double(lon1, lat2, lon2 - lon1, lat1 - lat2));
     }
 

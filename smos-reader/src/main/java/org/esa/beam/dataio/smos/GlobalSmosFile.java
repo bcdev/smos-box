@@ -36,7 +36,7 @@ class GlobalSmosFile extends ExplorerFile {
     }
 
     @Override
-    protected Area getArea() {
+    public final Area getArea() {
         return new Area(new Rectangle2D.Double(-180.0, -90.0, 360.0, 180.0));
     }
 

@@ -189,7 +189,7 @@ public class DggFile extends ExplorerFile {
     }
 
     @Override
-    protected Area getArea() {
+    public Area getArea() {
         return new Area(area);
     }
 

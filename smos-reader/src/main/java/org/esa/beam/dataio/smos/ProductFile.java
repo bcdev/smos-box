@@ -2,6 +2,7 @@ package org.esa.beam.dataio.smos;
 
 import org.esa.beam.framework.datamodel.Product;
 
+import java.awt.geom.Area;
 import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
@@ -16,6 +17,7 @@ public interface ProductFile extends Closeable{
 
     Product createProduct() throws IOException;
 
-    File getFile();
+    Area getArea();
 
+    File getFile();
 }

@@ -99,7 +99,7 @@ class LaiFile extends ExplorerFile {
     }
 
     @Override
-    protected Area getArea() {
+    public final Area getArea() {
         return new Area(new Rectangle2D.Double(-180.0, -90.0, 360.0, 180.0));
     }
 
@@ -178,66 +178,7 @@ class LaiFile extends ExplorerFile {
     private CellValueProvider createLaiValueProvider(BandDescriptor descriptor) {
         final int memberIndex = getCellType().getMemberIndex(descriptor.getMemberName());
 
-        return new CellValueProvider() {
-
-            @Override
-            public final Area getArea() {
-                return LaiFile.this.getArea();
-            }
-
-            @Override
-            public final long getCellIndex(double lon, double lat) {
-                return LaiFile.this.getCellIndex(lon, lat);
-            }
-
-            @Override
-            public final byte getValue(long cellIndex, byte noDataValue) {
-                final int zoneIndex = getZoneIndex(cellIndex);
-                final int gridIndex = getGridIndex(cellIndex, zoneIndex);
-
-                try {
-                    return getGridList().get(zoneIndex).getSequenceData().getCompound(gridIndex).getByte(memberIndex);
-                } catch (IOException e) {
-                    return noDataValue;
-                }
-            }
-
-            @Override
-            public final short getValue(long cellIndex, short noDataValue) {
-                final int zoneIndex = getZoneIndex(cellIndex);
-                final int gridIndex = getGridIndex(cellIndex, zoneIndex);
-
-                try {
-                    return getGridList().get(zoneIndex).getSequenceData().getCompound(gridIndex).getShort(memberIndex);
-                } catch (IOException e) {
-                    return noDataValue;
-                }
-            }
-
-            @Override
-            public final int getValue(long cellIndex, int noDataValue) {
-                final int zoneIndex = getZoneIndex(cellIndex);
-                final int gridIndex = getGridIndex(cellIndex, zoneIndex);
-
-                try {
-                    return getGridList().get(zoneIndex).getSequenceData().getCompound(gridIndex).getInt(memberIndex);
-                } catch (IOException e) {
-                    return noDataValue;
-                }
-            }
-
-            @Override
-            public final float getValue(long cellIndex, float noDataValue) {
-                final int zoneIndex = getZoneIndex(cellIndex);
-                final int gridIndex = getGridIndex(cellIndex, zoneIndex);
-
-                try {
-                    return getGridList().get(zoneIndex).getSequenceData().getCompound(gridIndex).getFloat(memberIndex);
-                } catch (IOException e) {
-                    return noDataValue;
-                }
-            }
-        };
+        return new LaiValueProvider(memberIndex);
     }
 
     private MultiLevelImage createSourceImage(Band band, CellValueProvider valueProvider) {
@@ -248,7 +189,7 @@ class LaiFile extends ExplorerFile {
         return new AbstractMultiLevelSource(SmosDgg.getInstance().getMultiLevelImage().getModel()) {
             @Override
             protected RenderedImage createImage(int level) {
-                return new LaiOpImage(valueProvider, band, getModel(), ResolutionLevel.create(getModel(), level));
+                return new CellGridOpImage(valueProvider, band, getModel(), ResolutionLevel.create(getModel(), level));
             }
         };
     }
@@ -316,4 +257,70 @@ class LaiFile extends ExplorerFile {
         return Collections.unmodifiableList(gridList);
     }
 
+    private final class LaiValueProvider implements CellValueProvider {
+
+        private final int memberIndex;
+
+        public LaiValueProvider(int memberIndex) {
+            this.memberIndex = memberIndex;
+        }
+
+        @Override
+        public final Area getArea() {
+            return LaiFile.this.getArea();
+        }
+
+        @Override
+        public final long getCellIndex(double lon, double lat) {
+            return LaiFile.this.getCellIndex(lon, lat);
+        }
+
+        @Override
+        public final byte getValue(long cellIndex, byte noDataValue) {
+            final int zoneIndex = getZoneIndex(cellIndex);
+            final int gridIndex = getGridIndex(cellIndex, zoneIndex);
+
+            try {
+                return getGridList().get(zoneIndex).getSequenceData().getCompound(gridIndex).getByte(memberIndex);
+            } catch (IOException e) {
+                return noDataValue;
+            }
+        }
+
+        @Override
+        public final short getValue(long cellIndex, short noDataValue) {
+            final int zoneIndex = getZoneIndex(cellIndex);
+            final int gridIndex = getGridIndex(cellIndex, zoneIndex);
+
+            try {
+                return getGridList().get(zoneIndex).getSequenceData().getCompound(gridIndex).getShort(memberIndex);
+            } catch (IOException e) {
+                return noDataValue;
+            }
+        }
+
+        @Override
+        public final int getValue(long cellIndex, int noDataValue) {
+            final int zoneIndex = getZoneIndex(cellIndex);
+            final int gridIndex = getGridIndex(cellIndex, zoneIndex);
+
+            try {
+                return getGridList().get(zoneIndex).getSequenceData().getCompound(gridIndex).getInt(memberIndex);
+            } catch (IOException e) {
+                return noDataValue;
+            }
+        }
+
+        @Override
+        public final float getValue(long cellIndex, float noDataValue) {
+            final int zoneIndex = getZoneIndex(cellIndex);
+            final int gridIndex = getGridIndex(cellIndex, zoneIndex);
+
+            try {
+                return getGridList().get(zoneIndex).getSequenceData().getCompound(gridIndex).getFloat(memberIndex);
+            } catch (IOException e) {
+                return noDataValue;
+            }
+        }
+    }
 }

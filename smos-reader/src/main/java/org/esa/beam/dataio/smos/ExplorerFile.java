@@ -54,6 +54,7 @@ public abstract class ExplorerFile implements ProductFile {
         return hdrFile;
     }
 
+    @Override
     public final File getFile() {
         return dblFile;
     }
@@ -62,16 +63,11 @@ public abstract class ExplorerFile implements ProductFile {
         return dataFormat;
     }
 
-    public final DataContext getDataContext() {
-        return dataContext;
-    }
-
     public final CompoundData getDataBlock() {
         return dataBlock;
     }
 
-    protected  abstract Area getArea();
-
+    @Override
     public void close() {
         dataContext.dispose();
     }
