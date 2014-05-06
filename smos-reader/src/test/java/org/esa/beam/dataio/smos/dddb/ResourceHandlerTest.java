@@ -8,8 +8,10 @@ import org.junit.Test;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Properties;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.*;
@@ -104,10 +106,53 @@ public class ResourceHandlerTest {
         }
     }
 
-    private void createTestFile(File targetDirectory, String testFileName) throws IOException {
-        if (!new File(targetDirectory, testFileName).createNewFile()) {
+    @Test
+    public void testGetResourceAsProperties_fromJar() throws IOException {
+        final Properties properties = resourceHandler.getResourceAsProperties("structs_MIR_SCXX1C.properties");
+        assertNotNull(properties);
+        assertEquals("true", properties.getProperty("Quality_Information_Type"));
+    }
+
+    @Test
+    public void testGetResourceAsProperties_fromJar_unknownProperty() throws IOException {
+        final Properties properties = resourceHandler.getResourceAsProperties("stupid_and_invalid.properties");
+        assertNotNull(properties);
+        assertEquals(0, properties.size());
+    }
+
+    @Test
+    public void testGetResourceAsProperties_fromDirectory() throws IOException {
+        File targetDirectory = null;
+
+        try {
+            targetDirectory = createTestDirectory();
+            System.setProperty(ResourceHandler.SMOS_DDDB_DIR_PROPERTY_NAME, targetDirectory.getAbsolutePath());
+            final File testFile = createTestFile(targetDirectory, "test.properties");
+            final PrintWriter writer = new PrintWriter(testFile);
+            writer.println("the_property = a_value");
+            writer.close();
+
+            final Properties properties = resourceHandler.getResourceAsProperties("test.properties");
+            assertNotNull(properties);
+            assertEquals("a_value", properties.getProperty("the_property"));
+
+        } finally {
+            System.clearProperty(ResourceHandler.SMOS_DDDB_DIR_PROPERTY_NAME);
+
+            if (targetDirectory != null && targetDirectory.isDirectory()) {
+                if (!FileUtils.deleteTree(targetDirectory)) {
+                    fail("Unable to delete test directory");
+                }
+            }
+        }
+    }
+
+    private File createTestFile(File targetDirectory, String testFileName) throws IOException {
+        final File testFile = new File(targetDirectory, testFileName);
+        if (!testFile.createNewFile()) {
             fail("unable to create test file.");
         }
+        return testFile;
     }
 
     private File createTestDirectory() {
