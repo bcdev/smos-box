@@ -1,4 +1,3 @@
-package org.esa.beam.dataio.smos;
 /*
  * Copyright (C) 2012 Brockmann Consult GmbH (info@brockmann-consult.de)
  *
@@ -15,11 +14,12 @@ package org.esa.beam.dataio.smos;
  * with this program; if not, see http://www.gnu.org/licenses/
  */
 
+package org.esa.beam.dataio.smos;
+
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import ucar.ma2.Array;
-import ucar.ma2.ArrayStructure;
 import ucar.ma2.DataType;
 import ucar.ma2.InvalidRangeException;
 import ucar.ma2.StructureData;
@@ -40,19 +40,10 @@ import static org.junit.Assert.assertTrue;
 
 /**
  * Tests for trying out reading SMOS BUFR formatted files obtained from 'ideas-nas.eo.esa.int'.
- * <p/>
- * The test has a dependency to the Unidata BUFR module.
- * <p/>
- * <pre>
- *      <dependency>
- *          <groupId>edu.ucar</groupId>
- *          <artifactId>bufr</artifactId>
- *          <version>4.3.19</version>
- *      </dependency>
- * </pre>
  *
  * @author Ralf Quast
  */
+@Ignore
 public class BufrTest {
 
     @Before
