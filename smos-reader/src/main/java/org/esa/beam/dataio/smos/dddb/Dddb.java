@@ -26,15 +26,15 @@ import org.jdom.Namespace;
 import org.jdom.filter.Filter;
 import org.jdom.input.SAXBuilder;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.ByteOrder;
 import java.nio.charset.Charset;
 import java.text.MessageFormat;
-import java.util.*;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -54,7 +54,7 @@ public class Dddb {
     private final Charset charset = Charset.forName("UTF-8");
     private final char[] separators = new char[]{'|'};
 
-    private final ResourcePathBuilder pathBuilder;
+    private final ResourceHandler resourceHandler;
     private final ConcurrentMap<String, DataFormat> dataFormatMap;
     private final ConcurrentMap<String, BandDescriptors> bandDescriptorMap;
     private final ConcurrentMap<String, FlagDescriptors> flagDescriptorMap;
@@ -64,7 +64,7 @@ public class Dddb {
         bandDescriptorMap = new ConcurrentHashMap<>(17);
         flagDescriptorMap = new ConcurrentHashMap<>(17);
 
-        pathBuilder = new ResourcePathBuilder();
+        resourceHandler = new ResourceHandler();
     }
 
     public static Dddb getInstance() {
@@ -73,20 +73,21 @@ public class Dddb {
 
     public DataFormat getDataFormat(String formatName) {
         if (!dataFormatMap.containsKey(formatName)) {
-            final URL url = getSchemaResource(formatName);
+            try {
+                final URL url = getSchemaResource(formatName);
+                if (url != null) {
+                    final DataFormat format;
 
-            if (url != null) {
-                final DataFormat format;
 
-                try {
                     format = createBinX(formatName).readDataFormat(url.toURI(), formatName);
-                } catch (Throwable e) {
-                    throw new IllegalStateException(
-                            MessageFormat.format("Schema resource ''{0}'': {1}", url, e.getMessage()));
-                }
 
-                format.setByteOrder(ByteOrder.LITTLE_ENDIAN);
-                dataFormatMap.putIfAbsent(formatName, format);
+
+                    format.setByteOrder(ByteOrder.LITTLE_ENDIAN);
+                    dataFormatMap.putIfAbsent(formatName, format);
+                }
+            } catch (Throwable e) {
+                throw new IllegalStateException(
+                        MessageFormat.format("Schema resource ''{0}'': {1}", formatName, e.getMessage()));
             }
         }
 
@@ -145,25 +146,24 @@ public class Dddb {
 
     public Family<BandDescriptor> getBandDescriptors(String formatName) {
         if (!bandDescriptorMap.containsKey(formatName)) {
-            final InputStream inputStream = getBandDescriptorResource(formatName);
-
-            if (inputStream != null) {
-                final BandDescriptors descriptors;
-
-                try {
-                    descriptors = readBandDescriptors(inputStream);
-                } catch (Throwable t) {
-                    throw new IllegalStateException(MessageFormat.format(
-                            "An error ocurred while reading band descriptors for format name ''{0}''.", formatName));
-                } finally {
+            InputStream inputStream = null;
+            try {
+                inputStream = getBandDescriptorResource(formatName);
+                if (inputStream != null) {
+                    final BandDescriptors descriptors = readBandDescriptors(inputStream);
+                    bandDescriptorMap.putIfAbsent(formatName, descriptors);
+                }
+            } catch (Throwable t) {
+                throw new IllegalStateException(MessageFormat.format(
+                        "An error occurred while reading band descriptors for format name ''{0}''.", formatName));
+            } finally {
+                if (inputStream != null) {
                     try {
                         inputStream.close();
                     } catch (IOException e) {
                         //ignore
                     }
                 }
-
-                bandDescriptorMap.putIfAbsent(formatName, descriptors);
             }
         }
 
@@ -172,37 +172,38 @@ public class Dddb {
 
     public Family<FlagDescriptor> getFlagDescriptors(String identifier) {
         if (!flagDescriptorMap.containsKey(identifier)) {
-            final InputStream inputStream = getFlagDescriptorResource(identifier);
+            InputStream inputStream = null;
 
-            if (inputStream != null) {
-                final FlagDescriptors descriptors;
+            try {
+                inputStream = getFlagDescriptorResource(identifier);
+                if (inputStream != null) {
+                    final FlagDescriptors descriptors = readFlagDescriptors(inputStream);
 
-                try {
-                    descriptors = readFlagDescriptors(inputStream);
-                } catch (Throwable e) {
-                    throw new IllegalStateException(MessageFormat.format(
-                            "An error ocurred while reading flag descriptors for identifier ''{0}''.", identifier));
-                } finally {
+                    flagDescriptorMap.putIfAbsent(identifier, descriptors);
+                }
+            } catch (Throwable e) {
+                throw new IllegalStateException(MessageFormat.format(
+                        "An error occurred while reading flag descriptors for identifier ''{0}''.", identifier));
+            } finally {
+                if (inputStream != null) {
                     try {
                         inputStream.close();
                     } catch (IOException e) {
                         //ignore
                     }
                 }
-
-                flagDescriptorMap.putIfAbsent(identifier, descriptors);
             }
         }
 
         return flagDescriptorMap.get(identifier);
     }
 
-    private URL getSchemaResource(String schemaName) {
+    private URL getSchemaResource(String schemaName) throws MalformedURLException {
         if (schemaName == null || !schemaName.matches(SCHEMA_NAMING_CONVENTION)) {
             return null;
         }
 
-        return getClass().getResource(pathBuilder.buildPath(schemaName, "schemas", ".binXschema.xml"));
+        return resourceHandler.getResourceUrl(ResourceHandler.buildPath(schemaName, "schemas", ".binXschema.xml"));
     }
 
     private BinX createBinX(String name) {
@@ -243,9 +244,10 @@ public class Dddb {
         return binX;
     }
 
+    // @todo 2 tb/tb move to resource handler class tb 2014-05-06
     private Properties getResourceAsProperties(String name) throws IOException {
         final Properties properties = new Properties();
-        final InputStream is = getClass().getResourceAsStream(name);
+        final InputStream is = resourceHandler.getResourceStream(name);
 
         if (is != null) {
             properties.load(is);
@@ -268,24 +270,23 @@ public class Dddb {
         return new FlagDescriptors(recordList);
     }
 
-    private InputStream getBandDescriptorResource(String formatName) {
+    private InputStream getBandDescriptorResource(String formatName) throws FileNotFoundException {
         if (formatName == null || !formatName.matches(SCHEMA_NAMING_CONVENTION)) {
             return null;
         }
 
-        return getClass().getResourceAsStream(pathBuilder.buildPath(formatName, "bands", ".csv"));
+        return resourceHandler.getResourceStream(ResourceHandler.buildPath(formatName, "bands", ".csv"));
     }
 
-    private InputStream getFlagDescriptorResource(String identifier) {
+    private InputStream getFlagDescriptorResource(String identifier) throws FileNotFoundException {
         if (identifier == null || !identifier.matches(SCHEMA_NAMING_CONVENTION + "_.*")) {
             return null;
         }
 
-        return getClass().getResourceAsStream(pathBuilder.buildPath(identifier, "flags", ".csv"));
+        return resourceHandler.getResourceStream(ResourceHandler.buildPath(identifier, "flags", ".csv"));
     }
 
     // Initialization on demand holder idiom
-
     private static class Holder {
         private static final Dddb INSTANCE = new Dddb();
     }
