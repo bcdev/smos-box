@@ -48,12 +48,12 @@ public class SnapshotInfo {
                         Collection<Long> snapshotIdsXY,
                         Map<Long, Rectangle2D> snapshotAreaMap) {
         this.snapshotIndexMap = Collections.unmodifiableMap(snapshotIndexMap);
-        this.snapshotIds = Collections.unmodifiableList(new ArrayList<Long>(snapshotIds));
-        this.snapshotIdsX = Collections.unmodifiableList(new ArrayList<Long>(snapshotIdsX));
-        this.snapshotIdsY = Collections.unmodifiableList(new ArrayList<Long>(snapshotIdsY));
-        this.snapshotIdsXY = Collections.unmodifiableList(new ArrayList<Long>(snapshotIdsXY));
+        this.snapshotIds = Collections.unmodifiableList(new ArrayList<>(snapshotIds));
+        this.snapshotIdsX = Collections.unmodifiableList(new ArrayList<>(snapshotIdsX));
+        this.snapshotIdsY = Collections.unmodifiableList(new ArrayList<>(snapshotIdsY));
+        this.snapshotIdsXY = Collections.unmodifiableList(new ArrayList<>(snapshotIdsXY));
 
-        final HashMap<Long, Area> map = new HashMap<Long, Area>();
+        final HashMap<Long, Area> map = new HashMap<>();
         for (Map.Entry<Long, Rectangle2D> entry : snapshotAreaMap.entrySet()) {
             map.put(entry.getKey(), new Area(entry.getValue()));
         }
