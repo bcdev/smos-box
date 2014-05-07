@@ -22,7 +22,6 @@ import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.text.MessageFormat;
-import java.util.Arrays;
 
 public class DggFile extends ExplorerFile {
 
@@ -301,8 +300,12 @@ public class DggFile extends ExplorerFile {
         int maxSeqnum = minSeqnum;
 
         final int gridPointCount = getGridPointCount();
+        final int[] seqNumbers = new int[gridPointCount];
+        seqNumbers[0] = minSeqnum;
+
         for (int i = 1; i < gridPointCount; i++) {
             final int seqnum = getGridPointSeqnum(i);
+            seqNumbers[i] = seqnum;
 
             if (seqnum < minSeqnum) {
                 minSeqnum = seqnum;
@@ -314,11 +317,7 @@ public class DggFile extends ExplorerFile {
         }
 
         final GridPointInfo gridPointInfo = new GridPointInfo(minSeqnum, maxSeqnum);
-        Arrays.fill(gridPointInfo.indexes, -1);
-
-        for (int i = 0; i < gridPointCount; i++) {
-            gridPointInfo.indexes[getGridPointSeqnum(i) - minSeqnum] = i;
-        }
+        gridPointInfo.setSequenceNumbers(seqNumbers);
 
         return gridPointInfo;
     }
@@ -336,27 +335,6 @@ public class DggFile extends ExplorerFile {
         } catch (Exception e) {
             System.out.println("e.getMessage() = " + e.getMessage());
             e.printStackTrace();
-        }
-    }
-
-    private static final class GridPointInfo {
-
-        final int minSeqnum;
-        final int maxSeqnum;
-        final int[] indexes;
-
-        GridPointInfo(int minSeqnum, int maxSeqnum) {
-            this.minSeqnum = minSeqnum;
-            this.maxSeqnum = maxSeqnum;
-            indexes = new int[maxSeqnum - minSeqnum + 1];
-        }
-
-        int getGridPointIndex(int seqnum) {
-            if (seqnum < minSeqnum || seqnum > maxSeqnum) {
-                return -1;
-            }
-
-            return indexes[seqnum - minSeqnum];
         }
     }
 }
