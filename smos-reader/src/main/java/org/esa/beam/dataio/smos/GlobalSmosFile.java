@@ -2,7 +2,7 @@ package org.esa.beam.dataio.smos;
 
 import com.bc.ceres.binio.CompoundMember;
 import com.bc.ceres.binio.CompoundType;
-import com.bc.ceres.binio.DataFormat;
+import com.bc.ceres.binio.DataContext;
 import com.bc.ceres.binio.SequenceData;
 import com.bc.ceres.glevel.MultiLevelImage;
 import com.bc.ceres.glevel.MultiLevelSource;
@@ -12,21 +12,21 @@ import org.esa.beam.dataio.smos.dddb.Dddb;
 import org.esa.beam.dataio.smos.dddb.Family;
 import org.esa.beam.framework.datamodel.Band;
 import org.esa.beam.framework.datamodel.Product;
+import org.esa.beam.smos.EEFilePair;
 import org.esa.beam.smos.dgg.SmosDgg;
 import org.esa.beam.util.io.FileUtils;
 
-import java.awt.Dimension;
+import java.awt.*;
 import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
-import java.io.File;
 import java.io.IOException;
 
 class GlobalSmosFile extends ExplorerFile {
 
     private final SequenceData[] zones;
 
-    protected GlobalSmosFile(File hdrFile, File dblFile, DataFormat dataFormat) throws IOException {
-        super(hdrFile, dblFile, dataFormat);
+    protected GlobalSmosFile(EEFilePair eeFilePair, DataContext dataContext) throws IOException {
+        super(eeFilePair, dataContext);
         final SequenceData zoneSequence = getDataBlock().getSequence(0);
 
         zones = new SequenceData[zoneSequence.getElementCount()];
@@ -42,8 +42,8 @@ class GlobalSmosFile extends ExplorerFile {
 
     @Override
     public Product createProduct() throws IOException {
-        final String productName = FileUtils.getFilenameWithoutExtension(getHeaderFile());
-        final String productType = getDataFormat().getName().substring(12, 22);
+        final String productName = FileUtils.getFilenameWithoutExtension(getDataFile());
+        final String productType = getProductType();
         final Dimension dimension = ProductHelper.getSceneRasterDimension();
         final Product product = new Product(productName, productType, dimension.width, dimension.height);
 
@@ -89,7 +89,7 @@ class GlobalSmosFile extends ExplorerFile {
             }
             if (descriptor.getFlagDescriptors() != null) {
                 ProductHelper.addFlagsAndMasks(product, band, descriptor.getFlagCodingName(),
-                                               descriptor.getFlagDescriptors());
+                        descriptor.getFlagDescriptors());
             }
 
             final ValueProvider valueProvider = createValueProvider(descriptor);

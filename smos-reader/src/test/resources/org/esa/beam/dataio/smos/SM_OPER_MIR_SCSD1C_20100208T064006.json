@@ -563,7 +563,7 @@
                     {
                         "x": 1575,
                         "y": 637,
-                        "value": 2.6895044
+                        "value": 2.7513134479522705
                     }
                 ]
             },
@@ -590,8 +590,8 @@
             },
             {
                 "name": "Stokes_1",
-                "noDataValue": "0.0",
-                "noDataValueUsed": "false",
+                "noDataValue": -999.0,
+                "noDataValueUsed": "true",
                 "spectralWavelength": "0.0",
                 "spectralBandwidth": "0.0",
                 "expectedPixels": [
@@ -609,15 +609,15 @@
             },
             {
                 "name": "Stokes_2",
-                "noDataValue": "0.0",
-                "noDataValueUsed": "false",
+                "noDataValue": -999.0,
+                "noDataValueUsed": "true",
                 "spectralWavelength": "0.0",
                 "spectralBandwidth": "0.0",
                 "expectedPixels": [
                     {
-                        "x": 1439,
-                        "y": 4363,
-                        "value": "NaN"
+                        "x": 15616,
+                        "y": 4864,
+                        "value": -4.793377
                     },
                     {
                         "x": 12049,

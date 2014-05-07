@@ -1,10 +1,6 @@
 package org.esa.beam.dataio.smos;
 
-import com.bc.ceres.binio.CompoundData;
-import com.bc.ceres.binio.CompoundMember;
-import com.bc.ceres.binio.CompoundType;
-import com.bc.ceres.binio.DataFormat;
-import com.bc.ceres.binio.SequenceData;
+import com.bc.ceres.binio.*;
 import com.bc.ceres.glevel.MultiLevelImage;
 import com.bc.ceres.glevel.MultiLevelSource;
 import com.bc.ceres.glevel.support.DefaultMultiLevelImage;
@@ -14,6 +10,7 @@ import org.esa.beam.dataio.smos.dddb.Family;
 import org.esa.beam.framework.datamodel.Band;
 import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.framework.datamodel.ProductData;
+import org.esa.beam.smos.EEFilePair;
 import org.esa.beam.smos.dgg.SmosDgg;
 import org.esa.beam.util.io.FileUtils;
 import org.jdom.Document;
@@ -23,10 +20,8 @@ import org.jdom.Namespace;
 import java.awt.Dimension;
 import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
-import java.io.File;
 import java.io.IOException;
 import java.text.MessageFormat;
-import java.util.Arrays;
 
 public class DggFile extends ExplorerFile {
 
@@ -36,8 +31,8 @@ public class DggFile extends ExplorerFile {
     private final Area area;
     private final GridPointInfo gridPointInfo;
 
-    protected DggFile(File hdrFile, File dblFile, DataFormat format, boolean fromZones) throws IOException {
-        super(hdrFile, dblFile, format);
+    protected DggFile(EEFilePair eeFilePair, DataContext dataContext, boolean fromZones) throws IOException {
+        super(eeFilePair, dataContext);
         try {
             if (fromZones) {
                 gridPointList = createGridPointListFromZones(getDataBlock().getSequence(0));
@@ -47,7 +42,7 @@ public class DggFile extends ExplorerFile {
             gridPointIdIndex = gridPointList.getCompoundType().getMemberIndex(SmosConstants.GRID_POINT_ID_NAME);
         } catch (IOException e) {
             throw new IOException(MessageFormat.format(
-                    "Unable to read SMOS File ''{0}'': {1}.", dblFile.getPath(), e.getMessage()), e);
+                    "Unable to read SMOS File ''{0}'': {1}.", eeFilePair.getDblFile().getPath(), e.getMessage()), e);
         }
         area = computeArea(this.getGridPointList());
         gridPointInfo = createGridPointInfo();
@@ -155,8 +150,8 @@ public class DggFile extends ExplorerFile {
 
     @Override
     public final Product createProduct() throws IOException {
-        final String productName = FileUtils.getFilenameWithoutExtension(getHeaderFile());
-        final String productType = getDataFormat().getName().substring(12, 22);
+        final String productName = FileUtils.getFilenameWithoutExtension(getDataFile());
+        final String productType = getProductType();
         final Dimension dimension = ProductHelper.getSceneRasterDimension();
         final Product product = new Product(productName, productType, dimension.width, dimension.height);
 
@@ -212,7 +207,7 @@ public class DggFile extends ExplorerFile {
             }
             if (descriptor.getFlagDescriptors() != null) {
                 ProductHelper.addFlagsAndMasks(product, band, descriptor.getFlagCodingName(),
-                                               descriptor.getFlagDescriptors());
+                        descriptor.getFlagDescriptors());
             }
 
             final ValueProvider valueProvider = createValueProvider(descriptor);
@@ -261,8 +256,12 @@ public class DggFile extends ExplorerFile {
         int maxSeqnum = minSeqnum;
 
         final int gridPointCount = getGridPointCount();
+        final int[] seqNumbers = new int[gridPointCount];
+        seqNumbers[0] = minSeqnum;
+
         for (int i = 1; i < gridPointCount; i++) {
             final int seqnum = getGridPointSeqnum(i);
+            seqNumbers[i] = seqnum;
 
             if (seqnum < minSeqnum) {
                 minSeqnum = seqnum;
@@ -274,11 +273,7 @@ public class DggFile extends ExplorerFile {
         }
 
         final GridPointInfo gridPointInfo = new GridPointInfo(minSeqnum, maxSeqnum);
-        Arrays.fill(gridPointInfo.indexes, -1);
-
-        for (int i = 0; i < gridPointCount; i++) {
-            gridPointInfo.indexes[getGridPointSeqnum(i) - minSeqnum] = i;
-        }
+        gridPointInfo.setSequenceNumbers(seqNumbers);
 
         return gridPointInfo;
     }

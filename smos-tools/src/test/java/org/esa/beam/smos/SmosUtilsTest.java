@@ -376,6 +376,15 @@ public class SmosUtilsTest {
     }
 
     @Test
+    public void testIsFullPolBrowseFormat() {
+        assertTrue(SmosUtils.isFullPolBrowseFormat("SM_OPER_MIR_BWLF1C_20100405T143038_20100405T152439_330_001_1.HDR"));
+        assertTrue(SmosUtils.isFullPolBrowseFormat("SM_OPER_MIR_BWSF1C_20100201T134256_20100201T140057_324_001_1.HDR"));
+
+        assertFalse(SmosUtils.isDualPolBrowseFormat("SM_OPER_MIR_OSUDP2_20091204T001853_20091204T011255_310_001_1.zip"));
+        assertFalse(SmosUtils.isDualPolBrowseFormat("SM_OPER_MIR_SMDAP2_20111130T141947_20111130T151305_500_001_1.DBL"));
+    }
+
+    @Test
     public void testIsBrowseFormat() {
         assertTrue(SmosUtils.isBrowseFormat("SM_OPER_MIR_BWLD1C_20100405T143038_20100405T152439_330_001_1.HDR"));
         assertTrue(SmosUtils.isBrowseFormat("SM_OPER_MIR_BWSD1C_20100201T134256_20100201T140057_324_001_1.HDR"));
@@ -384,6 +393,24 @@ public class SmosUtilsTest {
 
         assertFalse(SmosUtils.isBrowseFormat("SM_TEST_MIR_OSDAP2_20070225T041815_20070225T050750_306_001_8.DBL"));
         assertFalse(SmosUtils.isBrowseFormat("SM_OPER_MIR_OSUDP2_20091204T001853_20091204T011255_310_001_1.zip"));
+    }
+
+    @Test
+    public void testIsDualPolScienceFormat() {
+        assertTrue(SmosUtils.isDualPolScienceFormat("SM_OPER_MIR_SCSD1C_20100405T143038_20100405T152439_330_001_1.HDR"));
+        assertTrue(SmosUtils.isDualPolScienceFormat("SM_OPER_MIR_SCLD1C_20100201T134256_20100201T140057_324_001_1.HDR"));
+
+        assertFalse(SmosUtils.isDualPolScienceFormat("SM_OPER_MIR_OSUDP2_20091204T001853_20091204T011255_310_001_1.zip"));
+        assertFalse(SmosUtils.isDualPolScienceFormat("SM_OPER_MIR_SMDAP2_20111130T141947_20111130T151305_500_001_1.DBL"));
+    }
+
+    @Test
+    public void testIsFullPolScienceFormat() {
+        assertTrue(SmosUtils.isFullPolScienceFormat("SM_OPER_MIR_SCSF1C_20100405T143038_20100405T152439_330_001_1.HDR"));
+        assertTrue(SmosUtils.isFullPolScienceFormat("SM_OPER_MIR_SCLF1C_20100201T134256_20100201T140057_324_001_1.HDR"));
+
+        assertFalse(SmosUtils.isFullPolScienceFormat("SM_OPER_MIR_OSUDP2_20091204T001853_20091204T011255_310_001_1.zip"));
+        assertFalse(SmosUtils.isFullPolScienceFormat("SM_OPER_MIR_SMDAP2_20111130T141947_20111130T151305_500_001_1.DBL"));
     }
 
     @Test
@@ -399,6 +426,55 @@ public class SmosUtilsTest {
 
         final File zipFileWithCapitalExtension = new File("firlefanz.ZIP");
         assertTrue(SmosUtils.isCompressedFile(zipFileWithCapitalExtension));
+    }
+
+    @Test
+    public void testIsDggTlvFormat() {
+        assertTrue(SmosUtils.isDggTlvFormat("SM_OPER_AUX_DGGTLV_20110605T000000_20110608T000000_307_001_3.DBL"));
+        assertFalse(SmosUtils.isDggTlvFormat("SM_OPER_MIR_BWLF1C_20100201T134256_20100201T140057_324_001_1.DBL"));
+    }
+
+    @Test
+    public void testIsDggTfoFormat() {
+        assertTrue(SmosUtils.isDggTfoFormat("SM_OPER_AUX_DGGTFO_20140411T001616_20500101T000000_400_001_1.HDR"));
+        assertFalse(SmosUtils.isDggTfoFormat("SM_OPER_MIR_OSUDP2_20091204T001853_20091204T011255_310_001_1.DBL"));
+    }
+
+    @Test
+    public void testIsDggRouFormat() {
+        assertTrue(SmosUtils.isDggRouFormat("SM_OPER_AUX_DGGROU_20110605T000000_20110608T000000_307_001_3.DBL"));
+        assertFalse(SmosUtils.isDggRouFormat("SM_OPER_MIR_OSUDP2_20091204T001853_20091204T011255_310_001_1.DBL"));
+    }
+
+    @Test
+    public void testIsDggRfiFormat() {
+        assertTrue(SmosUtils.isDggRfiFormat("SM_OPER_AUX_DGGRFI_20140413T003825_20500101T000000_400_001_1.HDR"));
+        assertFalse(SmosUtils.isDggRfiFormat("SM_TEST_MIR_OSUDP2_20121118T143742_20121118T153047_306_002_1.DBL"));
+    }
+
+    @Test
+    public void testIsDggFloFormat() {
+        assertTrue(SmosUtils.isDggFloFormat("SM_OPER_AUX_DGGFLO_20140413T003825_20500101T000000_400_001_1.DBL"));
+        assertFalse(SmosUtils.isDggFloFormat("SM_TEST_AUX_RFI____20070101T235959_20781231T235959_00000001.DBL"));
+    }
+
+    @Test
+    public void testIsLsMaskFormat() {
+        assertTrue(SmosUtils.isLsMaskFormat("SM_OPER_AUX_LSMASK_20050101T000000_20500101T000000_300_003_3.DBL"));
+        assertFalse(SmosUtils.isLsMaskFormat("SM_TEST_MIR_GMATD__20121117T020130_20781231T235959_115_001_3.DBL"));
+    }
+
+    @Test
+    public void testIsVTecFormat() {
+        assertTrue(SmosUtils.isVTecFormat("SM_OPER_AUX_VTEC_C_20100118T230000_20100120T010000_306_001_3.HDR"));
+        assertTrue(SmosUtils.isVTecFormat("SM_OPER_AUX_VTEC_P_20100207T230000_20100209T010000_306_001_3.DBL"));
+        assertFalse(SmosUtils.isVTecFormat("SO_GNOT_MIR_OS__2__20070223T061024_20070223T062500_001_001_0.DBL"));
+    }
+
+    @Test
+    public void testIsDffLaiFormat() {
+        assertTrue(SmosUtils.isDffLaiFormat("SM_OPER_AUX_DFFLAI_20100117T000000_20100216T000000_306_001_3.DBL"));
+        assertFalse(SmosUtils.isDffLaiFormat("SM_TEST_MIR_SMDAP2_20121118T135052_20121118T144140_303_007_1.DBL"));
     }
 
     ////////////////////////////////////////////////////////////////////////////////

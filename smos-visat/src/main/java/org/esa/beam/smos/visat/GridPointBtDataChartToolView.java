@@ -16,11 +16,11 @@
 
 package org.esa.beam.smos.visat;
 
-import org.esa.beam.dataio.smos.L1cSmosFile;
 import org.esa.beam.dataio.smos.L1cScienceSmosFile;
+import org.esa.beam.dataio.smos.L1cSmosFile;
 import org.esa.beam.dataio.smos.SmosConstants;
-import org.esa.beam.dataio.smos.SmosProductReader;
 import org.esa.beam.framework.ui.product.ProductSceneView;
+import org.esa.beam.smos.SmosUtils;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -32,13 +32,10 @@ import org.jfree.data.xy.YIntervalSeries;
 import org.jfree.data.xy.YIntervalSeriesCollection;
 import org.jfree.ui.RectangleInsets;
 
-import javax.swing.JCheckBox;
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-import java.awt.Color;
-import java.awt.FlowLayout;
-import java.awt.event.ActionListener;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 
 public class GridPointBtDataChartToolView extends GridPointBtDataToolView {
@@ -55,14 +52,14 @@ public class GridPointBtDataChartToolView extends GridPointBtDataToolView {
         coPolDataset = new YIntervalSeriesCollection();
         crossPolDataset = new YIntervalSeriesCollection();
         chart = ChartFactory.createXYLineChart(null,
-                                               null,
-                                               null,
-                                               coPolDataset,
-                                               PlotOrientation.VERTICAL,
-                                               true, // Legend?
-                                               true,
-                                               false);
-        
+                null,
+                null,
+                coPolDataset,
+                PlotOrientation.VERTICAL,
+                true, // Legend?
+                true,
+                false);
+
         plot = chart.getXYPlot();
         plot.setNoDataMessage("No data");
         plot.setAxisOffset(new RectangleInsets(5, 5, 5, 5));
@@ -75,13 +72,13 @@ public class GridPointBtDataChartToolView extends GridPointBtDataToolView {
         final NumberAxis yAxis = (NumberAxis) plot.getRangeAxis();
         yAxis.setLabel("Co-Pol BT(K)");
         yAxis.setRange(50, 350);
-        
+
         final NumberAxis yAxis2 = new NumberAxis("Cross-Pol BT(K)");
         yAxis2.setRange(-25, 25);
         plot.setRangeAxis(1, yAxis2);
         plot.setDataset(1, crossPolDataset);
         plot.mapDatasetToRangeAxis(1, 1);
-        
+
         DeviationRenderer coPolRenderer = new DeviationRenderer(true, false);
         coPolRenderer.setSeriesFillPaint(0, new Color(255, 127, 127));
         coPolRenderer.setSeriesFillPaint(1, new Color(127, 127, 255));
@@ -101,7 +98,7 @@ public class GridPointBtDataChartToolView extends GridPointBtDataToolView {
             final L1cScienceSmosFile smosFile = (L1cScienceSmosFile) l1cSmosFile;
             modeCheckers[0].setEnabled(true);
             modeCheckers[1].setEnabled(true);
-            modeCheckers[2].setEnabled(SmosProductReader.isFullPolScienceFormat(smosFile.getDataFormat().getName()));
+            modeCheckers[2].setEnabled(SmosUtils.isFullPolScienceFormat(smosFile.getDataFormat().getName()));
         }
     }
 
@@ -147,7 +144,7 @@ public class GridPointBtDataChartToolView extends GridPointBtDataToolView {
                     double x = ds.data[i][ix].doubleValue();
                     double y = ds.data[i][iy1].doubleValue();
                     double dev = ds.data[i][id].doubleValue();
-                     if (m1 && polMode == SmosConstants.L1C_POL_MODE_X) {
+                    if (m1 && polMode == SmosConstants.L1C_POL_MODE_X) {
                         series1.add(x, y, y - dev, y + dev);
                     } else if (m2 && polMode == SmosConstants.L1C_POL_MODE_Y) {
                         series2.add(x, y, y - dev, y + dev);

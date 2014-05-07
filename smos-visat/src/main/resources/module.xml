@@ -63,7 +63,7 @@
             <id>smosGridPointExport</id>
             <class>org.esa.beam.smos.visat.export.GridPointExportAction</class>
             <helpId>smosGridPointExport</helpId>
-            <parent>tool</parent>
+            <parent>exportOther</parent>
             <text>Export SMOS Grid Points...</text>
             <mnemonic>G</mnemonic>
         </action>

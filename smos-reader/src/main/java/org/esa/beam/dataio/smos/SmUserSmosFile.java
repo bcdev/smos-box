@@ -1,13 +1,14 @@
 package org.esa.beam.dataio.smos;
 
-import com.bc.ceres.binio.DataFormat;
+import com.bc.ceres.binio.DataContext;
 import org.esa.beam.dataio.smos.dddb.BandDescriptor;
 import org.esa.beam.framework.datamodel.Band;
+import org.esa.beam.smos.EEFilePair;
+import org.esa.beam.util.StringUtils;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.Namespace;
 
-import java.io.File;
 import java.io.IOException;
 
 /**
@@ -17,14 +18,19 @@ class SmUserSmosFile extends SmosFile {
 
     private final double chi2Scale;
 
-    SmUserSmosFile(File hdrFile, File dblFile, DataFormat format) throws IOException {
-        super(hdrFile, dblFile, format);
+    SmUserSmosFile(EEFilePair eeFilePair, DataContext dataContext) throws IOException {
+        super(eeFilePair, dataContext);
 
         final Document document = getDocument();
         final Namespace namespace = document.getRootElement().getNamespace();
         final Element specificProductHeader = getElement(document.getRootElement(), TAG_SPECIFIC_PRODUCT_HEADER);
 
-        chi2Scale = Double.valueOf(specificProductHeader.getChildText("Chi_2_Scale", namespace));
+        final String chi_2_scale = specificProductHeader.getChildText("Chi_2_Scale", namespace);
+        if (StringUtils.isNotNullAndNotEmpty(chi_2_scale)) {
+            chi2Scale = Double.valueOf(chi_2_scale);
+        } else {
+            chi2Scale = 1.0;
+        }
     }
 
     @Override
