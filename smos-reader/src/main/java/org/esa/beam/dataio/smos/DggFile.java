@@ -1,6 +1,10 @@
 package org.esa.beam.dataio.smos;
 
-import com.bc.ceres.binio.*;
+import com.bc.ceres.binio.CompoundData;
+import com.bc.ceres.binio.CompoundMember;
+import com.bc.ceres.binio.CompoundType;
+import com.bc.ceres.binio.DataContext;
+import com.bc.ceres.binio.SequenceData;
 import com.bc.ceres.glevel.MultiLevelImage;
 import com.bc.ceres.glevel.MultiLevelSource;
 import com.bc.ceres.glevel.support.DefaultMultiLevelImage;
@@ -207,7 +211,7 @@ public class DggFile extends ExplorerFile {
             }
             if (descriptor.getFlagDescriptors() != null) {
                 ProductHelper.addFlagsAndMasks(product, band, descriptor.getFlagCodingName(),
-                        descriptor.getFlagDescriptors());
+                                               descriptor.getFlagDescriptors());
             }
 
             final ValueProvider valueProvider = createValueProvider(descriptor);
@@ -291,27 +295,6 @@ public class DggFile extends ExplorerFile {
         } catch (Exception e) {
             System.out.println("e.getMessage() = " + e.getMessage());
             e.printStackTrace();
-        }
-    }
-
-    private static final class GridPointInfo {
-
-        final int minSeqnum;
-        final int maxSeqnum;
-        final int[] indexes;
-
-        GridPointInfo(int minSeqnum, int maxSeqnum) {
-            this.minSeqnum = minSeqnum;
-            this.maxSeqnum = maxSeqnum;
-            indexes = new int[maxSeqnum - minSeqnum + 1];
-        }
-
-        int getGridPointIndex(int seqnum) {
-            if (seqnum < minSeqnum || seqnum > maxSeqnum) {
-                return -1;
-            }
-
-            return indexes[seqnum - minSeqnum];
         }
     }
 
