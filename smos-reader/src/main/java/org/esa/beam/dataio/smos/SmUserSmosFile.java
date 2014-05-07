@@ -3,6 +3,7 @@ package org.esa.beam.dataio.smos;
 import com.bc.ceres.binio.DataFormat;
 import org.esa.beam.dataio.smos.dddb.BandDescriptor;
 import org.esa.beam.framework.datamodel.Band;
+import org.esa.beam.util.StringUtils;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.Namespace;
@@ -24,7 +25,12 @@ class SmUserSmosFile extends SmosFile {
         final Namespace namespace = document.getRootElement().getNamespace();
         final Element specificProductHeader = getElement(document.getRootElement(), TAG_SPECIFIC_PRODUCT_HEADER);
 
-        chi2Scale = Double.valueOf(specificProductHeader.getChildText("Chi_2_Scale", namespace));
+        final String chi_2_scale = specificProductHeader.getChildText("Chi_2_Scale", namespace);
+        if (StringUtils.isNotNullAndNotEmpty(chi_2_scale)) {
+            chi2Scale = Double.valueOf(chi_2_scale);
+        } else {
+            chi2Scale = 1.0;
+        }
     }
 
     @Override
