@@ -48,6 +48,7 @@ public class SmosUtils {
 
         // @todo 1 pm/* review this code... it doesn't set a time zone, so if some other code sets time zone to UTC, then the day can change. Better to just use a different class than Date for the return value.
         final Calendar cal = GregorianCalendar.getInstance();
+        //noinspection MagicConstant
         cal.set(year, month - 1, day);
         return cal.getTime();
     }
@@ -246,13 +247,29 @@ public class SmosUtils {
                 || formatName.contains("MIR_BWND1C");
     }
 
-    public static boolean isBrowseFormat(String formatName) {
-        return isDualPolBrowseFormat(formatName)
-                || formatName.contains("MIR_BWLF1C")
+    public static boolean isFullPolBrowseFormat(String formatName) {
+        return formatName.contains("MIR_BWLF1C")
                 || formatName.contains("MIR_BWSF1C")
                 || formatName.contains("MIR_BWNF1C");
     }
 
+    public static boolean isBrowseFormat(String formatName) {
+        return isDualPolBrowseFormat(formatName) || isFullPolBrowseFormat(formatName);
+    }
+
+    public static boolean isDualPolScienceFormat(String formatName) {
+        return formatName.contains("MIR_SCLD1C")
+                || formatName.contains("MIR_SCSD1C")
+                || formatName.contains("MIR_SCND1C");
+    }
+
+    public static boolean isFullPolScienceFormat(String formatName) {
+        return formatName.contains("MIR_SCLF1C")
+                || formatName.contains("MIR_SCSF1C")
+                || formatName.contains("MIR_SCNF1C");
+    }
+
+    @SuppressWarnings("SimplifiableIfStatement")
     public static boolean isCompressedFile(File file) {
         final String extension = FileUtils.getExtension(file);
         if (StringUtils.isNullOrEmpty(extension)) {
@@ -262,9 +279,43 @@ public class SmosUtils {
         return extension.contains("zip") || extension.contains("ZIP");
     }
 
+    public static boolean isDggTlvFormat(String formatName) {
+        return formatName.contains("AUX_DGGTLV");
+    }
+
+    public static boolean isDggTfoFormat(String formatName) {
+        return formatName.contains("AUX_DGGTFO");
+    }
+
+    public static boolean isDggRouFormat(String formatName) {
+        return formatName.contains("AUX_DGGROU");
+    }
+
+    public static boolean isDggRfiFormat(String formatName) {
+        return formatName.contains("AUX_DGGRFI");
+    }
+
+    public static boolean isDggFloFormat(String formatName) {
+        return formatName.contains("AUX_DGGFLO");
+    }
+
+    public static boolean isLsMaskFormat(String formatName) {
+        return formatName.contains("AUX_LSMASK");
+    }
+
+    public static boolean isVTecFormat(String formatName) {
+        return formatName.contains("AUX_VTEC_C")
+                || formatName.contains("AUX_VTEC_P");
+    }
+
+    public static boolean isDffLaiFormat(String formatName) {
+        return formatName.contains("AUX_DFFLAI");
+    }
+
     ////////////////////////////////////////////////////////////////////////////////
     /////// END OF PUBLIC
     ////////////////////////////////////////////////////////////////////////////////
+
 
     static String getProductTypeFromFilename(String fileName) {
         //in case fileName includes path, remove it
@@ -273,7 +324,6 @@ public class SmosUtils {
         final String typeString = fileName.substring(8, 18);
         return typeString.toUpperCase();
     }
-
 
     /**
      * @param sensingTime The sensing time from the filename, which looks like ISO-8601 timespec=second with colons and hyphens removed.

@@ -26,6 +26,7 @@ import org.esa.beam.dataio.smos.dddb.Family;
 import org.esa.beam.framework.datamodel.Band;
 import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.framework.datamodel.ProductData;
+import org.esa.beam.smos.SmosUtils;
 
 import java.awt.geom.Rectangle2D;
 import java.io.File;
@@ -112,7 +113,7 @@ public class L1cScienceSmosFile extends L1cSmosFile {
     protected void addBands(Product product) {
         super.addBands(product);
 
-        if (SmosProductReader.isDualPolScienceFormat(getDataFormat().getName())) {
+        if (SmosUtils.isDualPolScienceFormat(getDataFormat().getName())) {
             addRotatedDualPolBands(product, valueProviderMap);
         } else {
             addRotatedFullPolBands(product, valueProviderMap);
@@ -145,10 +146,6 @@ public class L1cScienceSmosFile extends L1cSmosFile {
     protected final MultiLevelImage createSourceImage(Band band, ValueProvider valueProvider) {
         // todo - make source image reset itself and fire node-data-changed, if affected by snapshot ID (rq-20100121)
         return super.createSourceImage(band, valueProvider);
-    }
-
-    public final SequenceData getSnapshotList() {
-        return snapshotList;
     }
 
     public final CompoundData getSnapshotData(int snapshotIndex) throws IOException {
