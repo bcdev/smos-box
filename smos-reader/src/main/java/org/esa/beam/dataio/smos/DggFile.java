@@ -10,6 +10,7 @@ import org.esa.beam.dataio.smos.dddb.Family;
 import org.esa.beam.framework.datamodel.Band;
 import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.framework.datamodel.ProductData;
+import org.esa.beam.smos.EEFilePair;
 import org.esa.beam.smos.dgg.SmosDgg;
 import org.esa.beam.util.io.FileUtils;
 import org.jdom.Document;
@@ -19,7 +20,6 @@ import org.jdom.Namespace;
 import java.awt.*;
 import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
-import java.io.File;
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.Arrays;
@@ -32,8 +32,8 @@ public class DggFile extends ExplorerFile {
     private final Area area;
     private final GridPointInfo gridPointInfo;
 
-    protected DggFile(File hdrFile, File dblFile, DataContext dataContext, boolean fromZones) throws IOException {
-        super(hdrFile, dblFile, dataContext);
+    protected DggFile(EEFilePair eeFilePair, DataContext dataContext, boolean fromZones) throws IOException {
+        super(eeFilePair, dataContext);
         try {
             if (fromZones) {
                 gridPointList = createGridPointListFromZones(getDataBlock().getSequence(0));
@@ -43,7 +43,7 @@ public class DggFile extends ExplorerFile {
             gridPointIdIndex = gridPointList.getCompoundType().getMemberIndex(SmosConstants.GRID_POINT_ID_NAME);
         } catch (IOException e) {
             throw new IOException(MessageFormat.format(
-                    "Unable to read SMOS File ''{0}'': {1}.", dblFile.getPath(), e.getMessage()), e);
+                    "Unable to read SMOS File ''{0}'': {1}.", eeFilePair.getDblFile().getPath(), e.getMessage()), e);
         }
         area = computeArea(this);
         gridPointInfo = createGridPointInfo();
@@ -195,8 +195,8 @@ public class DggFile extends ExplorerFile {
 
     @Override
     public final Product createProduct() throws IOException {
-        final String productName = FileUtils.getFilenameWithoutExtension(getHeaderFile());
-        final String productType = getDataFormat().getName().substring(12, 22);
+        final String productName = FileUtils.getFilenameWithoutExtension(getDataFile());
+        final String productType = getProductType();
         final Dimension dimension = ProductHelper.getSceneRasterDimension();
         final Product product = new Product(productName, productType, dimension.width, dimension.height);
 

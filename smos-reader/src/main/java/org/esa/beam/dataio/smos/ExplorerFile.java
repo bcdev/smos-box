@@ -20,6 +20,7 @@ import com.bc.ceres.binio.CompoundData;
 import com.bc.ceres.binio.DataContext;
 import com.bc.ceres.binio.DataFormat;
 import org.esa.beam.dataio.smos.dddb.Dddb;
+import org.esa.beam.smos.EEFilePair;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -35,29 +36,31 @@ public abstract class ExplorerFile implements ProductFile {
 
     public static final String TAG_SPECIFIC_PRODUCT_HEADER = "Specific_Product_Header";
 
-    private final File hdrFile;
-    private final File dblFile;
+    private final EEFilePair eeFilePair;
     private final DataFormat dataFormat;
     private final DataContext dataContext;
 
-    protected ExplorerFile(File hdrFile, File dblFile, DataContext dataContext) throws IOException {
-        this.hdrFile = hdrFile;
-        this.dblFile = dblFile;
-        this.dataFormat = Dddb.getInstance().getDataFormat(hdrFile);
+    protected ExplorerFile(EEFilePair eeFilePair, DataContext dataContext) throws IOException {
+        this.eeFilePair = eeFilePair;
+        this.dataFormat = Dddb.getInstance().getDataFormat(eeFilePair.getHdrFile());
         this.dataContext = dataContext;
     }
 
     public final File getHeaderFile() {
-        return hdrFile;
+        return eeFilePair.getHdrFile();
     }
 
     @Override
     public final File getDataFile() {
-        return dblFile;
+        return eeFilePair.getDblFile();
     }
 
     public final DataFormat getDataFormat() {
         return dataFormat;
+    }
+
+    public String getProductType() {
+        return dataFormat.getName().substring(12, 22);
     }
 
     public final CompoundData getDataBlock() {
@@ -72,9 +75,9 @@ public abstract class ExplorerFile implements ProductFile {
     public final Document getDocument() throws IOException {
         final Document document;
         try {
-            document = new SAXBuilder().build(hdrFile);
+            document = new SAXBuilder().build(eeFilePair.getHdrFile());
         } catch (JDOMException e) {
-            throw new IOException(MessageFormat.format("File ''{0}'': Invalid document", hdrFile.getPath()), e);
+            throw new IOException(MessageFormat.format("File ''{0}'': Invalid document", eeFilePair.getHdrFile().getPath()), e);
         }
         return document;
     }

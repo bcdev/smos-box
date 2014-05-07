@@ -15,7 +15,10 @@
  */
 package org.esa.beam.dataio.smos;
 
-import com.bc.ceres.binio.*;
+import com.bc.ceres.binio.CompoundData;
+import com.bc.ceres.binio.CompoundType;
+import com.bc.ceres.binio.DataContext;
+import com.bc.ceres.binio.SequenceData;
 import com.bc.ceres.glevel.MultiLevelImage;
 import org.esa.beam.dataio.smos.dddb.BandDescriptor;
 import org.esa.beam.dataio.smos.dddb.Dddb;
@@ -23,17 +26,13 @@ import org.esa.beam.dataio.smos.dddb.Family;
 import org.esa.beam.framework.datamodel.Band;
 import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.framework.datamodel.ProductData;
+import org.esa.beam.smos.EEFilePair;
 import org.esa.beam.smos.SmosUtils;
 
 import java.awt.geom.Rectangle2D;
-import java.io.File;
 import java.io.IOException;
 import java.text.MessageFormat;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
@@ -64,8 +63,8 @@ public class L1cScienceSmosFile extends L1cSmosFile {
 
     private final Future<SnapshotInfo> snapshotInfoFuture;
 
-    L1cScienceSmosFile(File hdrFile, File dblFile, DataContext dataContext) throws IOException {
-        super(hdrFile, dblFile, dataContext);
+    L1cScienceSmosFile(EEFilePair eeFilePair, DataContext dataContext) throws IOException {
+        super(eeFilePair, dataContext);
         final String formatName = dataContext.getFormat().getName();
 
         flagsIndex = getBtDataType().getMemberIndex(SmosConstants.BT_FLAGS_NAME);
@@ -209,8 +208,8 @@ public class L1cScienceSmosFile extends L1cSmosFile {
             if (btData.getLong(snapshotIdOfPixelIndex) == snapshotId) {
                 final int flags = btData.getInt(flagsIndex);
                 if (polarization == 4 || // for flags (they do not depend on polarisation)
-                    polarization == (flags & 1) || // for x or y polarisation (dual pol)
-                    (polarization & flags & 2) != 0) { // for xy polarisation (full pol, real and imaginary)
+                        polarization == (flags & 1) || // for x or y polarisation (dual pol)
+                        (polarization & flags & 2) != 0) { // for xy polarisation (full pol, real and imaginary)
                     return btData;
                 }
             }

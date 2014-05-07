@@ -22,6 +22,7 @@ import com.bc.ceres.binio.SequenceData;
 import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.framework.datamodel.TiePointGrid;
 import org.esa.beam.smos.DateTimeUtils;
+import org.esa.beam.smos.EEFilePair;
 import org.esa.beam.util.io.FileUtils;
 import org.jdom.Document;
 import org.jdom.Element;
@@ -30,7 +31,6 @@ import org.jdom.Namespace;
 import java.awt.*;
 import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
-import java.io.File;
 import java.io.IOException;
 import java.text.MessageFormat;
 
@@ -71,8 +71,8 @@ class VTecFile extends ExplorerFile {
     private final int rowCount;
     private final int colCount;
 
-    VTecFile(File hdrFile, File dblFile, DataContext dataContext) throws IOException {
-        super(hdrFile, dblFile, dataContext);
+    VTecFile(EEFilePair eeFilePair, DataContext dataContext) throws IOException {
+        super(eeFilePair, dataContext);
 
         final Document document = getDocument();
         final Namespace namespace = document.getRootElement().getNamespace();
@@ -94,7 +94,7 @@ class VTecFile extends ExplorerFile {
         mapData = getDataBlock().getSequence(VTEC_INFO_NAME);
         if (mapData == null) {
             throw new IllegalStateException(MessageFormat.format(
-                    "SMOS File ''{0}'': Missing VTEC info.", dblFile.getPath()));
+                    "SMOS File ''{0}'': Missing VTEC info.", eeFilePair.getDblFile().getPath()));
         }
 
         rowCount = (int) (Math.round((lat2 - lat1) / latDelta) + 1);
@@ -108,8 +108,8 @@ class VTecFile extends ExplorerFile {
 
     @Override
     public Product createProduct() throws IOException {
-        final String productName = FileUtils.getFilenameWithoutExtension(getHeaderFile());
-        final String productType = getDataFormat().getName().substring(12, 22);
+        final String productName = FileUtils.getFilenameWithoutExtension(getDataFile());
+        final String productType = getProductType();
         final Dimension dimension = ProductHelper.getSceneRasterDimension();
         final Product product = new Product(productName, productType, dimension.width, dimension.height);
 

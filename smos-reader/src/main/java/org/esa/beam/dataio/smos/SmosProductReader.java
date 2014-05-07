@@ -27,6 +27,7 @@ import org.esa.beam.framework.dataio.ProductReaderPlugIn;
 import org.esa.beam.framework.datamodel.Band;
 import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.framework.datamodel.ProductData;
+import org.esa.beam.smos.EEFilePair;
 import org.esa.beam.smos.SmosUtils;
 import org.esa.beam.smos.lsmask.SmosLsMask;
 import org.esa.beam.util.io.FileUtils;
@@ -228,32 +229,34 @@ public class SmosProductReader extends AbstractProductReader {
             return null;
         }
 
+        final EEFilePair eeFilePair = new EEFilePair(hdrFile, dblFile);
         final String formatName = format.getName();
         final DataContext context = format.createContext(dblFile, "r");
+
         if (SmosUtils.isBrowseFormat(formatName)) {
-            return new L1cBrowseSmosFile(hdrFile, dblFile, context);
+            return new L1cBrowseSmosFile(eeFilePair, context);
         } else if (SmosUtils.isDualPolScienceFormat(formatName) ||
                 SmosUtils.isFullPolScienceFormat(formatName)) {
-            return new L1cScienceSmosFile(hdrFile, dblFile, context);
+            return new L1cScienceSmosFile(eeFilePair, context);
         } else if (SmosUtils.isSmUserFormat(formatName)) {
-            return new SmUserSmosFile(hdrFile, dblFile, context);
+            return new SmUserSmosFile(eeFilePair, context);
         } else if (SmosUtils.isOsUserFormat(formatName) ||
                 SmosUtils.isOsAnalysisFormat(formatName) ||
                 SmosUtils.isSmAnalysisFormat(formatName) ||
                 SmosUtils.isAuxECMWFType(formatName)) {
-            return new SmosFile(hdrFile, dblFile, context);
+            return new SmosFile(eeFilePair, context);
         } else if (SmosUtils.isDffLaiFormat(formatName)) {
-            return new LaiFile(hdrFile, dblFile, context);
+            return new LaiFile(eeFilePair, context);
         } else if (SmosUtils.isVTecFormat(formatName)) {
-            return new VTecFile(hdrFile, dblFile, context);
+            return new VTecFile(eeFilePair, context);
         } else if (SmosUtils.isLsMaskFormat(formatName)) {
-            return new GlobalSmosFile(hdrFile, dblFile, context);
+            return new GlobalSmosFile(eeFilePair, context);
         } else if (SmosUtils.isDggFloFormat(formatName) ||
                 SmosUtils.isDggRfiFormat(formatName) ||
                 SmosUtils.isDggRouFormat(formatName) ||
                 SmosUtils.isDggTfoFormat(formatName) ||
                 SmosUtils.isDggTlvFormat(formatName)) {
-            return new AuxiliaryFile(hdrFile, dblFile, context);
+            return new AuxiliaryFile(eeFilePair, context);
         }
 
         return null;
