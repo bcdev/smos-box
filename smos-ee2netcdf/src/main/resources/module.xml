@@ -46,7 +46,7 @@
             <id>smosEE2NetCDFExport</id>
             <class>org.esa.beam.smos.ee2netcdf.visat.NetCDFExportAction</class>
             <helpId>smosEE2NetCDFExport</helpId>
-            <parent>tool</parent>
+            <parent>exportOther</parent>
             <text>Convert SMOS EE files to NetCDF-4 ...</text>
             <mnemonic>N</mnemonic>
         </action>
