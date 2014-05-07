@@ -34,7 +34,7 @@ import java.util.Iterator;
 
 public abstract class ExplorerFile implements ProductFile {
 
-    public static final String TAG_SPECIFIC_PRODUCT_HEADER = "Specific_Product_Header";
+    protected static final String TAG_SPECIFIC_PRODUCT_HEADER = "Specific_Product_Header";
 
     private final EEFilePair eeFilePair;
     private final DataFormat dataFormat;
@@ -59,10 +59,6 @@ public abstract class ExplorerFile implements ProductFile {
         return dataFormat;
     }
 
-    public String getProductType() {
-        return dataFormat.getName().substring(12, 22);
-    }
-
     public final CompoundData getDataBlock() {
         return dataContext.getData();
     }
@@ -72,7 +68,11 @@ public abstract class ExplorerFile implements ProductFile {
         dataContext.dispose();
     }
 
-    public final Document getDocument() throws IOException {
+    protected String getProductType() {
+        return dataFormat.getName().substring(12, 22);
+    }
+
+    protected final Document getDocument() throws IOException {
         final Document document;
         try {
             document = new SAXBuilder().build(eeFilePair.getHdrFile());
@@ -82,7 +82,7 @@ public abstract class ExplorerFile implements ProductFile {
         return document;
     }
 
-    public Element getElement(Element parent, final String name) throws IOException {
+    protected Element getElement(Element parent, final String name) throws IOException {
         final Iterator descendants = parent.getDescendants(new Filter() {
             @Override
             public boolean matches(Object o) {
