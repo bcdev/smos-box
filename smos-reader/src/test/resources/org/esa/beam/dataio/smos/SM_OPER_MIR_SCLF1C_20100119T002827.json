@@ -887,9 +887,9 @@
                 "spectralBandwidth": "0.0",
                 "expectedPixels": [
                     {
-                        "x": 11976,
-                        "y": 3867,
-                        "value": "NaN"
+                        "x": 9999,
+                        "y": 421,
+                        "value": 1.0582094
                     },
                     {
                         "x": 2345,
