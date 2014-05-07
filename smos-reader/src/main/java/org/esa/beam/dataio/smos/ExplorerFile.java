@@ -26,7 +26,6 @@ import org.jdom.JDOMException;
 import org.jdom.filter.Filter;
 import org.jdom.input.SAXBuilder;
 
-import java.awt.geom.Area;
 import java.io.File;
 import java.io.IOException;
 import java.text.MessageFormat;
@@ -40,14 +39,12 @@ public abstract class ExplorerFile implements ProductFile {
     private final File dblFile;
     private final DataFormat dataFormat;
     private final DataContext dataContext;
-    private final CompoundData dataBlock;
 
-    protected ExplorerFile(File hdrFile, File dblFile, DataFormat dataFormat) throws IOException {
+    protected ExplorerFile(File hdrFile, File dblFile, DataContext dataContext) throws IOException {
         this.hdrFile = hdrFile;
         this.dblFile = dblFile;
         this.dataFormat = Dddb.getInstance().getDataFormat(hdrFile);
-        dataContext = dataFormat.createContext(dblFile, "r");
-        dataBlock = dataContext.getData();
+        this.dataContext = dataContext;
     }
 
     public final File getHeaderFile() {
@@ -64,7 +61,7 @@ public abstract class ExplorerFile implements ProductFile {
     }
 
     public final CompoundData getDataBlock() {
-        return dataBlock;
+        return dataContext.getData();
     }
 
     @Override

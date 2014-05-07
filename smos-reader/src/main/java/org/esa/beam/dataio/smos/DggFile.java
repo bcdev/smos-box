@@ -32,8 +32,8 @@ public class DggFile extends ExplorerFile {
     private final Area area;
     private final GridPointInfo gridPointInfo;
 
-    protected DggFile(File hdrFile, File dblFile, DataFormat format, boolean fromZones) throws IOException {
-        super(hdrFile, dblFile, format);
+    protected DggFile(File hdrFile, File dblFile, DataContext dataContext, boolean fromZones) throws IOException {
+        super(hdrFile, dblFile, dataContext);
         try {
             if (fromZones) {
                 gridPointList = createGridPointListFromZones(getDataBlock().getSequence(0));

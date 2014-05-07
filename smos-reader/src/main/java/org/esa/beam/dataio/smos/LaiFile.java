@@ -16,11 +16,7 @@
 
 package org.esa.beam.dataio.smos;
 
-import com.bc.ceres.binio.CompoundData;
-import com.bc.ceres.binio.CompoundMember;
-import com.bc.ceres.binio.CompoundType;
-import com.bc.ceres.binio.DataFormat;
-import com.bc.ceres.binio.SequenceData;
+import com.bc.ceres.binio.*;
 import com.bc.ceres.glevel.MultiLevelImage;
 import com.bc.ceres.glevel.MultiLevelSource;
 import com.bc.ceres.glevel.support.AbstractMultiLevelSource;
@@ -73,8 +69,8 @@ class LaiFile extends ExplorerFile {
     private final long zoneIndexMultiplier;
     private volatile List<Dffg> gridList = null;
 
-    LaiFile(File hdrFile, File dblFile, DataFormat dataFormat) throws IOException {
-        super(hdrFile, dblFile, dataFormat);
+    LaiFile(File hdrFile, File dblFile, DataContext dataContext) throws IOException {
+        super(hdrFile, dblFile, dataContext);
 
         final Document document = getDocument();
         final Namespace namespace = document.getRootElement().getNamespace();

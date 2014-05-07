@@ -16,7 +16,7 @@
 package org.esa.beam.dataio.smos;
 
 
-import com.bc.ceres.binio.DataFormat;
+import com.bc.ceres.binio.DataContext;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,7 +30,7 @@ import java.io.IOException;
  */
 class AuxiliaryFile extends DggFile {
 
-    AuxiliaryFile(File hdrFile, File dblFile, DataFormat format) throws IOException {
-        super(hdrFile, dblFile, format, true);
+    AuxiliaryFile(File hdrFile, File dblFile, DataContext dataContext) throws IOException {
+        super(hdrFile, dblFile, dataContext, true);
     }
 }

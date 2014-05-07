@@ -1,6 +1,6 @@
 package org.esa.beam.dataio.smos;
 
-import com.bc.ceres.binio.DataFormat;
+import com.bc.ceres.binio.DataContext;
 import org.esa.beam.dataio.smos.dddb.BandDescriptor;
 import org.esa.beam.framework.datamodel.Band;
 import org.esa.beam.util.StringUtils;
@@ -18,8 +18,8 @@ class SmUserSmosFile extends SmosFile {
 
     private final double chi2Scale;
 
-    SmUserSmosFile(File hdrFile, File dblFile, DataFormat format) throws IOException {
-        super(hdrFile, dblFile, format);
+    SmUserSmosFile(File hdrFile, File dblFile, DataContext dataContext) throws IOException {
+        super(hdrFile, dblFile, dataContext);
 
         final Document document = getDocument();
         final Namespace namespace = document.getRootElement().getNamespace();

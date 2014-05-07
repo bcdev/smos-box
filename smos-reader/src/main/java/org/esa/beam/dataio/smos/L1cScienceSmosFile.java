@@ -15,10 +15,7 @@
  */
 package org.esa.beam.dataio.smos;
 
-import com.bc.ceres.binio.CompoundData;
-import com.bc.ceres.binio.CompoundType;
-import com.bc.ceres.binio.DataFormat;
-import com.bc.ceres.binio.SequenceData;
+import com.bc.ceres.binio.*;
 import com.bc.ceres.glevel.MultiLevelImage;
 import org.esa.beam.dataio.smos.dddb.BandDescriptor;
 import org.esa.beam.dataio.smos.dddb.Dddb;
@@ -67,15 +64,16 @@ public class L1cScienceSmosFile extends L1cSmosFile {
 
     private final Future<SnapshotInfo> snapshotInfoFuture;
 
-    L1cScienceSmosFile(File hdrFile, File dblFile, DataFormat format) throws IOException {
-        super(hdrFile, dblFile, format);
+    L1cScienceSmosFile(File hdrFile, File dblFile, DataContext dataContext) throws IOException {
+        super(hdrFile, dblFile, dataContext);
+        final String formatName = dataContext.getFormat().getName();
 
         flagsIndex = getBtDataType().getMemberIndex(SmosConstants.BT_FLAGS_NAME);
         incidenceAngleIndex = getBtDataType().getMemberIndex(INCIDENCE_ANGLE_NAME);
-        final Family<BandDescriptor> bandDescriptors = Dddb.getInstance().getBandDescriptors(format.getName());
+        final Family<BandDescriptor> bandDescriptors = Dddb.getInstance().getBandDescriptors(formatName);
         if (bandDescriptors == null) {
             throw new IOException(MessageFormat.format(
-                    "No band descriptors found for format ''{0}''.", format.getName()));
+                    "No band descriptors found for format ''{0}''.", formatName));
         }
         incidenceAngleScalingFactor = getIncidenceAngleScalingFactor(bandDescriptors);
         snapshotIdOfPixelIndex = getBtDataType().getMemberIndex(SmosConstants.BT_SNAPSHOT_ID_OF_PIXEL_NAME);
