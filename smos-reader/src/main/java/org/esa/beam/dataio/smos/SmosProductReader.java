@@ -144,7 +144,7 @@ public class SmosProductReader extends AbstractProductReader {
                 final String path = virtualDir.getBasePath();
                 product.setFileLocation(new File(path));
             } else {
-                product.setFileLocation(productFile.getFile());
+                product.setFileLocation(productFile.getDataFile());
             }
             if (productFile instanceof SmosFile) {
                 addLandSeaMask(product);

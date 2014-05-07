@@ -113,7 +113,7 @@ class VTecFile extends ExplorerFile {
         final Dimension dimension = ProductHelper.getSceneRasterDimension();
         final Product product = new Product(productName, productType, dimension.width, dimension.height);
 
-        product.setFileLocation(getFile());
+        product.setFileLocation(getDataFile());
         product.setPreferredTileSize(512, 512);
         ProductHelper.addMetadata(product.getMetadataRoot(), this);
         product.setGeoCoding(ProductHelper.createGeoCoding(dimension));

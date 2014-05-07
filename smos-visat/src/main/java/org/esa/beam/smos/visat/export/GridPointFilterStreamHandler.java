@@ -68,7 +68,7 @@ class GridPointFilterStreamHandler {
                     }
                     if (productFile instanceof SmosFile) {
                         pm.setSubTaskName(MessageFormat.format(
-                                "Processing file ''{0}''...", productFile.getFile().getName()));
+                                "Processing file ''{0}''...", productFile.getDataFile().getName()));
                         try {
                             smosFileProcessor.process((SmosFile) productFile, SubProgressMonitor.create(pm, 1));
                         } catch (Exception e) {

@@ -258,7 +258,7 @@ public class ConverterOp extends Operator {
                 final ProductSubsetDef subsetDef = createSubsetDef(x_y_subset);
                 final Product subset = sourceProduct.createSubset(subsetDef, "", "");
 
-                final File outFile = getOutputFile(productFile.getFile(), targetDirectory);
+                final File outFile = getOutputFile(productFile.getDataFile(), targetDirectory);
                 if (outFile.isFile() && overwriteTarget) {
                     if (!outFile.delete()) {
                         throw new IOException(

@@ -76,12 +76,12 @@ class LightBufrFile implements ProductFile {
             }
         }
 
-        final String productName = FileUtils.getFilenameWithoutExtension(getFile());
+        final String productName = FileUtils.getFilenameWithoutExtension(getDataFile());
         final String productType = "W_ES-ESA-ESAC,SMOS,N256";
         final Dimension dimension = ProductHelper.getSceneRasterDimension();
         final Product product = new Product(productName, productType, dimension.width, dimension.height);
 
-        product.setFileLocation(getFile());
+        product.setFileLocation(getDataFile());
         product.setPreferredTileSize(512, 512);
         final List<Attribute> globalAttributes = ncfile.getGlobalAttributes();
         product.getMetadataRoot().addElement(
@@ -176,7 +176,7 @@ class LightBufrFile implements ProductFile {
     }
 
     @Override
-    public File getFile() {
+    public File getDataFile() {
         return new File(ncfile.getLocation());
     }
 

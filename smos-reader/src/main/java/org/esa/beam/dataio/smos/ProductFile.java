@@ -19,5 +19,5 @@ public interface ProductFile extends Closeable{
 
     Area getArea();
 
-    File getFile();
+    File getDataFile();
 }

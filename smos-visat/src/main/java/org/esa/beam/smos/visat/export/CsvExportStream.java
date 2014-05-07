@@ -49,7 +49,7 @@ class CsvExportStream implements GridPointFilterStream {
 
     @Override
     public void startFile(SmosFile smosFile) {
-        printWriter.println("# " + smosFile.getFile().getParent());
+        printWriter.println("# " + smosFile.getDataFile().getParent());
         printTypeHeader(smosFile.getGridPointType());
         printWriter.println();
     }

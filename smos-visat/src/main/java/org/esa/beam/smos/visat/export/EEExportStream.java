@@ -48,7 +48,7 @@ public class EEExportStream implements GridPointFilterStream {
 
     @Override
     public void startFile(SmosFile sourceFile) throws IOException {
-        targetDblFile = getTargetDblFile(sourceFile.getFile());
+        targetDblFile = getTargetDblFile(sourceFile.getDataFile());
         targetHdrFile = getTargetHdrFile(sourceFile.getHeaderFile());
         final DataFormat targetFormat = sourceFile.getDataFormat();
 

@@ -55,7 +55,7 @@ public abstract class ExplorerFile implements ProductFile {
     }
 
     @Override
-    public final File getFile() {
+    public final File getDataFile() {
         return dblFile;
     }
 
