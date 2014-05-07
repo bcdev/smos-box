@@ -242,7 +242,7 @@ public class ConverterOp extends Operator {
             final ProductFile productFile = productReader.getProductFile();
 
             if (productFile instanceof DggFile) {
-                final Area dataArea = DggFile.computeArea((DggFile) productFile);
+                final Area dataArea = DggFile.computeArea(((DggFile) productFile).getGridPointList());
                 Geometry polygon = convertToPolygon(dataArea);
 
                 if (region != null) {

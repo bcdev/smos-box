@@ -5,11 +5,10 @@ import com.bc.ceres.binio.CompoundType;
 
 import java.io.IOException;
 
-public interface GridPointList {
-
-    int getElementCount();
+public interface GridPointList extends PointList {
 
     CompoundData getCompound(int i) throws IOException;
 
     CompoundType getCompoundType();
+
 }
