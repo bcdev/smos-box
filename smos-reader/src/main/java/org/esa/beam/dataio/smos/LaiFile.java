@@ -169,16 +169,16 @@ class LaiFile extends ExplorerFile {
                                                descriptor.getFlagDescriptors());
             }
 
-            final CellValueProvider valueProvider = createLaiValueProvider(descriptor);
+            final CellValueProvider valueProvider = createCellValueProvider(descriptor);
             band.setSourceImage(createSourceImage(band, valueProvider));
             band.setImageInfo(ProductHelper.createImageInfo(band, descriptor));
         }
     }
 
-    private CellValueProvider createLaiValueProvider(BandDescriptor descriptor) {
+    private CellValueProvider createCellValueProvider(BandDescriptor descriptor) {
         final int memberIndex = getCellType().getMemberIndex(descriptor.getMemberName());
 
-        return new LaiValueProvider(memberIndex);
+        return new CellValueProviderImpl(memberIndex);
     }
 
     private MultiLevelImage createSourceImage(Band band, CellValueProvider valueProvider) {
@@ -257,11 +257,11 @@ class LaiFile extends ExplorerFile {
         return Collections.unmodifiableList(gridList);
     }
 
-    private final class LaiValueProvider implements CellValueProvider {
+    private final class CellValueProviderImpl implements CellValueProvider {
 
         private final int memberIndex;
 
-        public LaiValueProvider(int memberIndex) {
+        public CellValueProviderImpl(int memberIndex) {
             this.memberIndex = memberIndex;
         }
 

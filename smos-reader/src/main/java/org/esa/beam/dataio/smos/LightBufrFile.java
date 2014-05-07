@@ -145,7 +145,7 @@ class LightBufrFile implements ProductFile {
             band.setNoDataValue(missingValue.getNumericValue().doubleValue());
             band.setNoDataValueUsed(true);
         }
-        final CellValueProvider valueProvider = createValueProvider(variable);
+        final CellValueProvider valueProvider = createCellValueProvider(variable);
         band.setSourceImage(createSourceImage(band, valueProvider));
     }
 
@@ -162,8 +162,8 @@ class LightBufrFile implements ProductFile {
         };
     }
 
-    private CellValueProvider createValueProvider(Variable v) throws IOException {
-        return new LightBufrValueProvider(v);
+    private CellValueProvider createCellValueProvider(Variable v) throws IOException {
+        return new CellValueProviderImpl(v);
     }
 
     @Override
@@ -194,12 +194,12 @@ class LightBufrFile implements ProductFile {
         return new ObservationPointList(pointList.toArray(new Point[pointList.size()]));
     }
 
-    private final class LightBufrValueProvider implements CellValueProvider {
+    private final class CellValueProviderImpl implements CellValueProvider {
 
         private final Variable variable;
         private volatile Array array;
 
-        private LightBufrValueProvider(Variable variable) {
+        private CellValueProviderImpl(Variable variable) {
             this.variable = variable;
         }
 
