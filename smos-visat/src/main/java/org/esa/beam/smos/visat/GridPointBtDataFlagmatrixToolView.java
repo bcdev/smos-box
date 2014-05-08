@@ -62,9 +62,6 @@ public class GridPointBtDataFlagmatrixToolView extends GridPointBtDataToolView {
     private DefaultXYZDataset dataset;
     private XYPlot plot;
 
-    public GridPointBtDataFlagmatrixToolView() {
-    }
-
     @Override
     protected JComponent createGridPointComponent() {
         dataset = new DefaultXYZDataset();
@@ -119,11 +116,12 @@ public class GridPointBtDataFlagmatrixToolView extends GridPointBtDataToolView {
 
         int iq = ds.getColumnIndex(SmosConstants.BT_FLAGS_NAME);
         if (iq != -1) {
-            final int m = ds.data.length;
+            final Number[][] dsData = ds.getData();
+            final int m = dsData.length;
             final int n = FLAG_NAMES.length;
             double[][] data = new double[3][n * m];
             for (int x = 0; x < m; x++) {
-                final int flags = ds.data[x][iq].intValue();
+                final int flags = dsData[x][iq].intValue();
                 for (int y = 0; y < n; y++) {
                     data[0][y * m + x] = (1 + x);
                     data[1][y * m + x] = y;

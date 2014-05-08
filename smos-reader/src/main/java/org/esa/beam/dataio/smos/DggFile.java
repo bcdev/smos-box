@@ -68,16 +68,16 @@ public class DggFile extends ExplorerFile {
         return gridPointList.getElementCount();
     }
 
-    public final int getGridPointId(int i) throws IOException {
+    public final int getGridPointSeqnum(int i) throws IOException {
+        return SmosDgg.gridPointIdToSeqnum(getGridPointId(i));
+    }
+
+    private int getGridPointId(int i) throws IOException {
         final int gridPointId = gridPointList.getCompound(i).getInt(gridPointIdIndex);
         if (gridPointId < SmosDgg.MIN_GRID_POINT_ID || gridPointId > SmosDgg.MAX_GRID_POINT_ID) {
             throw new IOException(MessageFormat.format("Invalid Grid Point ID {0} at index {1}.", gridPointId, i));
         }
         return gridPointId;
-    }
-
-    public final int getGridPointSeqnum(int i) throws IOException {
-        return SmosDgg.gridPointIdToSeqnum(getGridPointId(i));
     }
 
     public final GridPointList getGridPointList() {
@@ -251,7 +251,7 @@ public class DggFile extends ExplorerFile {
         return new DefaultMultiLevelImage(createMultiLevelSource(band, valueProvider));
     }
 
-    protected MultiLevelSource createMultiLevelSource(Band band, ValueProvider valueProvider) {
+    private MultiLevelSource createMultiLevelSource(Band band, ValueProvider valueProvider) {
         return new SmosMultiLevelSource(band, valueProvider);
     }
 

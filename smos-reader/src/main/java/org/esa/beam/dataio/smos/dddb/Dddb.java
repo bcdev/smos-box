@@ -70,7 +70,7 @@ public class Dddb {
         return Holder.INSTANCE;
     }
 
-    public DataFormat getDataFormat(String formatName) {
+    DataFormat getDataFormat(String formatName) {
         if (!dataFormatMap.containsKey(formatName)) {
             try {
                 final URL url = getSchemaResource(formatName);

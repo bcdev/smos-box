@@ -21,7 +21,7 @@ import org.esa.beam.smos.DateTimeUtils;
 import java.text.DecimalFormat;
 import java.util.Date;
 
-public class FileNamePatcher {
+class FileNamePatcher {
     private String newStartDate;
     private String oldStartDate;
     private String newStopDate;
@@ -32,7 +32,7 @@ public class FileNamePatcher {
     private String suffix;
     private int fileCounter;
 
-    public FileNamePatcher(String originalName) {
+    FileNamePatcher(String originalName) {
         prefix = originalName.substring(0, 19);
         oldStartDate = originalName.substring(19, 34);
         oldStopDate = originalName.substring(35, 50);
@@ -41,35 +41,35 @@ public class FileNamePatcher {
         suffix = originalName.substring(58, originalName.length());
     }
 
-    public void setStartDate(Date startDate) {
+    void setStartDate(Date startDate) {
         newStartDate = DateTimeUtils.toFileNameFormat(startDate);
     }
 
-    public void setStopDate(Date stopDate) {
+     void setStopDate(Date stopDate) {
         newStopDate = DateTimeUtils.toFileNameFormat(stopDate);
     }
 
-    public void setFileCounter(int counter) {
+     void setFileCounter(int counter) {
         fileCounter = counter;
     }
 
-    public String getHdrFileName() {
+     String getHdrFileName() {
         final StringBuffer buffer = getFileNameBufferWithoutExtension();
         buffer.append(".HDR");
         return buffer.toString();
     }
 
-    public String getDblFileName() {
+     String getDblFileName() {
         final StringBuffer buffer = getFileNameBufferWithoutExtension();
         buffer.append(".DBL");
         return buffer.toString();
     }
 
-    public String getFileNameWithoutExtension() {
+     String getFileNameWithoutExtension() {
         return getFileNameBufferWithoutExtension().toString();
     }
 
-    private StringBuffer getFileNameBufferWithoutExtension() {
+     StringBuffer getFileNameBufferWithoutExtension() {
         final StringBuffer buffer = new StringBuffer(256);
         buffer.append(prefix);
         if (newStartDate != null) {

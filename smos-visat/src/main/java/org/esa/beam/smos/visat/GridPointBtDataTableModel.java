@@ -25,7 +25,7 @@ class GridPointBtDataTableModel extends AbstractTableModel {
 
     @Override
     public int getRowCount() {
-        return ds == null ? 0 :ds.data.length;
+        return ds == null ? 0 :ds.getData().length;
     }
 
     @Override
@@ -38,7 +38,7 @@ class GridPointBtDataTableModel extends AbstractTableModel {
         if (columnIndex == 0) {
             return 1 + rowIndex;
         } else {
-            return ds.data[rowIndex][columnIndex - 1];
+            return ds.getData()[rowIndex][columnIndex - 1];
         }
     }
 
@@ -59,7 +59,7 @@ class GridPointBtDataTableModel extends AbstractTableModel {
             if (ds == null) {
                 return Number.class;
             } else {
-                return ds.columnClasses[columnIndex - 1];
+                return ds.getColumnClasses()[columnIndex - 1];
             }
         }
     }

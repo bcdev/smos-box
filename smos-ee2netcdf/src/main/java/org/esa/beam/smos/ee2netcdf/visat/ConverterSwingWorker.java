@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-public class ConverterSwingWorker extends ProgressMonitorSwingWorker<List<Exception>, File> {
+class ConverterSwingWorker extends ProgressMonitorSwingWorker<List<Exception>, File> {
 
     private AppContext appContext;
     private ExportParameter exportParameter;
@@ -33,7 +33,7 @@ public class ConverterSwingWorker extends ProgressMonitorSwingWorker<List<Except
     protected List<Exception> doInBackground(ProgressMonitor pm) throws Exception {
         pm.beginTask("Converting product(s)", ProgressMonitor.UNKNOWN);
 
-        final ArrayList<Exception> exceptions = new ArrayList<Exception>();
+        final ArrayList<Exception> exceptions = new ArrayList<>();
 
         final HashMap<String, Object> parameterMap = createParameterMap(exportParameter);
 
@@ -126,7 +126,7 @@ public class ConverterSwingWorker extends ProgressMonitorSwingWorker<List<Except
         return sourcePath.toString();
     }
 
-    private static void addSelectedProductGeometry(Geometry geometry, HashMap<String, Object> parameterMap) {
+    static void addSelectedProductGeometry(Geometry geometry, HashMap<String, Object> parameterMap) {
         if (geometry instanceof Polygon) {
             final WKTWriter wktWriter = new WKTWriter();
             final String multiPolygonWkt = wktWriter.write(geometry);

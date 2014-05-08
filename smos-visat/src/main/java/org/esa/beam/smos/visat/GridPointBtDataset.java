@@ -20,20 +20,18 @@ import com.bc.ceres.binio.CompoundData;
 import com.bc.ceres.binio.CompoundType;
 import com.bc.ceres.binio.SequenceData;
 import com.bc.ceres.binio.util.NumberUtils;
+import org.esa.beam.dataio.smos.L1cSmosFile;
 import org.esa.beam.dataio.smos.dddb.BandDescriptor;
 import org.esa.beam.dataio.smos.dddb.Dddb;
-import org.esa.beam.dataio.smos.L1cSmosFile;
 
 import java.io.IOException;
 
 
 class GridPointBtDataset {
 
-    final int gridPointIndex;
-    final CompoundType btDataType;
-    final String[] columnNames;
-    final Class[] columnClasses;
-    final Number[][] data;
+    private final CompoundType btDataType;
+    private final Class[] columnClasses;
+    private final Number[][] data;
 
     static GridPointBtDataset read(L1cSmosFile smosFile, int gridPointIndex) throws IOException {
         SequenceData btDataList = smosFile.getBtDataList(gridPointIndex);
@@ -43,15 +41,14 @@ class GridPointBtDataset {
 
         int btDataListCount = btDataList.getElementCount();
 
-        final String[] columnNames = new String[memberCount];
         final Class[] columnClasses = new Class[memberCount];
         final BandDescriptor[] descriptors = new BandDescriptor[memberCount];
 
+        final Dddb dddb = Dddb.getInstance();
+        final String formatName = smosFile.getDataFormat().getName();
         for (int j = 0; j < memberCount; j++) {
             final String memberName = type.getMemberName(j);
-            columnNames[j] = memberName;
-            final BandDescriptor descriptor =
-                    Dddb.getInstance().findBandDescriptorForMember(smosFile.getDataFormat().getName(), memberName);
+            final BandDescriptor descriptor = dddb.findBandDescriptorForMember(formatName, memberName);
             if (descriptor == null || descriptor.getScalingFactor() == 1.0 && descriptor.getScalingOffset() == 0.0) {
                 columnClasses[j] = NumberUtils.getNumericMemberType(type, j);
             } else {
@@ -74,19 +71,25 @@ class GridPointBtDataset {
             }
         }
 
-        return new GridPointBtDataset(gridPointIndex, smosFile.getBtDataType(), columnNames, columnClasses, tableData);
+        return new GridPointBtDataset(smosFile.getBtDataType(), columnClasses, tableData);
     }
 
-    GridPointBtDataset(int gridPointIndex, CompoundType btDataType, String[] columnNames, Class[] columnClasses,
+    GridPointBtDataset(CompoundType btDataType, Class[] columnClasses,
                        Number[][] data) {
-        this.gridPointIndex = gridPointIndex;
         this.btDataType = btDataType;
-        this.columnNames = columnNames;
         this.columnClasses = columnClasses;
         this.data = data;
     }
 
     int getColumnIndex(String name) {
         return btDataType.getMemberIndex(name);
+    }
+
+    Number[][] getData() {
+        return data;
+    }
+
+    Class[] getColumnClasses() {
+        return columnClasses;
     }
 }

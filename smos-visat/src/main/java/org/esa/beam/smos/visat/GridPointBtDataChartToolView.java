@@ -138,12 +138,12 @@ public class GridPointBtDataChartToolView extends GridPointBtDataToolView {
                 YIntervalSeries series2 = new YIntervalSeries("Y");
                 boolean m1 = modeCheckers[0].isSelected();
                 boolean m2 = modeCheckers[1].isSelected();
-                int length = ds.data.length;
-                for (int i = 0; i < length; i++) {
-                    int polMode = ds.data[i][iq].intValue() & SmosConstants.L1C_POL_MODE_FLAGS_MASK;
-                    double x = ds.data[i][ix].doubleValue();
-                    double y = ds.data[i][iy1].doubleValue();
-                    double dev = ds.data[i][id].doubleValue();
+                final Number[][] data = ds.getData();
+                for (final Number[] dataList : data) {
+                    int polMode = dataList[iq].intValue() & SmosConstants.L1C_POL_MODE_FLAGS_MASK;
+                    double x = dataList[ix].doubleValue();
+                    double y = dataList[iy1].doubleValue();
+                    double dev = dataList[id].doubleValue();
                     if (m1 && polMode == SmosConstants.L1C_POL_MODE_X) {
                         series1.add(x, y, y - dev, y + dev);
                     } else if (m2 && polMode == SmosConstants.L1C_POL_MODE_Y) {
@@ -164,18 +164,18 @@ public class GridPointBtDataChartToolView extends GridPointBtDataToolView {
                     boolean m1 = modeCheckers[0].isSelected();
                     boolean m2 = modeCheckers[1].isSelected();
                     boolean m3 = modeCheckers[2].isSelected();
-                    int length = ds.data.length;
-                    for (int i = 0; i < length; i++) {
-                        int polMode = ds.data[i][iq].intValue() & SmosConstants.L1C_POL_MODE_FLAGS_MASK;
-                        double dev = ds.data[i][id].doubleValue();
-                        double x = ds.data[i][ix].doubleValue();
-                        double y1 = ds.data[i][iy1].doubleValue();
+                    final Number[][] data = ds.getData();
+                    for (final Number[] dataList : data) {
+                        int polMode = dataList[iq].intValue() & SmosConstants.L1C_POL_MODE_FLAGS_MASK;
+                        double dev = dataList[id].doubleValue();
+                        double x = dataList[ix].doubleValue();
+                        double y1 = dataList[iy1].doubleValue();
                         if (m1 && polMode == SmosConstants.L1C_POL_MODE_X) {
                             series1.add(x, y1, y1 - dev, y1 + dev);
                         } else if (m2 && polMode == SmosConstants.L1C_POL_MODE_Y) {
                             series2.add(x, y1, y1 - dev, y1 + dev);
                         } else if (m3 && (polMode == SmosConstants.L1C_POL_MODE_XY1 || polMode == SmosConstants.L1C_POL_MODE_XY2)) {
-                            double y2 = ds.data[i][iy2].doubleValue();
+                            double y2 = dataList[iy2].doubleValue();
                             series3.add(x, y1, y1 - dev, y1 + dev);
                             series4.add(x, y2, y2 - dev, y2 + dev);
                         }
