@@ -10,7 +10,7 @@ import java.io.IOException;
 /**
  * @author Ralf Quast
  */
-public interface ProductFile extends Closeable{
+public interface ProductFile extends Closeable {
 
     @Override
     void close() throws IOException;
@@ -19,5 +19,5 @@ public interface ProductFile extends Closeable{
 
     Area getArea();
 
-    File getFile();
+    File getDataFile();
 }

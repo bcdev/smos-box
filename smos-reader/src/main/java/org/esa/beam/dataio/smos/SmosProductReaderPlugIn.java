@@ -48,7 +48,7 @@ public class SmosProductReaderPlugIn implements ProductReaderPlugIn {
         if (SmosUtils.isLightBufrType(fileName)) {
             return DecodeQualification.INTENDED;
         }
-        if (fileName.endsWith(".DBL")) {
+        if (fileName.endsWith(".DBL") || fileName.endsWith(".HDR")) {
             final File hdrFile = FileUtils.exchangeExtension(file, ".HDR");
             final File dblFile = FileUtils.exchangeExtension(file, ".DBL");
 
@@ -63,8 +63,8 @@ public class SmosProductReaderPlugIn implements ProductReaderPlugIn {
             }
         } else if (SmosUtils.isCompressedFile(file)) {
             if (SmosUtils.isL1cType(fileName) ||
-                SmosUtils.isL2Type(fileName) ||
-                SmosUtils.isAuxECMWFType(fileName)) {
+                    SmosUtils.isL2Type(fileName) ||
+                    SmosUtils.isAuxECMWFType(fileName)) {
                 return DecodeQualification.INTENDED;
             } else {
                 ZipFile zipFile = null;
@@ -80,7 +80,7 @@ public class SmosProductReaderPlugIn implements ProductReaderPlugIn {
                     }
                     if (!entries.hasMoreElements()) {
                         if ((name1.endsWith(".HDR") && name2.endsWith(".DBL")) ||
-                            (name1.endsWith(".DBL") && name2.endsWith(".HDR"))) {
+                                (name1.endsWith(".DBL") && name2.endsWith(".HDR"))) {
                             return DecodeQualification.SUITABLE;
                         }
                     }
@@ -108,7 +108,7 @@ public class SmosProductReaderPlugIn implements ProductReaderPlugIn {
 
     @Override
     public String[] getDefaultFileExtensions() {
-        return new String[]{".DBL", ".zip", ".ZIP", ".bin"};
+        return new String[]{".HDR", ".DBL", ".zip", ".ZIP", ".bin"};
     }
 
     @Override
@@ -118,7 +118,7 @@ public class SmosProductReaderPlugIn implements ProductReaderPlugIn {
 
     @Override
     public String[] getFormatNames() {
-        return new String[]{"SMOS-EEF"};
+        return new String[]{"SMOS-EEF", "SMOS BUFR/CDM"};
     }
 
     @Override

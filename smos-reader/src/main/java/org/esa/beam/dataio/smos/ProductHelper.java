@@ -233,17 +233,21 @@ class ProductHelper {
     }
 
     static Band addVirtualBand(Product product, BandDescriptor descriptor, String bandExpression) {
-        final VirtualBand band = new VirtualBand(descriptor.getBandName(), ProductData.TYPE_FLOAT32,
+        final VirtualBand virtualBand = new VirtualBand(descriptor.getBandName(), ProductData.TYPE_FLOAT32,
                                                  product.getSceneRasterWidth(),
                                                  product.getSceneRasterHeight(),
                                                  bandExpression);
 
         final String validPixelExpression = createValidPixelExpression(product, bandExpression);
-        band.setValidPixelExpression(validPixelExpression);
-        band.setImageInfo(createImageInfo(band, descriptor));
-        product.addBand(band);
+        virtualBand.setValidPixelExpression(validPixelExpression);
+        virtualBand.setImageInfo(createImageInfo(virtualBand, descriptor));
+        virtualBand.setDescription(descriptor.getDescription());
+        virtualBand.setUnit(descriptor.getUnit());
+        virtualBand.setGeophysicalNoDataValue(descriptor.getFillValue());
+        virtualBand.setNoDataValueUsed(descriptor.hasFillValue());
+        product.addBand(virtualBand);
 
-        return band;
+        return virtualBand;
     }
 
     static String createValidPixelExpression(Product product, String expression) {

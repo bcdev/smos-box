@@ -1,6 +1,10 @@
 package org.esa.beam.dataio.smos;
 
-import com.bc.ceres.binio.*;
+import com.bc.ceres.binio.CompoundData;
+import com.bc.ceres.binio.CompoundMember;
+import com.bc.ceres.binio.CompoundType;
+import com.bc.ceres.binio.DataContext;
+import com.bc.ceres.binio.SequenceData;
 import com.bc.ceres.glevel.MultiLevelImage;
 import com.bc.ceres.glevel.MultiLevelSource;
 import com.bc.ceres.glevel.support.DefaultMultiLevelImage;
@@ -10,19 +14,18 @@ import org.esa.beam.dataio.smos.dddb.Family;
 import org.esa.beam.framework.datamodel.Band;
 import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.framework.datamodel.ProductData;
+import org.esa.beam.smos.EEFilePair;
 import org.esa.beam.smos.dgg.SmosDgg;
 import org.esa.beam.util.io.FileUtils;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.Namespace;
 
-import java.awt.*;
+import java.awt.Dimension;
 import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
-import java.io.File;
 import java.io.IOException;
 import java.text.MessageFormat;
-import java.util.Arrays;
 
 public class DggFile extends ExplorerFile {
 
@@ -32,8 +35,8 @@ public class DggFile extends ExplorerFile {
     private final Area area;
     private final GridPointInfo gridPointInfo;
 
-    protected DggFile(File hdrFile, File dblFile, DataFormat format, boolean fromZones) throws IOException {
-        super(hdrFile, dblFile, format);
+    protected DggFile(EEFilePair eeFilePair, DataContext dataContext, boolean fromZones) throws IOException {
+        super(eeFilePair, dataContext);
         try {
             if (fromZones) {
                 gridPointList = createGridPointListFromZones(getDataBlock().getSequence(0));
@@ -43,63 +46,22 @@ public class DggFile extends ExplorerFile {
             gridPointIdIndex = gridPointList.getCompoundType().getMemberIndex(SmosConstants.GRID_POINT_ID_NAME);
         } catch (IOException e) {
             throw new IOException(MessageFormat.format(
-                    "Unable to read SMOS File ''{0}'': {1}.", dblFile.getPath(), e.getMessage()), e);
+                    "Unable to read SMOS File ''{0}'': {1}.", eeFilePair.getDblFile().getPath(), e.getMessage()), e);
         }
-        area = computeArea(this);
+        area = computeArea(this.getGridPointList());
         gridPointInfo = createGridPointInfo();
     }
 
-    protected GridPointList createGridPointList(final SequenceData sequence) {
-        return new GridPointList() {
-            @Override
-            public final int getElementCount() {
-                return sequence.getElementCount();
-            }
-
-            @Override
-            public final CompoundData getCompound(int i) throws IOException {
-                return sequence.getCompound(i);
-            }
-
-            @Override
-            public final CompoundType getCompoundType() {
-                return (CompoundType) sequence.getType().getElementType();
-            }
-        };
+    private GridPointList createGridPointList(SequenceData sequence) {
+        return new PlainGridPointList(sequence);
     }
 
-    protected GridPointList createGridPointListFromZones(SequenceData zoneSequence) throws IOException {
+    private GridPointList createGridPointListFromZones(SequenceData zoneSequence) throws IOException {
         final SequenceData[] zones = new SequenceData[zoneSequence.getElementCount()];
         for (int i = 0; i < zones.length; i++) {
             zones[i] = zoneSequence.getCompound(i).getSequence(1);
         }
-        return new GridPointList() {
-            @Override
-            public final int getElementCount() {
-                int elementCount = 0;
-                for (final SequenceData zone : zones) {
-                    elementCount += zone.getElementCount();
-                }
-                return elementCount;
-            }
-
-            @Override
-            public final CompoundData getCompound(int i) throws IOException {
-                for (int z = 0, counts = 0, offset = 0, zonesLength = zones.length; z < zonesLength; z++) {
-                    counts += zones[z].getElementCount();
-                    if (i < counts) {
-                        return zones[z].getCompound(i - offset);
-                    }
-                    offset = counts;
-                }
-                throw new IOException(MessageFormat.format("Cannot read compound data for index {0}", i));
-            }
-
-            @Override
-            public final CompoundType getCompoundType() {
-                return (CompoundType) zones[0].getType().getElementType();
-            }
-        };
+        return new ZoneGridPointList(zones);
     }
 
     public final int getGridPointCount() {
@@ -134,10 +96,8 @@ public class DggFile extends ExplorerFile {
         return gridPointList.getCompound(gridPointIndex);
     }
 
-    public static Area computeArea(DggFile dggFile) throws IOException {
-        final int latIndex = dggFile.getGridPointType().getMemberIndex(SmosConstants.GRID_POINT_LAT_NAME);
-        final int lonIndex = dggFile.getGridPointType().getMemberIndex(SmosConstants.GRID_POINT_LON_NAME);
-
+    // TODO: move to somewhere else - rq-20140507
+    public static Area computeArea(PointList pointList) throws IOException {
         final Rectangle2D[] tileRectangles = new Rectangle2D[512];
         for (int i = 0; i < 32; ++i) {
             for (int j = 0; j < 16; ++j) {
@@ -146,11 +106,9 @@ public class DggFile extends ExplorerFile {
         }
 
         final Area envelope = new Area();
-        final GridPointList gridPointList = dggFile.getGridPointList();
-        for (int i = 0; i < gridPointList.getElementCount(); i++) {
-            final CompoundData compound = gridPointList.getCompound(i);
-            double lon = compound.getFloat(lonIndex);
-            double lat = compound.getFloat(latIndex);
+        for (int i = 0; i < pointList.getElementCount(); i++) {
+            double lon = pointList.getLon(i);
+            double lat = pointList.getLat(i);
 
             // normalisation to [-180, 180] necessary for some L1c test products
             if (lon > 180.0) {
@@ -179,6 +137,7 @@ public class DggFile extends ExplorerFile {
         return envelope;
     }
 
+    // TODO: move to somewhere else - rq-20140507
     private static Rectangle2D createTileRectangle(int i, int j) {
         final double w = 11.25;
         final double h = 11.25;
@@ -195,12 +154,12 @@ public class DggFile extends ExplorerFile {
 
     @Override
     public final Product createProduct() throws IOException {
-        final String productName = FileUtils.getFilenameWithoutExtension(getHeaderFile());
-        final String productType = getDataFormat().getName().substring(12, 22);
+        final String productName = FileUtils.getFilenameWithoutExtension(getDataFile());
+        final String productType = getProductType();
         final Dimension dimension = ProductHelper.getSceneRasterDimension();
         final Product product = new Product(productName, productType, dimension.width, dimension.height);
 
-        product.setFileLocation(getFile());
+        product.setFileLocation(getDataFile());
         product.setPreferredTileSize(512, 512);
         ProductHelper.addMetadata(product.getMetadataRoot(), this);
 
@@ -252,7 +211,7 @@ public class DggFile extends ExplorerFile {
             }
             if (descriptor.getFlagDescriptors() != null) {
                 ProductHelper.addFlagsAndMasks(product, band, descriptor.getFlagCodingName(),
-                        descriptor.getFlagDescriptors());
+                                               descriptor.getFlagDescriptors());
             }
 
             final ValueProvider valueProvider = createValueProvider(descriptor);
@@ -301,8 +260,12 @@ public class DggFile extends ExplorerFile {
         int maxSeqnum = minSeqnum;
 
         final int gridPointCount = getGridPointCount();
+        final int[] seqNumbers = new int[gridPointCount];
+        seqNumbers[0] = minSeqnum;
+
         for (int i = 1; i < gridPointCount; i++) {
             final int seqnum = getGridPointSeqnum(i);
+            seqNumbers[i] = seqnum;
 
             if (seqnum < minSeqnum) {
                 minSeqnum = seqnum;
@@ -314,11 +277,7 @@ public class DggFile extends ExplorerFile {
         }
 
         final GridPointInfo gridPointInfo = new GridPointInfo(minSeqnum, maxSeqnum);
-        Arrays.fill(gridPointInfo.indexes, -1);
-
-        for (int i = 0; i < gridPointCount; i++) {
-            gridPointInfo.indexes[getGridPointSeqnum(i) - minSeqnum] = i;
-        }
+        gridPointInfo.setSequenceNumbers(seqNumbers);
 
         return gridPointInfo;
     }
@@ -339,24 +298,91 @@ public class DggFile extends ExplorerFile {
         }
     }
 
-    private static final class GridPointInfo {
+    private static final class PlainGridPointList implements GridPointList {
 
-        final int minSeqnum;
-        final int maxSeqnum;
-        final int[] indexes;
+        private final SequenceData sequence;
+        private final int latIndex;
+        private final int lonIndex;
 
-        GridPointInfo(int minSeqnum, int maxSeqnum) {
-            this.minSeqnum = minSeqnum;
-            this.maxSeqnum = maxSeqnum;
-            indexes = new int[maxSeqnum - minSeqnum + 1];
+        public PlainGridPointList(SequenceData sequence) {
+            this.sequence = sequence;
+
+            lonIndex = getCompoundType().getMemberIndex(SmosConstants.GRID_POINT_LON_NAME);
+            latIndex = getCompoundType().getMemberIndex(SmosConstants.GRID_POINT_LAT_NAME);
         }
 
-        int getGridPointIndex(int seqnum) {
-            if (seqnum < minSeqnum || seqnum > maxSeqnum) {
-                return -1;
-            }
+        @Override
+        public final int getElementCount() {
+            return sequence.getElementCount();
+        }
 
-            return indexes[seqnum - minSeqnum];
+        @Override
+        public final CompoundData getCompound(int i) throws IOException {
+            return sequence.getCompound(i);
+        }
+
+        @Override
+        public final CompoundType getCompoundType() {
+            return (CompoundType) sequence.getType().getElementType();
+        }
+
+        @Override
+        public final double getLon(int i) throws IOException {
+            return getCompound(i).getFloat(lonIndex);
+        }
+
+        @Override
+        public final double getLat(int i) throws IOException {
+            return getCompound(i).getFloat(latIndex);
+        }
+    }
+
+    private static final class ZoneGridPointList implements GridPointList {
+
+        private final SequenceData[] zones;
+        private final int lonIndex;
+        private final int latIndex;
+
+        public ZoneGridPointList(SequenceData[] zones) {
+            this.zones = zones;
+            lonIndex = getCompoundType().getMemberIndex(SmosConstants.GRID_POINT_LON_NAME);
+            latIndex = getCompoundType().getMemberIndex(SmosConstants.GRID_POINT_LAT_NAME);
+        }
+
+        @Override
+        public final int getElementCount() {
+            int elementCount = 0;
+            for (final SequenceData zone : zones) {
+                elementCount += zone.getElementCount();
+            }
+            return elementCount;
+        }
+
+        @Override
+        public final CompoundData getCompound(int i) throws IOException {
+            for (int z = 0, counts = 0, offset = 0, zonesLength = zones.length; z < zonesLength; z++) {
+                counts += zones[z].getElementCount();
+                if (i < counts) {
+                    return zones[z].getCompound(i - offset);
+                }
+                offset = counts;
+            }
+            throw new IOException(MessageFormat.format("Cannot read compound data for index {0}", i));
+        }
+
+        @Override
+        public final CompoundType getCompoundType() {
+            return (CompoundType) zones[0].getType().getElementType();
+        }
+
+        @Override
+        public double getLon(int i) throws IOException {
+            return getCompound(i).getFloat(lonIndex);
+        }
+
+        @Override
+        public double getLat(int i) throws IOException {
+            return getCompound(i).getFloat(latIndex);
         }
     }
 }

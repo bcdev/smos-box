@@ -16,11 +16,7 @@
 
 package org.esa.beam.dataio.smos;
 
-import com.bc.ceres.binio.CompoundData;
-import com.bc.ceres.binio.CompoundMember;
-import com.bc.ceres.binio.CompoundType;
-import com.bc.ceres.binio.DataFormat;
-import com.bc.ceres.binio.SequenceData;
+import com.bc.ceres.binio.*;
 import com.bc.ceres.glevel.MultiLevelImage;
 import com.bc.ceres.glevel.MultiLevelSource;
 import com.bc.ceres.glevel.support.AbstractMultiLevelSource;
@@ -31,17 +27,17 @@ import org.esa.beam.dataio.smos.dddb.Family;
 import org.esa.beam.framework.datamodel.Band;
 import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.jai.ResolutionLevel;
+import org.esa.beam.smos.EEFilePair;
 import org.esa.beam.smos.dgg.SmosDgg;
 import org.esa.beam.util.io.FileUtils;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.Namespace;
 
-import java.awt.Dimension;
+import java.awt.*;
 import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.RenderedImage;
-import java.io.File;
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -73,8 +69,8 @@ class LaiFile extends ExplorerFile {
     private final long zoneIndexMultiplier;
     private volatile List<Dffg> gridList = null;
 
-    LaiFile(File hdrFile, File dblFile, DataFormat dataFormat) throws IOException {
-        super(hdrFile, dblFile, dataFormat);
+    LaiFile(EEFilePair eeFilePair, DataContext dataContext) throws IOException {
+        super(eeFilePair, dataContext);
 
         final Document document = getDocument();
         final Namespace namespace = document.getRootElement().getNamespace();
@@ -105,12 +101,12 @@ class LaiFile extends ExplorerFile {
 
     @Override
     public Product createProduct() throws IOException {
-        final String productName = FileUtils.getFilenameWithoutExtension(getHeaderFile());
-        final String productType = getDataFormat().getName().substring(12, 22);
+        final String productName = FileUtils.getFilenameWithoutExtension(getDataFile());
+        final String productType = getProductType();
         final Dimension dimension = ProductHelper.getSceneRasterDimension();
         final Product product = new Product(productName, productType, dimension.width, dimension.height);
 
-        product.setFileLocation(getFile());
+        product.setFileLocation(getDataFile());
         product.setPreferredTileSize(512, 512);
         ProductHelper.addMetadata(product.getMetadataRoot(), this);
 
@@ -166,19 +162,19 @@ class LaiFile extends ExplorerFile {
             }
             if (descriptor.getFlagDescriptors() != null) {
                 ProductHelper.addFlagsAndMasks(product, band, descriptor.getFlagCodingName(),
-                                               descriptor.getFlagDescriptors());
+                        descriptor.getFlagDescriptors());
             }
 
-            final CellValueProvider valueProvider = createLaiValueProvider(descriptor);
+            final CellValueProvider valueProvider = createCellValueProvider(descriptor);
             band.setSourceImage(createSourceImage(band, valueProvider));
             band.setImageInfo(ProductHelper.createImageInfo(band, descriptor));
         }
     }
 
-    private CellValueProvider createLaiValueProvider(BandDescriptor descriptor) {
+    private CellValueProvider createCellValueProvider(BandDescriptor descriptor) {
         final int memberIndex = getCellType().getMemberIndex(descriptor.getMemberName());
 
-        return new LaiValueProvider(memberIndex);
+        return new CellValueProviderImpl(memberIndex);
     }
 
     private MultiLevelImage createSourceImage(Band band, CellValueProvider valueProvider) {
@@ -225,9 +221,9 @@ class LaiFile extends ExplorerFile {
         final SequenceData zoneSequenceData = getDataBlock().getSequence(DFFG_LAI_NAME);
         if (zoneSequenceData == null) {
             throw new IllegalStateException(MessageFormat.format(
-                    "SMOS File ''{0}'': Missing zone data.", getFile().getPath()));
+                    "SMOS File ''{0}'': Missing zone data.", getDataFile().getPath()));
         }
-        final ArrayList<Dffg> gridList = new ArrayList<Dffg>(
+        final ArrayList<Dffg> gridList = new ArrayList<>(
                 zoneSequenceData.getElementCount());
 
         for (int i = 0; i < zoneSequenceData.getElementCount(); i++) {
@@ -257,11 +253,11 @@ class LaiFile extends ExplorerFile {
         return Collections.unmodifiableList(gridList);
     }
 
-    private final class LaiValueProvider implements CellValueProvider {
+    private final class CellValueProviderImpl implements CellValueProvider {
 
         private final int memberIndex;
 
-        public LaiValueProvider(int memberIndex) {
+        public CellValueProviderImpl(int memberIndex) {
             this.memberIndex = memberIndex;
         }
 

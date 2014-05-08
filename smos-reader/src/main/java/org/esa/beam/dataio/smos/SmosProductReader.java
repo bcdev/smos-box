@@ -16,6 +16,7 @@
 
 package org.esa.beam.dataio.smos;
 
+import com.bc.ceres.binio.DataContext;
 import com.bc.ceres.binio.DataFormat;
 import com.bc.ceres.core.ProgressMonitor;
 import com.bc.ceres.core.VirtualDir;
@@ -26,11 +27,12 @@ import org.esa.beam.framework.dataio.ProductReaderPlugIn;
 import org.esa.beam.framework.datamodel.Band;
 import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.framework.datamodel.ProductData;
+import org.esa.beam.smos.EEFilePair;
 import org.esa.beam.smos.SmosUtils;
 import org.esa.beam.smos.lsmask.SmosLsMask;
 import org.esa.beam.util.io.FileUtils;
 
-import java.awt.Rectangle;
+import java.awt.*;
 import java.awt.image.Raster;
 import java.awt.image.RenderedImage;
 import java.io.File;
@@ -44,37 +46,6 @@ public class SmosProductReader extends AbstractProductReader {
     private ProductFile productFile;
     private VirtualDir virtualDir;
 
-    public static boolean isDualPolScienceFormat(String formatName) {
-        return formatName.contains("MIR_SCLD1C")
-               || formatName.contains("MIR_SCSD1C")
-               || formatName.contains("MIR_SCND1C");
-    }
-
-    public static boolean isFullPolBrowseFormat(String formatName) {
-        return formatName.contains("MIR_BWLF1C")
-               || formatName.contains("MIR_BWSF1C")
-               || formatName.contains("MIR_BWNF1C");
-    }
-
-    public static boolean isFullPolScienceFormat(String formatName) {
-        return formatName.contains("MIR_SCLF1C")
-               || formatName.contains("MIR_SCSF1C")
-               || formatName.contains("MIR_SCNF1C");
-    }
-
-    public static boolean isDffLaiFormat(String formatName) {
-        return formatName.contains("AUX_DFFLAI");
-    }
-
-    public static boolean isVTecFormat(String formatName) {
-        return formatName.contains("AUX_VTEC_C")
-               || formatName.contains("AUX_VTEC_P");
-    }
-
-    public static boolean isLsMaskFormat(String formatName) {
-        return formatName.contains("AUX_LSMASK");
-    }
-
     public ProductFile getProductFile() {
         return productFile;
     }
@@ -87,7 +58,7 @@ public class SmosProductReader extends AbstractProductReader {
             }
         }
 
-        final ProductFile productFile = createProductFile2(file);
+        final ProductFile productFile = createProductFileImplementation(file);
         if (productFile == null) {
             throw new IOException(MessageFormat.format("File ''{0}'': unknown/unsupported SMOS data format.", file));
         }
@@ -118,7 +89,7 @@ public class SmosProductReader extends AbstractProductReader {
         File dblFile = FileUtils.exchangeExtension(hdrFile, ".DBL");
         dblFile = virtualDir.getFile(listPath + dblFile.getName());
 
-        return createProductFile2(dblFile);
+        return createProductFileImplementation(dblFile);
     }
 
     SmosProductReader(ProductReaderPlugIn readerPlugIn) {
@@ -144,7 +115,7 @@ public class SmosProductReader extends AbstractProductReader {
                 final String path = virtualDir.getBasePath();
                 product.setFileLocation(new File(path));
             } else {
-                product.setFileLocation(productFile.getFile());
+                product.setFileLocation(productFile.getDataFile());
             }
             if (productFile instanceof SmosFile) {
                 addLandSeaMask(product);
@@ -238,34 +209,14 @@ public class SmosProductReader extends AbstractProductReader {
         }
         if (descriptor.getFlagDescriptors() != null) {
             ProductHelper.addFlagsAndMasks(product, band, descriptor.getFlagCodingName(),
-                                           descriptor.getFlagDescriptors());
+                    descriptor.getFlagDescriptors());
         }
 
         band.setSourceImage(SmosLsMask.getInstance().getMultiLevelImage());
         band.setImageInfo(ProductHelper.createImageInfo(band, descriptor));
     }
 
-    private static boolean isDggFloFormat(String formatName) {
-        return formatName.contains("AUX_DGGFLO");
-    }
-
-    private static boolean isDggRfiFormat(String formatName) {
-        return formatName.contains("AUX_DGGRFI");
-    }
-
-    private static boolean isDggRouFormat(String formatName) {
-        return formatName.contains("AUX_DGGROU");
-    }
-
-    private static boolean isDggTfoFormat(String formatName) {
-        return formatName.contains("AUX_DGGTFO");
-    }
-
-    private static boolean isDggTlvFormat(String formatName) {
-        return formatName.contains("AUX_DGGTLV");
-    }
-
-    private static ProductFile createProductFile2(File file) throws IOException {
+    private static ProductFile createProductFileImplementation(File file) throws IOException {
         if (SmosUtils.isLightBufrType(file.getName())) {
             return new LightBufrFile(file);
         }
@@ -278,43 +229,36 @@ public class SmosProductReader extends AbstractProductReader {
             return null;
         }
 
+        final EEFilePair eeFilePair = new EEFilePair(hdrFile, dblFile);
         final String formatName = format.getName();
-        if (SmosUtils.isDualPolBrowseFormat(formatName)) {
-            return new L1cBrowseSmosFile(hdrFile, dblFile, format);
-        } else if (isFullPolBrowseFormat(formatName)) {
-            return new L1cBrowseSmosFile(hdrFile, dblFile, format);
-        } else if (isDualPolScienceFormat(formatName) ||
-                   isFullPolScienceFormat(formatName)) {
-            return new L1cScienceSmosFile(hdrFile, dblFile, format);
-        } else if (SmosUtils.isOsUserFormat(formatName)) {
-            return new SmosFile(hdrFile, dblFile, format);
+        final DataContext context = format.createContext(dblFile, "r");
+
+        if (SmosUtils.isBrowseFormat(formatName)) {
+            return new L1cBrowseSmosFile(eeFilePair, context);
+        } else if (SmosUtils.isDualPolScienceFormat(formatName) ||
+                SmosUtils.isFullPolScienceFormat(formatName)) {
+            return new L1cScienceSmosFile(eeFilePair, context);
         } else if (SmosUtils.isSmUserFormat(formatName)) {
-            return new SmUserSmosFile(hdrFile, dblFile, format);
-        } else if (SmosUtils.isOsAnalysisFormat(formatName)) {
-            return new SmosFile(hdrFile, dblFile, format);
-        } else if (SmosUtils.isSmAnalysisFormat(formatName)) {
-            return new SmosFile(hdrFile, dblFile, format);
-        } else if (SmosUtils.isAuxECMWFType(formatName)) {
-            return new SmosFile(hdrFile, dblFile, format);
-        } else if (isDffLaiFormat(formatName)) {
-            return new LaiFile(hdrFile, dblFile, format);
-        } else if (isVTecFormat(formatName)) {
-            return new VTecFile(hdrFile, dblFile, format);
-        } else if (isLsMaskFormat(formatName)) {
-            return new GlobalSmosFile(hdrFile, dblFile, format);
-        } else if (isDggFloFormat(formatName)) {
-            return new AuxiliaryFile(hdrFile, dblFile, format);
-        } else if (isDggRfiFormat(formatName)) {
-            return new AuxiliaryFile(hdrFile, dblFile, format);
-        } else if (isDggRouFormat(formatName)) {
-            return new AuxiliaryFile(hdrFile, dblFile, format);
-        } else if (isDggTfoFormat(formatName)) {
-            return new AuxiliaryFile(hdrFile, dblFile, format);
-        } else if (isDggTlvFormat(formatName)) {
-            return new AuxiliaryFile(hdrFile, dblFile, format);
+            return new SmUserSmosFile(eeFilePair, context);
+        } else if (SmosUtils.isOsUserFormat(formatName) ||
+                SmosUtils.isOsAnalysisFormat(formatName) ||
+                SmosUtils.isSmAnalysisFormat(formatName) ||
+                SmosUtils.isAuxECMWFType(formatName)) {
+            return new SmosFile(eeFilePair, context);
+        } else if (SmosUtils.isDffLaiFormat(formatName)) {
+            return new LaiFile(eeFilePair, context);
+        } else if (SmosUtils.isVTecFormat(formatName)) {
+            return new VTecFile(eeFilePair, context);
+        } else if (SmosUtils.isLsMaskFormat(formatName)) {
+            return new GlobalSmosFile(eeFilePair, context);
+        } else if (SmosUtils.isDggFloFormat(formatName) ||
+                SmosUtils.isDggRfiFormat(formatName) ||
+                SmosUtils.isDggRouFormat(formatName) ||
+                SmosUtils.isDggTfoFormat(formatName) ||
+                SmosUtils.isDggTlvFormat(formatName)) {
+            return new AuxiliaryFile(eeFilePair, context);
         }
 
         return null;
     }
-
 }

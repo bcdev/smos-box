@@ -17,7 +17,7 @@ package org.esa.beam.dataio.smos;
 
 import com.bc.ceres.binio.CompoundData;
 import com.bc.ceres.binio.CompoundType;
-import com.bc.ceres.binio.DataFormat;
+import com.bc.ceres.binio.DataContext;
 import com.bc.ceres.binio.SequenceData;
 import com.bc.ceres.glevel.MultiLevelImage;
 import org.esa.beam.dataio.smos.dddb.BandDescriptor;
@@ -26,16 +26,13 @@ import org.esa.beam.dataio.smos.dddb.Family;
 import org.esa.beam.framework.datamodel.Band;
 import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.framework.datamodel.ProductData;
+import org.esa.beam.smos.EEFilePair;
+import org.esa.beam.smos.SmosUtils;
 
 import java.awt.geom.Rectangle2D;
-import java.io.File;
 import java.io.IOException;
 import java.text.MessageFormat;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
@@ -66,15 +63,16 @@ public class L1cScienceSmosFile extends L1cSmosFile {
 
     private final Future<SnapshotInfo> snapshotInfoFuture;
 
-    L1cScienceSmosFile(File hdrFile, File dblFile, DataFormat format) throws IOException {
-        super(hdrFile, dblFile, format);
+    L1cScienceSmosFile(EEFilePair eeFilePair, DataContext dataContext) throws IOException {
+        super(eeFilePair, dataContext);
+        final String formatName = dataContext.getFormat().getName();
 
         flagsIndex = getBtDataType().getMemberIndex(SmosConstants.BT_FLAGS_NAME);
         incidenceAngleIndex = getBtDataType().getMemberIndex(INCIDENCE_ANGLE_NAME);
-        final Family<BandDescriptor> bandDescriptors = Dddb.getInstance().getBandDescriptors(format.getName());
+        final Family<BandDescriptor> bandDescriptors = Dddb.getInstance().getBandDescriptors(formatName);
         if (bandDescriptors == null) {
             throw new IOException(MessageFormat.format(
-                    "No band descriptors found for format ''{0}''.", format.getName()));
+                    "No band descriptors found for format ''{0}''.", formatName));
         }
         incidenceAngleScalingFactor = getIncidenceAngleScalingFactor(bandDescriptors);
         snapshotIdOfPixelIndex = getBtDataType().getMemberIndex(SmosConstants.BT_SNAPSHOT_ID_OF_PIXEL_NAME);
@@ -112,7 +110,7 @@ public class L1cScienceSmosFile extends L1cSmosFile {
     protected void addBands(Product product) {
         super.addBands(product);
 
-        if (SmosProductReader.isDualPolScienceFormat(getDataFormat().getName())) {
+        if (SmosUtils.isDualPolScienceFormat(getDataFormat().getName())) {
             addRotatedDualPolBands(product, valueProviderMap);
         } else {
             addRotatedFullPolBands(product, valueProviderMap);
@@ -145,10 +143,6 @@ public class L1cScienceSmosFile extends L1cSmosFile {
     protected final MultiLevelImage createSourceImage(Band band, ValueProvider valueProvider) {
         // todo - make source image reset itself and fire node-data-changed, if affected by snapshot ID (rq-20100121)
         return super.createSourceImage(band, valueProvider);
-    }
-
-    public final SequenceData getSnapshotList() {
-        return snapshotList;
     }
 
     public final CompoundData getSnapshotData(int snapshotIndex) throws IOException {
@@ -214,8 +208,8 @@ public class L1cScienceSmosFile extends L1cSmosFile {
             if (btData.getLong(snapshotIdOfPixelIndex) == snapshotId) {
                 final int flags = btData.getInt(flagsIndex);
                 if (polarization == 4 || // for flags (they do not depend on polarisation)
-                    polarization == (flags & 1) || // for x or y polarisation (dual pol)
-                    (polarization & flags & 2) != 0) { // for xy polarisation (full pol, real and imaginary)
+                        polarization == (flags & 1) || // for x or y polarisation (dual pol)
+                        (polarization & flags & 2) != 0) { // for xy polarisation (full pol, real and imaginary)
                     return btData;
                 }
             }

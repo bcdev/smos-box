@@ -15,18 +15,14 @@
  */
 package org.esa.beam.dataio.smos;
 
-import com.bc.ceres.binio.CompoundType;
-import com.bc.ceres.binio.DataFormat;
-import com.bc.ceres.binio.SequenceData;
-import com.bc.ceres.binio.SequenceType;
-import com.bc.ceres.binio.Type;
+import com.bc.ceres.binio.*;
 import org.esa.beam.dataio.smos.dddb.BandDescriptor;
 import org.esa.beam.framework.datamodel.Band;
+import org.esa.beam.smos.EEFilePair;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.Namespace;
 
-import java.io.File;
 import java.io.IOException;
 import java.text.MessageFormat;
 
@@ -44,8 +40,8 @@ public class L1cSmosFile extends SmosFile {
     private final double radiometricAccuracyScale;
     private final double pixelFootprintScale;
 
-    protected L1cSmosFile(File hdrFile, File dblFile, DataFormat format) throws IOException {
-        super(hdrFile, dblFile, format);
+    protected L1cSmosFile(EEFilePair eeFilePair, DataContext dataContext) throws IOException {
+        super(eeFilePair, dataContext);
 
         final Document document = getDocument();
         final Namespace namespace = document.getRootElement().getNamespace();

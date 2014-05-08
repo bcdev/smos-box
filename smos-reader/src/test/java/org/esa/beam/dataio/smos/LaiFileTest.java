@@ -24,6 +24,7 @@ import com.bc.ceres.binio.SequenceType;
 import com.bc.ceres.binio.Type;
 import com.bc.ceres.binio.util.DataPrinter;
 import org.esa.beam.dataio.smos.dddb.Dddb;
+import org.esa.beam.smos.EEFilePair;
 import org.junit.Test;
 
 import java.io.File;
@@ -64,10 +65,10 @@ public class LaiFileTest {
     }
 
     @Test
-    public void zoneDataSizes() throws IOException {
+    public void testZoneDataSizes() throws IOException {
         if (HDR_FILE.exists() && DBL_FILE.exists()) {
             final DataFormat dataFormat = Dddb.getInstance().getDataFormat(HDR_FILE);
-            final LaiFile laiFile = new LaiFile(HDR_FILE, DBL_FILE, dataFormat);
+            final LaiFile laiFile = new LaiFile(new EEFilePair(HDR_FILE, DBL_FILE), dataFormat.createContext(DBL_FILE, "r"));
 
             final SequenceData sequenceData = laiFile.getDataBlock().getSequence(DFFG_LAI_NAME);
             assertEquals(ZONE_COUNT, sequenceData.getElementCount());
@@ -99,7 +100,7 @@ public class LaiFileTest {
     // for dumping the contents of a LAI file
     public static void main(String[] args) throws IOException {
         final DataFormat dataFormat = Dddb.getInstance().getDataFormat(HDR_FILE);
-        final ExplorerFile explorerFile = new LaiFile(HDR_FILE, DBL_FILE, dataFormat);
+        final ExplorerFile explorerFile = new LaiFile(new EEFilePair(HDR_FILE, DBL_FILE), dataFormat.createContext(DBL_FILE, "r"));
         final SequenceData sequenceData = explorerFile.getDataBlock().getSequence(DFFG_LAI_NAME);
 
         try {

@@ -15,11 +15,11 @@
  */
 package org.esa.beam.dataio.smos;
 
-import com.bc.ceres.binio.DataFormat;
+import com.bc.ceres.binio.DataContext;
 import org.esa.beam.dataio.smos.dddb.BandDescriptor;
 import org.esa.beam.framework.datamodel.Product;
+import org.esa.beam.smos.EEFilePair;
 
-import java.io.File;
 import java.io.IOException;
 
 /**
@@ -31,8 +31,8 @@ import java.io.IOException;
  */
 public class L1cBrowseSmosFile extends L1cSmosFile {
 
-    L1cBrowseSmosFile(File hdrFile, File dblFile, DataFormat format) throws IOException {
-        super(hdrFile, dblFile, format);
+    L1cBrowseSmosFile(EEFilePair eeFilePair, DataContext dataContext) throws IOException {
+        super(eeFilePair, dataContext);
     }
 
     @Override
