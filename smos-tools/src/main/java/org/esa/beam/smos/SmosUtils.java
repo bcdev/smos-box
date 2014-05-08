@@ -312,6 +312,13 @@ public class SmosUtils {
         return formatName.contains("AUX_DFFLAI");
     }
 
+    public static boolean isL2Format(String formatName) {
+        return SmosUtils.isSmUserFormat(formatName) ||
+                SmosUtils.isSmAnalysisFormat(formatName) ||
+                SmosUtils.isOsUserFormat(formatName) ||
+                SmosUtils.isOsAnalysisFormat(formatName);
+    }
+
     ////////////////////////////////////////////////////////////////////////////////
     /////// END OF PUBLIC
     ////////////////////////////////////////////////////////////////////////////////

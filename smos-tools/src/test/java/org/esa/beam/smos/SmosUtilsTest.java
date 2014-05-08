@@ -183,6 +183,18 @@ public class SmosUtilsTest {
     }
 
     @Test
+    public void testIsL2Format() {
+        assertTrue(SmosUtils.isL2Format("SM_TEST_MIR_SMUDP2_20121118T143742_20121118T153047_303_002_1.zip"));
+        assertTrue(SmosUtils.isL2Format("SM_TEST_MIR_SMDAP2_20121118T135052_20121118T144140_303_007_1.zip"));
+        assertTrue(SmosUtils.isL2Format("SM_TEST_MIR_OSUDP2_20121118T143742_20121118T153047_306_002_1.zip"));
+        assertTrue(SmosUtils.isL2Format("SM_TEST_MIR_OSDAP2_20121118T143742_20121118T153047_306_002_1.zip"));
+
+        assertFalse(SmosUtils.isL2Format("SM_TEST_AUX_IGRF___20080102T010000_20080102T025959_105_001_0.zip"));
+        assertFalse(SmosUtils.isL2Format("SM_TEST_AUX_PATT99_20070101T000000_20781231T235959_00000006.EEF"));
+        assertFalse(SmosUtils.isL2Format("SM_TEST_MIR_SC_F0__20070223T112710_20070223T121514_001_001_0.DBL"));
+    }
+
+    @Test
     public void testIsLightBufrSpecification() throws Exception {
         assertTrue(SmosUtils.isLightBufrType(
                 "W_ES-ESA-ESAC,SMOS,N256_C_LEMM_20131028030552_20131028003256_20131028020943_bufr_v505.bin"));
@@ -476,6 +488,8 @@ public class SmosUtilsTest {
         assertTrue(SmosUtils.isDffLaiFormat("SM_OPER_AUX_DFFLAI_20100117T000000_20100216T000000_306_001_3.DBL"));
         assertFalse(SmosUtils.isDffLaiFormat("SM_TEST_MIR_SMDAP2_20121118T135052_20121118T144140_303_007_1.DBL"));
     }
+
+
 
     ////////////////////////////////////////////////////////////////////////////////
     /////// END OF PUBLIC

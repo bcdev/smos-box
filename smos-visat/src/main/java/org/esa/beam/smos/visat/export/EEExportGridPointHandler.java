@@ -59,7 +59,7 @@ class EEExportGridPointHandler implements GridPointHandler {
         geometryTracker = new GeometryTracker();
 
         final String formatName = targetContext.getFormat().getName();
-        level2 = isLevel2File(formatName);
+        level2 = SmosUtils.isL2Format(formatName);
     }
 
     @Override
@@ -212,14 +212,14 @@ class EEExportGridPointHandler implements GridPointHandler {
     }
 
     private void copySnapshotData(CollectionData parent, long parentPosition) throws IOException {
-        copyBytes(parent.getContext(), targetContext, 0, parentPosition);
+        copyBytesTo(parent.getContext(), targetContext, parentPosition);
     }
 
-    private static void copyBytes(DataContext sourceContext,
-                                  DataContext targetContext, long from, long to) throws IOException {
+    private static void copyBytesTo(DataContext sourceContext,
+                                    DataContext targetContext, long to) throws IOException {
         byte[] bytes = new byte[SEGMENT_SIZE];
 
-        for (long pos = from; pos < to; pos += SEGMENT_SIZE) {
+        for (long pos = 0; pos < to; pos += SEGMENT_SIZE) {
             final long remainderSize = to - pos;
             if (remainderSize < SEGMENT_SIZE) {
                 bytes = new byte[(int) remainderSize];
@@ -231,7 +231,9 @@ class EEExportGridPointHandler implements GridPointHandler {
     }
 
     private static void get(CompoundData compoundData, byte[] bytes) throws IOException {
-        compoundData.getContext().getHandler().read(compoundData.getContext(), bytes, compoundData.getPosition());
+        final DataContext context = compoundData.getContext();
+        final long position = compoundData.getPosition();
+        context.getHandler().read(context, bytes, position);
     }
 
     private static void get(DataContext sourceContext, byte[] bytes, long position) throws IOException {
@@ -240,12 +242,5 @@ class EEExportGridPointHandler implements GridPointHandler {
 
     private static void put(DataContext targetContext, byte[] bytes, long position) throws IOException {
         targetContext.getHandler().write(targetContext, bytes, position);
-    }
-
-    private static boolean isLevel2File(String formatName) {
-        return SmosUtils.isSmUserFormat(formatName) ||
-                SmosUtils.isSmAnalysisFormat(formatName) ||
-                SmosUtils.isOsUserFormat(formatName) ||
-                SmosUtils.isOsAnalysisFormat(formatName);
     }
 }
