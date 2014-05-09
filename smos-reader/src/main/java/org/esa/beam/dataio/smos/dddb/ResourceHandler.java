@@ -16,11 +16,7 @@ class ResourceHandler {
         final String fc = identifier.substring(12, 16);
         final String sd = identifier.substring(16, 22);
 
-        final StringBuilder pathBuilder = new StringBuilder();
-        pathBuilder.append(root).append("/").append(fc).append("/").append(sd).append("/").append(identifier);
-        pathBuilder.append(appendix);
-
-        return pathBuilder.toString();
+        return root + "/" + fc + "/" + sd + "/" + identifier + appendix;
     }
 
     InputStream getResourceStream(String path) throws FileNotFoundException {

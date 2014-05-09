@@ -7,9 +7,9 @@ import org.junit.Test;
 import java.io.File;
 import java.util.HashMap;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNull;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 
 public class ConverterSwingWorkerTest {
 
@@ -90,13 +90,6 @@ public class ConverterSwingWorkerTest {
         final String pathWildcards = ConverterSwingWorker.createInputPathWildcards(inputDir);
 
         final String absolutePath = inputDir.getAbsolutePath();
-        final StringBuilder expected = new StringBuilder();
-        expected.append(absolutePath);
-        expected.append(File.separator);
-        expected.append("*.zip,");
-        expected.append(absolutePath);
-        expected.append(File.separator);
-        expected.append("*.dbl");
-        assertEquals(expected.toString(), pathWildcards);
+        assertEquals(absolutePath + File.separator + "*.zip," + absolutePath + File.separator + "*.dbl", pathWildcards);
     }
 }

@@ -172,10 +172,7 @@ class VTecFile extends ExplorerFile {
         final int microseconds = epoch.getInt(MICROSECONDS_NAME);
         final String dateTime = DateTimeUtils.cfiDateToUtc(days, seconds, microseconds).toString();
 
-        final StringBuilder descriptionBuilder = new StringBuilder("Vertical total electron content (TECU) for epoch ");
-        descriptionBuilder.append(dateTime);
-
-        return descriptionBuilder.toString();
+        return "Vertical total electron content (TECU) for epoch " + dateTime;
     }
 
     private String getName(CompoundData mapCompoundData) throws IOException {

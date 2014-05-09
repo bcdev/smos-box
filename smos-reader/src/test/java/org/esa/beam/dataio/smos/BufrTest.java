@@ -130,9 +130,7 @@ public class BufrTest {
         final Array array = listVariable.read();
         assertNotNull(array);
 
-        int count = 0;
         while (structureIterator.hasNext()) {
-            count++;
             final StructureData structureData = structureIterator.next();
             assertNotNull(structureData);
 
@@ -141,8 +139,6 @@ public class BufrTest {
 
             final Array gridPointCountData = structureData.getArray("Number_of_grid_points");
             assertNotNull(gridPointCountData);
-
-            final int gridPointCount = gridPointCountData.getInt(0);
 
             final Array gridPointIdentifierData = structureData.getArray("Grid_point_identifier");
             assertNotNull(gridPointIdentifierData);
@@ -156,7 +152,5 @@ public class BufrTest {
             assertNotNull(brightnessTemperatureRealPartData);
             assertEquals(1, brightnessTemperatureRealPartData.getSize());
         }
-
-        System.out.println("count = " + count);
     }
 }

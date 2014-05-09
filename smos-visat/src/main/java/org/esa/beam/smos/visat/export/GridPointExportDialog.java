@@ -101,23 +101,23 @@ class GridPointExportDialog extends ModalDialog {
 
     @Override
     protected boolean verifyUserInput() {
-        final int roiType = (Integer) propertyContainer.getValue(BindingConstants.ROI_TYPE);
+        final int roiType = propertyContainer.getValue(BindingConstants.ROI_TYPE);
         if (roiType == 2) {
-            final double north = (Double) propertyContainer.getValue(BindingConstants.NORTH);
-            final double south = (Double) propertyContainer.getValue(BindingConstants.SOUTH);
+            final double north = propertyContainer.getValue(BindingConstants.NORTH);
+            final double south = propertyContainer.getValue(BindingConstants.SOUTH);
             if (north <= south) {
                 showErrorDialog("The southern latitude must be less than the northern latitude.");
                 return false;
             }
-            final double east = (Double) propertyContainer.getValue(BindingConstants.EAST);
-            final double west = (Double) propertyContainer.getValue(BindingConstants.WEST);
+            final double east = propertyContainer.getValue(BindingConstants.EAST);
+            final double west = propertyContainer.getValue(BindingConstants.WEST);
             if (east <= west) {
                 showErrorDialog("The western longitude must be less than the eastern longitude.");
                 return false;
             }
         }
-        final File targetFile = (File) propertyContainer.getValue(ALIAS_TARGET_FILE);
-        final String exportFormat = (String) propertyContainer.getValue(ALIAS_EXPORT_FORMAT);
+        final File targetFile = propertyContainer.getValue(ALIAS_TARGET_FILE);
+        final String exportFormat = propertyContainer.getValue(ALIAS_EXPORT_FORMAT);
         if (NAME_CSV.equals(exportFormat)) {
             if (targetFile.exists() && !targetFile.isFile()) {
                 showErrorDialog("The target file must be a normal file, not a directory.");
@@ -205,7 +205,7 @@ class GridPointExportDialog extends ModalDialog {
         }
 
         final JRadioButton useAreaButton = new JRadioButton("Area");
-        final Map<AbstractButton, Object> buttonGroupValueSet = new HashMap<AbstractButton, Object>();
+        final Map<AbstractButton, Object> buttonGroupValueSet = new HashMap<>();
         buttonGroupValueSet.put(useGeometryButton, 0);
         buttonGroupValueSet.put(usePinsButton, 1);
         buttonGroupValueSet.put(useAreaButton, 2);
@@ -323,12 +323,12 @@ class GridPointExportDialog extends ModalDialog {
         @Override
         public void propertyChange(PropertyChangeEvent evt) {
             if (NAME_CSV.equals(evt.getNewValue())) {
-                final File dir = (File) propertyContainer.getValue(ALIAS_TARGET_FILE);
+                final File dir = propertyContainer.getValue(ALIAS_TARGET_FILE);
                 if (last != null) {
                     propertyContainer.setValue(ALIAS_TARGET_FILE, new File(dir, last.getName()));
                 }
             } else {
-                last = (File) propertyContainer.getValue(ALIAS_TARGET_FILE);
+                last = propertyContainer.getValue(ALIAS_TARGET_FILE);
                 propertyContainer.setValue(ALIAS_TARGET_FILE, last.getParentFile());
             }
         }

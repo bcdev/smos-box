@@ -50,7 +50,7 @@ public class SceneViewSelectionService {
     public SceneViewSelectionService(VisatApp visatApp) {
         ifl = new IFL();
         ppl = new PPL();
-        this.selectionListeners = new ArrayList<SelectionListener>();
+        this.selectionListeners = new ArrayList<>();
         this.visatApp = visatApp;
         this.visatApp.addInternalFrameListener(ifl);
     }
@@ -86,6 +86,7 @@ public class SceneViewSelectionService {
         return sceneView != null ? sceneView.getProduct() : null;
     }
 
+    @SuppressWarnings("ConstantConditions")
     public SmosFile getSelectedSmosFile() {
         final Product product = getSelectedSmosProduct();
         if (product != null) {
