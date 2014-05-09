@@ -47,19 +47,16 @@
     tools which ESA/ESRIN are providing free of charge to the Earth
     Observation Community.</p>
 
-<p>The SMOS-Box software has been developed by <a href=
-                                                          "http://www.brockmann-consult.de/">Brockmann Consult</a> under
+<p>The SMOS-Box software has been developed by <a href="http://www.brockmann-consult.de/">Brockmann Consult</a> under
     ESA contract initiated by Steven Delwart (ESTEC) and coordinated
     by Peter Regner (ESRIN).</p>
 
-<p>This document set provides the online help for Version 2.3 of
-    the SMOS-Box.</p>
+<p>This document set provides the online help for Version 3.0 of the SMOS-Box.</p>
 
 <h4>License</h4>
 
 <p>BEAM and the SMOS-Box are free software; you can redistribute
-    it and/or modify it under the terms of the <a href=
-                                                          "http://www.gnu.org/licenses/gpl.html">GNU General Public
+    it and/or modify it under the terms of the <a href="http://www.gnu.org/licenses/gpl.html">GNU General Public
         License</a> as published by the Free Software Foundation. This
     program is distributed in the hope it will be useful, but WITHOUT
     ANY WARRANTY; without even the implied warranty of
@@ -68,9 +65,9 @@
 
 <h4>Supported Data Products</h4>
 
-<p>Version 2.3 of the BEAM SMOS-Box is capable of reading SMOS
+<p>Version 3.0 of the BEAM SMOS-Box is capable of reading SMOS
     data products complying with Schemas Release
-    2012-05-15_v05-02-01. The product types supported are listed in
+    2014-04-04_v06-02-03 and earlier. The product types supported are listed in
     the table below.</p>
 
 <table>
@@ -104,6 +101,30 @@
     <td>1C</td>
 
     <td>Browse Land Full-Polarisation Product. In the BEAM
+        <a href="DataModel.html">data model</a> all measurements in
+        the <code>BT_Data_Type</code> record are represented as
+        bands
+    </td>
+</tr>
+
+<tr>
+    <td>MIR_BWND1C</td>
+
+    <td>1C</td>
+
+    <td>NRT Browse Land Dual-Polarisation Product. In the BEAM
+        <a href="DataModel.html">data model</a> all measurements in
+        the <code>BT_Data_Type</code> record are represented as
+        bands
+    </td>
+</tr>
+
+<tr>
+    <td>MIR_BWNF1C</td>
+
+    <td>1C</td>
+
+    <td>NRT Browse Land Full-Polarisation Product. In the BEAM
         <a href="DataModel.html">data model</a> all measurements in
         the <code>BT_Data_Type</code> record are represented as
         bands
@@ -170,6 +191,40 @@
 </tr>
 
 <tr>
+    <td>MIR_SCND1C</td>
+
+    <td>1C</td>
+
+    <td>NRT Science Land Dual-Polarisation Product. In the BEAM
+        <a href="DataModel.html">data model</a> all measurements in
+        the <code>BT_Data_Type</code> record are represented as
+        bands. The user can specify whether the band data should be
+        provided by a simulated browse product, which is computed
+        on-the-fly, or by an individual snapshot. The former is the
+        default. Brightness temperature measurements, pixel
+        radiometric accuracies and Stokes parameters are represented
+        in the Satellite's as well as in the Earth's reference
+        frame
+    </td>
+</tr>
+
+<tr>
+    <td>MIR_SCNF1C</td>
+
+    <td>1C</td>
+
+    <td>NRT Land Full-Polarisation Product. In the BEAM <a href="DataModel.html">data model</a> all measurements in the
+        <code>BT_Data_Type</code> record are represented as bands.
+        The user can specify whether the band data should be provided
+        by a simulated browse product, which is computed on-the-fly,
+        or by an individual snapshot. The former is the default.
+        Brightness temperature measurements, pixel radiometric
+        accuracies and Stokes parameters are represented in the
+        Satellite's as well as in the Earth's reference frame
+    </td>
+</tr>
+
+<tr>
     <td>MIR_SCSD1C</td>
 
     <td>1C</td>
@@ -210,10 +265,20 @@
 
     <td>2</td>
 
-    <td>Ocean Salinity User Data Product. In the BEAM <a href=
-                                                                 "DataModel.html">data model</a> all measurements in the
+    <td>Ocean Salinity User Data Product. In the BEAM <a href="DataModel.html">data model</a> all measurements in the
         <code>Grid_Point_Data_Type</code> record are represented as
         bands
+    </td>
+</tr>
+
+<tr>
+    <td>MIR_OSDAP2</td>
+
+    <td>2</td>
+
+    <td>Ocean Salinity Data Analysis Product. In the BEAM <a href="DataModel.html">data model</a> all measurements in the
+        <code>Grid_Point_Data_Type</code>,<code>Diff_TBs_Type</code> and <code>Measurement_Data_Type</code> records are
+        represented as bands
     </td>
 </tr>
 
@@ -230,6 +295,16 @@
 </tr>
 
 <tr>
+    <td>MIR_SMDAP2</td>
+
+    <td>2</td>
+
+    <td>Soil Moisture Data Analysis Product. In the BEAM <a href="DataModel.html">data model</a> all measurements in the
+        <code>Grid_Point_Data_Type</code> record are represented as bands
+    </td>
+</tr>
+
+<tr>
     <td colspan="3">Auxiliary Products</td>
 </tr>
 
@@ -241,6 +316,66 @@
     <td>Leaf area index (LAI) auxiliary product. In the BEAM
         <a href="DataModel.html">data model</a> all measurements in
         the <code>DFFG_LAI_Point_Data_Type</code> record are
+        represented as bands
+    </td>
+</tr>
+
+<tr>
+    <td>AUX_DGGFLO</td>
+
+    <td></td>
+
+    <td>Flood flag probability auxiliary product. In the BEAM
+        <a href="DataModel.html">data model</a> all measurements in
+        the <code>Current_Flood_Data_Type</code> record are
+        represented as bands
+    </td>
+</tr>
+
+<tr>
+    <td>AUX_DGGRFI</td>
+
+    <td></td>
+
+    <td>Radio frequency interference probability auxiliary product. In the BEAM
+        <a href="DataModel.html">data model</a> all measurements in
+        the <code>Current_RFI_Data_Type</code> record are
+        represented as bands
+    </td>
+</tr>
+
+<tr>
+    <td>AUX_DGGROU</td>
+
+    <td></td>
+
+    <td>Current land roughness auxiliary product. In the BEAM
+        <a href="DataModel.html">data model</a> all measurements in
+        the <code>Current_Roughness_H_Data_Type</code> record are
+        represented as bands
+    </td>
+</tr>
+
+<tr>
+    <td>AUX_DGGTFO</td>
+
+    <td></td>
+
+    <td>Current forest optical thickness auxiliary product. In the BEAM
+        <a href="DataModel.html">data model</a> all measurements in
+        the <code>Current_Tau_Nadir_FO_Data_Type</code> record are
+        represented as bands
+    </td>
+</tr>
+
+<tr>
+    <td>AUX_DGGTLV</td>
+
+    <td></td>
+
+    <td>Current low vegetation optical thickness auxiliary product. In the BEAM
+        <a href="DataModel.html">data model</a> all measurements in
+        the <code>Current_Tau_Nadir_LV_Data_Type</code> record are
         represented as bands
     </td>
 </tr>
@@ -294,7 +429,7 @@
 
 <h4>Tools and commands</h4>
 
-<p>Version 2.3 of the SMOS-Box includes six SMOS-specific tools
+<p>Version 3.0 of the SMOS-Box includes six SMOS-specific tools
     and commands:</p>
 
 <ul>
@@ -334,7 +469,7 @@
 
 <h4>Known Limitations</h4>
 
-<p>Version 2.3 of the SMOS-Box has the following known
+<p>Version 3.0 of the SMOS-Box has the following known
     limitations:</p>
 
 <ul>
