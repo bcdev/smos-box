@@ -86,8 +86,8 @@
     </modules>
 
     <properties>
-        <ceres.version>0.14-SNAPSHOT</ceres.version>
-        <beam.version>5.0-SNAPSHOT</beam.version>
+        <ceres.version>0.14</ceres.version>
+        <beam.version>5.0</beam.version>
     </properties>
 
 
@@ -184,7 +184,7 @@
             <dependency>
                 <groupId>org.esa.beam</groupId>
                 <artifactId>blue-marble-worldmap</artifactId>
-                <version>1.0.2.${beam.version}</version>
+                <version>${beam.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.esa.beam</groupId>
