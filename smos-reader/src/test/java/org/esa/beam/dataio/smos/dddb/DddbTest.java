@@ -64,6 +64,11 @@ public class DddbTest {
     public void testGetBandDescriptors_BUFR() throws Exception {
         final Family<BandDescriptor> descriptors = dddb.getBandDescriptors("BUFR");
         assertEquals(27, descriptors.asList().size());
+
+        final BandDescriptor flagsBandDescriptor = descriptors.getMember("Flags");
+        assertNotNull(flagsBandDescriptor);
+        assertEquals("Flags", flagsBandDescriptor.getFlagCodingName());
+        assertNotNull("Flags", flagsBandDescriptor.getFlagDescriptors());
     }
 
     @Test
