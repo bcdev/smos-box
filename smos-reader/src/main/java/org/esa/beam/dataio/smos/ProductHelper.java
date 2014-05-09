@@ -63,7 +63,6 @@ class ProductHelper {
         final Color[] colors;
         if (descriptor.isCyclic()) {
             colors = new Color[]{
-                    new Color(0, 0, 0),
                     new Color(85, 0, 136),
                     new Color(0, 0, 255),
                     new Color(0, 255, 255),
@@ -77,7 +76,6 @@ class ProductHelper {
                     new Color(0, 255, 255),
                     new Color(0, 0, 255),
                     new Color(85, 0, 136),
-                    new Color(0, 0, 0)
             };
         } else {
             colors = new Color[]{
