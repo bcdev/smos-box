@@ -8,6 +8,9 @@ import org.esa.beam.binning.PlanetaryGrid;
 import org.esa.beam.binning.support.ReducedGaussianGrid;
 import org.esa.beam.dataio.netcdf.util.DataTypeUtils;
 import org.esa.beam.dataio.netcdf.util.MetadataUtils;
+import org.esa.beam.dataio.smos.dddb.BandDescriptor;
+import org.esa.beam.dataio.smos.dddb.Dddb;
+import org.esa.beam.dataio.smos.dddb.Family;
 import org.esa.beam.framework.datamodel.Band;
 import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.framework.datamodel.ProductData;
@@ -25,10 +28,12 @@ import java.awt.geom.Area;
 import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -36,43 +41,57 @@ import java.util.Set;
  */
 class LightBufrFile implements ProductFile {
 
-    private static final String VARIABLE_NAME_LON = "Longitude_high_accuracy";
-    private static final String VARIABLE_NAME_LAT = "Latitude_high_accuracy";
     private static final String ATTR_NAME_MISSING_VALUE = "missing_value";
     private static final String ATTR_NAME_ADD_OFFSET = "add_offset";
     private static final String ATTR_NAME_SCALE_FACTOR = "scale_factor";
+    private static final String VAR_NAME_LON = "Longitude_high_accuracy";
+    private static final String VAR_NAME_LAT = "Latitude_high_accuracy";
+    private static final String VAR_NAME_INCIDENCE_ANGLE = "Incidence_angle";
+    private static final String VAR_NAME_POLARISATION = "Polarisation";
+
+    private static final double CENTER_BROWSE_INCIDENCE_ANGLE = 42.5;
+    private static final double MIN_BROWSE_INCIDENCE_ANGLE = 37.5;
+    private static final double MAX_BROWSE_INCIDENCE_ANGLE = 52.5;
 
     private final NetcdfFile ncfile;
     private final Grid grid;
     private final Area area;
-    private int[] arrayIndexes;
+    private final Map<Long, List<Integer>> indexMap;
+    private final Accessor polarizationAccessor;
+    private final Accessor incidenceAngleAccessor;
+    private final Map<String, Array> arrayMap;
 
     public LightBufrFile(File file) throws IOException {
         ncfile = NetcdfFile.open(file.getPath());
         grid = new Grid(new ReducedGaussianGrid(512));
-        arrayIndexes = new int[grid.getCellCount()];
 
         final Sequence observationSequence = getObservationSequence();
-        final Variable lonVariable = observationSequence.findVariable(VARIABLE_NAME_LON);
-        final Variable latVariable = observationSequence.findVariable(VARIABLE_NAME_LAT);
-        final Accessor lonAccessor = new Accessor(lonVariable);
-        final Accessor latAccessor = new Accessor(latVariable);
+        final Accessor lonAccessor = new Accessor(observationSequence.findVariable(VAR_NAME_LON));
+        final Accessor latAccessor = new Accessor(observationSequence.findVariable(VAR_NAME_LAT));
         final int elementCount = lonAccessor.getElementCount();
 
-        // TODO - establish mapping from cell-index to array-index for individual snapshots
-        Arrays.fill(arrayIndexes, -1);
+        final PointList pointList = createPointList(lonAccessor, latAccessor);
+        area = DggFile.computeArea(pointList);
+
+
+        indexMap = new HashMap<>(pointList.getElementCount());
         for (int i = 0; i < elementCount; i++) {
             if (lonAccessor.isValid(i) && latAccessor.isValid(i)) {
                 final double lon = lonAccessor.getDouble(i);
                 final double lat = latAccessor.getDouble(i);
-                final int cellIndex = grid.getCellIndex(lon, lat);
-                if (arrayIndexes[cellIndex] == -1) {
-                    arrayIndexes[cellIndex] = i;
+                final long cellIndex = grid.getCellIndex(lon, lat);
+                if (!indexMap.containsKey(cellIndex)) {
+                    indexMap.put(cellIndex, new ArrayList<Integer>(50));
                 }
+                indexMap.get(cellIndex).add(i);
             }
         }
-        final PointList pointList = createPointList(lonAccessor, latAccessor);
-        area = DggFile.computeArea(pointList);
+        // TODO - establish mapping from cell-index to array-index for individual snapshots
+
+        polarizationAccessor = new Accessor(observationSequence.findVariable(VAR_NAME_POLARISATION));
+        incidenceAngleAccessor = new Accessor(observationSequence.findVariable(VAR_NAME_INCIDENCE_ANGLE));
+
+        arrayMap = new HashMap<>(15);
     }
 
     @Override
@@ -112,22 +131,24 @@ class LightBufrFile implements ProductFile {
 
     private void addBands(Product product) throws IOException {
         final Sequence sequence = getObservationSequence();
-        final List<Variable> variables = sequence.getVariables();
-        for (final Variable v : variables) {
+        final Family<BandDescriptor> descriptors = Dddb.getInstance().getBandDescriptors("BUFR");
+        for (final BandDescriptor d : descriptors.asList()) {
+            final Variable v = sequence.findVariable(d.getMemberName());
             if (v.getDataType().isEnum()) {
                 final int dataType = ProductData.TYPE_UINT8;
-                addBand(product, v, dataType);
+                addBand(product, v, dataType, d);
             } else {
                 final int dataType = DataTypeUtils.getRasterDataType(v);
                 if (dataType != -1) {
-                    addBand(product, v, dataType);
+                    addBand(product, v, dataType, d);
                 }
             }
         }
     }
 
-    private void addBand(Product product, Variable variable, int dataType) throws IOException {
-        final Band band = product.addBand(variable.getShortName(), dataType);
+    private void addBand(Product product, Variable variable, int dataType, BandDescriptor descriptor) throws
+                                                                                                      IOException {
+        final Band band = product.addBand(descriptor.getBandName(), dataType);
         final Attribute units = variable.findAttribute("units");
         if (units != null) {
             band.setUnit(units.getStringValue());
@@ -145,8 +166,20 @@ class LightBufrFile implements ProductFile {
             band.setNoDataValue(missingValue.getNumericValue().doubleValue());
             band.setNoDataValueUsed(true);
         }
-        final CellValueProvider valueProvider = createCellValueProvider(variable);
+        if (!descriptor.getValidPixelExpression().isEmpty()) {
+            band.setValidPixelExpression(descriptor.getValidPixelExpression());
+        }
+        if (!descriptor.getDescription().isEmpty()) {
+            band.setDescription(descriptor.getDescription());
+        }
+        if (descriptor.getFlagDescriptors() != null) {
+            ProductHelper.addFlagsAndMasks(product, band, descriptor.getFlagCodingName(),
+                                           descriptor.getFlagDescriptors());
+        }
+
+        final CellValueProvider valueProvider = createCellValueProvider(variable, descriptor.getPolarization());
         band.setSourceImage(createSourceImage(band, valueProvider));
+        band.setImageInfo(ProductHelper.createImageInfo(band, descriptor));
     }
 
     private MultiLevelImage createSourceImage(final Band band, final CellValueProvider valueProvider) {
@@ -162,8 +195,8 @@ class LightBufrFile implements ProductFile {
         };
     }
 
-    private CellValueProvider createCellValueProvider(Variable v) throws IOException {
-        return new CellValueProviderImpl(v);
+    private CellValueProvider createCellValueProvider(Variable variable, int polarization) throws IOException {
+        return new CellValueProviderImpl(variable, polarization);
     }
 
     @Override
@@ -197,17 +230,23 @@ class LightBufrFile implements ProductFile {
     private final class CellValueProviderImpl implements CellValueProvider {
 
         private final Variable variable;
+        private final int polarization;
         private volatile Array array;
 
-        private CellValueProviderImpl(Variable variable) {
+        private CellValueProviderImpl(Variable variable, int polarization) {
             this.variable = variable;
+            this.polarization = polarization;
         }
 
         private Array getArray() throws IOException {
             if (array == null) {
                 synchronized (this) {
-                    if (array == null) {
-                        array = variable.read();
+                    final String variableName = variable.getShortName();
+                    synchronized (arrayMap) {
+                        if (!arrayMap.containsKey(variableName)) {
+                            arrayMap.put(variableName, variable.read());
+                        }
+                        array = arrayMap.get(variableName);
                     }
                 }
             }
@@ -226,12 +265,12 @@ class LightBufrFile implements ProductFile {
 
         @Override
         public byte getValue(long cellIndex, byte noDataValue) {
-            final int index = LightBufrFile.this.arrayIndexes[(int) cellIndex];
-            if (index == -1) {
+            final List<Integer> indexes = LightBufrFile.this.indexMap.get(cellIndex);
+            if (indexes == null) {
                 return noDataValue;
             }
             try {
-                return getArray().getByte(index);
+                return (byte) getInterpolatedValue(cellIndex, getArray(), polarization);
             } catch (IOException e) {
                 return noDataValue;
             }
@@ -239,12 +278,12 @@ class LightBufrFile implements ProductFile {
 
         @Override
         public short getValue(long cellIndex, short noDataValue) {
-            final int index = LightBufrFile.this.arrayIndexes[(int) cellIndex];
-            if (index == -1) {
+            final List<Integer> indexes = LightBufrFile.this.indexMap.get(cellIndex);
+            if (indexes == null) {
                 return noDataValue;
             }
             try {
-                return getArray().getShort(index);
+                return (short) getInterpolatedValue(cellIndex, getArray(), polarization);
             } catch (IOException e) {
                 return noDataValue;
             }
@@ -252,12 +291,12 @@ class LightBufrFile implements ProductFile {
 
         @Override
         public int getValue(long cellIndex, int noDataValue) {
-            final int index = LightBufrFile.this.arrayIndexes[(int) cellIndex];
-            if (index == -1) {
+            final List<Integer> indexes = LightBufrFile.this.indexMap.get(cellIndex);
+            if (indexes == null) {
                 return noDataValue;
             }
             try {
-                return getArray().getInt(index);
+                return (int) getInterpolatedValue(cellIndex, getArray(), polarization);
             } catch (IOException e) {
                 return noDataValue;
             }
@@ -265,12 +304,12 @@ class LightBufrFile implements ProductFile {
 
         @Override
         public float getValue(long cellIndex, float noDataValue) {
-            final int index = LightBufrFile.this.arrayIndexes[(int) cellIndex];
-            if (index == -1) {
+            final List<Integer> indexes = LightBufrFile.this.indexMap.get(cellIndex);
+            if (indexes == null) {
                 return noDataValue;
             }
             try {
-                return getArray().getFloat(index);
+                return (float) getInterpolatedValue(cellIndex, getArray(), polarization);
             } catch (IOException e) {
                 return noDataValue;
             }
@@ -283,10 +322,6 @@ class LightBufrFile implements ProductFile {
 
         public Grid(PlanetaryGrid grid) {
             this.grid = grid;
-        }
-
-        public int getCellCount() {
-            return (int) grid.getNumBins();
         }
 
         public int getCellIndex(double lon, double lat) {
@@ -343,6 +378,10 @@ class LightBufrFile implements ProductFile {
         public double getDouble(int i) {
             return array.getDouble(i) * scaleFactor + addOffset;
         }
+
+        public int getInt(int i) {
+            return array.getInt(i);
+        }
     }
 
     private static final class Point {
@@ -378,6 +417,54 @@ class LightBufrFile implements ProductFile {
             return null;
         }
         return attribute.getNumericValue();
+    }
+
+    private double getInterpolatedValue(long cellIndex, Array array, int polarization) throws IOException {
+        final List<Integer> indexList = indexMap.get(cellIndex);
+
+        int count = 0;
+        double sx = 0;
+        double sy = 0;
+        double sxx = 0;
+        double sxy = 0;
+
+        boolean hasLower = false;
+        boolean hasUpper = false;
+
+        for (final Integer index : indexList) {
+            if (polarizationAccessor.isValid(index) && incidenceAngleAccessor.isValid(index)) {
+                final int flags = polarizationAccessor.getInt(index);
+
+                if (polarization == 4 || polarization == (flags & 3) || (polarization & flags & 2) != 0) {
+                    final double incidenceAngle = incidenceAngleAccessor.getDouble(index);
+
+                    if (incidenceAngle >= MIN_BROWSE_INCIDENCE_ANGLE && incidenceAngle <= MAX_BROWSE_INCIDENCE_ANGLE) {
+                        final double value = array.getDouble(index);
+
+                        sx += incidenceAngle;
+                        sy += value;
+                        sxx += incidenceAngle * incidenceAngle;
+                        sxy += incidenceAngle * value;
+                        count++;
+
+                        if (!hasLower) {
+                            hasLower = incidenceAngle <= CENTER_BROWSE_INCIDENCE_ANGLE;
+                        }
+                        if (!hasUpper) {
+                            hasUpper = incidenceAngle > CENTER_BROWSE_INCIDENCE_ANGLE;
+                        }
+                    }
+                }
+            }
+        }
+        if (hasLower && hasUpper) {
+            final double a = (count * sxy - sx * sy) / (count * sxx - sx * sx);
+            final double b = (sy - a * sx) / count;
+            return a * CENTER_BROWSE_INCIDENCE_ANGLE + b;
+        }
+
+        throw new IOException(MessageFormat.format(
+                "No data found for grid cell ''{0}'' and polarisation ''{1}''.", cellIndex, polarization));
     }
 
 }
