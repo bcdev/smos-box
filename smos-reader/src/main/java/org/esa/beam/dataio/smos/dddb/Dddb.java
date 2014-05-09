@@ -253,6 +253,9 @@ public class Dddb {
     }
 
     private InputStream getBandDescriptorResource(String formatName) throws FileNotFoundException {
+        if ("BUFR".equals(formatName)) {
+            return resourceHandler.getResourceStream("bands/BUFR/BUFR.csv");
+        }
         if (formatName == null || !formatName.matches(SCHEMA_NAMING_CONVENTION)) {
             return null;
         }
@@ -261,6 +264,9 @@ public class Dddb {
     }
 
     private InputStream getFlagDescriptorResource(String identifier) throws FileNotFoundException {
+        if ("BUFR_flags".equals(identifier)) {
+            return resourceHandler.getResourceStream("flags/BUFR/BUFR_flags.csv");
+        }
         if (identifier == null || !identifier.matches(SCHEMA_NAMING_CONVENTION + "_.*")) {
             return null;
         }

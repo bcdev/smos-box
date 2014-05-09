@@ -61,6 +61,18 @@ public class DddbTest {
     }
 
     @Test
+    public void testGetBandDescriptors_BUFR() throws Exception {
+        final Family<BandDescriptor> descriptors = dddb.getBandDescriptors("BUFR");
+        assertEquals(27, descriptors.asList().size());
+    }
+
+    @Test
+    public void testGetFlagDescriptors_BUFR() throws Exception {
+        final Family<FlagDescriptor> descriptors = dddb.getFlagDescriptors("BUFR_flags");
+        assertEquals(13, descriptors.asList().size());
+    }
+
+    @Test
     public void testGetFlagDescriptors() {
         final Family<FlagDescriptor> descriptors = dddb.getFlagDescriptors(DBL_SM_XXXX_AUX_ECMWF_0200 + "_flags1");
         assertEquals(21, descriptors.asList().size());

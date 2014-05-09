@@ -1,0 +1,14 @@
+# visible | name                  | mask     | color | transparency | description
+  *       | RFI                   | 00000001 | *     | *            | Pixel is affected by RFI effects as identified in the AUX_RFILST or it has exceeded the BT thresholds.
+  *       | SUN_TAILS             | 00000002 | *     | *            | Pixel is located in the hexagonal alias directions centred on a Sun alias (if Sun is not removed, measurement may be degraded in these directions).
+  *       | BORDER_FOV            | 00000004 | *     | *            | Pixel is close to the border delimiting the Extended Alias free zone or to the unit circle replicas borders.
+  *       | RFI_TAIL              | 00000008 | *     | *            | Measurement is affected by the tails of a point source RFI as identified in the AUX RFI list (tail width is dependant on the RFI expected BT defined in the AUX RFILST).
+  *       | AF_FOV                | 00000010 | *     | *            | Pixel is inside the exclusive zone of Alias free.
+  *       | MOON_POINT            | 00000020 | *     | *            | Pixel is located in a zone where a Moon alias was reconstructed.
+  *       | SUN_GLINT_AREA        | 00000040 | *     | *            | Pixel is located in a zone where Sun reflection has been detected.
+  *       | SUN_POINT             | 00000080 | *     | *            | Pixel is located in a zone where a Sun alias was reconstructed.
+  *       | RFI_MITIGATION        | 00000100 | *     | *            | RFI mitigation has been performed during image reconstruction of this pixel.
+  *       | SINGLE_SNAPSHOT       | 00000200 | *     | *            | Scene has not been combined with an adjacent scene in opposite polarisation during image reconstruction.
+  *       | MOON_FV               | 00000400 | *     | *            | Direct Moon correction has been performed during image reconstruction of this pixel.
+  *       | SUN_GLINT_FOV         | 00000800 | *     | *            | Reflected Sun correction has been performed during image reconstruction of this pixel.
+  *       | SUN_FOV               | 00001000 | *     | *            | Direct Sun correction has been performed during image reconstruction of this pixel.
