@@ -3,7 +3,7 @@
 
     <symbolicName>smos-ee2netcdf</symbolicName>
     <name>SMOS EarthExplorer to NetCDF converter</name>
-    <version>2.4</version>
+    <version>3.0</version>
 
     <description>
         <![CDATA[
