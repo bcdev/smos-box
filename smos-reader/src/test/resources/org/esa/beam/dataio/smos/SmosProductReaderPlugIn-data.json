@@ -16,6 +16,11 @@
             "description": "SMOS BWLF1C as directory with DBL file, schema version 300"
         },
         {
+            "id": "SM_TEST_MIR_BWLF1C_20100802T153857",
+            "relativePath": "sensors_platforms/SMOS/MIR_BWLF1C/SM_TEST_MIR_BWLF1C_20100802T153857_20100802T163215_620_001_1/SM_TEST_MIR_BWLF1C_20100802T153857_20100802T163215_620_001_1.HDR",
+            "description": "SMOS BWLF1C schema version 400"
+        },
+        {
             "id": "SMOS_BWSD1C_DBL",
             "relativePath": "sensors_platforms/SMOS/MIR_BWSD1C/SM_OPER_MIR_BWSD1C_20100201T134256_20100201T140057_324_001_1/SM_OPER_MIR_BWSD1C_20100201T134256_20100201T140057_324_001_1.DBL",
             "description": "SMOS BWSD1C as directory with DBL file"
@@ -33,12 +38,17 @@
         {
             "id": "SM_OPER_MIR_BWSF1C_20100119T043836",
             "relativePath": "sensors_platforms/SMOS/MIR_BWSF1C/SM_OPER_MIR_BWSF1C_20100119T043836_20100119T053238_324_001_1/SM_OPER_MIR_BWSF1C_20100119T043836_20100119T053238_324_001_1.DBL",
-            "description": "SMOS BWSF1C,  schema version 201"
+            "description": "SMOS BWSF1C, schema version 201"
         },
         {
             "id": "SM_OPER_MIR_BWSF1C_20140415T015031",
             "relativePath": "sensors_platforms/SMOS/MIR_BWSF1C/SM_OPER_MIR_BWSF1C_20140415T015031_20140415T024349_505_001_1/SM_OPER_MIR_BWSF1C_20140415T015031_20140415T024349_505_001_1.DBL",
-            "description": "SMOS BWSF1C,  schema version 300"
+            "description": "SMOS BWSF1C, schema version 300"
+        },
+        {
+            "id": "SM_TEST_MIR_BWSF1C_20100802T153857",
+            "relativePath": "sensors_platforms/SMOS/MIR_BWSF1C/SM_TEST_MIR_BWSF1C_20100802T153857_20100802T163215_620_001_1/SM_TEST_MIR_BWSF1C_20100802T153857_20100802T163215_620_001_1.HDR",
+            "description": "SMOS BWSF1C, schema version 400"
         },
         {
             "id": "SM_OPER_MIR_OSDAP2_20120514T022742",
@@ -58,17 +68,22 @@
         {
             "id": "SM_OPER_MIR_SCLD1C_20100208T040959",
             "relativePath": "sensors_platforms/SMOS/MIR_SCLD1C/SM_OPER_MIR_SCLD1C_20100208T040959_20100208T050400_324_001_1/SM_OPER_MIR_SCLD1C_20100208T040959_20100208T050400_324_001_1.HDR",
-            "description": "SMOS SCLD1C,  schema version 201"
+            "description": "SMOS SCLD1C, schema version 201"
         },
         {
             "id": "SM_OPER_MIR_SCLF1C_20100119T002827",
             "relativePath": "sensors_platforms/SMOS/MIR_SCLF1C/SM_OPER_MIR_SCLF1C_20100119T002827_20100119T012226_323_001_1/SM_OPER_MIR_SCLF1C_20100119T002827_20100119T012226_323_001_1.DBL",
-            "description": "SMOS SCLF1C,  schema version 201"
+            "description": "SMOS SCLF1C, schema version 201"
         },
         {
             "id": "SM_OPER_MIR_SCLF1C_20120514T195822",
             "relativePath": "sensors_platforms/SMOS/MIR_SCLF1C/SM_OPER_MIR_SCLF1C_20120514T195822_20120514T205142_505_001_1.zip",
-            "description": "SMOS SCLF1C,  schema version 300"
+            "description": "SMOS SCLF1C, schema version 300"
+        },
+        {
+            "id": "SM_TEST_MIR_SCLF1C_20120704T010214",
+            "relativePath": "sensors_platforms/SMOS/MIR_SCLF1C/SM_TEST_MIR_SCLF1C_20120704T010214_20120704T015527_620_001_1/SM_TEST_MIR_SCLF1C_20120704T010214_20120704T015527_620_001_1.HDR",
+            "description": "SMOS SCLF1C, schema version 400"
         },
         {
             "id": "SM_OPER_MIR_SCSD1C_20100208T064006",
@@ -84,6 +99,11 @@
             "id": "SM_OPER_MIR_SCSF1C_20120514T013734",
             "relativePath": "sensors_platforms/SMOS/MIR_SCSF1C/SM_OPER_MIR_SCSF1C_20120514T013734_20120514T023053_505_001_1.zip",
             "description": "SMOS SCSD1C,  schema version 300"
+        },
+        {
+            "id": "SM_TEST_MIR_SCSF1C_20120704T010214",
+            "relativePath": "sensors_platforms/SMOS/MIR_SCSF1C/SM_TEST_MIR_SCSF1C_20120704T010214_20120704T015527_620_001_1/SM_TEST_MIR_SCSF1C_20120704T010214_20120704T015527_620_001_1.DBL",
+            "description": "SMOS SCSD1C, schema version 400"
         },
         {
             "id": "SM_REPR_MIR_SMDAP2_20101105T163013",
