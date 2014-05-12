@@ -48,6 +48,7 @@ class LightBufrFile implements ProductFile {
     private static final String VAR_NAME_LAT = "Latitude_high_accuracy";
     private static final String VAR_NAME_INCIDENCE_ANGLE = "Incidence_angle";
     private static final String VAR_NAME_POLARISATION = "Polarisation";
+    private static final String VAR_NAME_SNAPSHOT_IDENTIFIER = "Snapshot_identifier";
 
     private static final double CENTER_BROWSE_INCIDENCE_ANGLE = 42.5;
     private static final double MIN_BROWSE_INCIDENCE_ANGLE = 37.5;
@@ -57,7 +58,8 @@ class LightBufrFile implements ProductFile {
     private final Grid grid;
     private final Area area;
     private final Map<Long, List<Integer>> indexMap;
-    private final Accessor polarizationAccessor;
+    private final Accessor snapshotIdAccessor;
+    private final Accessor polFlagsAccessor;
     private final Accessor incidenceAngleAccessor;
     private final Map<String, Array> arrayMap;
     private final CellValueCombinator cellValueCombinator;
@@ -88,9 +90,9 @@ class LightBufrFile implements ProductFile {
                 indexMap.get(cellIndex).add(i);
             }
         }
-        // TODO - establish mapping from cell-index to array-index for individual snapshots
 
-        polarizationAccessor = new Accessor(observationSequence.findVariable(VAR_NAME_POLARISATION));
+        snapshotIdAccessor = new Accessor(observationSequence.findVariable(VAR_NAME_SNAPSHOT_IDENTIFIER));
+        polFlagsAccessor = new Accessor(observationSequence.findVariable(VAR_NAME_POLARISATION));
         incidenceAngleAccessor = new Accessor(observationSequence.findVariable(VAR_NAME_INCIDENCE_ANGLE));
 
         arrayMap = new HashMap<>(15);
@@ -256,6 +258,15 @@ class LightBufrFile implements ProductFile {
             snapshotId = -1;
         }
 
+        public final long getSnapshotId() { // TODO: why is this not synchronized?
+            return snapshotId;
+        }
+
+        public final void setSnapshotId(long snapshotId) { // TODO: why is this not synchronized?
+            this.snapshotId = snapshotId;
+        }
+
+
         private Array getArray() throws IOException {
             if (array == null) {
                 synchronized (this) {
@@ -273,6 +284,7 @@ class LightBufrFile implements ProductFile {
 
         @Override
         public Area getArea() {
+            // TODO: implement area for snapshots - rq20140512
             return LightBufrFile.this.getArea();
         }
 
@@ -291,8 +303,7 @@ class LightBufrFile implements ProductFile {
                 if (snapshotId == -1) {
                     return cellValueAccumulator.accumulate(cellIndex, getArray(), polarization).byteValue();
                 } else {
-                    // TODO - implement
-                    return 0;
+                    return getSnapshotValue(cellIndex, noDataValue).byteValue();
                 }
             } catch (IOException e) {
                 return noDataValue;
@@ -309,8 +320,7 @@ class LightBufrFile implements ProductFile {
                 if (snapshotId == -1) {
                     return cellValueAccumulator.accumulate(cellIndex, getArray(), polarization).shortValue();
                 } else {
-                    // TODO - implement
-                    return 0;
+                    return getSnapshotValue(cellIndex, noDataValue).shortValue();
                 }
             } catch (IOException e) {
                 return noDataValue;
@@ -327,8 +337,7 @@ class LightBufrFile implements ProductFile {
                 if (snapshotId == -1) {
                     return cellValueAccumulator.accumulate(cellIndex, getArray(), polarization).intValue();
                 } else {
-                    // TODO - implement
-                    return 0;
+                    return getSnapshotValue(cellIndex, noDataValue).intValue();
                 }
             } catch (IOException e) {
                 return noDataValue;
@@ -345,12 +354,31 @@ class LightBufrFile implements ProductFile {
                 if (snapshotId == -1) {
                     return cellValueAccumulator.accumulate(cellIndex, getArray(), polarization).floatValue();
                 } else {
-                    // TODO - implement
-                    return Float.NaN;
+                    return getSnapshotValue(cellIndex, noDataValue).floatValue();
                 }
             } catch (IOException e) {
                 return noDataValue;
             }
+        }
+
+        private Number getSnapshotValue(long cellIndex, Number noDataValue) throws IOException {
+            final List<Integer> indexList = indexMap.get(cellIndex);
+
+            for (final Integer index : indexList) {
+                if (snapshotIdAccessor.isValid(index)) {
+                    if (snapshotId == snapshotIdAccessor.getInt(index)) {
+                        if (polFlagsAccessor.isValid(index)) {
+                            final int polFlags = polFlagsAccessor.getInt(index);
+                            if (polarization == 4 || // for flags (they do not depend on polarisation)
+                                polarization == (polFlags & 1) || // for x or y polarisation (dual pol)
+                                (polarization & polFlags & 2) != 0) { // for xy polarisation (full pol, real and imaginary)
+                                return (Number) getArray().getObject(index);
+                            }
+                        }
+                    }
+                }
+            }
+            return noDataValue;
         }
     }
 
@@ -464,7 +492,6 @@ class LightBufrFile implements ProductFile {
 
     private final class CellValueInterpolator implements CellValueAccumulator {
 
-
         @Override
         public Number accumulate(long cellIndex, Array array, int polarization) throws IOException {
             final List<Integer> indexList = indexMap.get(cellIndex);
@@ -479,8 +506,8 @@ class LightBufrFile implements ProductFile {
             boolean hasUpper = false;
 
             for (final Integer index : indexList) {
-                if (polarizationAccessor.isValid(index) && incidenceAngleAccessor.isValid(index)) {
-                    final int polFlags = polarizationAccessor.getInt(index);
+                if (polFlagsAccessor.isValid(index) && incidenceAngleAccessor.isValid(index)) {
+                    final int polFlags = polFlagsAccessor.getInt(index);
 
                     if (polarization == 4 || polarization == (polFlags & 3) || (polarization & polFlags & 2) != 0) {
                         final double incidenceAngle = incidenceAngleAccessor.getDouble(index);
@@ -526,8 +553,8 @@ class LightBufrFile implements ProductFile {
             int combinedFlags = 0;
 
             for (final Integer index : indexList) {
-                if (polarizationAccessor.isValid(index) && incidenceAngleAccessor.isValid(index)) {
-                    final int polFlags = polarizationAccessor.getInt(index);
+                if (polFlagsAccessor.isValid(index) && incidenceAngleAccessor.isValid(index)) {
+                    final int polFlags = polFlagsAccessor.getInt(index);
 
                     if (polarization == 4 || polarization == (polFlags & 3) || (polarization & polFlags & 2) != 0) {
                         final double incidenceAngle = incidenceAngleAccessor.getDouble(index);
