@@ -10,5 +10,6 @@
         <tocitem text="Tools" target="smosTools"/>
         <tocitem text="Grid Point Export" target="smosGridPointExport"/>
         <tocitem text="NetCDF Export" target="smosEE2NetCDFExport"/>
+        <tocitem text="File Format Updates" target="smosFileFormatUpdates"/>
     </tocitem>
 </toc>

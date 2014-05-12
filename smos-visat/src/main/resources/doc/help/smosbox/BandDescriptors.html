@@ -1,0 +1,148 @@
+<!--
+  ~ Copyright (C) 2014 Brockmann Consult GmbH (info@brockmann-consult.de)
+  ~
+  ~ This program is free software; you can redistribute it and/or modify it
+  ~ under the terms of the GNU General Public License as published by the Free
+  ~ Software Foundation; either version 3 of the License, or (at your option)
+  ~ any later version.
+  ~ This program is distributed in the hope that it will be useful, but WITHOUT
+  ~ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+  ~ FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+  ~ more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License along
+  ~ with this program; if not, see http://www.gnu.org/licenses/
+  -->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta name="generator" content=
+            "HTML Tidy for Mac OS X (vers 25 March 2009), see www.w3.org"/>
+
+    <title>Band Descriptor Format</title>
+    <link rel="stylesheet" href="../../style.css" type="text/css"/>
+</head>
+
+<body>
+<table class="header">
+    <tr class="header">
+        <td class="header">&nbsp; File Format Updates</td>
+
+        <td class="header" align="right"><a href=
+                                                    "../../index.html"><img src="../images/BeamHeader.jpg"
+                                                                            border="0"/></a></td>
+    </tr>
+</table>
+
+<h3>Band Descriptor Format</h3>
+
+<p>
+    The DDDB band descriptor file is used to define which data of the SMOS Data Block Structures is displayed as a
+    product band in BEAM.
+    The band descriptor file is a line based text file (comma separated file) that is using the vertical-bar character (<i>
+    &#124;</i>) as separator.
+    A line beginning with a number-sign (<i>&#035; </i>) is treated as comment line.
+</p>
+The following table lists all properties that may be used to describe a band.
+TODO!!! ist die reihenfolge egal? tb 2014-05-12
+<p>
+
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Explanation</th>
+    </tr>
+    <tr>
+        <td>visible</td>
+        <td>boolean</td>
+        <td>Should the band appear in the BEAM product tree (<i>true</i> or <i>false</i>). This property is currently
+            not supported
+        </td>
+    </tr>
+    <tr>
+        <td>band</td>
+        <td>string</td>
+        <td>Band name used in BEAM</td>
+    </tr>
+    <tr>
+        <td>dataset</td>
+        <td>string</td>
+        <td>The name of the dataset (in the original datablock structure)</td>
+    </tr>
+    <tr>
+        <td>pol</td>
+        <td>int</td>
+        <td>polarization</td>
+        <!-- @todo 1 tb/tb ask Ralf on more details here tb 2014-05-12-->
+    </tr>
+    <tr>
+        <td>sampleModel</td>
+        <td>int</td>
+        <td>0, 1, 2</td>
+        <!-- @todo 1 tb/tb ask Ralf on more details here tb 2014-05-12-->
+    </tr>
+    <tr>
+        <td>scalingOffset</td>
+        <td>double</td>
+        <td>Scaling offset applied to the raw data</td>
+    </tr>
+    <tr>
+        <td>scalingFactor</td>
+        <td>double</td>
+        <td>Scaling factor applied to the raw data</td>
+    </tr>
+    <tr>
+        <td>typicalMin</td>
+        <td>double</td>
+        <td>Typical (scaled) minimum value</td>
+    </tr>
+    <tr>
+        <td>typicalMax</td>
+        <td>double</td>
+        <td>Typical (scaled) maximum value</td>
+    </tr>
+    <tr>
+        <td>cyclic</td>
+        <td>boolean</td>
+        <td>Is the value range cyclic?</td>
+    </tr>
+    <tr>
+        <td>fillValue</td>
+        <td>double</td>
+        <td>Value indicating no-data in BEAM</td>
+    </tr>
+    <tr>
+        <td>validExpr</td>
+        <td>string</td>
+        <td>Valid-pixel expression used in BEAM</td>
+    </tr>
+    <tr>
+        <td>unit</td>
+        <td>string</td>
+        <td>Physical unit</td>
+    </tr>
+    <tr>
+        <td>description</td>
+        <td>string</td>
+        <td>Band description text displayed in VISAT</td>
+    </tr>
+    <tr>
+        <td>flagCoding</td>
+        <td>string</td>
+        <td>For flag bands only: the name of the flag coding</td>
+    </tr>
+    <tr>
+        <td>flags</td>
+        <td>string</td>
+        <td>For flag bands only: the name of the flag descriptor resource</td>
+    </tr>
+</table>
+
+</p>
+
+</body>
+</html>

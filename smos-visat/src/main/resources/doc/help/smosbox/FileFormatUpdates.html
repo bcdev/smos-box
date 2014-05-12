@@ -1,0 +1,85 @@
+<!--
+  ~ Copyright (C) 2014 Brockmann Consult GmbH (info@brockmann-consult.de)
+  ~
+  ~ This program is free software; you can redistribute it and/or modify it
+  ~ under the terms of the GNU General Public License as published by the Free
+  ~ Software Foundation; either version 3 of the License, or (at your option)
+  ~ any later version.
+  ~ This program is distributed in the hope that it will be useful, but WITHOUT
+  ~ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+  ~ FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+  ~ more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License along
+  ~ with this program; if not, see http://www.gnu.org/licenses/
+  -->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta name="generator" content=
+            "HTML Tidy for Mac OS X (vers 25 March 2009), see www.w3.org"/>
+
+    <title>File Format Updates</title>
+    <link rel="stylesheet" href="../../style.css" type="text/css"/>
+</head>
+
+<body>
+<table class="header">
+    <tr class="header">
+        <td class="header">&nbsp; File Format Updates</td>
+
+        <td class="header" align="right"><a href=
+                                                    "../../index.html"><img src="../images/BeamHeader.jpg"
+                                                                            border="0"/></a></td>
+    </tr>
+</table>
+
+<h3>SMOS Data File Format</h3>
+
+<p>
+    The data format for SMOS products supported by SMOS box is the Earth Explorer Ground Segment File Format
+    (EE-Format).
+    This data format consists of an ASCII XML header file (*.HDR) and a binary data block file (*.DBL).
+    <br>
+    The binary data structures contained in the data block file are described in the schema-files that are available
+    from ESA.
+    This approach allows software reading SMOS files to automatically decode the data correctly.
+</p>
+
+<h4>SMOS Product Reader</h4>
+The SMOS Product Reader uses a dynamic approach to adapt the data structures read from the product file to the data
+format
+described
+
+DDDB (Data Descriptor Data Base)
+
+<h5>DDDB</h5>
+The core of the DDDB consists of a large number of configuration files that define the decoding and display properties
+of the various file types supported. It is organised using the following directory structure:
+
+<p><img src="images/DDDBFileTree.png" alt="DDDB directory structure"/></p>
+
+The root directory for the DDDB in the example above is called <i>dddb</i>. It contains three sub-folders: <i>bands</i>,
+<i>flags</i> and <i>schemas</i> that contain the settings for the bands, flags and the schema files.
+Each of these folders contains two sub-folders for MIRAS (<i>MIR_</i>) and auxiliary data (<i>AUX_</i>) product data file descriptors.
+These folders contain a further sub-division according to the product type:
+
+<p><img src="images/DDDBTypeDirectories.png" alt="DDDB type directories"/></p>
+
+
+<a href="BandDescriptors.html">Band Descriptor File Format</a>
+<h5>Extending the DDDB</h5>
+
+<p>
+    The standard content of the DDDB is contained as a Java resource and shipped with the SMOS-Box software. This set of
+    band and flag descriptors is thoroughly tested and compliant with all file format versions including and prior to
+    the latest
+    version noted in the software change notes.
+</p>
+
+
+</body>
+</html>
