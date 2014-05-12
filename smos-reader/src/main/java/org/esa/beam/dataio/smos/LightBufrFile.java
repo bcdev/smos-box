@@ -60,6 +60,8 @@ class LightBufrFile implements ProductFile {
     private final Accessor polarizationAccessor;
     private final Accessor incidenceAngleAccessor;
     private final Map<String, Array> arrayMap;
+    private final CellValueCombinator cellValueCombinator;
+    private final CellValueInterpolator cellValueInterpolator;
 
     public LightBufrFile(File file) throws IOException {
         ncfile = NetcdfFile.open(file.getPath());
@@ -92,6 +94,8 @@ class LightBufrFile implements ProductFile {
         incidenceAngleAccessor = new Accessor(observationSequence.findVariable(VAR_NAME_INCIDENCE_ANGLE));
 
         arrayMap = new HashMap<>(15);
+        cellValueCombinator = new CellValueCombinator();
+        cellValueInterpolator = new CellValueInterpolator();
     }
 
     @Override
@@ -119,7 +123,7 @@ class LightBufrFile implements ProductFile {
 
 
         addBands(product);
-        //setTimes(product);
+        setTimes(product);
 
         return product;
     }
@@ -127,6 +131,11 @@ class LightBufrFile implements ProductFile {
     @Override
     public final Area getArea() {
         return new Area(area);
+    }
+
+    @Override
+    public File getDataFile() {
+        return new File(ncfile.getLocation());
     }
 
     private void addBands(Product product) throws IOException {
@@ -182,6 +191,10 @@ class LightBufrFile implements ProductFile {
         band.setImageInfo(ProductHelper.createImageInfo(band, descriptor));
     }
 
+    private void setTimes(Product product) {
+        // TODO - implement
+    }
+
     private MultiLevelImage createSourceImage(final Band band, final CellValueProvider valueProvider) {
         return new DefaultMultiLevelImage(createMultiLevelSource(band, valueProvider));
     }
@@ -196,12 +209,11 @@ class LightBufrFile implements ProductFile {
     }
 
     private CellValueProvider createCellValueProvider(Variable variable, int polarization) throws IOException {
-        return new CellValueProviderImpl(variable, polarization);
-    }
-
-    @Override
-    public File getDataFile() {
-        return new File(ncfile.getLocation());
+        if ("SMOS_information_flag".equals(variable.getShortName())) {
+            return new CellValueProviderImpl(variable, polarization, cellValueCombinator);
+        } else {
+            return new CellValueProviderImpl(variable, polarization, cellValueInterpolator);
+        }
     }
 
     private Sequence getObservationSequence() {
@@ -231,11 +243,17 @@ class LightBufrFile implements ProductFile {
 
         private final Variable variable;
         private final int polarization;
-        private volatile Array array;
+        private final CellValueAccumulator cellValueAccumulator;
 
-        private CellValueProviderImpl(Variable variable, int polarization) {
+        private volatile Array array;
+        private volatile long snapshotId;
+
+        private CellValueProviderImpl(Variable variable, int polarization,
+                                      CellValueAccumulator cellValueAccumulator) {
             this.variable = variable;
             this.polarization = polarization;
+            this.cellValueAccumulator = cellValueAccumulator;
+            snapshotId = -1;
         }
 
         private Array getArray() throws IOException {
@@ -270,7 +288,12 @@ class LightBufrFile implements ProductFile {
                 return noDataValue;
             }
             try {
-                return (byte) getInterpolatedValue(cellIndex, getArray(), polarization);
+                if (snapshotId == -1) {
+                    return cellValueAccumulator.accumulate(cellIndex, getArray(), polarization).byteValue();
+                } else {
+                    // TODO - implement
+                    return 0;
+                }
             } catch (IOException e) {
                 return noDataValue;
             }
@@ -283,7 +306,12 @@ class LightBufrFile implements ProductFile {
                 return noDataValue;
             }
             try {
-                return (short) getInterpolatedValue(cellIndex, getArray(), polarization);
+                if (snapshotId == -1) {
+                    return cellValueAccumulator.accumulate(cellIndex, getArray(), polarization).shortValue();
+                } else {
+                    // TODO - implement
+                    return 0;
+                }
             } catch (IOException e) {
                 return noDataValue;
             }
@@ -296,7 +324,12 @@ class LightBufrFile implements ProductFile {
                 return noDataValue;
             }
             try {
-                return (int) getInterpolatedValue(cellIndex, getArray(), polarization);
+                if (snapshotId == -1) {
+                    return cellValueAccumulator.accumulate(cellIndex, getArray(), polarization).intValue();
+                } else {
+                    // TODO - implement
+                    return 0;
+                }
             } catch (IOException e) {
                 return noDataValue;
             }
@@ -309,7 +342,12 @@ class LightBufrFile implements ProductFile {
                 return noDataValue;
             }
             try {
-                return (float) getInterpolatedValue(cellIndex, getArray(), polarization);
+                if (snapshotId == -1) {
+                    return cellValueAccumulator.accumulate(cellIndex, getArray(), polarization).floatValue();
+                } else {
+                    // TODO - implement
+                    return Float.NaN;
+                }
             } catch (IOException e) {
                 return noDataValue;
             }
@@ -419,52 +457,103 @@ class LightBufrFile implements ProductFile {
         return attribute.getNumericValue();
     }
 
-    private double getInterpolatedValue(long cellIndex, Array array, int polarization) throws IOException {
-        final List<Integer> indexList = indexMap.get(cellIndex);
+    private static interface CellValueAccumulator {
 
-        int count = 0;
-        double sx = 0;
-        double sy = 0;
-        double sxx = 0;
-        double sxy = 0;
+        Number accumulate(long cellIndex, Array array, int polarization) throws IOException;
+    }
 
-        boolean hasLower = false;
-        boolean hasUpper = false;
+    private final class CellValueInterpolator implements CellValueAccumulator {
 
-        for (final Integer index : indexList) {
-            if (polarizationAccessor.isValid(index) && incidenceAngleAccessor.isValid(index)) {
-                final int flags = polarizationAccessor.getInt(index);
 
-                if (polarization == 4 || polarization == (flags & 3) || (polarization & flags & 2) != 0) {
-                    final double incidenceAngle = incidenceAngleAccessor.getDouble(index);
+        @Override
+        public Number accumulate(long cellIndex, Array array, int polarization) throws IOException {
+            final List<Integer> indexList = indexMap.get(cellIndex);
 
-                    if (incidenceAngle >= MIN_BROWSE_INCIDENCE_ANGLE && incidenceAngle <= MAX_BROWSE_INCIDENCE_ANGLE) {
-                        final double value = array.getDouble(index);
+            int count = 0;
+            double sx = 0;
+            double sy = 0;
+            double sxx = 0;
+            double sxy = 0;
 
-                        sx += incidenceAngle;
-                        sy += value;
-                        sxx += incidenceAngle * incidenceAngle;
-                        sxy += incidenceAngle * value;
-                        count++;
+            boolean hasLower = false;
+            boolean hasUpper = false;
 
-                        if (!hasLower) {
-                            hasLower = incidenceAngle <= CENTER_BROWSE_INCIDENCE_ANGLE;
-                        }
-                        if (!hasUpper) {
-                            hasUpper = incidenceAngle > CENTER_BROWSE_INCIDENCE_ANGLE;
+            for (final Integer index : indexList) {
+                if (polarizationAccessor.isValid(index) && incidenceAngleAccessor.isValid(index)) {
+                    final int polFlags = polarizationAccessor.getInt(index);
+
+                    if (polarization == 4 || polarization == (polFlags & 3) || (polarization & polFlags & 2) != 0) {
+                        final double incidenceAngle = incidenceAngleAccessor.getDouble(index);
+
+                        if (incidenceAngle >= MIN_BROWSE_INCIDENCE_ANGLE && incidenceAngle <= MAX_BROWSE_INCIDENCE_ANGLE) {
+                            final double value = array.getDouble(index);
+
+                            sx += incidenceAngle;
+                            sy += value;
+                            sxx += incidenceAngle * incidenceAngle;
+                            sxy += incidenceAngle * value;
+                            count++;
+
+                            if (!hasLower) {
+                                hasLower = incidenceAngle <= CENTER_BROWSE_INCIDENCE_ANGLE;
+                            }
+                            if (!hasUpper) {
+                                hasUpper = incidenceAngle > CENTER_BROWSE_INCIDENCE_ANGLE;
+                            }
                         }
                     }
                 }
             }
-        }
-        if (hasLower && hasUpper) {
-            final double a = (count * sxy - sx * sy) / (count * sxx - sx * sx);
-            final double b = (sy - a * sx) / count;
-            return a * CENTER_BROWSE_INCIDENCE_ANGLE + b;
-        }
+            if (hasLower && hasUpper) {
+                final double a = (count * sxy - sx * sy) / (count * sxx - sx * sx);
+                final double b = (sy - a * sx) / count;
+                return a * CENTER_BROWSE_INCIDENCE_ANGLE + b;
+            }
 
-        throw new IOException(MessageFormat.format(
-                "No data found for grid cell ''{0}'' and polarisation ''{1}''.", cellIndex, polarization));
+            throw new IOException(MessageFormat.format(
+                    "No data found for grid cell ''{0}'' and polarisation ''{1}''.", cellIndex, polarization));
+        }
+    }
+
+    private final class CellValueCombinator implements CellValueAccumulator {
+
+        @Override
+        public Number accumulate(long cellIndex, Array array, int polarization) throws IOException {
+            final List<Integer> indexList = indexMap.get(cellIndex);
+
+            boolean hasLower = false;
+            boolean hasUpper = false;
+            int combinedFlags = 0;
+
+            for (final Integer index : indexList) {
+                if (polarizationAccessor.isValid(index) && incidenceAngleAccessor.isValid(index)) {
+                    final int polFlags = polarizationAccessor.getInt(index);
+
+                    if (polarization == 4 || polarization == (polFlags & 3) || (polarization & polFlags & 2) != 0) {
+                        final double incidenceAngle = incidenceAngleAccessor.getDouble(index);
+
+                        if (incidenceAngle >= MIN_BROWSE_INCIDENCE_ANGLE && incidenceAngle <= MAX_BROWSE_INCIDENCE_ANGLE) {
+                            final int flags = array.getInt(index);
+
+                            combinedFlags |= flags;
+
+                            if (!hasLower) {
+                                hasLower = incidenceAngle <= CENTER_BROWSE_INCIDENCE_ANGLE;
+                            }
+                            if (!hasUpper) {
+                                hasUpper = incidenceAngle > CENTER_BROWSE_INCIDENCE_ANGLE;
+                            }
+                        }
+                    }
+                }
+            }
+            if (hasLower && hasUpper) {
+                return combinedFlags;
+            }
+
+            throw new IOException(MessageFormat.format(
+                    "No data found for grid cell ''{0}'' and polarisation ''{1}''.", cellIndex, polarization));
+        }
     }
 
 }
