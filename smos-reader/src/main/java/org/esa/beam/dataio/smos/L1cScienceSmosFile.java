@@ -195,13 +195,8 @@ public class L1cScienceSmosFile extends L1cSmosFile {
         final SequenceData btDataList = getBtDataList(gridPointIndex);
         final int elementCount = btDataList.getElementCount();
 
-        System.out.println("elementCount = " + elementCount);
-
         if (elementCount > 0) {
             CompoundData btData = btDataList.getCompound(0);
-
-            System.out.println("snapshotIdOfPixelIndex = " + snapshotIdOfPixelIndex);
-
             if (btData.getLong(snapshotIdOfPixelIndex) > snapshotId) {
                 return null;
             }
