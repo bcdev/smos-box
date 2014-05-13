@@ -31,9 +31,8 @@
     <tr class="header">
         <td class="header">&nbsp; File Format Updates</td>
 
-        <td class="header" align="right"><a href=
-                                                    "../../index.html"><img src="../images/BeamHeader.jpg"
-                                                                            border="0"/></a></td>
+        <td class="header" align="right"><a href="../../index.html"><img src="../images/BeamHeader.jpg"
+                                                                         border="0"/></a></td>
     </tr>
 </table>
 
@@ -47,7 +46,6 @@
     A line beginning with a number-sign (<i>&#035; </i>) is treated as comment line.
 </p>
 The following table lists all properties that may be used to describe a band.
-TODO!!! ist die reihenfolge egal? tb 2014-05-12
 <p>
 
 <table>
@@ -76,14 +74,12 @@ TODO!!! ist die reihenfolge egal? tb 2014-05-12
     <tr>
         <td>pol</td>
         <td>int</td>
-        <td>polarization</td>
-        <!-- @todo 1 tb/tb ask Ralf on more details here tb 2014-05-12-->
+        <td>The band polarization. 0 = X, 1 = Y, 2 = XY/YX, 4 = irrelevant </td>
     </tr>
     <tr>
         <td>sampleModel</td>
         <td>int</td>
-        <td>0, 1, 2</td>
-        <!-- @todo 1 tb/tb ask Ralf on more details here tb 2014-05-12-->
+        <td>Defines how 64-bit integers are handled. 0 = default (no special treatment), 1 = lower 32 bits, 2 = higher 32 bits</td>
     </tr>
     <tr>
         <td>scalingOffset</td>
@@ -142,7 +138,23 @@ TODO!!! ist die reihenfolge egal? tb 2014-05-12
     </tr>
 </table>
 
+<p>
+    When the value of a property is not known or it is not important for the functionality, the asterisk character (*)
+    can be used to indicate this.
 </p>
-
+<p>
+    The name of a flag descriptor resource must be a name of a flag descriptor file available in the DDDB.
+    The name must not contain any path information or a file extension, these properties are resolved by the dddb automatically.
+    <br>
+    E.g. the resource name <i>DBL_SM_XXXX_AUX_ECMWF__0200_flags1</i> will be extended to <i>flags/AUX_/ECMWF_/DBL_SM_XXXX_AUX_ECMWF__0200_flags1.csv</i>.
+</p>
+<p>
+    Below is an example of a band-properties file. This example is taken from the operational resources of the SMOS-Box:
+</p>
+<pre>
+    # visible | band       | dataset    | pol | sampleModel | scalingOffset | scalingFactor | typicaMin | typicalMax | cyclic | fillValue | validExpr | unit | decription                                   | flagCoding | flags
+         *    | SSS1       | SSS1       | *   | *           | *             | *             | 0.0       | 40.0       | *      | -999.0    | *         | psu  | Sea surface salinity using Roughness Model 1 | *          | *
+         *    | Sigma_SSS1 | Sigma_SSS1 | *   | *           | *             | *             | 0.1       | 1.5        | *      | -999.0    | *         | psu  | Theoretical uncertainty computed for SSS1    | *          | *
+</pre>
 </body>
 </html>

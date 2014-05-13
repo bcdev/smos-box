@@ -50,11 +50,20 @@
 </p>
 
 <h4>SMOS Product Reader</h4>
-The SMOS Product Reader uses a dynamic approach to adapt the data structures read from the product file to the data
-format
-described
 
-DDDB (Data Descriptor Data Base)
+<p>
+    The SMOS Product Reader uses a dynamic approach to adapt the data structures read from the product file to the data
+    format used in BEAM and displayed in Visat. This dynamic approach is implemented by using a set of descriptor files
+    for each product and file version that define the content of the product and the way the data is extracted from the
+    EE files.
+</p>
+
+<p>
+    This large set of versioned descriptor files is bundled in a <i>Data Descriptor Data Base</i> (DDDB). The Product
+    Reader
+    extracts the schema information from the SMOS-EE header file and consults the DDDB about the structure and content
+    of the product to be read.
+</p>
 
 <h5>DDDB</h5>
 The core of the DDDB consists of a large number of configuration files that define the decoding and display properties
@@ -64,13 +73,19 @@ of the various file types supported. It is organised using the following directo
 
 The root directory for the DDDB in the example above is called <i>dddb</i>. It contains three sub-folders: <i>bands</i>,
 <i>flags</i> and <i>schemas</i> that contain the settings for the bands, flags and the schema files.
-Each of these folders contains two sub-folders for MIRAS (<i>MIR_</i>) and auxiliary data (<i>AUX_</i>) product data file descriptors.
+Each of these folders contains two sub-folders for MIRAS (<i>MIR_</i>) and auxiliary data (<i>AUX_</i>) product data
+file descriptors.
 These folders contain a further sub-division according to the product type:
 
 <p><img src="images/DDDBTypeDirectories.png" alt="DDDB type directories"/></p>
 
+<p>
+    Each of the product type directories contains the versioned descriptor files for this product type.
+</p>
+
 
 <a href="BandDescriptors.html">Band Descriptor File Format</a>
+
 <h5>Extending the DDDB</h5>
 
 <p>
