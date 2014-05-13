@@ -35,13 +35,13 @@ public class SnapshotSelectorComboModelTest {
     }
 
     @Test
-    public void initialState() {
+    public void testInitialState() {
         assertEquals(3, selectorComboModel.getSize());
         assertEquals("Any", selectorComboModel.getSelectedItem());
     }
 
     @Test
-    public void snapshotSelectorModelSelection() {
+    public void testModeSelection() {
         final SnapshotSelectorModel modelA = selectorComboModel.getSelectedModel();
         selectorComboModel.setSelectedItem("X");
         final SnapshotSelectorModel modelX = selectorComboModel.getSelectedModel();
@@ -54,7 +54,7 @@ public class SnapshotSelectorComboModelTest {
     }
 
     @Test
-    public void isSnapshotIdPreservedIfPossible() {
+    public void testSnapshotIdIsPreservedIfPossible() {
         final SnapshotSelectorModel modelA = selectorComboModel.getSelectedModel();
         modelA.setSnapshotId(3);
 
