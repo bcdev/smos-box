@@ -195,22 +195,29 @@ public class L1cScienceSmosFile extends L1cSmosFile {
         final SequenceData btDataList = getBtDataList(gridPointIndex);
         final int elementCount = btDataList.getElementCount();
 
-        CompoundData btData = btDataList.getCompound(0);
-        if (btData.getLong(snapshotIdOfPixelIndex) > snapshotId) {
-            return null;
-        }
-        btData = btDataList.getCompound(elementCount - 1);
-        if (btData.getLong(snapshotIdOfPixelIndex) < snapshotId) {
-            return null;
-        }
-        for (int i = 0; i < elementCount; ++i) {
-            btData = btDataList.getCompound(i);
-            if (btData.getLong(snapshotIdOfPixelIndex) == snapshotId) {
-                final int flags = btData.getInt(flagsIndex);
-                if (polarization == 4 || // for flags (they do not depend on polarisation)
-                        polarization == (flags & 1) || // for x or y polarisation (dual pol)
-                        (polarization & flags & 2) != 0) { // for xy polarisation (full pol, real and imaginary)
-                    return btData;
+        System.out.println("elementCount = " + elementCount);
+
+        if (elementCount > 0) {
+            CompoundData btData = btDataList.getCompound(0);
+
+            System.out.println("snapshotIdOfPixelIndex = " + snapshotIdOfPixelIndex);
+
+            if (btData.getLong(snapshotIdOfPixelIndex) > snapshotId) {
+                return null;
+            }
+            btData = btDataList.getCompound(elementCount - 1);
+            if (btData.getLong(snapshotIdOfPixelIndex) < snapshotId) {
+                return null;
+            }
+            for (int i = 0; i < elementCount; ++i) {
+                btData = btDataList.getCompound(i);
+                if (btData.getLong(snapshotIdOfPixelIndex) == snapshotId) {
+                    final int flags = btData.getInt(flagsIndex);
+                    if (polarization == 4 || // for flags (they do not depend on polarisation)
+                            polarization == (flags & 1) || // for x or y polarisation (dual pol)
+                            (polarization & flags & 2) != 0) { // for xy polarisation (full pol, real and imaginary)
+                        return btData;
+                    }
                 }
             }
         }
