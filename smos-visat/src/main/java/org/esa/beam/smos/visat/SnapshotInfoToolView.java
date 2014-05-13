@@ -36,7 +36,6 @@ import org.esa.beam.dataio.smos.SmosConstants;
 import org.esa.beam.dataio.smos.SmosFile;
 import org.esa.beam.dataio.smos.SmosMultiLevelSource;
 import org.esa.beam.dataio.smos.ValueProvider;
-import org.esa.beam.smos.DateTimeUtils;
 import org.esa.beam.framework.datamodel.Band;
 import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.framework.datamodel.RasterDataNode;
@@ -44,6 +43,7 @@ import org.esa.beam.framework.datamodel.VirtualBand;
 import org.esa.beam.framework.help.HelpSys;
 import org.esa.beam.framework.ui.product.ProductSceneView;
 import org.esa.beam.glevel.TiledFileMultiLevelSource;
+import org.esa.beam.smos.DateTimeUtils;
 import org.esa.beam.smos.visat.swing.SnapshotSelectorCombo;
 import org.esa.beam.smos.visat.swing.SnapshotSelectorComboModel;
 import org.esa.beam.visat.VisatApp;
@@ -177,10 +177,8 @@ public class SnapshotInfoToolView extends SmosToolView {
                 final SwingWorker<TableModel, Object> worker = new SwingWorker<TableModel, Object>() {
                     @Override
                     protected TableModel doInBackground() throws Exception {
-                        synchronized (l1cScienceSmosFile) {
-                            final CompoundData data = l1cScienceSmosFile.getSnapshotData(snapshotIndex);
-                            return createSnapshotTableModel(data);
-                        }
+                        final CompoundData data = l1cScienceSmosFile.getSnapshotData(snapshotIndex);
+                        return createSnapshotTableModel(data);
                     }
 
                     @Override
@@ -685,7 +683,7 @@ public class SnapshotInfoToolView extends SmosToolView {
 
     private static void regenerateImageLayers(Layer layer) {
         final List<Layer> children = layer.getChildren();
-        for (int i = children.size(); i-- > 0;) {
+        for (int i = children.size(); i-- > 0; ) {
             final Layer child = children.get(i);
             if (child instanceof ImageLayer) {
                 final ImageLayer imageLayer = (ImageLayer) child;
