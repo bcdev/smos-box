@@ -83,19 +83,52 @@ These folders contain a further sub-division according to the product type:
     Each of the product type directories contains the versioned descriptor files for this product type.
 </p>
 
-
+ <h5>Descriptor File Formats</h5>
+The DDDB descriptor files are human readable ASCII files using a standard comma-separated content pattern.
+The most important file formats are the
 <a href="BandDescriptors.html">Band Descriptor File Format</a>
-<a href="FlagDescriptors.html">Flag Descriptor File Format</a>
+ and the
+<a href="FlagDescriptors.html">Flag Descriptor File Format</a>.
 
 <h5>Extending the DDDB</h5>
 
 <p>
     The standard content of the DDDB is contained as a Java resource and shipped with the SMOS-Box software. This set of
     band and flag descriptors is thoroughly tested and compliant with all file format versions including and prior to
-    the latest
-    version noted in the software change notes.
+    the latest version noted in the software change notes.
 </p>
-
+<p>
+   In some circumstances it is desirable to change the default product descriptors. The main reason is that this feature
+   allows user to adapt to EE file format changes without the need to wait for a new software release.
+</p>
+<p>
+    The first step consists in setting up the structure of the external DDDB. This is done by simply setting up a
+    directory structure following the DDDB structure described above. It is not necessary to create all directories,
+    it is sufficient to just add the paths to the descriptor files that should be added or overwritten.
+</p>
+<p>
+    In a second step, the new configuration files have to be put in the corresponding location. Updated schema files have
+    to be stored in the <i>schemas/MIR_/</i> or <i>schemas/AUX_/</i> subdirectories, updated band or flag descriptor
+    files in the appropriate directory tree.
+</p>
+<p>
+    As a last step, the new DDDB resources need to be registered in BEAM. This is realised using the BEMA configuration.
+    The Visat/BEAM main configuration file is locate at <i>${BEAM_HOME}/config/beam.config</i>. To register the
+    additional DDDB resources, please add a key/value pair to the config that configures the additional DDDB entries.
+    The key is <i>org.esa.beam.smos.dddbDir</i>, the value of this property must be the absolute path to the root
+    directory of the external DDDB extension.
+</p>
+<p>
+    An example:
+</p>
+<pre>
+    org.esa.beam.smos.dddbDir = /home/tom/smos/dddb
+</pre>
+<p>
+    The external DDDB resources are treated as additional resource location which are checked in the first place. If a
+    requested resource could not be located in the external DDDB, the internal DDDB is used as fallback. This behaviour
+    allows also to override the product-descriptors shipped with BEAM.
+</p>
 
 </body>
 </html>
