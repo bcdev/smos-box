@@ -24,11 +24,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SnapshotSelectorComboModel implements ComboBoxModel {
-    private final ComboBoxModel comboBoxModel;
+    private final ComboBoxModel<String> comboBoxModel;
     private final Map<Object, SnapshotSelectorModel> map;
 
     public SnapshotSelectorComboModel(SnapshotInfo snapshotInfo) {
-        map = new HashMap<Object, SnapshotSelectorModel>();
+        map = new HashMap<>();
 
         map.put("Any", new SnapshotSelectorModel(snapshotInfo.getSnapshotIds()));
         map.put("X", new SnapshotSelectorModel(snapshotInfo.getSnapshotIdsX()));
@@ -36,14 +36,13 @@ public class SnapshotSelectorComboModel implements ComboBoxModel {
 
         if (snapshotInfo.getSnapshotIdsXY().size() != 0) {
             map.put("XY", new SnapshotSelectorModel(snapshotInfo.getSnapshotIdsXY()));
-            comboBoxModel = new DefaultComboBoxModel(new String[]{"Any", "X", "Y", "XY"});
+            comboBoxModel = new DefaultComboBoxModel<>(new String[]{"Any", "X", "Y", "XY"});
         } else {
-            comboBoxModel = new DefaultComboBoxModel(new String[]{"Any", "X", "Y"});
+            comboBoxModel = new DefaultComboBoxModel<>(new String[]{"Any", "X", "Y"});
         }
 
     }
 
-    @SuppressWarnings({"SuspiciousMethodCalls"})
     SnapshotSelectorModel getSelectedModel() {
         return getModel(comboBoxModel.getSelectedItem());
     }
