@@ -9,7 +9,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Properties;
 
@@ -83,7 +82,35 @@ public class ResourceHandlerTest {
     }
 
     @Test
-    public void testGetResourceURL_fromDirectory() throws MalformedURLException {
+    public void testGetResourceURL_fromDirectory() throws IOException {
+        File targetDirectory = null;
+
+        try {
+            targetDirectory = createTestDirectory();
+            System.setProperty(ResourceHandler.SMOS_DDDB_DIR_PROPERTY_NAME, targetDirectory.getAbsolutePath());
+            final File targetFile = new File(targetDirectory, "wurst");
+            if (!targetFile.createNewFile()) {
+                fail("unable to create test file");
+            }
+
+            final URL resourceUrl = resourceHandler.getResourceUrl("wurst");
+            assertNotNull(resourceUrl);
+            assertEquals(targetDirectory.getAbsolutePath() + File.separator + "wurst", resourceUrl.getPath());
+            assertEquals("file", resourceUrl.getProtocol());
+
+        } finally {
+            System.clearProperty(ResourceHandler.SMOS_DDDB_DIR_PROPERTY_NAME);
+
+            if (targetDirectory != null && targetDirectory.isDirectory()) {
+                if (!FileUtils.deleteTree(targetDirectory)) {
+                    fail("Unable to delete test directory");
+                }
+            }
+        }
+    }
+
+    @Test
+    public void testGetResourceURL_fromDirectory_resourceFileDoesNotExist() throws IOException {
         File targetDirectory = null;
 
         try {
@@ -91,10 +118,7 @@ public class ResourceHandlerTest {
             System.setProperty(ResourceHandler.SMOS_DDDB_DIR_PROPERTY_NAME, targetDirectory.getAbsolutePath());
 
             final URL resourceUrl = resourceHandler.getResourceUrl("wurst");
-            assertNotNull(resourceUrl);
-            assertEquals(targetDirectory.getAbsolutePath() + File.separator + "wurst", resourceUrl.getPath());
-            assertEquals("file", resourceUrl.getProtocol());
-
+            assertNull(resourceUrl);
         } finally {
             System.clearProperty(ResourceHandler.SMOS_DDDB_DIR_PROPERTY_NAME);
 

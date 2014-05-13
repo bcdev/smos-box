@@ -34,7 +34,9 @@ class ResourceHandler {
         final String dddbDirFromProperty = System.getProperty(SMOS_DDDB_DIR_PROPERTY_NAME);
         if (StringUtils.isNotNullAndNotEmpty(dddbDirFromProperty)) {
             final File resourceFile = new File(dddbDirFromProperty, path);
-            return new URL("file", "", 0, resourceFile.getAbsolutePath());
+            if (resourceFile.isFile()) {
+                return new URL("file", "", 0, resourceFile.getAbsolutePath());
+            }
         }
         return getClass().getResource(path);
     }
