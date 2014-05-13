@@ -43,17 +43,62 @@
     data structures that contain flag data.
     The flag descriptor file is a line based text file (comma separated file) that is using the vertical-bar character (<i>
     &#124;</i>) as separator.
-    A line beginning with a number-sign (<i>&#035; </i>) is treated as comment line.
+    A line beginning with a number-sign (<i>&#035; </i>) is treated as comment line. The file extension must be <i>.csv</i>.
 </p>
 The following table lists all properties that may be used to describe a flag.
 <p>
 
 <table>
     <tr>
-        <th>visible</th>
-        <th>visible</th>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Explanation</th>
+    </tr>
+    <tr>
+        <td>visible</td>
+        <td>boolean</td>
+        <td>Should the flag appear in the BEAM flag coding(<i>true</i> or <i>false</i>). This property is currently
+            not supported
+        </td>
+    </tr>
+    <tr>
+        <td>name</td>
+        <td>string</td>
+        <td>The name of the flag</td>
+    </tr>
+    <tr>
+        <td>mask</td>
+        <td>integer</td>
+        <td>The hexadecimal integer that codes the flag bit position</td>
+    </tr>
+    <tr>
+        <td>color</td>
+        <td>integer</td>
+        <td>Hexadecimal integer that codes the color of the flag overlay</td>
+    </tr>
+    <tr>
+        <td>transparency</td>
+        <td>double</td>
+        <td>Transparency of the flag overlay. 0.0 = opaque, 1.0 = transparent/td>
+    </tr>
+    <tr>
+        <td>description</td>
+        <td>string</td>
+        <td>description of the flag</td>
     </tr>
 </table>
+<p>
+    When the value of a property is not known or it is not important for the functionality, the asterisk character (*)
+    can be used to indicate this.
+</p>
+<p>
+    Below is an example of a flag-properties file. This example is taken from the operational resources of the SMOS-Box:
+</p>
+<pre>
+    # visible | name         | mask     | color | transparency | description
+      *       | FL_DATA_MISS | 00000001 | *     | *            | Check fall back options
+      *       | FL_MVAL0     | 00000002 | *     | *            | Flag to indicate no more retrieval to be done. True if MVAL0< TH_Mmin0
+</pre>
 
 </body>
 </html>
