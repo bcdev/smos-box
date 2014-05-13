@@ -177,8 +177,10 @@ public class SnapshotInfoToolView extends SmosToolView {
                 final SwingWorker<TableModel, Object> worker = new SwingWorker<TableModel, Object>() {
                     @Override
                     protected TableModel doInBackground() throws Exception {
-                        final CompoundData data = l1cScienceSmosFile.getSnapshotData(snapshotIndex);
-                        return createSnapshotTableModel(data);
+                        synchronized (l1cScienceSmosFile) {
+                            final CompoundData data = l1cScienceSmosFile.getSnapshotData(snapshotIndex);
+                            return createSnapshotTableModel(data);
+                        }
                     }
 
                     @Override
