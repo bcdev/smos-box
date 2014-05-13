@@ -146,13 +146,13 @@ public abstract class SmosToolView extends AbstractToolView {
         realizeSmosView(null);
     }
 
-    protected void realizeSmosView(ProductSceneView newView) {
+    protected void realizeSmosView(ProductSceneView view) {
         if (clientComponent == null) {
             clientComponent = createClientComponent();
         }
-        if (newView != null) {
+        if (view != null) {
             setToolViewComponent(clientComponent);
-            updateClientComponent(newView);
+            updateClientComponent(view);
         } else {
             setToolViewComponent(defaultComponent);
         }

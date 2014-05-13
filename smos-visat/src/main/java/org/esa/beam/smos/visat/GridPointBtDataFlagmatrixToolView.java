@@ -16,7 +16,12 @@
 
 package org.esa.beam.smos.visat;
 
+import org.esa.beam.dataio.smos.L1cSmosFile;
 import org.esa.beam.dataio.smos.SmosConstants;
+import org.esa.beam.dataio.smos.dddb.BandDescriptor;
+import org.esa.beam.dataio.smos.dddb.Dddb;
+import org.esa.beam.dataio.smos.dddb.Family;
+import org.esa.beam.dataio.smos.dddb.FlagDescriptor;
 import org.esa.beam.framework.ui.product.ProductSceneView;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -31,64 +36,46 @@ import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYZDataset;
 import org.jfree.ui.RectangleInsets;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JComponent;
+import java.awt.Color;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GridPointBtDataFlagmatrixToolView extends GridPointBtDataToolView {
 
     public static final String ID = GridPointBtDataFlagmatrixToolView.class.getName();
     private static final String SERIES_KEY = "Flags";
 
-    private static final String[] FLAG_NAMES = {
-            "POL_FLAG_1",
-            "POL_FLAG_2",
-            "SUN_FOV",
-            "SUN_GLINT_FOV",
-            "MOON_GLINT_FOV",
-            "SINGLE_SNAPSHOT",
-            "FTT",
-            "SUN_POINT",
-            "SUN_GLINT_AREA",
-            "MOON_POINT",
-            "AF_FOV",
-            "EAF_FOV",
-            "BORDER_FOV",
-            "SUN_TAILS",
-            "RFI"
-    };
+    private static final String DEFAULT_FLAG_DESCRIPTOR_IDENTIFIER = "DBL_SM_XXXX_MIR_XXXF1C_0400_flags";
 
     private JFreeChart chart;
     private DefaultXYZDataset dataset;
     private XYPlot plot;
+    private ChartPanel chartPanel;
+    private String[] flagNames;
 
     @Override
     protected JComponent createGridPointComponent() {
         dataset = new DefaultXYZDataset();
 
-        NumberAxis xAxis = new NumberAxis("Record #");
+        final NumberAxis xAxis = new NumberAxis("Record #");
         xAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
         xAxis.setAutoRangeIncludesZero(false);
         xAxis.setLowerMargin(0.0);
         xAxis.setUpperMargin(0.0);
 
-        // create Method
-        String[] flagNames = createFlagNames();
-        NumberAxis yAxis = new SymbolAxis(null, flagNames);
-        yAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
-        yAxis.setAutoRangeIncludesZero(false);
-        yAxis.setLowerMargin(0.0);
-        yAxis.setUpperMargin(0.0);
-        yAxis.setInverted(true);
+        flagNames = createFlagNames(Dddb.getInstance().getFlagDescriptors(DEFAULT_FLAG_DESCRIPTOR_IDENTIFIER));
+        final NumberAxis yAxis = createRangeAxis(flagNames);
 
-        LookupPaintScale paintScale = new LookupPaintScale(0.0, 4.0, Color.WHITE);
+        final LookupPaintScale paintScale = new LookupPaintScale(0.0, 4.0, Color.WHITE);
         paintScale.add(0.0, Color.BLACK);
         paintScale.add(1.0, Color.RED);
         paintScale.add(2.0, Color.GREEN);
         paintScale.add(3.0, Color.BLUE);
         paintScale.add(4.0, Color.YELLOW);
 
-        XYBlockRenderer renderer = new XYBlockRenderer();
+        final XYBlockRenderer renderer = new XYBlockRenderer();
         renderer.setPaintScale(paintScale);
         renderer.setBaseToolTipGenerator(new FlagToolTipGenerator(flagNames));
 
@@ -102,12 +89,31 @@ public class GridPointBtDataFlagmatrixToolView extends GridPointBtDataToolView {
 
         chart = new JFreeChart(null, plot);
         chart.removeLegend();
+        chartPanel = new ChartPanel(chart);
 
-        return new ChartPanel(chart);
+        return chartPanel;
     }
 
     @Override
     protected void updateClientComponent(ProductSceneView smosView) {
+        boolean enabled = smosView != null;
+        L1cSmosFile smosFile = null;
+        if (enabled) {
+            smosFile = getL1cSmosFile();
+            if (smosFile == null) {
+                enabled = false;
+            }
+        }
+        chartPanel.setEnabled(enabled);
+        if (enabled) {
+            final Family<BandDescriptor> bandDescriptors = Dddb.getInstance().getBandDescriptors(
+                    smosFile.getDataFormat().getName());
+            final BandDescriptor flagsBandDescriptor = bandDescriptors.getMember(SmosConstants.BT_FLAGS_NAME);
+            final Family<FlagDescriptor> flagDescriptors = flagsBandDescriptor.getFlagDescriptors();
+            flagNames = createFlagNames(flagDescriptors);
+            final NumberAxis rangeAxis = createRangeAxis(flagNames);
+            plot.setRangeAxis(rangeAxis);
+        }
     }
 
     @Override
@@ -118,7 +124,7 @@ public class GridPointBtDataFlagmatrixToolView extends GridPointBtDataToolView {
         if (iq != -1) {
             final Number[][] dsData = ds.getData();
             final int m = dsData.length;
-            final int n = FLAG_NAMES.length;
+            final int n = flagNames.length;
             double[][] data = new double[3][n * m];
             for (int x = 0; x < m; x++) {
                 final int flags = dsData[x][iq].intValue();
@@ -147,8 +153,25 @@ public class GridPointBtDataFlagmatrixToolView extends GridPointBtDataToolView {
         plot.setNoDataMessage("No data");
     }
 
-    private String[] createFlagNames() {
-        return FLAG_NAMES;
+    private String[] createFlagNames(Family<FlagDescriptor> flagDescriptors) {
+        final List<FlagDescriptor> flagDescriptorsList = flagDescriptors.asList();
+        final List<String> flagNames = new ArrayList<>(flagDescriptorsList.size());
+        for (final FlagDescriptor d : flagDescriptorsList) {
+            flagNames.add(d.getFlagName());
+        }
+
+        return flagNames.toArray(new String[flagNames.size()]);
+    }
+
+    private NumberAxis createRangeAxis(String[] flagNames) {
+        final NumberAxis axis = new SymbolAxis(null, flagNames);
+        axis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+        axis.setAutoRangeIncludesZero(false);
+        axis.setLowerMargin(0.0);
+        axis.setUpperMargin(0.0);
+        axis.setInverted(true);
+
+        return axis;
     }
 
 
