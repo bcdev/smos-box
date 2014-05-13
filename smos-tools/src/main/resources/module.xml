@@ -23,4 +23,8 @@
         <module>beam-core</module>
     </dependency>
 
+    <dependency>
+        <module>ceres-binio</module>
+    </dependency>
+
 </module>
