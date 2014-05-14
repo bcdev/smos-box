@@ -140,6 +140,9 @@ public class SmosUtils {
                 "W_ES-ESA-ESAC,SMOS,N256_C_LEMM_[0-9]{14}_[0-9]{14}_[0-9]{14}_bufr_v[0-9]{3}\\.bin");
     }
 
+    public static boolean isLightBufrTypeSupported() {
+        return "true".equalsIgnoreCase(System.getProperty("beam.smos.readLightBUFR"));
+    }
 
     public static boolean isL2Type(String fileName) {
         return fileName.matches("SO_.{4}_MIR_TSM_2__.{45}") ||

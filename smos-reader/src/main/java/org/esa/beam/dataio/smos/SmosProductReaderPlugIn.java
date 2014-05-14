@@ -45,9 +45,10 @@ public class SmosProductReaderPlugIn implements ProductReaderPlugIn {
         final File file = input instanceof File ? (File) input : new File(input.toString());
         final String fileName = file.getName();
 
-        if (SmosUtils.isLightBufrType(fileName)) {
+        if (SmosUtils.isLightBufrTypeSupported() && SmosUtils.isLightBufrType(fileName)) {
             return DecodeQualification.INTENDED;
         }
+
         if (fileName.endsWith(".DBL") || fileName.endsWith(".HDR")) {
             final File hdrFile = FileUtils.exchangeExtension(file, ".HDR");
             final File dblFile = FileUtils.exchangeExtension(file, ".DBL");
@@ -63,8 +64,8 @@ public class SmosProductReaderPlugIn implements ProductReaderPlugIn {
             }
         } else if (SmosUtils.isCompressedFile(file)) {
             if (SmosUtils.isL1cType(fileName) ||
-                    SmosUtils.isL2Type(fileName) ||
-                    SmosUtils.isAuxECMWFType(fileName)) {
+                SmosUtils.isL2Type(fileName) ||
+                SmosUtils.isAuxECMWFType(fileName)) {
                 return DecodeQualification.INTENDED;
             } else {
                 ZipFile zipFile = null;
@@ -80,7 +81,7 @@ public class SmosProductReaderPlugIn implements ProductReaderPlugIn {
                     }
                     if (!entries.hasMoreElements()) {
                         if ((name1.endsWith(".HDR") && name2.endsWith(".DBL")) ||
-                                (name1.endsWith(".DBL") && name2.endsWith(".HDR"))) {
+                            (name1.endsWith(".DBL") && name2.endsWith(".HDR"))) {
                             return DecodeQualification.SUITABLE;
                         }
                     }
@@ -108,7 +109,11 @@ public class SmosProductReaderPlugIn implements ProductReaderPlugIn {
 
     @Override
     public String[] getDefaultFileExtensions() {
-        return new String[]{".HDR", ".DBL", ".zip", ".ZIP", ".bin"};
+        if (SmosUtils.isLightBufrTypeSupported()) {
+            return new String[]{".HDR", ".DBL", ".zip", ".ZIP", ".bin"};
+        } else {
+            return new String[]{".HDR", ".DBL", ".zip", ".ZIP"};
+        }
     }
 
     @Override
@@ -118,7 +123,11 @@ public class SmosProductReaderPlugIn implements ProductReaderPlugIn {
 
     @Override
     public String[] getFormatNames() {
-        return new String[]{"SMOS-EEF", "SMOS BUFR/CDM"};
+        if (SmosUtils.isLightBufrTypeSupported()) {
+            return new String[]{"SMOS-EEF", "SMOS Light-BUFR"};
+        } else {
+            return new String[]{"SMOS-EEF"};
+        }
     }
 
     @Override
