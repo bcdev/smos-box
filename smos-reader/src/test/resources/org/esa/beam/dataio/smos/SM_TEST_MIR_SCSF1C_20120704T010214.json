@@ -40,72 +40,72 @@
                     {
                         "name": "SUN_FOV",
                         "value": 4,
-                        "description": "Direct  Sun  correction  has  been  performed  during  image reconstruction of this pixel"
+                        "description": "If set, Direct Sun correction has been performed during image reconstruction of this pixel"
                     },
                     {
                         "name": "SUN_GLINT_FOV",
                         "value": 8,
-                        "description": "Reflected  Sun  correction  has  been  performed  during  image reconstruction of this pixel"
+                        "description": "If set, Reflected Sun correction has been performed during image reconstruction of this pixel. Sun correction is based on the Sea bi-static coefficients defined in the AUX_BSCAT ADF and computed for a fixed wind speed of 7 m/s and wind direction of 0 deg North"
                     },
                     {
                         "name": "MOON_FOV",
                         "value": 16,
-                        "description": "Direct  Moon  correction  has  been  performed  during  image reconstruction of this pixel"
+                        "description": "If set, Direct Moon correction has been performed during image reconstruction of this pixel"
                     },
                     {
                         "name": "SINGLE_SNAPSHOT",
                         "value": 32,
-                        "description": "Scene has been combined with an adjacent scene in opposite polarisation during image reconstruction to account for cross-polarisation leakage"
-                    },
-                    {
-                        "name": "RFI_H_POL",
-                        "value": 64,
-                        "description": "RFI has been detected in H polarisation NIR analysis"
+                        "description": "If set, this scene has not been combined with an adjacent scene in opposite polarisation during image reconstruction to account for cross-polarisation leakage (it has been processed with only co- polar antenna patterns information)"
                     },
                     {
                         "name": "SUN_POINT",
                         "value": 128,
-                        "description": "Pixel is located in a zone where a Sun alias was reconstructed (after Sun removal, measurement may be degraded)"
+                        "description": "If set, this pixel is located in a zone (circle around Sun alias position with radius configurable through Sun_Point_Flag_Size field in AUX CNFL1P) where a Sun alias was reconstructed (if Sun removal is active, measurement may be degraded)"
                     },
                     {
                         "name": "SUN_GLINT_AREA",
                         "value": 256,
-                        "description": "Pixel is located in a zone where Sun reflection has been detected"
+                        "description": "If set, this pixel is located in a zone where Sun reflection has been detected using the bi-static scattering coefficient threshold defined in the configuration file"
                     },
                     {
                         "name": "MOON_POINT",
                         "value": 512,
-                        "description": "Pixel  is  located  in a zone where a Moon alias was reconstructed (after Moon removal, measurement may be degraded)"
+                        "description": "If set, this pixel is located in a zone where a Moon alias was reconstructed (after Moon removal, measurement may be degraded)"
                     },
                     {
                         "name": "AF_FOV",
                         "value": 1024,
-                        "description": "Pixel is inside the exclusive zone of Alias free (delimited by the six aliased unit circles)"
-                    },
-                    {
-                        "name": "RFI_TAIL",
-                        "value": 2048,
-                        "description": "Measurement is affected by the tails of a point source RFI"
+                        "description": "If set, the pixel is inside the exclusive zone of Alias free (delimited by the six aliased unit circles)"
                     },
                     {
                         "name": "BORDER_FOV",
                         "value": 4096,
-                        "description": "Pixel is close to the border delimiting the Extended Alias free zone"
+                        "description": "If set, the pixel is close to the border delimiting the Extended Alias free zone or to the unit circle replicas borders (also known as “suspenders and belts”). Distance threshold is configurable through FOV_Border_Flag_Size field in AUX CNFL1P"
                     },
                     {
                         "name": "SUN_TAILS",
                         "value": 8192,
-                        "description": "Pixel is located in the hexagonal alias directions centred on a Sun alias (if Sun is not removed, measurement may be degraded in these directions)"
+                        "description": "If set, this pixel is located in the hexagonal alias directions centred on a Sun alias (if Sun is not removed, measurement may be degraded in these directions)"
+                    },
+                    {
+                        "name": "RFI_H_POL",
+                        "value": 64,
+                        "description": "If set, the analysis of the NIR Brightness Temperatures or System Temperatures standard deviation in H polarisation has reported this snapshot as an outlier of the expected trend, which is a clear indicator of the presence of one or more RFI sources in the data; that the Temperatures were saturated or in the vicinity of such saturation and there is a high probability that the measurement is affected"
                     },
                     {
                         "name": "RFI_V_POL",
                         "value": 16384,
-                        "description": "RFI has been detected in V polarisation NIR analysis"
+                        "description": "If set, the analysis of the NIR Brightness Temperatures or System Temperatures standard deviation in V polarisation has reported this snapshot as an outlier of the expected trend, which is a clear indicator of the presence of one or more RFI sources in the data; that the Temperatures were saturated or in the vicinity of such saturation and there is a high probability that the measurement is affected"
                     },
                     {
                         "name": "RFI_2",
                         "value": 32768,
-                        "description": "Pixel is flagged as RFI in the AUX_RFI file"
+                        "description": "If set, the measurement is affected by point source RFI as identified in the AUX RFI list (flag is set in a circle around the RFI position, with a radius dependant on the RFI expected BT defined in the AUX RFILST), or it has exceeded the threshold defined in BT_Dual/Full_RFI_Pixel_Flag_Threshold fields in AUX CNFL1P, or is negative for Dual Polarisation values"
+                    },
+                    {
+                        "name": "RFI_3",
+                        "value": 2048,
+                        "description": "If set, the measurement is affected by the tails of a point source RFI as identified in the AUX RFI list (tail width is dependant on the RFI estimated BT (from each snapshot measurements) , corresponding to 0.16 of the radius of the RFI circle flagged)"
                     }
                 ]
             },
@@ -970,85 +970,85 @@
                 "name": "Flags_SUN_FOV",
                 "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
                 "color": "49,82,133",
-                "description": "Direct  Sun  correction  has  been  performed  during  image reconstruction of this pixel"
+                "description": "If set, Direct Sun correction has been performed during image reconstruction of this pixel"
             },
             {
                 "name": "Flags_SUN_GLINT_FOV",
                 "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
                 "color": "169,175,146",
-                "description": "Reflected  Sun  correction  has  been  performed  during  image reconstruction of this pixel"
+                "description": "If set, Reflected Sun correction has been performed during image reconstruction of this pixel. Sun correction is based on the Sea bi-static coefficients defined in the AUX_BSCAT ADF and computed for a fixed wind speed of 7 m/s and wind direction of 0 deg North"
             },
             {
                 "name": "Flags_MOON_FOV",
                 "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
                 "color": "156,188,14",
-                "description": "Direct  Moon  correction  has  been  performed  during  image reconstruction of this pixel"
+                "description": "If set, Direct Moon correction has been performed during image reconstruction of this pixel"
             },
             {
                 "name": "Flags_SINGLE_SNAPSHOT",
                 "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
                 "color": "39,91,126",
-                "description": "Scene has been combined with an adjacent scene in opposite polarisation during image reconstruction to account for cross-polarisation leakage"
-            },
-            {
-                "name": "Flags_RFI_H_POL",
-                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
-                "color": "214,25,160",
-                "description": "RFI has been detected in H polarisation NIR analysis"
+                "description": "If set, this scene has not been combined with an adjacent scene in opposite polarisation during image reconstruction to account for cross-polarisation leakage (it has been processed with only co- polar antenna patterns information)"
             },
             {
                 "name": "Flags_SUN_POINT",
                 "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
-                "color": "178,13,207",
-                "description": "Pixel is located in a zone where a Sun alias was reconstructed (after Sun removal, measurement may be degraded)"
+                "color": "214,25,160",
+                "description": "If set, this pixel is located in a zone (circle around Sun alias position with radius configurable through Sun_Point_Flag_Size field in AUX CNFL1P) where a Sun alias was reconstructed (if Sun removal is active, measurement may be degraded)"
             },
             {
                 "name": "Flags_SUN_GLINT_AREA",
                 "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
-                "color": "208,249,67",
-                "description": "Pixel is located in a zone where Sun reflection has been detected"
+                "color": "178,13,207",
+                "description": "If set, this pixel is located in a zone where Sun reflection has been detected using the bi-static scattering coefficient threshold defined in the configuration file"
             },
             {
                 "name": "Flags_MOON_POINT",
                 "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
-                "color": "106,109,115",
-                "description": "Pixel  is  located  in a zone where a Moon alias was reconstructed (after Moon removal, measurement may be degraded)"
+                "color": "208,249,67",
+                "description": "If set, this pixel is located in a zone where a Moon alias was reconstructed (after Moon removal, measurement may be degraded)"
             },
             {
                 "name": "Flags_AF_FOV",
                 "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
-                "color": "16,81,105",
-                "description": "Pixel is inside the exclusive zone of Alias free (delimited by the six aliased unit circles)"
-            },
-            {
-                "name": "Flags_RFI_TAIL",
-                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
-                "color": "171,1,243",
-                "description": "Measurement is affected by the tails of a point source RFI"
+                "color": "106,109,115",
+                "description": "If set, the pixel is inside the exclusive zone of Alias free (delimited by the six aliased unit circles)"
             },
             {
                 "name": "Flags_BORDER_FOV",
                 "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
-                "color": "238,203,217",
-                "description": "Pixel is close to the border delimiting the Extended Alias free zone"
+                "color": "16,81,105",
+                "description": "If set, the pixel is close to the border delimiting the Extended Alias free zone or to the unit circle replicas borders (also known as “suspenders and belts”). Distance threshold is configurable through FOV_Border_Flag_Size field in AUX CNFL1P"
             },
             {
                 "name": "Flags_SUN_TAILS",
                 "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
-                "color": "250,231,95",
-                "description": "Pixel is located in the hexagonal alias directions centred on a Sun alias (if Sun is not removed, measurement may be degraded in these directions)"
+                "color": "171,1,243",
+                "description": "If set, this pixel is located in the hexagonal alias directions centred on a Sun alias (if Sun is not removed, measurement may be degraded in these directions)"
+            },
+            {
+                "name": "Flags_RFI_H_POL",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "238,203,217",
+                "description": "If set, the analysis of the NIR Brightness Temperatures or System Temperatures standard deviation in H polarisation has reported this snapshot as an outlier of the expected trend, which is a clear indicator of the presence of one or more RFI sources in the data; that the Temperatures were saturated or in the vicinity of such saturation and there is a high probability that the measurement is affected"
             },
             {
                 "name": "Flags_RFI_V_POL",
                 "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
-                "color": "240,108,99",
-                "description": "RFI has been detected in V polarisation NIR analysis"
+                "color": "250,231,95",
+                "description": "If set, the analysis of the NIR Brightness Temperatures or System Temperatures standard deviation in V polarisation has reported this snapshot as an outlier of the expected trend, which is a clear indicator of the presence of one or more RFI sources in the data; that the Temperatures were saturated or in the vicinity of such saturation and there is a high probability that the measurement is affected"
             },
             {
                 "name": "Flags_RFI_2",
                 "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "240,108,99",
+                "description": "If set, the measurement is affected by point source RFI as identified in the AUX RFI list (flag is set in a circle around the RFI position, with a radius dependant on the RFI expected BT defined in the AUX RFILST), or it has exceeded the threshold defined in BT_Dual/Full_RFI_Pixel_Flag_Threshold fields in AUX CNFL1P, or is negative for Dual Polarisation values"
+            },
+            {
+                "name": "Flags_RFI_3",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
                 "color": "115,141,245",
-                "description": "Pixel is flagged as RFI in the AUX_RFI file"
+                "description": "If set, the measurement is affected by the tails of a point source RFI as identified in the AUX RFI list (tail width is dependant on the RFI estimated BT (from each snapshot measurements) , corresponding to 0.16 of the radius of the RFI circle flagged)"
             },
             {
                 "name": "Land_Sea_Mask_USGS_SEA_FLAG",

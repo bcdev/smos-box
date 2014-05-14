@@ -71,6 +71,11 @@
             "description": "SMOS OSUDP2,  schema version 300"
         },
         {
+            "id": "SM_TEST_MIR_OSUDP2_20100802T153855",
+            "relativePath": "sensors_platforms/SMOS/MIR_OSUDP2/SM_TEST_MIR_OSUDP2_20100802T153855_20100802T163215_612_001_8/SM_TEST_MIR_OSUDP2_20100802T153855_20100802T163215_612_001_8.DBL",
+            "description": "SMOS OSUDP2,  schema version 400"
+        },
+        {
             "id": "SM_OPER_MIR_SCLD1C_20100208T040959",
             "relativePath": "sensors_platforms/SMOS/MIR_SCLD1C/SM_OPER_MIR_SCLD1C_20100208T040959_20100208T050400_324_001_1/SM_OPER_MIR_SCLD1C_20100208T040959_20100208T050400_324_001_1.HDR",
             "description": "SMOS SCLD1C, schema version 201"
