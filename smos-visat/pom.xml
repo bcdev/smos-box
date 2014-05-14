@@ -19,7 +19,7 @@
         <dependency>
             <groupId>org.esa.beam</groupId>
             <artifactId>blue-marble-worldmap</artifactId>
-            <scope>runtime</scope>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.esa.beam</groupId>
