@@ -1,42 +1,23 @@
 <module>
     <manifestVersion>1.0.0</manifestVersion>
-    <symbolicName>smos-ui</symbolicName>
-    <version>2.4</version>
-    <name>SMOS Visat Integration Components</name>
+    <symbolicName>smos-visat</symbolicName>
+    <version>3.0</version>
+    <name>SMOS BEAM-VISAT Extensions</name>
     <description>
-        This module provides several UI components suited for visual
-        inspection and analysis of data products acquired by ESA's
-        SMOS mission.
+        This module provides components for the visual inspection and
+        analysis of data products acquired by ESA's SMOS mission.
     </description>
 
     <vendor>Brockmann Consult GmbH</vendor>
     <contactAddress>
         Max Planck Str.2, 21502 Geesthacht (Germany)
     </contactAddress>
-    <copyright>(C) 2010-2013 by Brockmann Consult GmbH</copyright>
+    <copyright>(C) 2010-2014 by Brockmann Consult GmbH</copyright>
     <url>http://envisat.esa.int/beam</url>
     <licenseUrl>http://www.gnu.org/licenses/gpl.html</licenseUrl>
 
     <changelog><![CDATA[
-       <p> Changes in 2.3:<br>
-        [SBOX-49] Export EE files to NetCDF-4
-        [SBOX-48] Update EE schema files
-        [SBOX-47] Correct gui control state updates in export dialogs
-       <p> Changes in 2.2:<br>
-        [SBOX-46] Sensing time tracking for L2 files<br>
-        [SBOX-45] Update to BEAM 4.10<br>
-       <p> Changes in 2.1.3:<br>
-        [SBOX-39] Add support for AUX_DGGTLV<br>
-        [SBOX-38] Add support for AUX_DGGTFO<br>
-        [SBOX-37] Add support for AUX_DGGROU<br>
-        [SBOX-36] Add support for AUX_DGGRFI<br>
-        [SBOX-35] Add support for AUX_DGGFLO<br>
-       <p>Changes in 2.1.2:<br>
-        [SBOX-31] Null pointer exception when opening a MIR_SMUDP2<br>
-       <p>Changes in 2.1.1:<br>
-        [SBOX-28] Grid point export does not work<br>
-       <p>Changes in 2.1:<br>
-        [SBOX-26] Grid point export to Earth Explorer format<br>
+       <p><a href="http://www.brockmann-consult.de/beam-jira/issues/?jql=project%20%3D%20SBOX%20AND%20issuetype%20in%20(Bug%2C%20Improvement%2C%20%22New%20Feature%22%2C%20Requirement)%20AND%20fixVersion%20%3D%20%223.0%22%20AND%20status%20%3D%20Resolved">Several issues</a> have been resolved.
        </p>]]>
     </changelog>
 

@@ -6,14 +6,14 @@
     <parent>
         <artifactId>smos-box</artifactId>
         <groupId>org.esa.beam.smos</groupId>
-        <version>3.0.0-SNAPSHOT</version>
+        <version>3.0-SNAPSHOT</version>
     </parent>
 
     <packaging>jar</packaging>
 
     <artifactId>smos-ee2netcdf</artifactId>
     <name>SMOS EE to NetCDF Converter</name>
-    <description>SMOS EarthExplorer to NetCDF Converter Operator</description>
+    <description>SMOS Earth Explorer to NetCDF Converter</description>
 
     <dependencies>
         <dependency>

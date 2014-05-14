@@ -3,9 +3,9 @@
 
     <symbolicName>smos-tools</symbolicName>
     <name>SMOS Tools and Utilities</name>
-    <version>2.4</version>
+    <version>3.0</version>
     <description>
-        This module provides utility classes for SMOS data handling
+        This module provides several utility classes for SMOS data handling.
     </description>
 
     <vendor>Brockmann Consult GmbH</vendor>
@@ -14,17 +14,19 @@
     <url>http://envisat.esa.int/beam/</url>
     <licenseUrl>http://www.gnu.org/licenses/gpl.html</licenseUrl>
 
-    <changelog>
+    <changelog><![CDATA[
+       <p><a href="http://www.brockmann-consult.de/beam-jira/issues/?jql=project%20%3D%20SBOX%20AND%20issuetype%20in%20(Bug%2C%20Improvement%2C%20%22New%20Feature%22%2C%20Requirement)%20AND%20fixVersion%20%3D%20%223.0%22%20AND%20status%20%3D%20Resolved">Several issues</a> have been resolved.
+       </p>]]>
     </changelog>
 
     <categories>SMOS, Tools</categories>
 
     <dependency>
-        <module>beam-core</module>
+        <module>ceres-binio</module>
     </dependency>
 
     <dependency>
-        <module>ceres-binio</module>
+        <module>beam-core</module>
     </dependency>
 
 </module>

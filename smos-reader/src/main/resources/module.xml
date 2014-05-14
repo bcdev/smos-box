@@ -1,7 +1,7 @@
 <module>
     <manifestVersion>1.0.0</manifestVersion>
     <symbolicName>smos-reader</symbolicName>
-    <version>2.4</version>
+    <version>3.0</version>
     <name>SMOS Product Reader</name>
     <description>
         The SMOS Product Reader provides the capability of reading data
@@ -14,36 +14,12 @@
     <contactAddress>
         Max Planck Str.2, 21502 Geesthacht (Germany)
     </contactAddress>
-    <copyright>(C) 2010-2013 by Brockmann Consult GmbH</copyright>
+    <copyright>(C) 2010-2014 by Brockmann Consult GmbH</copyright>
     <url>http://envisat.esa.int/beam</url>
     <licenseUrl>http://www.gnu.org/licenses/gpl.html</licenseUrl>
 
     <changelog><![CDATA[
-       <p> Changes in 2.4:<br>
-        [SBOX-50] Exception when opening AFP band of SMUDP2 products<br>
-       <p> Changes in 2.2:<br>
-        [SBOX-45] Update to BEAM 4.10<br>
-        [SBOX-44] Prob_RFI that is not reported correctly<br>
-        [SBOX-43] Extend Reader to support compressed files<br>
-        [SBOX-42] New ECMWF products generated with processor version 315<br>
-       <p> Changes in 2.1.3:<br>
-        [SBOX-39] Add support for AUX_DGGTLV<br>
-        [SBOX-38] Add support for AUX_DGGTFO<br>
-        [SBOX-37] Add support for AUX_DGGROU<br>
-        [SBOX-36] Add support for AUX_DGGRFI<br>
-        [SBOX-35] Add support for AUX_DGGFLO<br>
-        [SBOX-34] Update to schemas 2011-05-18_v05-00-00<br>
-       <p> Changes in 2.1.2:<br>
-        [SBOX-30] Update schemas to Release 2011-02-21_v04-07-85_DPGS_V3<br>
-       <p> Changes in 2.1.1:<br>
-        [SBOX-27] Missing start and stop times<br>
-       <p> Changes in 2.1:<br>
-        [SBOX-25] Incorrect brightness temperatures at ground<br>
-        [SBOX-24] Pixels eastward of 168.5° E do not show up<br>
-        [SBOX-23] Confusing product selection<br>
-       <p> Changes in 2.0.1:<br>
-        [SBOX-22] Interpolation for full pol products is wrong<br>
-        [SBOX-20] Second RFI flag not shown in L1c flag coding<br>
+       <p><a href="http://www.brockmann-consult.de/beam-jira/issues/?jql=project%20%3D%20SBOX%20AND%20issuetype%20in%20(Bug%2C%20Improvement%2C%20%22New%20Feature%22%2C%20Requirement)%20AND%20fixVersion%20%3D%20%223.0%22%20AND%20status%20%3D%20Resolved">Several issues</a> have been resolved.
        </p>]]>
     </changelog>
 
