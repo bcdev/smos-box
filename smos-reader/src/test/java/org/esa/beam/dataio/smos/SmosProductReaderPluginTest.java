@@ -1,5 +1,6 @@
 package org.esa.beam.dataio.smos;
 
+import org.esa.beam.smos.SmosUtils;
 import org.esa.beam.util.io.BeamFileFilter;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,7 +15,7 @@ public class SmosProductReaderPluginTest {
     private SmosProductReaderPlugIn plugIn;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         plugIn = new SmosProductReaderPlugIn();
     }
 
@@ -29,13 +30,23 @@ public class SmosProductReaderPluginTest {
     @Test
     public void testGetDefaultFileExtensions() {
         final String[] extensions = plugIn.getDefaultFileExtensions();
-        assertEquals(5, extensions.length);
 
-        assertEquals(".HDR", extensions[0]);
-        assertEquals(".DBL", extensions[1]);
-        assertEquals(".zip", extensions[2]);
-        assertEquals(".ZIP", extensions[3]);
-        assertEquals(".bin", extensions[4]);
+        if (SmosUtils.isLightBufrTypeSupported()) {
+            assertEquals(5, extensions.length);
+
+            assertEquals(".HDR", extensions[0]);
+            assertEquals(".DBL", extensions[1]);
+            assertEquals(".zip", extensions[2]);
+            assertEquals(".ZIP", extensions[3]);
+            assertEquals(".bin", extensions[4]);
+        } else {
+            assertEquals(4, extensions.length);
+
+            assertEquals(".HDR", extensions[0]);
+            assertEquals(".DBL", extensions[1]);
+            assertEquals(".zip", extensions[2]);
+            assertEquals(".ZIP", extensions[3]);
+        }
     }
 
     @Test
@@ -45,11 +56,17 @@ public class SmosProductReaderPluginTest {
     }
 
     @Test
-    public void testGetFormatNames(){
+    public void testGetFormatNames() {
         final String[] formatNames = plugIn.getFormatNames();
-        assertEquals(2, formatNames.length);
-        assertEquals("SMOS-EEF", formatNames[0]);
-        assertEquals("SMOS BUFR/CDM", formatNames[1]);
+
+        if (SmosUtils.isLightBufrTypeSupported()) {
+            assertEquals(2, formatNames.length);
+            assertEquals("SMOS-EEF", formatNames[0]);
+            assertEquals("SMOS Light-BUFR", formatNames[1]);
+        } else {
+            assertEquals(1, formatNames.length);
+            assertEquals("SMOS-EEF", formatNames[0]);
+        }
     }
 
     @Test
@@ -57,6 +74,11 @@ public class SmosProductReaderPluginTest {
         final BeamFileFilter productFileFilter = plugIn.getProductFileFilter();
         assertArrayEquals(plugIn.getDefaultFileExtensions(), productFileFilter.getExtensions());
         assertEquals(plugIn.getFormatNames()[0], productFileFilter.getFormatName());
-        assertEquals("SMOS Data Products (*.HDR,*.DBL,*.zip,*.ZIP,*.bin)", productFileFilter.getDescription());
+
+        if (SmosUtils.isLightBufrTypeSupported()) {
+            assertEquals("SMOS Data Products (*.HDR,*.DBL,*.zip,*.ZIP,*.bin)", productFileFilter.getDescription());
+        } else {
+            assertEquals("SMOS Data Products (*.HDR,*.DBL,*.zip,*.ZIP)", productFileFilter.getDescription());
+        }
     }
 }
