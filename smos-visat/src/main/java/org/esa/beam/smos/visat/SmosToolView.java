@@ -42,9 +42,6 @@ public abstract class SmosToolView extends AbstractToolView {
     private JComponent clientComponent;
     private SmosToolView.SVSL svsl;
 
-    protected SmosToolView() {
-    }
-
     protected final SceneViewSelectionService getSmosViewSelectionService() {
         return SmosBox.getInstance().getSmosViewSelectionService();
     }

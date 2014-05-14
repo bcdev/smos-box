@@ -103,11 +103,9 @@ class TableModelExportRunner {
             @Override
             protected Object doInBackground(ProgressMonitor pm) throws Exception {
                 pm.beginTask("Exporting table model...", 1);
-                final OutputStream stream = new BufferedOutputStream(new FileOutputStream(outFile));
-                try {
+                try (OutputStream stream = new BufferedOutputStream(new FileOutputStream(outFile))) {
                     exporter.export(stream);
                 } finally {
-                    stream.close();
                     pm.done();
                 }
                 return null;
@@ -141,11 +139,9 @@ class TableModelExportRunner {
             protected Object doInBackground(ProgressMonitor pm) throws Exception {
                 pm.beginTask("Exporting table model...", 1);
                 final ByteArrayOutputStream out = new ByteArrayOutputStream();
-                final OutputStream stream = new BufferedOutputStream(out);
-                try {
+                try (OutputStream stream = new BufferedOutputStream(out)) {
                     exporter.export(stream);
                 } finally {
-                    stream.close();
                     pm.done();
                 }
                 return out.toString();
@@ -221,6 +217,5 @@ class TableModelExportRunner {
         public boolean exportColumn(int columnIndex) {
             return TableColumnChooser.isVisibleColumn(columnModel, columnIndex);
         }
-        
     }
 }
