@@ -2,13 +2,13 @@
 
 export BEAM4_HOME=${installer:sys.installationDir}
 
-if [ ! -d "$BEAM4_HOME" ]
+if [ ! -d "${BEAM4_HOME}" ]
 then
     PRGDIR=`dirname $0`
-    export BEAM4_HOME=`cd "$PRGDIR/.." ; pwd`
+    export BEAM4_HOME=`cd "${PRGDIR}/.." ; pwd`
 fi
 
-if [ -z "$BEAM4_HOME" ]; then
+if [ -z "${BEAM4_HOME}" ]; then
     echo
     echo Error:
     echo BEAM4_HOME does not exists in your environment. Please
@@ -20,11 +20,11 @@ fi
 
 . "$BEAM4_HOME/bin/detect_java.sh"
 
-"$app_java_home/bin/java" \
+"${app_java_home}/bin/java" \
     -Xmx1024M \
     -Dceres.context=beam \
     "-Dbeam.mainClass=org.esa.beam.smos.visat.export.GridPointExporter" \
-    "-Dbeam.home=$BEAM4_HOME" \
-    -jar "$BEAM4_HOME/bin/ceres-launcher.jar" "$@"
+    "-Dbeam.home=${BEAM4_HOME}" \
+    -jar "${BEAM4_HOME}/bin/ceres-launcher.jar" "$@"
 
 exit 0
