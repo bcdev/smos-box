@@ -1,17 +1,17 @@
 # visible | name                  | mask     | color | transparency | description
   *       | POL_FLAG_1            | 00000001 | *     | *            | Flag indicating antenna HH (0) or VV (1) polarisation
-  *       | POL_FLAG_2            | 00000002 | *     | *            | *
+  *       | POL_FLAG_2            | 00000002 | *     | *            | Not used
   *       | SUN_FOV               | 00000004 | *     | *            | Direct  Sun  correction  has  been  performed  during  image reconstruction of this pixel
   *       | SUN_GLINT_FOV         | 00000008 | *     | *            | Reflected  Sun  correction  has  been  performed  during  image reconstruction of this pixel
   *       | MOON_FOV              | 00000010 | *     | *            | Direct  Moon  correction  has  been  performed  during  image reconstruction of this pixel
   *       | SINGLE_SNAPSHOT       | 00000020 | *     | *            | Scene has been combined with an adjacent scene in opposite polarisation during image reconstruction to account for cross-polarisation leakage
-  *       | RFI_H_POL             | 00000040 | *     | *            | RFI has been detected in H polarisation NIR analysis
   *       | SUN_POINT             | 00000080 | *     | *            | Pixel is located in a zone where a Sun alias was reconstructed (after Sun removal, measurement may be degraded)
   *       | SUN_GLINT_AREA        | 00000100 | *     | *            | Pixel is located in a zone where Sun reflection has been detected
   *       | MOON_POINT            | 00000200 | *     | *            | Pixel  is  located  in a zone where a Moon alias was reconstructed (after Moon removal, measurement may be degraded)
   *       | AF_FOV                | 00000400 | *     | *            | Pixel is inside the exclusive zone of Alias free (delimited by the six aliased unit circles)
-  *       | RFI_TAIL              | 00000800 | *     | *            | Measurement is affected by the tails of a point source RFI
   *       | BORDER_FOV            | 00001000 | *     | *            | Pixel is close to the border delimiting the Extended Alias free zone
   *       | SUN_TAILS             | 00002000 | *     | *            | Pixel is located in the hexagonal alias directions centred on a Sun alias (if Sun is not removed, measurement may be degraded in these directions)
-  *       | RFI_V_POL             | 00004000 | *     | *            | RFI has been detected in V polarisation NIR analysis
-  *       | RFI_2                 | 00008000 | *     | *            | Pixel is flagged as RFI in the AUX_RFI file
+  *       | RFI_H_POL             | 00000040 | *     | *            | If set, the analysis of the NIR Brightness Temperatures or System Temperatures standard deviation in H polarisation has reported this snapshot as an outlier of the expected trend, which is a clear indicator of the presence of one or more RFI sources in the data; that the Temperatures were saturated or in the vicinity of such saturation and there is a high probability that the measurement is affected
+  *       | RFI_V_POL             | 00004000 | *     | *            | If set, the analysis of the NIR Brightness Temperatures or System Temperatures standard deviation in V polarisation has reported this snapshot as an outlier of the expected trend, which is a clear indicator of the presence of one or more RFI sources in the data; that the Temperatures were saturated or in the vicinity of such saturation and there is a high probability that the measurement is affected
+  *       | RFI_2                 | 00008000 | *     | *            | If set, the measurement is affected by point source RFI as identified in the AUX RFI list (flag is set in a circle around the RFI position, with a radius dependant on the RFI expected BT defined in the AUX RFILST), or it has exceeded the threshold defined in BT_Dual/Full_RFI_Pixel_Flag_Threshold fields in AUX CNFL1P, or is negative for Dual Polarisation values
+  *       | RFI_3                 | 00000800 | *     | *            | If set, the measurement is affected by the tails of a point source RFI as identified in the AUX RFI list (tail width is dependant on the RFI estimated BT (from each snapshot measurements) , corresponding to 0.16 of the radius of the RFI circle flagged)
