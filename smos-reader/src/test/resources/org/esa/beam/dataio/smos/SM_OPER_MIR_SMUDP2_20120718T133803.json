@@ -1,0 +1,2150 @@
+{
+    "id": "SM_OPER_MIR_SMUDP2_20120718T133803",
+    "decodeQualification": "INTENDED",
+    "expectedContent": {
+        "sceneWidth": 16384,
+        "sceneHeight": 8192,
+        "startTime": "18-JUL-2012 13:38:03.000000",
+        "endTime": "18-JUL-2012 14:31:17.000000",
+        "geoCoding": {
+            "coordinates": [
+                {
+                    "x": 7066.0,
+                    "y": 4403.0,
+                    "lat": -6.7456055,
+                    "lon": -24.74121
+                },
+                {
+                    "x": 12164.0,
+                    "y": 5315.0,
+                    "lat": -26.784668,
+                    "lon": 87.27539
+                }
+            ],
+            "reverseAccuracy": 0.0
+        },
+        "flagCodings": [
+            {
+                "name": "Confidence_Flags",
+                "samples": [
+                    {
+                        "name": "FL_RFI_PRONE_H",
+                        "value": 2,
+                        "description": "DGG Current RFI for H pol above threshold"
+                    },
+                    {
+                        "name": "FL_RFI_PRONE_V",
+                        "value": 4,
+                        "description": "DGG Current RFI for V pol above threshold"
+                    },
+                    {
+                        "name": "FL_NO_PROD",
+                        "value": 16,
+                        "description": "No products are generated"
+                    },
+                    {
+                        "name": "FL_RANGE",
+                        "value": 32,
+                        "description": "Retrieval values out off range"
+                    },
+                    {
+                        "name": "FL_DQX",
+                        "value": 64,
+                        "description": "High retrieval DQX"
+                    },
+                    {
+                        "name": "FL_CHI2_P",
+                        "value": 128,
+                        "description": "Poor fit quality"
+                    },
+                    {
+                        "name": "FL_FARADAY_ROTATION_ANGLE",
+                        "value": 256,
+                        "description": "Indicates the source of the Faraday rotation angles. (0) means the Faraday rotation angles in the L1c product are used. 1 means the Faraday rotation angles in the AUX_FARA_x product are used"
+                    }
+                ]
+            },
+            {
+                "name": "Science_Flags",
+                "samples": [
+                    {
+                        "name": "FL_NON_NOM",
+                        "value": 1,
+                        "description": "Presence of other than nominal soil"
+                    },
+                    {
+                        "name": "FL_SCENE_T",
+                        "value": 2,
+                        "description": "True (1) if any of scene flags is set (1)"
+                    },
+                    {
+                        "name": "FL_BARREN",
+                        "value": 4,
+                        "description": "Scene flag indicating presence of rocks"
+                    },
+                    {
+                        "name": "FL_TOPO_S",
+                        "value": 8,
+                        "description": "Scene flag indicating presence of strong topography"
+                    },
+                    {
+                        "name": "FL_TOPO_M",
+                        "value": 16,
+                        "description": "Scene flag indicating presence of moderate topography"
+                    },
+                    {
+                        "name": "FL_OW",
+                        "value": 32,
+                        "description": "Scene flag indicating presence of open water"
+                    },
+                    {
+                        "name": "FL_SNOW_MIX",
+                        "value": 64,
+                        "description": "Scene flag indicating presence of mixed snow"
+                    },
+                    {
+                        "name": "FL_SNOW_WET",
+                        "value": 128,
+                        "description": "Scene flag indicating presence of wet snow"
+                    },
+                    {
+                        "name": "FL_SNOW_DRY",
+                        "value": 256,
+                        "description": "Scene flag indicating presence of significant dry snow"
+                    },
+                    {
+                        "name": "FL_FOREST",
+                        "value": 512,
+                        "description": "Scene flag indicating presence of forest"
+                    },
+                    {
+                        "name": "FL_NOMINAL",
+                        "value": 1024,
+                        "description": "Scene flag indicating presence of nominal soil"
+                    },
+                    {
+                        "name": "FL_FROST",
+                        "value": 2048,
+                        "description": "Scene flag indicating presence of frost"
+                    },
+                    {
+                        "name": "FL_ICE",
+                        "value": 4096,
+                        "description": "Scene flag indicating presence of permanent ice/snow"
+                    },
+                    {
+                        "name": "FL_WETLANDS",
+                        "value": 8192,
+                        "description": "Scene flag indicating presence of wetlands"
+                    },
+                    {
+                        "name": "FL_FLOOD_PROB",
+                        "value": 16384,
+                        "description": "Scene flag indicating probable flooding risk"
+                    },
+                    {
+                        "name": "FL_URBAN_LOW",
+                        "value": 32768,
+                        "description": "Scene flag indicating presence of limited urban area"
+                    },
+                    {
+                        "name": "FL_URBAN_HIGH",
+                        "value": 65536,
+                        "description": "Scene flag indicating presence of large urban area"
+                    },
+                    {
+                        "name": "FL_SAND",
+                        "value": 131072,
+                        "description": "Scene flag indicating presence of high sand fraction"
+                    },
+                    {
+                        "name": "FL_SEA_ICE",
+                        "value": 262144,
+                        "description": "Scene flag indicating presence of sea ice"
+                    },
+                    {
+                        "name": "FL_COAST",
+                        "value": 524288,
+                        "description": "Scene flag indicating presence of large tidal flag"
+                    },
+                    {
+                        "name": "FL_OCCUR_T",
+                        "value": 1048576,
+                        "description": "True (1) if any of occur flags is set (1)"
+                    },
+                    {
+                        "name": "FL_LITTER",
+                        "value": 2097152,
+                        "description": "Occur flag indicating litter suspected"
+                    },
+                    {
+                        "name": "FL_PR",
+                        "value": 4194304,
+                        "description": "Occur flag indicating interception suspected (polarisation ratio)"
+                    },
+                    {
+                        "name": "FL_INTERCEP",
+                        "value": 8388608,
+                        "description": "Occur flag - ECMWF indicates interception)"
+                    },
+                    {
+                        "name": "FL_EXTERNAL",
+                        "value": 16777216,
+                        "description": "Any of the external flags on, or N_SKY counter not equal to zero"
+                    },
+                    {
+                        "name": "FL_RAIN",
+                        "value": 33554432,
+                        "description": "External flag indicating heavy rain suspected"
+                    },
+                    {
+                        "name": "FL_TEC",
+                        "value": 67108864,
+                        "description": "External flag indicating high ionospheric contributions"
+                    },
+                    {
+                        "name": "FL_TAU_FO",
+                        "value": 134217728,
+                        "description": "Scene flag indicating presence of thick forest"
+                    },
+                    {
+                        "name": "FL_WINTER_FOREST",
+                        "value": 268435456,
+                        "description": "Flag indicating that the winter forest case has been selected by the decision tree"
+                    },
+                    {
+                        "name": "FL_DUAL_RETR_FNO_FFO",
+                        "value": 536870912,
+                        "description": "Flag indicating dual retrieval is performed on the FNO and FFO fractions"
+                    }
+                ]
+            },
+            {
+                "name": "Processing_Flags",
+                "samples": [
+                    {
+                        "name": "FL_R4",
+                        "value": 1,
+                        "description": "True (1) if attempted, regardless of success"
+                    },
+                    {
+                        "name": "FL_R3",
+                        "value": 2,
+                        "description": "True (1) if attempted, regardless of success"
+                    },
+                    {
+                        "name": "FL_R2",
+                        "value": 4,
+                        "description": "True (1) if attempted, regardless of success"
+                    },
+                    {
+                        "name": "FL_MD_A",
+                        "value": 8,
+                        "description": "True (1) if MDa failed"
+                    }
+                ]
+            },
+            {
+                "name": "DGG_Current_Flags",
+                "samples": [
+                    {
+                        "name": "FL_CURRENT_TAU_NADIR_LV",
+                        "value": 1,
+                        "description": "Flag driving request for updating the DGG_Current_Tau_Nadir_LV map after processing"
+                    },
+                    {
+                        "name": "FL_CURRENT_TAU_NADIR_FO",
+                        "value": 2,
+                        "description": "Flag driving request for updating the DGG_Current_Tau_Nadir_FO map after processing"
+                    },
+                    {
+                        "name": "FL_CURRENT_HR",
+                        "value": 4,
+                        "description": "Flag driving request for updating the DGG_Current_HR map after processing"
+                    },
+                    {
+                        "name": "FL_CURRENT_RFI",
+                        "value": 8,
+                        "description": "Flag driving request for updating the DGG_Current_RFI map after processing"
+                    },
+                    {
+                        "name": "FL_CURRENT_FLOOD",
+                        "value": 16,
+                        "description": "Flag driving request for updating the DGG_Current_Flood map after processing"
+                    }
+                ]
+            },
+            {
+                "name": "Land_Sea_Mask_Flags",
+                "samples": [
+                    {
+                        "name": "USGS_SEA_FLAG",
+                        "value": 1,
+                        "description": "Water fraction is above 95 percent (1); below 95 percent (0)"
+                    },
+                    {
+                        "name": "USGS_LAND_FLAG",
+                        "value": 2,
+                        "description": "Water fraction is below 10 percent (1); above 10 percent (0)"
+                    },
+                    {
+                        "name": "USGS_MIXED_FLAG",
+                        "value": 4,
+                        "description": "Water fraction is above 10 and below 95 percent (1); below 10 or above 95 percent (0)"
+                    },
+                    {
+                        "name": "200_KM_COASTAL_FLAG",
+                        "value": 8,
+                        "description": "Distance to coastline is less than 200 km (1); greater than 200 km (0)"
+                    },
+                    {
+                        "name": "100_KM_COASTAL_FLAG",
+                        "value": 16,
+                        "description": "Distance to coastline is less than 100 km (1); greater than 100 km (0)"
+                    },
+                    {
+                        "name": "40_KM_COASTAL_FLAG",
+                        "value": 32,
+                        "description": "Distance to coastline is less than 40 km (1); greater than 40 km (0)"
+                    },
+                    {
+                        "name": "MIN_SEA_ICE_FLAG",
+                        "value": 64,
+                        "description": "Sea ice is present for all months (1); is not present for all months (0)"
+                    },
+                    {
+                        "name": "MAX_SEA_ICE_FLAG",
+                        "value": 128,
+                        "description": "Sea ice is present for any months (1); is not present for any months (0)"
+                    }
+                ]
+            }
+        ],
+        "bands": [
+            {
+                "name": "Soil_Moisture",
+                "description": "Retrieved soil moisture value",
+                "geophysicalUnit": "m3 m-3",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 13300,
+                        "y": 630,
+                        "value": 0.25679675
+                    },
+                    {
+                        "x": 11224,
+                        "y": 6968,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Soil_Moisture_DQX",
+                "description": "DQX for soil moisture",
+                "geophysicalUnit": "m3 m-3",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 12979,
+                        "y": 735,
+                        "value": 0.012901308
+                    },
+                    {
+                        "x": 10002,
+                        "y": 2992,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Optical_Thickness_Nad",
+                "description": "Nadir optical thickness estimate for vegetation layer",
+                "geophysicalUnit": "Np",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 11903,
+                        "y": 1047,
+                        "value": 0.55059516
+                    },
+                    {
+                        "x": 9966,
+                        "y": 7605,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Optical_Thickness_Nad_DQX",
+                "description": "DQX for nadir optical thickness",
+                "geophysicalUnit": "Np",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 11874,
+                        "y": 894,
+                        "value": 0.014993104
+                    },
+                    {
+                        "x": 8505,
+                        "y": 7483,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Surface_Temperature",
+                "description": "Surface temperature - may be a retrieved value or from an external source",
+                "geophysicalUnit": "K",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 11578,
+                        "y": 1992,
+                        "value": 292.318
+                    },
+                    {
+                        "x": 15577,
+                        "y": 3980,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Surface_Temperature_DQX",
+                "description": "DQX for surface temperature",
+                "geophysicalUnit": "K",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 11552,
+                        "y": 2014,
+                        "value": 0.85212445
+                    },
+                    {
+                        "x": 163,
+                        "y": 3856,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "TTH",
+                "description": "Optical thickness coefficient for polarisation H",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 5364,
+                        "y": 1614,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 4475,
+                        "y": 353,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "TTH_DQX",
+                "description": "DQX for TTH",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 15916,
+                        "y": 4953,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 9377,
+                        "y": 5871,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "RTT",
+                "description": "Ratio of optical thickness coefficients TTH/TTV",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 3800,
+                        "y": 4075,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 5260,
+                        "y": 5919,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "RTT_DQX",
+                "description": "DQX for RTT",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 5867,
+                        "y": 4081,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 6600,
+                        "y": 3623,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Scattering_Albedo_H",
+                "description": "Scattering albedo for horizontal polarisation",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 9415,
+                        "y": 752,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 10571,
+                        "y": 129,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Scattering_Albedo_H_DQX",
+                "description": "DQX for scattering albedo for horizontal polarisation",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 15977,
+                        "y": 3008,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 15566,
+                        "y": 7752,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "DIFF_Albedos",
+                "description": "Difference of albedos H-V",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 1817,
+                        "y": 3701,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 9353,
+                        "y": 4607,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "DIFF_Albedos_DQX",
+                "description": "DQX for difference of albedos H-V",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 8287,
+                        "y": 4272,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 7384,
+                        "y": 4759,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Roughness_Param",
+                "description": "Roughness parameter estimate",
+                "geophysicalUnit": "K",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 9265,
+                        "y": 7562,
+                        "value": 0.0
+                    },
+                    {
+                        "x": 1149,
+                        "y": 8133,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Roughness_Param_DQX",
+                "description": "DQX for roughness parameter estimate",
+                "geophysicalUnit": "K",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 8916,
+                        "y": 7717,
+                        "value": 0.5
+                    },
+                    {
+                        "x": 13165,
+                        "y": 6032,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Dielect_Const_MD_RE",
+                "description": "Real part of the dielectric constant from MD",
+                "geophysicalUnit": "Fm-1",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 11265,
+                        "y": 2502,
+                        "value": 9.433716
+                    },
+                    {
+                        "x": 4073,
+                        "y": 4356,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Dielect_Const_MD_RE_DQX",
+                "description": "DQX for the real part of the dielectric constant from MD",
+                "geophysicalUnit": "Fm-1",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 11052,
+                        "y": 2812,
+                        "value": 0.031703684
+                    },
+                    {
+                        "x": 9058,
+                        "y": 1236,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Dielect_Const_MD_IM",
+                "description": "Imaginary part of the dielectric constant from MD",
+                "geophysicalUnit": "Fm-1",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 10998,
+                        "y": 2958,
+                        "value": -7.048838
+                    },
+                    {
+                        "x": 1563,
+                        "y": 6961,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Dielect_Const_MD_IM_DQX",
+                "description": "DQX for the imaginary part of the dielectric constant from MD",
+                "geophysicalUnit": "Fm-1",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 10871,
+                        "y": 2915,
+                        "value": 0.0072194748
+                    },
+                    {
+                        "x": 7455,
+                        "y": 5540,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Dielect_Const_Non_MD_RE",
+                "description": "Real part of the dielectric constant from retrieval models other than MD",
+                "geophysicalUnit": "Fm-1",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 10727,
+                        "y": 4370,
+                        "value": 70.00197
+                    },
+                    {
+                        "x": 14212,
+                        "y": 4915,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Dielect_Const_Non_MD_RE_DQX",
+                "description": "DQX for the real part of the dielectric constant from retrieval models other than MD",
+                "geophysicalUnit": "Fm-1",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 10843,
+                        "y": 3105,
+                        "value": 0.07794194
+                    },
+                    {
+                        "x": 1439,
+                        "y": 4363,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Dielect_Const_Non_MD_IM",
+                "description": "Imaginary part of the dielectric constant from retrieval models other than MD",
+                "geophysicalUnit": "Fm-1",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 10361,
+                        "y": 5131,
+                        "value": -1.522544
+                    },
+                    {
+                        "x": 15993,
+                        "y": 1523,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Dielect_Const_Non_MD_IM_DQX",
+                "description": "DQX for the imaginary part of the dielectric constant from retrieval models other than MD",
+                "geophysicalUnit": "Fm-1",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 10378,
+                        "y": 5082,
+                        "value": 0.1323375
+                    },
+                    {
+                        "x": 3753,
+                        "y": 5306,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "TB_ASL_Theta_B_H",
+                "description": "Surface level TB (corrected from sky/atmosphere contribution) computed from forward model with a specific incidence angle of 42.5°, and for H polarisation",
+                "geophysicalUnit": "K",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 10611,
+                        "y": 6241,
+                        "value": 78.40815
+                    },
+                    {
+                        "x": 8708,
+                        "y": 4646,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "TB_ASL_Theta_B_H_DQX",
+                "description": "DQX for surface level TB for H polarisation",
+                "geophysicalUnit": "K",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 6485,
+                        "y": 1751,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 4571,
+                        "y": 7280,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "TB_ASL_Theta_B_V",
+                "description": "Surface level TB (corrected from sky/atmosphere contribution) computed from forward model with a specific incidence angle of 42.5°, and for V polarisation",
+                "geophysicalUnit": "K",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 15493,
+                        "y": 4751,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 12420,
+                        "y": 2688,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "TB_ASL_Theta_B_V_DQX",
+                "description": "DQX for surface level TB for V polarisation",
+                "geophysicalUnit": "K",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 9184,
+                        "y": 2382,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 13586,
+                        "y": 7133,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "TB_TOA_Theta_B_H",
+                "description": "Top of atmosphere TB computed from forward model at specific incidence angle of 42.5°, for H polarisation",
+                "geophysicalUnit": "K",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 1771,
+                        "y": 7267,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 5634,
+                        "y": 6669,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "TB_TOA_Theta_B_H_DQX",
+                "description": "DQX for top of the atmosphere TB for H polarisation",
+                "geophysicalUnit": "K",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 2984,
+                        "y": 5672,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 9706,
+                        "y": 4498,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "TB_TOA_Theta_B_V",
+                "description": "Top of atmosphere TB computed from forward model at specific incidence angle of 42.5°, for V polarisation",
+                "geophysicalUnit": "K",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 3370,
+                        "y": 2507,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 6722,
+                        "y": 7075,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "TB_TOA_Theta_B_V_DQX",
+                "description": "DQX for top of the atmosphere TB for V polarisation",
+                "geophysicalUnit": "K",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 11497,
+                        "y": 7352,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 4875,
+                        "y": 8132,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Confidence_Flags",
+                "description": "Confidence flags",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 8965,
+                        "y": 956,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 3191,
+                        "y": 4596,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "GQX",
+                "description": "Global quality index",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 7504,
+                        "y": 1055,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 13581,
+                        "y": 4692,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Chi_2",
+                "description": "Retrieval fit quality index",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 1681,
+                        "y": 5543,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 11976,
+                        "y": 3867,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Chi_2_P",
+                "description": "Chi square high value acceptability probability",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 2345,
+                        "y": 546,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 13787,
+                        "y": 2455,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "N_Wild",
+                "description": "Number of times that wild data occurred",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 9703,
+                        "y": 7961,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 12736,
+                        "y": 224,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "M_AVA0",
+                "description": "Initial number of TB measurements available in L1c",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 3550,
+                        "y": 2018,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 5233,
+                        "y": 1587,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "M_AVA",
+                "description": "Preprocessing - number of TB measurements available for retrieval",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 4628,
+                        "y": 7235,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 16343,
+                        "y": 618,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "AFP",
+                "description": "Mean Surface of the antenna Footprint ellipses on Earth",
+                "geophysicalUnit": "km",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 13417,
+                        "y": 4109,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 1027,
+                        "y": 3157,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "N_AF_FOV",
+                "description": "Counter view - number of views that flag is set off to AF_FOV_flag",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 4543,
+                        "y": 4768,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 15214,
+                        "y": 1137,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "N_Sun_Tails",
+                "description": "Counter view - number of views that flag is set on to Sun_Tails flag",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 1713,
+                        "y": 1193,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 14478,
+                        "y": 873,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "N_Sun_Glint_Area",
+                "description": "Counter view - number of views that flag is set on to Sun_Glint_Area flag",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 6062,
+                        "y": 7220,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 9586,
+                        "y": 4714,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "N_Sun_FOV",
+                "description": "Counter view - number of views that flag is set on Sun_FOV flag",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 5532,
+                        "y": 2669,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 6124,
+                        "y": 7014,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "N_RFI_Mitigations",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 5338,
+                        "y": 5611,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 10542,
+                        "y": 5532,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "N_Strong_RFI",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 8688,
+                        "y": 1068,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 7597,
+                        "y": 6559,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "N_Point_Source_RFI",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 13145,
+                        "y": 7389,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 419,
+                        "y": 5722,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "N_Tails_Point_Source_RFI",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 14567,
+                        "y": 4719,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 10447,
+                        "y": 7435,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "N_Instrument_Error",
+                "description": "This counts the number of TBs that pass the initial TB filtering and have the L1c Instrument_Error_Flag ON",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 16094,
+                        "y": 2645,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 5885,
+                        "y": 43,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "N_Software_Error",
+                "description": "This counts the number of TBs that pass the initial TB filtering and have the L1c Software_Error_flag ON",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 13755,
+                        "y": 4662,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 9673,
+                        "y": 3261,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "N_ADF_Error",
+                "description": "This counts the number of TBs that pass the initial TB filtering and have the L1c ADF_Error_flag on",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 6465,
+                        "y": 8097,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 3761,
+                        "y": 5874,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "N_Calibration_Error",
+                "description": "This counts the number of TBs that pass the initial TB filtering and have the L1c Calibration_Error_flag ON",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 15380,
+                        "y": 2363,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 5154,
+                        "y": 6979,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "N_X_Band",
+                "description": "This counts the number of TBs that pass the initial TB fitering and have L1c X-Band ON",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 5367,
+                        "y": 4332,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 5868,
+                        "y": 6551,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Science_Flags",
+                "description": "Science flags",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 9183,
+                        "y": 1786,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 1558,
+                        "y": 5771,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "N_Sky",
+                "description": "Strong galactic source",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 11511,
+                        "y": 6513,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 13829,
+                        "y": 557,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Processing_Flags",
+                "description": "Processing flags",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 13703,
+                        "y": 1859,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 10692,
+                        "y": 7620,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "S_Tree_1",
+                "description": "Branches of Decision Tree S",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 4392,
+                        "y": 7056,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 6328,
+                        "y": 3038,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "S_Tree_2",
+                "description": "Retrieval R2, R3 or R4",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 15923,
+                        "y": 5575,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 11875,
+                        "y": 3503,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "DGG_Current_Flags",
+                "description": "DGG current flags",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 8172,
+                        "y": 1137,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 15874,
+                        "y": 1114,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Tau_Cur_DQX",
+                "description": "This is a special tau DQX value computed using a special sigma corresponding to the case where tau nad is completely free",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 11812,
+                        "y": 4555,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 11564,
+                        "y": 8108,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "HR_Cur_DQX",
+                "description": "This is a special HR DQX value computed using a special sigma corresponding to the case where HR is completely free",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 10498,
+                        "y": 7421,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 13685,
+                        "y": 4349,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "N_RFI_X",
+                "description": "Count of deleted TBs due to suspected RFI",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 8191,
+                        "y": 7617,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 9376,
+                        "y": 6327,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "N_RFI_Y",
+                "description": "Count of deleted TBs due to suspected RFI",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 15226,
+                        "y": 321,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 11536,
+                        "y": 5922,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "RFI_Prob",
+                "description": "The probability of RFI contamination",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 5689,
+                        "y": 56,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 3545,
+                        "y": 7048,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Grid_Point_ID",
+                "description": "Grid point ID",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 2060,
+                        "y": 831,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 1412,
+                        "y": 938,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Latitude",
+                "description": "Latitude (-90, 90)",
+                "geophysicalUnit": "deg",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 11404,
+                        "y": 572,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 7884,
+                        "y": 7111,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Longitude",
+                "description": "Longitude (-180, 180)",
+                "geophysicalUnit": "deg",
+                "noDataValue": "-999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 2742,
+                        "y": 1937,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 4114,
+                        "y": 7956,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Altitude",
+                "description": "Altitude (-12000, 9000)",
+                "geophysicalUnit": "m",
+                "noDataValue": "-99999.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 11728,
+                        "y": 2783,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 10559,
+                        "y": 4182,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "X_Swath",
+                "description": "Abscissa of dwell line",
+                "geophysicalUnit": "km",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 14861,
+                        "y": 4170,
+                        "value": "NaN"
+                    },
+                    {
+                        "x": 14108,
+                        "y": 4575,
+                        "value": "NaN"
+                    }
+                ]
+            },
+            {
+                "name": "Mean_Acq_Time_Days",
+                "description": "Mean acquisition time (days part) of the set of snapshots participating in the current successful or the latest failed retrieval attempt",
+                "geophysicalUnit": "days",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "false",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 13116,
+                        "y": 6237,
+                        "value": 0.0
+                    },
+                    {
+                        "x": 13684,
+                        "y": 6028,
+                        "value": 0.0
+                    }
+                ]
+            },
+            {
+                "name": "Mean_Acq_Time_Seconds",
+                "description": "Mean acquisition time (seconds part) of the set of snapshots participating in the current successful or the latest failed retrieval attempt",
+                "geophysicalUnit": "s",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "false",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 10309,
+                        "y": 3490,
+                        "value": 0.0
+                    },
+                    {
+                        "x": 8853,
+                        "y": 6252,
+                        "value": 0.0
+                    }
+                ]
+            },
+            {
+                "name": "Mean_Acq_Time_Microseconds",
+                "description": "Mean acquisition time (microseconds part) of the set of snapshots participating in the current successful or the latest failed retrieval attempt",
+                "geophysicalUnit": "µs",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "false",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 10386,
+                        "y": 1245,
+                        "value": 0.0
+                    },
+                    {
+                        "x": 14457,
+                        "y": 2579,
+                        "value": 0.0
+                    }
+                ]
+            },
+            {
+                "name": "Land_Sea_Mask",
+                "description": "Flag indicating Land/Sea USGS content, Coastline distance, and Ice content",
+                "noDataValue": "0.0",
+                "noDataValueUsed": "true",
+                "spectralWavelength": "0.0",
+                "spectralBandwidth": "0.0",
+                "expectedPixels": [
+                    {
+                        "x": 4481,
+                        "y": 3149,
+                        "value": 25.0
+                    },
+                    {
+                        "x": 11179,
+                        "y": 1527,
+                        "value": 26.0
+                    }
+                ]
+            }
+        ],
+        "masks": [
+            {
+                "name": "Confidence_Flags_FL_RFI_PRONE_H",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "246,182,21",
+                "description": "DGG Current RFI for H pol above threshold"
+            },
+            {
+                "name": "Confidence_Flags_FL_RFI_PRONE_V",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "95,92,204",
+                "description": "DGG Current RFI for V pol above threshold"
+            },
+            {
+                "name": "Confidence_Flags_FL_NO_PROD",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "49,82,133",
+                "description": "No products are generated"
+            },
+            {
+                "name": "Confidence_Flags_FL_RANGE",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "169,175,146",
+                "description": "Retrieval values out off range"
+            },
+            {
+                "name": "Confidence_Flags_FL_DQX",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "156,188,14",
+                "description": "High retrieval DQX"
+            },
+            {
+                "name": "Confidence_Flags_FL_CHI2_P",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "39,91,126",
+                "description": "Poor fit quality"
+            },
+            {
+                "name": "Confidence_Flags_FL_FARADAY_ROTATION_ANGLE",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "214,25,160",
+                "description": "Indicates the source of the Faraday rotation angles. (0) means the Faraday rotation angles in the L1c product are used. 1 means the Faraday rotation angles in the AUX_FARA_x product are used"
+            },
+            {
+                "name": "Science_Flags_FL_NON_NOM",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "246,182,21",
+                "description": "Presence of other than nominal soil"
+            },
+            {
+                "name": "Science_Flags_FL_SCENE_T",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "95,92,204",
+                "description": "True (1) if any of scene flags is set (1)"
+            },
+            {
+                "name": "Science_Flags_FL_BARREN",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "49,82,133",
+                "description": "Scene flag indicating presence of rocks"
+            },
+            {
+                "name": "Science_Flags_FL_TOPO_S",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "169,175,146",
+                "description": "Scene flag indicating presence of strong topography"
+            },
+            {
+                "name": "Science_Flags_FL_TOPO_M",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "156,188,14",
+                "description": "Scene flag indicating presence of moderate topography"
+            },
+            {
+                "name": "Science_Flags_FL_OW",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "39,91,126",
+                "description": "Scene flag indicating presence of open water"
+            },
+            {
+                "name": "Science_Flags_FL_SNOW_MIX",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "214,25,160",
+                "description": "Scene flag indicating presence of mixed snow"
+            },
+            {
+                "name": "Science_Flags_FL_SNOW_WET",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "178,13,207",
+                "description": "Scene flag indicating presence of wet snow"
+            },
+            {
+                "name": "Science_Flags_FL_SNOW_DRY",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "208,249,67",
+                "description": "Scene flag indicating presence of significant dry snow"
+            },
+            {
+                "name": "Science_Flags_FL_FOREST",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "106,109,115",
+                "description": "Scene flag indicating presence of forest"
+            },
+            {
+                "name": "Science_Flags_FL_NOMINAL",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "16,81,105",
+                "description": "Scene flag indicating presence of nominal soil"
+            },
+            {
+                "name": "Science_Flags_FL_FROST",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "171,1,243",
+                "description": "Scene flag indicating presence of frost"
+            },
+            {
+                "name": "Science_Flags_FL_ICE",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "238,203,217",
+                "description": "Scene flag indicating presence of permanent ice/snow"
+            },
+            {
+                "name": "Science_Flags_FL_WETLANDS",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "250,231,95",
+                "description": "Scene flag indicating presence of wetlands"
+            },
+            {
+                "name": "Science_Flags_FL_FLOOD_PROB",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "240,108,99",
+                "description": "Scene flag indicating probable flooding risk"
+            },
+            {
+                "name": "Science_Flags_FL_URBAN_LOW",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "115,141,245",
+                "description": "Scene flag indicating presence of limited urban area"
+            },
+            {
+                "name": "Science_Flags_FL_URBAN_HIGH",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "134,147,45",
+                "description": "Scene flag indicating presence of large urban area"
+            },
+            {
+                "name": "Science_Flags_FL_SAND",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "128,201,42",
+                "description": "Scene flag indicating presence of high sand fraction"
+            },
+            {
+                "name": "Science_Flags_FL_SEA_ICE",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "168,104,12",
+                "description": "Scene flag indicating presence of sea ice"
+            },
+            {
+                "name": "Science_Flags_FL_COAST",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "143,245,6",
+                "description": "Scene flag indicating presence of large tidal flag"
+            },
+            {
+                "name": "Science_Flags_FL_OCCUR_T",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "36,87,190",
+                "description": "True (1) if any of occur flags is set (1)"
+            },
+            {
+                "name": "Science_Flags_FL_LITTER",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "114,207,90",
+                "description": "Occur flag indicating litter suspected"
+            },
+            {
+                "name": "Science_Flags_FL_PR",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "145,13,33",
+                "description": "Occur flag indicating interception suspected (polarisation ratio)"
+            },
+            {
+                "name": "Science_Flags_FL_INTERCEP",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "52,182,192",
+                "description": "Occur flag - ECMWF indicates interception)"
+            },
+            {
+                "name": "Science_Flags_FL_EXTERNAL",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "46,90,194",
+                "description": "Any of the external flags on, or N_SKY counter not equal to zero"
+            },
+            {
+                "name": "Science_Flags_FL_RAIN",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "0,15,39",
+                "description": "External flag indicating heavy rain suspected"
+            },
+            {
+                "name": "Science_Flags_FL_TEC",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "160,208,135",
+                "description": "External flag indicating high ionospheric contributions"
+            },
+            {
+                "name": "Science_Flags_FL_TAU_FO",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "55,46,12",
+                "description": "Scene flag indicating presence of thick forest"
+            },
+            {
+                "name": "Science_Flags_FL_WINTER_FOREST",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "214,207,170",
+                "description": "Flag indicating that the winter forest case has been selected by the decision tree"
+            },
+            {
+                "name": "Science_Flags_FL_DUAL_RETR_FNO_FFO",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "47,83,139",
+                "description": "Flag indicating dual retrieval is performed on the FNO and FFO fractions"
+            },
+            {
+                "name": "Processing_Flags_FL_R4",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "246,182,21",
+                "description": "True (1) if attempted, regardless of success"
+            },
+            {
+                "name": "Processing_Flags_FL_R3",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "95,92,204",
+                "description": "True (1) if attempted, regardless of success"
+            },
+            {
+                "name": "Processing_Flags_FL_R2",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "49,82,133",
+                "description": "True (1) if attempted, regardless of success"
+            },
+            {
+                "name": "Processing_Flags_FL_MD_A",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "169,175,146",
+                "description": "True (1) if MDa failed"
+            },
+            {
+                "name": "DGG_Current_Flags_FL_CURRENT_TAU_NADIR_LV",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "246,182,21",
+                "description": "Flag driving request for updating the DGG_Current_Tau_Nadir_LV map after processing"
+            },
+            {
+                "name": "DGG_Current_Flags_FL_CURRENT_TAU_NADIR_FO",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "95,92,204",
+                "description": "Flag driving request for updating the DGG_Current_Tau_Nadir_FO map after processing"
+            },
+            {
+                "name": "DGG_Current_Flags_FL_CURRENT_HR",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "49,82,133",
+                "description": "Flag driving request for updating the DGG_Current_HR map after processing"
+            },
+            {
+                "name": "DGG_Current_Flags_FL_CURRENT_RFI",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "169,175,146",
+                "description": "Flag driving request for updating the DGG_Current_RFI map after processing"
+            },
+            {
+                "name": "DGG_Current_Flags_FL_CURRENT_FLOOD",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "156,188,14",
+                "description": "Flag driving request for updating the DGG_Current_Flood map after processing"
+            },
+            {
+                "name": "Land_Sea_Mask_USGS_SEA_FLAG",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "0,0,255",
+                "description": "Water fraction is above 95 percent (1); below 95 percent (0)"
+            },
+            {
+                "name": "Land_Sea_Mask_USGS_LAND_FLAG",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "0,255,0",
+                "description": "Water fraction is below 10 percent (1); above 10 percent (0)"
+            },
+            {
+                "name": "Land_Sea_Mask_USGS_MIXED_FLAG",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "0,255,255",
+                "description": "Water fraction is above 10 and below 95 percent (1); below 10 or above 95 percent (0)"
+            },
+            {
+                "name": "Land_Sea_Mask_200_KM_COASTAL_FLAG",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "178,140,0",
+                "description": "Distance to coastline is less than 200 km (1); greater than 200 km (0)"
+            },
+            {
+                "name": "Land_Sea_Mask_100_KM_COASTAL_FLAG",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "255,200,0",
+                "description": "Distance to coastline is less than 100 km (1); greater than 100 km (0)"
+            },
+            {
+                "name": "Land_Sea_Mask_40_KM_COASTAL_FLAG",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "255,255,0",
+                "description": "Distance to coastline is less than 40 km (1); greater than 40 km (0)"
+            },
+            {
+                "name": "Land_Sea_Mask_MIN_SEA_ICE_FLAG",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "255,255,255",
+                "description": "Sea ice is present for all months (1); is not present for all months (0)"
+            },
+            {
+                "name": "Land_Sea_Mask_MAX_SEA_ICE_FLAG",
+                "type": "org.esa.beam.framework.datamodel.Mask$BandMathsType",
+                "color": "240,240,240",
+                "description": "Sea ice is present for any months (1); is not present for any months (0)"
+            }
+        ],
+        "metadata": [
+            {
+                "path": "Fixed_Header/Source/Creator",
+                "value": "L2OP"
+            },
+            {
+                "path": "Variable_Header/Main_Product_Header/Orbit_Information/Y_Position",
+                "value": "-1310992.854"
+            }
+        ]
+    }
+}
