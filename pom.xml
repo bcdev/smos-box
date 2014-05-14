@@ -47,15 +47,16 @@
             </snapshots>
         </pluginRepository>
         <pluginRepository>
-            <id>apache.org</id>
-            <name>Maven Plugin Snapshots</name>
-            <url>http://people.apache.org/repo/m2-snapshot-repository</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
+            <id>central</id>
+            <name>Maven Plugin Repository</name>
+            <url>http://central.maven.org/maven2</url>
+            <layout>default</layout>
             <snapshots>
-                <enabled>true</enabled>
+                <enabled>false</enabled>
             </snapshots>
+            <releases>
+                <updatePolicy>never</updatePolicy>
+            </releases>
         </pluginRepository>
     </pluginRepositories>
 
@@ -289,7 +290,8 @@
 
                     <!-- IMPORTANT: make sure all jvm-options are written in a single line. tb 2013-03-22-->
                     <argLine>
-                        -Dorg.esa.beam.smos.dggDir=${project.basedir}/../smos-dgg/src/main/resources/org/esa/beam/smos/dgg -Dorg.esa.beam.smos.lsMaskDir=${project.basedir}/../smos-lsmask/src/main/resources/org/esa/beam/smos/lsmask
+                        -Dorg.esa.beam.smos.dggDir=${project.basedir}/../smos-dgg/src/main/resources/org/esa/beam/smos/dgg
+                        -Dorg.esa.beam.smos.lsMaskDir=${project.basedir}/../smos-lsmask/src/main/resources/org/esa/beam/smos/lsmask
                     </argLine>
                     <excludes>
                         <exclude>**/AcceptanceTestRunner.java</exclude>
@@ -347,9 +349,9 @@
 
     <developers>
         <developer>
-            <id>norman</id>
-            <name>Norman Fomferra</name>
-            <email>norman.fomferra@brockmann-consult.de</email>
+            <id>ralf</id>
+            <name>Ralf Quast</name>
+            <email>ralf.quast@brockmann-consult.de</email>
             <organization>Brockmann Consult</organization>
             <roles>
                 <role>Project Manager</role>
@@ -357,18 +359,27 @@
             </roles>
         </developer>
         <developer>
-            <id>marcop</id>
-            <name>Marco Peters</name>
-            <email>marco.peters@brockmann-consult.de</email>
+            <id>tomblock</id>
+            <name>Tom Block</name>
+            <email>tom.block@brockmann-consult.de</email>
             <organization>Brockmann Consult</organization>
             <roles>
                 <role>Java Developer</role>
             </roles>
         </developer>
         <developer>
-            <id>ralf</id>
-            <name>Ralf Quast</name>
-            <email>ralf.quast@brockmann-consult.de</email>
+            <id>norman</id>
+            <name>Norman Fomferra</name>
+            <email>norman.fomferra@brockmann-consult.de</email>
+            <organization>Brockmann Consult</organization>
+            <roles>
+                <role>Java Developer</role>
+            </roles>
+        </developer>
+        <developer>
+            <id>marcop</id>
+            <name>Marco Peters</name>
+            <email>marco.peters@brockmann-consult.de</email>
             <organization>Brockmann Consult</organization>
             <roles>
                 <role>Java Developer</role>
@@ -383,15 +394,6 @@
                 <role>Java Developer</role>
             </roles>
         </developer>
-        <developer>
-            <id>tomblock</id>
-            <name>Tom Block</name>
-            <email>tom.block@brockmann-consult.de</email>
-            <organization>Brockmann Consult</organization>
-            <roles>
-                <role>Java Developer</role>
-            </roles>
-        </developer>
     </developers>
 
     <reporting>
@@ -399,6 +401,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.9.1</version>
                 <configuration>
                     <excludePackageNames>*.internal;</excludePackageNames>
                     <quiet>true</quiet>
