@@ -35,7 +35,7 @@ public class SmosFileProcessor {
         this.gridPointFilter = gridPointFilter;
     }
 
-    public long process(SmosFile smosFile, ProgressMonitor pm) throws IOException {
+    public void process(SmosFile smosFile, ProgressMonitor pm) throws IOException {
         final CompoundType gridPointType = smosFile.getGridPointType();
         final int idIndex = gridPointType.getMemberIndex(SmosConstants.GRID_POINT_ID_NAME);
 
@@ -44,14 +44,12 @@ public class SmosFileProcessor {
 
         pm.beginTask(MessageFormat.format(
                 "Processing file ''{0}''...", smosFile.getDataFile().getName()), gridPointCount);
-        long intersectingGridPointsCounter = 0;
         try {
             for (int i = 0; i < gridPointCount; i++) {
                 final CompoundData gridPointData = smosFile.getGridPointData(i);
                 final int id = gridPointData.getInt(idIndex);
                 if (gridPointFilter.accept(id, gridPointData)) {
                     filterStream.handleGridPoint(i, gridPointData);
-                    intersectingGridPointsCounter++;
                 }
                 pm.worked(1);
                 if (pm.isCanceled()) {
@@ -62,6 +60,5 @@ public class SmosFileProcessor {
             filterStream.stopFile(smosFile);
             pm.done();
         }
-        return intersectingGridPointsCounter;
     }
 }

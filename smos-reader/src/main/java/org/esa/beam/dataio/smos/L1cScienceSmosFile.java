@@ -442,7 +442,7 @@ public class L1cScienceSmosFile extends L1cSmosFile {
         ProductHelper.addVirtualBand(product, descriptors.getMember("Stokes_4"), "BT_Value_XY_Imag");
     }
 
-    private Band addRotatedBand(Product product, BandDescriptor descriptor, ValueProvider valueProvider) {
+    private void addRotatedBand(Product product, BandDescriptor descriptor, ValueProvider valueProvider) {
         final Band band = product.addBand(descriptor.getBandName(), ProductData.TYPE_FLOAT32);
 
         band.setUnit(descriptor.getUnit());
@@ -454,8 +454,6 @@ public class L1cScienceSmosFile extends L1cSmosFile {
         }
         band.setSourceImage(createSourceImage(band, valueProvider));
         band.setImageInfo(ProductHelper.createImageInfo(band, descriptor));
-
-        return band;
     }
 
     // TODO - move to somewhere rq-20140512
