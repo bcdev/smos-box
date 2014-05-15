@@ -35,6 +35,12 @@ import java.util.zip.ZipFile;
  */
 public class SmosProductReaderPlugIn implements ProductReaderPlugIn {
 
+    private static final String[] EXTENSIONS_WITH_BUFR = new String[]{".HDR", ".DBL", ".zip", ".ZIP", ".bin"};
+    private static final String[] EXTENSIONS = new String[]{".HDR", ".DBL", ".zip", ".ZIP"};
+    private static final String[] FORMAT_NAMES_WITH_BUFR = new String[]{"SMOS-EEF", "SMOS Light-BUFR"};
+    private static final String[] FORMAT_NAMES = new String[]{"SMOS-EEF"};
+    private static final String DESCRIPTION = "SMOS Data Products";
+
     @Override
     public SmosProductReader createReaderInstance() {
         return new SmosProductReader(this);
@@ -110,23 +116,23 @@ public class SmosProductReaderPlugIn implements ProductReaderPlugIn {
     @Override
     public String[] getDefaultFileExtensions() {
         if (SmosUtils.isLightBufrTypeSupported()) {
-            return new String[]{".HDR", ".DBL", ".zip", ".ZIP", ".bin"};
+            return EXTENSIONS_WITH_BUFR;
         } else {
-            return new String[]{".HDR", ".DBL", ".zip", ".ZIP"};
+            return EXTENSIONS;
         }
     }
 
     @Override
     public String getDescription(Locale locale) {
-        return "SMOS Data Products";
+        return DESCRIPTION;
     }
 
     @Override
     public String[] getFormatNames() {
         if (SmosUtils.isLightBufrTypeSupported()) {
-            return new String[]{"SMOS-EEF", "SMOS Light-BUFR"};
+            return FORMAT_NAMES_WITH_BUFR;
         } else {
-            return new String[]{"SMOS-EEF"};
+            return FORMAT_NAMES;
         }
     }
 

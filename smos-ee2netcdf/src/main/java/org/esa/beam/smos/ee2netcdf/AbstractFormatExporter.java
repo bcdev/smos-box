@@ -5,7 +5,6 @@ import org.apache.commons.lang.StringUtils;
 import org.esa.beam.dataio.netcdf.nc.NFileWriteable;
 import org.esa.beam.dataio.netcdf.nc.NVariable;
 import org.esa.beam.dataio.smos.SmosFile;
-import org.esa.beam.dataio.smos.SmosProductReader;
 import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.smos.DateTimeUtils;
 import org.esa.beam.smos.ee2netcdf.variable.VariableDescriptor;
@@ -74,13 +73,13 @@ abstract class AbstractFormatExporter implements FormatExporter {
                 nVariable.addAttribute("flag_values", Array.factory(flagValues));
             }
             final String flagMeanings = variableDescriptor.getFlagMeanings();
-            if (StringUtils.isNotBlank(flagMeanings))                 {
+            if (StringUtils.isNotBlank(flagMeanings)) {
                 nVariable.addAttribute("flag_meanings", flagMeanings);
             }
             if (variableDescriptor.isScaleFactorPresent()) {
                 nVariable.addAttribute("scale_factor", variableDescriptor.getScaleFactor());
             }
-            if (variableDescriptor.isUnsigned())                                            {
+            if (variableDescriptor.isUnsigned()) {
                 nVariable.addAttribute("_Unsigned", "true");
             }
         }
