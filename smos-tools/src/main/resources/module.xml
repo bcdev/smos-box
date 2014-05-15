@@ -15,7 +15,7 @@
     <licenseUrl>http://www.gnu.org/licenses/gpl.html</licenseUrl>
 
     <changelog><![CDATA[
-       <p><a href="http://www.brockmann-consult.de/beam-jira/issues/?jql=project%20%3D%20SBOX%20AND%20issuetype%20in%20(Bug%2C%20Improvement%2C%20%22New%20Feature%22%2C%20Requirement)%20AND%20fixVersion%20%3D%20%223.0%22%20AND%20status%20%3D%20Resolved">Several issues</a> have been resolved.
+       <p><a href="http://www.brockmann-consult.de/beam-jira/issues/?jql=project%20%3D%20SBOX%20AND%20issuetype%20in%20(Bug%2C%20Improvement%2C%20%22New%20Feature%22%2C%20Requirement)%20AND%20fixVersion%20%3D%20%223.0%22%20AND%20status%20in%20(Resolved%2C%20Closed)">Several issues</a> have been resolved.
        </p>]]>
     </changelog>
 
