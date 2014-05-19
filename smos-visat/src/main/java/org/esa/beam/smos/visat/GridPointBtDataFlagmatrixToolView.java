@@ -134,9 +134,10 @@ public class GridPointBtDataFlagmatrixToolView extends GridPointBtDataToolView {
             for (int x = 0; x < m; x++) {
                 final int flags = dsData[x][iq].intValue();
                 for (int y = 0; y < n; y++) {
-                    data[0][y * m + x] = (1 + x);
-                    data[1][y * m + x] = y;
-                    data[2][y * m + x] = ((flags & (1 << y)) != 0) ? (1 + y % 3) : 0.0;
+                    final int index = y * m + x;
+                    data[0][index] = (1 + x);
+                    data[1][index] = y;
+                    data[2][index] = ((flags & (1 << y)) != 0) ? (1 + y % 3) : 0.0;
                 }
             }
             dataset.addSeries(SERIES_KEY, data);
