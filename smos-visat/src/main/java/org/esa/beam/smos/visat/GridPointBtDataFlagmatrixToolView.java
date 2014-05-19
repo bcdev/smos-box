@@ -16,6 +16,7 @@
 
 package org.esa.beam.smos.visat;
 
+import org.esa.beam.dataio.smos.L1cScienceSmosFile;
 import org.esa.beam.dataio.smos.L1cSmosFile;
 import org.esa.beam.dataio.smos.SmosConstants;
 import org.esa.beam.dataio.smos.dddb.BandDescriptor;
@@ -100,7 +101,7 @@ public class GridPointBtDataFlagmatrixToolView extends GridPointBtDataToolView {
         L1cSmosFile smosFile = null;
         if (enabled) {
             smosFile = getL1cSmosFile();
-            if (smosFile == null) {
+            if (canNotDisplayFile(smosFile)) {
                 enabled = false;
             }
         }
@@ -114,6 +115,10 @@ public class GridPointBtDataFlagmatrixToolView extends GridPointBtDataToolView {
             final NumberAxis rangeAxis = createRangeAxis(flagNames);
             plot.setRangeAxis(rangeAxis);
         }
+    }
+
+    static boolean canNotDisplayFile(L1cSmosFile smosFile) {
+        return smosFile == null || ! (smosFile instanceof L1cScienceSmosFile);
     }
 
     @Override
