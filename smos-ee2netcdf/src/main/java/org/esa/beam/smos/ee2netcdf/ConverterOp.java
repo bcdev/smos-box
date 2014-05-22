@@ -45,15 +45,19 @@ public class ConverterOp extends Operator {
 
     public static final String ALIAS = "SmosEE2NetCDF";
 
-    // input product types:
-    // MIR_SM_BWxD1C
-    // MIR_SM_BWxF1C
-    // MIR_SM_SCxD1C
-    // MIR_SM_SCxF1C
-    // MIR_SM_OSUDP2
-    // MIR_SM_SMUDP2
+    /**
+     * Valid source product types are
+     * <p/>
+     * MIR_SM_SMUDP2
+     * MIR_SM_OSUDP2
+     * MIR_SM_SCxF1C
+     * MIR_SM_SCxD1C
+     * MIR_SM_BWxF1C
+     * MIR_SM_BWxD1C
+     */
+    public static final String PRODUCT_TYPE_REGEX = "MIR_BW[LS][DF]1C|MIR_SC[LS][DF]1C|MIR_OSUDP2|MIR_SMUDP2";
 
-    @SourceProducts(type = "MIR_BW[LS][DF]1C|MIR_SC[LS][DF]1C|MIR_OSUDP2|MIR_SMUDP2",
+    @SourceProducts(type = PRODUCT_TYPE_REGEX,
                     description = "The source products to be converted. If not given, the parameter 'sourceProductPaths' must be provided.")
     private Product[] sourceProducts;
 
@@ -222,7 +226,12 @@ public class ConverterOp extends Operator {
         try {
             product = ProductIO.readProduct(inputFile);
             if (product != null) {
-                convertProduct(product);
+                final String productType = product.getProductType();
+                if (productType.matches(PRODUCT_TYPE_REGEX)) {
+                    convertProduct(product);
+                } else {
+                    getLogger().info("Unable to convert file: " + inputFile.getAbsolutePath());
+                }
             } else {
                 getLogger().warning("Unable to open file: " + inputFile.getAbsolutePath());
             }
