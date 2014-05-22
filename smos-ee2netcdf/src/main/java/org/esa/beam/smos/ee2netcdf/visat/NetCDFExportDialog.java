@@ -114,6 +114,7 @@ public class NetCDFExportDialog extends ModelessDialog {
 
         final Product selectedSmosProduct = DialogHelper.getSelectedSmosProduct(appContext);
         if (selectedSmosProduct != null) {
+            propertyContainer.setValue(BindingConstants.SELECTED_PRODUCT, true);
             final List<Geometry> geometries = GuiHelper.getPolygonGeometries(selectedSmosProduct);
             if (!geometries.isEmpty()) {
                 GuiHelper.bindGeometries(geometries, propertyContainer);
