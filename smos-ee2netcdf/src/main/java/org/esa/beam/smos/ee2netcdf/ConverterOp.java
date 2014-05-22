@@ -126,8 +126,8 @@ public class ConverterOp extends Operator {
     // package access for testing only tb 2013-03-26
     static MultiPolygon convertToPolygon(Area dataArea) {
         final PathIterator pathIterator = dataArea.getPathIterator(null);
-        final ArrayList<double[]> coordList = new ArrayList<double[]>();
-        final ArrayList<Polygon> polygonList = new ArrayList<Polygon>();
+        final ArrayList<double[]> coordList = new ArrayList<>();
+        final ArrayList<Polygon> polygonList = new ArrayList<>();
         final GeometryFactory geometryFactory = new GeometryFactory();
 
         while (!pathIterator.isDone()) {
