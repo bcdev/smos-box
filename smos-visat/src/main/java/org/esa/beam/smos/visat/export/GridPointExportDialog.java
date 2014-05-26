@@ -29,7 +29,7 @@ import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.framework.datamodel.VectorDataNode;
 import org.esa.beam.framework.gpf.annotations.ParameterDescriptorFactory;
 import org.esa.beam.framework.ui.AppContext;
-import org.esa.beam.framework.ui.ModalDialog;
+import org.esa.beam.framework.ui.ModelessDialog;
 import org.esa.beam.smos.gui.BindingConstants;
 import org.esa.beam.smos.gui.ChooserFactory;
 import org.esa.beam.smos.gui.DefaultChooserFactory;
@@ -47,7 +47,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-class GridPointExportDialog extends ModalDialog {
+class GridPointExportDialog extends ModelessDialog {
 
     static final String ALIAS_RECURSIVE = "recursive";
     static final String ALIAS_TARGET_FILE = "targetFileOrDir";
@@ -61,7 +61,7 @@ class GridPointExportDialog extends ModalDialog {
     private GridPointExportSwingWorker exportSwingWorker;
 
     GridPointExportDialog(final AppContext appContext, String helpId) {
-        super(appContext.getApplicationWindow(), "Export SMOS Grid Points", ID_OK_CANCEL_HELP, helpId); /* I18N */
+        super(appContext.getApplicationWindow(), "Export SMOS Grid Points", ID_OK | ID_CLOSE | ID_HELP, helpId); /* I18N */
         exportSwingWorker = new GridPointExportSwingWorker(appContext);
         this.appContext = appContext;
 
