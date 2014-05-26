@@ -58,14 +58,14 @@ public class NetCDFExportDialog extends ModelessDialog {
 
     // package access for testing only tb 2013-05-27
     static List<File> getTargetFiles(String filePath, File targetDir) throws IOException {
-        final ArrayList<File> targetFiles = new ArrayList<File>();
+        final ArrayList<File> targetFiles = new ArrayList<>();
 
         final File file = new File(filePath);
         if (file.isFile()) {
             final File outputFile = ConverterOp.getOutputFile(file, targetDir);
             targetFiles.add(outputFile);
         } else {
-            final TreeSet<File> sourceFileSet = new TreeSet<File>();
+            final TreeSet<File> sourceFileSet = new TreeSet<>();
             WildcardMatcher.glob(filePath, sourceFileSet);
             for (File aSourceFile : sourceFileSet) {
                 final File outputFile = ConverterOp.getOutputFile(aSourceFile, targetDir);
@@ -78,7 +78,7 @@ public class NetCDFExportDialog extends ModelessDialog {
 
     // package access for testing only tb 2013-05-27
     static List<File> getExistingFiles(List<File> targetFiles) {
-        final ArrayList<File> existingFiles = new ArrayList<File>();
+        final ArrayList<File> existingFiles = new ArrayList<>();
 
         for (File targetFile : targetFiles) {
             if (targetFile.isFile()) {
@@ -179,7 +179,7 @@ public class NetCDFExportDialog extends ModelessDialog {
         }
 
         final JRadioButton useAreaButton = new JRadioButton("Area");
-        final Map<AbstractButton, Object> buttonGroupValueSet = new HashMap<AbstractButton, Object>();
+        final Map<AbstractButton, Object> buttonGroupValueSet = new HashMap<>();
         buttonGroupValueSet.put(wholeProductButton, BindingConstants.ROI_TYPE_PRODUCT);
         buttonGroupValueSet.put(useGeometryButton, BindingConstants.ROI_TYPE_GEOMETRY);
         buttonGroupValueSet.put(useAreaButton, BindingConstants.ROI_TYPE_AREA);
@@ -269,10 +269,7 @@ public class NetCDFExportDialog extends ModelessDialog {
             return;
         }
 
-
         final ConverterSwingWorker worker = new ConverterSwingWorker(appContext, exportParameter);
-
-        super.onOK();
 
         GuiHelper.setDefaultSourceDirectory(exportParameter.getSourceDirectory(), appContext);
         GuiHelper.setDefaultTargetDirectory(exportParameter.getTargetDirectory(), appContext);
