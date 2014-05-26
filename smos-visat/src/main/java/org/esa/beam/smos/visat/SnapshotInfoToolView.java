@@ -91,9 +91,13 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.text.MessageFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 import java.util.concurrent.ExecutionException;
 
 public class SnapshotInfoToolView extends SmosToolView {
@@ -218,7 +222,11 @@ public class SnapshotInfoToolView extends SmosToolView {
             } else {
                 if ("Snapshot_Time".equals(compoundType.getMemberName(i))) {
                     try {
-                        entry[1] = DateTimeUtils.cfiDateToUtc(data.getCompound(0));
+                        final Date date = DateTimeUtils.cfiDateToUtc(data.getCompound(0));
+                        final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSz",
+                                                                                 Locale.ENGLISH);
+                        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+                        entry[1] = dateFormat.format(date);
                     } catch (IOException e) {
                         entry[1] = "Failed reading data";
                     }
