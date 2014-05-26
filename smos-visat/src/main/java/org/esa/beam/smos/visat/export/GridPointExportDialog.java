@@ -95,7 +95,7 @@ class GridPointExportDialog extends ModalDialog {
                 return;
             }
         }
-        super.onOK();
+
         exportSwingWorker.execute();
     }
 
