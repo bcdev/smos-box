@@ -26,6 +26,8 @@ import org.esa.beam.dataio.smos.SmosFile;
 import org.esa.beam.dataio.smos.SmosProductReader;
 import org.esa.beam.framework.dataio.ProductReader;
 import org.esa.beam.framework.datamodel.Product;
+import org.esa.beam.framework.datamodel.ProductNodeEvent;
+import org.esa.beam.framework.datamodel.ProductNodeListener;
 import org.esa.beam.framework.datamodel.VectorDataNode;
 import org.esa.beam.framework.gpf.annotations.ParameterDescriptorFactory;
 import org.esa.beam.framework.ui.AppContext;
@@ -307,6 +309,7 @@ class GridPointExportDialog extends ModelessDialog {
                 final SmosProductReader smosProductReader = (SmosProductReader) productReader;
                 final ProductFile productFile = smosProductReader.getProductFile();
                 if (productFile instanceof SmosFile) {
+                    selectedProduct.addProductNodeListener(new GeometryListener());
                     return selectedProduct;
                 }
             }
@@ -331,6 +334,28 @@ class GridPointExportDialog extends ModelessDialog {
                 last = propertyContainer.getValue(ALIAS_TARGET_FILE);
                 propertyContainer.setValue(ALIAS_TARGET_FILE, last.getParentFile());
             }
+        }
+    }
+
+    private class GeometryListener implements ProductNodeListener {
+        @Override
+        public void nodeChanged(ProductNodeEvent event) {
+            System.out.println("nodeChanged = " + event);
+        }
+
+        @Override
+        public void nodeDataChanged(ProductNodeEvent event) {
+            System.out.println("nodeDataChanged = " + event);
+        }
+
+        @Override
+        public void nodeAdded(ProductNodeEvent event) {
+            System.out.println("nodeAdded = " + event);
+        }
+
+        @Override
+        public void nodeRemoved(ProductNodeEvent event) {
+            System.out.println("nodeRemoved = " + event);
         }
     }
 }

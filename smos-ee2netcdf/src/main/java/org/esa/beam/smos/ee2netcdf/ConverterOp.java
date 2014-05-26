@@ -111,7 +111,7 @@ public class ConverterOp extends Operator {
 
     // package access for testing only tb 2013-03-27
     static TreeSet<File> createInputFileSet(String[] sourceProductPaths) {
-        final TreeSet<File> sourceFileSet = new TreeSet<File>();
+        final TreeSet<File> sourceFileSet = new TreeSet<>();
         try {
             for (String sourceProductPath : sourceProductPaths) {
                 sourceProductPath = sourceProductPath.trim();
@@ -231,6 +231,7 @@ public class ConverterOp extends Operator {
                     convertProduct(product);
                 } else {
                     getLogger().info("Unable to convert file: " + inputFile.getAbsolutePath());
+                    getLogger().info("Unsupported product of type: " + productType);
                 }
             } else {
                 getLogger().warning("Unable to open file: " + inputFile.getAbsolutePath());
