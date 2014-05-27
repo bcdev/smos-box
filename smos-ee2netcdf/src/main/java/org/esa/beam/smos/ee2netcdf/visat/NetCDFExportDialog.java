@@ -4,6 +4,7 @@ import com.bc.ceres.binding.*;
 import com.bc.ceres.swing.TableLayout;
 import com.bc.ceres.swing.binding.Binding;
 import com.bc.ceres.swing.binding.BindingContext;
+import com.bc.ceres.swing.selection.SelectionManager;
 import com.vividsolutions.jts.geom.Geometry;
 import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.framework.datamodel.ProductManager;
@@ -31,6 +32,7 @@ public class NetCDFExportDialog extends ProductChangeAwareDialog {
     private final PropertyContainer propertyContainer;
     private final AppContext appContext;
     private final BindingContext bindingContext;
+    private final ProductSelectionListener productSelectionListener;
     private GeometryListener geometryListener;
 
     public NetCDFExportDialog(AppContext appContext, String helpId) {
@@ -57,6 +59,10 @@ public class NetCDFExportDialog extends ProductChangeAwareDialog {
         productManager.addListener(new ProductManagerListener(this));
 
         geometryListener = new GeometryListener(this);
+
+        final SelectionManager selectionManager = appContext.getApplicationPage().getSelectionManager();
+        productSelectionListener = new ProductSelectionListener(this, selectionManager);
+        selectionManager.addSelectionChangeListener(productSelectionListener);
     }
 
     // package access for testing only tb 2013-05-27
@@ -129,9 +135,7 @@ public class NetCDFExportDialog extends ProductChangeAwareDialog {
             } else {
                 removeGeometries();
             }
-            if (bindingContext != null) {
-                bindingContext.setComponentsEnabled(BindingConstants.SELECTED_PRODUCT, true);
-            }
+            setSelectedProductButtonEnabled(true);
             propertyContainer.setValue(BindingConstants.SELECTED_PRODUCT, true);
 
             setSelectionToSelectedGeometry(propertyContainer);
@@ -146,17 +150,7 @@ public class NetCDFExportDialog extends ProductChangeAwareDialog {
     private void removeProductAndGeometries(Product product) {
         final Product selectedSmosProduct = DialogHelper.getSelectedSmosProduct(appContext);
         if (selectedSmosProduct == null) {
-            propertyContainer.setValue(BindingConstants.SELECTED_PRODUCT, false);
-            final Binding binding = bindingContext.getBinding(BindingConstants.SELECTED_PRODUCT);
-            final JComponent[] components = binding.getComponents();
-            for (final JComponent component : components) {
-                if (component instanceof JRadioButton) {
-                    if (((JRadioButton) component).getText().equals(BindingConstants.USE_SELECTED_PRODUCT_BUTTON_NAME)) {
-                        component.setEnabled(false);
-                        break;
-                    }
-                }
-            }
+            setSelectedProductButtonEnabled(false);
 
             final List<VectorDataNode> geometryNodeList = GuiHelper.getGeometries(product);
             if (!geometryNodeList.isEmpty()) {
@@ -164,6 +158,24 @@ public class NetCDFExportDialog extends ProductChangeAwareDialog {
             }
         }
     }
+
+    @SuppressWarnings("ConstantConditions")
+    private void setSelectedProductButtonEnabled(boolean enabled) {
+        if (bindingContext == null) {
+            return;
+        }
+        final Binding binding = bindingContext.getBinding(BindingConstants.SELECTED_PRODUCT);
+        final JComponent[] components = binding.getComponents();
+        for (final JComponent component : components) {
+            if (component instanceof JRadioButton) {
+                if (((JRadioButton) component).getText().equals(BindingConstants.USE_SELECTED_PRODUCT_BUTTON_NAME)) {
+                    component.setEnabled(enabled);
+                    break;
+                }
+            }
+        }
+    }
+
 
     private void removeGeometries() {
         final Property geometryProperty = propertyContainer.getProperty(BindingConstants.GEOMETRY);
@@ -324,6 +336,12 @@ public class NetCDFExportDialog extends ProductChangeAwareDialog {
     }
 
     @Override
+    protected void onClose() {
+        productSelectionListener.dispose();
+        super.onClose();
+    }
+
+    @Override
     protected void productAdded() {
         try {
             updateSelectedProductAndGeometries(propertyContainer);
@@ -339,7 +357,7 @@ public class NetCDFExportDialog extends ProductChangeAwareDialog {
     }
 
     @Override
-    protected void addGeometry() {
+    protected void geometryAdded() {
         try {
             updateSelectedProductAndGeometries(propertyContainer);
         } catch (ValidationException e) {
@@ -348,7 +366,16 @@ public class NetCDFExportDialog extends ProductChangeAwareDialog {
     }
 
     @Override
-    protected void removeGeometry() {
+    protected void geometryRemoved() {
+        try {
+            updateSelectedProductAndGeometries(propertyContainer);
+        } catch (ValidationException e) {
+            showErrorDialog("Internal error: " + e.getMessage());
+        }
+    }
+
+    @Override
+    protected void productSelectionChanged() {
         try {
             updateSelectedProductAndGeometries(propertyContainer);
         } catch (ValidationException e) {

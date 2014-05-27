@@ -20,6 +20,7 @@ import com.bc.ceres.binding.*;
 import com.bc.ceres.swing.TableLayout;
 import com.bc.ceres.swing.binding.Binding;
 import com.bc.ceres.swing.binding.BindingContext;
+import com.bc.ceres.swing.selection.SelectionManager;
 import org.esa.beam.dataio.smos.ProductFile;
 import org.esa.beam.dataio.smos.SmosFile;
 import org.esa.beam.dataio.smos.SmosProductReader;
@@ -54,6 +55,7 @@ class GridPointExportDialog extends ProductChangeAwareDialog {
     private final AppContext appContext;
     private final PropertyContainer propertyContainer;
     private final BindingContext bindingContext;
+    private final ProductSelectionListener productSelectionListener;
     private GridPointExportSwingWorker exportSwingWorker;
     private GeometryListener geometryListener;
 
@@ -79,6 +81,10 @@ class GridPointExportDialog extends ProductChangeAwareDialog {
         productManager.addListener(new ProductManagerListener(this));
 
         geometryListener = new GeometryListener(this);
+
+        final SelectionManager selectionManager = appContext.getApplicationPage().getSelectionManager();
+        productSelectionListener = new ProductSelectionListener(this, selectionManager);
+        selectionManager.addSelectionChangeListener(productSelectionListener);
     }
 
     @Override
@@ -165,10 +171,11 @@ class GridPointExportDialog extends ProductChangeAwareDialog {
                 }
             }
         }
-        if (bindingContext != null) {
-            bindingContext.setComponentsEnabled(BindingConstants.SELECTED_PRODUCT, selectedProduct != null);
-        }
+//        if (bindingContext != null) {
+//            bindingContext.setComponentsEnabled(BindingConstants.SELECTED_PRODUCT, selectedProduct != null);
+//        }
         propertyContainer.setValue(BindingConstants.SELECTED_PRODUCT, selectedProduct != null);
+        setSelectedProductButtonEnabled(selectedProduct != null);
     }
 
 
@@ -176,20 +183,28 @@ class GridPointExportDialog extends ProductChangeAwareDialog {
         final Product selectedSmosProduct = getSelectedSmosProduct();
         if (selectedSmosProduct == null) {
             propertyContainer.setValue(BindingConstants.SELECTED_PRODUCT, false);
-            final Binding binding = bindingContext.getBinding(BindingConstants.SELECTED_PRODUCT);
-            final JComponent[] components = binding.getComponents();
-            for (final JComponent component : components) {
-                if (component instanceof JRadioButton) {
-                    if (((JRadioButton) component).getText().equals(BindingConstants.USE_SELECTED_PRODUCT_BUTTON_NAME)) {
-                        component.setEnabled(false);
-                        break;
-                    }
-                }
-            }
+            setSelectedProductButtonEnabled(false);
 
             final List<VectorDataNode> geometryNodeList = GuiHelper.getGeometries(product);
             if (!geometryNodeList.isEmpty()) {
                 removeGeometries();
+            }
+        }
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    private void setSelectedProductButtonEnabled(boolean enabled) {
+        if (bindingContext == null) {
+            return;
+        }
+        final Binding binding = bindingContext.getBinding(BindingConstants.SELECTED_PRODUCT);
+        final JComponent[] components = binding.getComponents();
+        for (final JComponent component : components) {
+            if (component instanceof JRadioButton) {
+                if (((JRadioButton) component).getText().equals(BindingConstants.USE_SELECTED_PRODUCT_BUTTON_NAME)) {
+                    component.setEnabled(enabled);
+                    break;
+                }
             }
         }
     }
@@ -378,7 +393,7 @@ class GridPointExportDialog extends ProductChangeAwareDialog {
     }
 
     @Override
-    protected void addGeometry() {
+    protected void geometryAdded() {
         try {
             updateSelectedProductAndGeometries();
         } catch (ValidationException e) {
@@ -387,12 +402,27 @@ class GridPointExportDialog extends ProductChangeAwareDialog {
     }
 
     @Override
-    protected void removeGeometry() {
+    protected void geometryRemoved() {
         try {
             updateSelectedProductAndGeometries();
         } catch (ValidationException e) {
             showErrorDialog("Internal error: " + e.getMessage());
         }
+    }
+
+    @Override
+    protected void productSelectionChanged() {
+        try {
+            updateSelectedProductAndGeometries();
+        } catch (ValidationException e) {
+            showErrorDialog("Internal error: " + e.getMessage());
+        }
+    }
+
+    @Override
+    protected void onClose() {
+        productSelectionListener.dispose();
+        super.onClose();
     }
 
     private class ExportFormatChangeListener implements PropertyChangeListener {
