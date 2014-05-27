@@ -67,18 +67,18 @@ public class GuiHelper {
     }
 
     public static void addSourceProductsButtons(JPanel sourceProductPanel, boolean canProductSelectionBeEnabled, BindingContext bindingContext) {
-        final JRadioButton useSelectedProductButton = new JRadioButton("Use selected SMOS product");
+        final JRadioButton useSelectedProductButton = new JRadioButton(BindingConstants.USE_SELECTED_PRODUCT_BUTTON_NAME);
         final JRadioButton useAllProductsInDirectoryButton = new JRadioButton("Use all SMOS products in directory:");
 
         final ButtonGroup buttonGroup = new ButtonGroup();
         buttonGroup.add(useSelectedProductButton);
         buttonGroup.add(useAllProductsInDirectoryButton);
 
-        final Map<AbstractButton, Object> buttonGroupValueSet = new HashMap<AbstractButton, Object>();
+        final Map<AbstractButton, Object> buttonGroupValueSet = new HashMap<>();
         buttonGroupValueSet.put(useSelectedProductButton, true);
         buttonGroupValueSet.put(useAllProductsInDirectoryButton, false);
 
-        bindingContext.bind("useSelectedProduct", buttonGroup, buttonGroupValueSet);
+        bindingContext.bind(BindingConstants.SELECTED_PRODUCT, buttonGroup, buttonGroupValueSet);
         bindingContext.bindEnabledState(BindingConstants.SOURCE_DIRECTORY, true, BindingConstants.SELECTED_PRODUCT, false);
         bindingContext.bindEnabledState(BindingConstants.OPEN_FILE_DIALOG, true, BindingConstants.SELECTED_PRODUCT, false);
 
@@ -111,16 +111,15 @@ public class GuiHelper {
         panel.add(etcButton, BorderLayout.EAST);
 
         etcButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                final JFileChooser fileChooser = cf.createChooser((File) binding.getPropertyValue());
-                final int state = fileChooser.showDialog(panel, "Select");
-                if (state == JFileChooser.APPROVE_OPTION && fileChooser.getSelectedFile() != null) {
-                    binding.setPropertyValue(fileChooser.getSelectedFile());
-                }
-            }
-        }
-
+                                        @Override
+                                        public void actionPerformed(ActionEvent e) {
+                                            final JFileChooser fileChooser = cf.createChooser((File) binding.getPropertyValue());
+                                            final int state = fileChooser.showDialog(panel, "Select");
+                                            if (state == JFileChooser.APPROVE_OPTION && fileChooser.getSelectedFile() != null) {
+                                                binding.setPropertyValue(fileChooser.getSelectedFile());
+                                            }
+                                        }
+                                    }
         );
 
         return panel;
@@ -169,7 +168,7 @@ public class GuiHelper {
     }
 
     public static java.util.List<VectorDataNode> getGeometries(Product selectedProduct) {
-        final java.util.List<VectorDataNode> geometryNodeList = new ArrayList<VectorDataNode>();
+        final java.util.List<VectorDataNode> geometryNodeList = new ArrayList<>();
         final ProductNodeGroup<VectorDataNode> vectorDataGroup = selectedProduct.getVectorDataGroup();
         for (VectorDataNode node : vectorDataGroup.toArray(new VectorDataNode[vectorDataGroup.getNodeCount()])) {
             if (node.getFeatureType().getTypeName().equals(PlainFeatureFactory.DEFAULT_TYPE_NAME)) {
@@ -182,7 +181,7 @@ public class GuiHelper {
     }
 
     public static java.util.List<Geometry> getPolygonGeometries(Product selectedProduct) {
-        final java.util.List<Geometry> geometryNodeList = new ArrayList<Geometry>();
+        final java.util.List<Geometry> geometryNodeList = new ArrayList<>();
         final ProductNodeGroup<VectorDataNode> vectorDataGroup = selectedProduct.getVectorDataGroup();
         for (VectorDataNode node : vectorDataGroup.toArray(new VectorDataNode[vectorDataGroup.getNodeCount()])) {
             if (node.getFeatureType().getTypeName().equals(PlainFeatureFactory.DEFAULT_TYPE_NAME)) {
@@ -211,7 +210,7 @@ public class GuiHelper {
         descriptor.setNotEmpty(true);
         descriptor.setValueSet(new ValueSet(geometryNodeList.toArray()));
 
-        propertyContainer.setValue(BindingConstants.ROI_TYPE, 1);
+        propertyContainer.setValue(BindingConstants.ROI_TYPE, BindingConstants.ROI_TYPE_GEOMETRY);
         propertyContainer.getProperty(BindingConstants.GEOMETRY).setValue(geometryNodeList.get(0));
     }
 
@@ -221,7 +220,7 @@ public class GuiHelper {
         descriptor.setNotEmpty(true);
         descriptor.setValueSet(new ValueSet(geometryNodeList.toArray()));
 
-        propertyContainer.setValue(BindingConstants.ROI_TYPE, 1);
+        propertyContainer.setValue(BindingConstants.ROI_TYPE, BindingConstants.ROI_TYPE_GEOMETRY);
         propertyContainer.getProperty(BindingConstants.GEOMETRY).setValue(geometryNodeList.get(0));
     }
 

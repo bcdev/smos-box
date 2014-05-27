@@ -16,4 +16,6 @@ public class BindingConstants {
     public static final int ROI_TYPE_PRODUCT = 0;
     public static final int ROI_TYPE_GEOMETRY = 1;
     public static final int ROI_TYPE_AREA = 2;
+
+    public static final String USE_SELECTED_PRODUCT_BUTTON_NAME = "Use selected SMOS product";
 }

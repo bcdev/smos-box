@@ -1,20 +1,20 @@
 package org.esa.beam.smos.ee2netcdf.visat;
 
+import com.bc.ceres.binding.Property;
 import com.bc.ceres.binding.PropertyContainer;
 import com.bc.ceres.binding.PropertyDescriptor;
 import com.bc.ceres.binding.ValidationException;
 import com.bc.ceres.swing.TableLayout;
+import com.bc.ceres.swing.binding.Binding;
 import com.bc.ceres.swing.binding.BindingContext;
 import com.vividsolutions.jts.geom.Geometry;
 import org.esa.beam.framework.datamodel.Product;
+import org.esa.beam.framework.datamodel.ProductManager;
+import org.esa.beam.framework.datamodel.VectorDataNode;
 import org.esa.beam.framework.ui.AppContext;
-import org.esa.beam.framework.ui.ModelessDialog;
 import org.esa.beam.framework.ui.RegionBoundsInputUI;
 import org.esa.beam.smos.ee2netcdf.ConverterOp;
-import org.esa.beam.smos.gui.BindingConstants;
-import org.esa.beam.smos.gui.DefaultChooserFactory;
-import org.esa.beam.smos.gui.DirectoryChooserFactory;
-import org.esa.beam.smos.gui.GuiHelper;
+import org.esa.beam.smos.gui.*;
 import org.esa.beam.util.io.WildcardMatcher;
 
 import javax.swing.*;
@@ -27,7 +27,7 @@ import java.text.MessageFormat;
 import java.util.*;
 import java.util.List;
 
-public class NetCDFExportDialog extends ModelessDialog {
+public class NetCDFExportDialog extends ProductChangeAwareDialog {
 
     private static final String TARGET_DIRECTORY_BINDING = "targetDirectory";
     private final ExportParameter exportParameter;
@@ -54,6 +54,9 @@ public class NetCDFExportDialog extends ModelessDialog {
         } catch (ValidationException e) {
             throw new IllegalStateException(e.getMessage());
         }
+
+        final ProductManager productManager = appContext.getProductManager();
+        productManager.addListener(new ProductManagerListener(this));
     }
 
     // package access for testing only tb 2013-05-27
@@ -112,12 +115,20 @@ public class NetCDFExportDialog extends ModelessDialog {
         final File defaultTargetDirectory = GuiHelper.getDefaultTargetDirectory(appContext);
         propertyContainer.setValue(TARGET_DIRECTORY_BINDING, defaultTargetDirectory);
 
+        addSelectedProduct(propertyContainer);
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    private void addSelectedProduct(PropertyContainer propertyContainer) throws ValidationException {
         final Product selectedSmosProduct = DialogHelper.getSelectedSmosProduct(appContext);
         if (selectedSmosProduct != null) {
             propertyContainer.setValue(BindingConstants.SELECTED_PRODUCT, true);
             final List<Geometry> geometries = GuiHelper.getPolygonGeometries(selectedSmosProduct);
             if (!geometries.isEmpty()) {
                 GuiHelper.bindGeometries(geometries, propertyContainer);
+            }
+            if (bindingContext != null) {
+                bindingContext.setComponentsEnabled(BindingConstants.SELECTED_PRODUCT, true);
             }
             propertyContainer.setValue(BindingConstants.SELECTED_PRODUCT, true);
 
@@ -127,6 +138,31 @@ public class NetCDFExportDialog extends ModelessDialog {
             propertyContainer.setValue(BindingConstants.ROI_TYPE, BindingConstants.ROI_TYPE_PRODUCT);
         }
     }
+
+    private void removeProductAndGeometries(Product product) {
+        final Product selectedSmosProduct = DialogHelper.getSelectedSmosProduct(appContext);
+        if (selectedSmosProduct == null) {
+            propertyContainer.setValue(BindingConstants.SELECTED_PRODUCT, false);
+            final Binding binding = bindingContext.getBinding(BindingConstants.SELECTED_PRODUCT);
+            final JComponent[] components = binding.getComponents();
+            for (final JComponent component : components) {
+                if (component instanceof JRadioButton) {
+                    if (((JRadioButton) component).getText().equals(BindingConstants.USE_SELECTED_PRODUCT_BUTTON_NAME)) {
+                        component.setEnabled(false);
+                        break;
+                    }
+                }
+            }
+
+            final List<VectorDataNode> geometryNodeList = GuiHelper.getGeometries(product);
+            if (!geometryNodeList.isEmpty()) {
+                final Property geometryProperty = propertyContainer.getProperty(BindingConstants.GEOMETRY);
+                propertyContainer.removeProperty(geometryProperty);
+                propertyContainer.setValue(BindingConstants.ROI_TYPE, BindingConstants.ROI_TYPE_AREA);
+            }
+        }
+    }
+
 
     private void setAreaToGlobe(PropertyContainer propertyContainer) {
         propertyContainer.setValue(RegionBoundsInputUI.PROPERTY_NORTH_BOUND, 90.0);
@@ -256,7 +292,8 @@ public class NetCDFExportDialog extends ModelessDialog {
                 final String message = MessageFormat.format(
                         "The selected target file(s) already exists.\n\nDo you want to overwrite the target file(s)?\n\n" +
                                 "{0}",
-                        files);
+                        files
+                );
                 final int answer = JOptionPane.showConfirmDialog(getJDialog(), message, getTitle(),
                         JOptionPane.YES_NO_OPTION);
                 if (answer == JOptionPane.NO_OPTION) {
@@ -275,5 +312,19 @@ public class NetCDFExportDialog extends ModelessDialog {
         GuiHelper.setDefaultTargetDirectory(exportParameter.getTargetDirectory(), appContext);
 
         worker.execute();
+    }
+
+    @Override
+    protected void productAdded() {
+        try {
+            addSelectedProduct(propertyContainer);
+        } catch (ValidationException e) {
+            showErrorDialog("Internal error: " + e.getMessage());
+        }
+    }
+
+    @Override
+    protected void productRemoved(Product product) {
+        removeProductAndGeometries(product);
     }
 }

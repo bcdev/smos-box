@@ -16,26 +16,21 @@
 
 package org.esa.beam.smos.visat.export;
 
+import com.bc.ceres.binding.Property;
 import com.bc.ceres.binding.PropertyContainer;
 import com.bc.ceres.binding.PropertyDescriptor;
 import com.bc.ceres.binding.ValidationException;
 import com.bc.ceres.swing.TableLayout;
+import com.bc.ceres.swing.binding.Binding;
 import com.bc.ceres.swing.binding.BindingContext;
 import org.esa.beam.dataio.smos.ProductFile;
 import org.esa.beam.dataio.smos.SmosFile;
 import org.esa.beam.dataio.smos.SmosProductReader;
 import org.esa.beam.framework.dataio.ProductReader;
-import org.esa.beam.framework.datamodel.Product;
-import org.esa.beam.framework.datamodel.ProductNodeEvent;
-import org.esa.beam.framework.datamodel.ProductNodeListener;
-import org.esa.beam.framework.datamodel.VectorDataNode;
+import org.esa.beam.framework.datamodel.*;
 import org.esa.beam.framework.gpf.annotations.ParameterDescriptorFactory;
 import org.esa.beam.framework.ui.AppContext;
-import org.esa.beam.framework.ui.ModelessDialog;
-import org.esa.beam.smos.gui.BindingConstants;
-import org.esa.beam.smos.gui.ChooserFactory;
-import org.esa.beam.smos.gui.DefaultChooserFactory;
-import org.esa.beam.smos.gui.GuiHelper;
+import org.esa.beam.smos.gui.*;
 import org.esa.beam.util.io.FileChooserFactory;
 
 import javax.swing.*;
@@ -49,7 +44,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-class GridPointExportDialog extends ModelessDialog {
+class GridPointExportDialog extends ProductChangeAwareDialog {
 
     static final String ALIAS_RECURSIVE = "recursive";
     static final String ALIAS_TARGET_FILE = "targetFileOrDir";
@@ -75,10 +70,13 @@ class GridPointExportDialog extends ModelessDialog {
         }
 
         bindingContext = new BindingContext(propertyContainer);
-        bindingContext.bindEnabledState(BindingConstants.GEOMETRY, true, BindingConstants.ROI_TYPE, 0);
+        bindingContext.bindEnabledState(BindingConstants.GEOMETRY, true, BindingConstants.ROI_TYPE, BindingConstants.ROI_TYPE_PRODUCT);
         GuiHelper.bindLonLatPanelToRoiType(2, bindingContext);
 
         createUI();
+
+        final ProductManager productManager = appContext.getProductManager();
+        productManager.addListener(new ProductManagerListener(this));
     }
 
     @Override
@@ -143,20 +141,53 @@ class GridPointExportDialog extends ModelessDialog {
         final File targetFile = getDefaultTargetFile();
         propertyContainer.setValue(ALIAS_TARGET_FILE, targetFile);
 
+        addSelectedProduct();
+        if (targetFile.isDirectory()) {
+            propertyContainer.setValue(ALIAS_EXPORT_FORMAT, NAME_EEF);
+        }
+        propertyContainer.addPropertyChangeListener(ALIAS_EXPORT_FORMAT, new ExportFormatChangeListener());
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    private void addSelectedProduct() throws ValidationException {
         final Product selectedProduct = getSelectedSmosProduct();
         if (selectedProduct != null) {
             final List<VectorDataNode> geometryNodeList = GuiHelper.getGeometries(selectedProduct);
             if (!geometryNodeList.isEmpty()) {
                 GuiHelper.bindGeometryVectorDataNodes(geometryNodeList, propertyContainer);
             } else if (selectedProduct.getPinGroup().getNodeCount() != 0) {
-                propertyContainer.setValue(BindingConstants.ROI_TYPE, 1);
+                propertyContainer.setValue(BindingConstants.ROI_TYPE, BindingConstants.ROI_TYPE_GEOMETRY);
             }
         }
-        propertyContainer.setValue(BindingConstants.SELECTED_PRODUCT, selectedProduct != null);
-        if (targetFile.isDirectory()) {
-            propertyContainer.setValue(ALIAS_EXPORT_FORMAT, NAME_EEF);
+        if (bindingContext != null) {
+            bindingContext.setComponentsEnabled(BindingConstants.SELECTED_PRODUCT, selectedProduct != null);
         }
-        propertyContainer.addPropertyChangeListener(ALIAS_EXPORT_FORMAT, new ExportFormatChangeListener());
+        propertyContainer.setValue(BindingConstants.SELECTED_PRODUCT, selectedProduct != null);
+    }
+
+
+    private void removeProductAndGeometries(Product product) {
+        final Product selectedSmosProduct = getSelectedSmosProduct();
+        if (selectedSmosProduct == null) {
+            propertyContainer.setValue(BindingConstants.SELECTED_PRODUCT, false);
+            final Binding binding = bindingContext.getBinding(BindingConstants.SELECTED_PRODUCT);
+            final JComponent[] components = binding.getComponents();
+            for (final JComponent component : components) {
+                if (component instanceof JRadioButton) {
+                    if (((JRadioButton) component).getText().equals(BindingConstants.USE_SELECTED_PRODUCT_BUTTON_NAME)) {
+                        component.setEnabled(false);
+                        break;
+                    }
+                }
+            }
+
+            final List<VectorDataNode> geometryNodeList = GuiHelper.getGeometries(product);
+            if (!geometryNodeList.isEmpty()) {
+                final Property geometryProperty = propertyContainer.getProperty(BindingConstants.GEOMETRY);
+                propertyContainer.removeProperty(geometryProperty);
+                propertyContainer.setValue(BindingConstants.ROI_TYPE, BindingConstants.ROI_TYPE_AREA);
+            }
+        }
     }
 
     private void createUI() {
@@ -318,6 +349,17 @@ class GridPointExportDialog extends ModelessDialog {
         return null;
     }
 
+    protected void productAdded() {
+        try {
+            addSelectedProduct();
+        } catch (ValidationException e) {
+            showErrorDialog("Internal error: " + e.getMessage());
+        }
+    }
+
+    protected void productRemoved(Product product) {
+        removeProductAndGeometries(product);
+    }
 
     private class ExportFormatChangeListener implements PropertyChangeListener {
 
@@ -340,22 +382,18 @@ class GridPointExportDialog extends ModelessDialog {
     private class GeometryListener implements ProductNodeListener {
         @Override
         public void nodeChanged(ProductNodeEvent event) {
-            System.out.println("nodeChanged = " + event);
         }
 
         @Override
         public void nodeDataChanged(ProductNodeEvent event) {
-            System.out.println("nodeDataChanged = " + event);
         }
 
         @Override
         public void nodeAdded(ProductNodeEvent event) {
-            System.out.println("nodeAdded = " + event);
         }
 
         @Override
         public void nodeRemoved(ProductNodeEvent event) {
-            System.out.println("nodeRemoved = " + event);
         }
     }
 }
