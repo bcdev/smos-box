@@ -206,8 +206,8 @@ public class GuiHelper {
 
     public static void bindGeometryVectorDataNodes(java.util.List<VectorDataNode> geometryNodeList, PropertyContainer propertyContainer) throws ValidationException {
         final PropertyDescriptor descriptor = propertyContainer.getDescriptor(BindingConstants.GEOMETRY);
-        descriptor.setNotNull(true);
-        descriptor.setNotEmpty(true);
+        descriptor.setNotNull(false);
+        descriptor.setNotEmpty(false);
         descriptor.setValueSet(new ValueSet(geometryNodeList.toArray()));
 
         propertyContainer.setValue(BindingConstants.ROI_TYPE, BindingConstants.ROI_TYPE_GEOMETRY);
@@ -216,8 +216,8 @@ public class GuiHelper {
 
     public static void bindGeometries(java.util.List<Geometry> geometryNodeList, PropertyContainer propertyContainer) throws ValidationException {
         final PropertyDescriptor descriptor = propertyContainer.getDescriptor(BindingConstants.GEOMETRY);
-        descriptor.setNotNull(true);
-        descriptor.setNotEmpty(true);
+        descriptor.setNotNull(false);
+        descriptor.setNotEmpty(false);
         descriptor.setValueSet(new ValueSet(geometryNodeList.toArray()));
 
         propertyContainer.setValue(BindingConstants.ROI_TYPE, BindingConstants.ROI_TYPE_GEOMETRY);

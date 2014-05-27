@@ -16,10 +16,7 @@
 
 package org.esa.beam.smos.visat.export;
 
-import com.bc.ceres.binding.Property;
-import com.bc.ceres.binding.PropertyContainer;
-import com.bc.ceres.binding.PropertyDescriptor;
-import com.bc.ceres.binding.ValidationException;
+import com.bc.ceres.binding.*;
 import com.bc.ceres.swing.TableLayout;
 import com.bc.ceres.swing.binding.Binding;
 import com.bc.ceres.swing.binding.BindingContext;
@@ -27,7 +24,9 @@ import org.esa.beam.dataio.smos.ProductFile;
 import org.esa.beam.dataio.smos.SmosFile;
 import org.esa.beam.dataio.smos.SmosProductReader;
 import org.esa.beam.framework.dataio.ProductReader;
-import org.esa.beam.framework.datamodel.*;
+import org.esa.beam.framework.datamodel.Product;
+import org.esa.beam.framework.datamodel.ProductManager;
+import org.esa.beam.framework.datamodel.VectorDataNode;
 import org.esa.beam.framework.gpf.annotations.ParameterDescriptorFactory;
 import org.esa.beam.framework.ui.AppContext;
 import org.esa.beam.smos.gui.*;
@@ -56,6 +55,7 @@ class GridPointExportDialog extends ProductChangeAwareDialog {
     private final PropertyContainer propertyContainer;
     private final BindingContext bindingContext;
     private GridPointExportSwingWorker exportSwingWorker;
+    private GeometryListener geometryListener;
 
     GridPointExportDialog(final AppContext appContext, String helpId) {
         super(appContext.getApplicationWindow(), "Export SMOS Grid Points", ID_OK | ID_CLOSE | ID_HELP, helpId); /* I18N */
@@ -77,6 +77,8 @@ class GridPointExportDialog extends ProductChangeAwareDialog {
 
         final ProductManager productManager = appContext.getProductManager();
         productManager.addListener(new ProductManagerListener(this));
+
+        geometryListener = new GeometryListener(this);
     }
 
     @Override
@@ -141,7 +143,7 @@ class GridPointExportDialog extends ProductChangeAwareDialog {
         final File targetFile = getDefaultTargetFile();
         propertyContainer.setValue(ALIAS_TARGET_FILE, targetFile);
 
-        addSelectedProduct();
+        updateSelectedProductAndGeometries();
         if (targetFile.isDirectory()) {
             propertyContainer.setValue(ALIAS_EXPORT_FORMAT, NAME_EEF);
         }
@@ -149,14 +151,18 @@ class GridPointExportDialog extends ProductChangeAwareDialog {
     }
 
     @SuppressWarnings("ConstantConditions")
-    private void addSelectedProduct() throws ValidationException {
+    private void updateSelectedProductAndGeometries() throws ValidationException {
         final Product selectedProduct = getSelectedSmosProduct();
         if (selectedProduct != null) {
             final List<VectorDataNode> geometryNodeList = GuiHelper.getGeometries(selectedProduct);
             if (!geometryNodeList.isEmpty()) {
                 GuiHelper.bindGeometryVectorDataNodes(geometryNodeList, propertyContainer);
-            } else if (selectedProduct.getPinGroup().getNodeCount() != 0) {
-                propertyContainer.setValue(BindingConstants.ROI_TYPE, BindingConstants.ROI_TYPE_GEOMETRY);
+            } else {
+                removeGeometries();
+
+                if (selectedProduct.getPinGroup().getNodeCount() != 0) {
+                    propertyContainer.setValue(BindingConstants.ROI_TYPE, BindingConstants.ROI_TYPE_GEOMETRY);
+                }
             }
         }
         if (bindingContext != null) {
@@ -166,7 +172,7 @@ class GridPointExportDialog extends ProductChangeAwareDialog {
     }
 
 
-    private void removeProductAndGeometries(Product product) {
+    private void removeProductAndGeometries(Product product) throws ValidationException {
         final Product selectedSmosProduct = getSelectedSmosProduct();
         if (selectedSmosProduct == null) {
             propertyContainer.setValue(BindingConstants.SELECTED_PRODUCT, false);
@@ -183,11 +189,16 @@ class GridPointExportDialog extends ProductChangeAwareDialog {
 
             final List<VectorDataNode> geometryNodeList = GuiHelper.getGeometries(product);
             if (!geometryNodeList.isEmpty()) {
-                final Property geometryProperty = propertyContainer.getProperty(BindingConstants.GEOMETRY);
-                propertyContainer.removeProperty(geometryProperty);
-                propertyContainer.setValue(BindingConstants.ROI_TYPE, BindingConstants.ROI_TYPE_AREA);
+                removeGeometries();
             }
         }
+    }
+
+    private void removeGeometries() throws ValidationException {
+        final Property geometryProperty = propertyContainer.getProperty(BindingConstants.GEOMETRY);
+        geometryProperty.getDescriptor().setValueSet(new ValueSet(new VectorDataNode[0]));
+        propertyContainer.setValue(BindingConstants.GEOMETRY, null);
+        propertyContainer.setValue(BindingConstants.ROI_TYPE, BindingConstants.ROI_TYPE_AREA);
     }
 
     private void createUI() {
@@ -227,7 +238,7 @@ class GridPointExportDialog extends ProductChangeAwareDialog {
     private Component createRoiPanel() {
         final JRadioButton useGeometryButton = new JRadioButton("Geometry");
         final PropertyDescriptor geometryDescriptor = propertyContainer.getDescriptor(BindingConstants.GEOMETRY);
-        if (geometryDescriptor.getValueSet() == null) {
+        if (geometryDescriptor != null && geometryDescriptor.getValueSet() == null) {
             useGeometryButton.setEnabled(false);
         }
 
@@ -275,7 +286,7 @@ class GridPointExportDialog extends ProductChangeAwareDialog {
         targetFilePanel.setBorder(BorderFactory.createTitledBorder("Target File"));
 
         final PropertyDescriptor formatDescriptor = propertyContainer.getDescriptor(ALIAS_EXPORT_FORMAT);
-        final JComboBox formatComboBox = new JComboBox(formatDescriptor.getValueSet().getItems());
+        final JComboBox<Object> formatComboBox = new JComboBox<>(formatDescriptor.getValueSet().getItems());
         bindingContext.bind(ALIAS_EXPORT_FORMAT, formatComboBox);
 
         final JPanel formatPanel = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
@@ -340,7 +351,7 @@ class GridPointExportDialog extends ProductChangeAwareDialog {
                 final SmosProductReader smosProductReader = (SmosProductReader) productReader;
                 final ProductFile productFile = smosProductReader.getProductFile();
                 if (productFile instanceof SmosFile) {
-                    selectedProduct.addProductNodeListener(new GeometryListener());
+                    selectedProduct.addProductNodeListener(geometryListener);
                     return selectedProduct;
                 }
             }
@@ -351,14 +362,37 @@ class GridPointExportDialog extends ProductChangeAwareDialog {
 
     protected void productAdded() {
         try {
-            addSelectedProduct();
+            updateSelectedProductAndGeometries();
         } catch (ValidationException e) {
             showErrorDialog("Internal error: " + e.getMessage());
         }
     }
 
     protected void productRemoved(Product product) {
-        removeProductAndGeometries(product);
+        try {
+            removeProductAndGeometries(product);
+        } catch (ValidationException e) {
+            showErrorDialog("Internal error: " + e.getMessage());
+        }
+        product.removeProductNodeListener(geometryListener);
+    }
+
+    @Override
+    protected void addGeometry() {
+        try {
+            updateSelectedProductAndGeometries();
+        } catch (ValidationException e) {
+            showErrorDialog("Internal error: " + e.getMessage());
+        }
+    }
+
+    @Override
+    protected void removeGeometry() {
+        try {
+            updateSelectedProductAndGeometries();
+        } catch (ValidationException e) {
+            showErrorDialog("Internal error: " + e.getMessage());
+        }
     }
 
     private class ExportFormatChangeListener implements PropertyChangeListener {
@@ -376,24 +410,6 @@ class GridPointExportDialog extends ProductChangeAwareDialog {
                 last = propertyContainer.getValue(ALIAS_TARGET_FILE);
                 propertyContainer.setValue(ALIAS_TARGET_FILE, last.getParentFile());
             }
-        }
-    }
-
-    private class GeometryListener implements ProductNodeListener {
-        @Override
-        public void nodeChanged(ProductNodeEvent event) {
-        }
-
-        @Override
-        public void nodeDataChanged(ProductNodeEvent event) {
-        }
-
-        @Override
-        public void nodeAdded(ProductNodeEvent event) {
-        }
-
-        @Override
-        public void nodeRemoved(ProductNodeEvent event) {
         }
     }
 }

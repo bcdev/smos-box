@@ -1,9 +1,6 @@
 package org.esa.beam.smos.ee2netcdf.visat;
 
-import com.bc.ceres.binding.Property;
-import com.bc.ceres.binding.PropertyContainer;
-import com.bc.ceres.binding.PropertyDescriptor;
-import com.bc.ceres.binding.ValidationException;
+import com.bc.ceres.binding.*;
 import com.bc.ceres.swing.TableLayout;
 import com.bc.ceres.swing.binding.Binding;
 import com.bc.ceres.swing.binding.BindingContext;
@@ -34,6 +31,7 @@ public class NetCDFExportDialog extends ProductChangeAwareDialog {
     private final PropertyContainer propertyContainer;
     private final AppContext appContext;
     private final BindingContext bindingContext;
+    private GeometryListener geometryListener;
 
     public NetCDFExportDialog(AppContext appContext, String helpId) {
         super(appContext.getApplicationWindow(), "Convert SMOS EE File to NetCDF 4", ID_OK | ID_CLOSE | ID_HELP, helpId); /* I18N */
@@ -57,6 +55,8 @@ public class NetCDFExportDialog extends ProductChangeAwareDialog {
 
         final ProductManager productManager = appContext.getProductManager();
         productManager.addListener(new ProductManagerListener(this));
+
+        geometryListener = new GeometryListener(this);
     }
 
     // package access for testing only tb 2013-05-27
@@ -115,17 +115,19 @@ public class NetCDFExportDialog extends ProductChangeAwareDialog {
         final File defaultTargetDirectory = GuiHelper.getDefaultTargetDirectory(appContext);
         propertyContainer.setValue(TARGET_DIRECTORY_BINDING, defaultTargetDirectory);
 
-        addSelectedProduct(propertyContainer);
+        updateSelectedProductAndGeometries(propertyContainer);
     }
 
     @SuppressWarnings("ConstantConditions")
-    private void addSelectedProduct(PropertyContainer propertyContainer) throws ValidationException {
+    private void updateSelectedProductAndGeometries(PropertyContainer propertyContainer) throws ValidationException {
         final Product selectedSmosProduct = DialogHelper.getSelectedSmosProduct(appContext);
         if (selectedSmosProduct != null) {
             propertyContainer.setValue(BindingConstants.SELECTED_PRODUCT, true);
             final List<Geometry> geometries = GuiHelper.getPolygonGeometries(selectedSmosProduct);
             if (!geometries.isEmpty()) {
                 GuiHelper.bindGeometries(geometries, propertyContainer);
+            } else {
+                removeGeometries();
             }
             if (bindingContext != null) {
                 bindingContext.setComponentsEnabled(BindingConstants.SELECTED_PRODUCT, true);
@@ -133,6 +135,8 @@ public class NetCDFExportDialog extends ProductChangeAwareDialog {
             propertyContainer.setValue(BindingConstants.SELECTED_PRODUCT, true);
 
             setSelectionToSelectedGeometry(propertyContainer);
+
+            selectedSmosProduct.addProductNodeListener(geometryListener);
         } else {
             propertyContainer.setValue(BindingConstants.SELECTED_PRODUCT, false);
             propertyContainer.setValue(BindingConstants.ROI_TYPE, BindingConstants.ROI_TYPE_PRODUCT);
@@ -156,11 +160,16 @@ public class NetCDFExportDialog extends ProductChangeAwareDialog {
 
             final List<VectorDataNode> geometryNodeList = GuiHelper.getGeometries(product);
             if (!geometryNodeList.isEmpty()) {
-                final Property geometryProperty = propertyContainer.getProperty(BindingConstants.GEOMETRY);
-                propertyContainer.removeProperty(geometryProperty);
-                propertyContainer.setValue(BindingConstants.ROI_TYPE, BindingConstants.ROI_TYPE_AREA);
+                removeGeometries();
             }
         }
+    }
+
+    private void removeGeometries() {
+        final Property geometryProperty = propertyContainer.getProperty(BindingConstants.GEOMETRY);
+        geometryProperty.getDescriptor().setValueSet(new ValueSet(new VectorDataNode[0]));
+        propertyContainer.setValue(BindingConstants.GEOMETRY, null);
+        propertyContainer.setValue(BindingConstants.ROI_TYPE, BindingConstants.ROI_TYPE_AREA);
     }
 
 
@@ -317,7 +326,7 @@ public class NetCDFExportDialog extends ProductChangeAwareDialog {
     @Override
     protected void productAdded() {
         try {
-            addSelectedProduct(propertyContainer);
+            updateSelectedProductAndGeometries(propertyContainer);
         } catch (ValidationException e) {
             showErrorDialog("Internal error: " + e.getMessage());
         }
@@ -326,5 +335,24 @@ public class NetCDFExportDialog extends ProductChangeAwareDialog {
     @Override
     protected void productRemoved(Product product) {
         removeProductAndGeometries(product);
+        product.removeProductNodeListener(geometryListener);
+    }
+
+    @Override
+    protected void addGeometry() {
+        try {
+            updateSelectedProductAndGeometries(propertyContainer);
+        } catch (ValidationException e) {
+            showErrorDialog("Internal error: " + e.getMessage());
+        }
+    }
+
+    @Override
+    protected void removeGeometry() {
+        try {
+            updateSelectedProductAndGeometries(propertyContainer);
+        } catch (ValidationException e) {
+            showErrorDialog("Internal error: " + e.getMessage());
+        }
     }
 }
