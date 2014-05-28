@@ -10,9 +10,20 @@ public class ExportParameter {
 
     @Parameter(alias = BindingConstants.SELECTED_PRODUCT)
     private boolean useSelectedProduct;
+
+    @Parameter(alias = BindingConstants.SOURCE_DIRECTORY)
     private File sourceDirectory;
+
+    @Parameter(alias = BindingConstants.OPEN_FILE_DIALOG)
     private boolean openFileDialog;
+
     private Geometry geometry;
+
+    // @todo adapt Binding constant name   tb 2014-05-28
+    // @Parameter(alias = BindingConstants.GEOMETRY)
+    // private VectorDataNode geometryNode;
+
+    @Parameter(alias = BindingConstants.ROI_TYPE, defaultValue = "2", valueSet = {"0", "1", "2"})
     private int roiType;
 
     private File targetDirectory;

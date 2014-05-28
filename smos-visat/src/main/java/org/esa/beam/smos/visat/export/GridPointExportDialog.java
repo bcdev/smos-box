@@ -56,15 +56,15 @@ class GridPointExportDialog extends ProductChangeAwareDialog {
     private final PropertyContainer propertyContainer;
     private final BindingContext bindingContext;
     private final ProductSelectionListener productSelectionListener;
-    private GridPointExportSwingWorker exportSwingWorker;
     private GeometryListener geometryListener;
+    private final ExportParameter exportParameter;
 
     GridPointExportDialog(final AppContext appContext, String helpId) {
         super(appContext.getApplicationWindow(), "Export SMOS Grid Points", ID_OK | ID_CLOSE | ID_HELP, helpId); /* I18N */
-        exportSwingWorker = new GridPointExportSwingWorker(appContext);
+        exportParameter = new ExportParameter();
         this.appContext = appContext;
 
-        propertyContainer = PropertyContainer.createObjectBacked(exportSwingWorker, new ParameterDescriptorFactory());
+        propertyContainer = PropertyContainer.createObjectBacked(exportParameter, new ParameterDescriptorFactory());
         try {
             initPropertyContainer();
         } catch (ValidationException e) {
@@ -104,7 +104,9 @@ class GridPointExportDialog extends ProductChangeAwareDialog {
             }
         }
 
-        exportSwingWorker.execute();
+        final GridPointExportSwingWorker swingWorker = new GridPointExportSwingWorker(appContext, exportParameter.getClone());
+        // @todo 2 tb/tb save last selected directories 2014-05-28
+        swingWorker.execute();
     }
 
     @Override

@@ -24,16 +24,14 @@ import org.esa.beam.framework.datamodel.Placemark;
 import org.esa.beam.framework.datamodel.PlacemarkGroup;
 import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.framework.datamodel.VectorDataNode;
-import org.esa.beam.framework.gpf.annotations.Parameter;
 import org.esa.beam.framework.ui.AppContext;
-import org.esa.beam.smos.gui.BindingConstants;
 import org.geotools.feature.FeatureIterator;
 import org.geotools.geometry.jts.LiteShape2;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.operation.TransformException;
 
-import java.awt.Shape;
+import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.io.PrintWriter;
@@ -45,55 +43,22 @@ import java.util.concurrent.ExecutionException;
 class GridPointExportSwingWorker extends ProgressMonitorSwingWorker<List<Exception>, File> {
 
     private final AppContext appContext;
+    private final ExportParameter exportParameter;
 
-    @Parameter(alias = BindingConstants.SELECTED_PRODUCT)
-    private boolean useSelectedProduct;
-
-    @Parameter(alias = BindingConstants.SOURCE_DIRECTORY)
-    private File sourceDirectory;
-
-    @Parameter(alias = BindingConstants.OPEN_FILE_DIALOG)
-    private boolean openFileDialog;
-
-    @Parameter(alias = GridPointExportDialog.ALIAS_RECURSIVE, defaultValue = "false")
-    private boolean recursive;
-
-    @Parameter(alias = BindingConstants.ROI_TYPE, defaultValue = "2", valueSet = {"0", "1", "2"})
-    private int roiType;
-
-    @Parameter(alias = BindingConstants.GEOMETRY)
-    private VectorDataNode geometry;
-
-    @Parameter(alias = BindingConstants.NORTH, defaultValue = "90.0", interval = "[-90.0, 90.0]")
-    private double north;
-
-    @Parameter(alias = BindingConstants.SOUTH, defaultValue = "-90.0", interval = "[-90.0, 90.0]")
-    private double south;
-
-    @Parameter(alias = BindingConstants.EAST, defaultValue = "180.0", interval = "[-180.0, 180.0]")
-    private double east;
-
-    @Parameter(alias = BindingConstants.WEST, defaultValue = "-180.0", interval = "[-180.0, 180.0]")
-    private double west;
-
-    @Parameter(alias = GridPointExportDialog.ALIAS_TARGET_FILE, notNull = true, notEmpty = true)
-    private File targetFile;
-
-    @Parameter(alias = GridPointExportDialog.ALIAS_EXPORT_FORMAT, defaultValue = GridPointExportDialog.NAME_CSV,
-               valueSet = {GridPointExportDialog.NAME_CSV, GridPointExportDialog.NAME_EEF})
-    private String exportFormat;
-
-    GridPointExportSwingWorker(AppContext appContext) {
+    GridPointExportSwingWorker(AppContext appContext, ExportParameter exportParameter) {
         super(appContext.getApplicationWindow(), "Exporting grid points");
         this.appContext = appContext;
+        this.exportParameter = exportParameter;
     }
 
     @Override
     protected List<Exception> doInBackground(ProgressMonitor pm) throws Exception {
-        final List<Exception> problemList = new ArrayList<Exception>();
+        final List<Exception> problemList = new ArrayList<>();
 
         GridPointFilterStream filterStream = null;
         try {
+            final File targetFile = exportParameter.getTargetFile();
+            final String exportFormat = exportParameter.getExportFormat();
             if (GridPointExportDialog.NAME_CSV.equals(exportFormat)) {
                 filterStream = new CsvExportStream(new PrintWriter(targetFile), ";");
             } else {
@@ -101,11 +66,14 @@ class GridPointExportSwingWorker extends ProgressMonitorSwingWorker<List<Excepti
             }
             final GridPointFilter gridPointFilter = getGridPointFilter();
             final GridPointFilterStreamHandler handler = new GridPointFilterStreamHandler(filterStream,
-                                                                                          gridPointFilter);
-            final Product selectedProduct = appContext.getSelectedProduct();
-            if (useSelectedProduct && selectedProduct != null) {
+                    gridPointFilter);
+
+            if (exportParameter.isUseSelectedProduct()) {
+                final Product selectedProduct = appContext.getSelectedProduct();
                 handler.processProduct(selectedProduct, pm);
             } else {
+                final File sourceDirectory = exportParameter.getSourceDirectory();
+                final boolean recursive = exportParameter.isRecursive();
                 handler.processDirectory(sourceDirectory, recursive, pm, problemList);
             }
         } finally {
@@ -141,9 +109,11 @@ class GridPointExportSwingWorker extends ProgressMonitorSwingWorker<List<Excepti
     }
 
     private GridPointFilter getGridPointFilter() {
+        final int roiType = exportParameter.getRoiType();
         switch (roiType) {
             case 0: {
                 final MultiFilter multiFilter = new MultiFilter();
+                final VectorDataNode geometry = exportParameter.getGeometry();
                 if (geometry != null) {
                     final FeatureIterator<SimpleFeature> featureIterator = geometry.getFeatureCollection().features();
 
@@ -174,6 +144,10 @@ class GridPointExportSwingWorker extends ProgressMonitorSwingWorker<List<Excepti
                 return multiFilter;
             }
             case 2: {
+                final double north = exportParameter.getNorth();
+                final double south = exportParameter.getSouth();
+                final double east = exportParameter.getEast();
+                final double west = exportParameter.getWest();
                 return new RegionFilter(new Rectangle2D.Double(west, south, east - west, north - south));
             }
             default:
@@ -188,9 +162,7 @@ class GridPointExportSwingWorker extends ProgressMonitorSwingWorker<List<Excepti
             if (geometry instanceof Geometry) {
                 return new LiteShape2((Geometry) geometry, null, null, true);
             }
-        } catch (TransformException e) {
-            // ignore
-        } catch (FactoryException e) {
+        } catch (TransformException | FactoryException e) {
             // ignore
         }
         return null;

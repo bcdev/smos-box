@@ -44,12 +44,26 @@ public class ExportParameterTest {
     }
 
     @Test
+    public void testSourceDirectoryAnnotation() throws NoSuchFieldException {
+        final Field selectedProductField = ExportParameter.class.getDeclaredField(BindingConstants.SOURCE_DIRECTORY);
+        final Parameter parameter = selectedProductField.getAnnotation(Parameter.class);
+        assertEquals(BindingConstants.SOURCE_DIRECTORY, parameter.alias());
+    }
+
+    @Test
     public void testSetIsOpenFileDialog() {
         parameter.setOpenFileDialog(true);
         assertTrue(parameter.isOpenFileDialog());
 
         parameter.setOpenFileDialog(false);
         assertFalse(parameter.isOpenFileDialog());
+    }
+
+    @Test
+    public void testOpenFileDialogAnnotation() throws NoSuchFieldException {
+        final Field selectedProductField = ExportParameter.class.getDeclaredField(BindingConstants.OPEN_FILE_DIALOG);
+        final Parameter parameter = selectedProductField.getAnnotation(Parameter.class);
+        assertEquals(BindingConstants.OPEN_FILE_DIALOG, parameter.alias());
     }
 
     // @todo 1 tb/tb write test for geometry access 2013-04-08
@@ -77,6 +91,15 @@ public class ExportParameterTest {
 
         parameter.setRoiType(type_2);
         assertEquals(type_2, parameter.getRoiType());
+    }
+
+    @Test
+    public void testRoiTypeAnnotation() throws NoSuchFieldException {
+        final Field selectedProductField = ExportParameter.class.getDeclaredField(BindingConstants.ROI_TYPE);
+        final Parameter parameter = selectedProductField.getAnnotation(Parameter.class);
+        assertEquals(BindingConstants.ROI_TYPE, parameter.alias());
+        assertEquals("2", parameter.defaultValue());
+        assertArrayEquals(new String[]{"0", "1", "2"}, parameter.valueSet());
     }
 
     @Test
