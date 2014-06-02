@@ -158,12 +158,21 @@ class EEExportGridPointHandler implements GridPointHandler {
         } else {
             int index = type.getMemberIndex(SmosConstants.BT_DATA_LIST_NAME);
             final SequenceData btDataList = gridPointData.getSequence(index);
-            final CompoundData btData = btDataList.getCompound(0);
-            index = btData.getType().getMemberIndex(SmosConstants.BT_SNAPSHOT_ID_OF_PIXEL_NAME);
-            if (index >= 0) {
-                final long snapShotId = btData.getUInt(index);
-                timeTracker.track(snapshotIdTimeMap.get(snapShotId));
-            }
+            CompoundData btData = btDataList.getCompound(0);
+            trackTime(btData);
+
+            final int elementCount = btDataList.getElementCount();
+            btData = btDataList.getCompound(elementCount - 1);
+            trackTime(btData);
+        }
+    }
+
+    private void trackTime(CompoundData btData) throws IOException {
+        int index;
+        index = btData.getType().getMemberIndex(SmosConstants.BT_SNAPSHOT_ID_OF_PIXEL_NAME);
+        if (index >= 0) {
+            final long snapShotId = btData.getUInt(index);
+            timeTracker.track(snapshotIdTimeMap.get(snapShotId));
         }
     }
 
@@ -206,7 +215,6 @@ class EEExportGridPointHandler implements GridPointHandler {
             final CompoundData snapshot = snapshotData.getCompound(i);
             final Date snapshotTime = DateTimeUtils.cfiDateToUtc(snapshot.getCompound(0));
             final long snapshotId = snapshot.getUInt(1);
-
             snapshotIdTimeMap.put(snapshotId, snapshotTime);
         }
     }
