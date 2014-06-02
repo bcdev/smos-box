@@ -91,11 +91,10 @@ public class EEExportGridPointHandlerTest {
         ios.writeInt(100);
         ios.close();
 
-        CompoundType type = COMPOUND("dontcare", MEMBER("Mean_Acq_Time",
-                                                        COMPOUND("UTC_Type",
-                                                                 MEMBER("Days", SimpleType.INT),
-                                                                 MEMBER("Seconds", SimpleType.UINT),
-                                                                 MEMBER("Microseconds", SimpleType.UINT))));
+        CompoundType type = COMPOUND("dontcare",
+                MEMBER("Days", SimpleType.INT),
+                MEMBER("Seconds", SimpleType.UINT),
+                MEMBER("Microseconds", SimpleType.UINT));
 
 
         byte[] byteData = baos.toByteArray();
@@ -103,7 +102,7 @@ public class EEExportGridPointHandlerTest {
                 new ByteArrayIOHandler(byteData));
 
         CompoundData compoundData = InstanceFactory.createCompound(context, null, type, 0,
-                                                                   ByteOrder.LITTLE_ENDIAN);
+                ByteOrder.LITTLE_ENDIAN);
 
         Date l2MjdTimeStamp = EEExportGridPointHandler.getL2MjdTimeStamp(compoundData);
         assertEquals(new Date(1054685690000L), l2MjdTimeStamp);
@@ -121,7 +120,7 @@ public class EEExportGridPointHandlerTest {
                 new ByteArrayIOHandler(byteData));
 
         compoundData = InstanceFactory.createCompound(context, null, type, 0,
-                                                      ByteOrder.LITTLE_ENDIAN);
+                ByteOrder.LITTLE_ENDIAN);
 
         l2MjdTimeStamp = EEExportGridPointHandler.getL2MjdTimeStamp(compoundData);
         assertEquals(new Date(1054858490000L), l2MjdTimeStamp);
@@ -136,14 +135,14 @@ public class EEExportGridPointHandlerTest {
         ios.close();
 
         CompoundType type = COMPOUND("dontcare",
-                                     MEMBER("schnickschnack", SimpleType.FLOAT));
+                MEMBER("schnickschnack", SimpleType.FLOAT));
 
         byte[] byteData = baos.toByteArray();
         DataContext context = new DataFormat(type, ByteOrder.LITTLE_ENDIAN).createContext(
                 new ByteArrayIOHandler(byteData));
 
         CompoundData compoundData = InstanceFactory.createCompound(context, null, type, 0,
-                                                                   ByteOrder.LITTLE_ENDIAN);
+                ByteOrder.LITTLE_ENDIAN);
 
         final Date l2MjdTimeStamp = EEExportGridPointHandler.getL2MjdTimeStamp(compoundData);
         assertNull(l2MjdTimeStamp);
@@ -160,10 +159,10 @@ public class EEExportGridPointHandlerTest {
         ios.close();
 
         CompoundType type = COMPOUND("dontcare", MEMBER("Mean_Acq_Time",
-                                                        COMPOUND("UTC_Type",
-                                                                 MEMBER("Days", SimpleType.INT),
-                                                                 MEMBER("Seconds", SimpleType.UINT),
-                                                                 MEMBER("Microseconds", SimpleType.UINT))));
+                COMPOUND("UTC_Type",
+                        MEMBER("Days", SimpleType.INT),
+                        MEMBER("Seconds", SimpleType.UINT),
+                        MEMBER("Microseconds", SimpleType.UINT))));
 
 
         byte[] byteData = baos.toByteArray();
@@ -171,7 +170,7 @@ public class EEExportGridPointHandlerTest {
                 new ByteArrayIOHandler(byteData));
 
         CompoundData compoundData = InstanceFactory.createCompound(context, null, type, 0,
-                                                                   ByteOrder.LITTLE_ENDIAN);
+                ByteOrder.LITTLE_ENDIAN);
 
         Date l2MjdTimeStamp = EEExportGridPointHandler.getL2MjdTimeStamp(compoundData);
         assertNull(l2MjdTimeStamp);

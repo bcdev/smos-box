@@ -111,23 +111,22 @@ class EEExportGridPointHandler implements GridPointHandler {
 
     static Date getL2MjdTimeStamp(CompoundData compoundData) throws IOException {
         int index = compoundData.getType().getMemberIndex("Mean_Acq_Time");
-        if (index < 0) {
-            return null;
+        if (index > 0) {
+            return getOSUDPDate(compoundData, index);
+        }
+        final CompoundType type = compoundData.getType();
+        index = type.getMemberIndex("Days");
+        if (index >= 0) {
+            return getSMUPDDate(compoundData);
         }
 
-        final Type acqTimeType = compoundData.getType().getMemberType(index);
-        if (acqTimeType.isSimpleType()) {
-            return getOSUDPDate(compoundData, index);
-        } else {
-            return getSMUDPDate(compoundData, index);
-        }
+        return null;
     }
 
-    private static Date getSMUDPDate(CompoundData compoundData, int index) throws IOException {
-        final CompoundData utcCompound = compoundData.getCompound(index);
-        final int days = utcCompound.getInt("Days");
-        final long seconds = utcCompound.getUInt("Seconds");
-        final long microseconds = utcCompound.getUInt("Microseconds");
+    private static Date getSMUPDDate(CompoundData compoundData) throws IOException {
+        final int days = compoundData.getInt("Days");
+        final long seconds = compoundData.getUInt("Seconds");
+        final long microseconds = compoundData.getUInt("Microseconds");
 
         if ((days + seconds + microseconds) == 0) {
             return null;
@@ -152,7 +151,7 @@ class EEExportGridPointHandler implements GridPointHandler {
         }
         if (level2) {
             final Date timeStamp = getL2MjdTimeStamp(gridPointData);
-            if (timeStamp != null) {  // condition for valid measurement
+            if (timeStamp != null) {
                 timeTracker.track(timeStamp);
             }
         } else {
