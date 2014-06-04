@@ -119,8 +119,8 @@ abstract class FP extends AbstractValueProvider {
         final double grx = grxProvider.getFloat(gridPointIndex);
         final double gry = gryProvider.getFloat(gridPointIndex);
 
-        final double fr = angularAverage(frx, fry);
-        final double gr = angularAverage(grx, gry);
+        final double fr = -angularAverage(frx, fry);
+        final double gr = -angularAverage(grx, gry);
 
         final double alpha = Math.toRadians(fr + gr);
         final double a = Math.cos(alpha);
