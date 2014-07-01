@@ -5,6 +5,8 @@ import org.apache.commons.lang.StringUtils;
 import org.esa.beam.dataio.netcdf.nc.NFileWriteable;
 import org.esa.beam.dataio.netcdf.nc.NVariable;
 import org.esa.beam.dataio.smos.SmosFile;
+import org.esa.beam.framework.datamodel.MetadataAttribute;
+import org.esa.beam.framework.datamodel.MetadataElement;
 import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.smos.DateTimeUtils;
 import org.esa.beam.smos.ee2netcdf.variable.VariableDescriptor;
@@ -13,6 +15,7 @@ import ucar.ma2.Array;
 import java.io.IOException;
 import java.util.Date;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 
 abstract class AbstractFormatExporter implements FormatExporter {
@@ -29,7 +32,7 @@ abstract class AbstractFormatExporter implements FormatExporter {
 
     @Override
     public void addGlobalAttributes(NFileWriteable nFileWriteable) throws IOException {
-        nFileWriteable.addGlobalAttribute("Conventions", "CF-1.6");
+        nFileWriteable.addGlobalAttribute("Conventions", "CF-1.6");     // @todo 2 tb/tb discuss with Ralf - delete this? tb 2014-07-01
         nFileWriteable.addGlobalAttribute("title", "TBD");  // @todo 2 tb/tb replace with meaningful value tb 2014-04-07
         nFileWriteable.addGlobalAttribute("institution", "TBD");  // @todo 2 tb/tb replace with meaningful value tb 2014-04-07
         nFileWriteable.addGlobalAttribute("contact", "TBD");  // @todo 2 tb/tb replace with meaningful value tb 2014-04-07
@@ -91,4 +94,25 @@ abstract class AbstractFormatExporter implements FormatExporter {
     // @todo 3 tb/tb rethink this. I want to force derived classes to implement this method - as a reminder to create the map.
     // But the method should be private ... tb 014-04-11
     abstract void createVariableDescriptors();
+
+    // package access for testing only tb 2014-07-01
+    static Properties extractMetadata(MetadataElement root) {
+        final Properties properties = new Properties();
+        extractAttributes(root, properties, "");
+
+        return properties;
+    }
+
+    private static void extractAttributes(MetadataElement root, Properties properties, String prefix) {
+        final MetadataAttribute[] attributes = root.getAttributes();
+        for (MetadataAttribute attribute : attributes) {
+            final String attributeName = prefix + attribute.getName();
+            properties.setProperty(attributeName, attribute.getData().getElemString());
+        }
+
+        final MetadataElement[] elements = root.getElements();
+        for (final MetadataElement element : elements) {
+            extractAttributes(element, properties, element.getName() + ".");
+        }
+    }
 }
