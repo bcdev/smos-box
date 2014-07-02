@@ -65,6 +65,10 @@ public class GridPointFormatExporterTest {
             assertTrue(outputFile.isFile());
             targetFile = NetcdfFileOpener.open(outputFile);
             assertCorrectGlobalAttributes(targetFile, 84045);
+            assertGlobalAttribute("Fixed_Header:File_Name", "SM_OPER_MIR_BWLF1C_20111026T143206_20111026T152520_503_001_1", targetFile);
+            assertGlobalAttribute("Fixed_Header:Validity_Period:Validity_Start", "UTC=2011-10-26T14:32:06", targetFile);
+            assertGlobalAttribute("Variable_Header:Main_Product_Header:Ref_Doc", "SO-TN-IDR-GS-0005", targetFile);
+            assertGlobalAttribute("Variable_Header:Main_Product_Header:Orbit_Information:Phase", "+001", targetFile);
 
             assertDimension("n_grid_points", 84045, targetFile);
             assertDimension("n_bt_data", 4, targetFile);
@@ -294,6 +298,11 @@ public class GridPointFormatExporterTest {
             assertTrue(outputFile.isFile());
             targetFile = NetcdfFileOpener.open(outputFile);
             assertCorrectGlobalAttributes(targetFile, numGridPoints);
+            assertGlobalAttribute("Fixed_Header:File_Description", "Level 1C Full Polarization Land Science measurements product", targetFile);
+            assertGlobalAttribute("Fixed_Header:Source:System", "DPGS", targetFile);
+            assertGlobalAttribute("Variable_Header:Main_Product_Header:Acquisition_Station", "SVLD", targetFile);
+            assertGlobalAttribute("Variable_Header:Main_Product_Header:Orbit_Information:Cycle", "+019", targetFile);
+            assertGlobalAttribute("Variable_Header:Specific_Product_Header:List_of_Data_Sets:Data_Set_6:DS_Name", "LAND_SEA_MASK_FILE", targetFile);
 
             assertDimension("n_grid_points", numGridPoints, targetFile);
             assertDimension("n_bt_data", 300, targetFile);
@@ -535,8 +544,6 @@ public class GridPointFormatExporterTest {
     }
 
     private void assertCorrectGlobalAttributes(NetcdfFile targetFile, int numGridPoints) throws ParseException {
-        assertGlobalAttribute("Conventions", "CF-1.6", targetFile);
-        assertGlobalAttribute("title", "TBD", targetFile);
         assertGlobalAttribute("institution", "TBD", targetFile);
         assertGlobalAttribute("contact", "TBD", targetFile);
         assertCreationDateWithinLast5Minutes(targetFile);

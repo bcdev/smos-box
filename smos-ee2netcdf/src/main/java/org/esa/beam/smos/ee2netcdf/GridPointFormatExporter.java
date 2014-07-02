@@ -29,7 +29,7 @@ public class GridPointFormatExporter {
 
         final NFileWriteable nFileWriteable = N4FileWriteable.create(outputFile.getPath());
 
-        exporter.addGlobalAttributes(nFileWriteable);
+        exporter.addGlobalAttributes(nFileWriteable, product.getMetadataRoot());
         exporter.addDimensions(nFileWriteable);
         exporter.addVariables(nFileWriteable);
 

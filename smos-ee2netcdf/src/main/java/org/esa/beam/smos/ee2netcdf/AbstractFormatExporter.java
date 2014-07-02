@@ -8,15 +8,13 @@ import org.esa.beam.dataio.smos.SmosFile;
 import org.esa.beam.framework.datamodel.MetadataAttribute;
 import org.esa.beam.framework.datamodel.MetadataElement;
 import org.esa.beam.framework.datamodel.Product;
+import org.esa.beam.framework.datamodel.ProductData;
 import org.esa.beam.smos.DateTimeUtils;
 import org.esa.beam.smos.ee2netcdf.variable.VariableDescriptor;
 import ucar.ma2.Array;
 
 import java.io.IOException;
-import java.util.Date;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
+import java.util.*;
 
 abstract class AbstractFormatExporter implements FormatExporter {
 
@@ -31,13 +29,18 @@ abstract class AbstractFormatExporter implements FormatExporter {
     }
 
     @Override
-    public void addGlobalAttributes(NFileWriteable nFileWriteable) throws IOException {
-        nFileWriteable.addGlobalAttribute("Conventions", "CF-1.6");     // @todo 2 tb/tb discuss with Ralf - delete this? tb 2014-07-01
-        nFileWriteable.addGlobalAttribute("title", "TBD");  // @todo 2 tb/tb replace with meaningful value tb 2014-04-07
-        nFileWriteable.addGlobalAttribute("institution", "TBD");  // @todo 2 tb/tb replace with meaningful value tb 2014-04-07
-        nFileWriteable.addGlobalAttribute("contact", "TBD");  // @todo 2 tb/tb replace with meaningful value tb 2014-04-07
+    public void addGlobalAttributes(NFileWriteable nFileWriteable, MetadataElement metadataRoot) throws IOException {
+        nFileWriteable.addGlobalAttribute("institution", "TBD");  // @todo 2 tb/tb read from operator parameter tb 2014-07-01
+        nFileWriteable.addGlobalAttribute("contact", "TBD");  // @todo 2 tb/tb read from operator parameter tb 2014-07-01
         nFileWriteable.addGlobalAttribute("creation_date", DateTimeUtils.toFixedHeaderFormat(new Date()));
         nFileWriteable.addGlobalAttribute("total_number_of_grid_points", Integer.toString(gridPointCount));
+
+        final Properties fileMetadata = extractMetadata(metadataRoot);
+        final Set<String> metaKeys = fileMetadata.stringPropertyNames();
+        for (final String key : metaKeys) {
+            final String value = fileMetadata.getProperty(key);
+            nFileWriteable.addGlobalAttribute(key, value);
+        }
     }
 
     @Override
@@ -106,13 +109,49 @@ abstract class AbstractFormatExporter implements FormatExporter {
     private static void extractAttributes(MetadataElement root, Properties properties, String prefix) {
         final MetadataAttribute[] attributes = root.getAttributes();
         for (MetadataAttribute attribute : attributes) {
-            final String attributeName = prefix + attribute.getName();
-            properties.setProperty(attributeName, attribute.getData().getElemString());
+            addAttributeTo(properties, prefix, attribute);
         }
 
         final MetadataElement[] elements = root.getElements();
-        for (final MetadataElement element : elements) {
-            extractAttributes(element, properties, element.getName() + ".");
+        final HashMap<String, List<MetadataElement>> uniqueNamedElements = getListWithUniqueNamedElements(elements);
+
+        final Set<String> nameSet = uniqueNamedElements.keySet();
+        for (final String elementName : nameSet) {
+            final List<MetadataElement> elementsWithSameName = uniqueNamedElements.get(elementName);
+            if (elementsWithSameName.size() == 1) {
+                final MetadataElement metadataElement = elementsWithSameName.get(0);
+                final String nextRecursionPrefix = prefix + metadataElement.getName() + ":";
+                extractAttributes(metadataElement, properties, nextRecursionPrefix);
+            } else {
+                int index = 0;
+                for (final MetadataElement metadataElement : elementsWithSameName) {
+                    final String nextRecursionPrefix = prefix + metadataElement.getName() + "_" + Integer.toString(index) + ":";
+                    extractAttributes(metadataElement, properties, nextRecursionPrefix);
+                    ++index;
+                }
+            }
         }
+    }
+
+    private static void addAttributeTo(Properties properties, String prefix, MetadataAttribute attribute) {
+        final String attributeName = prefix + attribute.getName();
+        final ProductData data = attribute.getData();
+        properties.setProperty(attributeName, data.getElemString());
+    }
+
+    private static HashMap<String, List<MetadataElement>> getListWithUniqueNamedElements(MetadataElement[] elements) {
+        final HashMap<String, List<MetadataElement>> uniqueNamedElements = new HashMap<>(elements.length);
+        for (final MetadataElement element : elements) {
+            final String elementName = element.getName();
+            final List<MetadataElement> elementList = uniqueNamedElements.get(elementName);
+            if (elementList == null) {
+                final ArrayList<MetadataElement> uniqueNamedElementsList = new ArrayList<>();
+                uniqueNamedElementsList.add(element);
+                uniqueNamedElements.put(elementName, uniqueNamedElementsList);
+            } else {
+                elementList.add(element);
+            }
+        }
+        return uniqueNamedElements;
     }
 }
