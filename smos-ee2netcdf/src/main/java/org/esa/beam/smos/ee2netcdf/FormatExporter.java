@@ -10,7 +10,7 @@ import java.io.IOException;
 interface FormatExporter {
     void initialize(Product product);
 
-    void addGlobalAttributes(NFileWriteable nFileWriteable, MetadataElement metadataRoot) throws IOException;
+    void addGlobalAttributes(NFileWriteable nFileWriteable, MetadataElement metadataRoot, ExportParameter exportParameter) throws IOException;
 
     void addDimensions(NFileWriteable nFileWriteable) throws IOException;
 

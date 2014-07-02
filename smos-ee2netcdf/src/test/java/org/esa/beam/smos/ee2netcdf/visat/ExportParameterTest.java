@@ -1,6 +1,7 @@
 package org.esa.beam.smos.ee2netcdf.visat;
 
 import org.esa.beam.framework.gpf.annotations.Parameter;
+import org.esa.beam.smos.ee2netcdf.ExportParameter;
 import org.esa.beam.smos.gui.BindingConstants;
 import org.junit.Before;
 import org.junit.Test;
@@ -185,6 +186,30 @@ public class ExportParameterTest {
 
         parameter.setOverwriteTarget(false);
         assertFalse(parameter.isOverwriteTarget());
+    }
+
+    @Test
+    public void testSetGetContact() {
+        final String contact_1 = "take the phone";
+        final String contact_2 = "write a letter";
+
+        parameter.setContact(contact_1);
+        assertEquals(contact_1, parameter.getContact());
+
+        parameter.setContact(contact_2);
+        assertEquals(contact_2, parameter.getContact());
+    }
+
+    @Test
+    public void testSetGetInstitution() {
+        final String institution_1 = "the Lab";
+        final String institution_2 = "University of somewhere";
+
+        parameter.setInstitution(institution_1);
+        assertEquals(institution_1, parameter.getInstitution());
+
+        parameter.setInstitution(institution_2);
+        assertEquals(institution_2, parameter.getInstitution());
     }
 }
 

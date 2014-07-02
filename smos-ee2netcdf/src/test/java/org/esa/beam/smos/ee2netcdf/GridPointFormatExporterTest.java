@@ -5,6 +5,7 @@ import org.esa.beam.dataio.netcdf.util.NetcdfFileOpener;
 import org.esa.beam.framework.dataio.ProductIO;
 import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.smos.DateTimeUtils;
+import org.esa.beam.util.StringUtils;
 import org.esa.beam.util.io.FileUtils;
 import org.junit.After;
 import org.junit.Before;
@@ -60,11 +61,12 @@ public class GridPointFormatExporterTest {
         NetcdfFile targetFile = null;
         try {
             product = ProductIO.readProduct(file);
-            gridPointFormatExporter.write(product, outputFile);
+            final ExportParameter exportParameter = new ExportParameter();
+            gridPointFormatExporter.write(product, outputFile, exportParameter);
 
             assertTrue(outputFile.isFile());
             targetFile = NetcdfFileOpener.open(outputFile);
-            assertCorrectGlobalAttributes(targetFile, 84045);
+            assertCorrectGlobalAttributes(targetFile, 84045, exportParameter);
             assertGlobalAttribute("Fixed_Header:File_Name", "SM_OPER_MIR_BWLF1C_20111026T143206_20111026T152520_503_001_1", targetFile);
             assertGlobalAttribute("Fixed_Header:Validity_Period:Validity_Start", "UTC=2011-10-26T14:32:06", targetFile);
             assertGlobalAttribute("Variable_Header:Main_Product_Header:Ref_Doc", "SO-TN-IDR-GS-0005", targetFile);
@@ -292,12 +294,14 @@ public class GridPointFormatExporterTest {
         NetcdfFile targetFile = null;
         try {
             product = ProductIO.readProduct(file);
-            gridPointFormatExporter.write(product, outputFile);
+            final ExportParameter exportParameter = new ExportParameter();
+            exportParameter.setInstitution("theInstitue");
+            gridPointFormatExporter.write(product, outputFile, exportParameter);
 
             final int numGridPoints = 42;
             assertTrue(outputFile.isFile());
             targetFile = NetcdfFileOpener.open(outputFile);
-            assertCorrectGlobalAttributes(targetFile, numGridPoints);
+            assertCorrectGlobalAttributes(targetFile, numGridPoints, exportParameter);
             assertGlobalAttribute("Fixed_Header:File_Description", "Level 1C Full Polarization Land Science measurements product", targetFile);
             assertGlobalAttribute("Fixed_Header:Source:System", "DPGS", targetFile);
             assertGlobalAttribute("Variable_Header:Main_Product_Header:Acquisition_Station", "SVLD", targetFile);
@@ -330,13 +334,15 @@ public class GridPointFormatExporterTest {
         NetcdfFile targetFile = null;
         try {
             product = ProductIO.readProduct(file);
-            gridPointFormatExporter.write(product, outputFile);
+            final ExportParameter exportParameter = new ExportParameter();
+            exportParameter.setContact("via E-mail");
+            gridPointFormatExporter.write(product, outputFile, exportParameter);
 
             assertTrue(outputFile.isFile());
             targetFile = NetcdfFileOpener.open(outputFile);
 
             final int numGridPoints = 98564;
-            assertCorrectGlobalAttributes(targetFile, numGridPoints);
+            assertCorrectGlobalAttributes(targetFile, numGridPoints, exportParameter);
 
             assertDimension("n_grid_points", numGridPoints, targetFile);
             assertNoDimension("n_bt_data", targetFile);
@@ -543,9 +549,21 @@ public class GridPointFormatExporterTest {
         return null;
     }
 
-    private void assertCorrectGlobalAttributes(NetcdfFile targetFile, int numGridPoints) throws ParseException {
-        assertGlobalAttribute("institution", "TBD", targetFile);
-        assertGlobalAttribute("contact", "TBD", targetFile);
+    private void assertCorrectGlobalAttributes(NetcdfFile targetFile, int numGridPoints, ExportParameter exportParameter) throws ParseException {
+        final String institution = exportParameter.getInstitution();
+        if (StringUtils.isNotNullAndNotEmpty(institution)) {
+            assertGlobalAttribute("institution", institution, targetFile);
+        } else {
+            assertNoGlobalAttribute("institution", targetFile);
+        }
+
+        final String contact = exportParameter.getContact();
+        if (StringUtils.isNotNullAndNotEmpty(contact)) {
+            assertGlobalAttribute("contact", contact, targetFile);
+        } else {
+            assertNoGlobalAttribute("contact", targetFile);
+        }
+
         assertCreationDateWithinLast5Minutes(targetFile);
         assertGlobalAttribute("total_number_of_grid_points", Integer.toString(numGridPoints), targetFile);
     }
@@ -559,7 +577,6 @@ public class GridPointFormatExporterTest {
                 final Date now = new Date();
                 assertTrue((now.getTime() - dateFromFile.getTime() < 300000));
             }
-
         }
     }
 
@@ -572,6 +589,15 @@ public class GridPointFormatExporterTest {
             }
         }
         fail("Global attribute: '" + attributeName + "' not present");
+    }
+
+    private static void assertNoGlobalAttribute(String attributeName, NetcdfFile targetFile) {
+        final List<Attribute> globalAttributes = targetFile.getGlobalAttributes();
+        for (final Attribute globalAttribute : globalAttributes) {
+            if (globalAttribute.getFullName().equals(attributeName)) {
+                fail("Global attribute: '" + attributeName + "' present but should not");
+            }
+        }
     }
 
     private static void assertDimension(String dimensionName, int dimensionLength, NetcdfFile targetFile) {

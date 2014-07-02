@@ -1,4 +1,4 @@
-package org.esa.beam.smos.ee2netcdf.visat;
+package org.esa.beam.smos.ee2netcdf;
 
 import com.vividsolutions.jts.geom.Geometry;
 import org.esa.beam.framework.gpf.annotations.Parameter;
@@ -32,6 +32,8 @@ public class ExportParameter {
     private double southBound;
     private double westBound;
     private boolean overwriteTarget;
+    private String contact;
+    private String institution;
 
     public ExportParameter() {
         northBound = 90.0;
@@ -148,5 +150,21 @@ public class ExportParameter {
         if (appendComma) {
             wktBuilder.append(",");
         }
+    }
+
+    public void setContact(String contact) {
+        this.contact = contact;
+    }
+
+    public String getContact() {
+        return contact;
+    }
+
+    public void setInstitution(String institution) {
+        this.institution = institution;
+    }
+
+    public String getInstitution() {
+        return institution;
     }
 }

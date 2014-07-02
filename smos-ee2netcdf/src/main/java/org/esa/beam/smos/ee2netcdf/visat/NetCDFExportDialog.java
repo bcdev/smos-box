@@ -12,6 +12,7 @@ import org.esa.beam.framework.datamodel.VectorDataNode;
 import org.esa.beam.framework.ui.AppContext;
 import org.esa.beam.framework.ui.RegionBoundsInputUI;
 import org.esa.beam.smos.ee2netcdf.ConverterOp;
+import org.esa.beam.smos.ee2netcdf.ExportParameter;
 import org.esa.beam.smos.gui.*;
 import org.esa.beam.util.io.WildcardMatcher;
 

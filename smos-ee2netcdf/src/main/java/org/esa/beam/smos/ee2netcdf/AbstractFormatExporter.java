@@ -29,9 +29,16 @@ abstract class AbstractFormatExporter implements FormatExporter {
     }
 
     @Override
-    public void addGlobalAttributes(NFileWriteable nFileWriteable, MetadataElement metadataRoot) throws IOException {
-        nFileWriteable.addGlobalAttribute("institution", "TBD");  // @todo 2 tb/tb read from operator parameter tb 2014-07-01
-        nFileWriteable.addGlobalAttribute("contact", "TBD");  // @todo 2 tb/tb read from operator parameter tb 2014-07-01
+    public void addGlobalAttributes(NFileWriteable nFileWriteable, MetadataElement metadataRoot, ExportParameter exportParameter) throws IOException {
+        final String institution = exportParameter.getInstitution();
+        if (StringUtils.isNotBlank(institution)) {
+            nFileWriteable.addGlobalAttribute("institution", institution);
+        }
+
+        final String contact = exportParameter.getContact();
+        if (StringUtils.isNotBlank(contact)) {
+            nFileWriteable.addGlobalAttribute("contact", contact);
+        }
         nFileWriteable.addGlobalAttribute("creation_date", DateTimeUtils.toFixedHeaderFormat(new Date()));
         nFileWriteable.addGlobalAttribute("total_number_of_grid_points", Integer.toString(gridPointCount));
 

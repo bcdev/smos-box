@@ -9,6 +9,7 @@ import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.framework.gpf.GPF;
 import org.esa.beam.framework.ui.AppContext;
 import org.esa.beam.smos.ee2netcdf.ConverterOp;
+import org.esa.beam.smos.ee2netcdf.ExportParameter;
 import org.esa.beam.smos.gui.BindingConstants;
 
 import java.io.File;
@@ -81,7 +82,7 @@ class ConverterSwingWorker extends ProgressMonitorSwingWorker<List<Exception>, F
 
     // package access for testing only tb 2013-04-05
     static HashMap<String, Object> createParameterMap(ExportParameter exportParameter) {
-        final HashMap<String, Object> parameterMap = new HashMap<String, Object>();
+        final HashMap<String, Object> parameterMap = new HashMap<>();
 
         final File targetDirectory = exportParameter.getTargetDirectory();
         if (targetDirectory != null) {
