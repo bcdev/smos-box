@@ -88,7 +88,9 @@
 
     <properties>
         <ceres.version>0.14</ceres.version>
+        <ceres.version.updated>0.14.1</ceres.version.updated>
         <beam.version>5.0</beam.version>
+        <beam.version.updated>5.0.1</beam.version.updated>
     </properties>
 
 
@@ -129,7 +131,7 @@
             <dependency>
                 <groupId>com.bc.ceres</groupId>
                 <artifactId>ceres-glayer</artifactId>
-                <version>${ceres.version}</version>
+                <version>${ceres.version.updated}</version>
             </dependency>
 
             <dependency>
@@ -148,7 +150,7 @@
             <dependency>
                 <groupId>org.esa.beam</groupId>
                 <artifactId>beam-core</artifactId>
-                <version>${beam.version}</version>
+                <version>${beam.version.updated}</version>
             </dependency>
             <dependency>
                 <groupId>org.esa.beam</groupId>
