@@ -24,12 +24,12 @@ import java.util.HashMap;
 import static org.junit.Assert.*;
 
 @RunWith(AcceptanceTestRunner.class)
-public class EEtoNetCDFExporterOpAcceptanceTest {
+public class EEtoNetCDFExporterOpIntegrationTest {
 
     private final EEtoNetCDFExporterOp.Spi spi;
     private final File targetDirectory;
 
-    public EEtoNetCDFExporterOpAcceptanceTest() {
+    public EEtoNetCDFExporterOpIntegrationTest() {
         spi = new EEtoNetCDFExporterOp.Spi();
         targetDirectory = new File("test_out");
     }

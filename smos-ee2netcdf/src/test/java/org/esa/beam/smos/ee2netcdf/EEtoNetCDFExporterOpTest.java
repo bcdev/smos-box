@@ -27,9 +27,9 @@ public class EEtoNetCDFExporterOpTest {
         assertEquals(1, declaredAnnotations.length);
         final OperatorMetadata operatorMetadata = (OperatorMetadata) declaredAnnotations[0];
         assertEquals("SmosEE2NetCDF", operatorMetadata.alias());
-        assertEquals("0.1", operatorMetadata.version());
+        assertEquals("1.0", operatorMetadata.version());
         assertEquals("Tom Block", operatorMetadata.authors());
-        assertEquals("(c) 2013 by Brockmann Consult", operatorMetadata.copyright());
+        assertEquals("(c) 2013, 2014 by Brockmann Consult", operatorMetadata.copyright());
         assertEquals("Converts SMOS EE Products to NetCDF format.", operatorMetadata.description());
     }
 
