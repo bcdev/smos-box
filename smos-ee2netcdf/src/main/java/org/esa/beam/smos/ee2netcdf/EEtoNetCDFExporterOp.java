@@ -36,9 +36,9 @@ import java.util.TreeSet;
 @SuppressWarnings("MismatchedReadAndWriteOfArray")
 @OperatorMetadata(
         alias = EEtoNetCDFExporterOp.ALIAS,
-        version = "0.1",
+        version = "1.0",
         authors = "Tom Block",
-        copyright = "(c) 2013 by Brockmann Consult",
+        copyright = "(c) 2013, 2014 by Brockmann Consult",
         description = "Converts SMOS EE Products to NetCDF format.",
         autoWriteDisabled = true)
 public class EEtoNetCDFExporterOp extends Operator {
@@ -90,7 +90,7 @@ public class EEtoNetCDFExporterOp extends Operator {
 
         if (sourceProducts != null) {
             for (Product sourceProduct : sourceProducts) {
-                convertProduct(sourceProduct);
+                exportProduct(sourceProduct);
             }
         }
 
@@ -98,7 +98,7 @@ public class EEtoNetCDFExporterOp extends Operator {
             final TreeSet<File> sourceFileSet = createInputFileSet(sourceProductPaths);
 
             for (File inputFile : sourceFileSet) {
-                convertFile(inputFile);
+                exportFile(inputFile);
             }
         }
     }
@@ -221,14 +221,14 @@ public class EEtoNetCDFExporterOp extends Operator {
         setTargetProduct(product);
     }
 
-    private void convertFile(File inputFile) {
+    private void exportFile(File inputFile) {
         Product product = null;
         try {
             product = ProductIO.readProduct(inputFile);
             if (product != null) {
                 final String productType = product.getProductType();
                 if (productType.matches(PRODUCT_TYPE_REGEX)) {
-                    convertProduct(product);
+                    exportProduct(product);
                 } else {
                     getLogger().info("Unable to convert file: " + inputFile.getAbsolutePath());
                     getLogger().info("Unsupported product of type: " + productType);
@@ -246,7 +246,7 @@ public class EEtoNetCDFExporterOp extends Operator {
         }
     }
 
-    private void convertProduct(Product sourceProduct) {
+    private void exportProduct(Product sourceProduct) {
         try {
             final SmosProductReader productReader = (SmosProductReader) sourceProduct.getProductReader();
             final ProductFile productFile = productReader.getProductFile();
