@@ -11,7 +11,7 @@ import org.esa.beam.framework.datamodel.ProductManager;
 import org.esa.beam.framework.datamodel.VectorDataNode;
 import org.esa.beam.framework.ui.AppContext;
 import org.esa.beam.framework.ui.RegionBoundsInputUI;
-import org.esa.beam.smos.ee2netcdf.ConverterOp;
+import org.esa.beam.smos.ee2netcdf.EEtoNetCDFExporterOp;
 import org.esa.beam.smos.ee2netcdf.ExportParameter;
 import org.esa.beam.smos.gui.*;
 import org.esa.beam.util.io.WildcardMatcher;
@@ -72,13 +72,13 @@ public class NetCDFExportDialog extends ProductChangeAwareDialog {
 
         final File file = new File(filePath);
         if (file.isFile()) {
-            final File outputFile = ConverterOp.getOutputFile(file, targetDir);
+            final File outputFile = EEtoNetCDFExporterOp.getOutputFile(file, targetDir);
             targetFiles.add(outputFile);
         } else {
             final TreeSet<File> sourceFileSet = new TreeSet<>();
             WildcardMatcher.glob(filePath, sourceFileSet);
             for (File aSourceFile : sourceFileSet) {
-                final File outputFile = ConverterOp.getOutputFile(aSourceFile, targetDir);
+                final File outputFile = EEtoNetCDFExporterOp.getOutputFile(aSourceFile, targetDir);
                 targetFiles.add(outputFile);
             }
         }

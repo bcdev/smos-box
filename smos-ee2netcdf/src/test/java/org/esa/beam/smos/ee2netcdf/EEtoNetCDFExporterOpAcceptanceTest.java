@@ -24,13 +24,13 @@ import java.util.HashMap;
 import static org.junit.Assert.*;
 
 @RunWith(AcceptanceTestRunner.class)
-public class ConverterOpAcceptanceTest {
+public class EEtoNetCDFExporterOpAcceptanceTest {
 
-    private final ConverterOp.Spi spi;
+    private final EEtoNetCDFExporterOp.Spi spi;
     private final File targetDirectory;
 
-    public ConverterOpAcceptanceTest() {
-        spi = new ConverterOp.Spi();
+    public EEtoNetCDFExporterOpAcceptanceTest() {
+        spi = new EEtoNetCDFExporterOp.Spi();
         targetDirectory = new File("test_out");
     }
 
@@ -62,7 +62,7 @@ public class ConverterOpAcceptanceTest {
         try {
             product = ProductIO.readProduct(file);
 
-            GPF.createProduct(ConverterOp.ALIAS,
+            GPF.createProduct(EEtoNetCDFExporterOp.ALIAS,
                     createDefaultParameterMap(),
                     new Product[]{product});
 
@@ -90,7 +90,7 @@ public class ConverterOpAcceptanceTest {
             defaultParameterMap.put("sourceProductPaths", file.getParent() + File.separator + "*BWLF1C*");
             defaultParameterMap.put("region", "POLYGON((3 -70,5 -70,5 -71,3 -71,3 -70))");
 
-            GPF.createProduct(ConverterOp.ALIAS,
+            GPF.createProduct(EEtoNetCDFExporterOp.ALIAS,
                     defaultParameterMap);
 
             assertTrue(targetDirectory.isDirectory());
@@ -116,7 +116,7 @@ public class ConverterOpAcceptanceTest {
 
             final HashMap<String, Object> defaultParameterMap = createDefaultParameterMap();
             defaultParameterMap.put("region", "POLYGON((70 -9,85 -9,85 -12,70 -12,70 -9))");
-            GPF.createProduct(ConverterOp.ALIAS,
+            GPF.createProduct(EEtoNetCDFExporterOp.ALIAS,
                     defaultParameterMap,
                     new Product[]{product});
 
@@ -143,7 +143,7 @@ public class ConverterOpAcceptanceTest {
 
             final HashMap<String, Object> defaultParameterMap = createDefaultParameterMap();
             defaultParameterMap.put("region", "POLYGON((100 30,105 30,105 32,100 32,100 30))");
-            GPF.createProduct(ConverterOp.ALIAS,
+            GPF.createProduct(EEtoNetCDFExporterOp.ALIAS,
                     defaultParameterMap,
                     new Product[]{product});
 
@@ -167,9 +167,9 @@ public class ConverterOpAcceptanceTest {
             final ProductFile productFile = productReader.getProductFile();
             assertTrue(productFile instanceof DggFile);
             final Area dataArea = DggFile.computeArea(((DggFile) productFile).getGridPointList());
-            final Geometry polygon = ConverterOp.convertToPolygon(dataArea);
+            final Geometry polygon = EEtoNetCDFExporterOp.convertToPolygon(dataArea);
 
-            final Rectangle dataBoundingRect = ConverterOp.getDataBoundingRect(product, polygon);
+            final Rectangle dataBoundingRect = EEtoNetCDFExporterOp.getDataBoundingRect(product, polygon);
             assertNotNull(dataBoundingRect);
             assertEquals(4608, dataBoundingRect.x);
             assertEquals(0, dataBoundingRect.y);
@@ -192,7 +192,7 @@ public class ConverterOpAcceptanceTest {
             final ProductFile productFile = productReader.getProductFile();
             assertTrue(productFile instanceof DggFile);
             final Area dataArea = DggFile.computeArea(((DggFile) productFile).getGridPointList());
-            final Geometry polygon = ConverterOp.convertToPolygon(dataArea);
+            final Geometry polygon = EEtoNetCDFExporterOp.convertToPolygon(dataArea);
             assertEquals("MULTIPOLYGON (((-78.75 -90, -78.75 -78.75, -67.5 -78.75, -67.5 -67.5, 22.5 -67.5, 22.5 -56.25, 33.75 -56.25, 33.75 -45, 33.75 -33.75, 22.5 -33.75, 22.5 -22.5, 33.75 -22.5, 33.75 -11.25, 33.75 0, 33.75 11.25, 33.75 22.5, 33.75 33.75, 45 33.75, 45 45, 45 56.25, 45 67.5, 56.25 67.5, 56.25 78.75, 56.25 90, 123.75 90, 123.75 78.75, 146.25 78.75, 146.25 67.5, 90 67.5, 90 56.25, 78.75 56.25, 78.75 45, 67.5 45, 67.5 33.75, 67.5 22.5, 56.25 22.5, 56.25 11.25, 56.25 0, 56.25 -11.25, 56.25 -22.5, 56.25 -33.75, 45 -33.75, 45 -45, 45 -56.25, 45 -67.5, 45 -78.75, 33.75 -78.75, 33.75 -90, -78.75 -90)))",
                     polygon.toString());
         } finally {
@@ -204,7 +204,7 @@ public class ConverterOpAcceptanceTest {
     }
 
     private HashMap<String, Object> createDefaultParameterMap() {
-        final HashMap<String, Object> parameterMap = new HashMap<String, Object>();
+        final HashMap<String, Object> parameterMap = new HashMap<>();
         parameterMap.put("targetDirectory", targetDirectory);
         return parameterMap;
     }

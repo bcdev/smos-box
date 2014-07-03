@@ -35,13 +35,13 @@ import java.util.TreeSet;
 
 @SuppressWarnings("MismatchedReadAndWriteOfArray")
 @OperatorMetadata(
-        alias = ConverterOp.ALIAS,
+        alias = EEtoNetCDFExporterOp.ALIAS,
         version = "0.1",
         authors = "Tom Block",
         copyright = "(c) 2013 by Brockmann Consult",
         description = "Converts SMOS EE Products to NetCDF format.",
         autoWriteDisabled = true)
-public class ConverterOp extends Operator {
+public class EEtoNetCDFExporterOp extends Operator {
 
     public static final String ALIAS = "SmosEE2NetCDF";
 
@@ -293,7 +293,7 @@ public class ConverterOp extends Operator {
     public static class Spi extends OperatorSpi {
 
         public Spi() {
-            super(ConverterOp.class);
+            super(EEtoNetCDFExporterOp.class);
         }
     }
 }
