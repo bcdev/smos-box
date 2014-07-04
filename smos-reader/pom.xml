@@ -36,6 +36,16 @@
             <scope>test</scope>
         </dependency>
 
+
+        <!-- todo 1 tb/tb this is a temporal dependency to kee pthe reader tests running. Remove this immediately
+        when the SMOS-Box dependency is updated to beam - head. tb 2014-07-04 -->
+        <dependency>
+            <groupId>org.esa.beam</groupId>
+            <artifactId>beam-avhrr-reader</artifactId>
+            <version>5.0</version>
+            <scope>test</scope>
+        </dependency>
+
         <dependency>
             <groupId>com.bc.ceres</groupId>
             <artifactId>ceres-binio</artifactId>
