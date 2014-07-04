@@ -304,7 +304,7 @@ public class GPtoNetCDFExporterIntegrationTest {
     }
 
     @Test
-    public void testExportSCLF1C() throws IOException, ParseException, InvalidRangeException {
+    public void testExportSCLF1C_withSourceProductPaths() throws IOException, ParseException, InvalidRangeException {
         final File file = TestHelper.getResourceFile("SM_REPB_MIR_SCLF1C_20110201T151254_20110201T151308_505_152_1.zip");
 
         Product product = null;
@@ -312,9 +312,10 @@ public class GPtoNetCDFExporterIntegrationTest {
         try {
             product = ProductIO.readProduct(file);
 
+            final HashMap<String, Object> parameterMap = createDefaultParameterMap();
+            parameterMap.put("sourceProductPaths", file.getParent() + File.separator + "*SCLF1C*");
             GPF.createProduct(GPtoNetCDFExporterOp.ALIAS,
-                    createDefaultParameterMap(),
-                    new Product[]{product});
+                    parameterMap);
 
             final File outputFile = new File(targetDirectory, "SM_REPB_MIR_SCLF1C_20110201T151254_20110201T151308_505_152_1.nc");
             assertTrue(outputFile.isFile());
@@ -348,7 +349,7 @@ public class GPtoNetCDFExporterIntegrationTest {
     }
 
     @Test
-    public void testExportOSUDP2() throws IOException, ParseException, InvalidRangeException {
+    public void testExportOSUDP2_withAdditionalMetadata() throws IOException, ParseException, InvalidRangeException {
         final File file = TestHelper.getResourceFile("SM_OPER_MIR_OSUDP2_20091204T001853_20091204T011255_310_001_1.zip");
 
         Product product = null;
@@ -356,18 +357,23 @@ public class GPtoNetCDFExporterIntegrationTest {
         try {
             product = ProductIO.readProduct(file);
 
+            final HashMap<String, Object> parameterMap = createDefaultParameterMap();
+            parameterMap.put("institution", "BC");
+            parameterMap.put("contact", "Tom");
             GPF.createProduct(GPtoNetCDFExporterOp.ALIAS,
-                    createDefaultParameterMap(),
+                    parameterMap,
                     new Product[]{product});
 
             final File outputFile = new File(targetDirectory, "SM_OPER_MIR_OSUDP2_20091204T001853_20091204T011255_310_001_1.nc");
             assertTrue(outputFile.isFile());
-            assertEquals(3398042, outputFile.length());
+            assertEquals(3398114, outputFile.length());
 
             targetFile = NetcdfFileOpener.open(outputFile);
 
             final int numGridPoints = 98564;
             final ExportParameter exportParameter = new ExportParameter();
+            exportParameter.setInstitution("BC");
+            exportParameter.setContact("Tom");
             assertCorrectGlobalAttributes(targetFile, numGridPoints, exportParameter);
 
             assertDimension("n_grid_points", numGridPoints, targetFile);

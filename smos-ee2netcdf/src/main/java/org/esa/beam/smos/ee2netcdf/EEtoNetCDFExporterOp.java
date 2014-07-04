@@ -86,7 +86,7 @@ public class EEtoNetCDFExporterOp extends Operator {
     public void initialize() throws OperatorException {
         setDummyTargetProduct();
 
-        assertTargetDirectoryExists();
+        ExporterUtils.assertTargetDirectoryExists(targetDirectory);
 
         if (sourceProducts != null) {
             for (Product sourceProduct : sourceProducts) {
@@ -205,14 +205,6 @@ public class EEtoNetCDFExporterOp extends Operator {
         final ProductSubsetDef subsetDef = new ProductSubsetDef();
         subsetDef.setRegion(rectangle);
         return subsetDef;
-    }
-
-    private void assertTargetDirectoryExists() {
-        if (!targetDirectory.isDirectory()) {
-            if (!targetDirectory.mkdirs()) {
-                throw new OperatorException("Unable to create target directory: " + targetDirectory.getAbsolutePath());
-            }
-        }
     }
 
     private void setDummyTargetProduct() {

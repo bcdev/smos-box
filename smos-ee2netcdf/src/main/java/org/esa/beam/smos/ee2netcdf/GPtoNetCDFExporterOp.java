@@ -2,6 +2,7 @@ package org.esa.beam.smos.ee2netcdf;
 
 import org.esa.beam.dataio.netcdf.nc.N4FileWriteable;
 import org.esa.beam.dataio.netcdf.nc.NFileWriteable;
+import org.esa.beam.framework.dataio.ProductIO;
 import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.framework.datamodel.ProductData;
 import org.esa.beam.framework.gpf.Operator;
@@ -68,12 +69,16 @@ public class GPtoNetCDFExporterOp extends Operator {
 
     @Override
     public void initialize() throws OperatorException {
-        setDummyTargetProduct();
-
-        assertTargetDirectoryExists();
-
         // @todo 1 tb/tb fill with values from annotated fields
         final ExportParameter exportParameter = new ExportParameter();
+        exportParameter.setTargetDirectory(targetDirectory);
+        exportParameter.setInstitution(institution);
+        exportParameter.setContact(contact);
+
+        setDummyTargetProduct();
+
+        ExporterUtils.assertTargetDirectoryExists(exportParameter.getTargetDirectory());
+
 
         if (sourceProducts != null) {
             for (Product sourceProduct : sourceProducts) {
@@ -98,15 +103,6 @@ public class GPtoNetCDFExporterOp extends Operator {
     }
 
     // @todo 2 tb/tb duplicated code, extract exporter baseclass tb 2014-07-04
-    private void assertTargetDirectoryExists() {
-        if (!targetDirectory.isDirectory()) {
-            if (!targetDirectory.mkdirs()) {
-                throw new OperatorException("Unable to create target directory: " + targetDirectory.getAbsolutePath());
-            }
-        }
-    }
-
-    // @todo 2 tb/tb duplicated code, extract exporter baseclass tb 2014-07-04
     public static File getOutputFile(File dblFile, File targetDirectory) {
         File outFile = new File(targetDirectory, dblFile.getName());
         outFile = FileUtils.exchangeExtension(outFile, ".nc");
@@ -114,11 +110,13 @@ public class GPtoNetCDFExporterOp extends Operator {
     }
 
     private void exportProduct(Product sourceProduct, ExportParameter exportParameter) {
+        final File fileLocation = sourceProduct.getFileLocation();
+
         try {
-            final FormatExporter exporter = FormatExporterFactory.create(sourceProduct.getFileLocation().getName());
+            final FormatExporter exporter = FormatExporterFactory.create(fileLocation.getName());
             exporter.initialize(sourceProduct);
 
-            final File outputFile = getOutputFile(sourceProduct.getFileLocation(), targetDirectory);
+            final File outputFile = getOutputFile(fileLocation, targetDirectory);
             final NFileWriteable nFileWriteable = N4FileWriteable.create(outputFile.getPath());
 
             exporter.addGlobalAttributes(nFileWriteable, sourceProduct.getMetadataRoot(), exportParameter);
@@ -131,13 +129,34 @@ public class GPtoNetCDFExporterOp extends Operator {
 
             nFileWriteable.close();
         } catch (IOException e) {
-
+            getLogger().severe("Failed to convert file: " + fileLocation.getAbsolutePath());
+            getLogger().severe(e.getMessage());
         }
-        // @todo 1 tb/tb check if we need a finally block here tb 2014-07-04
     }
 
     private void exportFile(File inputFile, ExportParameter exportParameter) {
-
+        Product product = null;
+        try {
+            product = ProductIO.readProduct(inputFile);
+            if (product != null) {
+                final String productType = product.getProductType();
+                if (productType.matches(PRODUCT_TYPE_REGEX)) {
+                    exportProduct(product, exportParameter);
+                } else {
+                    getLogger().info("Unable to convert file: " + inputFile.getAbsolutePath());
+                    getLogger().info("Unsupported product of type: " + productType);
+                }
+            } else {
+                getLogger().warning("Unable to open file: " + inputFile.getAbsolutePath());
+            }
+        } catch (IOException e) {
+            getLogger().severe("Failed to convert file: " + inputFile.getAbsolutePath());
+            getLogger().severe(e.getMessage());
+        } finally {
+            if (product != null) {
+                product.dispose();
+            }
+        }
     }
 
     // @todo 2 tb/tb duplicated code, extract exporter baseclass tb 2014-07-04
