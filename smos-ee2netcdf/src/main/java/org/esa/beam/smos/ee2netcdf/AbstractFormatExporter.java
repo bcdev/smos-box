@@ -5,6 +5,7 @@ import org.apache.commons.lang.StringUtils;
 import org.esa.beam.dataio.netcdf.nc.NFileWriteable;
 import org.esa.beam.dataio.netcdf.nc.NVariable;
 import org.esa.beam.dataio.smos.SmosFile;
+import org.esa.beam.dataio.smos.SmosProductReader;
 import org.esa.beam.framework.datamodel.MetadataAttribute;
 import org.esa.beam.framework.datamodel.MetadataElement;
 import org.esa.beam.framework.datamodel.Product;
@@ -24,7 +25,7 @@ abstract class AbstractFormatExporter implements FormatExporter {
 
     @Override
     public void initialize(Product product) {
-        explorerFile = GridPointFormatExporter.getSmosFile(product);
+        explorerFile = getSmosFile(product);
         gridPointCount = explorerFile.getGridPointCount();
     }
 
@@ -111,6 +112,11 @@ abstract class AbstractFormatExporter implements FormatExporter {
         extractAttributes(root, properties, "");
 
         return properties;
+    }
+
+    private static SmosFile getSmosFile(Product product) {
+        final SmosProductReader smosReader = (SmosProductReader) product.getProductReader();
+        return (SmosFile) smosReader.getProductFile();
     }
 
     private static void extractAttributes(MetadataElement root, Properties properties, String prefix) {
