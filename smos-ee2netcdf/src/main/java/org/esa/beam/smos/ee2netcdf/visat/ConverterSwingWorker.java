@@ -51,7 +51,6 @@ class ConverterSwingWorker extends ProgressMonitorSwingWorker<List<Exception>, F
 
         pm.done();
 
-
         return exceptions;
     }
 

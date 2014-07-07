@@ -79,7 +79,6 @@ public class GPtoNetCDFExporterOp extends Operator {
 
         ExporterUtils.assertTargetDirectoryExists(exportParameter.getTargetDirectory());
 
-
         if (sourceProducts != null) {
             for (Product sourceProduct : sourceProducts) {
                 exportProduct(sourceProduct, exportParameter);
@@ -117,6 +116,12 @@ public class GPtoNetCDFExporterOp extends Operator {
             exporter.initialize(sourceProduct);
 
             final File outputFile = getOutputFile(fileLocation, targetDirectory);
+            // @todo 2 tb/tb extract method and move to helper class tb 2014-07-07
+            if (outputFile.isFile() && overwriteTarget) {
+                if (!outputFile.delete()) {
+                    throw new IOException("Unable to delete already existing product: " + outputFile.getAbsolutePath());
+                }
+            }
             final NFileWriteable nFileWriteable = N4FileWriteable.create(outputFile.getPath());
 
             exporter.addGlobalAttributes(nFileWriteable, sourceProduct.getMetadataRoot(), exportParameter);

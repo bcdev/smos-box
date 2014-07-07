@@ -31,12 +31,12 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 @RunWith(AcceptanceTestRunner.class)
-public class GPtoNetCDFExporterIntegrationTest {
+public class GPtoNetCDFExporterOpIntegrationTest {
 
     private final GPtoNetCDFExporterOp.Spi spi;
     private final File targetDirectory;
 
-    public GPtoNetCDFExporterIntegrationTest() {
+    public GPtoNetCDFExporterOpIntegrationTest() {
         spi = new GPtoNetCDFExporterOp.Spi();
         targetDirectory = new File("test_out");
     }
