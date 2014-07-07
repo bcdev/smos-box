@@ -7,6 +7,8 @@ import org.junit.Test;
 
 import java.io.File;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -166,6 +168,9 @@ public class ExportParameterTest {
         assertEquals(180.0, parameter.getEastBound(), 1e-8);
 
         assertFalse(parameter.isOverwriteTarget());
+        final List<String> outputBandNames = parameter.getOutputBandNames();
+        assertNotNull(outputBandNames);
+        assertEquals(0, outputBandNames.size());
     }
 
     @Test
@@ -209,6 +214,20 @@ public class ExportParameterTest {
 
         parameter.setInstitution(institution_2);
         assertEquals(institution_2, parameter.getInstitution());
+    }
+
+    @Test
+    public void testSetGetOutputBandNames() {
+        final List<String> bandNames = new ArrayList<>();
+        bandNames.add("band_1");
+        bandNames.add("band_2");
+        bandNames.add("band_3");
+
+        parameter.setOutputBandNames(bandNames);
+        final List<String> actualNames = parameter.getOutputBandNames();
+        assertNotNull(actualNames);
+        assertEquals(bandNames.size(), actualNames.size());
+        assertArrayEquals(bandNames.toArray(), actualNames.toArray());
     }
 }
 

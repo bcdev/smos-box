@@ -23,8 +23,12 @@ abstract class AbstractFormatExporter implements FormatExporter {
     protected SmosFile explorerFile;
     protected Map<String, VariableDescriptor> variableDescriptors;
 
+    protected static boolean mustExport(String bandName, List<String> outputBandNames) {
+        return outputBandNames.isEmpty() || outputBandNames.contains(bandName);
+    }
+
     @Override
-    public void initialize(Product product) {
+    public void initialize(Product product, ExportParameter exportParameter) {
         explorerFile = getSmosFile(product);
         gridPointCount = explorerFile.getGridPointCount();
     }
@@ -52,9 +56,13 @@ abstract class AbstractFormatExporter implements FormatExporter {
     }
 
     @Override
-    public void addVariables(NFileWriteable nFileWriteable) throws IOException {
+    public void addVariables(NFileWriteable nFileWriteable, ExportParameter exportParameter) throws IOException {
         final Set<String> variableNameKeys = variableDescriptors.keySet();
+        final List<String> outputBandNames = exportParameter.getOutputBandNames();
         for (final String ncVariableName : variableNameKeys) {
+            if (!mustExport(ncVariableName, outputBandNames)) {
+                continue;
+            }
             final VariableDescriptor variableDescriptor = variableDescriptors.get(ncVariableName);
             final NVariable nVariable = nFileWriteable.addVariable(ncVariableName, variableDescriptor.getDataType(), true, null, variableDescriptor.getDimensionNames());
             final String unitValue = variableDescriptor.getUnit();
@@ -104,7 +112,7 @@ abstract class AbstractFormatExporter implements FormatExporter {
 
     // @todo 3 tb/tb rethink this. I want to force derived classes to implement this method - as a reminder to create the map.
     // But the method should be private ... tb 014-04-11
-    abstract void createVariableDescriptors();
+    abstract void createVariableDescriptors(ExportParameter exportParameter);
 
     // package access for testing only tb 2014-07-01
     static Properties extractMetadata(MetadataElement root) {

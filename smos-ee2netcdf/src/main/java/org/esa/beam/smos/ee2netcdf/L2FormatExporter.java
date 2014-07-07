@@ -4,6 +4,7 @@ package org.esa.beam.smos.ee2netcdf;
 import com.bc.ceres.binio.CompoundData;
 import org.esa.beam.dataio.netcdf.nc.NFileWriteable;
 import org.esa.beam.dataio.netcdf.nc.NVariable;
+import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.smos.ee2netcdf.variable.VariableDescriptor;
 import org.esa.beam.smos.ee2netcdf.variable.VariableWriter;
 import org.esa.beam.smos.ee2netcdf.variable.VariableWriterFactory;
@@ -15,8 +16,12 @@ import java.util.Set;
 
 class L2FormatExporter extends AbstractFormatExporter {
 
-    L2FormatExporter() {
-        createVariableDescriptors();
+
+    @Override
+    public void initialize(Product product, ExportParameter exportParameter) {
+        super.initialize(product, exportParameter);
+
+        createVariableDescriptors(exportParameter);
     }
 
     @Override
@@ -40,7 +45,7 @@ class L2FormatExporter extends AbstractFormatExporter {
         }
     }
 
-    void createVariableDescriptors() {
+    void createVariableDescriptors(ExportParameter exportParameter) {
         // @todo 1 tb/tb differentiate between OS and SM tb 2014-04-14
         variableDescriptors = new HashMap<>();
 

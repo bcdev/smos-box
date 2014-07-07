@@ -80,4 +80,12 @@ public class GPtoNetCDFExporterOpTest {
         assertEquals("", contactFieldAnnotation.defaultValue());
         assertEquals("Set contact field for file metadata. If left empty, no contact information is written to output file.", contactFieldAnnotation.description());
     }
+
+    @Test
+    public void testParameterAnnotations_outputBandNames() throws NoSuchFieldException {
+        final Field bandNamesField = GPtoNetCDFExporterOp.class.getDeclaredField("outputBandNames");
+        final Parameter bandnamesFieldAnnotation = bandNamesField.getAnnotation(Parameter.class);
+        assertEquals("", bandnamesFieldAnnotation.defaultValue());
+        assertEquals("Comma separated list of band names to export. If left empty, no band subsetting is applied.", bandnamesFieldAnnotation.description());
+    }
 }

@@ -15,19 +15,17 @@ import ucar.ma2.DataType;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 
 class BrowseProductExporter extends AbstractFormatExporter {
 
     private int nBtData;
 
-    BrowseProductExporter() {
-        createVariableDescriptors();
-    }
-
     @Override
-    public void initialize(Product product) {
-        super.initialize(product);
+    public void initialize(Product product, ExportParameter exportParameter) {
+        super.initialize(product, exportParameter);
+        createVariableDescriptors(exportParameter);
 
         final String productName = product.getName();
         nBtData = getBtDataDimension(productName);
@@ -70,74 +68,105 @@ class BrowseProductExporter extends AbstractFormatExporter {
         }
     }
 
-    void createVariableDescriptors() {
+    void createVariableDescriptors(ExportParameter exportParameter) {
         variableDescriptors = new HashMap<>();
-        final VariableDescriptor gpIdDescriptor = new VariableDescriptor("Grid_Point_ID", true, DataType.INT, "n_grid_points", false, -1);
-        gpIdDescriptor.setUnsigned(true);
-        variableDescriptors.put("grid_point_id", gpIdDescriptor);
 
-        final VariableDescriptor latDescriptor = new VariableDescriptor("Latitude", true, DataType.FLOAT, "n_grid_points", false, -1);
-        latDescriptor.setUnit("degrees_north");
-        latDescriptor.setFillValue(-999.f);
-        latDescriptor.setValidMin(-90.f);
-        latDescriptor.setValidMax(90.f);
-        latDescriptor.setOriginalName("Grid_Point_Latitude");
-        latDescriptor.setStandardName("latitude");
-        variableDescriptors.put("lat", latDescriptor);
+        final List<String> outputBandNames = exportParameter.getOutputBandNames();
 
-        final VariableDescriptor lonDescriptor = new VariableDescriptor("Longitude", true, DataType.FLOAT, "n_grid_points", false, -1);
-        lonDescriptor.setUnit("degrees_east");
-        lonDescriptor.setFillValue(-999.f);
-        lonDescriptor.setValidMin(-180.f);
-        lonDescriptor.setValidMax(180.f);
-        lonDescriptor.setOriginalName("Grid_Point_Longitude");
-        lonDescriptor.setStandardName("longitude");
-        variableDescriptors.put("lon", lonDescriptor);
+        if (mustExport("grid_point_id", outputBandNames)) {
+            final VariableDescriptor gpIdDescriptor = new VariableDescriptor("Grid_Point_ID", true, DataType.INT, "n_grid_points", false, -1);
+            gpIdDescriptor.setUnsigned(true);
+            variableDescriptors.put("grid_point_id", gpIdDescriptor);
+        }
 
-        final VariableDescriptor altitudeDescriptor = new VariableDescriptor("Altitude", true, DataType.FLOAT, "n_grid_points", false, -1);
-        altitudeDescriptor.setUnit("m");
-        altitudeDescriptor.setFillValue(-999.f);
-        variableDescriptors.put("grid_point_altitude", altitudeDescriptor);
+        if (mustExport("lat", outputBandNames)) {
+            final VariableDescriptor latDescriptor = new VariableDescriptor("Latitude", true, DataType.FLOAT, "n_grid_points", false, -1);
+            latDescriptor.setUnit("degrees_north");
+            latDescriptor.setFillValue(-999.f);
+            latDescriptor.setValidMin(-90.f);
+            latDescriptor.setValidMax(90.f);
+            latDescriptor.setOriginalName("Grid_Point_Latitude");
+            latDescriptor.setStandardName("latitude");
+            variableDescriptors.put("lat", latDescriptor);
+        }
 
-        variableDescriptors.put("grid_point_mask", new VariableDescriptor("Grid_Point_Mask", true, DataType.BYTE, "n_grid_points", false, -1));
-        variableDescriptors.put("bt_data_count", new VariableDescriptor("BT_Data_Counter", true, DataType.BYTE, "n_grid_points", false, -1));
+        if (mustExport("lon", outputBandNames)) {
+            final VariableDescriptor lonDescriptor = new VariableDescriptor("Longitude", true, DataType.FLOAT, "n_grid_points", false, -1);
+            lonDescriptor.setUnit("degrees_east");
+            lonDescriptor.setFillValue(-999.f);
+            lonDescriptor.setValidMin(-180.f);
+            lonDescriptor.setValidMax(180.f);
+            lonDescriptor.setOriginalName("Grid_Point_Longitude");
+            lonDescriptor.setStandardName("longitude");
+            variableDescriptors.put("lon", lonDescriptor);
+        }
 
-        final VariableDescriptor flagsDescriptor = new VariableDescriptor("Flags", false, DataType.SHORT, "n_grid_points n_bt_data", true, 0);
-        flagsDescriptor.setFlagMasks(new short[]{3, 3, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, (short) 32768});
-        flagsDescriptor.setFlagValues(new short[]{0, 1, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, (short) 32768});
-        flagsDescriptor.setFlagMeanings("pol_xx pol_yy sun_fov sun_glint_fov moon_glint_fov single_snapshot rfi_x sun_point sun_glint_area moon_point af_fov rfi_tails border_fov sun_tails rfi_y rfi_point_source");
-        flagsDescriptor.setUnsigned(true);
-        variableDescriptors.put("flags", flagsDescriptor);
 
-        final VariableDescriptor btValueDescriptor = new VariableDescriptor("BT_Value", false, DataType.FLOAT, "n_grid_points n_bt_data", true, 1);
-        btValueDescriptor.setUnit("K");
-        btValueDescriptor.setFillValue(-999.f);
-        variableDescriptors.put("bt_value", btValueDescriptor);
+        if (mustExport("grid_point_altitude", outputBandNames)) {
+            final VariableDescriptor altitudeDescriptor = new VariableDescriptor("Altitude", true, DataType.FLOAT, "n_grid_points", false, -1);
+            altitudeDescriptor.setUnit("m");
+            altitudeDescriptor.setFillValue(-999.f);
+            variableDescriptors.put("grid_point_altitude", altitudeDescriptor);
+        }
 
-        final VariableDescriptor radAccDescriptor = new VariableDescriptor("Radiometric_Accuracy_of_Pixel", false, DataType.SHORT, "n_grid_points n_bt_data", true, 2);
-        radAccDescriptor.setUnit("K");
-        radAccDescriptor.setOriginalName("Radiometric_Accuracy_of_Pixel");
-        radAccDescriptor.setScaleFactor(0.000762939453125);
-        radAccDescriptor.setUnsigned(true);
-        variableDescriptors.put("pixel_radiometric_accuracy", radAccDescriptor);
+        if (mustExport("grid_point_mask", outputBandNames)) {
+            final VariableDescriptor gpMaskDescriptor = new VariableDescriptor("Grid_Point_Mask", true, DataType.BYTE, "n_grid_points", false, -1);
+            variableDescriptors.put("grid_point_mask", gpMaskDescriptor);
+        }
 
-        final VariableDescriptor azimuthAngleDescriptor = new VariableDescriptor("Azimuth_Angle", false, DataType.SHORT, "n_grid_points n_bt_data", true, 3);
-        azimuthAngleDescriptor.setUnit("degree");
-        azimuthAngleDescriptor.setScaleFactor(0.0054931640625);
-        azimuthAngleDescriptor.setUnsigned(true);
-        variableDescriptors.put("azimuth_angle", azimuthAngleDescriptor);
+        if (mustExport("bt_data_count", outputBandNames)) {
+            final VariableDescriptor btDataCounterDescriptor = new VariableDescriptor("BT_Data_Counter", true, DataType.BYTE, "n_grid_points", false, -1);
+            variableDescriptors.put("bt_data_count", btDataCounterDescriptor);
+        }
 
-        final VariableDescriptor fpAxis1Descriptor = new VariableDescriptor("Footprint_Axis1", false, DataType.SHORT, "n_grid_points n_bt_data", true, 4);
-        fpAxis1Descriptor.setUnit("km");
-        fpAxis1Descriptor.setScaleFactor(0.00152587890625);
-        fpAxis1Descriptor.setUnsigned(true);
-        variableDescriptors.put("footprint_axis_1", fpAxis1Descriptor);
+        if (mustExport("flags", outputBandNames)) {
+            final VariableDescriptor flagsDescriptor = new VariableDescriptor("Flags", false, DataType.SHORT, "n_grid_points n_bt_data", true, 0);
+            flagsDescriptor.setFlagMasks(new short[]{3, 3, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, (short) 32768});
+            flagsDescriptor.setFlagValues(new short[]{0, 1, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, (short) 32768});
+            flagsDescriptor.setFlagMeanings("pol_xx pol_yy sun_fov sun_glint_fov moon_glint_fov single_snapshot rfi_x sun_point sun_glint_area moon_point af_fov rfi_tails border_fov sun_tails rfi_y rfi_point_source");
+            flagsDescriptor.setUnsigned(true);
+            variableDescriptors.put("flags", flagsDescriptor);
+        }
 
-        final VariableDescriptor fpAxis2Descriptor = new VariableDescriptor("Footprint_Axis2", false, DataType.SHORT, "n_grid_points n_bt_data", true, 5);
-        fpAxis2Descriptor.setUnit("km");
-        fpAxis2Descriptor.setScaleFactor(0.00152587890625);
-        fpAxis2Descriptor.setUnsigned(true);
-        variableDescriptors.put("footprint_axis_2", fpAxis2Descriptor);
+        if (mustExport("bt_value", outputBandNames)) {
+            final VariableDescriptor btValueDescriptor = new VariableDescriptor("BT_Value", false, DataType.FLOAT, "n_grid_points n_bt_data", true, 1);
+            btValueDescriptor.setUnit("K");
+            btValueDescriptor.setFillValue(-999.f);
+            variableDescriptors.put("bt_value", btValueDescriptor);
+        }
+
+        if (mustExport("pixel_radiometric_accuracy", outputBandNames)) {
+            final VariableDescriptor radAccDescriptor = new VariableDescriptor("Radiometric_Accuracy_of_Pixel", false, DataType.SHORT, "n_grid_points n_bt_data", true, 2);
+            radAccDescriptor.setUnit("K");
+            radAccDescriptor.setOriginalName("Radiometric_Accuracy_of_Pixel");
+            radAccDescriptor.setScaleFactor(0.000762939453125);
+            radAccDescriptor.setUnsigned(true);
+            variableDescriptors.put("pixel_radiometric_accuracy", radAccDescriptor);
+        }
+
+        if (mustExport("azimuth_angle", outputBandNames)) {
+            final VariableDescriptor azimuthAngleDescriptor = new VariableDescriptor("Azimuth_Angle", false, DataType.SHORT, "n_grid_points n_bt_data", true, 3);
+            azimuthAngleDescriptor.setUnit("degree");
+            azimuthAngleDescriptor.setScaleFactor(0.0054931640625);
+            azimuthAngleDescriptor.setUnsigned(true);
+            variableDescriptors.put("azimuth_angle", azimuthAngleDescriptor);
+        }
+
+        if (mustExport("footprint_axis_1", outputBandNames)) {
+            final VariableDescriptor fpAxis1Descriptor = new VariableDescriptor("Footprint_Axis1", false, DataType.SHORT, "n_grid_points n_bt_data", true, 4);
+            fpAxis1Descriptor.setUnit("km");
+            fpAxis1Descriptor.setScaleFactor(0.00152587890625);
+            fpAxis1Descriptor.setUnsigned(true);
+            variableDescriptors.put("footprint_axis_1", fpAxis1Descriptor);
+        }
+
+        if (mustExport("footprint_axis_2", outputBandNames)) {
+            final VariableDescriptor fpAxis2Descriptor = new VariableDescriptor("Footprint_Axis2", false, DataType.SHORT, "n_grid_points n_bt_data", true, 5);
+            fpAxis2Descriptor.setUnit("km");
+            fpAxis2Descriptor.setScaleFactor(0.00152587890625);
+            fpAxis2Descriptor.setUnsigned(true);
+            variableDescriptors.put("footprint_axis_2", fpAxis2Descriptor);
+        }
     }
 
     private VariableWriter[] createVariableWriters(NFileWriteable nFileWriteable) {

@@ -97,7 +97,7 @@ public class GPtoNetCDFExporterOpIntegrationTest {
 
             assertGridPointIdVariable(targetFile, 346, new int[]{4098190, 4098191});
 
-            final Variable latVariable = getVariable("lat", targetFile);
+            final Variable latVariable = getVariableVerified("lat", targetFile);
             assertEquals(DataType.FLOAT, latVariable.getDataType());
             assertAttribute("units", "degrees_north", latVariable);
             assertAttribute("_FillValue", -999.0, latVariable);
@@ -114,7 +114,7 @@ public class GPtoNetCDFExporterOpIntegrationTest {
             assertEquals(78.56900024, array.getFloat(0), 1e-8);
             assertEquals(78.6760025, array.getFloat(1), 1e-8);
 
-            final Variable lonVariable = getVariable("lon", targetFile);
+            final Variable lonVariable = getVariableVerified("lon", targetFile);
             assertEquals(DataType.FLOAT, lonVariable.getDataType());
             assertAttribute("units", "degrees_east", lonVariable);
             assertAttribute("_FillValue", -999.0, lonVariable);
@@ -131,7 +131,7 @@ public class GPtoNetCDFExporterOpIntegrationTest {
             assertEquals(101.25, array.getFloat(0), 1e-8);
             assertEquals(100.994003295, array.getFloat(1), 1e-8);
 
-            final Variable altitudeVariable = getVariable("grid_point_altitude", targetFile);
+            final Variable altitudeVariable = getVariableVerified("grid_point_altitude", targetFile);
             assertEquals(DataType.FLOAT, altitudeVariable.getDataType());
             assertAttribute("units", "m", altitudeVariable);
             assertAttribute("_FillValue", -999.0, altitudeVariable);
@@ -148,7 +148,7 @@ public class GPtoNetCDFExporterOpIntegrationTest {
             assertEquals(-0.708, array.getFloat(0), 1e-8);
             assertEquals(0.0, array.getFloat(1), 1e-8);
 
-            final Variable gridPointMaskVariable = getVariable("grid_point_mask", targetFile);
+            final Variable gridPointMaskVariable = getVariableVerified("grid_point_mask", targetFile);
             assertEquals(DataType.BYTE, gridPointMaskVariable.getDataType());
             assertNoAttribute("units", gridPointMaskVariable);
             assertNoAttribute("_FillValue", gridPointMaskVariable);
@@ -165,7 +165,7 @@ public class GPtoNetCDFExporterOpIntegrationTest {
             assertEquals(-39, array.getByte(0)); // @todo 2 tb/tb these should be unsigned values - resolve problem tb 2014-04-09
             assertEquals(-39, array.getByte(1));
 
-            final Variable btDataCountVariable = getVariable("bt_data_count", targetFile);
+            final Variable btDataCountVariable = getVariableVerified("bt_data_count", targetFile);
             assertEquals(DataType.BYTE, btDataCountVariable.getDataType());
             assertNoAttribute("units", btDataCountVariable);
             assertNoAttribute("_FillValue", btDataCountVariable);
@@ -182,7 +182,7 @@ public class GPtoNetCDFExporterOpIntegrationTest {
             assertEquals(4, array.getByte(0)); // @todo 2 tb/tb these should be unsigned values - resolve problem tb 2014-04-09
             assertEquals(4, array.getByte(1));
 
-            final Variable flagsVariable = getVariable("flags", targetFile);
+            final Variable flagsVariable = getVariableVerified("flags", targetFile);
             assertEquals(DataType.SHORT, flagsVariable.getDataType());
             assertNoAttribute("units", flagsVariable);
             assertNoAttribute("_FillValue", flagsVariable);
@@ -199,7 +199,7 @@ public class GPtoNetCDFExporterOpIntegrationTest {
             assertEquals(1045, array.getShort(0));
             assertEquals(1045, array.getShort(1));
 
-            final Variable btValueVariable = getVariable("bt_value", targetFile);
+            final Variable btValueVariable = getVariableVerified("bt_value", targetFile);
             assertEquals(DataType.FLOAT, btValueVariable.getDataType());
             assertAttribute("units", "K", btValueVariable);
             assertAttribute("_FillValue", -999.0, btValueVariable);
@@ -218,7 +218,7 @@ public class GPtoNetCDFExporterOpIntegrationTest {
             assertEquals(6.454884052276611, array.getFloat(2), 1e-8);
             assertEquals(-0.10488655418157578, array.getFloat(3), 1e-8);
 
-            final Variable radAccVariable = getVariable("pixel_radiometric_accuracy", targetFile);
+            final Variable radAccVariable = getVariableVerified("pixel_radiometric_accuracy", targetFile);
             assertEquals(DataType.SHORT, radAccVariable.getDataType());
             assertAttribute("units", "K", radAccVariable);
             assertNoAttribute("_FillValue", radAccVariable);
@@ -237,7 +237,7 @@ public class GPtoNetCDFExporterOpIntegrationTest {
             assertEquals(3552, array.getShort(2));
             assertEquals(3642, array.getShort(3));
 
-            final Variable azimuthAngleVariable = getVariable("azimuth_angle", targetFile);
+            final Variable azimuthAngleVariable = getVariableVerified("azimuth_angle", targetFile);
             assertEquals(DataType.SHORT, azimuthAngleVariable.getDataType());
             assertAttribute("units", "degree", azimuthAngleVariable);
             assertNoAttribute("_FillValue", azimuthAngleVariable);
@@ -256,7 +256,7 @@ public class GPtoNetCDFExporterOpIntegrationTest {
             assertEquals(8377, array.getShort(2));
             assertEquals(8376, array.getShort(3));
 
-            final Variable footAxis1Variable = getVariable("footprint_axis_1", targetFile);
+            final Variable footAxis1Variable = getVariableVerified("footprint_axis_1", targetFile);
             assertEquals(DataType.SHORT, footAxis1Variable.getDataType());
             assertAttribute("units", "km", footAxis1Variable);
             assertNoAttribute("_FillValue", footAxis1Variable);
@@ -275,7 +275,7 @@ public class GPtoNetCDFExporterOpIntegrationTest {
             assertEquals(18492, array.getShort(2));
             assertEquals(18492, array.getShort(3));
 
-            final Variable footAxis2Variable = getVariable("footprint_axis_2", targetFile);
+            final Variable footAxis2Variable = getVariableVerified("footprint_axis_2", targetFile);
             assertEquals(DataType.SHORT, footAxis2Variable.getDataType());
             assertAttribute("units", "km", footAxis2Variable);
             assertNoAttribute("_FillValue", footAxis2Variable);
@@ -383,7 +383,7 @@ public class GPtoNetCDFExporterOpIntegrationTest {
 
             assertGridPointIdVariable(targetFile, 584, new int[]{7188459, 7188465});
 
-            final Variable latVariable = getVariable("lat", targetFile);
+            final Variable latVariable = getVariableVerified("lat", targetFile);
             assertEquals(DataType.FLOAT, latVariable.getDataType());
             assertAttribute("units", "degrees_north", latVariable);
             assertAttribute("_FillValue", -999.0, latVariable);
@@ -396,7 +396,7 @@ public class GPtoNetCDFExporterOpIntegrationTest {
             assertEquals(-76.871002197, array.getFloat(0), 1e-8);
             assertEquals(-76.870002747, array.getFloat(1), 1e-8);
 
-            final Variable lonVariable = getVariable("lon", targetFile);
+            final Variable lonVariable = getVariableVerified("lon", targetFile);
             assertEquals(DataType.FLOAT, lonVariable.getDataType());
             assertAttribute("units", "degrees_east", lonVariable);
             assertAttribute("_FillValue", -999.0, lonVariable);
@@ -409,7 +409,7 @@ public class GPtoNetCDFExporterOpIntegrationTest {
             assertEquals(168.957000732, array.getFloat(0), 1e-8);
             assertEquals(160.537002563, array.getFloat(1), 1e-8);
 
-            final Variable ftprtDiamVariable = getVariable("equiv_ftprt_diam", targetFile);
+            final Variable ftprtDiamVariable = getVariableVerified("equiv_ftprt_diam", targetFile);
             assertEquals(DataType.FLOAT, ftprtDiamVariable.getDataType());
             assertAttribute("units", "m", ftprtDiamVariable);
             assertAttribute("_FillValue", -999.0, ftprtDiamVariable);
@@ -417,7 +417,7 @@ public class GPtoNetCDFExporterOpIntegrationTest {
             assertEquals(-999.0, array.getFloat(0), 1e-8);
             assertEquals(-999.0, array.getFloat(1), 1e-8);
 
-            final Variable acqTimeVariable = getVariable("mean_acq_time", targetFile);
+            final Variable acqTimeVariable = getVariableVerified("mean_acq_time", targetFile);
             assertEquals(DataType.FLOAT, acqTimeVariable.getDataType());
             assertAttribute("units", "dd", acqTimeVariable);
             assertAttribute("_FillValue", -999.0, acqTimeVariable);
@@ -425,7 +425,7 @@ public class GPtoNetCDFExporterOpIntegrationTest {
             assertEquals(-999.0, array.getFloat(0), 1e-8);
             assertEquals(-999.0, array.getFloat(1), 1e-8);
 
-            final Variable sss1Variable = getVariable("sss1", targetFile);
+            final Variable sss1Variable = getVariableVerified("sss1", targetFile);
             assertEquals(DataType.FLOAT, sss1Variable.getDataType());
             assertAttribute("units", "psu", sss1Variable);
             assertAttribute("_FillValue", -999.0, sss1Variable);
@@ -433,7 +433,7 @@ public class GPtoNetCDFExporterOpIntegrationTest {
             assertEquals(-999.0, array.getFloat(0), 1e-8);
             assertEquals(-999.0, array.getFloat(1), 1e-8);
 
-            final Variable sigmaSss1Variable = getVariable("sigma_sss1", targetFile);
+            final Variable sigmaSss1Variable = getVariableVerified("sigma_sss1", targetFile);
             assertEquals(DataType.FLOAT, sigmaSss1Variable.getDataType());
             assertAttribute("units", "psu", sigmaSss1Variable);
             assertAttribute("_FillValue", -999.0, sigmaSss1Variable);
@@ -441,7 +441,7 @@ public class GPtoNetCDFExporterOpIntegrationTest {
             assertEquals(-999.0, array.getFloat(0), 1e-8);
             assertEquals(-999.0, array.getFloat(1), 1e-8);
 
-            final Variable sss2Variable = getVariable("sss2", targetFile);
+            final Variable sss2Variable = getVariableVerified("sss2", targetFile);
             assertEquals(DataType.FLOAT, sss2Variable.getDataType());
             assertAttribute("units", "psu", sss2Variable);
             assertAttribute("_FillValue", -999.0, sss2Variable);
@@ -449,7 +449,7 @@ public class GPtoNetCDFExporterOpIntegrationTest {
             assertEquals(-999.0, array.getFloat(0), 1e-8);
             assertEquals(-999.0, array.getFloat(1), 1e-8);
 
-            final Variable sigmaSss2Variable = getVariable("sigma_sss2", targetFile);
+            final Variable sigmaSss2Variable = getVariableVerified("sigma_sss2", targetFile);
             assertEquals(DataType.FLOAT, sigmaSss2Variable.getDataType());
             assertAttribute("units", "psu", sigmaSss2Variable);
             assertAttribute("_FillValue", -999.0, sigmaSss2Variable);
@@ -457,7 +457,7 @@ public class GPtoNetCDFExporterOpIntegrationTest {
             assertEquals(-999.0, array.getFloat(0), 1e-8);
             assertEquals(-999.0, array.getFloat(1), 1e-8);
 
-            final Variable sss3Variable = getVariable("sss3", targetFile);
+            final Variable sss3Variable = getVariableVerified("sss3", targetFile);
             assertEquals(DataType.FLOAT, sss3Variable.getDataType());
             assertAttribute("units", "psu", sss3Variable);
             assertAttribute("_FillValue", -999.0, sss3Variable);
@@ -465,7 +465,7 @@ public class GPtoNetCDFExporterOpIntegrationTest {
             assertEquals(-999.0, array.getFloat(0), 1e-8);
             assertEquals(-999.0, array.getFloat(1), 1e-8);
 
-            final Variable sigmaSss3Variable = getVariable("sigma_sss3", targetFile);
+            final Variable sigmaSss3Variable = getVariableVerified("sigma_sss3", targetFile);
             assertEquals(DataType.FLOAT, sigmaSss3Variable.getDataType());
             assertAttribute("units", "psu", sigmaSss3Variable);
             assertAttribute("_FillValue", -999.0, sigmaSss3Variable);
@@ -473,19 +473,61 @@ public class GPtoNetCDFExporterOpIntegrationTest {
             assertEquals(-999.0, array.getFloat(0), 1e-8);
             assertEquals(-999.0, array.getFloat(1), 1e-8);
 
-            final Variable aCardVariable = getVariable("a_card", targetFile);
+            final Variable aCardVariable = getVariableVerified("a_card", targetFile);
             assertEquals(DataType.FLOAT, aCardVariable.getDataType());
             assertAttribute("_FillValue", -999.0, aCardVariable);
             array = aCardVariable.read(new int[]{1694}, new int[]{2});
             assertEquals(-999.0, array.getFloat(0), 1e-8);
             assertEquals(-999.0, array.getFloat(1), 1e-8);
 
-            final Variable sigmaACardVariable = getVariable("sigma_a_card", targetFile);
+            final Variable sigmaACardVariable = getVariableVerified("sigma_a_card", targetFile);
             assertEquals(DataType.FLOAT, sigmaACardVariable.getDataType());
             assertAttribute("_FillValue", -999.0, sigmaACardVariable);
             array = sigmaACardVariable.read(new int[]{1762}, new int[]{2});
             assertEquals(-999.0, array.getFloat(0), 1e-8);
             assertEquals(-999.0, array.getFloat(1), 1e-8);
+        } finally {
+            if (product != null) {
+                product.dispose();
+            }
+
+            if (targetFile != null) {
+                targetFile.close();
+            }
+        }
+    }
+
+    @Test
+    public void testConvert_BWSD1C_withBandSubset() throws IOException, InvalidRangeException, ParseException {
+        final File file = TestHelper.getResourceFile("SM_OPER_MIR_BWLF1C_20111026T143206_20111026T152520_503_001_1.zip");
+
+        Product product = null;
+        NetcdfFile targetFile = null;
+        try {
+            product = ProductIO.readProduct(file);
+
+            final HashMap<String, Object> parameterMap = createDefaultParameterMap();
+            parameterMap.put("outputBandNames", "lat,lon,bt_value,azimuth_angle");
+            GPF.createProduct(GPtoNetCDFExporterOp.ALIAS,
+                    parameterMap,
+                    new Product[]{product});
+
+            final File outputFile = new File(targetDirectory, "SM_OPER_MIR_BWLF1C_20111026T143206_20111026T152520_503_001_1.nc");
+            assertTrue(outputFile.isFile());
+            assertEquals(2520092, outputFile.length());
+
+            targetFile = NetcdfFileOpener.open(outputFile);
+            getVariableVerified("lat", targetFile);
+            getVariableVerified("lon", targetFile);
+            getVariableVerified("bt_value", targetFile);
+            getVariableVerified("azimuth_angle", targetFile);
+
+            final Variable gridPointAltitude = getVariable("grid_point_altitude", targetFile);
+            assertNull(gridPointAltitude);
+
+            final Variable footprintAxis1 = getVariable("footprint_axis_1", targetFile);
+            assertNull(footprintAxis1);
+
         } finally {
             if (product != null) {
                 product.dispose();
@@ -565,13 +607,21 @@ public class GPtoNetCDFExporterOpIntegrationTest {
     }
 
     private void assertGridPointIdVariable(NetcdfFile targetFile, int offset, int[] expected) throws IOException, InvalidRangeException {
-        final Variable gridPointIdVariable = getVariable("grid_point_id", targetFile);
+        final Variable gridPointIdVariable = getVariableVerified("grid_point_id", targetFile);
         assertEquals(DataType.INT, gridPointIdVariable.getDataType());
         assertAttribute("_Unsigned", "true", gridPointIdVariable);
         Array array = gridPointIdVariable.read(new int[]{offset}, new int[]{2});
         for (int i = 0; i < 2; i++) {
             assertEquals(expected[i], array.getInt(i));
         }
+    }
+
+    private Variable getVariableVerified(String variableName, NetcdfFile targetFile) {
+        final Variable variable = getVariable(variableName, targetFile);
+        if (variable == null) {
+            fail("Variable '" + variableName + "' not in file");
+        }
+        return variable;
     }
 
     private Variable getVariable(String variableName, NetcdfFile targetFile) {
@@ -581,7 +631,6 @@ public class GPtoNetCDFExporterOpIntegrationTest {
                 return variable;
             }
         }
-        fail("Variable '" + variableName + "' not in file");
         return null;
     }
 

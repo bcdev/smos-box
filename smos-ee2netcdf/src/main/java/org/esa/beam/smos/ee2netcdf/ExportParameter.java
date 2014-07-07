@@ -5,6 +5,8 @@ import org.esa.beam.framework.gpf.annotations.Parameter;
 import org.esa.beam.smos.gui.BindingConstants;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ExportParameter {
 
@@ -19,6 +21,7 @@ public class ExportParameter {
      * MIR_SM_BWxD1C
      */
     public static final String PRODUCT_TYPE_REGEX = "MIR_BW[LS][DF]1C|MIR_SC[LS][DF]1C|MIR_OSUDP2|MIR_SMUDP2";
+
     @Parameter(alias = BindingConstants.SELECTED_PRODUCT)
     private boolean useSelectedProduct;
 
@@ -45,12 +48,14 @@ public class ExportParameter {
     private boolean overwriteTarget;
     private String contact;
     private String institution;
+    private List<String> outputBandNames;
 
     public ExportParameter() {
         northBound = 90.0;
         southBound = -90.0;
         westBound = -180.0;
         eastBound = 180.0;
+        outputBandNames = new ArrayList<>();
     }
 
     public void setUseSelectedProduct(boolean useSelectedProduct) {
@@ -177,5 +182,13 @@ public class ExportParameter {
 
     public String getInstitution() {
         return institution;
+    }
+
+    public void setOutputBandNames(List<String> outputBandNames) {
+        this.outputBandNames = outputBandNames;
+    }
+
+    public List<String> getOutputBandNames() {
+        return outputBandNames;
     }
 }

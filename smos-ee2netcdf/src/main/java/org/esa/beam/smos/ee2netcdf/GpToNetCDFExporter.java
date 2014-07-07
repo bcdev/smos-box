@@ -28,7 +28,7 @@ class GpToNetCDFExporter {
 
         try {
             final FormatExporter exporter = FormatExporterFactory.create(fileLocation.getName());
-            exporter.initialize(product);
+            exporter.initialize(product, parameter);
 
             final File outputFile = getOutputFile(fileLocation, parameter.getTargetDirectory());
             // @todo 2 tb/tb extract method and move to helper class tb 2014-07-07
@@ -41,7 +41,7 @@ class GpToNetCDFExporter {
 
             exporter.addGlobalAttributes(nFileWriteable, product.getMetadataRoot(), parameter);
             exporter.addDimensions(nFileWriteable);
-            exporter.addVariables(nFileWriteable);
+            exporter.addVariables(nFileWriteable, parameter);
 
             nFileWriteable.create();
 

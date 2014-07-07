@@ -8,10 +8,12 @@ import org.esa.beam.framework.gpf.OperatorSpi;
 import org.esa.beam.framework.gpf.annotations.OperatorMetadata;
 import org.esa.beam.framework.gpf.annotations.Parameter;
 import org.esa.beam.framework.gpf.annotations.SourceProducts;
+import org.esa.beam.util.StringUtils;
 import org.esa.beam.util.io.WildcardMatcher;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.TreeSet;
 
 @OperatorMetadata(
@@ -51,6 +53,10 @@ public class GPtoNetCDFExporterOp extends Operator {
     @Parameter(description = "Set contact field for file metadata. If left empty, no contact information is written to output file.")
     private String contact;
 
+    @Parameter(defaultValue = "",
+            description = "Comma separated list of band names to export. If left empty, no band subsetting is applied.")
+    private String outputBandNames;
+
     @Override
     public void initialize() throws OperatorException {
         final ExportParameter exportParameter = new ExportParameter();
@@ -58,6 +64,14 @@ public class GPtoNetCDFExporterOp extends Operator {
         exportParameter.setInstitution(institution);
         exportParameter.setContact(contact);
         exportParameter.setOverwriteTarget(overwriteTarget);
+        if (StringUtils.isNotNullAndNotEmpty(outputBandNames)) {
+            final String[] bandNames = StringUtils.csvToArray(outputBandNames);
+            final ArrayList<String> bandNamesList = new ArrayList<String>(bandNames.length);
+            for (int i = 0; i < bandNames.length; i++) {
+                bandNamesList.add(bandNames[i].trim());
+            }
+            exportParameter.setOutputBandNames(bandNamesList);
+        }
 
         setDummyTargetProduct();
 

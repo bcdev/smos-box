@@ -19,13 +19,10 @@ class L1CProductExporter extends AbstractFormatExporter {
 
     private int numSnapshots;
 
-    L1CProductExporter() {
-        createVariableDescriptors();
-    }
-
     @Override
-    public void initialize(Product product) {
-        super.initialize(product);
+    public void initialize(Product product, ExportParameter exportParameter) {
+        super.initialize(product, exportParameter);
+        createVariableDescriptors(exportParameter);
 
         final L1cScienceSmosFile scienceSmosFile = (L1cScienceSmosFile) explorerFile;
         final SnapshotInfo snapshotInfo = scienceSmosFile.getSnapshotInfo();
@@ -56,7 +53,7 @@ class L1CProductExporter extends AbstractFormatExporter {
         }
     }
 
-    void createVariableDescriptors() {
+    void createVariableDescriptors(ExportParameter exportParameter) {
         variableDescriptors = new HashMap<>();
 
         final VariableDescriptor gpIdDescriptor = new VariableDescriptor("Grid_Point_ID", true, DataType.INT, "n_grid_points", false, -1);
