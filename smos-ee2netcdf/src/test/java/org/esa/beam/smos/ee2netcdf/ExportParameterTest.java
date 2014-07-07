@@ -1,7 +1,6 @@
-package org.esa.beam.smos.ee2netcdf.visat;
+package org.esa.beam.smos.ee2netcdf;
 
 import org.esa.beam.framework.gpf.annotations.Parameter;
-import org.esa.beam.smos.ee2netcdf.ExportParameter;
 import org.esa.beam.smos.gui.BindingConstants;
 import org.junit.Before;
 import org.junit.Test;

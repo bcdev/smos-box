@@ -8,6 +8,17 @@ import java.io.File;
 
 public class ExportParameter {
 
+    /**
+     * Valid source product types are
+     * <p/>
+     * MIR_SM_SMUDP2
+     * MIR_SM_OSUDP2
+     * MIR_SM_SCxF1C
+     * MIR_SM_SCxD1C
+     * MIR_SM_BWxF1C
+     * MIR_SM_BWxD1C
+     */
+    public static final String PRODUCT_TYPE_REGEX = "MIR_BW[LS][DF]1C|MIR_SC[LS][DF]1C|MIR_OSUDP2|MIR_SMUDP2";
     @Parameter(alias = BindingConstants.SELECTED_PRODUCT)
     private boolean useSelectedProduct;
 
