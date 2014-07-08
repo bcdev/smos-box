@@ -64,6 +64,9 @@ class GlobalSmosFile extends ExplorerFile {
     }
 
     private void addBand(Product product, BandDescriptor descriptor, CompoundType compoundType) {
+        if (!descriptor.isVisible()) {
+            return;
+        }
         final int memberIndex = compoundType.getMemberIndex(descriptor.getMemberName());
 
         if (memberIndex >= 0) {

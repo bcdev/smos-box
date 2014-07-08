@@ -16,7 +16,7 @@
 
 package org.esa.beam.dataio.smos.dddb;
 
-import com.bc.ceres.binio.DataFormat;
+import com.bc.ceres.binio.*;
 import com.bc.ceres.binio.binx.BinX;
 import org.esa.beam.util.io.CsvReader;
 import org.jdom.Document;
@@ -32,8 +32,7 @@ import java.net.URL;
 import java.nio.ByteOrder;
 import java.nio.charset.Charset;
 import java.text.MessageFormat;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -190,6 +189,71 @@ public class Dddb {
         }
 
         return flagDescriptorMap.get(identifier);
+    }
+
+    public Family<MemberDescriptor> getMemberDescriptors(File hdrFile) throws IOException {
+        final MemberDescriptors memberDescriptors = new MemberDescriptors();
+
+        final DataFormat dataFormat = getDataFormat(hdrFile);
+        final CompoundType type = dataFormat.getType();
+
+        final Family<BandDescriptor> bandDescriptors = getBandDescriptors(dataFormat.getName());
+        final Map<String, BandDescriptor> uniqueMemberMap = extractUniqueMembers(bandDescriptors);
+
+        extractMembers(type, memberDescriptors);
+
+        final List<MemberDescriptor> memberDescriptorList = memberDescriptors.asList();
+        final ArrayList<MemberDescriptor> toRemoveList = new ArrayList<>();
+        for (MemberDescriptor memberDescriptor : memberDescriptorList) {
+            if (!uniqueMemberMap.containsKey(memberDescriptor.getName())) {
+               toRemoveList.add(memberDescriptor);
+            }
+        }
+
+        for (MemberDescriptor toRemove : toRemoveList) {
+            memberDescriptors.remove(toRemove.getName());
+        }
+        return memberDescriptors;
+    }
+
+    private Map<String, BandDescriptor> extractUniqueMembers(Family<BandDescriptor> bandDescriptors) {
+        final HashMap<String, BandDescriptor> uniqueMemberMap = new HashMap<>();
+
+        final List<BandDescriptor> bandDescriptorsList = bandDescriptors.asList();
+        for (BandDescriptor bandDescriptor : bandDescriptorsList) {
+            final String memberName = bandDescriptor.getMemberName();
+            if (uniqueMemberMap.containsKey(memberName)) {
+                continue;
+            }
+
+            uniqueMemberMap.put(memberName, bandDescriptor);
+        }
+        return uniqueMemberMap;
+    }
+
+    private void extractMembers(CompoundType type, MemberDescriptors memberDescriptors) {
+        final CompoundMember[] members = type.getMembers();
+        for (CompoundMember member : members) {
+            final Type subType = member.getType();
+
+            if (subType.isSimpleType()) {
+                final MemberDescriptor memberDescriptor = new MemberDescriptor();
+                memberDescriptor.setName(member.getName());
+                memberDescriptors.add(memberDescriptor);
+            } else if (subType.isCompoundType()) {
+                extractMembers((CompoundType) subType, memberDescriptors);
+            } else if (subType.isSequenceType()) {
+                final SequenceType sequenceType = (SequenceType) subType;
+                final Type elementType = sequenceType.getElementType();
+                if (elementType.isSimpleType()) {
+                    final MemberDescriptor memberDescriptor = new MemberDescriptor();
+                    memberDescriptor.setName(member.getName());
+                    memberDescriptors.add(memberDescriptor);
+                } else if (elementType.isCompoundType()) {
+                    extractMembers((CompoundType) elementType, memberDescriptors);
+                }
+            }
+        }
     }
 
     private URL getSchemaResource(String schemaName) throws MalformedURLException {

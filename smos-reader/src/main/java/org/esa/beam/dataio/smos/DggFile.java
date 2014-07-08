@@ -1,10 +1,6 @@
 package org.esa.beam.dataio.smos;
 
-import com.bc.ceres.binio.CompoundData;
-import com.bc.ceres.binio.CompoundMember;
-import com.bc.ceres.binio.CompoundType;
-import com.bc.ceres.binio.DataContext;
-import com.bc.ceres.binio.SequenceData;
+import com.bc.ceres.binio.*;
 import com.bc.ceres.glevel.MultiLevelImage;
 import com.bc.ceres.glevel.MultiLevelSource;
 import com.bc.ceres.glevel.support.DefaultMultiLevelImage;
@@ -21,7 +17,7 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.Namespace;
 
-import java.awt.Dimension;
+import java.awt.*;
 import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
@@ -186,6 +182,10 @@ public class DggFile extends ExplorerFile {
     }
 
     protected final void addBand(Product product, BandDescriptor descriptor, CompoundType compoundType) {
+        if (!descriptor.isVisible()) {
+            return;
+        }
+
         final int memberIndex = compoundType.getMemberIndex(descriptor.getMemberName());
 
         if (memberIndex >= 0) {
@@ -211,7 +211,7 @@ public class DggFile extends ExplorerFile {
             }
             if (descriptor.getFlagDescriptors() != null) {
                 ProductHelper.addFlagsAndMasks(product, band, descriptor.getFlagCodingName(),
-                                               descriptor.getFlagDescriptors());
+                        descriptor.getFlagDescriptors());
             }
 
             final ValueProvider valueProvider = createValueProvider(descriptor);

@@ -159,6 +159,9 @@ class LightBufrFile implements ProductFile {
 
     private void addBand(Product product, Variable variable, int dataType, BandDescriptor descriptor) throws
                                                                                                       IOException {
+        if (!descriptor.isVisible()) {
+            return;
+        }
         final Band band = product.addBand(descriptor.getBandName(), dataType);
         final Attribute units = variable.findAttribute("units");
         if (units != null) {

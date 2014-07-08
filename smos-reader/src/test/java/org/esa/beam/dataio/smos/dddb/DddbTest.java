@@ -19,6 +19,9 @@ package org.esa.beam.dataio.smos.dddb;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.File;
+import java.io.IOException;
+
 import static org.junit.Assert.*;
 
 public class DddbTest {
@@ -178,5 +181,29 @@ public class DddbTest {
 
         final BandDescriptor n_instrument_error = descriptors.getMember("N_Instrument_Error");
         assertNotNull(n_instrument_error);
+    }
+
+    @Test
+    public void testGetMemberDescriptors_BWLF1C() throws IOException {
+        final File hdrFile = TestHelper.getResourceFile("SM_OPER_MIR_BWLF1C_20111026T143206_20111026T152520_503_001_1.HDR");
+
+        final Family<MemberDescriptor> memberDescriptors = dddb.getMemberDescriptors(hdrFile);
+        assertNotNull(memberDescriptors);
+        assertEquals(11, memberDescriptors.asList().size());
+        /*
+        Flags
+        BT_Value
+        Radiometric_Accuracy_of_Pixel
+        Azimuth_Angle
+        Footprint_Axis1
+        Footprint_Axis2
+        Grid_Point_ID
+        Grid_Point_Latitude
+        Grid_Point_Longitude
+        Grid_Point_Altitude
+        Grid_Point_Mask
+         */
+
+
     }
 }

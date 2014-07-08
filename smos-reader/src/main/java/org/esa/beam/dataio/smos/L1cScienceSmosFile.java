@@ -443,6 +443,9 @@ public class L1cScienceSmosFile extends L1cSmosFile {
     }
 
     private void addRotatedBand(Product product, BandDescriptor descriptor, ValueProvider valueProvider) {
+        if (!descriptor.isVisible()) {
+            return;
+        }
         final Band band = product.addBand(descriptor.getBandName(), ProductData.TYPE_FLOAT32);
 
         band.setUnit(descriptor.getUnit());
