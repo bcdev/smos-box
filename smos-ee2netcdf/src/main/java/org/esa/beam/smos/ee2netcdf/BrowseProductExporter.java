@@ -23,7 +23,7 @@ class BrowseProductExporter extends AbstractFormatExporter {
     private int nBtData;
 
     @Override
-    public void initialize(Product product, ExportParameter exportParameter) {
+    public void initialize(Product product, ExportParameter exportParameter) throws IOException {
         super.initialize(product, exportParameter);
         createVariableDescriptors(exportParameter);
 
@@ -68,7 +68,7 @@ class BrowseProductExporter extends AbstractFormatExporter {
         }
     }
 
-    void createVariableDescriptors(ExportParameter exportParameter) {
+    void createVariableDescriptors(ExportParameter exportParameter) throws IOException {
         variableDescriptors = new HashMap<>();
 
         final List<String> outputBandNames = exportParameter.getOutputBandNames();

@@ -28,7 +28,7 @@ abstract class AbstractFormatExporter implements FormatExporter {
     }
 
     @Override
-    public void initialize(Product product, ExportParameter exportParameter) {
+    public void initialize(Product product, ExportParameter exportParameter) throws IOException {
         explorerFile = getSmosFile(product);
         gridPointCount = explorerFile.getGridPointCount();
     }
@@ -112,7 +112,7 @@ abstract class AbstractFormatExporter implements FormatExporter {
 
     // @todo 3 tb/tb rethink this. I want to force derived classes to implement this method - as a reminder to create the map.
     // But the method should be private ... tb 014-04-11
-    abstract void createVariableDescriptors(ExportParameter exportParameter);
+    abstract void createVariableDescriptors(ExportParameter exportParameter) throws IOException;
 
     // package access for testing only tb 2014-07-01
     static Properties extractMetadata(MetadataElement root) {

@@ -20,7 +20,7 @@ class L1CProductExporter extends AbstractFormatExporter {
     private int numSnapshots;
 
     @Override
-    public void initialize(Product product, ExportParameter exportParameter) {
+    public void initialize(Product product, ExportParameter exportParameter) throws IOException {
         super.initialize(product, exportParameter);
         createVariableDescriptors(exportParameter);
 

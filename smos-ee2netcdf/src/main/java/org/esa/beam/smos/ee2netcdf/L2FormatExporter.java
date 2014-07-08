@@ -16,9 +16,8 @@ import java.util.Set;
 
 class L2FormatExporter extends AbstractFormatExporter {
 
-
     @Override
-    public void initialize(Product product, ExportParameter exportParameter) {
+    public void initialize(Product product, ExportParameter exportParameter) throws IOException {
         super.initialize(product, exportParameter);
 
         createVariableDescriptors(exportParameter);
