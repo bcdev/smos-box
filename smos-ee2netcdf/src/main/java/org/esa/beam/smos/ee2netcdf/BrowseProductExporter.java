@@ -6,6 +6,9 @@ import com.bc.ceres.binio.SequenceData;
 import org.esa.beam.dataio.netcdf.nc.NFileWriteable;
 import org.esa.beam.dataio.netcdf.nc.NVariable;
 import org.esa.beam.dataio.smos.L1cBrowseSmosFile;
+import org.esa.beam.dataio.smos.dddb.Dddb;
+import org.esa.beam.dataio.smos.dddb.Family;
+import org.esa.beam.dataio.smos.dddb.MemberDescriptor;
 import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.smos.SmosUtils;
 import org.esa.beam.smos.ee2netcdf.variable.VariableDescriptor;
@@ -21,10 +24,13 @@ import java.util.Set;
 class BrowseProductExporter extends AbstractFormatExporter {
 
     private int nBtData;
+    private Family<MemberDescriptor> memberDescriptors;
 
     @Override
     public void initialize(Product product, ExportParameter exportParameter) throws IOException {
         super.initialize(product, exportParameter);
+
+        memberDescriptors = Dddb.getInstance().getMemberDescriptors(explorerFile.getHeaderFile());
         createVariableDescriptors(exportParameter);
 
         final String productName = product.getName();
@@ -72,6 +78,14 @@ class BrowseProductExporter extends AbstractFormatExporter {
         variableDescriptors = new HashMap<>();
 
         final List<String> outputBandNames = exportParameter.getOutputBandNames();
+
+        final List<MemberDescriptor> memberDescriptorList = memberDescriptors.asList();
+        for(final MemberDescriptor memberDescriptor : memberDescriptorList) {
+            if (mustExport(memberDescriptor.getName(), outputBandNames))  {
+                // name
+                // @todo 1 tb/tb continue here tb 2014-07-09
+            }
+        }
 
         if (mustExport("grid_point_id", outputBandNames)) {
             final VariableDescriptor gpIdDescriptor = new VariableDescriptor("Grid_Point_ID", true, DataType.INT, "n_grid_points", false, -1);

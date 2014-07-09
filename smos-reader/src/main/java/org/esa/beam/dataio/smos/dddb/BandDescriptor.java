@@ -55,4 +55,6 @@ public interface BandDescriptor {
     String getFlagCodingName();
 
     Family<FlagDescriptor> getFlagDescriptors();
+
+    boolean isGridPointData();
 }
