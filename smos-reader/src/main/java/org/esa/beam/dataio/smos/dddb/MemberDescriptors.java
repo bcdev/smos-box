@@ -37,6 +37,11 @@ public class MemberDescriptors implements Family<MemberDescriptor> {
 
     @Override
     public MemberDescriptor getMember(String name) {
+        for(MemberDescriptor descriptor : descriptorList) {
+            if (descriptor.getName().equalsIgnoreCase(name)) {
+                return descriptor;
+            }
+        }
         return null;
     }
 }

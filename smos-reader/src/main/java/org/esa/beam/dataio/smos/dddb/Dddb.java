@@ -88,6 +88,12 @@ public class Dddb {
     }
 
     public DataFormat getDataFormat(File hdrFile) throws IOException {
+        final String formatName = extractFormatName(hdrFile);
+
+        return getDataFormat(formatName);
+    }
+
+    private String extractFormatName(File hdrFile) throws IOException {
         final Document document;
 
         try {
@@ -114,15 +120,15 @@ public class Dddb {
                 return false;
             }
         });
+        final String formatName;
         if (descendants.hasNext()) {
             final Element e = (Element) descendants.next();
-            final String formatName = e.getChildText(TAG_DATABLOCK_SCHEMA, namespace).substring(0, 27);
-
-            return getDataFormat(formatName);
+            formatName = e.getChildText(TAG_DATABLOCK_SCHEMA, namespace).substring(0, 27);
         } else {
             throw new IOException(MessageFormat.format(
                     "File ''{0}'': Missing datablock schema.", hdrFile.getPath()));
         }
+        return formatName;
     }
 
     public BandDescriptor findBandDescriptorForMember(String formatName, String memberName) {
@@ -206,14 +212,39 @@ public class Dddb {
         final ArrayList<MemberDescriptor> toRemoveList = new ArrayList<>();
         for (MemberDescriptor memberDescriptor : memberDescriptorList) {
             if (!uniqueMemberMap.containsKey(memberDescriptor.getName())) {
-               toRemoveList.add(memberDescriptor);
+                toRemoveList.add(memberDescriptor);
             }
         }
 
         for (MemberDescriptor toRemove : toRemoveList) {
             memberDescriptors.remove(toRemove.getName());
         }
+
+        final String formatName = extractFormatName(hdrFile);
+        final Properties mappingProperties = getMappingProperties(formatName);
+        if (mappingProperties != null) {
+            for (final MemberDescriptor memberDescriptor : memberDescriptorList) {
+                final String originalName = findOriginalName(mappingProperties, memberDescriptor.getName());
+                if (originalName != null) {
+                    memberDescriptor.setName(originalName);
+                }
+
+            }
+        }
+
         return memberDescriptors;
+    }
+
+    // package access for testing only tb 2014-07-09
+    static String findOriginalName(Properties mappingProperties, String searchName) {
+        final Set<Map.Entry<Object, Object>> entries = mappingProperties.entrySet();
+        for (Map.Entry<Object, Object> next : entries) {
+            if (searchName.equalsIgnoreCase((String) next.getValue())) {
+                return (String) next.getKey();
+            }
+        }
+
+        return null;
     }
 
     private Map<String, BandDescriptor> extractUniqueMembers(Family<BandDescriptor> bandDescriptors) {
@@ -269,30 +300,22 @@ public class Dddb {
         binX.setSingleDatasetStructInlined(true);
         binX.setArrayVariableInlined(true);
 
+
         try {
-            if (name.contains("AUX_ECMWF_")) {
-                binX.setVarNameMappings(resourceHandler.getResourceAsProperties("mappings_AUX_ECMWF_.properties"));
+            final Properties mappingProperties = getMappingProperties(name);
+            if (mappingProperties != null) {
+                binX.setVarNameMappings(mappingProperties);
             }
-            if (name.matches("DBL_\\w{2}_\\w{4}_MIR_\\w{4}1C_\\d{4}")) {
-                binX.setVarNameMappings(resourceHandler.getResourceAsProperties("mappings_MIR_XXXX1C.properties"));
-                if (name.matches("DBL_\\w{2}_\\w{4}_MIR_SC\\w{2}1C_\\d{4}")) {
-                    binX.setTypeMembersInlined(resourceHandler.getResourceAsProperties("structs_MIR_SCXX1C.properties"));
-                }
-            }
-            if (name.contains("MIR_OSDAP2")) {
-                binX.setVarNameMappings(resourceHandler.getResourceAsProperties("mappings_MIR_OSDAP2.properties"));
+
+            if (name.matches("DBL_\\w{2}_\\w{4}_MIR_SC\\w{2}1C_\\d{4}")) {
+                binX.setTypeMembersInlined(resourceHandler.getResourceAsProperties("structs_MIR_SCXX1C.properties"));
+            } else if (name.contains("MIR_OSDAP2")) {
                 binX.setTypeMembersInlined(resourceHandler.getResourceAsProperties("structs_MIR_OSDAP2.properties"));
-            }
-            if (name.contains("MIR_OSUDP2")) {
-                binX.setVarNameMappings(resourceHandler.getResourceAsProperties("mappings_MIR_OSUDP2.properties"));
+            } else if (name.contains("MIR_OSUDP2")) {
                 binX.setTypeMembersInlined(resourceHandler.getResourceAsProperties("structs_MIR_OSUDP2.properties"));
-            }
-            if (name.contains("MIR_SMDAP2")) {
-                binX.setVarNameMappings(resourceHandler.getResourceAsProperties("mappings_MIR_SMDAP2.properties"));
+            } else if (name.contains("MIR_SMDAP2")) {
                 binX.setTypeMembersInlined(resourceHandler.getResourceAsProperties("structs_MIR_SMDAP2.properties"));
-            }
-            if (name.contains("MIR_SMUDP2")) {
-                binX.setVarNameMappings(resourceHandler.getResourceAsProperties("mappings_MIR_SMUDP2.properties"));
+            } else if (name.contains("MIR_SMUDP2")) {
                 binX.setTypeMembersInlined(resourceHandler.getResourceAsProperties("structs_MIR_SMUDP2.properties"));
             }
         } catch (IOException e) {
@@ -300,6 +323,24 @@ public class Dddb {
         }
 
         return binX;
+    }
+
+    private Properties getMappingProperties(String name) throws IOException {
+        Properties mappingProperties = null;
+        if (name.contains("AUX_ECMWF_")) {
+            mappingProperties = resourceHandler.getResourceAsProperties("mappings_AUX_ECMWF_.properties");
+        } else if (name.matches("DBL_\\w{2}_\\w{4}_MIR_\\w{4}1C_\\d{4}")) {
+            mappingProperties = resourceHandler.getResourceAsProperties("mappings_MIR_XXXX1C.properties");
+        } else if (name.contains("MIR_OSDAP2")) {
+            mappingProperties = resourceHandler.getResourceAsProperties("mappings_MIR_OSDAP2.properties");
+        } else if (name.contains("MIR_OSUDP2")) {
+            mappingProperties = resourceHandler.getResourceAsProperties("mappings_MIR_OSUDP2.properties");
+        } else if (name.contains("MIR_SMDAP2")) {
+            mappingProperties = resourceHandler.getResourceAsProperties("mappings_MIR_SMDAP2.properties");
+        } else if (name.contains("MIR_SMUDP2")) {
+            mappingProperties = resourceHandler.getResourceAsProperties("mappings_MIR_SMUDP2.properties");
+        }
+        return mappingProperties;
     }
 
     private BandDescriptors readBandDescriptors(InputStream inputStream) throws IOException {

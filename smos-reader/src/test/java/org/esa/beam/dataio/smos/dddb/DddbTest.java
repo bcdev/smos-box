@@ -21,6 +21,7 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Properties;
 
 import static org.junit.Assert.*;
 
@@ -190,20 +191,58 @@ public class DddbTest {
         final Family<MemberDescriptor> memberDescriptors = dddb.getMemberDescriptors(hdrFile);
         assertNotNull(memberDescriptors);
         assertEquals(11, memberDescriptors.asList().size());
-        /*
-        Flags
-        BT_Value
-        Radiometric_Accuracy_of_Pixel
-        Azimuth_Angle
-        Footprint_Axis1
-        Footprint_Axis2
-        Grid_Point_ID
-        Grid_Point_Latitude
-        Grid_Point_Longitude
-        Grid_Point_Altitude
-        Grid_Point_Mask
-         */
 
+        final MemberDescriptor flagsDescriptor = memberDescriptors.getMember("Flags");
+        assertNotNull(flagsDescriptor);
 
+        final MemberDescriptor btValueDescriptor = memberDescriptors.getMember("BT_Value");
+        assertNotNull(btValueDescriptor);
+
+        final MemberDescriptor radiometricAccuracyOfPixelDescriptor = memberDescriptors.getMember("Radiometric_Accuracy_of_Pixel");
+        assertNotNull(radiometricAccuracyOfPixelDescriptor);
+
+        final MemberDescriptor azimuthAngleDescriptor = memberDescriptors.getMember("Azimuth_Angle");
+        assertNotNull(azimuthAngleDescriptor);
+
+        final MemberDescriptor footprintAxis1Descriptor = memberDescriptors.getMember("Footprint_Axis1");
+        assertNotNull(footprintAxis1Descriptor);
+
+        final MemberDescriptor footprintAxis2Descriptor = memberDescriptors.getMember("Footprint_Axis2");
+        assertNotNull(footprintAxis2Descriptor);
+
+        final MemberDescriptor gridPointIdDescriptor = memberDescriptors.getMember("Grid_Point_ID");
+        assertNotNull(gridPointIdDescriptor);
+
+        final MemberDescriptor latitudeDescriptor = memberDescriptors.getMember("Grid_Point_Latitude");
+        assertNotNull(latitudeDescriptor);
+
+        final MemberDescriptor longitudeDescriptor = memberDescriptors.getMember("Grid_Point_Longitude");
+        assertNotNull(longitudeDescriptor);
+
+        final MemberDescriptor altitudeDescriptor = memberDescriptors.getMember("Grid_Point_Altitude");
+        assertNotNull(altitudeDescriptor);
+
+        final MemberDescriptor maskDescriptor = memberDescriptors.getMember("Grid_Point_Mask");
+        assertNotNull(maskDescriptor);
+    }
+
+    @Test
+    public void testGetOriginalName() {
+        final Properties properties = new Properties();
+        properties.setProperty("a_key", "a_value");
+        properties.setProperty("another_key", "another_value");
+
+        final String key = Dddb.findOriginalName(properties, "another_value");
+        assertEquals("another_key", key);
+    }
+
+    @Test
+    public void testGetOriginalName_nameNotInProperties() {
+        final Properties properties = new Properties();
+        properties.setProperty("a_key", "a_value");
+        properties.setProperty("another_key", "another_value");
+
+        final String key = Dddb.findOriginalName(properties, "the Werner Value");
+        assertNull(key);
     }
 }
