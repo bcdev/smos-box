@@ -59,9 +59,7 @@ public class VariableDescriptor {
         this.flagValues = flagValues;
     }
 
-    private short[] flagValues
-
-            ;
+    private short[] flagValues;
 
     public short[] getFlagMasks() {
         return flagMasks;

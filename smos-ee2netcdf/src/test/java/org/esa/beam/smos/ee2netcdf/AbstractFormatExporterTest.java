@@ -4,13 +4,14 @@ package org.esa.beam.smos.ee2netcdf;
 import org.esa.beam.framework.datamodel.MetadataAttribute;
 import org.esa.beam.framework.datamodel.MetadataElement;
 import org.esa.beam.framework.datamodel.ProductData;
+import org.esa.beam.smos.ee2netcdf.variable.VariableDescriptor;
 import org.junit.Before;
 import org.junit.Test;
+import ucar.ma2.DataType;
 
 import java.util.Properties;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 public class AbstractFormatExporterTest {
 
@@ -101,5 +102,71 @@ public class AbstractFormatExporterTest {
         assertEquals(2, properties.size());
         assertEquals("Wilhelm", properties.getProperty("secondary:third_0:att_3_1"));
         assertEquals("Busch", properties.getProperty("secondary:third_1:att_3_1"));
+    }
+
+    @Test
+    public void testSetDataType_noTypeNameSet() {
+        final VariableDescriptor variableDescriptor = new VariableDescriptor();
+        try {
+            AbstractFormatExporter.setDataType(variableDescriptor, "");
+            fail("IllegalStateException expected");
+        } catch (IllegalStateException expected) {
+        }
+
+        try {
+            AbstractFormatExporter.setDataType(variableDescriptor, null);
+            fail("IllegalStateException expected");
+        } catch (IllegalStateException expected) {
+        }
+    }
+
+    @Test
+    public void testSetDataType_unsupportedType() {
+        final VariableDescriptor variableDescriptor = new VariableDescriptor();
+        try {
+            AbstractFormatExporter.setDataType(variableDescriptor, "ArrayOfWordDocuments");
+            fail("IllegalArgumentException expected");
+        } catch (IllegalArgumentException expected) {
+        }
+    }
+
+    @Test
+    public void testSetDataType_Uint() {
+        final VariableDescriptor variableDescriptor = new VariableDescriptor();
+
+        AbstractFormatExporter.setDataType(variableDescriptor, "uint");
+
+        assertEquals(DataType.INT, variableDescriptor.getDataType());
+        assertTrue(variableDescriptor.isUnsigned());
+    }
+
+    @Test
+    public void testSetDataType_Float() {
+        final VariableDescriptor variableDescriptor = new VariableDescriptor();
+
+        AbstractFormatExporter.setDataType(variableDescriptor, "float");
+
+        assertEquals(DataType.FLOAT, variableDescriptor.getDataType());
+        assertFalse(variableDescriptor.isUnsigned());
+    }
+
+    @Test
+    public void testSetDataType_UByte() {
+        final VariableDescriptor variableDescriptor = new VariableDescriptor();
+
+        AbstractFormatExporter.setDataType(variableDescriptor, "ubyte");
+
+        assertEquals(DataType.BYTE, variableDescriptor.getDataType());
+        assertTrue(variableDescriptor.isUnsigned());
+    }
+
+    @Test
+    public void testSetDataType_UShort() {
+        final VariableDescriptor variableDescriptor = new VariableDescriptor();
+
+        AbstractFormatExporter.setDataType(variableDescriptor, "ushort");
+
+        assertEquals(DataType.SHORT, variableDescriptor.getDataType());
+        assertTrue(variableDescriptor.isUnsigned());
     }
 }

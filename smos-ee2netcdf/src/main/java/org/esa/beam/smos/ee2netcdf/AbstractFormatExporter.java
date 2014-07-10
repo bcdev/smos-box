@@ -13,6 +13,7 @@ import org.esa.beam.framework.datamodel.ProductData;
 import org.esa.beam.smos.DateTimeUtils;
 import org.esa.beam.smos.ee2netcdf.variable.VariableDescriptor;
 import ucar.ma2.Array;
+import ucar.ma2.DataType;
 
 import java.io.IOException;
 import java.util.*;
@@ -174,5 +175,26 @@ abstract class AbstractFormatExporter implements FormatExporter {
             }
         }
         return uniqueNamedElements;
+    }
+
+    static void setDataType(VariableDescriptor variableDescriptor, String dataTypeName) {
+        if (StringUtils.isBlank(dataTypeName)) {
+            throw new IllegalStateException("datatype not set for '" + variableDescriptor.getName() + "'");
+        }
+
+        if ("uint".equalsIgnoreCase(dataTypeName)) {
+            variableDescriptor.setDataType(DataType.INT);
+            variableDescriptor.setUnsigned(true);
+        } else if ("float".equalsIgnoreCase(dataTypeName)) {
+            variableDescriptor.setDataType(DataType.FLOAT);
+        } else if ("ubyte".equalsIgnoreCase(dataTypeName)) {
+            variableDescriptor.setDataType(DataType.BYTE);
+            variableDescriptor.setUnsigned(true);
+        } else if ("ushort".equalsIgnoreCase(dataTypeName)) {
+            variableDescriptor.setDataType(DataType.SHORT);
+            variableDescriptor.setUnsigned(true);
+        } else {
+            throw new IllegalArgumentException("unsupported datatype: '" + dataTypeName + "'");
+        }
     }
 }

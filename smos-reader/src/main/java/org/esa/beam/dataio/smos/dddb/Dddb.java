@@ -222,14 +222,18 @@ public class Dddb {
 
         final String formatName = extractFormatName(hdrFile);
         final Properties mappingProperties = getMappingProperties(formatName);
-        if (mappingProperties != null) {
-            for (final MemberDescriptor memberDescriptor : memberDescriptorList) {
-                final String originalName = findOriginalName(mappingProperties, memberDescriptor.getName());
+
+        for (final MemberDescriptor memberDescriptor : memberDescriptorList) {
+            final String memberDescriptorName = memberDescriptor.getName();
+            if (mappingProperties != null) {
+                final String originalName = findOriginalName(mappingProperties, memberDescriptorName);
                 if (originalName != null) {
                     memberDescriptor.setName(originalName);
                 }
-
             }
+
+            final BandDescriptor bandDescriptor = uniqueMemberMap.get(memberDescriptorName);
+            memberDescriptor.setGridPointData(bandDescriptor.isGridPointData());
         }
 
         return memberDescriptors;
@@ -270,6 +274,7 @@ public class Dddb {
             if (subType.isSimpleType()) {
                 final MemberDescriptor memberDescriptor = new MemberDescriptor();
                 memberDescriptor.setName(member.getName());
+                memberDescriptor.setDataTypeName(subType.getName());
                 memberDescriptors.add(memberDescriptor);
             } else if (subType.isCompoundType()) {
                 extractMembers((CompoundType) subType, memberDescriptors);

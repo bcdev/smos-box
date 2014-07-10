@@ -80,10 +80,13 @@ class BrowseProductExporter extends AbstractFormatExporter {
         final List<String> outputBandNames = exportParameter.getOutputBandNames();
 
         final List<MemberDescriptor> memberDescriptorList = memberDescriptors.asList();
-        for(final MemberDescriptor memberDescriptor : memberDescriptorList) {
-            if (mustExport(memberDescriptor.getName(), outputBandNames))  {
+        for (final MemberDescriptor memberDescriptor : memberDescriptorList) {
+            final String memberDescriptorName = memberDescriptor.getName();
+            if (mustExport(memberDescriptorName, outputBandNames)) {
                 // name
-                // @todo 1 tb/tb continue here tb 2014-07-09
+                // gridPointData
+                // datatype - set by name sing baseclass functionality
+                // dimension-name(s)
             }
         }
 
