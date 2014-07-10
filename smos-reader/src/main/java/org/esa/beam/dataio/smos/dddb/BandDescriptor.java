@@ -57,4 +57,6 @@ public interface BandDescriptor {
     Family<FlagDescriptor> getFlagDescriptors();
 
     boolean isGridPointData();
+
+    String getDimensionNames();
 }

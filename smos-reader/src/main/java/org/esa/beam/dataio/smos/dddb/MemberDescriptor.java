@@ -6,6 +6,7 @@ public class MemberDescriptor {
     private String name;
     private boolean gridPointData;
     private String dataTypeName;
+    private String dimensionNames;
 
     public String getName() {
         return name;
@@ -29,5 +30,13 @@ public class MemberDescriptor {
 
     public String getDataTypeName() {
         return dataTypeName;
+    }
+
+    public void setDimensionNames(String dimensionNames) {
+        this.dimensionNames = dimensionNames;
+    }
+
+    public String getDimensionNames() {
+        return dimensionNames;
     }
 }

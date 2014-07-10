@@ -37,4 +37,16 @@ public class MemberDescriptorTest {
         descriptor.setDataTypeName(name_2);
         assertEquals(name_2, descriptor.getDataTypeName());
     }
+
+    @Test
+    public void testSetGetDimensionNames() {
+         final String name_1 = "dimension";
+         final String name_2 = "name";
+
+        descriptor.setDimensionNames(name_1);
+        assertEquals(name_1, descriptor.getDimensionNames());
+
+        descriptor.setDimensionNames(name_2);
+        assertEquals(name_2, descriptor.getDimensionNames());
+    }
 }

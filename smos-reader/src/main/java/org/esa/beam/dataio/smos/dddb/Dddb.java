@@ -234,6 +234,7 @@ public class Dddb {
 
             final BandDescriptor bandDescriptor = uniqueMemberMap.get(memberDescriptorName);
             memberDescriptor.setGridPointData(bandDescriptor.isGridPointData());
+            memberDescriptor.setDimensionNames(bandDescriptor.getDimensionNames());
         }
 
         return memberDescriptors;

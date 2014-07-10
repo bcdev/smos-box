@@ -87,6 +87,8 @@ class BrowseProductExporter extends AbstractFormatExporter {
                 // gridPointData
                 // datatype - set by name sing baseclass functionality
                 // dimension-name(s)
+                // @todo 1 tb/tb continue here - extract dimensionality from dimensions names
+                // @todo 1 tb/tb add gridPoint Index to dddb
             }
         }
 
