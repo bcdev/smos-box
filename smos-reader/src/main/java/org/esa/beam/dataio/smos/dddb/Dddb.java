@@ -18,6 +18,7 @@ package org.esa.beam.dataio.smos.dddb;
 
 import com.bc.ceres.binio.*;
 import com.bc.ceres.binio.binx.BinX;
+import org.esa.beam.util.StringUtils;
 import org.esa.beam.util.io.CsvReader;
 import org.jdom.Document;
 import org.jdom.Element;
@@ -236,7 +237,26 @@ public class Dddb {
             memberDescriptor.setGridPointData(bandDescriptor.isGridPointData());
             memberDescriptor.setDimensionNames(bandDescriptor.getDimensionNames());
             memberDescriptor.setMemberIndex(bandDescriptor.getMemberIndex());
-//            bandDescriptor.getFlagDescriptors();
+
+            final Family<FlagDescriptor> flagDescriptors = bandDescriptor.getFlagDescriptors();
+            if (flagDescriptors != null) {
+                final List<FlagDescriptor> flagDescriptorsList = flagDescriptors.asList();
+                final int size = flagDescriptorsList.size();
+                final short[] flagMasks = new short[size];
+                final String[] flagMeanings = new String[size];
+                int i = 0;
+                for(final FlagDescriptor flagDescriptor : flagDescriptorsList) {
+                    flagMasks[i] = (short)flagDescriptor.getMask();
+                    flagMeanings[i] = flagDescriptor.getFlagName();
+                    ++i;
+                }
+
+                memberDescriptor.setFlagMasks(flagMasks);
+                memberDescriptor.setFlagValues(flagMasks);
+                memberDescriptor.setFlagMeanings(StringUtils.arrayToString(flagMeanings, " "));
+            }
+
+            memberDescriptor.setUnit(bandDescriptor.getUnit());
         }
 
         return memberDescriptors;
@@ -254,6 +274,7 @@ public class Dddb {
         return null;
     }
 
+    // @todo 2 tb/tb make static and write tests tb 2014-07-11
     private Map<String, BandDescriptor> extractUniqueMembers(Family<BandDescriptor> bandDescriptors) {
         final HashMap<String, BandDescriptor> uniqueMemberMap = new HashMap<>();
 

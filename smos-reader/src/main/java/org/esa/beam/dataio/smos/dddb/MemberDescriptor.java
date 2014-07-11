@@ -8,6 +8,10 @@ public class MemberDescriptor {
     private String dataTypeName;
     private String dimensionNames;
     private int memberIndex;
+    private short[] flagMasks;
+    private short[] flagValues;
+    private String flagMeanings;
+    private String unit;
 
     public String getName() {
         return name;
@@ -47,5 +51,37 @@ public class MemberDescriptor {
 
     public int getMemberIndex() {
         return memberIndex;
+    }
+
+    public void setFlagMasks(short[] flagMasks) {
+        this.flagMasks = flagMasks;
+    }
+
+    public short[] getFlagMasks() {
+        return flagMasks;
+    }
+
+    public void setFlagValues(short[] flagValues) {
+        this.flagValues = flagValues;
+    }
+
+    public short[] getFlagValues() {
+        return flagValues;
+    }
+
+    public void setFlagMeanings(String flagMeanings) {
+        this.flagMeanings = flagMeanings;
+    }
+
+    public String getFlagMeanings() {
+        return flagMeanings;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
+    }
+
+    public String getUnit() {
+        return unit;
     }
 }
