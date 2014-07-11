@@ -12,6 +12,7 @@ public class MemberDescriptor {
     private short[] flagValues;
     private String flagMeanings;
     private String unit;
+    private float fillValue;
 
     public String getName() {
         return name;
@@ -83,5 +84,13 @@ public class MemberDescriptor {
 
     public String getUnit() {
         return unit;
+    }
+
+    public void setFillValue(float fillValue) {
+        this.fillValue = fillValue;
+    }
+
+    public float getFillValue() {
+        return fillValue;
     }
 }

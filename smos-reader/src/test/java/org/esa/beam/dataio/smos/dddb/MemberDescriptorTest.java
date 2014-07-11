@@ -98,4 +98,16 @@ public class MemberDescriptorTest {
         descriptor.setUnit(unit_2);
         assertEquals(unit_2, descriptor.getUnit());
     }
+
+    @Test
+    public void testSetGetFillValue() {
+         final float fill_1 = 3.6f;
+         final float fill_2 = -9.4f;
+
+        descriptor.setFillValue(fill_1);
+        assertEquals(fill_1, descriptor.getFillValue(), 1e-8);
+
+        descriptor.setFillValue(fill_2);
+        assertEquals(fill_2, descriptor.getFillValue(), 1e-8);
+    }
 }

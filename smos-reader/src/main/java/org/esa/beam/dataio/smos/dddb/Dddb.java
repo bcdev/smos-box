@@ -257,6 +257,7 @@ public class Dddb {
             }
 
             memberDescriptor.setUnit(bandDescriptor.getUnit());
+            memberDescriptor.setFillValue((float)bandDescriptor.getFillValue());
         }
 
         return memberDescriptors;
