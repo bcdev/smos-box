@@ -197,72 +197,84 @@ public class DddbTest {
         assertFalse(flagsDescriptor.isGridPointData());
         assertEquals("ushort", flagsDescriptor.getDataTypeName());
         assertEquals("n_grid_points n_bt_data", flagsDescriptor.getDimensionNames());
+        assertEquals(0, flagsDescriptor.getMemberIndex());
 
         final MemberDescriptor btValueDescriptor = memberDescriptors.getMember("BT_Value");
         assertNotNull(btValueDescriptor);
         assertFalse(btValueDescriptor.isGridPointData());
         assertEquals("float", btValueDescriptor.getDataTypeName());
         assertEquals("n_grid_points n_bt_data", btValueDescriptor.getDimensionNames());
+        assertEquals(1, btValueDescriptor.getMemberIndex());
 
         final MemberDescriptor radiometricAccuracyOfPixelDescriptor = memberDescriptors.getMember("Radiometric_Accuracy_of_Pixel");
         assertNotNull(radiometricAccuracyOfPixelDescriptor);
         assertFalse(radiometricAccuracyOfPixelDescriptor.isGridPointData());
         assertEquals("ushort", radiometricAccuracyOfPixelDescriptor.getDataTypeName());
         assertEquals("n_grid_points n_bt_data", radiometricAccuracyOfPixelDescriptor.getDimensionNames());
+        assertEquals(2, radiometricAccuracyOfPixelDescriptor.getMemberIndex());
 
         final MemberDescriptor azimuthAngleDescriptor = memberDescriptors.getMember("Azimuth_Angle");
         assertNotNull(azimuthAngleDescriptor);
         assertFalse(azimuthAngleDescriptor.isGridPointData());
         assertEquals("ushort", azimuthAngleDescriptor.getDataTypeName());
         assertEquals("n_grid_points n_bt_data", azimuthAngleDescriptor.getDimensionNames());
+        assertEquals(3, azimuthAngleDescriptor.getMemberIndex());
 
         final MemberDescriptor footprintAxis1Descriptor = memberDescriptors.getMember("Footprint_Axis1");
         assertNotNull(footprintAxis1Descriptor);
         assertFalse(footprintAxis1Descriptor.isGridPointData());
         assertEquals("ushort", footprintAxis1Descriptor.getDataTypeName());
         assertEquals("n_grid_points n_bt_data", footprintAxis1Descriptor.getDimensionNames());
+        assertEquals(4, footprintAxis1Descriptor.getMemberIndex());
 
         final MemberDescriptor footprintAxis2Descriptor = memberDescriptors.getMember("Footprint_Axis2");
         assertNotNull(footprintAxis2Descriptor);
         assertFalse(footprintAxis2Descriptor.isGridPointData());
         assertEquals("ushort", footprintAxis2Descriptor.getDataTypeName());
         assertEquals("n_grid_points n_bt_data", footprintAxis2Descriptor.getDimensionNames());
+        assertEquals(5, footprintAxis2Descriptor.getMemberIndex());
 
         final MemberDescriptor gridPointIdDescriptor = memberDescriptors.getMember("Grid_Point_ID");
         assertNotNull(gridPointIdDescriptor);
         assertTrue(gridPointIdDescriptor.isGridPointData());
         assertEquals("uint", gridPointIdDescriptor.getDataTypeName());
         assertEquals("n_grid_points", gridPointIdDescriptor.getDimensionNames());
+        assertEquals(-1, gridPointIdDescriptor.getMemberIndex());
 
         final MemberDescriptor latitudeDescriptor = memberDescriptors.getMember("Grid_Point_Latitude");
         assertNotNull(latitudeDescriptor);
         assertTrue(latitudeDescriptor.isGridPointData());
         assertEquals("float", latitudeDescriptor.getDataTypeName());
         assertEquals("n_grid_points", latitudeDescriptor.getDimensionNames());
+        assertEquals(-1, latitudeDescriptor.getMemberIndex());
 
         final MemberDescriptor longitudeDescriptor = memberDescriptors.getMember("Grid_Point_Longitude");
         assertNotNull(longitudeDescriptor);
         assertTrue(longitudeDescriptor.isGridPointData());
         assertEquals("float", longitudeDescriptor.getDataTypeName());
         assertEquals("n_grid_points", longitudeDescriptor.getDimensionNames());
+        assertEquals(-1, longitudeDescriptor.getMemberIndex());
 
         final MemberDescriptor altitudeDescriptor = memberDescriptors.getMember("Grid_Point_Altitude");
         assertNotNull(altitudeDescriptor);
         assertTrue(altitudeDescriptor.isGridPointData());
         assertEquals("float", altitudeDescriptor.getDataTypeName());
         assertEquals("n_grid_points", altitudeDescriptor.getDimensionNames());
+        assertEquals(-1, altitudeDescriptor.getMemberIndex());
 
         final MemberDescriptor maskDescriptor = memberDescriptors.getMember("Grid_Point_Mask");
         assertNotNull(maskDescriptor);
         assertTrue(maskDescriptor.isGridPointData());
         assertEquals("ubyte", maskDescriptor.getDataTypeName());
         assertEquals("n_grid_points", maskDescriptor.getDimensionNames());
+        assertEquals(-1, maskDescriptor.getMemberIndex());
 
         final MemberDescriptor btCountDescriptor = memberDescriptors.getMember("BT_Data_Counter");
         assertNotNull(btCountDescriptor);
         assertTrue(btCountDescriptor.isGridPointData());
         assertEquals("ubyte", btCountDescriptor.getDataTypeName());
         assertEquals("n_grid_points", btCountDescriptor.getDimensionNames());
+        assertEquals(-1, btCountDescriptor.getMemberIndex());
     }
 
     @Test

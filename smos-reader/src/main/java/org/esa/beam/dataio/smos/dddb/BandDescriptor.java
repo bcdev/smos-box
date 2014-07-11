@@ -59,4 +59,6 @@ public interface BandDescriptor {
     boolean isGridPointData();
 
     String getDimensionNames();
+
+    int getMemberIndex();
 }

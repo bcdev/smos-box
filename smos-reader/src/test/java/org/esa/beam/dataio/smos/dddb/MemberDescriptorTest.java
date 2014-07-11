@@ -4,9 +4,7 @@ package org.esa.beam.dataio.smos.dddb;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class MemberDescriptorTest {
 
@@ -40,13 +38,22 @@ public class MemberDescriptorTest {
 
     @Test
     public void testSetGetDimensionNames() {
-         final String name_1 = "dimension";
-         final String name_2 = "name";
+        final String name_1 = "dimension";
+        final String name_2 = "name";
 
         descriptor.setDimensionNames(name_1);
         assertEquals(name_1, descriptor.getDimensionNames());
 
         descriptor.setDimensionNames(name_2);
         assertEquals(name_2, descriptor.getDimensionNames());
+    }
+
+    @Test
+    public void testSetGetMemberIndex() {
+        descriptor.setMemberIndex(3);
+        assertEquals(3, descriptor.getMemberIndex());
+
+        descriptor.setMemberIndex(-1);
+        assertEquals(-1, descriptor.getMemberIndex());
     }
 }

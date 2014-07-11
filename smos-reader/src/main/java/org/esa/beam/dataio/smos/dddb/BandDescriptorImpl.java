@@ -21,6 +21,7 @@ class BandDescriptorImpl implements BandDescriptor {
     private final Family<FlagDescriptor> flagDescriptors;
     private boolean gridPointData;
     private String dimensionNames;
+    private int memberIndex;
 
     BandDescriptorImpl(String[] tokens, Dddb dddb) {
         visible = TokenParser.parseBoolean(tokens[0], true);
@@ -44,15 +45,15 @@ class BandDescriptorImpl implements BandDescriptor {
         flagCodingName = TokenParser.parseString(tokens[14], "");
         flagDescriptors = getFlagDescriptors(tokens[15], dddb);
 
-        if (tokens.length > 17) {
+        if (tokens.length > 18) {
             gridPointData = TokenParser.parseBoolean(tokens[16], true);
             dimensionNames = TokenParser.parseString(tokens[17], null);
+            memberIndex = TokenParser.parseInt(tokens[18], -1);
         } else {
             gridPointData = true;
             dimensionNames = null;
+            memberIndex = -1;
         }
-
-
     }
 
     private Family<FlagDescriptor> getFlagDescriptors(String token, Dddb dddb) {
@@ -162,7 +163,13 @@ class BandDescriptorImpl implements BandDescriptor {
         return gridPointData;
     }
 
+    @Override
     public String getDimensionNames() {
         return dimensionNames;
+    }
+
+    @Override
+    public int getMemberIndex() {
+        return memberIndex;
     }
 }

@@ -7,6 +7,7 @@ public class MemberDescriptor {
     private boolean gridPointData;
     private String dataTypeName;
     private String dimensionNames;
+    private int memberIndex;
 
     public String getName() {
         return name;
@@ -38,5 +39,13 @@ public class MemberDescriptor {
 
     public String getDimensionNames() {
         return dimensionNames;
+    }
+
+    public void setMemberIndex(int memberIndex) {
+        this.memberIndex = memberIndex;
+    }
+
+    public int getMemberIndex() {
+        return memberIndex;
     }
 }

@@ -151,6 +151,12 @@
                 <groupId>org.esa.beam</groupId>
                 <artifactId>beam-core</artifactId>
                 <version>${beam.version.updated}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.esa.beam</groupId>
+                        <artifactId>beam-avhrr-reader</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.esa.beam</groupId>
@@ -161,6 +167,12 @@
                 <groupId>org.esa.beam</groupId>
                 <artifactId>beam-gpf</artifactId>
                 <version>${beam.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.esa.beam</groupId>
+                        <artifactId>beam-avhrr-reader</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.esa.beam</groupId>
