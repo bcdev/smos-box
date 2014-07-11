@@ -10,7 +10,7 @@ public class VariableWriterFactory {
                                         VariableDescriptor variableDescriptor, int gridPointCount, int btDataCount) {
         final DataType dataType = variableDescriptor.getDataType();
         if (variableDescriptor.isGridPointData()) {
-            final String name = variableDescriptor.getName();
+            final String name = variableDescriptor.getBinXName();
             if (dataType == DataType.FLOAT) {
                 return new FloatVariableGridPointWriter(nVariable, name, gridPointCount);
             } else if (dataType == DataType.INT) {

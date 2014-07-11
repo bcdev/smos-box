@@ -226,6 +226,7 @@ public class Dddb {
 
         for (final MemberDescriptor memberDescriptor : memberDescriptorList) {
             final String memberDescriptorName = memberDescriptor.getName();
+            memberDescriptor.setBinXName(memberDescriptorName);
             if (mappingProperties != null) {
                 final String originalName = findOriginalName(mappingProperties, memberDescriptorName);
                 if (originalName != null) {

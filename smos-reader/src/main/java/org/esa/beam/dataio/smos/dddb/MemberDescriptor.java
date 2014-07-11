@@ -15,6 +15,7 @@ public class MemberDescriptor {
     private float fillValue;
     private float scalingFactor;
     private float scalingOffset;
+    private String binXName;
 
     public String getName() {
         return name;
@@ -110,5 +111,13 @@ public class MemberDescriptor {
 
     public float getScalingOffset() {
         return scalingOffset;
+    }
+
+    public void setBinXName(String binXName) {
+        this.binXName = binXName;
+    }
+
+    public String getBinXName() {
+        return binXName;
     }
 }

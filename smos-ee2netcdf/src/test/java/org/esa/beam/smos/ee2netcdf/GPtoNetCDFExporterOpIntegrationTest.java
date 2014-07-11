@@ -10,6 +10,7 @@ import org.esa.beam.util.StringUtils;
 import org.esa.beam.util.io.FileUtils;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import ucar.ma2.Array;
@@ -80,7 +81,7 @@ public class GPtoNetCDFExporterOpIntegrationTest {
 
             final File outputFile = new File(targetDirectory, "SM_OPER_MIR_BWLF1C_20111026T143206_20111026T152520_503_001_1.nc");
             assertTrue(outputFile.isFile());
-            assertEquals(4342448, outputFile.length());
+            assertEquals(4342498, outputFile.length());
 
             targetFile = NetcdfFileOpener.open(outputFile);
             final ExportParameter exportParameter = new ExportParameter();
@@ -97,14 +98,13 @@ public class GPtoNetCDFExporterOpIntegrationTest {
 
             assertGridPointIdVariable(targetFile, 346, new int[]{4098190, 4098191});
 
-            final Variable latVariable = getVariableVerified("lat", targetFile);
+            final Variable latVariable = getVariableVerified("Grid_Point_Latitude", targetFile);
             assertEquals(DataType.FLOAT, latVariable.getDataType());
-            assertAttribute("units", "degrees_north", latVariable);
-            assertAttribute("_FillValue", -999.0, latVariable);
-            assertAttribute("valid_min", -90.0, latVariable);
-            assertAttribute("valid_max", 90.0, latVariable);
-            assertAttribute("original_name", "Grid_Point_Latitude", latVariable);
-            assertAttribute("standard_name", "latitude", latVariable);
+            assertAttribute("units", "deg", latVariable);
+            assertAttribute("_FillValue", Double.NaN, latVariable);
+            // @todo 2 tb/tb implement tb 2014-07-11
+//            assertAttribute("valid_min", -90.0, latVariable);
+//            assertAttribute("valid_max", 90.0, latVariable);
             assertNoAttribute("flag_masks", latVariable);
             assertNoAttribute("flag_values", latVariable);
             assertNoAttribute("flag_meanings", latVariable);
@@ -114,14 +114,13 @@ public class GPtoNetCDFExporterOpIntegrationTest {
             assertEquals(78.56900024, array.getFloat(0), 1e-8);
             assertEquals(78.6760025, array.getFloat(1), 1e-8);
 
-            final Variable lonVariable = getVariableVerified("lon", targetFile);
+            final Variable lonVariable = getVariableVerified("Grid_Point_Longitude", targetFile);
             assertEquals(DataType.FLOAT, lonVariable.getDataType());
-            assertAttribute("units", "degrees_east", lonVariable);
-            assertAttribute("_FillValue", -999.0, lonVariable);
-            assertAttribute("valid_min", -180.0, lonVariable);
-            assertAttribute("valid_max", 180.0, lonVariable);
-            assertAttribute("original_name", "Grid_Point_Longitude", lonVariable);
-            assertAttribute("standard_name", "longitude", lonVariable);
+            assertAttribute("units", "deg", lonVariable);
+            assertAttribute("_FillValue", Double.NaN, lonVariable);
+            // @todo 2 tb/tb implement tb 2014-07-11
+//            assertAttribute("valid_min", -180.0, lonVariable);
+//            assertAttribute("valid_max", 180.0, lonVariable);
             assertNoAttribute("flag_masks", lonVariable);
             assertNoAttribute("flag_values", lonVariable);
             assertNoAttribute("flag_meanings", lonVariable);
@@ -131,14 +130,13 @@ public class GPtoNetCDFExporterOpIntegrationTest {
             assertEquals(101.25, array.getFloat(0), 1e-8);
             assertEquals(100.994003295, array.getFloat(1), 1e-8);
 
-            final Variable altitudeVariable = getVariableVerified("grid_point_altitude", targetFile);
+            final Variable altitudeVariable = getVariableVerified("Grid_Point_Altitude", targetFile);
             assertEquals(DataType.FLOAT, altitudeVariable.getDataType());
             assertAttribute("units", "m", altitudeVariable);
-            assertAttribute("_FillValue", -999.0, altitudeVariable);
-            assertNoAttribute("valid_min", altitudeVariable);
-            assertNoAttribute("valid_max", altitudeVariable);
-            assertNoAttribute("orignal_name", altitudeVariable);
-            assertNoAttribute("standard_name", altitudeVariable);
+            assertAttribute("_FillValue", Double.NaN, altitudeVariable);
+            // @todo 2 tb/tb implement tb 2014-07-11
+//            assertNoAttribute("valid_min", altitudeVariable);
+//            assertNoAttribute("valid_max", altitudeVariable);
             assertNoAttribute("flag_masks", altitudeVariable);
             assertNoAttribute("flag_values", altitudeVariable);
             assertNoAttribute("flag_meanings", altitudeVariable);
@@ -148,14 +146,12 @@ public class GPtoNetCDFExporterOpIntegrationTest {
             assertEquals(-0.708, array.getFloat(0), 1e-8);
             assertEquals(0.0, array.getFloat(1), 1e-8);
 
-            final Variable gridPointMaskVariable = getVariableVerified("grid_point_mask", targetFile);
+            final Variable gridPointMaskVariable = getVariableVerified("Grid_Point_Mask", targetFile);
             assertEquals(DataType.BYTE, gridPointMaskVariable.getDataType());
             assertNoAttribute("units", gridPointMaskVariable);
-            assertNoAttribute("_FillValue", gridPointMaskVariable);
+            assertAttribute("_FillValue", Double.NaN, gridPointMaskVariable);
             assertNoAttribute("valid_min", gridPointMaskVariable);
             assertNoAttribute("valid_max", gridPointMaskVariable);
-            assertNoAttribute("orignal_name", gridPointMaskVariable);
-            assertNoAttribute("standard_name", gridPointMaskVariable);
             assertNoAttribute("flag_masks", gridPointMaskVariable);
             assertNoAttribute("flag_values", gridPointMaskVariable);
             assertNoAttribute("flag_meanings", gridPointMaskVariable);
@@ -165,10 +161,10 @@ public class GPtoNetCDFExporterOpIntegrationTest {
             assertEquals(-39, array.getByte(0)); // @todo 2 tb/tb these should be unsigned values - resolve problem tb 2014-04-09
             assertEquals(-39, array.getByte(1));
 
-            final Variable btDataCountVariable = getVariableVerified("bt_data_count", targetFile);
+            final Variable btDataCountVariable = getVariableVerified("BT_Data_Counter", targetFile);
             assertEquals(DataType.BYTE, btDataCountVariable.getDataType());
             assertNoAttribute("units", btDataCountVariable);
-            assertNoAttribute("_FillValue", btDataCountVariable);
+            assertAttribute("_FillValue", Double.NaN, gridPointMaskVariable);
             assertNoAttribute("valid_min", btDataCountVariable);
             assertNoAttribute("valid_max", btDataCountVariable);
             assertNoAttribute("orignal_name", btDataCountVariable);
@@ -182,31 +178,27 @@ public class GPtoNetCDFExporterOpIntegrationTest {
             assertEquals(4, array.getByte(0)); // @todo 2 tb/tb these should be unsigned values - resolve problem tb 2014-04-09
             assertEquals(4, array.getByte(1));
 
-            final Variable flagsVariable = getVariableVerified("flags", targetFile);
+            final Variable flagsVariable = getVariableVerified("Flags", targetFile);
             assertEquals(DataType.SHORT, flagsVariable.getDataType());
             assertNoAttribute("units", flagsVariable);
-            assertNoAttribute("_FillValue", flagsVariable);
+            assertAttribute("_FillValue", 0.0, flagsVariable);
             assertNoAttribute("valid_min", flagsVariable);
             assertNoAttribute("valid_max", flagsVariable);
-            assertNoAttribute("orignal_name", flagsVariable);
-            assertNoAttribute("standard_name", flagsVariable);
-            assertAttribute("flag_masks", new short[]{3, 3, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, (short) 32768}, flagsVariable);
-            assertAttribute("flag_values", new short[]{0, 1, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, (short) 32768}, flagsVariable);
-            assertAttribute("flag_meanings", "pol_xx pol_yy sun_fov sun_glint_fov moon_glint_fov single_snapshot rfi_x sun_point sun_glint_area moon_point af_fov rfi_tails border_fov sun_tails rfi_y rfi_point_source", flagsVariable);
+            assertAttribute("flag_masks", new short[]{1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, (short) 32768}, flagsVariable);
+            assertAttribute("flag_values", new short[]{1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, (short) 32768}, flagsVariable);
+            assertAttribute("flag_meanings", "POL_FLAG_1 POL_FLAG_2 SUN_FOV SUN_GLINT_FOV MOON_GLINT_FOV SINGLE_SNAPSHOT FTT SUN_POINT SUN_GLINT_AREA MOON_POINT AF_FOV EAF_FOV BORDER_FOV SUN_TAILS RFI_1 RFI_2", flagsVariable);
             assertNoAttribute("scale_factor", flagsVariable);
             assertAttribute("_Unsigned", "true", flagsVariable);
             array = flagsVariable.read(new int[]{945, 1}, new int[]{2, 1});
             assertEquals(1045, array.getShort(0));
             assertEquals(1045, array.getShort(1));
 
-            final Variable btValueVariable = getVariableVerified("bt_value", targetFile);
+            final Variable btValueVariable = getVariableVerified("BT_Value", targetFile);
             assertEquals(DataType.FLOAT, btValueVariable.getDataType());
             assertAttribute("units", "K", btValueVariable);
             assertAttribute("_FillValue", -999.0, btValueVariable);
             assertNoAttribute("valid_min", btValueVariable);
             assertNoAttribute("valid_max", btValueVariable);
-            assertNoAttribute("orignal_name", btValueVariable);
-            assertNoAttribute("standard_name", btValueVariable);
             assertNoAttribute("flag_masks", btValueVariable);
             assertNoAttribute("flag_values", btValueVariable);
             assertNoAttribute("flag_meanings", btValueVariable);
@@ -218,18 +210,16 @@ public class GPtoNetCDFExporterOpIntegrationTest {
             assertEquals(6.454884052276611, array.getFloat(2), 1e-8);
             assertEquals(-0.10488655418157578, array.getFloat(3), 1e-8);
 
-            final Variable radAccVariable = getVariableVerified("pixel_radiometric_accuracy", targetFile);
+            final Variable radAccVariable = getVariableVerified("Radiometric_Accuracy_of_Pixel", targetFile);
             assertEquals(DataType.SHORT, radAccVariable.getDataType());
             assertAttribute("units", "K", radAccVariable);
-            assertNoAttribute("_FillValue", radAccVariable);
+            assertAttribute("_FillValue", 0.0,radAccVariable);
             assertNoAttribute("valid_min", radAccVariable);
             assertNoAttribute("valid_max", radAccVariable);
-            assertAttribute("original_name", "Radiometric_Accuracy_of_Pixel", radAccVariable);
-            assertNoAttribute("standard_name", radAccVariable);
             assertNoAttribute("flag_masks", radAccVariable);
             assertNoAttribute("flag_values", radAccVariable);
             assertNoAttribute("flag_meanings", radAccVariable);
-            assertAttribute("scale_factor", 0.000762939453125, radAccVariable);
+            assertAttribute("scale_factor", 1.52587890625E-5, radAccVariable);
             assertAttribute("_Unsigned", "true", radAccVariable);
             array = radAccVariable.read(new int[]{1175, 0}, new int[]{2, 2});
             assertEquals(3547, array.getShort(0));
@@ -237,14 +227,12 @@ public class GPtoNetCDFExporterOpIntegrationTest {
             assertEquals(3552, array.getShort(2));
             assertEquals(3642, array.getShort(3));
 
-            final Variable azimuthAngleVariable = getVariableVerified("azimuth_angle", targetFile);
+            final Variable azimuthAngleVariable = getVariableVerified("Azimuth_Angle", targetFile);
             assertEquals(DataType.SHORT, azimuthAngleVariable.getDataType());
-            assertAttribute("units", "degree", azimuthAngleVariable);
-            assertNoAttribute("_FillValue", azimuthAngleVariable);
+            assertAttribute("units", "deg", azimuthAngleVariable);
+            assertAttribute("_FillValue", 0.0, azimuthAngleVariable);
             assertNoAttribute("valid_min", azimuthAngleVariable);
             assertNoAttribute("valid_max", azimuthAngleVariable);
-            assertNoAttribute("orignal_name", azimuthAngleVariable);
-            assertNoAttribute("standard_name", azimuthAngleVariable);
             assertNoAttribute("flag_masks", azimuthAngleVariable);
             assertNoAttribute("flag_values", azimuthAngleVariable);
             assertNoAttribute("flag_meanings", azimuthAngleVariable);
@@ -256,18 +244,16 @@ public class GPtoNetCDFExporterOpIntegrationTest {
             assertEquals(8377, array.getShort(2));
             assertEquals(8376, array.getShort(3));
 
-            final Variable footAxis1Variable = getVariableVerified("footprint_axis_1", targetFile);
+            final Variable footAxis1Variable = getVariableVerified("Footprint_Axis1", targetFile);
             assertEquals(DataType.SHORT, footAxis1Variable.getDataType());
             assertAttribute("units", "km", footAxis1Variable);
-            assertNoAttribute("_FillValue", footAxis1Variable);
+            assertAttribute("_FillValue", 0.0, footAxis1Variable);
             assertNoAttribute("valid_min", footAxis1Variable);
             assertNoAttribute("valid_max", footAxis1Variable);
-            assertNoAttribute("orignal_name", footAxis1Variable);
-            assertNoAttribute("standard_name", footAxis1Variable);
             assertNoAttribute("flag_masks", footAxis1Variable);
             assertNoAttribute("flag_values", footAxis1Variable);
             assertNoAttribute("flag_meanings", footAxis1Variable);
-            assertAttribute("scale_factor", 0.00152587890625, footAxis1Variable);
+            assertAttribute("scale_factor", 1.52587890625E-5, footAxis1Variable);
             assertAttribute("_Unsigned", "true", footAxis1Variable);
             array = footAxis1Variable.read(new int[]{1394, 2}, new int[]{2, 2});
             assertEquals(18489, array.getShort(0));
@@ -275,18 +261,16 @@ public class GPtoNetCDFExporterOpIntegrationTest {
             assertEquals(18492, array.getShort(2));
             assertEquals(18492, array.getShort(3));
 
-            final Variable footAxis2Variable = getVariableVerified("footprint_axis_2", targetFile);
+            final Variable footAxis2Variable = getVariableVerified("Footprint_Axis2", targetFile);
             assertEquals(DataType.SHORT, footAxis2Variable.getDataType());
             assertAttribute("units", "km", footAxis2Variable);
-            assertNoAttribute("_FillValue", footAxis2Variable);
+            assertAttribute("_FillValue", 0.0, footAxis2Variable);
             assertNoAttribute("valid_min", footAxis2Variable);
             assertNoAttribute("valid_max", footAxis2Variable);
-            assertNoAttribute("orignal_name", footAxis2Variable);
-            assertNoAttribute("standard_name", footAxis2Variable);
             assertNoAttribute("flag_masks", footAxis2Variable);
             assertNoAttribute("flag_values", footAxis2Variable);
             assertNoAttribute("flag_meanings", footAxis2Variable);
-            assertAttribute("scale_factor", 0.00152587890625, footAxis2Variable);
+            assertAttribute("scale_factor", 1.52587890625E-5, footAxis2Variable);
             assertAttribute("_Unsigned", "true", footAxis2Variable);
             array = footAxis2Variable.read(new int[]{1417, 0}, new int[]{2, 2});
             assertEquals(13625, array.getShort(0));
@@ -304,6 +288,7 @@ public class GPtoNetCDFExporterOpIntegrationTest {
     }
 
     @Test
+    @Ignore
     public void testExportSCLF1C_withSourceProductPaths() throws IOException, ParseException, InvalidRangeException {
         final File file = TestHelper.getResourceFile("SM_REPB_MIR_SCLF1C_20110201T151254_20110201T151308_505_152_1.zip");
 
@@ -349,6 +334,7 @@ public class GPtoNetCDFExporterOpIntegrationTest {
     }
 
     @Test
+    @Ignore
     public void testExportOSUDP2_withAdditionalMetadata() throws IOException, ParseException, InvalidRangeException {
         final File file = TestHelper.getResourceFile("SM_OPER_MIR_OSUDP2_20091204T001853_20091204T011255_310_001_1.zip");
 
@@ -507,25 +493,25 @@ public class GPtoNetCDFExporterOpIntegrationTest {
             product = ProductIO.readProduct(file);
 
             final HashMap<String, Object> parameterMap = createDefaultParameterMap();
-            parameterMap.put("outputBandNames", "lat,lon,bt_value,azimuth_angle");
+            parameterMap.put("outputBandNames", "Grid_Point_Latitude,Grid_Point_Longitude,BT_Value,Azimuth_Angle");
             GPF.createProduct(GPtoNetCDFExporterOp.ALIAS,
                     parameterMap,
                     new Product[]{product});
 
             final File outputFile = new File(targetDirectory, "SM_OPER_MIR_BWLF1C_20111026T143206_20111026T152520_503_001_1.nc");
             assertTrue(outputFile.isFile());
-            assertEquals(2520092, outputFile.length());
+            assertEquals(2519711, outputFile.length());
 
             targetFile = NetcdfFileOpener.open(outputFile);
-            getVariableVerified("lat", targetFile);
-            getVariableVerified("lon", targetFile);
-            getVariableVerified("bt_value", targetFile);
-            getVariableVerified("azimuth_angle", targetFile);
+            getVariableVerified("Grid_Point_Latitude", targetFile);
+            getVariableVerified("Grid_Point_Longitude", targetFile);
+            getVariableVerified("BT_Value", targetFile);
+            getVariableVerified("Azimuth_Angle", targetFile);
 
-            final Variable gridPointAltitude = getVariable("grid_point_altitude", targetFile);
+            final Variable gridPointAltitude = getVariable("Grid_Point_Altitude", targetFile);
             assertNull(gridPointAltitude);
 
-            final Variable footprintAxis1 = getVariable("footprint_axis_1", targetFile);
+            final Variable footprintAxis1 = getVariable("Footprint_Axis1", targetFile);
             assertNull(footprintAxis1);
 
         } finally {
@@ -607,7 +593,7 @@ public class GPtoNetCDFExporterOpIntegrationTest {
     }
 
     private void assertGridPointIdVariable(NetcdfFile targetFile, int offset, int[] expected) throws IOException, InvalidRangeException {
-        final Variable gridPointIdVariable = getVariableVerified("grid_point_id", targetFile);
+        final Variable gridPointIdVariable = getVariableVerified("Grid_Point_ID", targetFile);
         assertEquals(DataType.INT, gridPointIdVariable.getDataType());
         assertAttribute("_Unsigned", "true", gridPointIdVariable);
         Array array = gridPointIdVariable.read(new int[]{offset}, new int[]{2});

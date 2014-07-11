@@ -37,6 +37,18 @@ public class MemberDescriptorTest {
     }
 
     @Test
+    public void testSetGetBinXName() {
+        final String binXName_1 = "binary";
+        final String binXName_2 = "xName";
+
+        descriptor.setBinXName(binXName_1);
+        assertEquals(binXName_1, descriptor.getBinXName());
+
+        descriptor.setBinXName(binXName_2);
+        assertEquals(binXName_2, descriptor.getBinXName());
+    }
+
+    @Test
     public void testSetGetDimensionNames() {
         final String name_1 = "dimension";
         final String name_2 = "name";

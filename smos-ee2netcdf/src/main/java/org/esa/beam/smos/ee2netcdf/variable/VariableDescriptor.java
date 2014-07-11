@@ -18,8 +18,7 @@ public class VariableDescriptor {
     private float validMin;
     private boolean validMaxPresent;
     private float validMax;
-    private String originalName;
-    private String standardName;
+    private String binXName;
     private short[] flagMasks;
     private String flagMeanings;
     double scaleFactor;
@@ -69,21 +68,14 @@ public class VariableDescriptor {
         this.flagMasks = flagMasks;
     }
 
-    public String getStandardName() {
-        return standardName;
+    public String getBinXName() {
+        return binXName;
     }
 
-    public void setStandardName(String standardName) {
-        this.standardName = standardName;
+    public void setBinXName(String binXName) {
+        this.binXName = binXName;
     }
 
-    public String getOriginalName() {
-        return originalName;
-    }
-
-    public void setOriginalName(String originalName) {
-        this.originalName = originalName;
-    }
 
     public VariableDescriptor(String name, boolean gridPointData, DataType dataType, String dimensionNames, boolean is2d, int btDataMemberIndex) {
         this();
@@ -106,10 +98,6 @@ public class VariableDescriptor {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public boolean isGridPointData() {
         return gridPointData;
     }
@@ -130,10 +118,6 @@ public class VariableDescriptor {
         return dimensionNames;
     }
 
-    public void setDimensionNames(String dimensionNames) {
-        this.dimensionNames = dimensionNames;
-    }
-
     public boolean isIs2d() {
         return is2d;
     }
@@ -144,10 +128,6 @@ public class VariableDescriptor {
 
     public int getBtDataMemberIndex() {
         return btDataMemberIndex;
-    }
-
-    public void setBtDataMemberIndex(int btDataMemberIndex) {
-        this.btDataMemberIndex = btDataMemberIndex;
     }
 
     public String getUnit() {

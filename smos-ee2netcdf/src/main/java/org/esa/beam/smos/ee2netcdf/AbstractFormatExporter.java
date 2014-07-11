@@ -79,14 +79,6 @@ abstract class AbstractFormatExporter implements FormatExporter {
             if (variableDescriptor.isValidMaxPresent()) {
                 nVariable.addAttribute("valid_max", variableDescriptor.getValidMax());
             }
-            final String originalName = variableDescriptor.getOriginalName();
-            if (StringUtils.isNotBlank(originalName)) {
-                nVariable.addAttribute("original_name", originalName);
-            }
-            final String standardName = variableDescriptor.getStandardName();
-            if (StringUtils.isNotBlank(standardName)) {
-                nVariable.addAttribute("standard_name", standardName);
-            }
             final short[] flagMasks = variableDescriptor.getFlagMasks();
             if (flagMasks != null) {
                 nVariable.addAttribute("flag_masks", Array.factory(flagMasks));

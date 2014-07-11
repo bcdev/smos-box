@@ -57,8 +57,7 @@ class L2FormatExporter extends AbstractFormatExporter {
         latDescriptor.setFillValue(-999.f);
         latDescriptor.setValidMin(-90.f);
         latDescriptor.setValidMax(90.f);
-        latDescriptor.setOriginalName("Latitude");
-        latDescriptor.setStandardName("latitude");
+        latDescriptor.setBinXName("latitude");
         variableDescriptors.put("lat", latDescriptor);
 
         final VariableDescriptor lonDescriptor = new VariableDescriptor("Longitude", true, DataType.FLOAT, "n_grid_points", false, -1);
@@ -66,8 +65,7 @@ class L2FormatExporter extends AbstractFormatExporter {
         lonDescriptor.setFillValue(-999.f);
         lonDescriptor.setValidMin(-180.f);
         lonDescriptor.setValidMax(180.f);
-        lonDescriptor.setOriginalName("Longitude");
-        lonDescriptor.setStandardName("longitude");
+        lonDescriptor.setBinXName("longitude");
         variableDescriptors.put("lon", lonDescriptor);
 
         final VariableDescriptor ftprtDiamDescriptor = new VariableDescriptor("Equiv_ftprt_diam", true, DataType.FLOAT, "n_grid_points", false, -1);

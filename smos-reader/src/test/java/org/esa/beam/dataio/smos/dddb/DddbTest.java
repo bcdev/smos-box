@@ -281,6 +281,7 @@ public class DddbTest {
 
         final MemberDescriptor latitudeDescriptor = memberDescriptors.getMember("Grid_Point_Latitude");
         assertNotNull(latitudeDescriptor);
+        assertEquals("Latitude", latitudeDescriptor.getBinXName());
         assertTrue(latitudeDescriptor.isGridPointData());
         assertEquals("float", latitudeDescriptor.getDataTypeName());
         assertEquals("n_grid_points", latitudeDescriptor.getDimensionNames());
@@ -292,6 +293,7 @@ public class DddbTest {
 
         final MemberDescriptor longitudeDescriptor = memberDescriptors.getMember("Grid_Point_Longitude");
         assertNotNull(longitudeDescriptor);
+        assertEquals("Longitude", longitudeDescriptor.getBinXName());
         assertTrue(longitudeDescriptor.isGridPointData());
         assertEquals("float", longitudeDescriptor.getDataTypeName());
         assertEquals("n_grid_points", longitudeDescriptor.getDimensionNames());
@@ -303,6 +305,7 @@ public class DddbTest {
 
         final MemberDescriptor altitudeDescriptor = memberDescriptors.getMember("Grid_Point_Altitude");
         assertNotNull(altitudeDescriptor);
+        assertEquals("Altitude", altitudeDescriptor.getBinXName());
         assertTrue(altitudeDescriptor.isGridPointData());
         assertEquals("float", altitudeDescriptor.getDataTypeName());
         assertEquals("n_grid_points", altitudeDescriptor.getDimensionNames());
