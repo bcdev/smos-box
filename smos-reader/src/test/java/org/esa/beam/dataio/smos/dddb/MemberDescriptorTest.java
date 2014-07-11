@@ -101,13 +101,37 @@ public class MemberDescriptorTest {
 
     @Test
     public void testSetGetFillValue() {
-         final float fill_1 = 3.6f;
-         final float fill_2 = -9.4f;
+        final float fill_1 = 3.6f;
+        final float fill_2 = -9.4f;
 
         descriptor.setFillValue(fill_1);
         assertEquals(fill_1, descriptor.getFillValue(), 1e-8);
 
         descriptor.setFillValue(fill_2);
         assertEquals(fill_2, descriptor.getFillValue(), 1e-8);
+    }
+
+    @Test
+    public void testSetGetScalingFactor() {
+        final float factor_1 = 0.34f;
+        final float factor_2 = 1.45f;
+
+        descriptor.setScalingFactor(factor_1);
+        assertEquals(factor_1, descriptor.getScalingFactor(), 1e-8);
+
+        descriptor.setScalingFactor(factor_2);
+        assertEquals(factor_2, descriptor.getScalingFactor(), 1e-8);
+    }
+
+    @Test
+    public void testSetGetScalingOffset() {
+        final float offset_1 = 1.67f;
+        final float offset_2 = 2.18f;
+
+        descriptor.setScalingOffset(offset_1);
+        assertEquals(offset_1, descriptor.getScalingOffset(), 1e-8);
+
+        descriptor.setScalingOffset(offset_2);
+        assertEquals(offset_2, descriptor.getScalingOffset(), 1e-8);
     }
 }

@@ -13,6 +13,8 @@ public class MemberDescriptor {
     private String flagMeanings;
     private String unit;
     private float fillValue;
+    private float scalingFactor;
+    private float scalingOffset;
 
     public String getName() {
         return name;
@@ -92,5 +94,21 @@ public class MemberDescriptor {
 
     public float getFillValue() {
         return fillValue;
+    }
+
+    public void setScalingFactor(float scalingFactor) {
+        this.scalingFactor = scalingFactor;
+    }
+
+    public float getScalingFactor() {
+        return scalingFactor;
+    }
+
+    public void setScalingOffset(float scalingOffset) {
+        this.scalingOffset = scalingOffset;
+    }
+
+    public float getScalingOffset() {
+        return scalingOffset;
     }
 }

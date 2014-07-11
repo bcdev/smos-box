@@ -258,6 +258,8 @@ public class Dddb {
 
             memberDescriptor.setUnit(bandDescriptor.getUnit());
             memberDescriptor.setFillValue((float)bandDescriptor.getFillValue());
+            memberDescriptor.setScalingFactor((float)bandDescriptor.getScalingFactor());
+            memberDescriptor.setScalingOffset((float)bandDescriptor.getScalingOffset());
         }
 
         return memberDescriptors;
