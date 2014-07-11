@@ -169,4 +169,25 @@ public class AbstractFormatExporterTest {
         assertEquals(DataType.SHORT, variableDescriptor.getDataType());
         assertTrue(variableDescriptor.isUnsigned());
     }
+
+    @Test
+    public void testGetNumDimensions() {
+        assertEquals(1, AbstractFormatExporter.getNumDimensions("onedimensional"));
+        assertEquals(2, AbstractFormatExporter.getNumDimensions("two dims"));
+    }
+
+    @Test
+    public void testGetNumDimensions_emptyArgument() {
+        try {
+            AbstractFormatExporter.getNumDimensions("");
+            fail("IllegalArgumentException expected");
+        } catch (IllegalArgumentException expected) {
+        }
+
+        try {
+            AbstractFormatExporter.getNumDimensions(null);
+            fail("IllegalArgumentException expected");
+        } catch (IllegalArgumentException expected) {
+        }
+    }
 }

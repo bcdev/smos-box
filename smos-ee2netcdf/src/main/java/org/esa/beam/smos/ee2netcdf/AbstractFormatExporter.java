@@ -197,4 +197,12 @@ abstract class AbstractFormatExporter implements FormatExporter {
             throw new IllegalArgumentException("unsupported datatype: '" + dataTypeName + "'");
         }
     }
+
+    public static int getNumDimensions(String dimensionNames) {
+        if (StringUtils.isBlank(dimensionNames)) {
+            throw new IllegalArgumentException("empty dimension names");
+        }
+        final String[] splittednames = StringUtils.split(dimensionNames, ' ');
+        return splittednames.length;
+    }
 }
