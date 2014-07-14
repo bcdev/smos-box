@@ -441,7 +441,7 @@ class LightBufrFile implements ProductFile {
         }
 
         public boolean isValid(int i) {
-            return missingValue == null || array.getDouble(i) != missingValue;
+            return missingValue == null || array.getDouble(i) != missingValue.doubleValue();
         }
 
         public double getDouble(int i) {
