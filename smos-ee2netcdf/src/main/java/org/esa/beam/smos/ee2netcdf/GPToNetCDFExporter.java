@@ -11,11 +11,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.logging.Logger;
 
-class GpToNetCDFExporter {
+class GPToNetCDFExporter {
 
     private final ExportParameter parameter;
 
-    GpToNetCDFExporter(ExportParameter parameter) {
+    GPToNetCDFExporter(ExportParameter parameter) {
         this.parameter = parameter;
     }
 
