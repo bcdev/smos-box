@@ -11,11 +11,11 @@ import java.lang.reflect.Field;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class GPtoNetCDFExporterOpTest {
+public class GPToNetCDFExporterOpTest {
 
     @Test
     public void testOperatorAnnotations() {
-        final Annotation[] declaredAnnotations = GPtoNetCDFExporterOp.class.getDeclaredAnnotations();
+        final Annotation[] declaredAnnotations = GPToNetCDFExporterOp.class.getDeclaredAnnotations();
 
         assertEquals(1, declaredAnnotations.length);
         final OperatorMetadata operatorMetadata = (OperatorMetadata) declaredAnnotations[0];
@@ -28,7 +28,7 @@ public class GPtoNetCDFExporterOpTest {
 
     @Test
     public void testParameterAnnotations_SourceProducts() throws NoSuchFieldException {
-        final Field sourceProductsField = GPtoNetCDFExporterOp.class.getDeclaredField("sourceProducts");
+        final Field sourceProductsField = GPToNetCDFExporterOp.class.getDeclaredField("sourceProducts");
         final SourceProducts sourceProducts = sourceProductsField.getAnnotation(SourceProducts.class);
         assertEquals(0, sourceProducts.count());
         assertEquals("MIR_BW[LS][DF]1C|MIR_SC[LS][DF]1C|MIR_OSUDP2|MIR_SMUDP2", sourceProducts.type());
@@ -39,7 +39,7 @@ public class GPtoNetCDFExporterOpTest {
 
     @Test
     public void testParameterAnnotation_sourceProductPaths() throws NoSuchFieldException {
-        final Field targetDirectoryField = GPtoNetCDFExporterOp.class.getDeclaredField("sourceProductPaths");
+        final Field targetDirectoryField = GPToNetCDFExporterOp.class.getDeclaredField("sourceProductPaths");
         final Parameter sourceProductPaths = targetDirectoryField.getAnnotation(Parameter.class);
         assertEquals("Comma-separated list of file paths specifying the source products.\n" +
                 "Each path may contain the wildcards '**' (matches recursively any directory),\n" +
@@ -49,7 +49,7 @@ public class GPtoNetCDFExporterOpTest {
 
     @Test
     public void testParameterAnnotation_targetDirectory() throws NoSuchFieldException {
-        final Field targetDirectoryField = GPtoNetCDFExporterOp.class.getDeclaredField("targetDirectory");
+        final Field targetDirectoryField = GPToNetCDFExporterOp.class.getDeclaredField("targetDirectory");
         final Parameter targetDirectory = targetDirectoryField.getAnnotation(Parameter.class);
         assertEquals(".", targetDirectory.defaultValue());
         assertEquals("The target directory for the converted data. If not existing, directory will be created.", targetDirectory.description());
@@ -59,7 +59,7 @@ public class GPtoNetCDFExporterOpTest {
 
     @Test
     public void testParameterAnnotations_OverwriteTarget() throws NoSuchFieldException {
-        final Field overwriteTargetField = GPtoNetCDFExporterOp.class.getDeclaredField("overwriteTarget");
+        final Field overwriteTargetField = GPToNetCDFExporterOp.class.getDeclaredField("overwriteTarget");
         final Parameter overwriteTargetFieldAnnotation = overwriteTargetField.getAnnotation(Parameter.class);
         assertEquals("false", overwriteTargetFieldAnnotation.defaultValue());
         assertEquals("Set true to overwrite already existing target files.", overwriteTargetFieldAnnotation.description());
@@ -67,7 +67,7 @@ public class GPtoNetCDFExporterOpTest {
 
     @Test
     public void testParameterAnnotations_Institution() throws NoSuchFieldException {
-        final Field institutionField = GPtoNetCDFExporterOp.class.getDeclaredField("institution");
+        final Field institutionField = GPToNetCDFExporterOp.class.getDeclaredField("institution");
         final Parameter institutionFieldAnnotation = institutionField.getAnnotation(Parameter.class);
         assertEquals("", institutionFieldAnnotation.defaultValue());
         assertEquals("Set institution field for file metadata. If left empty, no institution metadata is written to output file.", institutionFieldAnnotation.description());
@@ -75,7 +75,7 @@ public class GPtoNetCDFExporterOpTest {
 
     @Test
     public void testParameterAnnotations_Contact() throws NoSuchFieldException {
-        final Field contactField = GPtoNetCDFExporterOp.class.getDeclaredField("contact");
+        final Field contactField = GPToNetCDFExporterOp.class.getDeclaredField("contact");
         final Parameter contactFieldAnnotation = contactField.getAnnotation(Parameter.class);
         assertEquals("", contactFieldAnnotation.defaultValue());
         assertEquals("Set contact field for file metadata. If left empty, no contact information is written to output file.", contactFieldAnnotation.description());
@@ -83,7 +83,7 @@ public class GPtoNetCDFExporterOpTest {
 
     @Test
     public void testParameterAnnotations_outputBandNames() throws NoSuchFieldException {
-        final Field bandNamesField = GPtoNetCDFExporterOp.class.getDeclaredField("outputBandNames");
+        final Field bandNamesField = GPToNetCDFExporterOp.class.getDeclaredField("outputBandNames");
         final Parameter bandnamesFieldAnnotation = bandNamesField.getAnnotation(Parameter.class);
         assertEquals("", bandnamesFieldAnnotation.defaultValue());
         assertEquals("Comma separated list of band names to export. If left empty, no band subsetting is applied.", bandnamesFieldAnnotation.description());

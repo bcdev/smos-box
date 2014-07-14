@@ -4,6 +4,9 @@ package org.esa.beam.smos.ee2netcdf;
 import com.bc.ceres.binio.CompoundData;
 import org.esa.beam.dataio.netcdf.nc.NFileWriteable;
 import org.esa.beam.dataio.netcdf.nc.NVariable;
+import org.esa.beam.dataio.smos.dddb.Dddb;
+import org.esa.beam.dataio.smos.dddb.Family;
+import org.esa.beam.dataio.smos.dddb.MemberDescriptor;
 import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.smos.ee2netcdf.variable.VariableDescriptor;
 import org.esa.beam.smos.ee2netcdf.variable.VariableWriter;
@@ -12,13 +15,19 @@ import ucar.ma2.DataType;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 
 class L2FormatExporter extends AbstractFormatExporter {
 
+    private Family<MemberDescriptor> memberDescriptors;
+
     @Override
     public void initialize(Product product, ExportParameter exportParameter) throws IOException {
         super.initialize(product, exportParameter);
+
+        memberDescriptors = Dddb.getInstance().getMemberDescriptors(explorerFile.getHeaderFile());
+        createVariableDescriptors(exportParameter);
 
         createVariableDescriptors(exportParameter);
     }
@@ -45,77 +54,53 @@ class L2FormatExporter extends AbstractFormatExporter {
     }
 
     void createVariableDescriptors(ExportParameter exportParameter) {
-        // @todo 1 tb/tb differentiate between OS and SM tb 2014-04-14
         variableDescriptors = new HashMap<>();
 
-        final VariableDescriptor gpIdDescriptor = new VariableDescriptor("Grid_Point_ID", true, DataType.INT, "n_grid_points", false, -1);
-        gpIdDescriptor.setUnsigned(true);
-        variableDescriptors.put("grid_point_id", gpIdDescriptor);
+        final List<String> outputBandNames = exportParameter.getOutputBandNames();
 
-        final VariableDescriptor latDescriptor = new VariableDescriptor("Latitude", true, DataType.FLOAT, "n_grid_points", false, -1);
-        latDescriptor.setUnit("degrees_north");
-        latDescriptor.setFillValue(-999.f);
-        latDescriptor.setValidMin(-90.f);
-        latDescriptor.setValidMax(90.f);
-        latDescriptor.setBinXName("latitude");
-        variableDescriptors.put("lat", latDescriptor);
+        final List<MemberDescriptor> memberDescriptorList = memberDescriptors.asList();
+        for (final MemberDescriptor memberDescriptor : memberDescriptorList) {
+            final String memberDescriptorName = memberDescriptor.getName();
+            if (mustExport(memberDescriptorName, outputBandNames)) {
+                final String dimensionNames = memberDescriptor.getDimensionNames();
+                System.out.println(memberDescriptorName);
+                final int numDimensions = getNumDimensions(dimensionNames);
+                final VariableDescriptor variableDescriptor = new VariableDescriptor(memberDescriptorName,
+                        memberDescriptor.isGridPointData(),
+                        DataType.OBJECT,
+                        dimensionNames,
+                        numDimensions == 2,
+                        memberDescriptor.getMemberIndex());
 
-        final VariableDescriptor lonDescriptor = new VariableDescriptor("Longitude", true, DataType.FLOAT, "n_grid_points", false, -1);
-        lonDescriptor.setUnit("degrees_east");
-        lonDescriptor.setFillValue(-999.f);
-        lonDescriptor.setValidMin(-180.f);
-        lonDescriptor.setValidMax(180.f);
-        lonDescriptor.setBinXName("longitude");
-        variableDescriptors.put("lon", lonDescriptor);
+                setDataType(variableDescriptor, memberDescriptor.getDataTypeName());
 
-        final VariableDescriptor ftprtDiamDescriptor = new VariableDescriptor("Equiv_ftprt_diam", true, DataType.FLOAT, "n_grid_points", false, -1);
-        ftprtDiamDescriptor.setUnit("m");
-        ftprtDiamDescriptor.setFillValue(-999.f);
-        variableDescriptors.put("equiv_ftprt_diam", ftprtDiamDescriptor);
+                variableDescriptor.setBinXName(memberDescriptor.getBinXName());
 
-        // @todo 3 tb/** mismatch between StructMember name and name in schema file - check and resolve tb 2014-04-11
-        final VariableDescriptor acqTimeDescriptor = new VariableDescriptor("Mean_Acq_Time", true, DataType.FLOAT, "n_grid_points", false, -1);
-        acqTimeDescriptor.setUnit("dd");
-        acqTimeDescriptor.setFillValue(-999.f);
-        variableDescriptors.put("mean_acq_time", acqTimeDescriptor);
+                variableDescriptor.setUnit(memberDescriptor.getUnit());
+                variableDescriptor.setFillValue(memberDescriptor.getFillValue());
+                // @todo 2 tb/tb valid min
+                // @todo 2 tb/tb valid max
 
-        final VariableDescriptor sss1Descriptor = new VariableDescriptor("SSS1", true, DataType.FLOAT, "n_grid_points", false, -1);
-        sss1Descriptor.setUnit("psu");
-        sss1Descriptor.setFillValue(-999.f);
-        variableDescriptors.put("sss1", sss1Descriptor);
+                final float scalingFactor = memberDescriptor.getScalingFactor();
+                if (scalingFactor != 1.0) {
+                    variableDescriptor.setScaleFactor(scalingFactor);
+                }
 
-        final VariableDescriptor sigmaSss1Descriptor = new VariableDescriptor("Sigma_SSS1", true, DataType.FLOAT, "n_grid_points", false, -1);
-        sigmaSss1Descriptor.setUnit("psu");
-        sigmaSss1Descriptor.setFillValue(-999.f);
-        variableDescriptors.put("sigma_sss1", sigmaSss1Descriptor);
+                final float scalingOffset = memberDescriptor.getScalingOffset();
+                if (scalingOffset != 0.0) {
+                    variableDescriptor.setScaleOffset(memberDescriptor.getScalingOffset());
+                }
 
-        final VariableDescriptor sss2Descriptor = new VariableDescriptor("SSS2", true, DataType.FLOAT, "n_grid_points", false, -1);
-        sss2Descriptor.setUnit("psu");
-        sss2Descriptor.setFillValue(-999.f);
-        variableDescriptors.put("sss2", sss2Descriptor);
+                final short[] flagMasks = memberDescriptor.getFlagMasks();
+                if (flagMasks != null) {
+                    variableDescriptor.setFlagMasks(memberDescriptor.getFlagMasks());
+                    variableDescriptor.setFlagValues(memberDescriptor.getFlagValues());
+                    variableDescriptor.setFlagMeanings(memberDescriptor.getFlagMeanings());
+                }
 
-        final VariableDescriptor sigmaSss2Descriptor = new VariableDescriptor("Sigma_SSS2", true, DataType.FLOAT, "n_grid_points", false, -1);
-        sigmaSss2Descriptor.setUnit("psu");
-        sigmaSss2Descriptor.setFillValue(-999.f);
-        variableDescriptors.put("sigma_sss2", sigmaSss2Descriptor);
-
-        final VariableDescriptor sss3Descriptor = new VariableDescriptor("SSS3", true, DataType.FLOAT, "n_grid_points", false, -1);
-        sss3Descriptor.setUnit("psu");
-        sss3Descriptor.setFillValue(-999.f);
-        variableDescriptors.put("sss3", sss3Descriptor);
-
-        final VariableDescriptor sigmaSss3Descriptor = new VariableDescriptor("Sigma_SSS3", true, DataType.FLOAT, "n_grid_points", false, -1);
-        sigmaSss3Descriptor.setUnit("psu");
-        sigmaSss3Descriptor.setFillValue(-999.f);
-        variableDescriptors.put("sigma_sss3", sigmaSss3Descriptor);
-
-        final VariableDescriptor aCardDescriptor = new VariableDescriptor("A_card", true, DataType.FLOAT, "n_grid_points", false, -1);
-        aCardDescriptor.setFillValue(-999.f);
-        variableDescriptors.put("a_card", aCardDescriptor);
-
-        final VariableDescriptor sigmaACardDescriptor = new VariableDescriptor("Sigma_Acard", true, DataType.FLOAT, "n_grid_points", false, -1);
-        sigmaACardDescriptor.setFillValue(-999.f);
-        variableDescriptors.put("sigma_a_card", sigmaACardDescriptor);
+                variableDescriptors.put(memberDescriptorName, variableDescriptor);
+            }
+        }
     }
 
     private VariableWriter[] createVariableWriters(NFileWriteable nFileWriteable) {

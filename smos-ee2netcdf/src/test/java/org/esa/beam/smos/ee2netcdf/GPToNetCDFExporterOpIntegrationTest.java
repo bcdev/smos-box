@@ -32,13 +32,13 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 @RunWith(AcceptanceTestRunner.class)
-public class GPtoNetCDFExporterOpIntegrationTest {
+public class GPToNetCDFExporterOpIntegrationTest {
 
-    private final GPtoNetCDFExporterOp.Spi spi;
+    private final GPToNetCDFExporterOp.Spi spi;
     private final File targetDirectory;
 
-    public GPtoNetCDFExporterOpIntegrationTest() {
-        spi = new GPtoNetCDFExporterOp.Spi();
+    public GPToNetCDFExporterOpIntegrationTest() {
+        spi = new GPToNetCDFExporterOp.Spi();
         targetDirectory = new File("test_out");
     }
 
@@ -75,7 +75,7 @@ public class GPtoNetCDFExporterOpIntegrationTest {
         try {
             product = ProductIO.readProduct(file);
 
-            GPF.createProduct(GPtoNetCDFExporterOp.ALIAS,
+            GPF.createProduct(GPToNetCDFExporterOp.ALIAS,
                     createDefaultParameterMap(),
                     new Product[]{product});
 
@@ -303,7 +303,7 @@ public class GPtoNetCDFExporterOpIntegrationTest {
 
             final HashMap<String, Object> parameterMap = createDefaultParameterMap();
             parameterMap.put("sourceProductPaths", file.getParent() + File.separator + "*SCLF1C*");
-            GPF.createProduct(GPtoNetCDFExporterOp.ALIAS,
+            GPF.createProduct(GPToNetCDFExporterOp.ALIAS,
                     parameterMap);
 
             final File outputFile = new File(targetDirectory, "SM_REPB_MIR_SCLF1C_20110201T151254_20110201T151308_505_152_1.nc");
@@ -338,7 +338,6 @@ public class GPtoNetCDFExporterOpIntegrationTest {
     }
 
     @Test
-    @Ignore
     public void testExportOSUDP2_withAdditionalMetadata() throws IOException, ParseException, InvalidRangeException {
         final File file = TestHelper.getResourceFile("SM_OPER_MIR_OSUDP2_20091204T001853_20091204T011255_310_001_1.zip");
 
@@ -350,7 +349,7 @@ public class GPtoNetCDFExporterOpIntegrationTest {
             final HashMap<String, Object> parameterMap = createDefaultParameterMap();
             parameterMap.put("institution", "BC");
             parameterMap.put("contact", "Tom");
-            GPF.createProduct(GPtoNetCDFExporterOp.ALIAS,
+            GPF.createProduct(GPToNetCDFExporterOp.ALIAS,
                     parameterMap,
                     new Product[]{product});
 
@@ -498,7 +497,7 @@ public class GPtoNetCDFExporterOpIntegrationTest {
 
             final HashMap<String, Object> parameterMap = createDefaultParameterMap();
             parameterMap.put("outputBandNames", "Grid_Point_Latitude,Grid_Point_Longitude,BT_Value,Azimuth_Angle");
-            GPF.createProduct(GPtoNetCDFExporterOp.ALIAS,
+            GPF.createProduct(GPToNetCDFExporterOp.ALIAS,
                     parameterMap,
                     new Product[]{product});
 

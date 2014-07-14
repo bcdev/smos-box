@@ -17,13 +17,13 @@ import java.util.ArrayList;
 import java.util.TreeSet;
 
 @OperatorMetadata(
-        alias = GPtoNetCDFExporterOp.ALIAS,
+        alias = GPToNetCDFExporterOp.ALIAS,
         version = "0.1",
         authors = "Tom Block",
         copyright = "(c) 2014 by Brockmann Consult",
         description = "Converts SMOS EE Products to NetCDF-GridPoint format.",
         autoWriteDisabled = true)
-public class GPtoNetCDFExporterOp extends Operator {
+public class GPToNetCDFExporterOp extends Operator {
 
     public static final String ALIAS = "SmosGP2NetCDF";
 
@@ -75,7 +75,7 @@ public class GPtoNetCDFExporterOp extends Operator {
 
         setDummyTargetProduct();
 
-        final GpToNetCDFExporter gpToNetCDFExporter = new GpToNetCDFExporter(exportParameter);
+        final GPToNetCDFExporter gpToNetCDFExporter = new GPToNetCDFExporter(exportParameter);
         gpToNetCDFExporter.initialize();
 
         if (sourceProducts != null) {
@@ -117,7 +117,7 @@ public class GPtoNetCDFExporterOp extends Operator {
     public static class Spi extends OperatorSpi {
 
         public Spi() {
-            super(GPtoNetCDFExporterOp.class);
+            super(GPToNetCDFExporterOp.class);
         }
     }
 }
