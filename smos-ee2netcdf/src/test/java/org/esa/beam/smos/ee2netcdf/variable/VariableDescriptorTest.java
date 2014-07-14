@@ -49,10 +49,26 @@ public class VariableDescriptorTest {
     @Test
     public void testSettingScaleFactorTriggersPresentIndicator() {
         assertFalse(variableDescriptor.isScaleFactorPresent());
-        assertEquals(Double.NaN, variableDescriptor.getScaleFactor(), 1e-8);
+        assertEquals(1.0, variableDescriptor.getScaleFactor(), 1e-8);
 
         variableDescriptor.setScaleFactor(985.0);
         assertTrue(variableDescriptor.isScaleFactorPresent());
         assertEquals(985.0, variableDescriptor.getScaleFactor(), 1e-8);
+    }
+
+    @Test
+    public void testSettingScaleOffsetTriggersPresentIndicator() {
+        assertFalse(variableDescriptor.isScaleOffsetPresent());
+        assertEquals(0.0, variableDescriptor.getScaleOffset(), 1e-8);
+
+        variableDescriptor.setScaleOffset(986.0);
+        assertTrue(variableDescriptor.isScaleOffsetPresent());
+        assertEquals(986.0, variableDescriptor.getScaleOffset(), 1e-8);
+    }
+
+    @Test
+    public void testConstruction() {
+        assertEquals(1.0, variableDescriptor.getScaleFactor(), 1e-8);
+        assertEquals(0.0, variableDescriptor.getScaleOffset(), 1e-8);
     }
 }

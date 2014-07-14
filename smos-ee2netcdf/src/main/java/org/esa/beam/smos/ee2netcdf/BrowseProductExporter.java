@@ -105,7 +105,11 @@ class BrowseProductExporter extends AbstractFormatExporter {
                 if (scalingFactor != 1.0) {
                     variableDescriptor.setScaleFactor(scalingFactor);
                 }
-                // @todo 1 tb/tb add scaling offset
+
+                final float scalingOffset = memberDescriptor.getScalingOffset();
+                if (scalingOffset != 0.0) {
+                    variableDescriptor.setScaleOffset(memberDescriptor.getScalingOffset());
+                }
 
                 final short[] flagMasks = memberDescriptor.getFlagMasks();
                 if (flagMasks != null) {

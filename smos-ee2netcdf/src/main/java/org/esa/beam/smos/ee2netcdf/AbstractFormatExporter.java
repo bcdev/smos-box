@@ -91,8 +91,9 @@ abstract class AbstractFormatExporter implements FormatExporter {
             if (StringUtils.isNotBlank(flagMeanings)) {
                 nVariable.addAttribute("flag_meanings", flagMeanings);
             }
-            if (variableDescriptor.isScaleFactorPresent()) {
+            if (variableDescriptor.isScaleFactorPresent() || variableDescriptor.isScaleOffsetPresent()) {
                 nVariable.addAttribute("scale_factor", variableDescriptor.getScaleFactor());
+                nVariable.addAttribute("scale_offset", variableDescriptor.getScaleOffset());
             }
             if (variableDescriptor.isUnsigned()) {
                 nVariable.addAttribute("_Unsigned", "true");

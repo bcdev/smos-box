@@ -81,7 +81,7 @@ public class GPtoNetCDFExporterOpIntegrationTest {
 
             final File outputFile = new File(targetDirectory, "SM_OPER_MIR_BWLF1C_20111026T143206_20111026T152520_503_001_1.nc");
             assertTrue(outputFile.isFile());
-            assertEquals(4342498, outputFile.length());
+            assertEquals(4342778, outputFile.length());
 
             targetFile = NetcdfFileOpener.open(outputFile);
             final ExportParameter exportParameter = new ExportParameter();
@@ -220,6 +220,7 @@ public class GPtoNetCDFExporterOpIntegrationTest {
             assertNoAttribute("flag_values", radAccVariable);
             assertNoAttribute("flag_meanings", radAccVariable);
             assertAttribute("scale_factor", 1.52587890625E-5, radAccVariable);
+            assertAttribute("scale_offset", 0.0, radAccVariable);
             assertAttribute("_Unsigned", "true", radAccVariable);
             array = radAccVariable.read(new int[]{1175, 0}, new int[]{2, 2});
             assertEquals(3547, array.getShort(0));
@@ -237,6 +238,7 @@ public class GPtoNetCDFExporterOpIntegrationTest {
             assertNoAttribute("flag_values", azimuthAngleVariable);
             assertNoAttribute("flag_meanings", azimuthAngleVariable);
             assertAttribute("scale_factor", 0.0054931640625, azimuthAngleVariable);
+            assertAttribute("scale_offset", 0.0, azimuthAngleVariable);
             assertAttribute("_Unsigned", "true", azimuthAngleVariable);
             array = azimuthAngleVariable.read(new int[]{1261, 1}, new int[]{2, 2});
             assertEquals(8169, array.getShort(0));
@@ -254,6 +256,7 @@ public class GPtoNetCDFExporterOpIntegrationTest {
             assertNoAttribute("flag_values", footAxis1Variable);
             assertNoAttribute("flag_meanings", footAxis1Variable);
             assertAttribute("scale_factor", 1.52587890625E-5, footAxis1Variable);
+            assertAttribute("scale_offset", 0.0, footAxis1Variable);
             assertAttribute("_Unsigned", "true", footAxis1Variable);
             array = footAxis1Variable.read(new int[]{1394, 2}, new int[]{2, 2});
             assertEquals(18489, array.getShort(0));
@@ -271,6 +274,7 @@ public class GPtoNetCDFExporterOpIntegrationTest {
             assertNoAttribute("flag_values", footAxis2Variable);
             assertNoAttribute("flag_meanings", footAxis2Variable);
             assertAttribute("scale_factor", 1.52587890625E-5, footAxis2Variable);
+            assertAttribute("scale_offset", 0.0, footAxis2Variable);
             assertAttribute("_Unsigned", "true", footAxis2Variable);
             array = footAxis2Variable.read(new int[]{1417, 0}, new int[]{2, 2});
             assertEquals(13625, array.getShort(0));
@@ -500,7 +504,7 @@ public class GPtoNetCDFExporterOpIntegrationTest {
 
             final File outputFile = new File(targetDirectory, "SM_OPER_MIR_BWLF1C_20111026T143206_20111026T152520_503_001_1.nc");
             assertTrue(outputFile.isFile());
-            assertEquals(2519711, outputFile.length());
+            assertEquals(2519783, outputFile.length());
 
             targetFile = NetcdfFileOpener.open(outputFile);
             getVariableVerified("Grid_Point_Latitude", targetFile);

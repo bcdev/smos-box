@@ -205,7 +205,7 @@ public class Dddb {
         final CompoundType type = dataFormat.getType();
 
         final Family<BandDescriptor> bandDescriptors = getBandDescriptors(dataFormat.getName());
-        final Map<String, BandDescriptor> uniqueMemberMap = extractUniqueMembers(bandDescriptors);
+        final Map<String, BandDescriptor> uniqueMemberMap = extractUniqueMembers(bandDescriptors.asList());
 
         extractMembers(type, memberDescriptors);
 
@@ -278,11 +278,10 @@ public class Dddb {
         return null;
     }
 
-    // @todo 2 tb/tb make static and write tests tb 2014-07-11
-    private Map<String, BandDescriptor> extractUniqueMembers(Family<BandDescriptor> bandDescriptors) {
+    // package access for testing only tb 2014-07-14
+    static Map<String, BandDescriptor> extractUniqueMembers(List<BandDescriptor> bandDescriptorsList) {
         final HashMap<String, BandDescriptor> uniqueMemberMap = new HashMap<>();
 
-        final List<BandDescriptor> bandDescriptorsList = bandDescriptors.asList();
         for (BandDescriptor bandDescriptor : bandDescriptorsList) {
             final String memberName = bandDescriptor.getMemberName();
             if (uniqueMemberMap.containsKey(memberName)) {

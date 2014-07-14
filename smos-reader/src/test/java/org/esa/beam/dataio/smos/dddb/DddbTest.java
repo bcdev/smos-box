@@ -21,6 +21,8 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Map;
 import java.util.Properties;
 
 import static org.junit.Assert.*;
@@ -356,5 +358,142 @@ public class DddbTest {
 
         final String key = Dddb.findOriginalName(properties, "the Werner Value");
         assertNull(key);
+    }
+
+    @Test
+    public void testExtractUniqueMemberNames() {
+        final ArrayList<BandDescriptor> descriptors = new ArrayList<>();
+        descriptors.add(new TestBandDescriptor("name"));
+        descriptors.add(new TestBandDescriptor("name_2"));
+        descriptors.add(new TestBandDescriptor("name_3"));
+        descriptors.add(new TestBandDescriptor("name_4"));
+        descriptors.add(new TestBandDescriptor("name_2"));
+        descriptors.add(new TestBandDescriptor("name"));
+
+        final Map<String, BandDescriptor> descriptorMap = Dddb.extractUniqueMembers(descriptors);
+        assertEquals(4, descriptorMap.size());
+        assertTrue(descriptorMap.containsKey("name"));
+        assertTrue(descriptorMap.containsKey("name_2"));
+        assertTrue(descriptorMap.containsKey("name_3"));
+        assertTrue(descriptorMap.containsKey("name_4"));
+    }
+
+    private class TestBandDescriptor implements BandDescriptor {
+
+        private final String memberName;
+
+        private TestBandDescriptor(String memberName) {
+            this.memberName = memberName;
+        }
+
+        @Override
+        public String getBandName() {
+            return null;
+        }
+
+        @Override
+        public String getMemberName() {
+            return memberName;
+        }
+
+        @Override
+        public int getPolarization() {
+            return 0;
+        }
+
+        @Override
+        public boolean isVisible() {
+            return false;
+        }
+
+        @Override
+        public int getSampleModel() {
+            return 0;
+        }
+
+        @Override
+        public double getScalingOffset() {
+            return 0;
+        }
+
+        @Override
+        public double getScalingFactor() {
+            return 0;
+        }
+
+        @Override
+        public boolean hasTypicalMin() {
+            return false;
+        }
+
+        @Override
+        public boolean hasTypicalMax() {
+            return false;
+        }
+
+        @Override
+        public boolean hasFillValue() {
+            return false;
+        }
+
+        @Override
+        public double getTypicalMin() {
+            return 0;
+        }
+
+        @Override
+        public double getTypicalMax() {
+            return 0;
+        }
+
+        @Override
+        public double getFillValue() {
+            return 0;
+        }
+
+        @Override
+        public String getValidPixelExpression() {
+            return null;
+        }
+
+        @Override
+        public String getUnit() {
+            return null;
+        }
+
+        @Override
+        public boolean isCyclic() {
+            return false;
+        }
+
+        @Override
+        public String getDescription() {
+            return null;
+        }
+
+        @Override
+        public String getFlagCodingName() {
+            return null;
+        }
+
+        @Override
+        public Family<FlagDescriptor> getFlagDescriptors() {
+            return null;
+        }
+
+        @Override
+        public boolean isGridPointData() {
+            return false;
+        }
+
+        @Override
+        public String getDimensionNames() {
+            return null;
+        }
+
+        @Override
+        public int getMemberIndex() {
+            return 0;
+        }
     }
 }

@@ -21,8 +21,10 @@ public class VariableDescriptor {
     private String binXName;
     private short[] flagMasks;
     private String flagMeanings;
-    double scaleFactor;
+    private double scaleFactor;
     private boolean scaleFactorPresent;
+    private double scaleOffset;
+    private boolean scaleOffsetPresent;
     private boolean unsigned;
 
     public boolean isUnsigned() {
@@ -91,7 +93,8 @@ public class VariableDescriptor {
         fillValue = Float.NaN;
         validMin = Float.NaN;
         validMax = Float.NaN;
-        scaleFactor = Double.NaN;
+        scaleFactor = 1.0;
+        scaleOffset = 0.0;
     }
 
     public String getName() {
@@ -179,5 +182,18 @@ public class VariableDescriptor {
 
     public boolean isScaleFactorPresent() {
         return scaleFactorPresent;
+    }
+
+    public boolean isScaleOffsetPresent() {
+        return scaleOffsetPresent;
+    }
+
+    public double getScaleOffset() {
+        return scaleOffset;
+    }
+
+    public void setScaleOffset(double scaleOffset) {
+        scaleOffsetPresent = true;
+        this.scaleOffset = scaleOffset;
     }
 }
