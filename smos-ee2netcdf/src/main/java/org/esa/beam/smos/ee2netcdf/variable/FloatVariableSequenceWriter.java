@@ -10,10 +10,12 @@ import java.io.IOException;
 class FloatVariableSequenceWriter extends AbstractVariableWriter {
 
     private final int memberIndex;
+    private final int compoundIndex;
 
-    FloatVariableSequenceWriter(NVariable variable, int arraySize, int memberIndex) {
+    FloatVariableSequenceWriter(NVariable variable, int arraySize, int memberIndex, int compoundIndex) {
         this.variable = variable;
         this.memberIndex = memberIndex;
+        this.compoundIndex = compoundIndex;
         array = Array.factory(new float[arraySize]);
     }
 

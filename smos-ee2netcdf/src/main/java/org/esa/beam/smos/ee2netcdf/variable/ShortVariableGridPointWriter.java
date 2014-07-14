@@ -9,17 +9,17 @@ import java.io.IOException;
 
 class ShortVariableGridPointWriter extends AbstractVariableWriter {
 
-    private final String compoundName;
+    private final int memberIndex;
 
-    ShortVariableGridPointWriter(NVariable variable, String compoundName, int arraySize) {
-        this.compoundName = compoundName;
+    ShortVariableGridPointWriter(NVariable variable, int memberIndex, int arraySize) {
+        this.memberIndex = memberIndex;
         array = Array.factory(new short[arraySize]);
         this.variable = variable;
     }
 
     @Override
     public void write(CompoundData gridPointData, SequenceData btDataList, int index) throws IOException {
-        final short gpShort = gridPointData.getShort(compoundName);
+        final short gpShort = gridPointData.getShort(memberIndex);
         array.setShort(index, gpShort);
     }
 }

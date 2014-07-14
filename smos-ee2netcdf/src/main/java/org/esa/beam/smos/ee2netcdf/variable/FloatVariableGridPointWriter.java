@@ -9,17 +9,17 @@ import java.io.IOException;
 
 class FloatVariableGridPointWriter extends AbstractVariableWriter {
 
-    private final String compoundName;
+    private final int memberIndex;
 
-    FloatVariableGridPointWriter(NVariable variable, String compoundName, int arraySize) {
-        this.compoundName = compoundName;
+    FloatVariableGridPointWriter(NVariable variable, int memberIndex, int arraySize) {
+        this.memberIndex = memberIndex;
         array = Array.factory(new float[arraySize]);
         this.variable = variable;
     }
 
     @Override
     public void write(CompoundData gridPointData, SequenceData btDataList, int index) throws IOException {
-        final float gpFloat = gridPointData.getFloat(compoundName);
+        final float gpFloat = gridPointData.getFloat(memberIndex);
         array.setFloat(index, gpFloat);
     }
 }

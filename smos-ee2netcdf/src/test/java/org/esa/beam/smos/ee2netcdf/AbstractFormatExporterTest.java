@@ -190,4 +190,10 @@ public class AbstractFormatExporterTest {
         } catch (IllegalArgumentException expected) {
         }
     }
+
+    @Test
+    public void testEnsureNetCDFName() {
+         assertEquals("bla_bla_bla", AbstractFormatExporter.ensureNetCDFName("bla_bla_bla"));
+         assertEquals("bla_bla_bla", AbstractFormatExporter.ensureNetCDFName("bla.bla.bla"));
+    }
 }

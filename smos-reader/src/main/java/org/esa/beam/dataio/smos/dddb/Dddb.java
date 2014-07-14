@@ -237,7 +237,8 @@ public class Dddb {
             final BandDescriptor bandDescriptor = uniqueMemberMap.get(memberDescriptorName);
             memberDescriptor.setGridPointData(bandDescriptor.isGridPointData());
             memberDescriptor.setDimensionNames(bandDescriptor.getDimensionNames());
-            memberDescriptor.setMemberIndex(bandDescriptor.getMemberIndex());
+            // @todo 1 tb/tb REMOVE THIS and the stuff in the dddb-band-csv filestb 2014-07-14
+           // memberDescriptor.setMemberIndex(bandDescriptor.getMemberIndex());
 
             final Family<FlagDescriptor> flagDescriptors = bandDescriptor.getFlagDescriptors();
             if (flagDescriptors != null) {
@@ -246,8 +247,8 @@ public class Dddb {
                 final short[] flagMasks = new short[size];
                 final String[] flagMeanings = new String[size];
                 int i = 0;
-                for(final FlagDescriptor flagDescriptor : flagDescriptorsList) {
-                    flagMasks[i] = (short)flagDescriptor.getMask();
+                for (final FlagDescriptor flagDescriptor : flagDescriptorsList) {
+                    flagMasks[i] = (short) flagDescriptor.getMask();
                     flagMeanings[i] = flagDescriptor.getFlagName();
                     ++i;
                 }
@@ -258,9 +259,9 @@ public class Dddb {
             }
 
             memberDescriptor.setUnit(bandDescriptor.getUnit());
-            memberDescriptor.setFillValue((float)bandDescriptor.getFillValue());
-            memberDescriptor.setScalingFactor((float)bandDescriptor.getScalingFactor());
-            memberDescriptor.setScalingOffset((float)bandDescriptor.getScalingOffset());
+            memberDescriptor.setFillValue((float) bandDescriptor.getFillValue());
+            memberDescriptor.setScalingFactor((float) bandDescriptor.getScalingFactor());
+            memberDescriptor.setScalingOffset((float) bandDescriptor.getScalingOffset());
         }
 
         return memberDescriptors;
@@ -298,10 +299,13 @@ public class Dddb {
         for (CompoundMember member : members) {
             final Type subType = member.getType();
 
+            final String memberName = member.getName();
             if (subType.isSimpleType()) {
                 final MemberDescriptor memberDescriptor = new MemberDescriptor();
-                memberDescriptor.setName(member.getName());
+                memberDescriptor.setName(memberName);
                 memberDescriptor.setDataTypeName(subType.getName());
+                final int memberIndex = type.getMemberIndex(memberName);
+                memberDescriptor.setMemberIndex(memberIndex);
                 memberDescriptors.add(memberDescriptor);
             } else if (subType.isCompoundType()) {
                 extractMembers((CompoundType) subType, memberDescriptors);
@@ -310,7 +314,7 @@ public class Dddb {
                 final Type elementType = sequenceType.getElementType();
                 if (elementType.isSimpleType()) {
                     final MemberDescriptor memberDescriptor = new MemberDescriptor();
-                    memberDescriptor.setName(member.getName());
+                    memberDescriptor.setName(memberName);
                     memberDescriptors.add(memberDescriptor);
                 } else if (elementType.isCompoundType()) {
                     extractMembers((CompoundType) elementType, memberDescriptors);

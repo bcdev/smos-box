@@ -70,6 +70,15 @@ public class MemberDescriptorTest {
     }
 
     @Test
+    public void testSetGetCompoundIndex() {
+        descriptor.setCompoundIndex(3);
+        assertEquals(3, descriptor.getCompoundIndex());
+
+        descriptor.setCompoundIndex(-6);
+        assertEquals(-6, descriptor.getCompoundIndex());
+    }
+
+    @Test
     public void testSetGetFlagMasks() {
         final short[] masks = {2, 4, 6};
 

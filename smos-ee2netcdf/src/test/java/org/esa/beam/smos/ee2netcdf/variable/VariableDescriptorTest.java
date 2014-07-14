@@ -3,9 +3,7 @@ package org.esa.beam.smos.ee2netcdf.variable;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class VariableDescriptorTest {
 
@@ -64,6 +62,15 @@ public class VariableDescriptorTest {
         variableDescriptor.setScaleOffset(986.0);
         assertTrue(variableDescriptor.isScaleOffsetPresent());
         assertEquals(986.0, variableDescriptor.getScaleOffset(), 1e-8);
+    }
+
+    @Test
+    public void testSetGetCompoundIndex() {
+        variableDescriptor.setCompoundIndex(3);
+        assertEquals(3, variableDescriptor.getCompoundIndex());
+
+        variableDescriptor.setCompoundIndex(19);
+        assertEquals(19, variableDescriptor.getCompoundIndex());
     }
 
     @Test

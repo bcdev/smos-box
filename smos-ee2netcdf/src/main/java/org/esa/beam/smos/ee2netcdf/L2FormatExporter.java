@@ -28,8 +28,6 @@ class L2FormatExporter extends AbstractFormatExporter {
 
         memberDescriptors = Dddb.getInstance().getMemberDescriptors(explorerFile.getHeaderFile());
         createVariableDescriptors(exportParameter);
-
-        createVariableDescriptors(exportParameter);
     }
 
     @Override
@@ -63,14 +61,15 @@ class L2FormatExporter extends AbstractFormatExporter {
             final String memberDescriptorName = memberDescriptor.getName();
             if (mustExport(memberDescriptorName, outputBandNames)) {
                 final String dimensionNames = memberDescriptor.getDimensionNames();
-                System.out.println(memberDescriptorName);
                 final int numDimensions = getNumDimensions(dimensionNames);
-                final VariableDescriptor variableDescriptor = new VariableDescriptor(memberDescriptorName,
+                final String variableName = ensureNetCDFName(memberDescriptorName);
+                final VariableDescriptor variableDescriptor = new VariableDescriptor(variableName,
                         memberDescriptor.isGridPointData(),
                         DataType.OBJECT,
                         dimensionNames,
                         numDimensions == 2,
-                        memberDescriptor.getMemberIndex());
+                        memberDescriptor.getMemberIndex(),
+                        memberDescriptor.getCompoundIndex());
 
                 setDataType(variableDescriptor, memberDescriptor.getDataTypeName());
 
@@ -98,7 +97,7 @@ class L2FormatExporter extends AbstractFormatExporter {
                     variableDescriptor.setFlagMeanings(memberDescriptor.getFlagMeanings());
                 }
 
-                variableDescriptors.put(memberDescriptorName, variableDescriptor);
+                variableDescriptors.put(variableName, variableDescriptor);
             }
         }
     }

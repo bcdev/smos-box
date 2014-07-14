@@ -35,6 +35,7 @@ public class DddbTest {
     private static final String DBL_SM_XXXX_MIR_SMDAP2_0300 = "DBL_SM_XXXX_MIR_SMDAP2_0300";
     private static final String DBL_SM_XXXX_MIR_OSDAP2_0200 = "DBL_SM_XXXX_MIR_OSDAP2_0200";
     private static final String DBL_SM_XXXX_MIR_OSDAP2_0300 = "DBL_SM_XXXX_MIR_OSDAP2_0300";
+    private static final String DBL_SM_XXXX_MIR_OSUDP2_0200 = "DBL_SM_XXXX_MIR_OSUDP2_0200";
     private static final String DBL_SM_XXXX_MIR_OSUDP2_0300 = "DBL_SM_XXXX_MIR_OSUDP2_0300";
     private static final String DBL_SM_XXXX_MIR_SMUDP2_0200 = "DBL_SM_XXXX_MIR_SMUDP2_0200";
     private Dddb dddb;
@@ -178,6 +179,18 @@ public class DddbTest {
     }
 
     @Test
+    public void testGetOSUDP2_v0200Descriptors() {
+        final Family<BandDescriptor> descriptors = dddb.getBandDescriptors(DBL_SM_XXXX_MIR_OSUDP2_0200);
+        assertEquals(64, descriptors.asList().size());
+
+        final BandDescriptor dg_num_meas_l1c = descriptors.getMember("Dg_num_meas_L1c");
+        assertNotNull(dg_num_meas_l1c);
+
+        final BandDescriptor a_card = descriptors.getMember("Acard");
+        assertNotNull(a_card);
+    }
+
+    @Test
     public void testGetSMUPD2_v0200Descriptors() {
         final Family<BandDescriptor> descriptors = dddb.getBandDescriptors(DBL_SM_XXXX_MIR_SMUDP2_0200);
         assertEquals(66, descriptors.asList().size());
@@ -274,7 +287,7 @@ public class DddbTest {
         assertTrue(gridPointIdDescriptor.isGridPointData());
         assertEquals("uint", gridPointIdDescriptor.getDataTypeName());
         assertEquals("n_grid_points", gridPointIdDescriptor.getDimensionNames());
-        assertEquals(-1, gridPointIdDescriptor.getMemberIndex());
+        assertEquals(0, gridPointIdDescriptor.getMemberIndex());
         assertEquals("", gridPointIdDescriptor.getUnit());
         assertEquals(Float.NaN, gridPointIdDescriptor.getFillValue(), 1e-8);
         assertEquals(1.0f, gridPointIdDescriptor.getScalingFactor(), 1e-8);
@@ -287,7 +300,7 @@ public class DddbTest {
         assertTrue(latitudeDescriptor.isGridPointData());
         assertEquals("float", latitudeDescriptor.getDataTypeName());
         assertEquals("n_grid_points", latitudeDescriptor.getDimensionNames());
-        assertEquals(-1, latitudeDescriptor.getMemberIndex());
+        assertEquals(1, latitudeDescriptor.getMemberIndex());
         assertEquals("deg", latitudeDescriptor.getUnit());
         assertEquals(Float.NaN, latitudeDescriptor.getFillValue(), 1e-8);
         assertEquals(1.0f, latitudeDescriptor.getScalingFactor(), 1e-8);
@@ -299,7 +312,7 @@ public class DddbTest {
         assertTrue(longitudeDescriptor.isGridPointData());
         assertEquals("float", longitudeDescriptor.getDataTypeName());
         assertEquals("n_grid_points", longitudeDescriptor.getDimensionNames());
-        assertEquals(-1, longitudeDescriptor.getMemberIndex());
+        assertEquals(2, longitudeDescriptor.getMemberIndex());
         assertEquals("deg", longitudeDescriptor.getUnit());
         assertEquals(Float.NaN, longitudeDescriptor.getFillValue(), 1e-8);
         assertEquals(1.0f, longitudeDescriptor.getScalingFactor(), 1e-8);
@@ -311,7 +324,7 @@ public class DddbTest {
         assertTrue(altitudeDescriptor.isGridPointData());
         assertEquals("float", altitudeDescriptor.getDataTypeName());
         assertEquals("n_grid_points", altitudeDescriptor.getDimensionNames());
-        assertEquals(-1, altitudeDescriptor.getMemberIndex());
+        assertEquals(3, altitudeDescriptor.getMemberIndex());
         assertEquals("m", altitudeDescriptor.getUnit());
         assertEquals(Float.NaN, altitudeDescriptor.getFillValue(), 1e-8);
         assertEquals(1.0f, altitudeDescriptor.getScalingFactor(), 1e-8);
@@ -322,7 +335,7 @@ public class DddbTest {
         assertTrue(maskDescriptor.isGridPointData());
         assertEquals("ubyte", maskDescriptor.getDataTypeName());
         assertEquals("n_grid_points", maskDescriptor.getDimensionNames());
-        assertEquals(-1, maskDescriptor.getMemberIndex());
+        assertEquals(4, maskDescriptor.getMemberIndex());
         assertEquals("", maskDescriptor.getUnit());
         assertEquals(Float.NaN, maskDescriptor.getFillValue(), 1e-8);
         assertEquals(1.0f, maskDescriptor.getScalingFactor(), 1e-8);
@@ -333,7 +346,7 @@ public class DddbTest {
         assertTrue(btCountDescriptor.isGridPointData());
         assertEquals("ubyte", btCountDescriptor.getDataTypeName());
         assertEquals("n_grid_points", btCountDescriptor.getDimensionNames());
-        assertEquals(-1, btCountDescriptor.getMemberIndex());
+        assertEquals(5, btCountDescriptor.getMemberIndex());
         assertEquals("", btCountDescriptor.getUnit());
         assertEquals(Float.NaN, btCountDescriptor.getFillValue(), 1e-8);
         assertEquals(1.0f, btCountDescriptor.getScalingFactor(), 1e-8);

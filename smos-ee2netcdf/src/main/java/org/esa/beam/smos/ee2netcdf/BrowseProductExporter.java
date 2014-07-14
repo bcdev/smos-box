@@ -90,7 +90,8 @@ class BrowseProductExporter extends AbstractFormatExporter {
                         DataType.OBJECT,
                         dimensionNames,
                         numDimensions == 2,
-                        memberDescriptor.getMemberIndex());
+                        memberDescriptor.getMemberIndex(),
+                        memberDescriptor.getCompoundIndex());
 
                 setDataType(variableDescriptor, memberDescriptor.getDataTypeName());
 

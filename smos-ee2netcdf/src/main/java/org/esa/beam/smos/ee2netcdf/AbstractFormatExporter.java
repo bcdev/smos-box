@@ -198,4 +198,8 @@ abstract class AbstractFormatExporter implements FormatExporter {
         final String[] splittednames = StringUtils.split(dimensionNames, ' ');
         return splittednames.length;
     }
+
+    static String ensureNetCDFName(String variableName) {
+        return variableName.replace(".", "_");
+    }
 }

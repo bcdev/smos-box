@@ -10,16 +10,16 @@ import java.io.IOException;
 
 class IntVariableGridPointWriter extends AbstractVariableWriter {
 
-    private final String compoundName;
+    private final int memberIndex;
 
-    IntVariableGridPointWriter(NVariable variable, String compoundName, int arraySize) {
-        this.compoundName = compoundName;
+    IntVariableGridPointWriter(NVariable variable, int memberIndex, int arraySize) {
+        this.memberIndex = memberIndex;
         array = Array.factory(new int[arraySize]);
         this.variable = variable;
     }
 
     public void write(CompoundData gridPointData, SequenceData btDataList, int index) throws IOException {
-        final int gpInt = gridPointData.getInt(compoundName);
+        final int gpInt = gridPointData.getInt(memberIndex);
         array.setInt(index, gpInt);
     }
 }

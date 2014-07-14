@@ -56,7 +56,7 @@ class L1CProductExporter extends AbstractFormatExporter {
     void createVariableDescriptors(ExportParameter exportParameter) {
         variableDescriptors = new HashMap<>();
 
-        final VariableDescriptor gpIdDescriptor = new VariableDescriptor("Grid_Point_ID", true, DataType.INT, "n_grid_points", false, -1);
+        final VariableDescriptor gpIdDescriptor = new VariableDescriptor("Grid_Point_ID", true, DataType.INT, "n_grid_points", false, -1, -1);
         gpIdDescriptor.setUnsigned(true);
         variableDescriptors.put("grid_point_id", gpIdDescriptor);
     }

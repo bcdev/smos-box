@@ -355,7 +355,7 @@ public class GPToNetCDFExporterOpIntegrationTest {
 
             final File outputFile = new File(targetDirectory, "SM_OPER_MIR_OSUDP2_20091204T001853_20091204T011255_310_001_1.nc");
             assertTrue(outputFile.isFile());
-            assertEquals(3398114, outputFile.length());
+            assertEquals(7245774, outputFile.length());
 
             targetFile = NetcdfFileOpener.open(outputFile);
 
@@ -372,109 +372,56 @@ public class GPToNetCDFExporterOpIntegrationTest {
 
             assertGridPointIdVariable(targetFile, 584, new int[]{7188459, 7188465});
 
-            final Variable latVariable = getVariableVerified("lat", targetFile);
+            final Variable latVariable = getVariableVerified("Latitude", targetFile);
             assertEquals(DataType.FLOAT, latVariable.getDataType());
-            assertAttribute("units", "degrees_north", latVariable);
+            assertAttribute("units", "deg", latVariable);
             assertAttribute("_FillValue", -999.0, latVariable);
-            assertAttribute("valid_min", -90.0, latVariable);
-            assertAttribute("valid_max", 90.0, latVariable);
-            assertAttribute("original_name", "Latitude", latVariable);
-            assertAttribute("standard_name", "latitude", latVariable);
             assertNoAttribute("_Unsigned", latVariable);
             Array array = latVariable.read(new int[]{672}, new int[]{2});
             assertEquals(-76.871002197, array.getFloat(0), 1e-8);
             assertEquals(-76.870002747, array.getFloat(1), 1e-8);
 
-            final Variable lonVariable = getVariableVerified("lon", targetFile);
+            final Variable lonVariable = getVariableVerified("Longitude", targetFile);
             assertEquals(DataType.FLOAT, lonVariable.getDataType());
-            assertAttribute("units", "degrees_east", lonVariable);
+            assertAttribute("units", "deg", lonVariable);
             assertAttribute("_FillValue", -999.0, lonVariable);
-            assertAttribute("valid_min", -180.0, lonVariable);
-            assertAttribute("valid_max", 180.0, lonVariable);
-            assertAttribute("original_name", "Longitude", lonVariable);
-            assertAttribute("standard_name", "longitude", lonVariable);
             assertNoAttribute("_Unsigned", lonVariable);
             array = lonVariable.read(new int[]{718}, new int[]{2});
             assertEquals(168.957000732, array.getFloat(0), 1e-8);
             assertEquals(160.537002563, array.getFloat(1), 1e-8);
 
-            final Variable ftprtDiamVariable = getVariableVerified("equiv_ftprt_diam", targetFile);
-            assertEquals(DataType.FLOAT, ftprtDiamVariable.getDataType());
-            assertAttribute("units", "m", ftprtDiamVariable);
-            assertAttribute("_FillValue", -999.0, ftprtDiamVariable);
-            array = ftprtDiamVariable.read(new int[]{837}, new int[]{2});
+            final Variable equiv_ftprt_diam = getVariableVerified("Equiv_ftprt_diam", targetFile);
+            assertEquals(DataType.FLOAT, equiv_ftprt_diam.getDataType());
+            assertAttribute("units", "m", equiv_ftprt_diam);
+            assertAttribute("_FillValue", -999.0, equiv_ftprt_diam);
+            array = equiv_ftprt_diam.read(new int[]{819}, new int[]{2});
             assertEquals(-999.0, array.getFloat(0), 1e-8);
             assertEquals(-999.0, array.getFloat(1), 1e-8);
 
-            final Variable acqTimeVariable = getVariableVerified("mean_acq_time", targetFile);
-            assertEquals(DataType.FLOAT, acqTimeVariable.getDataType());
-            assertAttribute("units", "dd", acqTimeVariable);
-            assertAttribute("_FillValue", -999.0, acqTimeVariable);
-            array = acqTimeVariable.read(new int[]{923}, new int[]{2});
-            assertEquals(-999.0, array.getFloat(0), 1e-8);
-            assertEquals(-999.0, array.getFloat(1), 1e-8);
+            final Variable mean_acq_time = getVariableVerified("Mean_acq_time", targetFile);
+            assertEquals(DataType.FLOAT, mean_acq_time.getDataType());
+            assertAttribute("units", "dd", mean_acq_time);
+            assertAttribute("_FillValue", -999.0, mean_acq_time);
+            array = mean_acq_time.read(new int[]{920}, new int[]{2});
+            assertEquals(3625.015869140625, array.getFloat(0), 1e-8);
+            assertEquals(3625.015869140625, array.getFloat(1), 1e-8);
 
-            final Variable sss1Variable = getVariableVerified("sss1", targetFile);
-            assertEquals(DataType.FLOAT, sss1Variable.getDataType());
-            assertAttribute("units", "psu", sss1Variable);
-            assertAttribute("_FillValue", -999.0, sss1Variable);
-            array = sss1Variable.read(new int[]{1062}, new int[]{2});
-            assertEquals(-999.0, array.getFloat(0), 1e-8);
-            assertEquals(-999.0, array.getFloat(1), 1e-8);
+            final Variable sss1 = getVariableVerified("SSS1", targetFile);
+            assertEquals(DataType.FLOAT, sss1.getDataType());
+            assertAttribute("units", "psu", sss1);
+            assertAttribute("_FillValue", -999.0, sss1);
+            array = sss1.read(new int[]{10021}, new int[]{2});
+            assertEquals(69.771240234375, array.getFloat(0), 1e-8);
+            assertEquals(-4.7435197830200195, array.getFloat(1), 1e-8);
 
-            final Variable sigmaSss1Variable = getVariableVerified("sigma_sss1", targetFile);
-            assertEquals(DataType.FLOAT, sigmaSss1Variable.getDataType());
-            assertAttribute("units", "psu", sigmaSss1Variable);
-            assertAttribute("_FillValue", -999.0, sigmaSss1Variable);
-            array = sigmaSss1Variable.read(new int[]{1173}, new int[]{2});
-            assertEquals(-999.0, array.getFloat(0), 1e-8);
-            assertEquals(-999.0, array.getFloat(1), 1e-8);
+            final Variable sigma_sss1 = getVariableVerified("Sigma_SSS1", targetFile);
+            assertEquals(DataType.FLOAT, sigma_sss1.getDataType());
+            assertAttribute("units", "psu", sigma_sss1);
+            assertAttribute("_FillValue", -999.0, sigma_sss1);
+            array = sigma_sss1.read(new int[]{10022}, new int[]{2});
+            assertEquals(7.676535129547119, array.getFloat(0), 1e-8);
+            assertEquals(66.9095687866211, array.getFloat(1), 1e-8);
 
-            final Variable sss2Variable = getVariableVerified("sss2", targetFile);
-            assertEquals(DataType.FLOAT, sss2Variable.getDataType());
-            assertAttribute("units", "psu", sss2Variable);
-            assertAttribute("_FillValue", -999.0, sss2Variable);
-            array = sss2Variable.read(new int[]{1216}, new int[]{2});
-            assertEquals(-999.0, array.getFloat(0), 1e-8);
-            assertEquals(-999.0, array.getFloat(1), 1e-8);
-
-            final Variable sigmaSss2Variable = getVariableVerified("sigma_sss2", targetFile);
-            assertEquals(DataType.FLOAT, sigmaSss2Variable.getDataType());
-            assertAttribute("units", "psu", sigmaSss2Variable);
-            assertAttribute("_FillValue", -999.0, sigmaSss2Variable);
-            array = sigmaSss2Variable.read(new int[]{1382}, new int[]{2});
-            assertEquals(-999.0, array.getFloat(0), 1e-8);
-            assertEquals(-999.0, array.getFloat(1), 1e-8);
-
-            final Variable sss3Variable = getVariableVerified("sss3", targetFile);
-            assertEquals(DataType.FLOAT, sss3Variable.getDataType());
-            assertAttribute("units", "psu", sss3Variable);
-            assertAttribute("_FillValue", -999.0, sss3Variable);
-            array = sss3Variable.read(new int[]{1428}, new int[]{2});
-            assertEquals(-999.0, array.getFloat(0), 1e-8);
-            assertEquals(-999.0, array.getFloat(1), 1e-8);
-
-            final Variable sigmaSss3Variable = getVariableVerified("sigma_sss3", targetFile);
-            assertEquals(DataType.FLOAT, sigmaSss3Variable.getDataType());
-            assertAttribute("units", "psu", sigmaSss3Variable);
-            assertAttribute("_FillValue", -999.0, sigmaSss3Variable);
-            array = sigmaSss3Variable.read(new int[]{1527}, new int[]{2});
-            assertEquals(-999.0, array.getFloat(0), 1e-8);
-            assertEquals(-999.0, array.getFloat(1), 1e-8);
-
-            final Variable aCardVariable = getVariableVerified("a_card", targetFile);
-            assertEquals(DataType.FLOAT, aCardVariable.getDataType());
-            assertAttribute("_FillValue", -999.0, aCardVariable);
-            array = aCardVariable.read(new int[]{1694}, new int[]{2});
-            assertEquals(-999.0, array.getFloat(0), 1e-8);
-            assertEquals(-999.0, array.getFloat(1), 1e-8);
-
-            final Variable sigmaACardVariable = getVariableVerified("sigma_a_card", targetFile);
-            assertEquals(DataType.FLOAT, sigmaACardVariable.getDataType());
-            assertAttribute("_FillValue", -999.0, sigmaACardVariable);
-            array = sigmaACardVariable.read(new int[]{1762}, new int[]{2});
-            assertEquals(-999.0, array.getFloat(0), 1e-8);
-            assertEquals(-999.0, array.getFloat(1), 1e-8);
         } finally {
             if (product != null) {
                 product.dispose();

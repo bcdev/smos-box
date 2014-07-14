@@ -16,6 +16,7 @@ public class MemberDescriptor {
     private float scalingFactor;
     private float scalingOffset;
     private String binXName;
+    private int compoundIndex;
 
     public String getName() {
         return name;
@@ -119,5 +120,13 @@ public class MemberDescriptor {
 
     public String getBinXName() {
         return binXName;
+    }
+
+    public void setCompoundIndex(int compoundIndex) {
+        this.compoundIndex = compoundIndex;
+    }
+
+    public int getCompoundIndex() {
+        return compoundIndex;
     }
 }

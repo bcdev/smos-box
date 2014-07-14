@@ -108,6 +108,16 @@ public class VariableWriterFactoryTest {
     }
 
     @Test
+    public void testCreateByteVariableSequenceWriter() {
+        variableDescriptor.setDataType(DataType.BYTE);
+        variableDescriptor.setIs2d(false);
+        variableDescriptor.setGridPointData(false);
+
+        final VariableWriter writer = VariableWriterFactory.create(nVariable, variableDescriptor, 21, 22);
+        assertTrue(writer instanceof ByteVariableSequenceWriter);
+    }
+
+    @Test
     public void testCreateVariableWithUnsupportedDataTypeThrowsException() {
         variableDescriptor.setDataType(DataType.BOOLEAN);
         variableDescriptor.setGridPointData(true);

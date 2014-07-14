@@ -39,11 +39,12 @@ public class BandDescriptorImplTest {
         assertTrue(descriptor.isGridPointData());
         assertNull(descriptor.getDimensionNames());
         assertEquals(-1, descriptor.getMemberIndex());
+        assertEquals(-1, descriptor.getCompundIndex());
     }
 
     @Test
     public void testConstruction_extendedPropertySet() {
-        final String[] tokens = new String[] {"false", "theBand", "theMember", "18", "19", "20.0", "21.1", "22.2", "23.3", "true", "24.4", "pixelExpression", "unit", "description", "codingName", "flagDescriptors", "false", "dimension_name", "3"};
+        final String[] tokens = new String[] {"false", "theBand", "theMember", "18", "19", "20.0", "21.1", "22.2", "23.3", "true", "24.4", "pixelExpression", "unit", "description", "codingName", "flagDescriptors", "false", "dimension_name", "3", "4"};
         final Dddb dddb = mock(Dddb.class);
         when(dddb.getFlagDescriptors(anyString())).thenReturn(new FlagDescriptors(new ArrayList<String[]>()));
 
@@ -67,6 +68,7 @@ public class BandDescriptorImplTest {
         assertFalse(descriptor.isGridPointData());
         assertEquals("dimension_name", descriptor.getDimensionNames());
         assertEquals(3, descriptor.getMemberIndex());
+        assertEquals(4, descriptor.getCompundIndex());
     }
 
     @Test
@@ -93,11 +95,12 @@ public class BandDescriptorImplTest {
         assertTrue(descriptor.isGridPointData());
         assertNull(descriptor.getDimensionNames());
         assertEquals(-1, descriptor.getMemberIndex());
+        assertEquals(-1, descriptor.getCompundIndex());
     }
 
     @Test
     public void testConstruction_withDefaults_extendedPropertySet() {
-        final String[] tokens = new String[] {"*", "theBand", "*", "*", "*", "*", "*", "*", "*", "*", "*", "pixelExpression", "*", "*", "*", "flagDescriptors", "*", "*", "*"};
+        final String[] tokens = new String[] {"*", "theBand", "*", "*", "*", "*", "*", "*", "*", "*", "*", "pixelExpression", "*", "*", "*", "flagDescriptors", "*", "*", "*", "*"};
         final Dddb dddb = mock(Dddb.class);
 
         final BandDescriptorImpl descriptor = new BandDescriptorImpl(tokens, dddb);
@@ -119,5 +122,6 @@ public class BandDescriptorImplTest {
         assertTrue(descriptor.isGridPointData());
         assertNull(descriptor.getDimensionNames());
         assertEquals(-1, descriptor.getMemberIndex());
+        assertEquals(-1, descriptor.getCompundIndex());
     }
 }
