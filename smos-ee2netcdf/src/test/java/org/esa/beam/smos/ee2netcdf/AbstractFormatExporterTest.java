@@ -141,6 +141,16 @@ public class AbstractFormatExporterTest {
     }
 
     @Test
+    public void testSetDataType_Int() {
+        final VariableDescriptor variableDescriptor = new VariableDescriptor();
+
+        AbstractFormatExporter.setDataType(variableDescriptor, "int");
+
+        assertEquals(DataType.INT, variableDescriptor.getDataType());
+        assertFalse(variableDescriptor.isUnsigned());
+    }
+
+    @Test
     public void testSetDataType_Float() {
         final VariableDescriptor variableDescriptor = new VariableDescriptor();
 

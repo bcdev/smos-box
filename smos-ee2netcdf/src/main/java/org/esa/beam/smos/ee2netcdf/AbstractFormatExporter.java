@@ -6,6 +6,9 @@ import org.esa.beam.dataio.netcdf.nc.NFileWriteable;
 import org.esa.beam.dataio.netcdf.nc.NVariable;
 import org.esa.beam.dataio.smos.SmosFile;
 import org.esa.beam.dataio.smos.SmosProductReader;
+import org.esa.beam.dataio.smos.dddb.Dddb;
+import org.esa.beam.dataio.smos.dddb.Family;
+import org.esa.beam.dataio.smos.dddb.MemberDescriptor;
 import org.esa.beam.framework.datamodel.MetadataAttribute;
 import org.esa.beam.framework.datamodel.MetadataElement;
 import org.esa.beam.framework.datamodel.Product;
@@ -23,6 +26,7 @@ abstract class AbstractFormatExporter implements FormatExporter {
     protected int gridPointCount;
     protected SmosFile explorerFile;
     protected Map<String, VariableDescriptor> variableDescriptors;
+    private Family<MemberDescriptor> memberDescriptors;
 
     protected static boolean mustExport(String bandName, List<String> outputBandNames) {
         return outputBandNames.isEmpty() || outputBandNames.contains(bandName);
@@ -32,6 +36,9 @@ abstract class AbstractFormatExporter implements FormatExporter {
     public void initialize(Product product, ExportParameter exportParameter) throws IOException {
         explorerFile = getSmosFile(product);
         gridPointCount = explorerFile.getGridPointCount();
+
+        memberDescriptors = Dddb.getInstance().getMemberDescriptors(explorerFile.getHeaderFile());
+        createVariableDescriptors(exportParameter);
     }
 
     @Override
@@ -104,9 +111,56 @@ abstract class AbstractFormatExporter implements FormatExporter {
     @Override
     abstract public void addDimensions(NFileWriteable nFileWriteable) throws IOException;
 
-    // @todo 3 tb/tb rethink this. I want to force derived classes to implement this method - as a reminder to create the map.
-    // But the method should be private ... tb 014-04-11
-    abstract void createVariableDescriptors(ExportParameter exportParameter) throws IOException;
+    void createVariableDescriptors(ExportParameter exportParameter) {
+        variableDescriptors = new HashMap<>();
+
+        final List<String> outputBandNames = exportParameter.getOutputBandNames();
+
+        final List<MemberDescriptor> memberDescriptorList = memberDescriptors.asList();
+        for (final MemberDescriptor memberDescriptor : memberDescriptorList) {
+            final String memberDescriptorName = memberDescriptor.getName();
+            if (mustExport(memberDescriptorName, outputBandNames)) {
+                final String dimensionNames = memberDescriptor.getDimensionNames();
+                final int numDimensions = getNumDimensions(dimensionNames);
+                final String variableName = ensureNetCDFName(memberDescriptorName);
+                final VariableDescriptor variableDescriptor = new VariableDescriptor(variableName,
+                        memberDescriptor.isGridPointData(),
+                        DataType.OBJECT,
+                        dimensionNames,
+                        numDimensions == 2,
+                        memberDescriptor.getMemberIndex(),
+                        memberDescriptor.getCompoundIndex());
+
+                setDataType(variableDescriptor, memberDescriptor.getDataTypeName());
+
+                variableDescriptor.setBinXName(memberDescriptor.getBinXName());
+
+                variableDescriptor.setUnit(memberDescriptor.getUnit());
+                variableDescriptor.setFillValue(memberDescriptor.getFillValue());
+                // @todo 2 tb/tb valid min
+                // @todo 2 tb/tb valid max
+
+                final float scalingFactor = memberDescriptor.getScalingFactor();
+                if (scalingFactor != 1.0) {
+                    variableDescriptor.setScaleFactor(scalingFactor);
+                }
+
+                final float scalingOffset = memberDescriptor.getScalingOffset();
+                if (scalingOffset != 0.0) {
+                    variableDescriptor.setScaleOffset(memberDescriptor.getScalingOffset());
+                }
+
+                final short[] flagMasks = memberDescriptor.getFlagMasks();
+                if (flagMasks != null) {
+                    variableDescriptor.setFlagMasks(memberDescriptor.getFlagMasks());
+                    variableDescriptor.setFlagValues(memberDescriptor.getFlagValues());
+                    variableDescriptor.setFlagMeanings(memberDescriptor.getFlagMeanings());
+                }
+
+                variableDescriptors.put(variableName, variableDescriptor);
+            }
+        }
+    }
 
     // package access for testing only tb 2014-07-01
     static Properties extractMetadata(MetadataElement root) {
@@ -178,6 +232,8 @@ abstract class AbstractFormatExporter implements FormatExporter {
         if ("uint".equalsIgnoreCase(dataTypeName)) {
             variableDescriptor.setDataType(DataType.INT);
             variableDescriptor.setUnsigned(true);
+        } else if ("int".equalsIgnoreCase(dataTypeName)) {
+            variableDescriptor.setDataType(DataType.INT);
         } else if ("float".equalsIgnoreCase(dataTypeName)) {
             variableDescriptor.setDataType(DataType.FLOAT);
         } else if ("ubyte".equalsIgnoreCase(dataTypeName)) {

@@ -292,6 +292,48 @@ public class GPToNetCDFExporterOpIntegrationTest {
     }
 
     @Test
+    public void testConvert_BWSD1C_withBandSubset() throws IOException, InvalidRangeException, ParseException {
+        final File file = TestHelper.getResourceFile("SM_OPER_MIR_BWLF1C_20111026T143206_20111026T152520_503_001_1.zip");
+
+        Product product = null;
+        NetcdfFile targetFile = null;
+        try {
+            product = ProductIO.readProduct(file);
+
+            final HashMap<String, Object> parameterMap = createDefaultParameterMap();
+            parameterMap.put("outputBandNames", "Grid_Point_Latitude,Grid_Point_Longitude,BT_Value,Azimuth_Angle");
+            GPF.createProduct(GPToNetCDFExporterOp.ALIAS,
+                    parameterMap,
+                    new Product[]{product});
+
+            final File outputFile = new File(targetDirectory, "SM_OPER_MIR_BWLF1C_20111026T143206_20111026T152520_503_001_1.nc");
+            assertTrue(outputFile.isFile());
+            assertEquals(2519783, outputFile.length());
+
+            targetFile = NetcdfFileOpener.open(outputFile);
+            getVariableVerified("Grid_Point_Latitude", targetFile);
+            getVariableVerified("Grid_Point_Longitude", targetFile);
+            getVariableVerified("BT_Value", targetFile);
+            getVariableVerified("Azimuth_Angle", targetFile);
+
+            final Variable gridPointAltitude = getVariable("Grid_Point_Altitude", targetFile);
+            assertNull(gridPointAltitude);
+
+            final Variable footprintAxis1 = getVariable("Footprint_Axis1", targetFile);
+            assertNull(footprintAxis1);
+
+        } finally {
+            if (product != null) {
+                product.dispose();
+            }
+
+            if (targetFile != null) {
+                targetFile.close();
+            }
+        }
+    }
+
+    @Test
     @Ignore
     public void testExportSCLF1C_withSourceProductPaths() throws IOException, ParseException, InvalidRangeException {
         final File file = TestHelper.getResourceFile("SM_REPB_MIR_SCLF1C_20110201T151254_20110201T151308_505_152_1.zip");
@@ -434,8 +476,8 @@ public class GPToNetCDFExporterOpIntegrationTest {
     }
 
     @Test
-    public void testConvert_BWSD1C_withBandSubset() throws IOException, InvalidRangeException, ParseException {
-        final File file = TestHelper.getResourceFile("SM_OPER_MIR_BWLF1C_20111026T143206_20111026T152520_503_001_1.zip");
+    public void testExportSMUDP2() throws IOException, ParseException, InvalidRangeException {
+        final File file = TestHelper.getResourceFile("SM_OPEB_MIR_SMUDP2_20140413T185915_20140413T195227_551_026_1.zip");
 
         Product product = null;
         NetcdfFile targetFile = null;
@@ -443,26 +485,42 @@ public class GPToNetCDFExporterOpIntegrationTest {
             product = ProductIO.readProduct(file);
 
             final HashMap<String, Object> parameterMap = createDefaultParameterMap();
-            parameterMap.put("outputBandNames", "Grid_Point_Latitude,Grid_Point_Longitude,BT_Value,Azimuth_Angle");
             GPF.createProduct(GPToNetCDFExporterOp.ALIAS,
                     parameterMap,
                     new Product[]{product});
 
-            final File outputFile = new File(targetDirectory, "SM_OPER_MIR_BWLF1C_20111026T143206_20111026T152520_503_001_1.nc");
+            final File outputFile = new File(targetDirectory, "SM_OPEB_MIR_SMUDP2_20140413T185915_20140413T195227_551_026_1.nc");
             assertTrue(outputFile.isFile());
-            assertEquals(2519783, outputFile.length());
+            assertEquals(676066, outputFile.length());
 
             targetFile = NetcdfFileOpener.open(outputFile);
-            getVariableVerified("Grid_Point_Latitude", targetFile);
-            getVariableVerified("Grid_Point_Longitude", targetFile);
-            getVariableVerified("BT_Value", targetFile);
-            getVariableVerified("Azimuth_Angle", targetFile);
 
-            final Variable gridPointAltitude = getVariable("Grid_Point_Altitude", targetFile);
-            assertNull(gridPointAltitude);
+            final int numGridPoints = 157;
+            final ExportParameter exportParameter = new ExportParameter();
+            assertCorrectGlobalAttributes(targetFile, numGridPoints, exportParameter);
 
-            final Variable footprintAxis1 = getVariable("Footprint_Axis1", targetFile);
-            assertNull(footprintAxis1);
+            assertDimension("n_grid_points", numGridPoints, targetFile);
+            assertNoDimension("n_bt_data", targetFile);
+            assertNoDimension("n_radiometric_accuracy", targetFile);
+            assertNoDimension("n_snapshots", targetFile);
+
+            assertGridPointIdVariable(targetFile, 131, new int[]{2002428, 2002941});
+
+            final Variable latVariable = getVariableVerified("Latitude", targetFile);
+            assertEquals(DataType.FLOAT, latVariable.getDataType());
+            assertAttribute("units", "deg", latVariable);
+            assertAttribute("_FillValue", -999.0, latVariable);
+            Array array = latVariable.read(new int[]{130}, new int[]{2});
+            assertEquals(43.858001708984375, array.getFloat(0), 1e-8);
+            assertEquals(43.86000061035156, array.getFloat(1), 1e-8);
+
+            final Variable lonVariable = getVariableVerified("Longitude", targetFile);
+            assertEquals(DataType.FLOAT, lonVariable.getDataType());
+            assertAttribute("units", "deg", lonVariable);
+            assertAttribute("_FillValue", -999.0, lonVariable);
+            array = lonVariable.read(new int[]{129}, new int[]{2});
+            assertEquals(-1.8890000581741333, array.getFloat(0), 1e-8);
+            assertEquals(-1.6920000314712524, array.getFloat(1), 1e-8);
 
         } finally {
             if (product != null) {
