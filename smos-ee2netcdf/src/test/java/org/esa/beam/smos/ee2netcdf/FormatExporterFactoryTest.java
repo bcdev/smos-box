@@ -15,13 +15,13 @@ public class FormatExporterFactoryTest {
     @Test
     public void testCreateExporterForBrowseProduct() throws IOException {
         final FormatExporter exporter = FormatExporterFactory.create("SM_OPER_MIR_BWLF1C_20111026T143206_20111026T152520_503_001_1.zip");
-        assertThat(exporter, is(instanceOf(BrowseProductExporter.class)));
+        assertThat(exporter, is(instanceOf(BrowseFormatExporter.class)));
     }
 
     @Test
     public void testCreateExporterForL1CProduct() throws IOException {
         final FormatExporter exporter = FormatExporterFactory.create("SM_REPB_MIR_SCLF1C_20110201T151254_20110201T151308_505_152_1.hdr");
-        assertThat(exporter, is(instanceOf(L1CProductExporter.class)));
+        assertThat(exporter, is(instanceOf(L1CFormatExporter.class)));
     }
 
     @Test

@@ -102,9 +102,6 @@ public class GPToNetCDFExporterOpIntegrationTest {
             assertEquals(DataType.FLOAT, latVariable.getDataType());
             assertAttribute("units", "deg", latVariable);
             assertAttribute("_FillValue", Double.NaN, latVariable);
-            // @todo 2 tb/tb implement tb 2014-07-11
-//            assertAttribute("valid_min", -90.0, latVariable);
-//            assertAttribute("valid_max", 90.0, latVariable);
             assertNoAttribute("flag_masks", latVariable);
             assertNoAttribute("flag_values", latVariable);
             assertNoAttribute("flag_meanings", latVariable);
@@ -118,9 +115,6 @@ public class GPToNetCDFExporterOpIntegrationTest {
             assertEquals(DataType.FLOAT, lonVariable.getDataType());
             assertAttribute("units", "deg", lonVariable);
             assertAttribute("_FillValue", Double.NaN, lonVariable);
-            // @todo 2 tb/tb implement tb 2014-07-11
-//            assertAttribute("valid_min", -180.0, lonVariable);
-//            assertAttribute("valid_max", 180.0, lonVariable);
             assertNoAttribute("flag_masks", lonVariable);
             assertNoAttribute("flag_values", lonVariable);
             assertNoAttribute("flag_meanings", lonVariable);
@@ -134,9 +128,6 @@ public class GPToNetCDFExporterOpIntegrationTest {
             assertEquals(DataType.FLOAT, altitudeVariable.getDataType());
             assertAttribute("units", "m", altitudeVariable);
             assertAttribute("_FillValue", Double.NaN, altitudeVariable);
-            // @todo 2 tb/tb implement tb 2014-07-11
-//            assertNoAttribute("valid_min", altitudeVariable);
-//            assertNoAttribute("valid_max", altitudeVariable);
             assertNoAttribute("flag_masks", altitudeVariable);
             assertNoAttribute("flag_values", altitudeVariable);
             assertNoAttribute("flag_meanings", altitudeVariable);
@@ -150,8 +141,6 @@ public class GPToNetCDFExporterOpIntegrationTest {
             assertEquals(DataType.BYTE, gridPointMaskVariable.getDataType());
             assertNoAttribute("units", gridPointMaskVariable);
             assertAttribute("_FillValue", Double.NaN, gridPointMaskVariable);
-            assertNoAttribute("valid_min", gridPointMaskVariable);
-            assertNoAttribute("valid_max", gridPointMaskVariable);
             assertNoAttribute("flag_masks", gridPointMaskVariable);
             assertNoAttribute("flag_values", gridPointMaskVariable);
             assertNoAttribute("flag_meanings", gridPointMaskVariable);
@@ -165,10 +154,6 @@ public class GPToNetCDFExporterOpIntegrationTest {
             assertEquals(DataType.BYTE, btDataCountVariable.getDataType());
             assertNoAttribute("units", btDataCountVariable);
             assertAttribute("_FillValue", Double.NaN, gridPointMaskVariable);
-            assertNoAttribute("valid_min", btDataCountVariable);
-            assertNoAttribute("valid_max", btDataCountVariable);
-            assertNoAttribute("orignal_name", btDataCountVariable);
-            assertNoAttribute("standard_name", btDataCountVariable);
             assertNoAttribute("flag_masks", btDataCountVariable);
             assertNoAttribute("flag_values", btDataCountVariable);
             assertNoAttribute("flag_meanings", btDataCountVariable);
@@ -182,8 +167,6 @@ public class GPToNetCDFExporterOpIntegrationTest {
             assertEquals(DataType.SHORT, flagsVariable.getDataType());
             assertNoAttribute("units", flagsVariable);
             assertAttribute("_FillValue", 0.0, flagsVariable);
-            assertNoAttribute("valid_min", flagsVariable);
-            assertNoAttribute("valid_max", flagsVariable);
             assertAttribute("flag_masks", new short[]{1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, (short) 32768}, flagsVariable);
             assertAttribute("flag_values", new short[]{1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, (short) 32768}, flagsVariable);
             assertAttribute("flag_meanings", "POL_FLAG_1 POL_FLAG_2 SUN_FOV SUN_GLINT_FOV MOON_GLINT_FOV SINGLE_SNAPSHOT FTT SUN_POINT SUN_GLINT_AREA MOON_POINT AF_FOV EAF_FOV BORDER_FOV SUN_TAILS RFI_1 RFI_2", flagsVariable);
@@ -197,8 +180,6 @@ public class GPToNetCDFExporterOpIntegrationTest {
             assertEquals(DataType.FLOAT, btValueVariable.getDataType());
             assertAttribute("units", "K", btValueVariable);
             assertAttribute("_FillValue", -999.0, btValueVariable);
-            assertNoAttribute("valid_min", btValueVariable);
-            assertNoAttribute("valid_max", btValueVariable);
             assertNoAttribute("flag_masks", btValueVariable);
             assertNoAttribute("flag_values", btValueVariable);
             assertNoAttribute("flag_meanings", btValueVariable);
@@ -214,8 +195,6 @@ public class GPToNetCDFExporterOpIntegrationTest {
             assertEquals(DataType.SHORT, radAccVariable.getDataType());
             assertAttribute("units", "K", radAccVariable);
             assertAttribute("_FillValue", 0.0,radAccVariable);
-            assertNoAttribute("valid_min", radAccVariable);
-            assertNoAttribute("valid_max", radAccVariable);
             assertNoAttribute("flag_masks", radAccVariable);
             assertNoAttribute("flag_values", radAccVariable);
             assertNoAttribute("flag_meanings", radAccVariable);
@@ -232,8 +211,6 @@ public class GPToNetCDFExporterOpIntegrationTest {
             assertEquals(DataType.SHORT, azimuthAngleVariable.getDataType());
             assertAttribute("units", "deg", azimuthAngleVariable);
             assertAttribute("_FillValue", 0.0, azimuthAngleVariable);
-            assertNoAttribute("valid_min", azimuthAngleVariable);
-            assertNoAttribute("valid_max", azimuthAngleVariable);
             assertNoAttribute("flag_masks", azimuthAngleVariable);
             assertNoAttribute("flag_values", azimuthAngleVariable);
             assertNoAttribute("flag_meanings", azimuthAngleVariable);
@@ -250,8 +227,6 @@ public class GPToNetCDFExporterOpIntegrationTest {
             assertEquals(DataType.SHORT, footAxis1Variable.getDataType());
             assertAttribute("units", "km", footAxis1Variable);
             assertAttribute("_FillValue", 0.0, footAxis1Variable);
-            assertNoAttribute("valid_min", footAxis1Variable);
-            assertNoAttribute("valid_max", footAxis1Variable);
             assertNoAttribute("flag_masks", footAxis1Variable);
             assertNoAttribute("flag_values", footAxis1Variable);
             assertNoAttribute("flag_meanings", footAxis1Variable);
@@ -268,8 +243,6 @@ public class GPToNetCDFExporterOpIntegrationTest {
             assertEquals(DataType.SHORT, footAxis2Variable.getDataType());
             assertAttribute("units", "km", footAxis2Variable);
             assertAttribute("_FillValue", 0.0, footAxis2Variable);
-            assertNoAttribute("valid_min", footAxis2Variable);
-            assertNoAttribute("valid_max", footAxis2Variable);
             assertNoAttribute("flag_masks", footAxis2Variable);
             assertNoAttribute("flag_values", footAxis2Variable);
             assertNoAttribute("flag_meanings", footAxis2Variable);

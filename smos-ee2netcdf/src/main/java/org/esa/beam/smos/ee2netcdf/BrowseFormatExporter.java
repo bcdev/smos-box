@@ -15,7 +15,7 @@ import org.esa.beam.smos.ee2netcdf.variable.VariableWriterFactory;
 import java.io.IOException;
 import java.util.Set;
 
-class BrowseProductExporter extends AbstractFormatExporter {
+class BrowseFormatExporter extends AbstractFormatExporter {
 
     private int nBtData;
 

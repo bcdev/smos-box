@@ -9,9 +9,9 @@ class FormatExporterFactory {
 
     public static FormatExporter create(String fileName) throws IOException {
         if (SmosUtils.isBrowseFormat(fileName)) {
-            return new BrowseProductExporter();
+            return new BrowseFormatExporter();
         } else if (SmosUtils.isL1cType(fileName)) {
-            return new L1CProductExporter();
+            return new L1CFormatExporter();
         } else if (SmosUtils.isOsUserFormat(fileName) || SmosUtils.isSmUserFormat(fileName)) {
             return new L2FormatExporter();
         }
