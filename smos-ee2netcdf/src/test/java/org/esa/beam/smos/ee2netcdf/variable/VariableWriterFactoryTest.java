@@ -50,16 +50,6 @@ public class VariableWriterFactoryTest {
     }
 
     @Test
-    public void testCreateFloatVariableSequenceWriter() {
-        variableDescriptor.setDataType(DataType.FLOAT);
-        variableDescriptor.setIs2d(false);
-        variableDescriptor.setGridPointData(false);
-
-        final VariableWriter writer = VariableWriterFactory.create(nVariable, variableDescriptor, 15, 16);
-        assertTrue(writer instanceof FloatVariableSequenceWriter);
-    }
-
-    @Test
     public void testCreateIntVariableGridPointWriter() {
         variableDescriptor.setDataType(DataType.INT);
         variableDescriptor.setGridPointData(true);
@@ -76,16 +66,6 @@ public class VariableWriterFactoryTest {
 
         final VariableWriter writer = VariableWriterFactory.create(nVariable, variableDescriptor, 18, 19);
         assertTrue(writer instanceof IntVariableSequence2DWriter);
-    }
-
-    @Test
-    public void testCreateIntVariableSequenceWriter() {
-        variableDescriptor.setDataType(DataType.INT);
-        variableDescriptor.setIs2d(false);
-        variableDescriptor.setGridPointData(false);
-
-        final VariableWriter writer = VariableWriterFactory.create(nVariable, variableDescriptor, 17, 18);
-        assertTrue(writer instanceof IntVariableSequenceWriter);
     }
 
     @Test
@@ -108,23 +88,12 @@ public class VariableWriterFactoryTest {
     }
 
     @Test
-    public void testCreateShortVariableSequenceWriter() {
-        variableDescriptor.setDataType(DataType.SHORT);
-        variableDescriptor.setIs2d(false);
-        variableDescriptor.setGridPointData(false);
-
-        final VariableWriter writer = VariableWriterFactory.create(nVariable, variableDescriptor, 19, 20);
-        assertTrue(writer instanceof ShortVariableSequenceWriter);
-    }
-
-    @Test
-    public void testCreateByteVariableSequenceWriter() {
-        variableDescriptor.setDataType(DataType.BYTE);
-        variableDescriptor.setIs2d(false);
-        variableDescriptor.setGridPointData(false);
+    public void testCreateLongVariableGridPointWriter() {
+        variableDescriptor.setDataType(DataType.LONG);
+        variableDescriptor.setGridPointData(true);
 
         final VariableWriter writer = VariableWriterFactory.create(nVariable, variableDescriptor, 21, 22);
-        assertTrue(writer instanceof ByteVariableSequenceWriter);
+        assertTrue(writer instanceof LongVariableGridPointWriter);
     }
 
     @Test

@@ -7,19 +7,18 @@ import ucar.ma2.Array;
 
 import java.io.IOException;
 
-class ByteVariableSequenceWriter extends AbstractVariableWriter {
+public class LongVariableGridPointWriter extends AbstractVariableWriter {
 
     private final int memberIndex;
 
-    ByteVariableSequenceWriter(NVariable variable, int arraySize, int memberIndex) {
-        this.variable = variable;
+    LongVariableGridPointWriter(NVariable variable, int memberIndex, int arraySize) {
         this.memberIndex = memberIndex;
-        array = Array.factory(new byte[arraySize]);
+        array = Array.factory(new long[arraySize]);
+        this.variable = variable;
     }
 
-    @Override
     public void write(CompoundData gridPointData, SequenceData btDataList, int index) throws IOException {
-        final byte data = btDataList.getCompound(index).getByte(memberIndex);
-        array.setByte(index, data);
+        final long gpLong = gridPointData.getLong(memberIndex);
+        array.setLong(index, gpLong);
     }
 }

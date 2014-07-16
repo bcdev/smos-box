@@ -14,6 +14,7 @@ import org.esa.beam.util.StringUtils;
 
 import java.awt.*;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -47,37 +48,70 @@ class L1CFormatExporter extends AbstractFormatExporter {
 
     @Override
     public void writeData(NFileWriteable nFileWriteable) throws IOException {
-        final VariableWriter[] variableWriters = createVariableWriters(nFileWriteable);
         final L1cScienceSmosFile l1cScienceSmosFile = (L1cScienceSmosFile) explorerFile;
         //final CompoundData snapshotData = l1cScienceSmosFile.getSnapshotData(1);
+
+        final VariableWriter[] gridPointVariableWriters = createGridPointVariableWriters(nFileWriteable);
 
         for (int i = 0; i < gridPointCount; i++) {
             final CompoundData gridPointData = l1cScienceSmosFile.getGridPointData(i);
             final SequenceData btDataList = l1cScienceSmosFile.getBtDataList(i);
 
-            for (VariableWriter writer : variableWriters) {
+            for (VariableWriter writer : gridPointVariableWriters) {
                 writer.write(gridPointData, btDataList, i);
             }
         }
 
-        for (VariableWriter writer : variableWriters) {
+        for (VariableWriter writer : gridPointVariableWriters) {
+            writer.close();
+        }
+
+        final VariableWriter[] snapshotVariableWriters = createSnapshotVariableWriters(nFileWriteable);
+        for (int i = 0; i < numSnapshots; i++) {
+            final CompoundData snapshotData = l1cScienceSmosFile.getSnapshotData(i);
+
+            for (VariableWriter writer : snapshotVariableWriters) {
+                writer.write(snapshotData, null, i);
+            }
+        }
+
+        for (VariableWriter writer : snapshotVariableWriters) {
             writer.close();
         }
     }
 
-    private VariableWriter[] createVariableWriters(NFileWriteable nFileWriteable) {
+    private VariableWriter[] createGridPointVariableWriters(NFileWriteable nFileWriteable) {
         final Set<String> variableNameKeys = variableDescriptors.keySet();
-        final VariableWriter[] variableWriters = new VariableWriter[variableNameKeys.size()];
-        int index = 0;
+
+        final ArrayList<Object> variableWriterList = new ArrayList<>(variableNameKeys.size());
         for (final String ncVariableName : variableNameKeys) {
             final NVariable nVariable = nFileWriteable.findVariable(ncVariableName);
             final VariableDescriptor variableDescriptor = variableDescriptors.get(ncVariableName);
+            if (!variableDescriptor.isGridPointData()) {
+                continue;
+            }
             final Dimension dimension = extractDimensions(variableDescriptor.getDimensionNames(), dimensionMap);
 
-            variableWriters[index] = VariableWriterFactory.create(nVariable, variableDescriptor, dimension.width, dimension.height);
-            index++;
+            variableWriterList.add(VariableWriterFactory.create(nVariable, variableDescriptor, dimension.width, dimension.height));
         }
-        return variableWriters;
+        return variableWriterList.toArray(new VariableWriter[variableWriterList.size()]);
+    }
+
+    private VariableWriter[] createSnapshotVariableWriters(NFileWriteable nFileWriteable) {
+        final Set<String> variableNameKeys = variableDescriptors.keySet();
+
+        final ArrayList<Object> variableWriterList = new ArrayList<>(variableNameKeys.size());
+        for (final String ncVariableName : variableNameKeys) {
+            final NVariable nVariable = nFileWriteable.findVariable(ncVariableName);
+            final VariableDescriptor variableDescriptor = variableDescriptors.get(ncVariableName);
+            if (variableDescriptor.isGridPointData()) {
+                continue;
+            }
+            final Dimension dimension = extractDimensions(variableDescriptor.getDimensionNames(), dimensionMap);
+
+            variableWriterList.add(VariableWriterFactory.create(nVariable, variableDescriptor, dimension.width, dimension.height));
+        }
+        return variableWriterList.toArray(new VariableWriter[variableWriterList.size()]);
     }
 
     // package access for testing only tb 2014-07-15
