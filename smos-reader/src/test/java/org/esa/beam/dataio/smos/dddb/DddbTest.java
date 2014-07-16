@@ -503,10 +503,5 @@ public class DddbTest {
         public String getDimensionNames() {
             return null;
         }
-
-        @Override
-        public int getMemberIndex() {
-            return 0;
-        }
     }
 }
