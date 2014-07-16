@@ -23,7 +23,7 @@ public class ExportParameter {
     @Parameter(alias = BindingConstants.ROI_TYPE, defaultValue = "2", valueSet = {"0", "1", "2"})
     private int roiType;
 
-    @Parameter(alias = BindingConstants.GEOMETRY)
+    @Parameter(alias = BindingConstants.REGION)
     private VectorDataNode geometry;    // @todo 4 tb/** rename - this is not a geometry tb 2014-05-28
 
     @Parameter(alias = BindingConstants.NORTH, defaultValue = "90.0", interval = "[-90.0, 90.0]")

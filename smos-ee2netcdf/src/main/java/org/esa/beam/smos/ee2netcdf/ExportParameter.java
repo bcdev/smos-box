@@ -3,6 +3,7 @@ package org.esa.beam.smos.ee2netcdf;
 import com.vividsolutions.jts.geom.Geometry;
 import org.esa.beam.framework.gpf.annotations.Parameter;
 import org.esa.beam.smos.gui.BindingConstants;
+import org.esa.beam.util.converters.JtsGeometryConverter;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -22,49 +23,62 @@ public class ExportParameter {
      */
     public static final String PRODUCT_TYPE_REGEX = "MIR_BW[LS][DF]1C|MIR_SC[LS][DF]1C|MIR_OSUDP2|MIR_SMUDP2";
 
-    @Parameter(alias = BindingConstants.SELECTED_PRODUCT, label = "Use selected product")
+    @Parameter(alias = BindingConstants.SELECTED_PRODUCT, defaultValue = "false",
+               description = "Convert the selected product to netCDF. Used in GUI mode only.")
     private boolean useSelectedProduct;
 
-    @Parameter(alias = BindingConstants.SOURCE_DIRECTORY, label = "Source directory")
+    @Parameter(alias = BindingConstants.SOURCE_DIRECTORY,
+               description = "The source directory. If specified, all files in the source directory are converted to netCDF.",
+               label = "Source directory")
     private File sourceDirectory;
 
-    @Parameter(alias = BindingConstants.OPEN_FILE_DIALOG, label = "Open file dialog")
+    @Parameter(alias = BindingConstants.OPEN_FILE_DIALOG, defaultValue = "false",
+               description = "Open a file dialog to select a product to be converted to netCDF.")
     private boolean openFileDialog;
 
-    private Geometry geometry;
+    @Parameter(alias = BindingConstants.REGION, converter = JtsGeometryConverter.class,
+               description = "A region-of-interest specified in geographic coordinates using well-known-text (WKT) format. For example: 'POLYGON((<lon1> <lat1>, <lon2> <lat2>, ..., <lon1> <lat1>))'.",
+               label = "region")
+    private Geometry region;
 
-    // @todo adapt Binding constant name   tb 2014-05-28
-    // @Parameter(alias = BindingConstants.GEOMETRY)
-    // private VectorDataNode geometryNode;
-
-    @Parameter(alias = BindingConstants.ROI_TYPE, defaultValue = "2", valueSet = {"0", "1", "2"}, label = "ROI type")
+    @Parameter(alias = BindingConstants.ROI_TYPE, defaultValue = "2", valueSet = {"0", "1", "2"})
     private int roiType;
 
-    @Parameter(label = "Target directory")
+    @Parameter(alias = BindingConstants.TARGET_DIRECTORY,
+               defaultValue = ".",
+               description = "The directory where the target netCDF file is put out.",
+               label = "Target directory")
     private File targetDirectory;
-    @Parameter(interval = "[-90.0, 90.0]", label = "Northern bound")
+    @Parameter(interval = "[-90.0, 90.0]", defaultValue = "90.0",
+               description = "The northern bound of the region-of-interest. Used only if the ROI type selected is a latitude-longitude box.")
     private double northBound;
-    @Parameter(interval = "[-180.0, 180.0]", label = "Eastern bound")
+    @Parameter(interval = "[-180.0, 180.0]", defaultValue = "180.0",
+               description = "The eastern bound of the region-of-interest. Used only if the ROI type selected is a latitude-longitude box.")
     private double eastBound;
-    @Parameter(interval = "[-90.0, 90.0]", label = "Southern bound")
+    @Parameter(interval = "[-90.0, 90.0]", defaultValue = "-90.0",
+               description = "The southern bound of the region-of-interest. Used only if the ROI type selected is a latitude-longitude box.")
     private double southBound;
-    @Parameter(interval = "[-180.0, 180.0]", label = "Western bound")
+    @Parameter(interval = "[-180.0, 180.0]", defaultValue = "-180.0",
+               description = "The western bound of the region-of-interest. Used only if the ROI type selected is a latitude-longitude box.")
     private double westBound;
-    @Parameter(description = "Overwrite the target product", label = "Overwrite target")
+    @Parameter(alias = BindingConstants.OVERWRITE_TARGET, defaultValue = "false",
+               description = "Overwrite the target product.", label = "Overwrite target")
     private boolean overwriteTarget;
-    @Parameter(description = "The contact address to be included in the meta data of the target product", label = "Contact")
+    @Parameter(alias = BindingConstants.CONTACT,
+               description = "The contact address to be included in the global attributes of the target netCDF file.",
+               label = "Contact")
     private String contact;
-    @Parameter(description = "The institution to be included in the mata data of the target product", label = "Institution")
+    @Parameter(alias = BindingConstants.INSTITUTION,
+               description = "The institution to be included in the global attributes of the target netCDF file.",
+               label = "Institution")
     private String institution;
-    @Parameter(description = "The output band names", label = "Output band names")
-    private List<String> outputBandNames;
+    @Parameter(alias = BindingConstants.VARIABLES,
+               description = "A comma-separated list of variables to be included in the target netCDF file. Variables have to be denoted by names as defined in the ESA SMOS product specification documents. By default all variables in the source file are included in the target file.",
+               label = "Variables")
+    private List<String> variableNames;
 
     public ExportParameter() {
-        northBound = 90.0;
-        southBound = -90.0;
-        westBound = -180.0;
-        eastBound = 180.0;
-        outputBandNames = new ArrayList<>();
+        variableNames = new ArrayList<>();
     }
 
     public void setUseSelectedProduct(boolean useSelectedProduct) {
@@ -91,12 +105,12 @@ public class ExportParameter {
         return openFileDialog;
     }
 
-    public void setGeometry(Geometry geometry) {
-        this.geometry = geometry;
+    public void setRegion(Geometry region) {
+        this.region = region;
     }
 
-    public Geometry getGeometry() {
-        return geometry;
+    public Geometry getRegion() {
+        return region;
     }
 
     public void setRoiType(int roiType) {
@@ -193,11 +207,11 @@ public class ExportParameter {
         return institution;
     }
 
-    public void setOutputBandNames(List<String> outputBandNames) {
-        this.outputBandNames = outputBandNames;
+    public void setVariableNames(List<String> variableNames) {
+        this.variableNames = variableNames;
     }
 
-    public List<String> getOutputBandNames() {
-        return outputBandNames;
+    public List<String> getVariableNames() {
+        return variableNames;
     }
 }

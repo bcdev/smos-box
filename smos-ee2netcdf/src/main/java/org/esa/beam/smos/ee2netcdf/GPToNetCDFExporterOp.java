@@ -70,7 +70,7 @@ public class GPToNetCDFExporterOp extends Operator {
             for (int i = 0; i < bandNames.length; i++) {
                 bandNamesList.add(bandNames[i].trim());
             }
-            exportParameter.setOutputBandNames(bandNamesList);
+            exportParameter.setVariableNames(bandNamesList);
         }
 
         setDummyTargetProduct();

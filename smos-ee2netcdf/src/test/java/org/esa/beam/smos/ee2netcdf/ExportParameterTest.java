@@ -168,7 +168,7 @@ public class ExportParameterTest {
         assertEquals(180.0, parameter.getEastBound(), 1e-8);
 
         assertFalse(parameter.isOverwriteTarget());
-        final List<String> outputBandNames = parameter.getOutputBandNames();
+        final List<String> outputBandNames = parameter.getVariableNames();
         assertNotNull(outputBandNames);
         assertEquals(0, outputBandNames.size());
     }
@@ -223,8 +223,8 @@ public class ExportParameterTest {
         bandNames.add("band_2");
         bandNames.add("band_3");
 
-        parameter.setOutputBandNames(bandNames);
-        final List<String> actualNames = parameter.getOutputBandNames();
+        parameter.setVariableNames(bandNames);
+        final List<String> actualNames = parameter.getVariableNames();
         assertNotNull(actualNames);
         assertEquals(bandNames.size(), actualNames.size());
         assertArrayEquals(bandNames.toArray(), actualNames.toArray());

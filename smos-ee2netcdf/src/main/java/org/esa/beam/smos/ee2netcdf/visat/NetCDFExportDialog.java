@@ -49,7 +49,7 @@ public class NetCDFExportDialog extends ProductChangeAwareDialog {
 
         createUi();
 
-        bindingContext.bindEnabledState(BindingConstants.GEOMETRY, true, BindingConstants.ROI_TYPE, BindingConstants.ROI_TYPE_GEOMETRY);
+        bindingContext.bindEnabledState(BindingConstants.REGION, true, BindingConstants.ROI_TYPE, BindingConstants.ROI_TYPE_GEOMETRY);
         try {
             init(propertyContainer);
         } catch (ValidationException e) {
@@ -179,9 +179,9 @@ public class NetCDFExportDialog extends ProductChangeAwareDialog {
 
 
     private void removeGeometries() {
-        final Property geometryProperty = propertyContainer.getProperty(BindingConstants.GEOMETRY);
+        final Property geometryProperty = propertyContainer.getProperty(BindingConstants.REGION);
         geometryProperty.getDescriptor().setValueSet(new ValueSet(new VectorDataNode[0]));
-        propertyContainer.setValue(BindingConstants.GEOMETRY, null);
+        propertyContainer.setValue(BindingConstants.REGION, null);
         propertyContainer.setValue(BindingConstants.ROI_TYPE, BindingConstants.ROI_TYPE_AREA);
     }
 
@@ -196,7 +196,7 @@ public class NetCDFExportDialog extends ProductChangeAwareDialog {
     private void setSelectionToSelectedGeometry(PropertyContainer propertyContainer) {
         final Geometry selectedGeometry = GuiHelper.getSelectedGeometry(appContext);
         if (selectedGeometry != null) {
-            propertyContainer.setValue(BindingConstants.GEOMETRY, selectedGeometry);
+            propertyContainer.setValue(BindingConstants.REGION, selectedGeometry);
         }
     }
 
@@ -231,7 +231,7 @@ public class NetCDFExportDialog extends ProductChangeAwareDialog {
         final JRadioButton wholeProductButton = new JRadioButton("Whole Product");
 
         final JRadioButton useGeometryButton = new JRadioButton("Geometry");
-        final PropertyDescriptor geometryDescriptor = propertyContainer.getDescriptor(BindingConstants.GEOMETRY);
+        final PropertyDescriptor geometryDescriptor = propertyContainer.getDescriptor(BindingConstants.REGION);
         if (geometryDescriptor.getValueSet() == null) {
             useGeometryButton.setEnabled(false);
         }

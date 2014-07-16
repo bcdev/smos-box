@@ -66,7 +66,7 @@ abstract class AbstractFormatExporter implements FormatExporter {
     @Override
     public void addVariables(NFileWriteable nFileWriteable, ExportParameter exportParameter) throws IOException {
         final Set<String> variableNameKeys = variableDescriptors.keySet();
-        final List<String> outputBandNames = exportParameter.getOutputBandNames();
+        final List<String> outputBandNames = exportParameter.getVariableNames();
         for (final String ncVariableName : variableNameKeys) {
             if (!mustExport(ncVariableName, outputBandNames)) {
                 continue;
@@ -115,7 +115,7 @@ abstract class AbstractFormatExporter implements FormatExporter {
     void createVariableDescriptors(ExportParameter exportParameter) {
         variableDescriptors = new HashMap<>();
 
-        final List<String> outputBandNames = exportParameter.getOutputBandNames();
+        final List<String> outputBandNames = exportParameter.getVariableNames();
 
         final List<MemberDescriptor> memberDescriptorList = memberDescriptors.asList();
         for (final MemberDescriptor memberDescriptor : memberDescriptorList) {

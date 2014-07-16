@@ -72,7 +72,7 @@ class GridPointExportDialog extends ProductChangeAwareDialog {
         }
 
         bindingContext = new BindingContext(propertyContainer);
-        bindingContext.bindEnabledState(BindingConstants.GEOMETRY, true, BindingConstants.ROI_TYPE, BindingConstants.ROI_TYPE_PRODUCT);
+        bindingContext.bindEnabledState(BindingConstants.REGION, true, BindingConstants.ROI_TYPE, BindingConstants.ROI_TYPE_PRODUCT);
         GuiHelper.bindLonLatPanelToRoiType(2, bindingContext);
 
         createUI();
@@ -212,9 +212,9 @@ class GridPointExportDialog extends ProductChangeAwareDialog {
     }
 
     private void removeGeometries() throws ValidationException {
-        final Property geometryProperty = propertyContainer.getProperty(BindingConstants.GEOMETRY);
+        final Property geometryProperty = propertyContainer.getProperty(BindingConstants.REGION);
         geometryProperty.getDescriptor().setValueSet(new ValueSet(new VectorDataNode[0]));
-        propertyContainer.setValue(BindingConstants.GEOMETRY, null);
+        propertyContainer.setValue(BindingConstants.REGION, null);
         propertyContainer.setValue(BindingConstants.ROI_TYPE, BindingConstants.ROI_TYPE_AREA);
     }
 
@@ -254,7 +254,7 @@ class GridPointExportDialog extends ProductChangeAwareDialog {
 
     private Component createRoiPanel() {
         final JRadioButton useGeometryButton = new JRadioButton("Geometry");
-        final PropertyDescriptor geometryDescriptor = propertyContainer.getDescriptor(BindingConstants.GEOMETRY);
+        final PropertyDescriptor geometryDescriptor = propertyContainer.getDescriptor(BindingConstants.REGION);
         if (geometryDescriptor != null && geometryDescriptor.getValueSet() == null) {
             useGeometryButton.setEnabled(false);
         }

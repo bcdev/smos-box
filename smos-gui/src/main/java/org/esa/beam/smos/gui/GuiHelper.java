@@ -205,23 +205,23 @@ public class GuiHelper {
     }
 
     public static void bindGeometryVectorDataNodes(java.util.List<VectorDataNode> geometryNodeList, PropertyContainer propertyContainer) throws ValidationException {
-        final PropertyDescriptor descriptor = propertyContainer.getDescriptor(BindingConstants.GEOMETRY);
+        final PropertyDescriptor descriptor = propertyContainer.getDescriptor(BindingConstants.REGION);
         descriptor.setNotNull(false);
         descriptor.setNotEmpty(false);
         descriptor.setValueSet(new ValueSet(geometryNodeList.toArray()));
 
         propertyContainer.setValue(BindingConstants.ROI_TYPE, BindingConstants.ROI_TYPE_GEOMETRY);
-        propertyContainer.getProperty(BindingConstants.GEOMETRY).setValue(geometryNodeList.get(0));
+        propertyContainer.getProperty(BindingConstants.REGION).setValue(geometryNodeList.get(0));
     }
 
     public static void bindGeometries(java.util.List<Geometry> geometryNodeList, PropertyContainer propertyContainer) throws ValidationException {
-        final PropertyDescriptor descriptor = propertyContainer.getDescriptor(BindingConstants.GEOMETRY);
+        final PropertyDescriptor descriptor = propertyContainer.getDescriptor(BindingConstants.REGION);
         descriptor.setNotNull(false);
         descriptor.setNotEmpty(false);
         descriptor.setValueSet(new ValueSet(geometryNodeList.toArray()));
 
         propertyContainer.setValue(BindingConstants.ROI_TYPE, BindingConstants.ROI_TYPE_GEOMETRY);
-        propertyContainer.getProperty(BindingConstants.GEOMETRY).setValue(geometryNodeList.get(0));
+        propertyContainer.getProperty(BindingConstants.REGION).setValue(geometryNodeList.get(0));
     }
 
     public static JComboBox createGeometryComboBox(PropertyDescriptor geometryDescriptor, BindingContext bindingContext) {
