@@ -18,7 +18,6 @@ import org.esa.beam.smos.gui.BindingConstants;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.text.MessageFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
