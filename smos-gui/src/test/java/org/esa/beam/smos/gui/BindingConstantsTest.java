@@ -3,7 +3,8 @@ package org.esa.beam.smos.gui;
 
 import org.junit.Test;
 
-import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
+
 
 public class BindingConstantsTest {
 
