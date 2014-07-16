@@ -22,13 +22,13 @@ public class ExportParameter {
      */
     public static final String PRODUCT_TYPE_REGEX = "MIR_BW[LS][DF]1C|MIR_SC[LS][DF]1C|MIR_OSUDP2|MIR_SMUDP2";
 
-    @Parameter(alias = BindingConstants.SELECTED_PRODUCT)
+    @Parameter(alias = BindingConstants.SELECTED_PRODUCT, label = "Use selected product")
     private boolean useSelectedProduct;
 
-    @Parameter(alias = BindingConstants.SOURCE_DIRECTORY)
+    @Parameter(alias = BindingConstants.SOURCE_DIRECTORY, label = "Source directory")
     private File sourceDirectory;
 
-    @Parameter(alias = BindingConstants.OPEN_FILE_DIALOG)
+    @Parameter(alias = BindingConstants.OPEN_FILE_DIALOG, label = "Open file dialog")
     private boolean openFileDialog;
 
     private Geometry geometry;
@@ -37,17 +37,26 @@ public class ExportParameter {
     // @Parameter(alias = BindingConstants.GEOMETRY)
     // private VectorDataNode geometryNode;
 
-    @Parameter(alias = BindingConstants.ROI_TYPE, defaultValue = "2", valueSet = {"0", "1", "2"})
+    @Parameter(alias = BindingConstants.ROI_TYPE, defaultValue = "2", valueSet = {"0", "1", "2"}, label = "ROI type")
     private int roiType;
 
+    @Parameter(label = "Target directory")
     private File targetDirectory;
+    @Parameter(interval = "[-90.0, 90.0]", label = "Northern bound")
     private double northBound;
+    @Parameter(interval = "[-180.0, 180.0]", label = "Eastern bound")
     private double eastBound;
+    @Parameter(interval = "[-90.0, 90.0]", label = "Southern bound")
     private double southBound;
+    @Parameter(interval = "[-180.0, 180.0]", label = "Western bound")
     private double westBound;
+    @Parameter(description = "Overwrite the target product", label = "Overwrite target")
     private boolean overwriteTarget;
+    @Parameter(description = "The contact address to be included in the meta data of the target product", label = "Contact")
     private String contact;
+    @Parameter(description = "The institution to be included in the mata data of the target product", label = "Institution")
     private String institution;
+    @Parameter(description = "The output band names", label = "Output band names")
     private List<String> outputBandNames;
 
     public ExportParameter() {
