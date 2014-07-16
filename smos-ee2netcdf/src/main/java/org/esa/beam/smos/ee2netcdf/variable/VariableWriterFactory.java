@@ -31,14 +31,18 @@ public class VariableWriterFactory {
                     return new FloatVariableSequenceWriter(nVariable, gridPointCount, memberIndex, compoundIndex);
                 }
             } else if (dataType == DataType.INT) {
-                return new IntVariableSequenceWriter(nVariable, gridPointCount, memberIndex, compoundIndex);
+                if (is2d) {
+                    return new IntVariableSequence2DWriter(nVariable, gridPointCount, btDataCount, memberIndex, compoundIndex);
+                } else {
+                    return new IntVariableSequenceWriter(nVariable, gridPointCount, memberIndex, compoundIndex);
+                }
             } else if (dataType == DataType.SHORT) {
                 if (is2d) {
                     return new ShortVariableSequence2DWriter(nVariable, gridPointCount, btDataCount, memberIndex, compoundIndex);
                 } else {
                     return new ShortVariableSequenceWriter(nVariable, gridPointCount, memberIndex, compoundIndex);
                 }
-            }else if (dataType == DataType.BYTE) {
+            } else if (dataType == DataType.BYTE) {
                 if (is2d) {
                     throw new IllegalArgumentException("Unsupported data type for writer: " + dataType);
                 } else {

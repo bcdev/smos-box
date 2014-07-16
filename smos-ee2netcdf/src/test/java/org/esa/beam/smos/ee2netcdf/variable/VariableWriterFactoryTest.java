@@ -69,6 +69,16 @@ public class VariableWriterFactoryTest {
     }
 
     @Test
+    public void testCreateIntVariableSequence2DWriter() {
+        variableDescriptor.setDataType(DataType.INT);
+        variableDescriptor.setIs2d(true);
+        variableDescriptor.setGridPointData(false);
+
+        final VariableWriter writer = VariableWriterFactory.create(nVariable, variableDescriptor, 18, 19);
+        assertTrue(writer instanceof IntVariableSequence2DWriter);
+    }
+
+    @Test
     public void testCreateIntVariableSequenceWriter() {
         variableDescriptor.setDataType(DataType.INT);
         variableDescriptor.setIs2d(false);

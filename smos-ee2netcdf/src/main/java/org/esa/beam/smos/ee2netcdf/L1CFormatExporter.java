@@ -1,6 +1,7 @@
 package org.esa.beam.smos.ee2netcdf;
 
 import com.bc.ceres.binio.CompoundData;
+import com.bc.ceres.binio.SequenceData;
 import org.esa.beam.dataio.netcdf.nc.NFileWriteable;
 import org.esa.beam.dataio.netcdf.nc.NVariable;
 import org.esa.beam.dataio.smos.L1cScienceSmosFile;
@@ -48,12 +49,14 @@ class L1CFormatExporter extends AbstractFormatExporter {
     public void writeData(NFileWriteable nFileWriteable) throws IOException {
         final VariableWriter[] variableWriters = createVariableWriters(nFileWriteable);
         final L1cScienceSmosFile l1cScienceSmosFile = (L1cScienceSmosFile) explorerFile;
-        final CompoundData snapshotData = l1cScienceSmosFile.getSnapshotData(1);
+        //final CompoundData snapshotData = l1cScienceSmosFile.getSnapshotData(1);
 
         for (int i = 0; i < gridPointCount; i++) {
-            final CompoundData gridPointData = explorerFile.getGridPointData(i);
+            final CompoundData gridPointData = l1cScienceSmosFile.getGridPointData(i);
+            final SequenceData btDataList = l1cScienceSmosFile.getBtDataList(i);
+
             for (VariableWriter writer : variableWriters) {
-                writer.write(gridPointData, null, i);
+                writer.write(gridPointData, btDataList, i);
             }
         }
 
