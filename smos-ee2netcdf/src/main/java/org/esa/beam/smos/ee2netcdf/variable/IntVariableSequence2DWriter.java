@@ -12,7 +12,7 @@ public class IntVariableSequence2DWriter extends AbstractVariableWriter {
 
     private final int memberIndex;
 
-    IntVariableSequence2DWriter(NVariable variable, int width, int height, int memberIndex, int compoundIndex) {
+    IntVariableSequence2DWriter(NVariable variable, int width, int height, int memberIndex) {
         this.variable = variable;
         this.memberIndex = memberIndex;
         array = Array.factory(new int[width][height]);

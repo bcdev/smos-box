@@ -10,18 +10,16 @@ import java.io.IOException;
 class ByteVariableSequenceWriter extends AbstractVariableWriter {
 
     private final int memberIndex;
-    private final int compoundIndex;
 
-    ByteVariableSequenceWriter(NVariable variable, int arraySize, int memberIndex, int compoundIndex) {
+    ByteVariableSequenceWriter(NVariable variable, int arraySize, int memberIndex) {
         this.variable = variable;
         this.memberIndex = memberIndex;
-        this.compoundIndex = compoundIndex;
         array = Array.factory(new byte[arraySize]);
     }
 
     @Override
     public void write(CompoundData gridPointData, SequenceData btDataList, int index) throws IOException {
-        final byte data = btDataList.getCompound(compoundIndex).getByte(memberIndex);
+        final byte data = btDataList.getCompound(index).getByte(memberIndex);
         array.setByte(index, data);
     }
 }

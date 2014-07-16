@@ -11,7 +11,6 @@ public class VariableWriterFactory {
         final DataType dataType = variableDescriptor.getDataType();
         final int memberIndex = variableDescriptor.getBtDataMemberIndex();
         if (variableDescriptor.isGridPointData()) {
-            final String name = variableDescriptor.getBinXName();
             if (dataType == DataType.FLOAT) {
                 return new FloatVariableGridPointWriter(nVariable, memberIndex, gridPointCount);
             } else if (dataType == DataType.INT) {
@@ -23,30 +22,29 @@ public class VariableWriterFactory {
             }
         } else {
             final boolean is2d = variableDescriptor.isIs2d();
-            final int compoundIndex = variableDescriptor.getCompoundIndex();
             if (dataType == DataType.FLOAT) {
                 if (is2d) {
-                    return new FloatVariableSequence2DWriter(nVariable, gridPointCount, btDataCount, memberIndex, compoundIndex);
+                    return new FloatVariableSequence2DWriter(nVariable, gridPointCount, btDataCount, memberIndex);
                 } else {
-                    return new FloatVariableSequenceWriter(nVariable, gridPointCount, memberIndex, compoundIndex);
+                    return new FloatVariableSequenceWriter(nVariable, gridPointCount, memberIndex);
                 }
             } else if (dataType == DataType.INT) {
                 if (is2d) {
-                    return new IntVariableSequence2DWriter(nVariable, gridPointCount, btDataCount, memberIndex, compoundIndex);
+                    return new IntVariableSequence2DWriter(nVariable, gridPointCount, btDataCount, memberIndex);
                 } else {
-                    return new IntVariableSequenceWriter(nVariable, gridPointCount, memberIndex, compoundIndex);
+                    return new IntVariableSequenceWriter(nVariable, gridPointCount, memberIndex);
                 }
             } else if (dataType == DataType.SHORT) {
                 if (is2d) {
-                    return new ShortVariableSequence2DWriter(nVariable, gridPointCount, btDataCount, memberIndex, compoundIndex);
+                    return new ShortVariableSequence2DWriter(nVariable, gridPointCount, btDataCount, memberIndex);
                 } else {
-                    return new ShortVariableSequenceWriter(nVariable, gridPointCount, memberIndex, compoundIndex);
+                    return new ShortVariableSequenceWriter(nVariable, gridPointCount, memberIndex);
                 }
             } else if (dataType == DataType.BYTE) {
                 if (is2d) {
                     throw new IllegalArgumentException("Unsupported data type for writer: " + dataType);
                 } else {
-                    return new ByteVariableSequenceWriter(nVariable, gridPointCount, memberIndex, compoundIndex);
+                    return new ByteVariableSequenceWriter(nVariable, gridPointCount, memberIndex);
                 }
             }
         }

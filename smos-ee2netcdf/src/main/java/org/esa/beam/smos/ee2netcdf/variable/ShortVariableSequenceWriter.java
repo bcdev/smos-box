@@ -10,18 +10,16 @@ import java.io.IOException;
 class ShortVariableSequenceWriter extends AbstractVariableWriter {
 
     private final int memberIndex;
-    private final int compoundIndex;
 
-    ShortVariableSequenceWriter(NVariable variable, int arraySize, int memberIndex, int compoundIndex) {
+    ShortVariableSequenceWriter(NVariable variable, int arraySize, int memberIndex) {
         this.variable = variable;
         this.memberIndex = memberIndex;
-        this.compoundIndex = compoundIndex;
         array = Array.factory(new short[arraySize]);
     }
 
     @Override
     public void write(CompoundData gridPointData, SequenceData btDataList, int index) throws IOException {
-        final short data = btDataList.getCompound(compoundIndex).getShort(memberIndex);
+        final short data = btDataList.getCompound(index).getShort(memberIndex);
         array.setShort(index, data);
     }
 }

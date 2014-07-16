@@ -129,12 +129,9 @@ abstract class AbstractFormatExporter implements FormatExporter {
                         DataType.OBJECT,
                         dimensionNames,
                         numDimensions == 2,
-                        memberDescriptor.getMemberIndex(),
-                        memberDescriptor.getCompoundIndex());
+                        memberDescriptor.getMemberIndex());
 
                 setDataType(variableDescriptor, memberDescriptor.getDataTypeName());
-
-                variableDescriptor.setBinXName(memberDescriptor.getBinXName());
 
                 variableDescriptor.setUnit(memberDescriptor.getUnit());
                 variableDescriptor.setFillValue(memberDescriptor.getFillValue());

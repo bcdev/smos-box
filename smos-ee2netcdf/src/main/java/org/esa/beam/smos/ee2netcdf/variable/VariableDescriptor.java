@@ -18,7 +18,6 @@ public class VariableDescriptor {
     private float validMin;
     private boolean validMaxPresent;
     private float validMax;
-    private String binXName;
     private short[] flagMasks;
     private String flagMeanings;
     private double scaleFactor;
@@ -26,7 +25,6 @@ public class VariableDescriptor {
     private double scaleOffset;
     private boolean scaleOffsetPresent;
     private boolean unsigned;
-    private int compoundIndex;
 
     public boolean isUnsigned() {
         return unsigned;
@@ -71,16 +69,7 @@ public class VariableDescriptor {
         this.flagMasks = flagMasks;
     }
 
-    public String getBinXName() {
-        return binXName;
-    }
-
-    public void setBinXName(String binXName) {
-        this.binXName = binXName;
-    }
-
-
-    public VariableDescriptor(String name, boolean gridPointData, DataType dataType, String dimensionNames, boolean is2d, int btDataMemberIndex, int compoundIndex) {
+    public VariableDescriptor(String name, boolean gridPointData, DataType dataType, String dimensionNames, boolean is2d, int btDataMemberIndex) {
         this();
         this.name = name;
         this.gridPointData = gridPointData;
@@ -88,7 +77,6 @@ public class VariableDescriptor {
         this.is2d = is2d;
         this.dimensionNames = dimensionNames;
         this.btDataMemberIndex = btDataMemberIndex;
-        this.compoundIndex = compoundIndex;
     }
 
     public VariableDescriptor() {
@@ -197,13 +185,5 @@ public class VariableDescriptor {
     public void setScaleOffset(double scaleOffset) {
         scaleOffsetPresent = true;
         this.scaleOffset = scaleOffset;
-    }
-
-    public void setCompoundIndex(int compoundIndex) {
-        this.compoundIndex = compoundIndex;
-    }
-
-    public int getCompoundIndex() {
-        return compoundIndex;
     }
 }
