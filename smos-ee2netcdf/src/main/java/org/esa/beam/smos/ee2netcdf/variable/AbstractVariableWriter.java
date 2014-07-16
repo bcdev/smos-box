@@ -12,6 +12,11 @@ abstract class AbstractVariableWriter implements VariableWriter {
 
     @Override
     public void close() throws IOException {
-        variable.writeFully(array);
+        try {
+            variable.writeFully(array);
+        } catch (Exception e) {
+            System.out.println("variable = " + variable.getName());
+            throw new IOException(e);
+        }
     }
 }

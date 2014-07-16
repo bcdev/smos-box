@@ -65,15 +65,6 @@ public class VariableDescriptorTest {
     }
 
     @Test
-    public void testSetGetCompoundIndex() {
-        variableDescriptor.setCompoundIndex(3);
-        assertEquals(3, variableDescriptor.getCompoundIndex());
-
-        variableDescriptor.setCompoundIndex(19);
-        assertEquals(19, variableDescriptor.getCompoundIndex());
-    }
-
-    @Test
     public void testConstruction() {
         assertEquals(1.0, variableDescriptor.getScaleFactor(), 1e-8);
         assertEquals(0.0, variableDescriptor.getScaleOffset(), 1e-8);

@@ -209,7 +209,7 @@ public class DddbTest {
 
         final MemberDescriptor flagsDescriptor = memberDescriptors.getMember("Flags");
         assertNotNull(flagsDescriptor);
-        assertFalse(flagsDescriptor.isGridPointData());
+        assertTrue(flagsDescriptor.isGridPointData());
         assertEquals("ushort", flagsDescriptor.getDataTypeName());
         assertEquals("n_grid_points n_bt_data", flagsDescriptor.getDimensionNames());
         assertEquals(0, flagsDescriptor.getMemberIndex());
@@ -227,7 +227,7 @@ public class DddbTest {
 
         final MemberDescriptor btValueDescriptor = memberDescriptors.getMember("BT_Value");
         assertNotNull(btValueDescriptor);
-        assertFalse(btValueDescriptor.isGridPointData());
+        assertTrue(btValueDescriptor.isGridPointData());
         assertEquals("float", btValueDescriptor.getDataTypeName());
         assertEquals("n_grid_points n_bt_data", btValueDescriptor.getDimensionNames());
         assertEquals(1, btValueDescriptor.getMemberIndex());
@@ -239,7 +239,7 @@ public class DddbTest {
 
         final MemberDescriptor radiometricAccuracyOfPixelDescriptor = memberDescriptors.getMember("Radiometric_Accuracy_of_Pixel");
         assertNotNull(radiometricAccuracyOfPixelDescriptor);
-        assertFalse(radiometricAccuracyOfPixelDescriptor.isGridPointData());
+        assertTrue(radiometricAccuracyOfPixelDescriptor.isGridPointData());
         assertEquals("ushort", radiometricAccuracyOfPixelDescriptor.getDataTypeName());
         assertEquals("n_grid_points n_bt_data", radiometricAccuracyOfPixelDescriptor.getDimensionNames());
         assertEquals(2, radiometricAccuracyOfPixelDescriptor.getMemberIndex());
@@ -251,7 +251,7 @@ public class DddbTest {
 
         final MemberDescriptor azimuthAngleDescriptor = memberDescriptors.getMember("Azimuth_Angle");
         assertNotNull(azimuthAngleDescriptor);
-        assertFalse(azimuthAngleDescriptor.isGridPointData());
+        assertTrue(azimuthAngleDescriptor.isGridPointData());
         assertEquals("ushort", azimuthAngleDescriptor.getDataTypeName());
         assertEquals("n_grid_points n_bt_data", azimuthAngleDescriptor.getDimensionNames());
         assertEquals(3, azimuthAngleDescriptor.getMemberIndex());
@@ -262,7 +262,7 @@ public class DddbTest {
 
         final MemberDescriptor footprintAxis1Descriptor = memberDescriptors.getMember("Footprint_Axis1");
         assertNotNull(footprintAxis1Descriptor);
-        assertFalse(footprintAxis1Descriptor.isGridPointData());
+        assertTrue(footprintAxis1Descriptor.isGridPointData());
         assertEquals("ushort", footprintAxis1Descriptor.getDataTypeName());
         assertEquals("n_grid_points n_bt_data", footprintAxis1Descriptor.getDimensionNames());
         assertEquals(4, footprintAxis1Descriptor.getMemberIndex());
@@ -273,7 +273,7 @@ public class DddbTest {
 
         final MemberDescriptor footprintAxis2Descriptor = memberDescriptors.getMember("Footprint_Axis2");
         assertNotNull(footprintAxis2Descriptor);
-        assertFalse(footprintAxis2Descriptor.isGridPointData());
+        assertTrue(footprintAxis2Descriptor.isGridPointData());
         assertEquals("ushort", footprintAxis2Descriptor.getDataTypeName());
         assertEquals("n_grid_points n_bt_data", footprintAxis2Descriptor.getDimensionNames());
         assertEquals(5, footprintAxis2Descriptor.getMemberIndex());
@@ -502,11 +502,6 @@ public class DddbTest {
         @Override
         public String getDimensionNames() {
             return null;
-        }
-
-        @Override
-        public int getMemberIndex() {
-            return 0;
         }
     }
 }

@@ -181,6 +181,16 @@ public class AbstractFormatExporterTest {
     }
 
     @Test
+    public void testSetDataType_ULong() {
+        final VariableDescriptor variableDescriptor = new VariableDescriptor();
+
+        AbstractFormatExporter.setDataType(variableDescriptor, "ulong");
+
+        assertEquals(DataType.LONG, variableDescriptor.getDataType());
+        assertTrue(variableDescriptor.isUnsigned());
+    }
+
+    @Test
     public void testGetNumDimensions() {
         assertEquals(1, AbstractFormatExporter.getNumDimensions("onedimensional"));
         assertEquals(2, AbstractFormatExporter.getNumDimensions("two dims"));

@@ -237,8 +237,6 @@ public class Dddb {
             final BandDescriptor bandDescriptor = uniqueMemberMap.get(memberDescriptorName);
             memberDescriptor.setGridPointData(bandDescriptor.isGridPointData());
             memberDescriptor.setDimensionNames(bandDescriptor.getDimensionNames());
-            // @todo 1 tb/tb REMOVE THIS and the stuff in the dddb-band-csv filestb 2014-07-14
-           // memberDescriptor.setMemberIndex(bandDescriptor.getMemberIndex());
 
             final Family<FlagDescriptor> flagDescriptors = bandDescriptor.getFlagDescriptors();
             if (flagDescriptors != null) {

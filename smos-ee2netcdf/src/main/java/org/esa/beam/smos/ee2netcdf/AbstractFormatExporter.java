@@ -129,12 +129,9 @@ abstract class AbstractFormatExporter implements FormatExporter {
                         DataType.OBJECT,
                         dimensionNames,
                         numDimensions == 2,
-                        memberDescriptor.getMemberIndex(),
-                        memberDescriptor.getCompoundIndex());
+                        memberDescriptor.getMemberIndex());
 
                 setDataType(variableDescriptor, memberDescriptor.getDataTypeName());
-
-                variableDescriptor.setBinXName(memberDescriptor.getBinXName());
 
                 variableDescriptor.setUnit(memberDescriptor.getUnit());
                 variableDescriptor.setFillValue(memberDescriptor.getFillValue());
@@ -242,6 +239,9 @@ abstract class AbstractFormatExporter implements FormatExporter {
             variableDescriptor.setUnsigned(true);
         } else if ("ushort".equalsIgnoreCase(dataTypeName)) {
             variableDescriptor.setDataType(DataType.SHORT);
+            variableDescriptor.setUnsigned(true);
+        } else if ("ulong".equalsIgnoreCase(dataTypeName)) {
+            variableDescriptor.setDataType(DataType.LONG);
             variableDescriptor.setUnsigned(true);
         } else {
             throw new IllegalArgumentException("unsupported datatype: '" + dataTypeName + "'");
