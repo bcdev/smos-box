@@ -2,6 +2,7 @@ package org.esa.beam.smos.ee2netcdf;
 
 import com.bc.ceres.binding.Property;
 import com.bc.ceres.binding.PropertyContainer;
+import com.bc.ceres.binding.PropertyDescriptor;
 import com.bc.ceres.binding.ValidationException;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.HelpFormatter;
@@ -17,6 +18,7 @@ import org.esa.beam.smos.gui.BindingConstants;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
@@ -295,15 +297,7 @@ public class GPToNetCDFExporterTool {
     }
 
     private static String getOptionName(String alias) {
-        final String[] words = alias.split("[A-Z]");
-        final StringBuilder nameBuilder = new StringBuilder();
-        for (final String word : words) {
-            if (nameBuilder.length() > 0) {
-                nameBuilder.append("-");
-            }
-            nameBuilder.append(word.toLowerCase());
-        }
-        return nameBuilder.toString();
+        return PropertyDescriptor.createDisplayName(alias).replace(" ", "-").toLowerCase();
     }
 
     private static Class<?> getType(Field field) {
