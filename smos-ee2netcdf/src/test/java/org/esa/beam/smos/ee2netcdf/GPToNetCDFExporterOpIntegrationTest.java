@@ -355,6 +355,20 @@ public class GPToNetCDFExporterOpIntegrationTest {
             assertEquals(0, array.getByte(0));
             assertEquals(0, array.getByte(1));
 
+            final Variable adf_error_flag = getVariableVerified("ADF_Error_flag", targetFile);
+            assertEquals(DataType.BYTE, adf_error_flag.getDataType());
+            assertAttribute("_Unsigned","true", adf_error_flag);
+            array = adf_error_flag.read(new int[]{1}, new int[]{2});
+            assertEquals(0, array.getByte(0));
+            assertEquals(0, array.getByte(1));
+
+            final Variable calibration_error_flag = getVariableVerified("Calibration_Error_flag", targetFile);
+            assertEquals(DataType.BYTE, calibration_error_flag.getDataType());
+            assertAttribute("_Unsigned","true", calibration_error_flag);
+            array = calibration_error_flag.read(new int[]{1}, new int[]{2});
+            assertEquals(0, array.getByte(0));
+            assertEquals(0, array.getByte(1));
+
         } finally {
             if (product != null) {
                 product.dispose();

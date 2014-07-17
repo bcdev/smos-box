@@ -49,24 +49,13 @@ class L1CFormatExporter extends AbstractFormatExporter {
     @Override
     public void writeData(NFileWriteable nFileWriteable) throws IOException {
         final L1cScienceSmosFile l1cScienceSmosFile = (L1cScienceSmosFile) explorerFile;
-        //final CompoundData snapshotData = l1cScienceSmosFile.getSnapshotData(1);
 
-        final VariableWriter[] gridPointVariableWriters = createGridPointVariableWriters(nFileWriteable);
+        writeGridPointVariables(nFileWriteable, l1cScienceSmosFile);
+        writeSnapshotVariables(nFileWriteable, l1cScienceSmosFile);
+    }
 
-        for (int i = 0; i < gridPointCount; i++) {
-            final CompoundData gridPointData = l1cScienceSmosFile.getGridPointData(i);
-            final SequenceData btDataList = l1cScienceSmosFile.getBtDataList(i);
-
-            for (VariableWriter writer : gridPointVariableWriters) {
-                writer.write(gridPointData, btDataList, i);
-            }
-        }
-
-        for (VariableWriter writer : gridPointVariableWriters) {
-            writer.close();
-        }
-
-        final VariableWriter[] snapshotVariableWriters = createSnapshotVariableWriters(nFileWriteable);
+    private void writeSnapshotVariables(NFileWriteable nFileWriteable, L1cScienceSmosFile l1cScienceSmosFile) throws IOException {
+        final VariableWriter[] snapshotVariableWriters = createVariableWriters(nFileWriteable, false);
         for (int i = 0; i < numSnapshots; i++) {
             final CompoundData snapshotData = l1cScienceSmosFile.getSnapshotData(i);
 
@@ -80,31 +69,31 @@ class L1CFormatExporter extends AbstractFormatExporter {
         }
     }
 
-    private VariableWriter[] createGridPointVariableWriters(NFileWriteable nFileWriteable) {
-        final Set<String> variableNameKeys = variableDescriptors.keySet();
+    private void writeGridPointVariables(NFileWriteable nFileWriteable, L1cScienceSmosFile l1cScienceSmosFile) throws IOException {
+        final VariableWriter[] gridPointVariableWriters = createVariableWriters(nFileWriteable, true);
 
-        final ArrayList<Object> variableWriterList = new ArrayList<>(variableNameKeys.size());
-        for (final String ncVariableName : variableNameKeys) {
-            final NVariable nVariable = nFileWriteable.findVariable(ncVariableName);
-            final VariableDescriptor variableDescriptor = variableDescriptors.get(ncVariableName);
-            if (!variableDescriptor.isGridPointData()) {
-                continue;
+        for (int i = 0; i < gridPointCount; i++) {
+            final CompoundData gridPointData = l1cScienceSmosFile.getGridPointData(i);
+            final SequenceData btDataList = l1cScienceSmosFile.getBtDataList(i);
+
+            for (VariableWriter writer : gridPointVariableWriters) {
+                writer.write(gridPointData, btDataList, i);
             }
-            final Dimension dimension = extractDimensions(variableDescriptor.getDimensionNames(), dimensionMap);
-
-            variableWriterList.add(VariableWriterFactory.create(nVariable, variableDescriptor, dimension.width, dimension.height));
         }
-        return variableWriterList.toArray(new VariableWriter[variableWriterList.size()]);
+
+        for (VariableWriter writer : gridPointVariableWriters) {
+            writer.close();
+        }
     }
 
-    private VariableWriter[] createSnapshotVariableWriters(NFileWriteable nFileWriteable) {
+    private VariableWriter[] createVariableWriters(NFileWriteable nFileWriteable, boolean gridPointData) {
         final Set<String> variableNameKeys = variableDescriptors.keySet();
 
         final ArrayList<Object> variableWriterList = new ArrayList<>(variableNameKeys.size());
         for (final String ncVariableName : variableNameKeys) {
             final NVariable nVariable = nFileWriteable.findVariable(ncVariableName);
             final VariableDescriptor variableDescriptor = variableDescriptors.get(ncVariableName);
-            if (variableDescriptor.isGridPointData()) {
+            if (gridPointData != variableDescriptor.isGridPointData()) {
                 continue;
             }
             final Dimension dimension = extractDimensions(variableDescriptor.getDimensionNames(), dimensionMap);
