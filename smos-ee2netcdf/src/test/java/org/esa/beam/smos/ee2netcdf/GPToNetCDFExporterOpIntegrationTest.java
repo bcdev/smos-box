@@ -339,7 +339,22 @@ public class GPToNetCDFExporterOpIntegrationTest {
             assertDimension("n_radiometric_accuracy", 2, targetFile);
             assertDimension("n_snapshots", 172, targetFile);
 
-            //assertGridPointIdVariable(targetFile, 32, new int[]{6247647, 6248159});
+            assertGridPointIdVariable(targetFile, 32, new int[]{6247647, 6248159});
+
+            final Variable software_error_flag = getVariableVerified("Software_Error_flag", targetFile);
+            assertEquals(DataType.BYTE, software_error_flag.getDataType());
+            assertAttribute("_Unsigned","true", software_error_flag);
+            Array array = software_error_flag.read(new int[]{1}, new int[]{2});
+            assertEquals(0, array.getByte(0));
+            assertEquals(0, array.getByte(1));
+
+            final Variable instrument_error_flag = getVariableVerified("Instrument_Error_flag", targetFile);
+            assertEquals(DataType.BYTE, instrument_error_flag.getDataType());
+            assertAttribute("_Unsigned","true", instrument_error_flag);
+            array = instrument_error_flag.read(new int[]{1}, new int[]{2});
+            assertEquals(0, array.getByte(0));
+            assertEquals(0, array.getByte(1));
+
         } finally {
             if (product != null) {
                 product.dispose();

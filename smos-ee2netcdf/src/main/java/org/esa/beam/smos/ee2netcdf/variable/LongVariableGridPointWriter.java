@@ -7,7 +7,7 @@ import ucar.ma2.Array;
 
 import java.io.IOException;
 
-public class LongVariableGridPointWriter extends AbstractVariableWriter {
+class LongVariableGridPointWriter extends AbstractVariableWriter {
 
     private final int memberIndex;
 

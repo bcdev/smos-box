@@ -8,7 +8,7 @@ import ucar.ma2.Index;
 
 import java.io.IOException;
 
-public class IntVariableSequence2DWriter extends AbstractVariableWriter {
+class IntVariableSequence2DWriter extends AbstractVariableWriter {
 
     private final int memberIndex;
 
