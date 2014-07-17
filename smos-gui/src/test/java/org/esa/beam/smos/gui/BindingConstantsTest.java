@@ -13,7 +13,7 @@ public class BindingConstantsTest {
        assertEquals("useSelectedProduct", BindingConstants.SELECTED_PRODUCT);
        assertEquals("sourceDirectory", BindingConstants.SOURCE_DIRECTORY);
        assertEquals("openFileDialog", BindingConstants.OPEN_FILE_DIALOG);
-       assertEquals("geometry", BindingConstants.REGION);
+       assertEquals("region", BindingConstants.REGION);
        assertEquals("roiType", BindingConstants.ROI_TYPE);
        assertEquals("north", BindingConstants.NORTH);
        assertEquals("south", BindingConstants.SOUTH);
