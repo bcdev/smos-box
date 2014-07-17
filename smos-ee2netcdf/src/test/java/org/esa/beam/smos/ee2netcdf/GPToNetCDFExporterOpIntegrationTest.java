@@ -322,7 +322,7 @@ public class GPToNetCDFExporterOpIntegrationTest {
 
             final File outputFile = new File(targetDirectory, "SM_REPB_MIR_SCLF1C_20110201T151254_20110201T151308_505_152_1.nc");
             assertTrue(outputFile.isFile());
-            assertEquals(605183, outputFile.length());
+            assertEquals(631895, outputFile.length());
 
             final ExportParameter exportParameter = new ExportParameter();
             targetFile = NetcdfFileOpener.open(outputFile);
@@ -368,6 +368,27 @@ public class GPToNetCDFExporterOpIntegrationTest {
             array = calibration_error_flag.read(new int[]{1}, new int[]{2});
             assertEquals(0, array.getByte(0));
             assertEquals(0, array.getByte(1));
+
+            final Variable days = getVariableVerified("Days", targetFile);
+            assertEquals(DataType.INT, days.getDataType());
+            assertNoAttribute("_Unsigned", days);
+            array = days.read(new int[]{1}, new int[]{2});
+            assertEquals(4049, array.getInt(0));
+            assertEquals(4049, array.getInt(1));
+
+            final Variable seconds = getVariableVerified("Seconds", targetFile);
+            assertEquals(DataType.INT, seconds.getDataType());
+            assertAttribute("_Unsigned", "true", seconds);
+            array = seconds.read(new int[]{1}, new int[]{2});
+            assertEquals(51928, array.getInt(0));
+            assertEquals(51929, array.getInt(1));
+
+            final Variable microseconds = getVariableVerified("Microseconds", targetFile);
+            assertEquals(DataType.INT, microseconds.getDataType());
+            assertAttribute("_Unsigned", "true", microseconds);
+            array = microseconds.read(new int[]{1}, new int[]{2});
+            assertEquals(792932, array.getInt(0));
+            assertEquals(992944, array.getInt(1));
 
         } finally {
             if (product != null) {
