@@ -7,11 +7,11 @@ import ucar.ma2.Array;
 
 import java.io.IOException;
 
-class FloatVariableGridPointWriter extends AbstractVariableWriter {
+class FloatStructMemberWriter extends AbstractVariableWriter {
 
     private final int memberIndex;
 
-    FloatVariableGridPointWriter(NVariable variable, int memberIndex, int arraySize) {
+    FloatStructMemberWriter(NVariable variable, int memberIndex, int arraySize) {
         this.memberIndex = memberIndex;
         array = Array.factory(new float[arraySize]);
         this.variable = variable;

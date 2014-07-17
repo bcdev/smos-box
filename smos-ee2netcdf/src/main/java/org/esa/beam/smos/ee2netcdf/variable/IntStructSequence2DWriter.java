@@ -8,24 +8,24 @@ import ucar.ma2.Index;
 
 import java.io.IOException;
 
-class ShortVariableSequence2DWriter extends AbstractVariableWriter {
+class IntStructSequence2DWriter extends AbstractVariableWriter {
 
     private final int memberIndex;
 
-    ShortVariableSequence2DWriter(NVariable variable, int width, int height, int memberIndex) {
+    IntStructSequence2DWriter(NVariable variable, int width, int height, int memberIndex) {
         this.variable = variable;
         this.memberIndex = memberIndex;
-        array = Array.factory(new short[width][height]);
+        array = Array.factory(new int[width][height]);
     }
 
     @Override
     public void write(CompoundData gridPointData, SequenceData btDataList, int index) throws IOException {
         final Index arrayIndex = array.getIndex();
-        final int size = btDataList.getElementCount();
+        final long size = btDataList.getElementCount();
         for (int i = 0; i < size; i++) {
-            final short data = btDataList.getCompound(i).getShort(memberIndex);
+            final int data = btDataList.getCompound(i).getInt(memberIndex);
             arrayIndex.set(index, i);
-            array.setShort(arrayIndex, data);
+            array.setInt(arrayIndex, data);
         }
     }
 }

@@ -22,97 +22,97 @@ public class VariableWriterFactoryTest {
     }
 
     @Test
-    public void testCreateByteVariableGridPointWriter() {
+    public void testCreateByteStructMemberWriter() {
         variableDescriptor.setDataType(DataType.BYTE);
         variableDescriptor.setGridPointData(true);
 
         final VariableWriter writer = VariableWriterFactory.create(nVariable, variableDescriptor, 12, 13);
-        assertTrue(writer instanceof ByteVariableGridPointWriter);
+        assertTrue(writer instanceof ByteStructMemberWriter);
     }
 
     @Test
-    public void testCreateFloatVariableGridPointWriter() {
+    public void testCreateFloatStructMemberWriter() {
         variableDescriptor.setDataType(DataType.FLOAT);
         variableDescriptor.setGridPointData(true);
 
         final VariableWriter writer = VariableWriterFactory.create(nVariable, variableDescriptor, 13, 14);
-        assertTrue(writer instanceof FloatVariableGridPointWriter);
+        assertTrue(writer instanceof FloatStructMemberWriter);
     }
 
     @Test
-    public void testCreateFloatVariableSequence2DWriter() {
+    public void testCreateFloatStructSequence2DWriter() {
         variableDescriptor.setDataType(DataType.FLOAT);
         variableDescriptor.setIs2d(true);
         variableDescriptor.setGridPointData(true);
 
         final VariableWriter writer = VariableWriterFactory.create(nVariable, variableDescriptor, 14, 15);
-        assertTrue(writer instanceof FloatVariableSequence2DWriter);
+        assertTrue(writer instanceof FloatStructSequence2DWriter);
     }
 
     @Test
-    public void testCreateFloatSequenceWriter() {
+    public void testCreateFloatStructMember2DWriter() {
         variableDescriptor.setDataType(DataType.FLOAT);
         variableDescriptor.setIs2d(true);
         variableDescriptor.setGridPointData(false);
 
         final VariableWriter writer = VariableWriterFactory.create(nVariable, variableDescriptor, 14, 15);
-        assertTrue(writer instanceof FloatSequenceWriter);
+        assertTrue(writer instanceof FloatStructMember2DWriter);
     }
 
     @Test
-    public void testCreateIntVariableGridPointWriter() {
+    public void testCreateIntStructMemberWriter() {
         variableDescriptor.setDataType(DataType.INT);
         variableDescriptor.setGridPointData(true);
 
         final VariableWriter writer = VariableWriterFactory.create(nVariable, variableDescriptor, 16, 17);
-        assertTrue(writer instanceof IntVariableGridPointWriter);
+        assertTrue(writer instanceof IntStructMemberWriter);
     }
 
     @Test
-    public void testCreateIntVariableSequence2DWriter() {
+    public void testCreateIntStructSequence2DWriter() {
         variableDescriptor.setDataType(DataType.INT);
         variableDescriptor.setIs2d(true);
         variableDescriptor.setGridPointData(false);
 
         final VariableWriter writer = VariableWriterFactory.create(nVariable, variableDescriptor, 18, 19);
-        assertTrue(writer instanceof IntVariableSequence2DWriter);
+        assertTrue(writer instanceof IntStructSequence2DWriter);
     }
 
     @Test
-    public void testCreateShortVariableGridPointWriter() {
+    public void testCreateShortStructMemberWriter() {
         variableDescriptor.setDataType(DataType.SHORT);
         variableDescriptor.setGridPointData(true);
 
         final VariableWriter writer = VariableWriterFactory.create(nVariable, variableDescriptor, 18, 19);
-        assertTrue(writer instanceof ShortVariableGridPointWriter);
+        assertTrue(writer instanceof ShortStructMemberWriter);
     }
 
     @Test
-    public void testCreateShortVariableSequence2DWriter() {
+    public void testCreateShortStructSequence2DWriter() {
         variableDescriptor.setDataType(DataType.SHORT);
         variableDescriptor.setIs2d(true);
         variableDescriptor.setGridPointData(false);
 
         final VariableWriter writer = VariableWriterFactory.create(nVariable, variableDescriptor, 19, 20);
-        assertTrue(writer instanceof ShortVariableSequence2DWriter);
+        assertTrue(writer instanceof ShortStructSequence2DWriter);
     }
 
     @Test
-    public void testCreateLongVariableGridPointWriter() {
+    public void testCreateLongStructMemberWriter() {
         variableDescriptor.setDataType(DataType.LONG);
         variableDescriptor.setGridPointData(true);
 
         final VariableWriter writer = VariableWriterFactory.create(nVariable, variableDescriptor, 21, 22);
-        assertTrue(writer instanceof LongVariableGridPointWriter);
+        assertTrue(writer instanceof LongStructMemberWriter);
     }
 
     @Test
-    public void testCreateDoubleVariableGridPointWriter() {
+    public void testCreateDoubleStructMemberWriter() {
         variableDescriptor.setDataType(DataType.DOUBLE);
         variableDescriptor.setIs2d(false);
 
         final VariableWriter writer = VariableWriterFactory.create(nVariable, variableDescriptor, 21, 22);
-        assertTrue(writer instanceof DoubleVariableGridPointWriter);
+        assertTrue(writer instanceof DoubleStructMemberWriter);
     }
 
     @Test
