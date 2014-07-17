@@ -2,7 +2,6 @@ package org.esa.beam.smos.ee2netcdf;
 
 import com.bc.ceres.binding.Property;
 import com.bc.ceres.binding.PropertyContainer;
-import com.bc.ceres.binding.PropertyDescriptor;
 import com.bc.ceres.binding.ValidationException;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.HelpFormatter;
@@ -19,7 +18,9 @@ import java.io.File;
 import java.lang.reflect.Field;
 import java.text.MessageFormat;
 import java.util.Arrays;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -37,15 +38,17 @@ public class GPToNetCDFExporterTool {
     private static final int USAGE_ERROR = 2;
     private static final int EXECUTION_ERROR = 3;
 
-    private static final String[] PARAMETER_NAMES = new String[]{
-            BindingConstants.CONTACT,
-            BindingConstants.INSTITUTION,
-            BindingConstants.OVERWRITE_TARGET,
-            BindingConstants.REGION,
-            BindingConstants.SOURCE_DIRECTORY,
-            BindingConstants.TARGET_DIRECTORY,
-            BindingConstants.VARIABLES,
-    };
+    private static final Map<String, String> PARAMETER_NAMES = new HashMap<>();
+
+    static {
+        PARAMETER_NAMES.put(BindingConstants.CONTACT, "contact");
+        PARAMETER_NAMES.put(BindingConstants.INSTITUTION, "institution");
+        PARAMETER_NAMES.put(BindingConstants.OVERWRITE_TARGET, "overwrite-target");
+        PARAMETER_NAMES.put(BindingConstants.REGION, "region");
+        PARAMETER_NAMES.put(BindingConstants.SOURCE_DIRECTORY, "source-directory");
+        PARAMETER_NAMES.put(BindingConstants.TARGET_DIRECTORY, "target-directory");
+        PARAMETER_NAMES.put(BindingConstants.VARIABLES, "variables");
+    }
 
     private static final Level[] LOG_LEVELS = new Level[]{
             Level.ALL,
@@ -125,7 +128,7 @@ public class GPToNetCDFExporterTool {
         container.setDefaultValues();
         container.setValue(BindingConstants.ROI_TYPE, BindingConstants.ROI_TYPE_GEOMETRY);
 
-        for (final String parameterName : PARAMETER_NAMES) {
+        for (final String parameterName : PARAMETER_NAMES.keySet()) {
             final String optionName = getOptionName(parameterName);
             if (commandLine.hasOption(optionName)) {
                 final String optionValue = commandLine.getOptionValue(optionName);
@@ -219,67 +222,70 @@ public class GPToNetCDFExporterTool {
         options.addOption("v", "version", false, "Display version information.");
         options.addOption(createOption("l", LOG_LEVEL_OPTION_NAME, Level.class, LOG_LEVEL_DESCRIPTION));
 
-        final List<String> parameterNames = Arrays.asList(PARAMETER_NAMES);
+        final Set<String> parameterNames = PARAMETER_NAMES.keySet();
         final Field[] fields = ExportParameter.class.getDeclaredFields();
 
         for (final Field field : fields) {
             final Parameter parameter = field.getAnnotation(Parameter.class);
-            if (parameter != null && parameterNames.contains(parameter.alias())) {
-                final String optionName = getOptionName(parameter);
-                OptionBuilder.withLongOpt(optionName);
+            if (parameter != null) {
+                final String alias = parameter.alias();
+                if (parameterNames.contains(alias)) {
+                    final String optionName = getOptionName(alias);
+                    OptionBuilder.withLongOpt(optionName);
 
-                final Class<?> type = getType(field);
-                OptionBuilder.withType(type);
+                    final Class<?> type = getType(field);
+                    OptionBuilder.withType(type);
 
-                final String argName = type.getSimpleName().toLowerCase();
-                final boolean noArg = type.isAssignableFrom(boolean.class);
-                if (noArg) {
-                    OptionBuilder.hasArg(false);
-                } else {
-                    OptionBuilder.hasArg(true);
-                    OptionBuilder.withArgName(argName);
-                }
-
-                final String description = parameter.description();
-                final StringBuilder descriptionBuilder = new StringBuilder(description);
-                if (!description.isEmpty() && !description.endsWith(".")) {
-                    descriptionBuilder.append(".");
-                }
-                if (!noArg) {
-                    final String[] valueSet = parameter.valueSet();
-                    if (valueSet.length != 0) {
-                        descriptionBuilder
-                                .append(" The argument <")
-                                .append(argName)
-                                .append("> must be in ")
-                                .append(Arrays.toString(valueSet).replace("[", "{").replace("]", "}"))
-                                .append(".");
+                    final String argName = type.getSimpleName().toLowerCase();
+                    final boolean noArg = type.isAssignableFrom(boolean.class);
+                    if (noArg) {
+                        OptionBuilder.hasArg(false);
                     } else {
-                        final String interval = parameter.interval();
-                        if (!interval.isEmpty()) {
+                        OptionBuilder.hasArg(true);
+                        OptionBuilder.withArgName(argName);
+                    }
+
+                    final String description = parameter.description();
+                    final StringBuilder descriptionBuilder = new StringBuilder(description);
+                    if (!description.isEmpty() && !description.endsWith(".")) {
+                        descriptionBuilder.append(".");
+                    }
+                    if (!noArg) {
+                        final String[] valueSet = parameter.valueSet();
+                        if (valueSet.length != 0) {
                             descriptionBuilder
                                     .append(" The argument <")
                                     .append(argName)
-                                    .append("> must be in the interval ")
-                                    .append(interval)
+                                    .append("> must be in ")
+                                    .append(Arrays.toString(valueSet).replace("[", "{").replace("]", "}"))
                                     .append(".");
+                        } else {
+                            final String interval = parameter.interval();
+                            if (!interval.isEmpty()) {
+                                descriptionBuilder
+                                        .append(" The argument <")
+                                        .append(argName)
+                                        .append("> must be in the interval ")
+                                        .append(interval)
+                                        .append(".");
+                            }
+                        }
+                        final String defaultValue = parameter.defaultValue();
+                        if (!defaultValue.isEmpty()) {
+                            descriptionBuilder
+                                    .append(" The default value is '")
+                                    .append(defaultValue)
+                                    .append("'.");
                         }
                     }
-                    final String defaultValue = parameter.defaultValue();
-                    if (!defaultValue.isEmpty()) {
-                        descriptionBuilder
-                                .append(" The default value is '")
-                                .append(defaultValue)
-                                .append("'.");
-                    }
+                    OptionBuilder.withDescription(descriptionBuilder.toString());
+                    final Option option = OptionBuilder.create();
+
+                    final boolean required = parameter.notNull() || parameter.notEmpty();
+                    option.setRequired(required);
+
+                    options.addOption(option);
                 }
-                OptionBuilder.withDescription(descriptionBuilder.toString());
-                final Option option = OptionBuilder.create();
-
-                final boolean required = parameter.notNull() || parameter.notEmpty();
-                option.setRequired(required);
-
-                options.addOption(option);
             }
         }
     }
@@ -291,12 +297,8 @@ public class GPToNetCDFExporterTool {
         return option;
     }
 
-    private static String getOptionName(Parameter parameter) {
-        return getOptionName(parameter.alias());
-    }
-
     private static String getOptionName(String alias) {
-        return PropertyDescriptor.createDisplayName(alias).replace(" ", "-").toLowerCase();
+        return PARAMETER_NAMES.get(alias);
     }
 
     private static Class<?> getType(Field field) {
