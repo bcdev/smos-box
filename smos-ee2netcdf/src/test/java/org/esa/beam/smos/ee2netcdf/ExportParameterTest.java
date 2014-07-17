@@ -162,10 +162,10 @@ public class ExportParameterTest {
 
     @Test
     public void testConstruction() {
-        assertEquals(90.0, parameter.getNorthBound(), 1e-8);
-        assertEquals(-90.0, parameter.getSouthBound(), 1e-8);
-        assertEquals(-180.0, parameter.getWestBound(), 1e-8);
-        assertEquals(180.0, parameter.getEastBound(), 1e-8);
+        assertEquals(0.0, parameter.getNorthBound(), 1e-8);
+        assertEquals(0.0, parameter.getSouthBound(), 1e-8);
+        assertEquals(0.0, parameter.getWestBound(), 1e-8);
+        assertEquals(0.0, parameter.getEastBound(), 1e-8);
 
         assertFalse(parameter.isOverwriteTarget());
         final List<String> outputBandNames = parameter.getVariableNames();
