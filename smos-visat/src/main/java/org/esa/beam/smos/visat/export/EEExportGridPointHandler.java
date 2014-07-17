@@ -212,7 +212,7 @@ class EEExportGridPointHandler implements GridPointHandler {
         final int snapshotCount = snapshotData.getElementCount();
         for (int i = 0; i < snapshotCount; i++) {
             final CompoundData snapshot = snapshotData.getCompound(i);
-            final Date snapshotTime = DateTimeUtils.cfiDateToUtc(snapshot.getCompound(0));
+            final Date snapshotTime = DateTimeUtils.cfiDateToUtc(snapshot);
             final long snapshotId = snapshot.getUInt(1);
             snapshotIdTimeMap.put(snapshotId, snapshotTime);
         }

@@ -222,7 +222,7 @@ public class SnapshotInfoToolView extends SmosToolView {
             } else {
                 if ("Snapshot_Time".equals(compoundType.getMemberName(i))) {
                     try {
-                        final Date date = DateTimeUtils.cfiDateToUtc(data.getCompound(0));
+                        final Date date = DateTimeUtils.cfiDateToUtc(data);
                         final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSz",
                                                                                  Locale.ENGLISH);
                         dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));

@@ -43,9 +43,9 @@ public class DateTimeUtils {
     }
 
     public static Date cfiDateToUtc(CompoundData compoundData) throws IOException {
-        final int days = compoundData.getInt(0);
-        final long seconds = compoundData.getUInt(1);
-        final long microSeconds = compoundData.getUInt(2);
+        final int days = compoundData.getInt("Days");
+        final long seconds = compoundData.getUInt("Seconds");
+        final long microSeconds = compoundData.getUInt("Microseconds");
         return cfiDateToUtc(days, seconds, microSeconds);
     }
 

@@ -33,16 +33,16 @@ public class DateTimeUtilsTest {
     @Test
     public void testCfiDateToUtc_formCompound() throws IOException {
         final CompoundData compoundData = mock(CompoundData.class);
-        when(compoundData.getInt(0)).thenReturn(187);
-        when(compoundData.getUInt(1)).thenReturn(78765L);
-        when(compoundData.getUInt(2)).thenReturn(1007L);
+        when(compoundData.getInt("Days")).thenReturn(187);
+        when(compoundData.getUInt("Seconds")).thenReturn(78765L);
+        when(compoundData.getUInt("Microseconds")).thenReturn(1007L);
 
         Date date = DateTimeUtils.cfiDateToUtc(compoundData);
         assertEquals("Thu Jul 06 23:52:45 CEST 2000", date.toString());
 
-        when(compoundData.getInt(0)).thenReturn(0);
-        when(compoundData.getUInt(1)).thenReturn(0L);
-        when(compoundData.getUInt(2)).thenReturn(0L);
+        when(compoundData.getInt("Days")).thenReturn(0);
+        when(compoundData.getUInt("Seconds")).thenReturn(0L);
+        when(compoundData.getUInt("Microseconds")).thenReturn(0L);
         date = DateTimeUtils.cfiDateToUtc(compoundData);
         assertEquals("Sat Jan 01 01:00:00 CET 2000", date.toString());
     }
