@@ -31,6 +31,8 @@ public class VariableWriterFactory {
                 return new ByteVariableGridPointWriter(nVariable, memberIndex, gridPointCount);
             } else if (dataType == DataType.LONG) {
                 return new LongVariableGridPointWriter(nVariable, memberIndex, gridPointCount);
+            } else if (dataType == DataType.DOUBLE) {
+                return new DoubleVariableGridPointWriter(nVariable, memberIndex, gridPointCount);
             }
         }
         throw new IllegalArgumentException("Unsupported data type for writer: " + dataType);

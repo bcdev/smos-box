@@ -97,6 +97,15 @@ public class VariableWriterFactoryTest {
     }
 
     @Test
+    public void testCreateDoubleVariableGridPointWriter() {
+        variableDescriptor.setDataType(DataType.DOUBLE);
+        variableDescriptor.setIs2d(false);
+
+        final VariableWriter writer = VariableWriterFactory.create(nVariable, variableDescriptor, 21, 22);
+        assertTrue(writer instanceof DoubleVariableGridPointWriter);
+    }
+
+    @Test
     public void testCreateVariableWithUnsupportedDataTypeThrowsException() {
         variableDescriptor.setDataType(DataType.BOOLEAN);
         variableDescriptor.setGridPointData(true);

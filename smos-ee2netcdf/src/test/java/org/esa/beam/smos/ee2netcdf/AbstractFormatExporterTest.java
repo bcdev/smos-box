@@ -191,6 +191,16 @@ public class AbstractFormatExporterTest {
     }
 
     @Test
+    public void testSetDataType_Double() {
+        final VariableDescriptor variableDescriptor = new VariableDescriptor();
+
+        AbstractFormatExporter.setDataType(variableDescriptor, "double");
+
+        assertEquals(DataType.DOUBLE, variableDescriptor.getDataType());
+        assertFalse(variableDescriptor.isUnsigned());
+    }
+
+    @Test
     public void testGetNumDimensions() {
         assertEquals(1, AbstractFormatExporter.getNumDimensions("onedimensional"));
         assertEquals(2, AbstractFormatExporter.getNumDimensions("two dims"));
