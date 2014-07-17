@@ -12,7 +12,11 @@ public class VariableWriterFactory {
         final boolean is2d = variableDescriptor.isIs2d();
         if (is2d) {
             if (dataType == DataType.FLOAT) {
-                return new FloatVariableSequence2DWriter(nVariable, gridPointCount, btDataCount, memberIndex);
+                if (variableDescriptor.isGridPointData()) {
+                    return new FloatVariableSequence2DWriter(nVariable, gridPointCount, btDataCount, memberIndex);
+                } else {
+                    return new FloatSequenceWriter(nVariable, gridPointCount, btDataCount, memberIndex);
+                }
             } else if (dataType == DataType.INT) {
                 return new IntVariableSequence2DWriter(nVariable, gridPointCount, btDataCount, memberIndex);
             } else if (dataType == DataType.SHORT) {

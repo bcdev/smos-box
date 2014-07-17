@@ -58,9 +58,10 @@ class L1CFormatExporter extends AbstractFormatExporter {
         final VariableWriter[] snapshotVariableWriters = createVariableWriters(nFileWriteable, false);
         for (int i = 0; i < numSnapshots; i++) {
             final CompoundData snapshotData = l1cScienceSmosFile.getSnapshotData(i);
+            final SequenceData radiometricAccuracy = snapshotData.getSequence("Radiometric_Accuracy");
 
             for (VariableWriter writer : snapshotVariableWriters) {
-                writer.write(snapshotData, null, i);
+                writer.write(snapshotData, radiometricAccuracy, i);
             }
         }
 

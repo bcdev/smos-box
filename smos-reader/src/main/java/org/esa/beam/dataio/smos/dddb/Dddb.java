@@ -313,6 +313,9 @@ public class Dddb {
                 if (elementType.isSimpleType()) {
                     final MemberDescriptor memberDescriptor = new MemberDescriptor();
                     memberDescriptor.setName(memberName);
+                    memberDescriptor.setDataTypeName(elementType.getName());
+                    final int memberIndex = type.getMemberIndex(memberName);
+                    memberDescriptor.setMemberIndex(memberIndex);
                     memberDescriptors.add(memberDescriptor);
                 } else if (elementType.isCompoundType()) {
                     extractMembers((CompoundType) elementType, memberDescriptors);

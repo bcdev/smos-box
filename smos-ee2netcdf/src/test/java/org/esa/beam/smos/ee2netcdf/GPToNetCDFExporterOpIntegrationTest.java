@@ -322,7 +322,7 @@ public class GPToNetCDFExporterOpIntegrationTest {
 
             final File outputFile = new File(targetDirectory, "SM_REPB_MIR_SCLF1C_20110201T151254_20110201T151308_505_152_1.nc");
             assertTrue(outputFile.isFile());
-            assertEquals(631895, outputFile.length());
+            assertEquals(643823, outputFile.length());
 
             final ExportParameter exportParameter = new ExportParameter();
             targetFile = NetcdfFileOpener.open(outputFile);
@@ -343,7 +343,7 @@ public class GPToNetCDFExporterOpIntegrationTest {
 
             final Variable software_error_flag = getVariableVerified("Software_Error_flag", targetFile);
             assertEquals(DataType.BYTE, software_error_flag.getDataType());
-            assertAttribute("_Unsigned","true", software_error_flag);
+            assertAttribute("_Unsigned", "true", software_error_flag);
             Array array = software_error_flag.read(new int[]{1}, new int[]{2});
             assertEquals(0, array.getByte(0));
             assertEquals(0, array.getByte(1));
@@ -389,6 +389,15 @@ public class GPToNetCDFExporterOpIntegrationTest {
             array = microseconds.read(new int[]{1}, new int[]{2});
             assertEquals(792932, array.getInt(0));
             assertEquals(992944, array.getInt(1));
+
+            final Variable radiometric_accuracy = getVariableVerified("Radiometric_Accuracy", targetFile);
+            assertEquals(DataType.FLOAT, radiometric_accuracy.getDataType());
+            assertAttribute("units", "K", radiometric_accuracy);
+            array = radiometric_accuracy.read(new int[]{2,0}, new int[]{2,2});
+            assertEquals(3.27913236618042, array.getFloat(0), 1e-8);
+            assertEquals(0.0, array.getFloat(1), 1e-8);
+            assertEquals(5.296276569366455, array.getFloat(2), 1e-8);
+            assertEquals(4.488641262054443, array.getFloat(3), 1e-8);
 
         } finally {
             if (product != null) {

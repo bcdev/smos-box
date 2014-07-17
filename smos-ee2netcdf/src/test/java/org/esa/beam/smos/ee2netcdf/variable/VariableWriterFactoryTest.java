@@ -43,10 +43,20 @@ public class VariableWriterFactoryTest {
     public void testCreateFloatVariableSequence2DWriter() {
         variableDescriptor.setDataType(DataType.FLOAT);
         variableDescriptor.setIs2d(true);
-        variableDescriptor.setGridPointData(false);
+        variableDescriptor.setGridPointData(true);
 
         final VariableWriter writer = VariableWriterFactory.create(nVariable, variableDescriptor, 14, 15);
         assertTrue(writer instanceof FloatVariableSequence2DWriter);
+    }
+
+    @Test
+    public void testCreateFloatSequenceWriter() {
+        variableDescriptor.setDataType(DataType.FLOAT);
+        variableDescriptor.setIs2d(true);
+        variableDescriptor.setGridPointData(false);
+
+        final VariableWriter writer = VariableWriterFactory.create(nVariable, variableDescriptor, 14, 15);
+        assertTrue(writer instanceof FloatSequenceWriter);
     }
 
     @Test
