@@ -76,9 +76,11 @@ public class ExportParameter {
                description = "A comma-separated list of variables to be included in the target netCDF file. Variables have to be denoted by names as defined in the ESA SMOS product specification documents. By default all variables in the source file are included in the target file.",
                label = "Variables")
     private List<String> variableNames;
+    private int compressionLevel;
 
     public ExportParameter() {
         variableNames = new ArrayList<>();
+        compressionLevel = 6;
     }
 
     public void setUseSelectedProduct(boolean useSelectedProduct) {
@@ -213,5 +215,13 @@ public class ExportParameter {
 
     public List<String> getVariableNames() {
         return variableNames;
+    }
+
+    public void setCompressionLevel(int compressionLevel) {
+        this.compressionLevel = compressionLevel;
+    }
+
+    public int getCompressionLevel() {
+        return compressionLevel;
     }
 }

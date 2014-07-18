@@ -72,7 +72,12 @@ abstract class AbstractFormatExporter implements FormatExporter {
                 continue;
             }
             final VariableDescriptor variableDescriptor = variableDescriptors.get(ncVariableName);
-            final NVariable nVariable = nFileWriteable.addVariable(ncVariableName, variableDescriptor.getDataType(), true, null, variableDescriptor.getDimensionNames());
+            final NVariable nVariable = nFileWriteable.addVariable(ncVariableName,
+                    variableDescriptor.getDataType(),
+                    true,
+                    null,
+                    variableDescriptor.getDimensionNames(),
+                    exportParameter.getCompressionLevel());
             final String unitValue = variableDescriptor.getUnit();
             if (StringUtils.isNotBlank(unitValue)) {
                 nVariable.addAttribute("units", unitValue);

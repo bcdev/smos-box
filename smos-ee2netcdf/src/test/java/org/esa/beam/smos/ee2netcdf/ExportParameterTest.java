@@ -171,6 +171,8 @@ public class ExportParameterTest {
         final List<String> outputBandNames = parameter.getVariableNames();
         assertNotNull(outputBandNames);
         assertEquals(0, outputBandNames.size());
+
+        assertEquals(6, parameter.getCompressionLevel());
     }
 
     @Test
@@ -228,6 +230,18 @@ public class ExportParameterTest {
         assertNotNull(actualNames);
         assertEquals(bandNames.size(), actualNames.size());
         assertArrayEquals(bandNames.toArray(), actualNames.toArray());
+    }
+
+    @Test
+    public void testSetGetCompressionLevel() {
+        final int level_1 = 1;
+        final int level_2 = 7;
+
+        parameter.setCompressionLevel(level_1);
+        assertEquals(level_1, parameter.getCompressionLevel());
+
+        parameter.setCompressionLevel(level_2);
+        assertEquals(level_2, parameter.getCompressionLevel());
     }
 }
 

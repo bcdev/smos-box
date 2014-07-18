@@ -91,6 +91,7 @@
         <ceres.version.updated>0.14.1</ceres.version.updated>
         <beam.version>5.0</beam.version>
         <beam.version.updated>5.0.1</beam.version.updated>
+        <netcdf.version.updated>5.0.2-SNAPSHOT</netcdf.version.updated>
     </properties>
 
 
@@ -177,7 +178,7 @@
             <dependency>
                 <groupId>org.esa.beam</groupId>
                 <artifactId>beam-netcdf</artifactId>
-                <version>${beam.version}</version>
+                <version>${netcdf.version.updated}</version>
             </dependency>
             <dependency>
                 <groupId>org.esa.beam</groupId>
