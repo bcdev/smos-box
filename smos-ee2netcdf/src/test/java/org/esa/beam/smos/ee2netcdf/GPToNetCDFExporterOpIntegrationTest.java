@@ -322,7 +322,7 @@ public class GPToNetCDFExporterOpIntegrationTest {
 
             final File outputFile = new File(targetDirectory, "SM_REPB_MIR_SCLF1C_20110201T151254_20110201T151308_505_152_1.nc");
             assertTrue(outputFile.isFile());
-            assertEquals(643823, outputFile.length());
+            assertEquals(647007, outputFile.length());
 
             final ExportParameter exportParameter = new ExportParameter();
             targetFile = NetcdfFileOpener.open(outputFile);
