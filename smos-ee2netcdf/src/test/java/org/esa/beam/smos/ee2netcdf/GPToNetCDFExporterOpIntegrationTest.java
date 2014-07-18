@@ -310,11 +310,8 @@ public class GPToNetCDFExporterOpIntegrationTest {
     public void testExportSCLF1C_withSourceProductPaths() throws IOException, ParseException, InvalidRangeException {
         final File file = TestHelper.getResourceFile("SM_REPB_MIR_SCLF1C_20110201T151254_20110201T151308_505_152_1.zip");
 
-        Product product = null;
         NetcdfFile targetFile = null;
         try {
-            product = ProductIO.readProduct(file);
-
             final HashMap<String, Object> parameterMap = createDefaultParameterMap();
             parameterMap.put("sourceProductPaths", file.getParent() + File.separator + "*SCLF1C*");
             GPF.createProduct(GPToNetCDFExporterOp.ALIAS,
@@ -400,10 +397,6 @@ public class GPToNetCDFExporterOpIntegrationTest {
             assertEquals(4.488641262054443, array.getFloat(3), 1e-8);
 
         } finally {
-            if (product != null) {
-                product.dispose();
-            }
-
             if (targetFile != null) {
                 targetFile.close();
             }
