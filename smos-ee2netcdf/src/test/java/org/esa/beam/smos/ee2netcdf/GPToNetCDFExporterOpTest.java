@@ -8,8 +8,7 @@ import org.junit.Test;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class GPToNetCDFExporterOpTest {
 
@@ -87,5 +86,15 @@ public class GPToNetCDFExporterOpTest {
         final Parameter bandnamesFieldAnnotation = bandNamesField.getAnnotation(Parameter.class);
         assertEquals("", bandnamesFieldAnnotation.defaultValue());
         assertEquals("Comma separated list of band names to export. If left empty, no band subsetting is applied.", bandnamesFieldAnnotation.description());
+    }
+
+    @Test
+    public void testParameterAnnotations_compressionLevel() throws NoSuchFieldException {
+        final Field compressionLevelField = GPToNetCDFExporterOp.class.getDeclaredField("compressionLevel");
+        final Parameter compressionLevelFieldAnnotation = compressionLevelField.getAnnotation(Parameter.class);
+        assertEquals("6", compressionLevelFieldAnnotation.defaultValue());
+        final String[] valueSet = compressionLevelFieldAnnotation.valueSet();
+        assertArrayEquals(new String[]{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"}, valueSet);
+        assertEquals("Output file compression level. 0 - no compression, 9 - highest compression.", compressionLevelFieldAnnotation.description());
     }
 }

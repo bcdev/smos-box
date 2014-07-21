@@ -57,7 +57,9 @@ public class GPToNetCDFExporterOp extends Operator {
             description = "Comma separated list of band names to export. If left empty, no band subsetting is applied.")
     private String outputBandNames;
 
-    @Parameter(defaultValue = "6")
+    @Parameter(defaultValue = "6",
+            valueSet = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"},
+            description = "Output file compression level. 0 - no compression, 9 - highest compression.")
     private int compressionLevel;
 
     @Override
@@ -70,9 +72,9 @@ public class GPToNetCDFExporterOp extends Operator {
         exportParameter.setCompressionLevel(compressionLevel);
         if (StringUtils.isNotNullAndNotEmpty(outputBandNames)) {
             final String[] bandNames = StringUtils.csvToArray(outputBandNames);
-            final ArrayList<String> bandNamesList = new ArrayList<String>(bandNames.length);
-            for (int i = 0; i < bandNames.length; i++) {
-                bandNamesList.add(bandNames[i].trim());
+            final ArrayList<String> bandNamesList = new ArrayList<>(bandNames.length);
+            for (String bandName : bandNames) {
+                bandNamesList.add(bandName.trim());
             }
             exportParameter.setVariableNames(bandNamesList);
         }

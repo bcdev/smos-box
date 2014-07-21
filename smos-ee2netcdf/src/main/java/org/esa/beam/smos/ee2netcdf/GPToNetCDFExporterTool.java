@@ -48,6 +48,7 @@ public class GPToNetCDFExporterTool {
         PARAMETER_NAMES.put(BindingConstants.SOURCE_DIRECTORY, "source-directory");
         PARAMETER_NAMES.put(BindingConstants.TARGET_DIRECTORY, "target-directory");
         PARAMETER_NAMES.put(BindingConstants.VARIABLES, "variables");
+        PARAMETER_NAMES.put(BindingConstants.COMPRESSION_LEVEL, "compressionLevel");
     }
 
     private static final Level[] LOG_LEVELS = new Level[]{

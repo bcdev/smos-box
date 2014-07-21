@@ -76,6 +76,9 @@ public class ExportParameter {
                description = "A comma-separated list of variables to be included in the target netCDF file. Variables have to be denoted by names as defined in the ESA SMOS product specification documents. By default all variables in the source file are included in the target file.",
                label = "Variables")
     private List<String> variableNames;
+    @Parameter(defaultValue = "6",
+            valueSet = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"},
+            description = "Output file compression level. 0 - no compression, 9 - highest compression.")
     private int compressionLevel;
 
     public ExportParameter() {

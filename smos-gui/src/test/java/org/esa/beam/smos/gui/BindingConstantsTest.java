@@ -19,6 +19,8 @@ public class BindingConstantsTest {
        assertEquals("south", BindingConstants.SOUTH);
        assertEquals("east", BindingConstants.EAST);
        assertEquals("west", BindingConstants.WEST);
+
+        assertEquals("compressionLevel", BindingConstants.COMPRESSION_LEVEL);
     }
 
     @Test
