@@ -11,6 +11,7 @@ import java.util.TreeSet;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 public class AbstractNetCDFExporterOpTest {
 
@@ -71,5 +72,15 @@ public class AbstractNetCDFExporterOpTest {
                 "Each path may contain the wildcards '**' (matches recursively any directory),\n" +
                 "'*' (matches any character sequence in path names) and\n" +
                 "'?' (matches any single character).", sourceProductPaths.description());
+    }
+
+    @Test
+    public void testParameterAnnotation_targetDirectory() throws NoSuchFieldException {
+        final Field targetDirectoryField = AbstractNetCDFExporterOp.class.getDeclaredField("targetDirectory");
+        final Parameter targetDirectory = targetDirectoryField.getAnnotation(Parameter.class);
+        assertEquals(".", targetDirectory.defaultValue());
+        assertEquals("The target directory for the converted data. If not existing, directory will be created.", targetDirectory.description());
+        assertTrue(targetDirectory.notEmpty());
+        assertTrue(targetDirectory.notNull());
     }
 }

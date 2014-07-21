@@ -24,6 +24,12 @@ abstract class AbstractNetCDFExporterOp extends Operator {
             "'?' (matches any single character).")
     protected String[] sourceProductPaths;
 
+    @Parameter(description = "The target directory for the converted data. If not existing, directory will be created.",
+            defaultValue = ".",
+            notEmpty = true,
+            notNull = true)
+    protected File targetDirectory;
+
     static TreeSet<File> createInputFileSet(String[] sourceProductPaths) {
         final TreeSet<File> sourceFileSet = new TreeSet<>();
         try {

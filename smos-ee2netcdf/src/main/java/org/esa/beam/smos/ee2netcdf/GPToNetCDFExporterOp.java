@@ -22,12 +22,6 @@ public class GPToNetCDFExporterOp extends AbstractNetCDFExporterOp {
 
     public static final String ALIAS = "SmosGP2NetCDF";
 
-    @Parameter(description = "The target directory for the converted data. If not existing, directory will be created.",
-            defaultValue = ".",
-            notEmpty = true,
-            notNull = true)
-    private File targetDirectory;
-
     @Parameter(defaultValue = "false",
             description = "Set true to overwrite already existing target files.")
     private boolean overwriteTarget;

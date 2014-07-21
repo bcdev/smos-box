@@ -31,16 +31,6 @@ public class EEToNetCDFExporterOpTest {
     }
 
     @Test
-    public void testParameterAnnotation_targetDirectory() throws NoSuchFieldException {
-        final Field targetDirectoryField = EEToNetCDFExporterOp.class.getDeclaredField("targetDirectory");
-        final Parameter targetDirectory = targetDirectoryField.getAnnotation(Parameter.class);
-        assertEquals(".", targetDirectory.defaultValue());
-        assertEquals("The target directory for the converted data. If not existing, directory will be created.", targetDirectory.description());
-        assertTrue(targetDirectory.notEmpty());
-        assertTrue(targetDirectory.notNull());
-    }
-
-    @Test
     public void testParameterAnnotations_Region() throws NoSuchFieldException {
         final Field regionField = EEToNetCDFExporterOp.class.getDeclaredField("region");
         final Parameter regionFieldAnnotation = regionField.getAnnotation(Parameter.class);

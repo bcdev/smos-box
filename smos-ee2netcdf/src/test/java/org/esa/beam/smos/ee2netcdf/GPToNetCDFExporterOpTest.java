@@ -7,7 +7,8 @@ import org.junit.Test;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 
 public class GPToNetCDFExporterOpTest {
 
@@ -22,16 +23,6 @@ public class GPToNetCDFExporterOpTest {
         assertEquals("Tom Block", operatorMetadata.authors());
         assertEquals("(c) 2014 by Brockmann Consult", operatorMetadata.copyright());
         assertEquals("Converts SMOS EE Products to NetCDF-GridPoint format.", operatorMetadata.description());
-    }
-
-    @Test
-    public void testParameterAnnotation_targetDirectory() throws NoSuchFieldException {
-        final Field targetDirectoryField = GPToNetCDFExporterOp.class.getDeclaredField("targetDirectory");
-        final Parameter targetDirectory = targetDirectoryField.getAnnotation(Parameter.class);
-        assertEquals(".", targetDirectory.defaultValue());
-        assertEquals("The target directory for the converted data. If not existing, directory will be created.", targetDirectory.description());
-        assertTrue(targetDirectory.notEmpty());
-        assertTrue(targetDirectory.notNull());
     }
 
     @Test

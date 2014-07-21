@@ -39,12 +39,6 @@ public class EEToNetCDFExporterOp extends AbstractNetCDFExporterOp {
 
     public static final String ALIAS = "SmosEE2NetCDF";
 
-    @Parameter(description = "The target directory for the converted data. If not existing, directory will be created.",
-            defaultValue = ".",
-            notEmpty = true,
-            notNull = true)
-    private File targetDirectory;
-
     @Parameter(description = "Target geographical region as a geometry in well-known text format (WKT). The  output product will be tailored according to the region.",
             converter = JtsGeometryConverter.class)
     private Geometry region;
