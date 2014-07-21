@@ -6,6 +6,7 @@ import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.MultiPolygon;
 import com.vividsolutions.jts.geom.Polygon;
 import org.esa.beam.dataio.smos.DggFile;
+import org.esa.beam.dataio.smos.DggUtils;
 import org.esa.beam.dataio.smos.ProductFile;
 import org.esa.beam.dataio.smos.SmosProductReader;
 import org.esa.beam.framework.dataio.ProductIO;
@@ -232,7 +233,7 @@ public class EEtoNetCDFExporterOp extends Operator {
             final ProductFile productFile = productReader.getProductFile();
 
             if (productFile instanceof DggFile) {
-                final Area dataArea = DggFile.computeArea(((DggFile) productFile).getGridPointList());
+                final Area dataArea = DggUtils.computeArea(((DggFile) productFile).getGridPointList());
                 Geometry polygon = convertToPolygon(dataArea);
 
                 if (region != null) {

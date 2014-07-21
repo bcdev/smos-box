@@ -15,8 +15,6 @@
  */
 package org.esa.beam.smos.visat.swing;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertTrue;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,6 +24,9 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JSpinner;
 import javax.swing.JFrame;
 import java.text.ParseException;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class SnapshotSelectorComboTest {
 

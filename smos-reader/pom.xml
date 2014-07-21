@@ -25,19 +25,8 @@
             <artifactId>beam-reader-tests</artifactId>
             <type>test-jar</type>
         </dependency>
-        <dependency>
-            <groupId>org.esa.beam.smos</groupId>
-            <artifactId>smos-tools</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.esa.beam.smos</groupId>
-            <artifactId>smos-tools</artifactId>
-            <type>test-jar</type>
-            <scope>test</scope>
-        </dependency>
 
-
-        <!-- todo 1 tb/tb this is a temporal dependency to kee pthe reader tests running. Remove this immediately
+        <!-- todo 1 tb/tb this is a temporal dependency to keep the reader tests running. Remove this immediately
         when the SMOS-Box dependency is updated to beam - head. tb 2014-07-04 -->
         <dependency>
             <groupId>org.esa.beam</groupId>
@@ -58,6 +47,7 @@
             <groupId>com.bc.ceres</groupId>
             <artifactId>ceres-jai</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.esa.beam.smos</groupId>
             <artifactId>smos-dgg</artifactId>
@@ -65,6 +55,16 @@
         <dependency>
             <groupId>org.esa.beam.smos</groupId>
             <artifactId>smos-lsmask</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.esa.beam.smos</groupId>
+            <artifactId>smos-tools</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.esa.beam.smos</groupId>
+            <artifactId>smos-tools</artifactId>
+            <type>test-jar</type>
+            <scope>test</scope>
         </dependency>
 
         <dependency>

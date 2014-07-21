@@ -2,9 +2,7 @@ package org.esa.beam.dataio.smos;
 
 import java.io.IOException;
 
-/**
- * @author Ralf Quast
- */
+
 public interface PointList {
 
     int getElementCount();

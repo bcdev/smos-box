@@ -75,7 +75,7 @@ class LightBufrFile implements ProductFile {
         final int elementCount = lonAccessor.getElementCount();
 
         final PointList pointList = createPointList(lonAccessor, latAccessor);
-        area = DggFile.computeArea(pointList);
+        area = DggUtils.computeArea(pointList);
 
 
         indexMap = new HashMap<>(pointList.getElementCount());
