@@ -1,15 +1,18 @@
 package org.esa.beam.smos.ee2netcdf;
 
+import org.esa.beam.framework.gpf.annotations.Parameter;
+import org.esa.beam.framework.gpf.annotations.SourceProducts;
 import org.junit.Test;
 
 import java.io.File;
+import java.lang.reflect.Field;
 import java.util.Iterator;
 import java.util.TreeSet;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-public class NetCDFExporterOpTest {
+public class AbstractNetCDFExporterOpTest {
 
     @Test
     public void testCreateInputFileSet_emptyList() {
@@ -47,5 +50,26 @@ public class NetCDFExporterOpTest {
             testDir = new File("./src/test/resources/org/esa/beam/smos/ee2netcdf/");
         }
         return testDir.getPath();
+    }
+
+    @Test
+    public void testParameterAnnotations_SourceProducts() throws NoSuchFieldException {
+        final Field sourceProductsField = AbstractNetCDFExporterOp.class.getDeclaredField("sourceProducts");
+        final SourceProducts sourceProducts = sourceProductsField.getAnnotation(SourceProducts.class);
+        assertEquals(0, sourceProducts.count());
+        assertEquals("MIR_BW[LS][DF]1C|MIR_SC[LS][DF]1C|MIR_OSUDP2|MIR_SMUDP2", sourceProducts.type());
+        assertEquals(0, sourceProducts.bands().length);
+        assertEquals("The source products to be converted. If not given, the parameter 'sourceProductPaths' must be provided.",
+                sourceProducts.description());
+    }
+
+    @Test
+    public void testParameterAnnotation_sourceProductPaths() throws NoSuchFieldException {
+        final Field targetDirectoryField = AbstractNetCDFExporterOp.class.getDeclaredField("sourceProductPaths");
+        final Parameter sourceProductPaths = targetDirectoryField.getAnnotation(Parameter.class);
+        assertEquals("Comma-separated list of file paths specifying the source products.\n" +
+                "Each path may contain the wildcards '**' (matches recursively any directory),\n" +
+                "'*' (matches any character sequence in path names) and\n" +
+                "'?' (matches any single character).", sourceProductPaths.description());
     }
 }
