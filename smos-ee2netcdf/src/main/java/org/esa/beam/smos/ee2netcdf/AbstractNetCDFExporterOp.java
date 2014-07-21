@@ -30,6 +30,10 @@ abstract class AbstractNetCDFExporterOp extends Operator {
             notNull = true)
     protected File targetDirectory;
 
+    @Parameter(defaultValue = "false",
+            description = "Set true to overwrite already existing target files.")
+    protected boolean overwriteTarget;
+
     static TreeSet<File> createInputFileSet(String[] sourceProductPaths) {
         final TreeSet<File> sourceFileSet = new TreeSet<>();
         try {

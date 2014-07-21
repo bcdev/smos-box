@@ -43,11 +43,6 @@ public class EEToNetCDFExporterOp extends AbstractNetCDFExporterOp {
             converter = JtsGeometryConverter.class)
     private Geometry region;
 
-    @Parameter(defaultValue = "false",
-            description = "Set true to overwrite already existing target files.")
-    private boolean overwriteTarget;
-
-
     @Override
     public void initialize() throws OperatorException {
         setDummyTargetProduct();

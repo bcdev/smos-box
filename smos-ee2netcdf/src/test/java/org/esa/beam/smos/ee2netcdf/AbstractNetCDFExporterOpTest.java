@@ -83,4 +83,12 @@ public class AbstractNetCDFExporterOpTest {
         assertTrue(targetDirectory.notEmpty());
         assertTrue(targetDirectory.notNull());
     }
+
+    @Test
+    public void testParameterAnnotations_OverwriteTarget() throws NoSuchFieldException {
+        final Field regionField = AbstractNetCDFExporterOp.class.getDeclaredField("overwriteTarget");
+        final Parameter overwriteTargetFieldAnnotation = regionField.getAnnotation(Parameter.class);
+        assertEquals("false", overwriteTargetFieldAnnotation.defaultValue());
+        assertEquals("Set true to overwrite already existing target files.", overwriteTargetFieldAnnotation.description());
+    }
 }

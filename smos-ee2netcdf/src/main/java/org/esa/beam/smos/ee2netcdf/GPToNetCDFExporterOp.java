@@ -22,10 +22,6 @@ public class GPToNetCDFExporterOp extends AbstractNetCDFExporterOp {
 
     public static final String ALIAS = "SmosGP2NetCDF";
 
-    @Parameter(defaultValue = "false",
-            description = "Set true to overwrite already existing target files.")
-    private boolean overwriteTarget;
-
     @Parameter(description = "Set institution field for file metadata. If left empty, no institution metadata is written to output file.")
     private String institution;
 
