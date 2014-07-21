@@ -1,18 +1,14 @@
 package org.esa.beam.smos.ee2netcdf;
 
 import org.esa.beam.framework.datamodel.Product;
-import org.esa.beam.framework.datamodel.ProductData;
-import org.esa.beam.framework.gpf.Operator;
 import org.esa.beam.framework.gpf.OperatorException;
 import org.esa.beam.framework.gpf.OperatorSpi;
 import org.esa.beam.framework.gpf.annotations.OperatorMetadata;
 import org.esa.beam.framework.gpf.annotations.Parameter;
 import org.esa.beam.framework.gpf.annotations.SourceProducts;
 import org.esa.beam.util.StringUtils;
-import org.esa.beam.util.io.WildcardMatcher;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.TreeSet;
 
@@ -23,7 +19,7 @@ import java.util.TreeSet;
         copyright = "(c) 2014 by Brockmann Consult",
         description = "Converts SMOS EE Products to NetCDF-GridPoint format.",
         autoWriteDisabled = true)
-public class GPToNetCDFExporterOp extends Operator {
+public class GPToNetCDFExporterOp extends NetCDFExporterOp {
 
     public static final String ALIAS = "SmosGP2NetCDF";
 
@@ -97,27 +93,6 @@ public class GPToNetCDFExporterOp extends Operator {
                 gpToNetCDFExporter.exportFile(inputFile, getLogger());
             }
         }
-    }
-
-    // @todo 2 tb/tb duplicated code, extract exporter baseclass tb 2014-07-04
-    private void setDummyTargetProduct() {
-        final Product product = new Product("dummy", "dummy", 2, 2);
-        product.addBand("dummy", ProductData.TYPE_INT8);
-        setTargetProduct(product);
-    }
-
-    // @todo 2 tb/tb duplicated code, extract exporter baseclass tb 2014-07-04
-    static TreeSet<File> createInputFileSet(String[] sourceProductPaths) {
-        final TreeSet<File> sourceFileSet = new TreeSet<>();
-        try {
-            for (String sourceProductPath : sourceProductPaths) {
-                sourceProductPath = sourceProductPath.trim();
-                WildcardMatcher.glob(sourceProductPath, sourceFileSet);
-            }
-        } catch (IOException e) {
-            throw new OperatorException(e.getMessage());
-        }
-        return sourceFileSet;
     }
 
     public static class Spi extends OperatorSpi {

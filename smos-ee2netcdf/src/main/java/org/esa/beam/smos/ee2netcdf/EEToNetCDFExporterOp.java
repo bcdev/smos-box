@@ -1,9 +1,6 @@
 package org.esa.beam.smos.ee2netcdf;
 
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.GeometryFactory;
-import com.vividsolutions.jts.geom.MultiPolygon;
+import com.vividsolutions.jts.geom.*;
 import com.vividsolutions.jts.geom.Polygon;
 import org.esa.beam.dataio.smos.DggFile;
 import org.esa.beam.dataio.smos.DggUtils;
@@ -15,8 +12,6 @@ import org.esa.beam.framework.datamodel.GeoCoding;
 import org.esa.beam.framework.datamodel.GeoPos;
 import org.esa.beam.framework.datamodel.PixelPos;
 import org.esa.beam.framework.datamodel.Product;
-import org.esa.beam.framework.datamodel.ProductData;
-import org.esa.beam.framework.gpf.Operator;
 import org.esa.beam.framework.gpf.OperatorException;
 import org.esa.beam.framework.gpf.OperatorSpi;
 import org.esa.beam.framework.gpf.annotations.OperatorMetadata;
@@ -24,9 +19,8 @@ import org.esa.beam.framework.gpf.annotations.Parameter;
 import org.esa.beam.framework.gpf.annotations.SourceProducts;
 import org.esa.beam.util.converters.JtsGeometryConverter;
 import org.esa.beam.util.io.FileUtils;
-import org.esa.beam.util.io.WildcardMatcher;
 
-import java.awt.Rectangle;
+import java.awt.*;
 import java.awt.geom.Area;
 import java.awt.geom.PathIterator;
 import java.io.File;
@@ -42,32 +36,32 @@ import java.util.TreeSet;
         copyright = "(c) 2013, 2014 by Brockmann Consult",
         description = "Converts SMOS EE Products to NetCDF format.",
         autoWriteDisabled = true)
-public class EEToNetCDFExporterOp extends Operator {
+public class EEToNetCDFExporterOp extends NetCDFExporterOp {
 
     public static final String ALIAS = "SmosEE2NetCDF";
 
     @SourceProducts(type = ExportParameter.PRODUCT_TYPE_REGEX,
-                    description = "The source products to be converted. If not given, the parameter 'sourceProductPaths' must be provided.")
+            description = "The source products to be converted. If not given, the parameter 'sourceProductPaths' must be provided.")
     private Product[] sourceProducts;
 
     @Parameter(description = "Comma-separated list of file paths specifying the source products.\n" +
-                             "Each path may contain the wildcards '**' (matches recursively any directory),\n" +
-                             "'*' (matches any character sequence in path names) and\n" +
-                             "'?' (matches any single character).")
+            "Each path may contain the wildcards '**' (matches recursively any directory),\n" +
+            "'*' (matches any character sequence in path names) and\n" +
+            "'?' (matches any single character).")
     private String[] sourceProductPaths;
 
     @Parameter(description = "The target directory for the converted data. If not existing, directory will be created.",
-               defaultValue = ".",
-               notEmpty = true,
-               notNull = true)
+            defaultValue = ".",
+            notEmpty = true,
+            notNull = true)
     private File targetDirectory;
 
     @Parameter(description = "The geographical region as a geometry in well-known text format (WKT).",
-               converter = JtsGeometryConverter.class)
+            converter = JtsGeometryConverter.class)
     private Geometry region;
 
     @Parameter(defaultValue = "false",
-               description = "Set true to overwrite already existing target files.")
+            description = "Set true to overwrite already existing target files.")
     private boolean overwriteTarget;
 
 
@@ -98,20 +92,6 @@ public class EEToNetCDFExporterOp extends Operator {
         return outFile;
     }
 
-    // package access for testing only tb 2013-03-27
-    static TreeSet<File> createInputFileSet(String[] sourceProductPaths) {
-        final TreeSet<File> sourceFileSet = new TreeSet<>();
-        try {
-            for (String sourceProductPath : sourceProductPaths) {
-                sourceProductPath = sourceProductPath.trim();
-                WildcardMatcher.glob(sourceProductPath, sourceFileSet);
-            }
-        } catch (IOException e) {
-            throw new OperatorException(e.getMessage());
-        }
-        return sourceFileSet;
-    }
-
     // package access for testing only tb 2013-03-26
     static MultiPolygon convertToPolygon(Area dataArea) {
         final PathIterator pathIterator = dataArea.getPathIterator(null);
@@ -127,7 +107,7 @@ public class EEToNetCDFExporterOp extends Operator {
                 final Coordinate[] coordinates = convert(coordList);
 
                 final Polygon polygon = geometryFactory.createPolygon(geometryFactory.createLinearRing(coordinates),
-                                                                      null);
+                        null);
                 polygonList.add(polygon);
 
                 coordList.clear();
@@ -194,12 +174,6 @@ public class EEToNetCDFExporterOp extends Operator {
         final ProductSubsetDef subsetDef = new ProductSubsetDef();
         subsetDef.setRegion(rectangle);
         return subsetDef;
-    }
-
-    private void setDummyTargetProduct() {
-        final Product product = new Product("dummy", "dummy", 2, 2);
-        product.addBand("dummy", ProductData.TYPE_INT8);
-        setTargetProduct(product);
     }
 
     private void exportFile(File inputFile) {
