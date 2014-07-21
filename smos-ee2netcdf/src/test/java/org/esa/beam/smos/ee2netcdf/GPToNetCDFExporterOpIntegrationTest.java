@@ -306,7 +306,41 @@ public class GPToNetCDFExporterOpIntegrationTest {
     }
 
     @Test
-//    @Ignore
+    public void testConvert_BWSD1C_withGeometricSubset() throws IOException, InvalidRangeException, ParseException {
+        final File file = TestHelper.getResourceFile("SM_OPER_MIR_BWLF1C_20111026T143206_20111026T152520_503_001_1.zip");
+
+        Product product = null;
+        NetcdfFile targetFile = null;
+        try {
+            product = ProductIO.readProduct(file);
+
+            final HashMap<String, Object> parameterMap = createDefaultParameterMap();
+            parameterMap.put("region", "POLYGON((42 5, 42 9, 44 9, 44 5, 42 5))");
+            GPF.createProduct(GPToNetCDFExporterOp.ALIAS,
+                    parameterMap,
+                    new Product[]{product});
+
+            final File outputFile = new File(targetDirectory, "SM_OPER_MIR_BWLF1C_20111026T143206_20111026T152520_503_001_1.nc");
+            assertTrue(outputFile.isFile());
+            assertEquals(521552, outputFile.length());
+
+            targetFile = NetcdfFileOpener.open(outputFile);
+            final Variable grid_point_latitude = getVariableVerified("Grid_Point_Latitude", targetFile);
+            final Variable grid_point_longitude = getVariableVerified("Grid_Point_Longitude", targetFile);
+
+
+        } finally {
+            if (product != null) {
+                product.dispose();
+            }
+
+            if (targetFile != null) {
+                targetFile.close();
+            }
+        }
+    }
+
+    @Test
     public void testExportSCLF1C_withSourceProductPaths() throws IOException, ParseException, InvalidRangeException {
         final File file = TestHelper.getResourceFile("SM_REPB_MIR_SCLF1C_20110201T151254_20110201T151308_505_152_1.zip");
 
