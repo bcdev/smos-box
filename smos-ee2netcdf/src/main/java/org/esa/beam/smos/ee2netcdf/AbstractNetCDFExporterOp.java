@@ -1,11 +1,13 @@
 package org.esa.beam.smos.ee2netcdf;
 
+import com.vividsolutions.jts.geom.Geometry;
 import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.framework.datamodel.ProductData;
 import org.esa.beam.framework.gpf.Operator;
 import org.esa.beam.framework.gpf.OperatorException;
 import org.esa.beam.framework.gpf.annotations.Parameter;
 import org.esa.beam.framework.gpf.annotations.SourceProducts;
+import org.esa.beam.util.converters.JtsGeometryConverter;
 import org.esa.beam.util.io.WildcardMatcher;
 
 import java.io.File;
@@ -33,6 +35,10 @@ abstract class AbstractNetCDFExporterOp extends Operator {
     @Parameter(defaultValue = "false",
             description = "Set true to overwrite already existing target files.")
     protected boolean overwriteTarget;
+
+    @Parameter(description = "Target geographical region as a geometry in well-known text format (WKT). The  output product will be tailored according to the region.",
+            converter = JtsGeometryConverter.class)
+    protected Geometry region;
 
     static TreeSet<File> createInputFileSet(String[] sourceProductPaths) {
         final TreeSet<File> sourceFileSet = new TreeSet<>();

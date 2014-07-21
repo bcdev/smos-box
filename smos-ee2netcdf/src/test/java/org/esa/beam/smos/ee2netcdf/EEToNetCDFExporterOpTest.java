@@ -3,14 +3,11 @@ package org.esa.beam.smos.ee2netcdf;
 import com.vividsolutions.jts.geom.Coordinate;
 import org.esa.beam.framework.dataio.ProductSubsetDef;
 import org.esa.beam.framework.gpf.annotations.OperatorMetadata;
-import org.esa.beam.framework.gpf.annotations.Parameter;
-import org.esa.beam.util.converters.JtsGeometryConverter;
 import org.junit.Test;
 
 import java.awt.*;
 import java.io.File;
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 import static org.junit.Assert.*;
@@ -28,17 +25,6 @@ public class EEToNetCDFExporterOpTest {
         assertEquals("Tom Block", operatorMetadata.authors());
         assertEquals("(c) 2013, 2014 by Brockmann Consult", operatorMetadata.copyright());
         assertEquals("Converts SMOS EE Products to NetCDF format.", operatorMetadata.description());
-    }
-
-    @Test
-    public void testParameterAnnotations_Region() throws NoSuchFieldException {
-        final Field regionField = EEToNetCDFExporterOp.class.getDeclaredField("region");
-        final Parameter regionFieldAnnotation = regionField.getAnnotation(Parameter.class);
-        assertEquals("", regionFieldAnnotation.defaultValue());
-        assertEquals("Target geographical region as a geometry in well-known text format (WKT). The  output product will be tailored according to the region.", regionFieldAnnotation.description());
-        assertEquals(JtsGeometryConverter.class, regionFieldAnnotation.converter());
-        assertFalse(regionFieldAnnotation.notEmpty());
-        assertFalse(regionFieldAnnotation.notNull());
     }
 
     @Test

@@ -15,8 +15,6 @@ import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.framework.gpf.OperatorException;
 import org.esa.beam.framework.gpf.OperatorSpi;
 import org.esa.beam.framework.gpf.annotations.OperatorMetadata;
-import org.esa.beam.framework.gpf.annotations.Parameter;
-import org.esa.beam.util.converters.JtsGeometryConverter;
 import org.esa.beam.util.io.FileUtils;
 
 import java.awt.*;
@@ -38,10 +36,6 @@ import java.util.TreeSet;
 public class EEToNetCDFExporterOp extends AbstractNetCDFExporterOp {
 
     public static final String ALIAS = "SmosEE2NetCDF";
-
-    @Parameter(description = "Target geographical region as a geometry in well-known text format (WKT). The  output product will be tailored according to the region.",
-            converter = JtsGeometryConverter.class)
-    private Geometry region;
 
     @Override
     public void initialize() throws OperatorException {

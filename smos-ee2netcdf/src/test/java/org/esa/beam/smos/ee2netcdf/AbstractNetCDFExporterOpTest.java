@@ -2,6 +2,7 @@ package org.esa.beam.smos.ee2netcdf;
 
 import org.esa.beam.framework.gpf.annotations.Parameter;
 import org.esa.beam.framework.gpf.annotations.SourceProducts;
+import org.esa.beam.util.converters.JtsGeometryConverter;
 import org.junit.Test;
 
 import java.io.File;
@@ -9,9 +10,8 @@ import java.lang.reflect.Field;
 import java.util.Iterator;
 import java.util.TreeSet;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
 
 public class AbstractNetCDFExporterOpTest {
 
@@ -90,5 +90,16 @@ public class AbstractNetCDFExporterOpTest {
         final Parameter overwriteTargetFieldAnnotation = regionField.getAnnotation(Parameter.class);
         assertEquals("false", overwriteTargetFieldAnnotation.defaultValue());
         assertEquals("Set true to overwrite already existing target files.", overwriteTargetFieldAnnotation.description());
+    }
+
+    @Test
+    public void testParameterAnnotations_Region() throws NoSuchFieldException {
+        final Field regionField = AbstractNetCDFExporterOp.class.getDeclaredField("region");
+        final Parameter regionFieldAnnotation = regionField.getAnnotation(Parameter.class);
+        assertEquals("", regionFieldAnnotation.defaultValue());
+        assertEquals("Target geographical region as a geometry in well-known text format (WKT). The  output product will be tailored according to the region.", regionFieldAnnotation.description());
+        assertEquals(JtsGeometryConverter.class, regionFieldAnnotation.converter());
+        assertFalse(regionFieldAnnotation.notEmpty());
+        assertFalse(regionFieldAnnotation.notNull());
     }
 }
