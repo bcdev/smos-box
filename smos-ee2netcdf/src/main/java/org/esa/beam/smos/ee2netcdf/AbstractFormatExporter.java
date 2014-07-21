@@ -14,6 +14,8 @@ import org.esa.beam.framework.datamodel.MetadataElement;
 import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.framework.datamodel.ProductData;
 import org.esa.beam.smos.DateTimeUtils;
+import org.esa.beam.smos.ee2netcdf.geometry.GeometryFilter;
+import org.esa.beam.smos.ee2netcdf.geometry.GeometryFilterFactory;
 import org.esa.beam.smos.ee2netcdf.variable.VariableDescriptor;
 import ucar.ma2.Array;
 import ucar.ma2.DataType;
@@ -23,10 +25,12 @@ import java.util.*;
 
 abstract class AbstractFormatExporter implements FormatExporter {
 
+    private Family<MemberDescriptor> memberDescriptors;
+
     protected int gridPointCount;
     protected SmosFile explorerFile;
     protected Map<String, VariableDescriptor> variableDescriptors;
-    private Family<MemberDescriptor> memberDescriptors;
+    protected GeometryFilter geometryFilter;
 
     protected static boolean mustExport(String bandName, List<String> outputBandNames) {
         return outputBandNames.isEmpty() || outputBandNames.contains(bandName);
@@ -39,6 +43,8 @@ abstract class AbstractFormatExporter implements FormatExporter {
 
         memberDescriptors = Dddb.getInstance().getMemberDescriptors(explorerFile.getHeaderFile());
         createVariableDescriptors(exportParameter);
+
+        geometryFilter = GeometryFilterFactory.create(exportParameter.getRegion());
     }
 
     @Override

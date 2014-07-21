@@ -45,6 +45,7 @@ public class GPToNetCDFExporterOp extends AbstractNetCDFExporterOp {
         exportParameter.setContact(contact);
         exportParameter.setOverwriteTarget(overwriteTarget);
         exportParameter.setCompressionLevel(compressionLevel);
+        exportParameter.setRegion(region);
         if (StringUtils.isNotNullAndNotEmpty(outputBandNames)) {
             final String[] bandNames = StringUtils.csvToArray(outputBandNames);
             final ArrayList<String> bandNamesList = new ArrayList<>(bandNames.length);

@@ -15,8 +15,6 @@
  */
 package org.esa.beam.smos.visat.swing;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotSame;
 import org.esa.beam.dataio.smos.SnapshotInfo;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,6 +22,9 @@ import org.junit.Test;
 import java.awt.geom.Rectangle2D;
 import java.util.Arrays;
 import java.util.Collections;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotSame;
 
 public class SnapshotSelectorComboModelTest {
 

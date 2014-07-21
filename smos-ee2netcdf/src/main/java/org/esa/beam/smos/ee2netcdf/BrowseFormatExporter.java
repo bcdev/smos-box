@@ -42,8 +42,11 @@ class BrowseFormatExporter extends AbstractFormatExporter {
         for (int i = 0; i < gridPointCount; i++) {
             final SequenceData btDataList = browseFile.getBtDataList(i);
             final CompoundData gridPointData = explorerFile.getGridPointData(i);
-            for (VariableWriter writer : variableWriters) {
-                writer.write(gridPointData, btDataList, i);
+
+            if (geometryFilter.accept(gridPointData)) {
+                for (VariableWriter writer : variableWriters) {
+                    writer.write(gridPointData, btDataList, i);
+                }
             }
         }
 

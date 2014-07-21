@@ -31,8 +31,10 @@ class L2FormatExporter extends AbstractFormatExporter {
 
         for (int i = 0; i < gridPointCount; i++) {
             final CompoundData gridPointData = explorerFile.getGridPointData(i);
-            for (VariableWriter writer : variableWriters) {
-                writer.write(gridPointData, null, i);
+            if (geometryFilter.accept(gridPointData)) {
+                for (VariableWriter writer : variableWriters) {
+                    writer.write(gridPointData, null, i);
+                }
             }
         }
 
