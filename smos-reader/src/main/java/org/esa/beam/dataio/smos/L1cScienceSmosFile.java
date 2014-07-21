@@ -329,7 +329,7 @@ public class L1cScienceSmosFile extends L1cSmosFile {
                 if (lon > 180.0) {
                     lon -= 360.0;
                 }
-                final Rectangle2D rectangle = L1cScienceSmosFile.createGridPointRectangle(lon, lat);
+                final Rectangle2D rectangle = DggUtils.createGridPointRectangle(lon, lat);
 
                 long lastId = -1;
                 for (int j = 0; j < btCount; j++) {
@@ -457,24 +457,5 @@ public class L1cScienceSmosFile extends L1cSmosFile {
         }
         band.setSourceImage(createSourceImage(band, valueProvider));
         band.setImageInfo(ProductHelper.createImageInfo(band, descriptor));
-    }
-
-    // TODO - move to somewhere rq-20140512
-    static Rectangle2D createGridPointRectangle(double lon, double lat) {
-        // the average width of a grid point is about 0.04
-        lon -= 0.02;
-        if (lon < -180.0) {
-            lon = -180.0;
-        } else if (lon + 0.04 > 180.0) {
-            lon -= 0.04;
-        }
-        // the height of a grid point always is about 0.02
-        lat -= 0.01;
-        if (lat < -90.0) {
-            lat = -90.0;
-        } else if (lat + 0.02 > 90.0) {
-            lat -= 0.02;
-        }
-        return new Rectangle2D.Double(lon, lat, 0.04, 0.02);
     }
 }

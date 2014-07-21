@@ -55,4 +55,23 @@ public class DggUtils {
 
         return new Rectangle2D.Double(x, y, w, w);
     }
+
+    // package access for testing only tb 2014-07-21
+    static Rectangle2D createGridPointRectangle(double lon, double lat) {
+        // the average width of a grid point is about 0.04
+        lon -= 0.02;
+        if (lon < -180.0) {
+            lon = -180.0;
+        } else if (lon + 0.04 > 180.0) {
+            lon -= 0.04;
+        }
+        // the height of a grid point always is about 0.02
+        lat -= 0.01;
+        if (lat < -90.0) {
+            lat = -90.0;
+        } else if (lat + 0.02 > 90.0) {
+            lat -= 0.02;
+        }
+        return new Rectangle2D.Double(lon, lat, 0.04, 0.02);
+    }
 }
