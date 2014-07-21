@@ -1,2 +1,2 @@
-org.esa.beam.smos.ee2netcdf.EEtoNetCDFExporterOp$Spi
+org.esa.beam.smos.ee2netcdf.EEToNetCDFExporterOp$Spi
 org.esa.beam.smos.ee2netcdf.GPToNetCDFExporterOp$Spi

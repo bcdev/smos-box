@@ -8,7 +8,7 @@ import com.vividsolutions.jts.io.WKTWriter;
 import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.framework.gpf.GPF;
 import org.esa.beam.framework.ui.AppContext;
-import org.esa.beam.smos.ee2netcdf.EEtoNetCDFExporterOp;
+import org.esa.beam.smos.ee2netcdf.EEToNetCDFExporterOp;
 import org.esa.beam.smos.ee2netcdf.ExportParameter;
 import org.esa.beam.smos.gui.BindingConstants;
 
@@ -41,9 +41,9 @@ class ConverterSwingWorker extends ProgressMonitorSwingWorker<List<Exception>, F
         try {
             if (exportParameter.isUseSelectedProduct()) {
                 final Product selectedProduct = appContext.getSelectedProduct();
-                GPF.createProduct(EEtoNetCDFExporterOp.ALIAS, parameterMap, new Product[]{selectedProduct});
+                GPF.createProduct(EEToNetCDFExporterOp.ALIAS, parameterMap, new Product[]{selectedProduct});
             } else {
-                GPF.createProduct(EEtoNetCDFExporterOp.ALIAS, parameterMap);
+                GPF.createProduct(EEToNetCDFExporterOp.ALIAS, parameterMap);
             }
         } catch (Exception e) {
             exceptions.add(e);

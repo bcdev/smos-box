@@ -18,11 +18,11 @@ import java.util.TreeSet;
 
 import static org.junit.Assert.*;
 
-public class EEtoNetCDFExporterOpTest {
+public class EEToNetCDFExporterOpTest {
 
     @Test
     public void testOperatorAnnotations() {
-        final Annotation[] declaredAnnotations = EEtoNetCDFExporterOp.class.getDeclaredAnnotations();
+        final Annotation[] declaredAnnotations = EEToNetCDFExporterOp.class.getDeclaredAnnotations();
 
         assertEquals(1, declaredAnnotations.length);
         final OperatorMetadata operatorMetadata = (OperatorMetadata) declaredAnnotations[0];
@@ -35,7 +35,7 @@ public class EEtoNetCDFExporterOpTest {
 
     @Test
     public void testParameterAnnotations_SourceProducts() throws NoSuchFieldException {
-        final Field sourceProductsField = EEtoNetCDFExporterOp.class.getDeclaredField("sourceProducts");
+        final Field sourceProductsField = EEToNetCDFExporterOp.class.getDeclaredField("sourceProducts");
         final SourceProducts sourceProducts = sourceProductsField.getAnnotation(SourceProducts.class);
         assertEquals(0, sourceProducts.count());
         assertEquals("MIR_BW[LS][DF]1C|MIR_SC[LS][DF]1C|MIR_OSUDP2|MIR_SMUDP2", sourceProducts.type());
@@ -46,7 +46,7 @@ public class EEtoNetCDFExporterOpTest {
 
     @Test
     public void testParameterAnnotation_sourceProductPaths() throws NoSuchFieldException {
-        final Field targetDirectoryField = EEtoNetCDFExporterOp.class.getDeclaredField("sourceProductPaths");
+        final Field targetDirectoryField = EEToNetCDFExporterOp.class.getDeclaredField("sourceProductPaths");
         final Parameter sourceProductPaths = targetDirectoryField.getAnnotation(Parameter.class);
         assertEquals("Comma-separated list of file paths specifying the source products.\n" +
                 "Each path may contain the wildcards '**' (matches recursively any directory),\n" +
@@ -56,7 +56,7 @@ public class EEtoNetCDFExporterOpTest {
 
     @Test
     public void testParameterAnnotation_targetDirectory() throws NoSuchFieldException {
-        final Field targetDirectoryField = EEtoNetCDFExporterOp.class.getDeclaredField("targetDirectory");
+        final Field targetDirectoryField = EEToNetCDFExporterOp.class.getDeclaredField("targetDirectory");
         final Parameter targetDirectory = targetDirectoryField.getAnnotation(Parameter.class);
         assertEquals(".", targetDirectory.defaultValue());
         assertEquals("The target directory for the converted data. If not existing, directory will be created.", targetDirectory.description());
@@ -66,7 +66,7 @@ public class EEtoNetCDFExporterOpTest {
 
     @Test
     public void testParameterAnnotations_Region() throws NoSuchFieldException {
-        final Field regionField = EEtoNetCDFExporterOp.class.getDeclaredField("region");
+        final Field regionField = EEToNetCDFExporterOp.class.getDeclaredField("region");
         final Parameter regionFieldAnnotation = regionField.getAnnotation(Parameter.class);
         assertEquals("", regionFieldAnnotation.defaultValue());
         assertEquals("The geographical region as a geometry in well-known text format (WKT).", regionFieldAnnotation.description());
@@ -77,7 +77,7 @@ public class EEtoNetCDFExporterOpTest {
 
     @Test
     public void testParameterAnnotations_OverwriteTarget() throws NoSuchFieldException {
-        final Field regionField = EEtoNetCDFExporterOp.class.getDeclaredField("overwriteTarget");
+        final Field regionField = EEToNetCDFExporterOp.class.getDeclaredField("overwriteTarget");
         final Parameter overwriteTargetFieldAnnotation = regionField.getAnnotation(Parameter.class);
         assertEquals("false", overwriteTargetFieldAnnotation.defaultValue());
         assertEquals("Set true to overwrite already existing target files.", overwriteTargetFieldAnnotation.description());
@@ -88,7 +88,7 @@ public class EEtoNetCDFExporterOpTest {
         final File input = new File("bla/bla/change_my_name.zip");
         final File targetDir = new File("/target/di/rectory");
 
-        final File outputFile = EEtoNetCDFExporterOp.getOutputFile(input, targetDir);
+        final File outputFile = EEToNetCDFExporterOp.getOutputFile(input, targetDir);
         assertEquals("change_my_name.nc", outputFile.getName());
         assertEquals(targetDir.getAbsolutePath(), outputFile.getParentFile().getAbsolutePath());
     }
@@ -97,7 +97,7 @@ public class EEtoNetCDFExporterOpTest {
     public void testCreateSubsetDef() {
         final Rectangle rectangle = new Rectangle(0, 1, 3, 4);
 
-        final ProductSubsetDef subsetDef = EEtoNetCDFExporterOp.createSubsetDef(rectangle);
+        final ProductSubsetDef subsetDef = EEToNetCDFExporterOp.createSubsetDef(rectangle);
         assertNotNull(subsetDef);
 
         final Rectangle subsetDefRegion = subsetDef.getRegion();
@@ -115,7 +115,7 @@ public class EEtoNetCDFExporterOpTest {
         rawCoords.add(new double[]{3.0, 4.0});
         rawCoords.add(new double[]{5.0, 6.0});
 
-        final Coordinate[] coordinates = EEtoNetCDFExporterOp.convert(rawCoords);
+        final Coordinate[] coordinates = EEToNetCDFExporterOp.convert(rawCoords);
         assertNotNull(coordinates);
         assertEquals(3, coordinates.length);
         assertEquals(1.0, coordinates[0].x, 1e-8);
@@ -128,7 +128,7 @@ public class EEtoNetCDFExporterOpTest {
 
     @Test
     public void testCreateInputFileSet_emptyList() {
-        final TreeSet<File> inputFileSet = EEtoNetCDFExporterOp.createInputFileSet(new String[0]);
+        final TreeSet<File> inputFileSet = EEToNetCDFExporterOp.createInputFileSet(new String[0]);
         assertNotNull(inputFileSet);
         assertEquals(0, inputFileSet.size());
     }
@@ -136,7 +136,7 @@ public class EEtoNetCDFExporterOpTest {
     @Test
     public void testCreateInputFileSet_oneDir() {
         final String resourcePath = getResourcePath();
-        final TreeSet<File> inputFileSet = EEtoNetCDFExporterOp.createInputFileSet(new String[]{resourcePath + File.separator + "*"});
+        final TreeSet<File> inputFileSet = EEToNetCDFExporterOp.createInputFileSet(new String[]{resourcePath + File.separator + "*"});
         assertNotNull(inputFileSet);
         assertEquals(4, inputFileSet.size());
         final Iterator<File> iterator = inputFileSet.iterator();
@@ -149,7 +149,7 @@ public class EEtoNetCDFExporterOpTest {
     @Test
     public void testCreateInputFileSet_oneDir_wildcard() {
         final String resourcePath = getResourcePath();
-        final TreeSet<File> inputFileSet = EEtoNetCDFExporterOp.createInputFileSet(new String[]{resourcePath + File.separator + "*BWL*"});
+        final TreeSet<File> inputFileSet = EEToNetCDFExporterOp.createInputFileSet(new String[]{resourcePath + File.separator + "*BWL*"});
         assertNotNull(inputFileSet);
         assertEquals(1, inputFileSet.size());
         final Iterator<File> iterator = inputFileSet.iterator();
@@ -158,7 +158,7 @@ public class EEtoNetCDFExporterOpTest {
 
     @Test
     public void testAlias() {
-         assertEquals("SmosEE2NetCDF", EEtoNetCDFExporterOp.ALIAS);
+         assertEquals("SmosEE2NetCDF", EEToNetCDFExporterOp.ALIAS);
     }
 
     private String getResourcePath() {
