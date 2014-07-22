@@ -40,6 +40,7 @@ class GPToNetCDFExporter {
             }
             nFileWriteable = N4FileWriteable.create(outputFile.getPath());
 
+            exporter.prepareGeographicSubset(nFileWriteable, parameter);
             exporter.addGlobalAttributes(nFileWriteable, product.getMetadataRoot(), parameter);
             exporter.addDimensions(nFileWriteable);
             exporter.addVariables(nFileWriteable, parameter);

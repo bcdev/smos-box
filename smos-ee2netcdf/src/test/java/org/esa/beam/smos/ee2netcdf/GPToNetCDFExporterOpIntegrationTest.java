@@ -452,7 +452,7 @@ public class GPToNetCDFExporterOpIntegrationTest {
 
             final File outputFile = new File(targetDirectory, "SM_REPB_MIR_SCLF1C_20110201T151254_20110201T151308_505_152_1.nc");
             assertTrue(outputFile.isFile());
-            assertEquals(524271, outputFile.length());
+            assertEquals(501724, outputFile.length());
 
             final ExportParameter exportParameter = new ExportParameter();
             targetFile = NetcdfFileOpener.open(outputFile);
@@ -462,7 +462,7 @@ public class GPToNetCDFExporterOpIntegrationTest {
             assertDimension("n_grid_points", numGridPoints, targetFile);
             assertDimension("n_bt_data", 300, targetFile);
             assertDimension("n_radiometric_accuracy", 2, targetFile);
-            assertDimension("n_snapshots", 172, targetFile);
+            assertDimension("n_snapshots", 164, targetFile);
 
             final Variable grid_point_latitude = getVariableVerified("Grid_Point_Latitude", targetFile);
             assertVariableInRange(grid_point_latitude, -75.5f, -75.0f);

@@ -7,6 +7,8 @@ import org.esa.beam.dataio.netcdf.nc.NVariable;
 import org.esa.beam.dataio.smos.L1cScienceSmosFile;
 import org.esa.beam.dataio.smos.SnapshotInfo;
 import org.esa.beam.framework.datamodel.Product;
+import org.esa.beam.smos.ee2netcdf.geometry.GeometryFilter;
+import org.esa.beam.smos.ee2netcdf.geometry.GeometryFilterFactory;
 import org.esa.beam.smos.ee2netcdf.variable.VariableDescriptor;
 import org.esa.beam.smos.ee2netcdf.variable.VariableWriter;
 import org.esa.beam.smos.ee2netcdf.variable.VariableWriterFactory;
@@ -20,16 +22,49 @@ import java.util.Set;
 
 class L1CFormatExporter extends AbstractFormatExporter {
 
-    private int numSnapshots;
+    private int numSnapshotsToExport;
+    private int numSnapshotsInInput;
     private HashMap<String, Integer> dimensionMap;
+    private ArrayList<Integer> snapshotIdList;
+    private L1cScienceSmosFile scienceSmosFile;
 
     @Override
     public void initialize(Product product, ExportParameter exportParameter) throws IOException {
         super.initialize(product, exportParameter);
 
-        final L1cScienceSmosFile scienceSmosFile = (L1cScienceSmosFile) explorerFile;
+        scienceSmosFile = (L1cScienceSmosFile) explorerFile;
         final SnapshotInfo snapshotInfo = scienceSmosFile.getSnapshotInfo();
-        numSnapshots = snapshotInfo.getSnapshotIds().size();
+        numSnapshotsToExport = snapshotInfo.getSnapshotIds().size();
+        numSnapshotsInInput = numSnapshotsToExport;
+
+        snapshotIdList = new ArrayList<>();
+    }
+
+    @Override
+    public void prepareGeographicSubset(NFileWriteable nFileWriteable, ExportParameter exportParameter) throws IOException {
+        if (exportParameter.getRegion() != null) {
+            final GeometryFilter geometryFilter = GeometryFilterFactory.create(exportParameter.getRegion());
+            gpIndexList = new ArrayList<>(gridPointCount);
+            for (int i = 0; i < gridPointCount; i++) {
+                final CompoundData gridPointData = explorerFile.getGridPointData(i);
+                if (geometryFilter.accept(gridPointData)) {
+                    gpIndexList.add(i);
+
+                    final SequenceData btDataList = scienceSmosFile.getBtDataList(i);
+                    final int elementCount = btDataList.getElementCount();
+                    for (int j = 0; j < elementCount; j++) {
+                        final CompoundData btData = btDataList.getCompound(j);
+                        final int snapshotId = btData.getInt("Snapshot_ID_of_Pixel");
+                        if (!snapshotIdList.contains(snapshotId)) {
+                            snapshotIdList.add(snapshotId);
+                        }
+                    }
+                }
+            }
+
+            gridPointCount = gpIndexList.size();
+            numSnapshotsToExport = snapshotIdList.size();
+        }
     }
 
     @Override
@@ -37,26 +72,34 @@ class L1CFormatExporter extends AbstractFormatExporter {
         nFileWriteable.addDimension("n_grid_points", gridPointCount);
         nFileWriteable.addDimension("n_bt_data", 300);
         nFileWriteable.addDimension("n_radiometric_accuracy", 2);
-        nFileWriteable.addDimension("n_snapshots", numSnapshots);
+        nFileWriteable.addDimension("n_snapshots", numSnapshotsToExport);
 
         dimensionMap = new HashMap<>();
         dimensionMap.put("n_grid_points", gridPointCount);
         dimensionMap.put("n_bt_data", 300);
         dimensionMap.put("n_radiometric_accuracy", 2);
-        dimensionMap.put("n_snapshots", numSnapshots);
+        dimensionMap.put("n_snapshots", numSnapshotsToExport);
     }
 
     @Override
     public void writeData(NFileWriteable nFileWriteable) throws IOException {
         final L1cScienceSmosFile l1cScienceSmosFile = (L1cScienceSmosFile) explorerFile;
 
-        writeGridPointVariables(nFileWriteable, l1cScienceSmosFile);
+        writeGridPointVariables(nFileWriteable);
         writeSnapshotVariables(nFileWriteable, l1cScienceSmosFile);
     }
 
     private void writeSnapshotVariables(NFileWriteable nFileWriteable, L1cScienceSmosFile l1cScienceSmosFile) throws IOException {
         final VariableWriter[] snapshotVariableWriters = createVariableWriters(nFileWriteable, false);
-        for (int i = 0; i < numSnapshots; i++) {
+        if (snapshotIdList.isEmpty()) {
+            writeAllSnapshots(l1cScienceSmosFile, snapshotVariableWriters);
+        } else {
+            writeSnapshotSubset(l1cScienceSmosFile, snapshotVariableWriters);
+        }
+    }
+
+    private void writeAllSnapshots(L1cScienceSmosFile l1cScienceSmosFile, VariableWriter[] snapshotVariableWriters) throws IOException {
+        for (int i = 0; i < numSnapshotsInInput; i++) {
             final CompoundData snapshotData = l1cScienceSmosFile.getSnapshotData(i);
             final SequenceData radiometricAccuracy = snapshotData.getSequence("Radiometric_Accuracy");
 
@@ -70,17 +113,40 @@ class L1CFormatExporter extends AbstractFormatExporter {
         }
     }
 
-    private void writeGridPointVariables(NFileWriteable nFileWriteable, L1cScienceSmosFile l1cScienceSmosFile) throws IOException {
+    private void writeSnapshotSubset(L1cScienceSmosFile l1cScienceSmosFile, VariableWriter[] snapshotVariableWriters) throws IOException {
+        int writeIndex = 0;
+        for (int i = 0; i < numSnapshotsInInput; i++) {
+            final CompoundData snapshotData = l1cScienceSmosFile.getSnapshotData(i);
+
+            final int snapshotId = snapshotData.getInt("Snapshot_ID");
+            if (!snapshotIdList.contains(snapshotId)) {
+                continue;
+            }
+
+            final SequenceData radiometricAccuracy = snapshotData.getSequence("Radiometric_Accuracy");
+            for (VariableWriter writer : snapshotVariableWriters) {
+                writer.write(snapshotData, radiometricAccuracy, writeIndex);
+            }
+
+            ++writeIndex;
+        }
+
+        for (VariableWriter writer : snapshotVariableWriters) {
+            writer.close();
+        }
+    }
+
+    private void writeGridPointVariables(NFileWriteable nFileWriteable) throws IOException {
         final VariableWriter[] gridPointVariableWriters = createVariableWriters(nFileWriteable, true);
 
         if (gpIndexList == null) {
             for (int i = 0; i < gridPointCount; i++) {
-                writeGridPointData(i, i, l1cScienceSmosFile, gridPointVariableWriters);
+                writeGridPointData(i, i, gridPointVariableWriters);
             }
         } else {
             int writeIndex = 0;
             for (int index : gpIndexList) {
-                writeGridPointData(index, writeIndex, l1cScienceSmosFile, gridPointVariableWriters);
+                writeGridPointData(index, writeIndex, gridPointVariableWriters);
                 ++writeIndex;
             }
         }
@@ -90,9 +156,9 @@ class L1CFormatExporter extends AbstractFormatExporter {
         }
     }
 
-    private void writeGridPointData(int readIndex, int writeIndex, L1cScienceSmosFile l1cScienceSmosFile, VariableWriter[] gridPointVariableWriters) throws IOException {
-        final CompoundData gridPointData = l1cScienceSmosFile.getGridPointData(readIndex);
-        final SequenceData btDataList = l1cScienceSmosFile.getBtDataList(readIndex);
+    private void writeGridPointData(int readIndex, int writeIndex, VariableWriter[] gridPointVariableWriters) throws IOException {
+        final CompoundData gridPointData = scienceSmosFile.getGridPointData(readIndex);
+        final SequenceData btDataList = scienceSmosFile.getBtDataList(readIndex);
 
         for (VariableWriter writer : gridPointVariableWriters) {
             writer.write(gridPointData, btDataList, writeIndex);

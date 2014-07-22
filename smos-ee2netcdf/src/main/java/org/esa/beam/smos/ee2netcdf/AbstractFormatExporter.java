@@ -45,6 +45,11 @@ abstract class AbstractFormatExporter implements FormatExporter {
         memberDescriptors = Dddb.getInstance().getMemberDescriptors(explorerFile.getHeaderFile());
         createVariableDescriptors(exportParameter);
 
+
+    }
+
+    @Override
+    public void prepareGeographicSubset(NFileWriteable nFileWriteable, ExportParameter exportParameter) throws IOException {
         if (exportParameter.getRegion() != null) {
             final GeometryFilter geometryFilter = GeometryFilterFactory.create(exportParameter.getRegion());
             gpIndexList = new ArrayList<>(gridPointCount);
