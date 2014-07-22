@@ -306,7 +306,7 @@ public class GPToNetCDFExporterOpIntegrationTest {
     }
 
     @Test
-    public void testConvert_BWSD1C_withGeometricSubset() throws IOException, InvalidRangeException, ParseException {
+    public void testConvert_BWSD1C_withGeographicSubset() throws IOException, InvalidRangeException, ParseException {
         final File file = TestHelper.getResourceFile("SM_OPER_MIR_BWLF1C_20111026T143206_20111026T152520_503_001_1.zip");
 
         Product product = null;
@@ -534,6 +534,47 @@ public class GPToNetCDFExporterOpIntegrationTest {
         }
     }
 
+    @Test
+    public void testExportOSUDP2_withGeographicSubset() throws IOException, ParseException, InvalidRangeException {
+        final File file = TestHelper.getResourceFile("SM_OPER_MIR_OSUDP2_20091204T001853_20091204T011255_310_001_1.zip");
+
+        Product product = null;
+        NetcdfFile targetFile = null;
+        try {
+            product = ProductIO.readProduct(file);
+
+            final HashMap<String, Object> parameterMap = createDefaultParameterMap();
+            parameterMap.put("region", "POLYGON((80 -25, 80 -23, 83 -23, 83 -25, 80 -25))");
+            GPF.createProduct(GPToNetCDFExporterOp.ALIAS,
+                    parameterMap,
+                    new Product[]{product});
+
+            final File outputFile = new File(targetDirectory, "SM_OPER_MIR_OSUDP2_20091204T001853_20091204T011255_310_001_1.nc");
+            assertTrue(outputFile.isFile());
+            assertEquals(1032932, outputFile.length());
+
+            targetFile = NetcdfFileOpener.open(outputFile);
+
+            final int numGridPoints = 344;
+            assertCorrectGlobalAttributes(targetFile, numGridPoints, new ExportParameter());
+            assertDimension("n_grid_points", numGridPoints, targetFile);
+
+            final Variable grid_point_latitude = getVariableVerified("Latitude", targetFile);
+            assertVariableInRange(grid_point_latitude, -25.0f, -23.0f);
+
+            final Variable grid_point_longitude = getVariableVerified("Longitude", targetFile);
+            assertVariableInRange(grid_point_longitude, 80.0f, 83.0f);
+        } finally {
+            if (product != null) {
+                product.dispose();
+            }
+
+            if (targetFile != null) {
+                targetFile.close();
+            }
+        }
+
+    }
     @Test
     public void testExportSMUDP2() throws IOException, ParseException, InvalidRangeException {
         final File file = TestHelper.getResourceFile("SM_OPEB_MIR_SMUDP2_20140413T185915_20140413T195227_551_026_1.zip");

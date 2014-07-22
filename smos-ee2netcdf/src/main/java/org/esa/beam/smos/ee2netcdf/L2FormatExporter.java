@@ -29,15 +29,27 @@ class L2FormatExporter extends AbstractFormatExporter {
     public void writeData(NFileWriteable nFileWriteable) throws IOException {
         final VariableWriter[] variableWriters = createVariableWriters(nFileWriteable);
 
-        for (int i = 0; i < gridPointCount; i++) {
-            final CompoundData gridPointData = explorerFile.getGridPointData(i);
-            for (VariableWriter writer : variableWriters) {
-                writer.write(gridPointData, null, i);
+        if (gpIndexList == null) {
+            for (int i = 0; i < gridPointCount; i++) {
+                writeCompound(i, i, variableWriters);
+            }
+        } else {
+            int writeIndex = 0;
+            for (int index : gpIndexList) {
+                writeCompound(index, writeIndex, variableWriters);
+                ++writeIndex;
             }
         }
 
         for (VariableWriter writer : variableWriters) {
             writer.close();
+        }
+    }
+
+    private void writeCompound(int readIndex, int writeIndex, VariableWriter[] variableWriters) throws IOException {
+        final CompoundData gridPointData = explorerFile.getGridPointData(readIndex);
+        for (VariableWriter writer : variableWriters) {
+            writer.write(gridPointData, null, writeIndex);
         }
     }
 
