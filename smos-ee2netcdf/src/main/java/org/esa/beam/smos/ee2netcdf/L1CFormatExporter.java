@@ -73,17 +73,29 @@ class L1CFormatExporter extends AbstractFormatExporter {
     private void writeGridPointVariables(NFileWriteable nFileWriteable, L1cScienceSmosFile l1cScienceSmosFile) throws IOException {
         final VariableWriter[] gridPointVariableWriters = createVariableWriters(nFileWriteable, true);
 
-        for (int i = 0; i < gridPointCount; i++) {
-            final CompoundData gridPointData = l1cScienceSmosFile.getGridPointData(i);
-            final SequenceData btDataList = l1cScienceSmosFile.getBtDataList(i);
-
-            for (VariableWriter writer : gridPointVariableWriters) {
-                writer.write(gridPointData, btDataList, i);
+        if (gpIndexList == null) {
+            for (int i = 0; i < gridPointCount; i++) {
+                writeGridPointData(i, i, l1cScienceSmosFile, gridPointVariableWriters);
+            }
+        } else {
+            int writeIndex = 0;
+            for (int index : gpIndexList) {
+                writeGridPointData(index, writeIndex, l1cScienceSmosFile, gridPointVariableWriters);
+                ++writeIndex;
             }
         }
 
         for (VariableWriter writer : gridPointVariableWriters) {
             writer.close();
+        }
+    }
+
+    private void writeGridPointData(int readIndex, int writeIndex, L1cScienceSmosFile l1cScienceSmosFile, VariableWriter[] gridPointVariableWriters) throws IOException {
+        final CompoundData gridPointData = l1cScienceSmosFile.getGridPointData(readIndex);
+        final SequenceData btDataList = l1cScienceSmosFile.getBtDataList(readIndex);
+
+        for (VariableWriter writer : gridPointVariableWriters) {
+            writer.write(gridPointData, btDataList, writeIndex);
         }
     }
 

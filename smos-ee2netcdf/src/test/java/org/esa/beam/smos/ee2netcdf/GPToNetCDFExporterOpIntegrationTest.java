@@ -439,6 +439,45 @@ public class GPToNetCDFExporterOpIntegrationTest {
     }
 
     @Test
+    public void testExportSCLF1C_withGeographicSubset() throws IOException, ParseException, InvalidRangeException {
+        final File file = TestHelper.getResourceFile("SM_REPB_MIR_SCLF1C_20110201T151254_20110201T151308_505_152_1.zip");
+
+        NetcdfFile targetFile = null;
+        try {
+            final HashMap<String, Object> parameterMap = createDefaultParameterMap();
+            parameterMap.put("sourceProductPaths", file.getParent() + File.separator + "*SCLF1C*");
+            parameterMap.put("region", "POLYGON((-3.5 -75.5,-3.5 -75, 0 -75, 0 -75.5, -3.5 -75.5))");
+            GPF.createProduct(GPToNetCDFExporterOp.ALIAS,
+                    parameterMap);
+
+            final File outputFile = new File(targetDirectory, "SM_REPB_MIR_SCLF1C_20110201T151254_20110201T151308_505_152_1.nc");
+            assertTrue(outputFile.isFile());
+            assertEquals(524271, outputFile.length());
+
+            final ExportParameter exportParameter = new ExportParameter();
+            targetFile = NetcdfFileOpener.open(outputFile);
+            final int numGridPoints = 9;
+            assertCorrectGlobalAttributes(targetFile, numGridPoints, exportParameter);
+
+            assertDimension("n_grid_points", numGridPoints, targetFile);
+            assertDimension("n_bt_data", 300, targetFile);
+            assertDimension("n_radiometric_accuracy", 2, targetFile);
+            assertDimension("n_snapshots", 172, targetFile);
+
+            final Variable grid_point_latitude = getVariableVerified("Grid_Point_Latitude", targetFile);
+            assertVariableInRange(grid_point_latitude, -75.5f, -75.0f);
+
+            final Variable grid_point_longitude = getVariableVerified("Grid_Point_Longitude", targetFile);
+            assertVariableInRange(grid_point_longitude, -3.5f, 0.0f);
+
+        } finally {
+            if (targetFile != null) {
+                targetFile.close();
+            }
+        }
+    }
+
+    @Test
     public void testExportOSUDP2_withAdditionalMetadata() throws IOException, ParseException, InvalidRangeException {
         final File file = TestHelper.getResourceFile("SM_OPER_MIR_OSUDP2_20091204T001853_20091204T011255_310_001_1.zip");
 
