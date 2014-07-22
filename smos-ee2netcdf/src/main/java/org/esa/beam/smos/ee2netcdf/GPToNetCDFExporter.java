@@ -26,6 +26,7 @@ class GPToNetCDFExporter {
     void exportProduct(Product product, Logger logger) {
         final File fileLocation = product.getFileLocation();
 
+        NFileWriteable nFileWriteable = null;
         try {
             final FormatExporter exporter = FormatExporterFactory.create(fileLocation.getName());
             exporter.initialize(product, parameter);
@@ -37,7 +38,7 @@ class GPToNetCDFExporter {
                     throw new IOException("Unable to delete already existing product: " + outputFile.getAbsolutePath());
                 }
             }
-            final NFileWriteable nFileWriteable = N4FileWriteable.create(outputFile.getPath());
+            nFileWriteable = N4FileWriteable.create(outputFile.getPath());
 
             exporter.addGlobalAttributes(nFileWriteable, product.getMetadataRoot(), parameter);
             exporter.addDimensions(nFileWriteable);
@@ -46,15 +47,22 @@ class GPToNetCDFExporter {
             nFileWriteable.create();
 
             exporter.writeData(nFileWriteable);
-
-            nFileWriteable.close();
         } catch (IOException e) {
             logger.severe("Failed to convert file: " + fileLocation.getAbsolutePath());
             logger.severe(e.getMessage());
+        } finally {
+            if (nFileWriteable != null) {
+                try {
+                    nFileWriteable.close();
+                } catch (IOException e) {
+                    logger.severe("Failed to close file: " + fileLocation.getAbsolutePath());
+                    logger.severe(e.getMessage());
+                }
+            }
         }
     }
 
-    void exportFile(File file, Logger logger ) {
+    void exportFile(File file, Logger logger) {
         Product product = null;
         try {
             product = ProductIO.readProduct(file);

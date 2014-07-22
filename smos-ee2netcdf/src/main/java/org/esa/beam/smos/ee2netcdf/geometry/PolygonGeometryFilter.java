@@ -6,12 +6,12 @@ import org.geotools.geometry.jts.JTSFactoryFinder;
 
 import java.io.IOException;
 
-public class PolygonGeometryFilter implements GeometryFilter {
+class PolygonGeometryFilter implements GeometryFilter {
 
     private final Polygon polygon;
     private final GeometryFactory geometryFactory;
 
-    public PolygonGeometryFilter(Geometry geometry) {
+    PolygonGeometryFilter(Geometry geometry) {
         polygon = (Polygon) geometry;
 
         geometryFactory = JTSFactoryFinder.getGeometryFactory(null);

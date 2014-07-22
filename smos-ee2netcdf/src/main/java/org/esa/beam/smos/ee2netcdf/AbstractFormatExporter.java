@@ -1,6 +1,7 @@
 package org.esa.beam.smos.ee2netcdf;
 
 
+import com.bc.ceres.binio.CompoundData;
 import org.apache.commons.lang.StringUtils;
 import org.esa.beam.dataio.netcdf.nc.NFileWriteable;
 import org.esa.beam.dataio.netcdf.nc.NVariable;
@@ -30,7 +31,7 @@ abstract class AbstractFormatExporter implements FormatExporter {
     protected int gridPointCount;
     protected SmosFile explorerFile;
     protected Map<String, VariableDescriptor> variableDescriptors;
-    protected GeometryFilter geometryFilter;
+    protected ArrayList<Integer> gpIndexList;
 
     protected static boolean mustExport(String bandName, List<String> outputBandNames) {
         return outputBandNames.isEmpty() || outputBandNames.contains(bandName);
@@ -44,7 +45,18 @@ abstract class AbstractFormatExporter implements FormatExporter {
         memberDescriptors = Dddb.getInstance().getMemberDescriptors(explorerFile.getHeaderFile());
         createVariableDescriptors(exportParameter);
 
-        geometryFilter = GeometryFilterFactory.create(exportParameter.getRegion());
+        if (exportParameter.getRegion() != null) {
+            final GeometryFilter geometryFilter = GeometryFilterFactory.create(exportParameter.getRegion());
+            gpIndexList = new ArrayList<>(gridPointCount);
+            for (int i = 0; i < gridPointCount; i++) {
+                final CompoundData gridPointData = explorerFile.getGridPointData(i);
+                if (geometryFilter.accept(gridPointData)) {
+                    gpIndexList.add(i);
+                }
+            }
+
+            gridPointCount = gpIndexList.size();
+        }
     }
 
     @Override

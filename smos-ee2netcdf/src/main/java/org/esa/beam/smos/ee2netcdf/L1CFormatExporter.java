@@ -77,10 +77,8 @@ class L1CFormatExporter extends AbstractFormatExporter {
             final CompoundData gridPointData = l1cScienceSmosFile.getGridPointData(i);
             final SequenceData btDataList = l1cScienceSmosFile.getBtDataList(i);
 
-            if (geometryFilter.accept(gridPointData)) {
-                for (VariableWriter writer : gridPointVariableWriters) {
-                    writer.write(gridPointData, btDataList, i);
-                }
+            for (VariableWriter writer : gridPointVariableWriters) {
+                writer.write(gridPointData, btDataList, i);
             }
         }
 

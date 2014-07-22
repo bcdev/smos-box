@@ -322,13 +322,14 @@ public class GPToNetCDFExporterOpIntegrationTest {
 
             final File outputFile = new File(targetDirectory, "SM_OPER_MIR_BWLF1C_20111026T143206_20111026T152520_503_001_1.nc");
             assertTrue(outputFile.isFile());
-            assertEquals(521552, outputFile.length());
+            assertEquals(172222, outputFile.length());
 
             targetFile = NetcdfFileOpener.open(outputFile);
             final Variable grid_point_latitude = getVariableVerified("Grid_Point_Latitude", targetFile);
+            assertVariableInRange(grid_point_latitude, 5.0f, 9.0f);
+
             final Variable grid_point_longitude = getVariableVerified("Grid_Point_Longitude", targetFile);
-
-
+            assertVariableInRange(grid_point_longitude, 42.0f, 44.0f);
         } finally {
             if (product != null) {
                 product.dispose();
@@ -381,21 +382,21 @@ public class GPToNetCDFExporterOpIntegrationTest {
 
             final Variable instrument_error_flag = getVariableVerified("Instrument_Error_flag", targetFile);
             assertEquals(DataType.BYTE, instrument_error_flag.getDataType());
-            assertAttribute("_Unsigned","true", instrument_error_flag);
+            assertAttribute("_Unsigned", "true", instrument_error_flag);
             array = instrument_error_flag.read(new int[]{1}, new int[]{2});
             assertEquals(0, array.getByte(0));
             assertEquals(0, array.getByte(1));
 
             final Variable adf_error_flag = getVariableVerified("ADF_Error_flag", targetFile);
             assertEquals(DataType.BYTE, adf_error_flag.getDataType());
-            assertAttribute("_Unsigned","true", adf_error_flag);
+            assertAttribute("_Unsigned", "true", adf_error_flag);
             array = adf_error_flag.read(new int[]{1}, new int[]{2});
             assertEquals(0, array.getByte(0));
             assertEquals(0, array.getByte(1));
 
             final Variable calibration_error_flag = getVariableVerified("Calibration_Error_flag", targetFile);
             assertEquals(DataType.BYTE, calibration_error_flag.getDataType());
-            assertAttribute("_Unsigned","true", calibration_error_flag);
+            assertAttribute("_Unsigned", "true", calibration_error_flag);
             array = calibration_error_flag.read(new int[]{1}, new int[]{2});
             assertEquals(0, array.getByte(0));
             assertEquals(0, array.getByte(1));
@@ -424,7 +425,7 @@ public class GPToNetCDFExporterOpIntegrationTest {
             final Variable radiometric_accuracy = getVariableVerified("Radiometric_Accuracy", targetFile);
             assertEquals(DataType.FLOAT, radiometric_accuracy.getDataType());
             assertAttribute("units", "K", radiometric_accuracy);
-            array = radiometric_accuracy.read(new int[]{2,0}, new int[]{2,2});
+            array = radiometric_accuracy.read(new int[]{2, 0}, new int[]{2, 2});
             assertEquals(3.27913236618042, array.getFloat(0), 1e-8);
             assertEquals(0.0, array.getFloat(1), 1e-8);
             assertEquals(5.296276569366455, array.getFloat(2), 1e-8);
@@ -587,6 +588,21 @@ public class GPToNetCDFExporterOpIntegrationTest {
 
             if (targetFile != null) {
                 targetFile.close();
+            }
+        }
+    }
+
+    private void assertVariableInRange(Variable variable, float minValue, float maxValue) throws IOException {
+        final Array values = variable.read();
+        final int[] shape = values.getShape();
+        for (int i = 0; i < shape[0]; i++) {
+            final float value = values.getFloat(i);
+            if (value < minValue) {
+                fail("value below expected minValue: " + value);
+            }
+
+            if (value > maxValue) {
+                fail("value above expected maxValue: " + value);
             }
         }
     }

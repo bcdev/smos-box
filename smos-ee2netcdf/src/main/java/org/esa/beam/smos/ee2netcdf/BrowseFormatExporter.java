@@ -39,19 +39,29 @@ class BrowseFormatExporter extends AbstractFormatExporter {
 
         final L1cBrowseSmosFile browseFile = (L1cBrowseSmosFile) explorerFile;
 
-        for (int i = 0; i < gridPointCount; i++) {
-            final SequenceData btDataList = browseFile.getBtDataList(i);
-            final CompoundData gridPointData = explorerFile.getGridPointData(i);
-
-            if (geometryFilter.accept(gridPointData)) {
-                for (VariableWriter writer : variableWriters) {
-                    writer.write(gridPointData, btDataList, i);
-                }
+        if (gpIndexList == null) {
+            for (int i = 0; i < gridPointCount; i++) {
+                writeGridPointAt(i, i, variableWriters, browseFile);
+            }
+        } else {
+            int writeIndex = 0;
+            for (int index : gpIndexList) {
+                writeGridPointAt(index, writeIndex, variableWriters, browseFile);
+                ++writeIndex;
             }
         }
 
         for (VariableWriter writer : variableWriters) {
             writer.close();
+        }
+    }
+
+    private void writeGridPointAt(int readIndex, int writeIndex, VariableWriter[] variableWriters, L1cBrowseSmosFile browseFile) throws IOException {
+        final SequenceData btDataList = browseFile.getBtDataList(readIndex);
+        final CompoundData gridPointData = explorerFile.getGridPointData(readIndex);
+
+        for (VariableWriter writer : variableWriters) {
+            writer.write(gridPointData, btDataList, writeIndex);
         }
     }
 
