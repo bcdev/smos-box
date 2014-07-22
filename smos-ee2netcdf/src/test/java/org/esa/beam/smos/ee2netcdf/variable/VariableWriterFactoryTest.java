@@ -31,6 +31,18 @@ public class VariableWriterFactoryTest {
     }
 
     @Test
+    public void testCreateByteStructMember2DWriter_unsupported() {
+        variableDescriptor.setDataType(DataType.BYTE);
+        variableDescriptor.setIs2d(true);
+
+        try {
+            VariableWriterFactory.create(nVariable, variableDescriptor, 12, 13);
+            fail("IllegalArgumentException expected");
+        } catch (IllegalArgumentException expected) {
+        }
+    }
+
+    @Test
     public void testCreateFloatStructMemberWriter() {
         variableDescriptor.setDataType(DataType.FLOAT);
         variableDescriptor.setGridPointData(true);

@@ -98,7 +98,6 @@ class ConverterSwingWorker extends ProgressMonitorSwingWorker<List<Exception>, F
         if (roiType == BindingConstants.ROI_TYPE_AREA) {
             parameterMap.put("region", exportParameter.toAreaWKT());
         } else if (roiType == BindingConstants.ROI_TYPE_GEOMETRY) {
-            // @todo 1 tb/tb write test 2013-04-08
             addSelectedProductGeometry(exportParameter.getRegion(), parameterMap);
         } else if (roiType == BindingConstants.ROI_TYPE_PRODUCT) {
             parameterMap.remove("region");
@@ -126,6 +125,7 @@ class ConverterSwingWorker extends ProgressMonitorSwingWorker<List<Exception>, F
         return sourcePath.toString();
     }
 
+    // package access for testing only tb 2013-07-21
     static void addSelectedProductGeometry(Geometry geometry, HashMap<String, Object> parameterMap) {
         if (geometry instanceof Polygon) {
             final WKTWriter wktWriter = new WKTWriter();

@@ -1,7 +1,10 @@
 package org.esa.beam.smos.ee2netcdf.visat;
 
+import com.bc.ceres.binding.ConversionException;
+import com.vividsolutions.jts.geom.Geometry;
 import org.esa.beam.smos.ee2netcdf.ExportParameter;
 import org.esa.beam.smos.gui.BindingConstants;
+import org.esa.beam.util.converters.JtsGeometryConverter;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -92,5 +95,28 @@ public class ConverterSwingWorkerTest {
 
         final String absolutePath = inputDir.getAbsolutePath();
         assertEquals(absolutePath + File.separator + "*.zip," + absolutePath + File.separator + "*.dbl", pathWildcards);
+    }
+
+    @Test
+    public void testAddSelectedGeometry_polygon() throws ConversionException {
+        final JtsGeometryConverter converter = new JtsGeometryConverter();
+        final Geometry polygon = converter.parse("POLYGON((0 0, 1 0, 1 1, 0 1, 0 0))");
+        final HashMap<String, Object> parameterMap = new HashMap<>();
+
+        ConverterSwingWorker.addSelectedProductGeometry(polygon, parameterMap);
+
+        final String region = (String) parameterMap.get("region");
+        assertEquals("POLYGON ((0 0, 1 0, 1 1, 0 1, 0 0))", region);
+    }
+
+    @Test
+    public void testAddSelectedGeometry_point() throws ConversionException {
+        final JtsGeometryConverter converter = new JtsGeometryConverter();
+        final Geometry polygon = converter.parse("POINT(4 6))");
+        final HashMap<String, Object> parameterMap = new HashMap<>();
+
+        ConverterSwingWorker.addSelectedProductGeometry(polygon, parameterMap);
+
+        assertFalse(parameterMap.containsKey("region"));
     }
 }
