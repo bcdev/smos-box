@@ -3,7 +3,8 @@ package org.esa.beam.smos.ee2netcdf;
 
 import org.esa.beam.dataio.netcdf.nc.N4FileWriteable;
 import org.esa.beam.dataio.netcdf.nc.NFileWriteable;
-import org.esa.beam.framework.dataio.ProductIO;
+import org.esa.beam.dataio.smos.SmosProductReaderPlugIn;
+import org.esa.beam.framework.dataio.DecodeQualification;
 import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.util.io.FileUtils;
 
@@ -66,8 +67,10 @@ class GPToNetCDFExporter {
     void exportFile(File file, Logger logger) {
         Product product = null;
         try {
-            product = ProductIO.readProduct(file);
-            if (product != null) {
+            final SmosProductReaderPlugIn readerPlugIn = new SmosProductReaderPlugIn();
+            final DecodeQualification decodeQualification = readerPlugIn.getDecodeQualification(file);
+            if (decodeQualification == DecodeQualification.INTENDED) {
+                product = readerPlugIn.createReaderInstance().readProductNodes(file, null);
                 final String productType = product.getProductType();
                 if (productType.matches(ExportParameter.PRODUCT_TYPE_REGEX)) {
                     exportProduct(product, logger);
