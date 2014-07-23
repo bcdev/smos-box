@@ -13,14 +13,17 @@ import org.apache.commons.cli.PosixParser;
 import org.esa.beam.framework.gpf.annotations.Parameter;
 import org.esa.beam.framework.gpf.annotations.ParameterDescriptorFactory;
 import org.esa.beam.smos.gui.BindingConstants;
+import org.esa.beam.util.logging.BeamLogManager;
 
 import java.io.File;
 import java.lang.reflect.Field;
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -41,6 +44,8 @@ public class GPToNetCDFExporterTool {
     private static final Map<String, String> PARAMETER_NAMES = new HashMap<>();
 
     static {
+        Locale.setDefault(Locale.ENGLISH);
+
         PARAMETER_NAMES.put(BindingConstants.CONTACT, "contact");
         PARAMETER_NAMES.put(BindingConstants.INSTITUTION, "institution");
         PARAMETER_NAMES.put(BindingConstants.OVERWRITE_TARGET, "overwrite-target");
@@ -48,7 +53,7 @@ public class GPToNetCDFExporterTool {
         PARAMETER_NAMES.put(BindingConstants.SOURCE_DIRECTORY, "source-directory");
         PARAMETER_NAMES.put(BindingConstants.TARGET_DIRECTORY, "target-directory");
         PARAMETER_NAMES.put(BindingConstants.VARIABLES, "variables");
-        PARAMETER_NAMES.put(BindingConstants.COMPRESSION_LEVEL, "compressionLevel");
+        PARAMETER_NAMES.put(BindingConstants.COMPRESSION_LEVEL, "compression-level");
     }
 
     private static final Level[] LOG_LEVELS = new Level[]{
@@ -124,8 +129,32 @@ public class GPToNetCDFExporterTool {
         }
 
         final ExportParameter exportParameter = new ExportParameter();
-        final PropertyContainer container = PropertyContainer.createObjectBacked(exportParameter,
-                                                                                 new ParameterDescriptorFactory());
+        setExportParameters(commandLine, exportParameter);
+
+        final GPToNetCDFExporter exporter = new GPToNetCDFExporter(exportParameter);
+        try {
+            exporter.initialize();
+        } catch (Exception e) {
+            final File targetDirectory = exportParameter.getTargetDirectory();
+            throw new ToolException(
+                    MessageFormat.format("The target directory ''{0}'' could not be created.", targetDirectory), e,
+                    EXECUTION_ERROR);
+        }
+        for (final String path : commandLine.getArgs()) {
+            final File file = new File(path);
+            try {
+                exporter.exportFile(file, getLogger());
+            } catch (Exception e) {
+                throw new ToolException(
+                        MessageFormat.format("An error has occurred while trying to convert file ''{0}''.", path), e,
+                        EXECUTION_ERROR);
+            }
+        }
+    }
+
+    private void setExportParameters(CommandLine commandLine, ExportParameter exportParameter) throws ToolException {
+        final ParameterDescriptorFactory descriptorFactory = new ParameterDescriptorFactory();
+        final PropertyContainer container = PropertyContainer.createObjectBacked(exportParameter, descriptorFactory);
         container.setDefaultValues();
         container.setValue(BindingConstants.ROI_TYPE, BindingConstants.ROI_TYPE_GEOMETRY);
 
@@ -149,26 +178,6 @@ public class GPToNetCDFExporterTool {
                 }
             }
         }
-
-        final GPToNetCDFExporter exporter = new GPToNetCDFExporter(exportParameter);
-        try {
-            exporter.initialize();
-        } catch (Exception e) {
-            final File targetDirectory = exportParameter.getTargetDirectory();
-            throw new ToolException(
-                    MessageFormat.format("The target directory ''{0}'' could not be created.", targetDirectory), e,
-                    EXECUTION_ERROR);
-        }
-        for (final String path : commandLine.getArgs()) {
-            final File file = new File(path);
-            try {
-                exporter.exportFile(file, getLogger());
-            } catch (Exception e) {
-                throw new ToolException(
-                        MessageFormat.format("An error has occurred while trying to convert file ''{0}''.", path), e,
-                        EXECUTION_ERROR);
-            }
-        }
     }
 
     private void exit(Throwable t, int exitCode) {
@@ -189,13 +198,17 @@ public class GPToNetCDFExporterTool {
 
     private Logger getLogger() {
         if (logger == null) {
-            logger = Logger.getAnonymousLogger(); // TODO - which logger?
+            logger = BeamLogManager.getSystemLogger();
         }
         return logger;
     }
 
     private void configureLogger() {
-        getLogger().setLevel(logLevel);
+        final Logger logger = getLogger();
+        logger.setLevel(logLevel);
+        final ConsoleHandler consoleHandler = new ConsoleHandler();
+        consoleHandler.setLevel(logLevel);
+        logger.addHandler(consoleHandler);
     }
 
     private void printVersion() {
