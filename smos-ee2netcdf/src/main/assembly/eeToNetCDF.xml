@@ -1,0 +1,73 @@
+<assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0 http://maven.apache.org/xsd/assembly-1.1.0.xsd">
+
+    <id>
+        eeToNetCDF
+    </id>
+
+    <formats>
+        <format>zip</format>
+    </formats>
+
+    <files>
+        <file>
+            <source>${project.basedir}/smos-ee2netcdf/src/main/bin/smosEEToNetCDF.sh</source>
+            <outputDirectory>/</outputDirectory>
+            <lineEnding>unix</lineEnding>
+            <fileMode>0755</fileMode>
+            <filtered>false</filtered>
+        </file>
+        <file>
+            <source>${project.basedir}/smos-ee2netcdf/src/main/bin/smosEEToNetCDF.bat</source>
+            <outputDirectory>/</outputDirectory>
+            <lineEnding>dos</lineEnding>
+            <fileMode>0755</fileMode>
+            <filtered>false</filtered>
+        </file>
+    </files>
+
+    <dependencySets>
+        <dependencySet>
+            <outputDirectory>/lib</outputDirectory>
+            <includes>
+                <include>org.esa.beam.smos:smos-dgg</include>
+                <include>org.esa.beam.smos:smos-lsmask</include>
+            </includes>
+            <unpack>true</unpack>
+            <unpackOptions>
+                <excludes>
+                    <exclude>about.html</exclude>
+                    <exclude>LICENSE.txt</exclude>
+                    <exclude>module.xml</exclude>
+                    <exclude>META-INF/*</exclude>
+                </excludes>
+            </unpackOptions>
+        </dependencySet>
+
+        <dependencySet>
+            <outputDirectory>/lib</outputDirectory>
+            <excludes>
+                <!-- need to exclude DGG and LSMASK. These will be unpacked to the output directory tb 2014-07-22 -->
+                <exclude>org.esa.beam.smos:smos-dgg</exclude>
+                <exclude>org.esa.beam.smos:smos-lsmask</exclude>
+
+                <exclude>org.esa.beam:beam-alos-reader</exclude>
+                <exclude>org.esa.beam:beam-atsr-reader</exclude>
+                <exclude>org.esa.beam:beam-avhrr-reader</exclude>
+                <exclude>org.esa.beam:beam-binning</exclude>
+                <exclude>org.esa.beam:beam-chris-reader</exclude>
+                <exclude>org.esa.beam:beam-csv-dataio</exclude>
+                <exclude>org.esa.beam:beam-envisat-reader</exclude>
+                <exclude>org.esa.beam:beam-geotiff</exclude>
+                <exclude>org.esa.beam:beam-getasse30-reader</exclude>
+                <exclude>org.esa.beam:beam-landsat-reader</exclude>
+                <exclude>org.esa.beam:beam-merisl3-reader</exclude>
+                <exclude>org.esa.beam:beam-modis-reader</exclude>
+                <exclude>org.esa.beam:beam-reader-tests</exclude>
+                <exclude>org.esa.beam:beam-spot-vgt-reader</exclude>
+                <exclude>org.esa.beam:beam-statistics-op</exclude>
+            </excludes>
+        </dependencySet>
+    </dependencySets>
+</assembly>
