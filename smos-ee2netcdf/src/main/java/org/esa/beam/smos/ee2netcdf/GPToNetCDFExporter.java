@@ -29,6 +29,7 @@ class GPToNetCDFExporter {
 
         NFileWriteable nFileWriteable = null;
         try {
+            logger.info("Converting product: " + fileLocation.getPath() + " ...");
             final FormatExporter exporter = FormatExporterFactory.create(fileLocation.getName());
             exporter.initialize(product, parameter);
 
@@ -49,7 +50,8 @@ class GPToNetCDFExporter {
             nFileWriteable.create();
 
             exporter.writeData(nFileWriteable);
-        } catch (IOException e) {
+            logger.info("Success. Wrote target product: " + outputFile.getPath());
+        } catch (Exception e) {
             logger.severe("Failed to convert file: " + fileLocation.getAbsolutePath());
             logger.severe(e.getMessage());
         } finally {

@@ -313,18 +313,29 @@
                     </excludes>
                 </configuration>
             </plugin>
+
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
-                <version>2.2</version>
-                <configuration>
-                    <descriptors>
-                        <descriptor>src/main/assembly/bin.xml</descriptor>
-                        <descriptor>src/main/assembly/project.xml</descriptor>
-                        <descriptor>smos-ee2netcdf/src/main/assembly/eeToNetCDF.xml</descriptor>
-                    </descriptors>
-                    <finalName>smos-box</finalName>
-                </configuration>
+                <version>2.4</version>
+                <executions>
+                    <execution>
+                        <id>assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <descriptors>
+                                <!--<descriptor>src/main/assembly/bin.xml</descriptor>-->
+                                <!--<descriptor>src/main/assembly/project.xml</descriptor>-->
+                                <descriptor>src/main/assembly/eeToNetCDF.xml</descriptor>
+                            </descriptors>
+                            <finalName>smos-box</finalName>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
