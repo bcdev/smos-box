@@ -8,12 +8,19 @@
         <format>dir</format>
     </formats>
 
-    <dependencySets>
-        <dependencySet>
-            <includes>
-                <include>org.esa.beam.smos:smos-ee2netcdf</include>
-            </includes>
-            <outputDirectory>/lib</outputDirectory>
-        </dependencySet>
-    </dependencySets>
+    <moduleSets>
+        <moduleSet>
+            <binaries>
+                <dependencySets>
+                    <dependencySet>
+                        <includes>
+                            <include>org.esa.beam.smos:smos-ee2netcdf</include>
+                        </includes>
+                        <outputDirectory>/lib</outputDirectory>
+                    </dependencySet>
+                </dependencySets>
+            </binaries>
+        </moduleSet>
+    </moduleSets>
+
 </assembly>
