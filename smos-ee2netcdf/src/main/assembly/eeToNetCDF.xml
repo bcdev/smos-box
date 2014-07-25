@@ -32,6 +32,22 @@
             <excludes>
                 <exclude>org.esa.beam.smos:smos-dgg</exclude>
                 <exclude>org.esa.beam.smos:smos-lsmask</exclude>
+                <!-- secondary/transient dependencies that we do not need here tb 2014-07-25 -->
+                <exclude>org.esa.beam:beam-alos-reader</exclude>
+                <exclude>org.esa.beam:beam-atsr-reader</exclude>
+                <exclude>org.esa.beam:beam-avhrr-reader</exclude>
+                <exclude>org.esa.beam:beam-binning</exclude>
+                <exclude>org.esa.beam:beam-chris-reader</exclude>
+                <exclude>org.esa.beam:beam-csv-dataio</exclude>
+                <exclude>org.esa.beam:beam-envisat-reader</exclude>
+                <exclude>org.esa.beam:beam-geotiff</exclude>
+                <exclude>org.esa.beam:beam-getasse30-reader</exclude>
+                <exclude>org.esa.beam:beam-landsat-reader</exclude>
+                <exclude>org.esa.beam:beam-merisl3-reader</exclude>
+                <exclude>org.esa.beam:beam-modis-reader</exclude>
+                <exclude>org.esa.beam:beam-reader-tests</exclude>
+                <exclude>org.esa.beam:beam-spot-vgt-reader</exclude>
+                <exclude>org.esa.beam:beam-statistics-op</exclude>
             </excludes>
         </dependencySet>
 

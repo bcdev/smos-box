@@ -64,7 +64,7 @@
                     <descriptors>
                         <descriptor>src/main/assembly/eeToNetCDF.xml</descriptor>
                     </descriptors>
-                    <finalName>smos</finalName>
+                    <finalName>smos-eeToNetCDF</finalName>
                 </configuration>
             </plugin>
         </plugins>
