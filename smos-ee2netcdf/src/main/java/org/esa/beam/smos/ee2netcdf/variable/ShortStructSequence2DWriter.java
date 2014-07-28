@@ -12,10 +12,11 @@ class ShortStructSequence2DWriter extends AbstractVariableWriter {
 
     private final int memberIndex;
 
-    ShortStructSequence2DWriter(NVariable variable, int width, int height, int memberIndex) {
+    ShortStructSequence2DWriter(NVariable variable, int width, int height, int memberIndex, short fillValue) {
         this.variable = variable;
         this.memberIndex = memberIndex;
-        array = Array.factory(new short[width][height]);
+        final short[][] shortArray = VariableHelper.getShortArray(width, height, fillValue);
+        array = Array.factory(shortArray);
     }
 
     @Override

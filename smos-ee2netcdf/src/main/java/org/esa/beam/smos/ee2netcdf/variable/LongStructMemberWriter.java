@@ -11,9 +11,10 @@ class LongStructMemberWriter extends AbstractVariableWriter {
 
     private final int memberIndex;
 
-    LongStructMemberWriter(NVariable variable, int memberIndex, int arraySize) {
+    LongStructMemberWriter(NVariable variable, int memberIndex, int arraySize, long fillValue) {
         this.memberIndex = memberIndex;
-        array = Array.factory(new long[arraySize]);
+        final long[] longVector = VariableHelper.getLongVector(arraySize, fillValue);
+        array = Array.factory(longVector);
         this.variable = variable;
     }
 

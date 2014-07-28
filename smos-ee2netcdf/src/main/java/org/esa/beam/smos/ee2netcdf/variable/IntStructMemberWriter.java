@@ -12,9 +12,10 @@ class IntStructMemberWriter extends AbstractVariableWriter {
 
     private final int memberIndex;
 
-    IntStructMemberWriter(NVariable variable, int memberIndex, int arraySize) {
+    IntStructMemberWriter(NVariable variable, int memberIndex, int arraySize, int fillValue) {
         this.memberIndex = memberIndex;
-        array = Array.factory(new int[arraySize]);
+        final int[] intVector = VariableHelper.getIntVector(arraySize, fillValue);
+        array = Array.factory(intVector);
         this.variable = variable;
     }
 

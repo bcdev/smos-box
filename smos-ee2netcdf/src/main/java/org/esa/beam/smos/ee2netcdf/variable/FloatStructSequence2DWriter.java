@@ -12,10 +12,11 @@ class FloatStructSequence2DWriter extends AbstractVariableWriter {
 
     private final int memberIndex;
 
-    FloatStructSequence2DWriter(NVariable variable, int width, int height, int memberIndex) {
+    FloatStructSequence2DWriter(NVariable variable, int width, int height, int memberIndex, float fillValue) {
         this.variable = variable;
         this.memberIndex = memberIndex;
-        array = Array.factory(new float[width][height]);
+        final float[][] floatArray = VariableHelper.getFloatArray(width, height, fillValue);
+        array = Array.factory(floatArray);
     }
 
     @Override

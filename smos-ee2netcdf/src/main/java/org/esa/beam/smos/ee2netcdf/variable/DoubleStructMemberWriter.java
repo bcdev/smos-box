@@ -12,9 +12,10 @@ class DoubleStructMemberWriter extends AbstractVariableWriter {
 
     private final int memberIndex;
 
-    DoubleStructMemberWriter(NVariable variable, int memberIndex, int arraySize) {
+    DoubleStructMemberWriter(NVariable variable, int memberIndex, int arraySize, double fillValue) {
         this.memberIndex = memberIndex;
-        array = Array.factory(new double[arraySize]);
+        final double[] doubleVector = VariableHelper.getDoubleVector(arraySize, fillValue);
+        array = Array.factory(doubleVector);
         this.variable = variable;
     }
 

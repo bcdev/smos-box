@@ -11,9 +11,10 @@ class ByteStructMemberWriter extends AbstractVariableWriter {
 
     private final int memberIndex;
 
-    ByteStructMemberWriter(NVariable variable, int memberIndex, int arraySize) {
+    ByteStructMemberWriter(NVariable variable, int memberIndex, int arraySize, byte fillValue) {
         this.memberIndex = memberIndex;
-        array = Array.factory(new byte[arraySize]);
+        final byte[] byteVector = VariableHelper.getByteVector(arraySize, fillValue);
+        array = Array.factory(byteVector);
         this.variable = variable;
     }
 

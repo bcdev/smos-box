@@ -11,9 +11,10 @@ class FloatStructMemberWriter extends AbstractVariableWriter {
 
     private final int memberIndex;
 
-    FloatStructMemberWriter(NVariable variable, int memberIndex, int arraySize) {
+    FloatStructMemberWriter(NVariable variable, int memberIndex, int arraySize, float fillValue) {
         this.memberIndex = memberIndex;
-        array = Array.factory(new float[arraySize]);
+        final float[] floatVector = VariableHelper.getFloatVector(arraySize, fillValue);
+        array = Array.factory(floatVector);
         this.variable = variable;
     }
 

@@ -11,9 +11,10 @@ class ShortStructMemberWriter extends AbstractVariableWriter {
 
     private final int memberIndex;
 
-    ShortStructMemberWriter(NVariable variable, int memberIndex, int arraySize) {
+    ShortStructMemberWriter(NVariable variable, int memberIndex, int arraySize, short fillValue) {
         this.memberIndex = memberIndex;
-        array = Array.factory(new short[arraySize]);
+        final short[] shortVector = VariableHelper.getShortVector(arraySize, fillValue);
+        array = Array.factory(shortVector);
         this.variable = variable;
     }
 
