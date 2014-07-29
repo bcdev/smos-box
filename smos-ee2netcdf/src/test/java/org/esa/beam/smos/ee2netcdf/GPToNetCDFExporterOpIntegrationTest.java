@@ -439,6 +439,44 @@ public class GPToNetCDFExporterOpIntegrationTest {
     }
 
     @Test
+    public void testExportSCLF1C_notOverwriteTarget() throws IOException {
+        final File file = TestHelper.getResourceFile("SM_REPB_MIR_SCLF1C_20110201T151254_20110201T151308_505_152_1.zip");
+
+        final File outputFile = new File(targetDirectory, "SM_REPB_MIR_SCLF1C_20110201T151254_20110201T151308_505_152_1.nc");
+        if (!outputFile.createNewFile()) {
+            fail("unable to create test file.");
+        }
+
+        final HashMap<String, Object> parameterMap = createDefaultParameterMap();
+        parameterMap.put("sourceProductPaths", file.getParent() + File.separator + "*SCLF1C*");
+        parameterMap.put("overwriteTarget", "false");
+        GPF.createProduct(GPToNetCDFExporterOp.ALIAS,
+                parameterMap);
+
+        assertTrue(outputFile.isFile());
+        assertEquals(0, outputFile.length());
+    }
+
+    @Test
+    public void testExportSCLF1C_overwriteTarget() throws IOException {
+        final File file = TestHelper.getResourceFile("SM_REPB_MIR_SCLF1C_20110201T151254_20110201T151308_505_152_1.zip");
+
+        final File outputFile = new File(targetDirectory, "SM_REPB_MIR_SCLF1C_20110201T151254_20110201T151308_505_152_1.nc");
+        if (!outputFile.createNewFile()) {
+            fail("unable to create test file.");
+        }
+
+        final HashMap<String, Object> parameterMap = createDefaultParameterMap();
+        parameterMap.put("sourceProductPaths", file.getParent() + File.separator + "*SCLF1C*");
+        parameterMap.put("overwriteTarget", "true");
+        GPF.createProduct(GPToNetCDFExporterOp.ALIAS,
+                parameterMap);
+
+        assertTrue(outputFile.isFile());
+        assertEquals(647175, outputFile.length());
+    }
+
+    @Test
     public void testExportSCLF1C_withGeographicSubset() throws IOException, ParseException, InvalidRangeException {
         final File file = TestHelper.getResourceFile("SM_REPB_MIR_SCLF1C_20110201T151254_20110201T151308_505_152_1.zip");
 
@@ -614,6 +652,7 @@ public class GPToNetCDFExporterOpIntegrationTest {
         }
 
     }
+
     @Test
     public void testExportSMUDP2() throws IOException, ParseException, InvalidRangeException {
         final File file = TestHelper.getResourceFile("SM_OPEB_MIR_SMUDP2_20140413T185915_20140413T195227_551_026_1.zip");

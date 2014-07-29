@@ -142,10 +142,12 @@ public class GPToNetCDFExporterTool {
         }
 
         if (exportParameter.getSourceDirectory() != null) {
-            final TreeSet<File> inputFileSet = ExporterUtils.createInputFileSet(new String[]{exportParameter.getSourceDirectory().getPath() + File.separator + "*.hdr",
-                    exportParameter.getSourceDirectory().getPath() + File.separator + "*.HDR",
-                    exportParameter.getSourceDirectory().getPath() + File.separator + "*.zip",
-                    exportParameter.getSourceDirectory().getPath() + File.separator + "*.ZIP"});
+            final String sourceDirectoryPath = exportParameter.getSourceDirectory().getPath();
+            final TreeSet<File> inputFileSet = ExporterUtils.createInputFileSet(new String[]{sourceDirectoryPath + File.separator + "*.hdr",
+                    sourceDirectoryPath + File.separator + "*.HDR",
+                    sourceDirectoryPath + File.separator + "*.zip",
+                    sourceDirectoryPath + File.separator + "*.ZIP"});
+
             for (File inputFile : inputFileSet) {
                 if (inputFile.isDirectory()) {
                     continue;

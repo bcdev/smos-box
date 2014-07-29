@@ -34,12 +34,17 @@ class GPToNetCDFExporter {
             exporter.initialize(product, parameter);
 
             final File outputFile = getOutputFile(fileLocation, parameter.getTargetDirectory());
-            // @todo 2 tb/tb extract method and move to helper class tb 2014-07-07
-            if (outputFile.isFile() && parameter.isOverwriteTarget()) {
-                if (!outputFile.delete()) {
-                    throw new IOException("Unable to delete already existing product: " + outputFile.getAbsolutePath());
+            if (outputFile.isFile()) {
+                if (parameter.isOverwriteTarget()) {
+                    if (!outputFile.delete()) {
+                        throw new IOException("Unable to delete already existing product: " + outputFile.getAbsolutePath());
+                    }
+                } else {
+                    logger.warning("output file '" + outputFile.getPath() + "' exists. Output will not be overwritten.");
+                    return;
                 }
             }
+
             nFileWriteable = N4FileWriteable.create(outputFile.getPath());
 
             exporter.prepareGeographicSubset(nFileWriteable, parameter);
