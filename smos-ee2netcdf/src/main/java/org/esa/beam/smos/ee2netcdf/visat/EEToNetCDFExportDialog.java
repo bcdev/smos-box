@@ -26,7 +26,7 @@ import java.text.MessageFormat;
 import java.util.*;
 import java.util.List;
 
-public class NetCDFExportDialog extends ProductChangeAwareDialog {
+public class EEToNetCDFExportDialog extends ProductChangeAwareDialog {
 
     private static final String TARGET_DIRECTORY_BINDING = "targetDirectory";
     private final ExportParameter exportParameter;
@@ -36,7 +36,7 @@ public class NetCDFExportDialog extends ProductChangeAwareDialog {
     private final ProductSelectionListener productSelectionListener;
     private GeometryListener geometryListener;
 
-    public NetCDFExportDialog(AppContext appContext, String helpId) {
+    public EEToNetCDFExportDialog(AppContext appContext, String helpId) {
         super(appContext.getApplicationWindow(), "Convert SMOS EE File to NetCDF 4", ID_OK | ID_CLOSE | ID_HELP, helpId); /* I18N */
 
         this.appContext = appContext;

@@ -43,7 +43,7 @@
     <extension point="beam-ui:actions">
         <action>
             <id>smosEE2NetCDFExport</id>
-            <class>org.esa.beam.smos.ee2netcdf.visat.NetCDFExportAction</class>
+            <class>org.esa.beam.smos.ee2netcdf.visat.EEToNetCDFExportAction</class>
             <helpId>smosEE2NetCDFExport</helpId>
             <parent>exportOther</parent>
             <text>Convert SMOS EE files to NetCDF-4 ...</text>
