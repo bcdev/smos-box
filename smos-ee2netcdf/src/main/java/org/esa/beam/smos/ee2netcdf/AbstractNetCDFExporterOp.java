@@ -4,15 +4,11 @@ import com.vividsolutions.jts.geom.Geometry;
 import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.framework.datamodel.ProductData;
 import org.esa.beam.framework.gpf.Operator;
-import org.esa.beam.framework.gpf.OperatorException;
 import org.esa.beam.framework.gpf.annotations.Parameter;
 import org.esa.beam.framework.gpf.annotations.SourceProducts;
 import org.esa.beam.util.converters.JtsGeometryConverter;
-import org.esa.beam.util.io.WildcardMatcher;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.TreeSet;
 
 abstract class AbstractNetCDFExporterOp extends Operator {
 
@@ -39,19 +35,6 @@ abstract class AbstractNetCDFExporterOp extends Operator {
     @Parameter(description = "Target geographical region as a geometry in well-known text format (WKT). The  output product will be tailored according to the region.",
             converter = JtsGeometryConverter.class)
     protected Geometry region;
-
-    static TreeSet<File> createInputFileSet(String[] sourceProductPaths) {
-        final TreeSet<File> sourceFileSet = new TreeSet<>();
-        try {
-            for (String sourceProductPath : sourceProductPaths) {
-                sourceProductPath = sourceProductPath.trim();
-                WildcardMatcher.glob(sourceProductPath, sourceFileSet);
-            }
-        } catch (IOException e) {
-            throw new OperatorException(e.getMessage());
-        }
-        return sourceFileSet;
-    }
 
     protected void setDummyTargetProduct() {
         final Product product = new Product("dummy", "dummy", 2, 2);

@@ -3,13 +3,7 @@ package org.esa.beam.smos.ee2netcdf;
 import com.bc.ceres.binding.Property;
 import com.bc.ceres.binding.PropertyContainer;
 import com.bc.ceres.binding.ValidationException;
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.HelpFormatter;
-import org.apache.commons.cli.Option;
-import org.apache.commons.cli.OptionBuilder;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
-import org.apache.commons.cli.PosixParser;
+import org.apache.commons.cli.*;
 import org.esa.beam.framework.gpf.annotations.Parameter;
 import org.esa.beam.framework.gpf.annotations.ParameterDescriptorFactory;
 import org.esa.beam.smos.gui.BindingConstants;
@@ -18,11 +12,7 @@ import org.esa.beam.util.logging.BeamLogManager;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.text.MessageFormat;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -68,11 +58,11 @@ public class GPToNetCDFExporterTool {
     private static final String LOG_LEVEL_OPTION_NAME = "log-level";
     private static final String ERROR_OPTION_NAME = "error";
     private static final String LOG_LEVEL_DESCRIPTION = "Set the logging level to <level> where <level> must be in "
-                                                        + Arrays.toString(LOG_LEVELS).replace("[", "{").replaceAll("]",
-                                                                                                                   "}")
-                                                        + ". The default logging level is '"
-                                                        + Level.INFO.toString()
-                                                        + "'.";
+            + Arrays.toString(LOG_LEVELS).replace("[", "{").replaceAll("]",
+            "}")
+            + ". The default logging level is '"
+            + Level.INFO.toString()
+            + "'.";
 
     private final Options options = new Options();
 
@@ -111,7 +101,7 @@ public class GPToNetCDFExporterTool {
                 printVersion();
                 return;
             }
-            if (commandLine.getArgs().length == 0) {
+            if (commandLine.getArgs().length == 0 && !commandLine.hasOption("source-directory")) {
                 printHelp();
                 return;
             }
@@ -136,10 +126,10 @@ public class GPToNetCDFExporterTool {
             exporter.initialize();
         } catch (Exception e) {
             final File targetDirectory = exportParameter.getTargetDirectory();
-            throw new ToolException(
-                    MessageFormat.format("The target directory ''{0}'' could not be created.", targetDirectory), e,
-                    EXECUTION_ERROR);
+            throw new ToolException(MessageFormat.format("The target directory ''{0}'' could not be created.", targetDirectory),
+                    e, EXECUTION_ERROR);
         }
+
         for (final String path : commandLine.getArgs()) {
             final File file = new File(path);
             try {
@@ -148,6 +138,19 @@ public class GPToNetCDFExporterTool {
                 throw new ToolException(
                         MessageFormat.format("An error has occurred while trying to convert file ''{0}''.", path), e,
                         EXECUTION_ERROR);
+            }
+        }
+
+        if (exportParameter.getSourceDirectory() != null) {
+            final TreeSet<File> inputFileSet = ExporterUtils.createInputFileSet(new String[]{exportParameter.getSourceDirectory().getPath() + File.separator + "*.hdr",
+                    exportParameter.getSourceDirectory().getPath() + File.separator + "*.HDR",
+                    exportParameter.getSourceDirectory().getPath() + File.separator + "*.zip",
+                    exportParameter.getSourceDirectory().getPath() + File.separator + "*.ZIP"});
+            for (File inputFile : inputFileSet) {
+                if (inputFile.isDirectory()) {
+                    continue;
+                }
+                exporter.exportFile(inputFile, getLogger());
             }
         }
     }

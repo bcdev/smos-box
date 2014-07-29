@@ -67,7 +67,7 @@ public class GPToNetCDFExporterOp extends AbstractNetCDFExporterOp {
         }
 
         if (sourceProductPaths != null) {
-            final TreeSet<File> sourceFileSet = createInputFileSet(sourceProductPaths);
+            final TreeSet<File> sourceFileSet = ExporterUtils.createInputFileSet(sourceProductPaths);
 
             for (File inputFile : sourceFileSet) {
                 gpToNetCDFExporter.exportFile(inputFile, getLogger());
