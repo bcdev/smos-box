@@ -162,8 +162,6 @@ abstract class AbstractFormatExporter implements FormatExporter {
 
                 variableDescriptor.setUnit(memberDescriptor.getUnit());
                 variableDescriptor.setFillValue(memberDescriptor.getFillValue());
-                // @todo 2 tb/tb valid min
-                // @todo 2 tb/tb valid max
 
                 final float scalingFactor = memberDescriptor.getScalingFactor();
                 if (scalingFactor != 1.0) {
@@ -249,6 +247,7 @@ abstract class AbstractFormatExporter implements FormatExporter {
         return uniqueNamedElements;
     }
 
+    // package access for testing only tb 2014-07-30
     static void setDataType(VariableDescriptor variableDescriptor, String dataTypeName) {
         if (StringUtils.isBlank(dataTypeName)) {
             throw new IllegalStateException("datatype not set for '" + variableDescriptor.getName() + "'");
@@ -277,7 +276,8 @@ abstract class AbstractFormatExporter implements FormatExporter {
         }
     }
 
-    public static int getNumDimensions(String dimensionNames) {
+    // package access for testing only tb 2014-07-30
+    static int getNumDimensions(String dimensionNames) {
         if (StringUtils.isBlank(dimensionNames)) {
             throw new IllegalArgumentException("empty dimension names");
         }
