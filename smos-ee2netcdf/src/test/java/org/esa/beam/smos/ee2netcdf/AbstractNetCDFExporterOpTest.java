@@ -55,7 +55,7 @@ public class AbstractNetCDFExporterOpTest {
         final Field regionField = AbstractNetCDFExporterOp.class.getDeclaredField("region");
         final Parameter regionFieldAnnotation = regionField.getAnnotation(Parameter.class);
         assertEquals("", regionFieldAnnotation.defaultValue());
-        assertEquals("Target geographical region as a geometry in well-known text format (WKT). The  output product will be tailored according to the region.", regionFieldAnnotation.description());
+        assertEquals("Target geographical region as a geometry in well-known text format (WKT). The output product will be tailored according to the region.", regionFieldAnnotation.description());
         assertEquals(JtsGeometryConverter.class, regionFieldAnnotation.converter());
         assertFalse(regionFieldAnnotation.notEmpty());
         assertFalse(regionFieldAnnotation.notNull());

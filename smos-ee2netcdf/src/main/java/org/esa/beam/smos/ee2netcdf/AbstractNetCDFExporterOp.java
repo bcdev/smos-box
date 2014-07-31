@@ -32,7 +32,7 @@ abstract class AbstractNetCDFExporterOp extends Operator {
             description = "Set true to overwrite already existing target files.")
     protected boolean overwriteTarget;
 
-    @Parameter(description = "Target geographical region as a geometry in well-known text format (WKT). The  output product will be tailored according to the region.",
+    @Parameter(description = "Target geographical region as a geometry in well-known text format (WKT). The output product will be tailored according to the region.",
             converter = JtsGeometryConverter.class)
     protected Geometry region;
 
