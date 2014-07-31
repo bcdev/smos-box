@@ -24,6 +24,13 @@
             <fileMode>0755</fileMode>
             <filtered>false</filtered>
         </file>
+
+        <file>
+            <source>${project.basedir}/src/main/doc/SMOS-BOX-NetCDF-Converter-1.0-Manual.pdf</source>
+            <outputDirectory>/</outputDirectory>
+            <fileMode>0755</fileMode>
+            <filtered>false</filtered>
+        </file>
     </files>
 
     <dependencySets>
