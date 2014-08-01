@@ -7,8 +7,6 @@ import org.junit.Test;
 
 import java.io.File;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -168,9 +166,9 @@ public class ExportParameterTest {
         assertEquals(0.0, parameter.getEastBound(), 1e-8);
 
         assertFalse(parameter.isOverwriteTarget());
-        final List<String> outputBandNames = parameter.getVariableNames();
+        final String[] outputBandNames = parameter.getVariableNames();
         assertNotNull(outputBandNames);
-        assertEquals(0, outputBandNames.size());
+        assertEquals(0, outputBandNames.length);
 
         assertEquals(6, parameter.getCompressionLevel());
     }
@@ -220,16 +218,14 @@ public class ExportParameterTest {
 
     @Test
     public void testSetGetOutputBandNames() {
-        final List<String> bandNames = new ArrayList<>();
-        bandNames.add("band_1");
-        bandNames.add("band_2");
-        bandNames.add("band_3");
+        final String[] bandNames = new String[3];
+        bandNames[0] = "band_1";
+        bandNames[1] = "band_2";
+        bandNames[1] = "band_3";
 
         parameter.setVariableNames(bandNames);
-        final List<String> actualNames = parameter.getVariableNames();
-        assertNotNull(actualNames);
-        assertEquals(bandNames.size(), actualNames.size());
-        assertArrayEquals(bandNames.toArray(), actualNames.toArray());
+        final String[] actualNames = parameter.getVariableNames();
+        assertArrayEquals(bandNames, actualNames);
     }
 
     @Test

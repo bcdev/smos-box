@@ -52,7 +52,7 @@ public class GPToNetCDFExporterOp extends AbstractNetCDFExporterOp {
             for (String bandName : bandNames) {
                 bandNamesList.add(bandName.trim());
             }
-            exportParameter.setVariableNames(bandNamesList);
+            exportParameter.setVariableNames(bandNamesList.toArray(new String[bandNamesList.size()]));
         }
 
         setDummyTargetProduct();

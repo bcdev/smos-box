@@ -33,8 +33,17 @@ abstract class AbstractFormatExporter implements FormatExporter {
     protected Map<String, VariableDescriptor> variableDescriptors;
     protected ArrayList<Integer> gpIndexList;
 
-    protected static boolean mustExport(String bandName, List<String> outputBandNames) {
-        return outputBandNames.isEmpty() || outputBandNames.contains(bandName);
+    protected static boolean mustExport(String bandName, String[] outputBandNames) {
+        if (outputBandNames.length == 0) {
+            return true;
+        }
+
+        for (final String outputBandName : outputBandNames) {
+            if (outputBandName.equalsIgnoreCase(bandName)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -89,7 +98,7 @@ abstract class AbstractFormatExporter implements FormatExporter {
     @Override
     public void addVariables(NFileWriteable nFileWriteable, ExportParameter exportParameter) throws IOException {
         final Set<String> variableNameKeys = variableDescriptors.keySet();
-        final List<String> outputBandNames = exportParameter.getVariableNames();
+        final String[] outputBandNames = exportParameter.getVariableNames();
         for (final String ncVariableName : variableNameKeys) {
             if (!mustExport(ncVariableName, outputBandNames)) {
                 continue;
@@ -142,7 +151,7 @@ abstract class AbstractFormatExporter implements FormatExporter {
     void createVariableDescriptors(ExportParameter exportParameter) {
         variableDescriptors = new HashMap<>();
 
-        final List<String> outputBandNames = exportParameter.getVariableNames();
+        final String[] outputBandNames = exportParameter.getVariableNames();
 
         final List<MemberDescriptor> memberDescriptorList = memberDescriptors.asList();
         for (final MemberDescriptor memberDescriptor : memberDescriptorList) {
