@@ -226,4 +226,28 @@ public class AbstractFormatExporterTest {
          assertEquals("bla_bla_bla", AbstractFormatExporter.ensureNetCDFName("bla_bla_bla"));
          assertEquals("bla_bla_bla", AbstractFormatExporter.ensureNetCDFName("bla.bla.bla"));
     }
+
+    @Test
+    public void testMustExport_emptyArray() {
+        final String[] subsetNames = new String[0];
+
+        assertTrue(AbstractFormatExporter.mustExport("whatever", subsetNames));
+        assertTrue(AbstractFormatExporter.mustExport("we_dont_care", subsetNames));
+    }
+
+    @Test
+    public void testMustExport_nameContainedInSubsetNames() {
+        final String[] subsetNames = new String[]{"to_subset", "this_one_too", "this_also"};
+
+        assertTrue(AbstractFormatExporter.mustExport("this_one_too", subsetNames));
+        assertTrue(AbstractFormatExporter.mustExport("THIS_also", subsetNames));
+    }
+
+    @Test
+    public void testMustExport_nameNotContainedInSubsetNames() {
+        final String[] subsetNames = new String[]{"to_subset", "this_one_too", "this_also"};
+
+        assertFalse(AbstractFormatExporter.mustExport("BT_Value", subsetNames));
+        assertFalse(AbstractFormatExporter.mustExport("I_WANT_THIS", subsetNames));
+    }
 }

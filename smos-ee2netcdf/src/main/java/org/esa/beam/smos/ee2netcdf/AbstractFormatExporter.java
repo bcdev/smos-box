@@ -33,19 +33,6 @@ abstract class AbstractFormatExporter implements FormatExporter {
     protected Map<String, VariableDescriptor> variableDescriptors;
     protected ArrayList<Integer> gpIndexList;
 
-    protected static boolean mustExport(String bandName, String[] outputBandNames) {
-        if (outputBandNames.length == 0) {
-            return true;
-        }
-
-        for (final String outputBandName : outputBandNames) {
-            if (outputBandName.equalsIgnoreCase(bandName)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     @Override
     public void initialize(Product product, ExportParameter exportParameter) throws IOException {
         explorerFile = getSmosFile(product);
@@ -200,6 +187,20 @@ abstract class AbstractFormatExporter implements FormatExporter {
         extractAttributes(root, properties, "");
 
         return properties;
+    }
+
+    // package access for testing only tb 2014-08-01
+    static boolean mustExport(String bandName, String[] outputBandNames) {
+        if (outputBandNames.length == 0) {
+            return true;
+        }
+
+        for (final String outputBandName : outputBandNames) {
+            if (outputBandName.equalsIgnoreCase(bandName)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private static SmosFile getSmosFile(Product product) {
