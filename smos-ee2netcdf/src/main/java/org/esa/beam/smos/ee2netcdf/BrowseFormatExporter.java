@@ -68,9 +68,9 @@ class BrowseFormatExporter extends AbstractFormatExporter {
     // static access for testing only tb 2014-04-10
     static int getBtDataDimension(String productName) {
         final String productType = SmosUtils.getProductType(productName);
-        if ("MIR_BWLF1C".equalsIgnoreCase(productType) || "MIR_BWNF1C".equalsIgnoreCase(productType)) {
+        if ("MIR_BWLF1C".equalsIgnoreCase(productType) || "MIR_BWNF1C".equalsIgnoreCase(productType) || "MIR_BWSF1C".equalsIgnoreCase(productType)) {
             return 4;
-        } else if ("MIR_BWLD1C".equalsIgnoreCase(productType) || "MIR_BWND1C".equalsIgnoreCase(productType)) {
+        } else if ("MIR_BWLD1C".equalsIgnoreCase(productType) || "MIR_BWND1C".equalsIgnoreCase(productType) || "MIR_BWSD1C".equalsIgnoreCase(productType)) {
             return 2;
         } else {
             throw new IllegalArgumentException("unsupported product: " + productName);
