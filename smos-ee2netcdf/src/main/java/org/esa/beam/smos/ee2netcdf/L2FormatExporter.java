@@ -54,16 +54,8 @@ class L2FormatExporter extends AbstractFormatExporter {
     private void applyChiSquareScalingIfNecessary(Product product) {
         final String productType = product.getProductType();
         if (SmosUtils.isSmUserFormat(productType)) {
-            final MetadataElement metadataRoot = product.getMetadataRoot();
-            final MetadataElement variableHeader = metadataRoot.getElement("Variable_Header");
-            if (variableHeader == null) {
-                return;
-            }
-
-            final MetadataElement specificProductHeader = variableHeader.getElement("Specific_Product_Header");
-            if (specificProductHeader == null) {
-                return;
-            }
+            final MetadataElement specificProductHeader = ExporterUtils.getSpecificProductHeader(product);
+            if (specificProductHeader == null) return;
 
             final MetadataAttribute chi2ScaleAttribute = specificProductHeader.getAttribute("Chi_2_Scale");
             if (chi2ScaleAttribute == null) {
@@ -72,9 +64,7 @@ class L2FormatExporter extends AbstractFormatExporter {
 
             final double scaleFactor = chi2ScaleAttribute.getData().getElemDouble();
             if (scaleFactor != 1.0) {
-                final VariableDescriptor chi_2_variable = variableDescriptors.get("Chi_2");
-                final double originalScaleFactor = chi_2_variable.getScaleFactor();
-                chi_2_variable.setScaleFactor(originalScaleFactor * scaleFactor);
+                ExporterUtils.correctScaleFactor(variableDescriptors, "Chi_2", scaleFactor);
             }
         }
     }

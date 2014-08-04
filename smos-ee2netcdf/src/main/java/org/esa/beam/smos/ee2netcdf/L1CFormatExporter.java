@@ -45,13 +45,7 @@ class L1CFormatExporter extends AbstractFormatExporter {
     }
 
     private void applyScalingFromHeaderFile(Product product) {
-        final MetadataElement metadataRoot = product.getMetadataRoot();
-        final MetadataElement variableHeader = metadataRoot.getElement("Variable_Header");
-        if (variableHeader == null) {
-            return;
-        }
-
-        final MetadataElement specificProductHeader = variableHeader.getElement("Specific_Product_Header");
+        final MetadataElement specificProductHeader = ExporterUtils.getSpecificProductHeader(product);
         if (specificProductHeader == null) {
             return;
         }
@@ -60,18 +54,8 @@ class L1CFormatExporter extends AbstractFormatExporter {
         if (radiometricAccuracyAttribute != null) {
             final double scaleFactor = radiometricAccuracyAttribute.getData().getElemDouble();
             if (scaleFactor != 1.0) {
-                double originalScaleFactor;
-                final VariableDescriptor radiometricAccuracyVariable = variableDescriptors.get("Radiometric_Accuracy");
-                if (radiometricAccuracyVariable != null) {
-                    originalScaleFactor = radiometricAccuracyVariable.getScaleFactor();
-                    radiometricAccuracyVariable.setScaleFactor(originalScaleFactor * scaleFactor);
-                }
-
-                final VariableDescriptor accuracyOfPixelVariable = variableDescriptors.get("Radiometric_Accuracy_of_Pixel");
-                if (accuracyOfPixelVariable != null) {
-                    originalScaleFactor = accuracyOfPixelVariable.getScaleFactor();
-                    accuracyOfPixelVariable.setScaleFactor(originalScaleFactor * scaleFactor);
-                }
+                ExporterUtils.correctScaleFactor(variableDescriptors, "Radiometric_Accuracy", scaleFactor);
+                ExporterUtils.correctScaleFactor(variableDescriptors, "Radiometric_Accuracy_of_Pixel", scaleFactor);
             }
         }
 
@@ -79,17 +63,8 @@ class L1CFormatExporter extends AbstractFormatExporter {
         if (pixelFootprintAttribute != null) {
             final double scaleFactor = pixelFootprintAttribute.getData().getElemDouble();
             if (scaleFactor != 1.0) {
-                final VariableDescriptor footprintAxis1Variable = variableDescriptors.get("Footprint_Axis1");
-                if (footprintAxis1Variable != null) {
-                    final double originalScaleFactor = footprintAxis1Variable.getScaleFactor();
-                    footprintAxis1Variable.setScaleFactor(originalScaleFactor * scaleFactor);
-                }
-
-                final VariableDescriptor footprintAxis2Variable = variableDescriptors.get("Footprint_Axis2");
-                if (footprintAxis2Variable != null) {
-                    final double originalScaleFactor = footprintAxis2Variable.getScaleFactor();
-                    footprintAxis2Variable.setScaleFactor(originalScaleFactor * scaleFactor);
-                }
+                ExporterUtils.correctScaleFactor(variableDescriptors, "Footprint_Axis1", scaleFactor);
+                ExporterUtils.correctScaleFactor(variableDescriptors, "Footprint_Axis2", scaleFactor);
             }
         }
     }
