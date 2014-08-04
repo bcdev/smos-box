@@ -4,7 +4,10 @@ package org.esa.beam.smos.ee2netcdf;
 import com.bc.ceres.binio.CompoundData;
 import org.esa.beam.dataio.netcdf.nc.NFileWriteable;
 import org.esa.beam.dataio.netcdf.nc.NVariable;
+import org.esa.beam.framework.datamodel.MetadataAttribute;
+import org.esa.beam.framework.datamodel.MetadataElement;
 import org.esa.beam.framework.datamodel.Product;
+import org.esa.beam.smos.SmosUtils;
 import org.esa.beam.smos.ee2netcdf.variable.VariableDescriptor;
 import org.esa.beam.smos.ee2netcdf.variable.VariableWriter;
 import org.esa.beam.smos.ee2netcdf.variable.VariableWriterFactory;
@@ -18,6 +21,8 @@ class L2FormatExporter extends AbstractFormatExporter {
     @Override
     public void initialize(Product product, ExportParameter exportParameter) throws IOException {
         super.initialize(product, exportParameter);
+
+        applyChiSquareScalingIfNecessary(product);
     }
 
     @Override
@@ -43,6 +48,27 @@ class L2FormatExporter extends AbstractFormatExporter {
 
         for (VariableWriter writer : variableWriters) {
             writer.close();
+        }
+    }
+
+    private void applyChiSquareScalingIfNecessary(Product product) {
+        final String productType = product.getProductType();
+        if (SmosUtils.isSmUserFormat(productType)) {
+            final MetadataElement metadataRoot = product.getMetadataRoot();
+            final MetadataElement variableHeader = metadataRoot.getElement("Variable_Header");
+            if (variableHeader == null) {
+                return;
+            }
+
+            final MetadataElement specificProductHeader = variableHeader.getElement("Specific_Product_Header");
+            if (specificProductHeader == null) {
+                return;
+            }
+
+            final MetadataAttribute chi2ScaleAttribute = specificProductHeader.getAttribute("Chi_2_Scale");
+            if (chi2ScaleAttribute == null) {
+                return;
+            }
         }
     }
 

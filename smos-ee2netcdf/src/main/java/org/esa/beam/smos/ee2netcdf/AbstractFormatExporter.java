@@ -40,8 +40,6 @@ abstract class AbstractFormatExporter implements FormatExporter {
 
         memberDescriptors = Dddb.getInstance().getMemberDescriptors(explorerFile.getHeaderFile());
         createVariableDescriptors(exportParameter);
-
-
     }
 
     @Override
