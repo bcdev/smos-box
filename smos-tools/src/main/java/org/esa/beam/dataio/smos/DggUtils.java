@@ -56,7 +56,7 @@ public class DggUtils {
         return new Rectangle2D.Double(x, y, w, w);
     }
 
-    // package access for testing only tb 2014-07-21
+    // Keep this method public - else we get weired class loading problems from within Visat tb 2014-08-04
     public static Rectangle2D createGridPointRectangle(double lon, double lat) {
         // the average width of a grid point is about 0.04
         lon -= 0.02;
