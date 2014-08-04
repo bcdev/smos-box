@@ -354,7 +354,7 @@ public class GPToNetCDFExporterOpIntegrationTest {
 
             final File outputFile = new File(targetDirectory, "SM_REPB_MIR_SCLF1C_20110201T151254_20110201T151308_505_152_1.nc");
             assertTrue(outputFile.isFile());
-            assertEquals(647175, outputFile.length());
+            assertEquals(647311, outputFile.length());
 
             final ExportParameter exportParameter = new ExportParameter();
             targetFile = NetcdfFileOpener.open(outputFile);
@@ -425,11 +425,35 @@ public class GPToNetCDFExporterOpIntegrationTest {
             final Variable radiometric_accuracy = getVariableVerified("Radiometric_Accuracy", targetFile);
             assertEquals(DataType.FLOAT, radiometric_accuracy.getDataType());
             assertAttribute("units", "K", radiometric_accuracy);
+            assertAttribute("scale_factor", 48.0, radiometric_accuracy);
+            assertAttribute("scale_offset", 0.0, radiometric_accuracy);
             array = radiometric_accuracy.read(new int[]{2, 0}, new int[]{2, 2});
             assertEquals(3.27913236618042, array.getFloat(0), 1e-8);
             assertEquals(0.0, array.getFloat(1), 1e-8);
             assertEquals(5.296276569366455, array.getFloat(2), 1e-8);
             assertEquals(4.488641262054443, array.getFloat(3), 1e-8);
+
+            final Variable footprint_axis1 = getVariableVerified("Footprint_Axis1", targetFile);
+            assertEquals(DataType.SHORT, footprint_axis1.getDataType());
+            assertAttribute("units", "km", footprint_axis1);
+            assertAttribute("scale_factor", 7.476806640625E-4, footprint_axis1);
+            assertAttribute("scale_offset", 0.0, footprint_axis1);
+            array = footprint_axis1.read(new int[]{4, 0}, new int[]{2, 2});
+            assertEquals(-20156, array.getShort(0));
+            assertEquals(-20156, array.getShort(1));
+            assertEquals(-17805, array.getShort(2));
+            assertEquals(-18419, array.getShort(3));
+
+            final Variable footprint_axis2 = getVariableVerified("Footprint_Axis2", targetFile);
+            assertEquals(DataType.SHORT, footprint_axis2.getDataType());
+            assertAttribute("units", "km", footprint_axis2);
+            assertAttribute("scale_factor", 7.476806640625E-4, footprint_axis2);
+            assertAttribute("scale_offset", 0.0, footprint_axis2);
+            array = footprint_axis2.read(new int[]{5, 0}, new int[]{2, 2});
+            assertEquals(19972, array.getShort(0));
+            assertEquals(19878, array.getShort(1));
+            assertEquals(19656, array.getShort(2));
+            assertEquals(19562, array.getShort(3));
 
         } finally {
             if (targetFile != null) {
@@ -473,7 +497,7 @@ public class GPToNetCDFExporterOpIntegrationTest {
                 parameterMap);
 
         assertTrue(outputFile.isFile());
-        assertEquals(647175, outputFile.length());
+        assertEquals(647311, outputFile.length());
     }
 
     @Test
@@ -490,7 +514,7 @@ public class GPToNetCDFExporterOpIntegrationTest {
 
             final File outputFile = new File(targetDirectory, "SM_REPB_MIR_SCLF1C_20110201T151254_20110201T151308_505_152_1.nc");
             assertTrue(outputFile.isFile());
-            assertEquals(501772, outputFile.length());
+            assertEquals(501908, outputFile.length());
 
             final ExportParameter exportParameter = new ExportParameter();
             targetFile = NetcdfFileOpener.open(outputFile);

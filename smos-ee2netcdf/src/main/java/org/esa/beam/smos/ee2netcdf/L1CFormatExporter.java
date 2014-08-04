@@ -6,6 +6,8 @@ import org.esa.beam.dataio.netcdf.nc.NFileWriteable;
 import org.esa.beam.dataio.netcdf.nc.NVariable;
 import org.esa.beam.dataio.smos.L1cScienceSmosFile;
 import org.esa.beam.dataio.smos.SnapshotInfo;
+import org.esa.beam.framework.datamodel.MetadataAttribute;
+import org.esa.beam.framework.datamodel.MetadataElement;
 import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.smos.ee2netcdf.geometry.GeometryFilter;
 import org.esa.beam.smos.ee2netcdf.geometry.GeometryFilterFactory;
@@ -38,6 +40,58 @@ class L1CFormatExporter extends AbstractFormatExporter {
         numSnapshotsInInput = numSnapshotsToExport;
 
         snapshotIdList = new ArrayList<>();
+
+        applyScalingFromHeaderFile(product);
+    }
+
+    private void applyScalingFromHeaderFile(Product product) {
+        final MetadataElement metadataRoot = product.getMetadataRoot();
+        final MetadataElement variableHeader = metadataRoot.getElement("Variable_Header");
+        if (variableHeader == null) {
+            return;
+        }
+
+        final MetadataElement specificProductHeader = variableHeader.getElement("Specific_Product_Header");
+        if (specificProductHeader == null) {
+            return;
+        }
+
+        final MetadataAttribute radiometricAccuracyAttribute = specificProductHeader.getAttribute("Radiometric_Accuracy_Scale");
+        if (radiometricAccuracyAttribute != null) {
+            final double scaleFactor = radiometricAccuracyAttribute.getData().getElemDouble();
+            if (scaleFactor != 1.0) {
+                double originalScaleFactor;
+                final VariableDescriptor radiometricAccuracyVariable = variableDescriptors.get("Radiometric_Accuracy");
+                if (radiometricAccuracyVariable != null) {
+                    originalScaleFactor = radiometricAccuracyVariable.getScaleFactor();
+                    radiometricAccuracyVariable.setScaleFactor(originalScaleFactor * scaleFactor);
+                }
+
+                final VariableDescriptor accuracyOfPixelVariable = variableDescriptors.get("Radiometric_Accuracy_of_Pixel");
+                if (accuracyOfPixelVariable != null) {
+                    originalScaleFactor = accuracyOfPixelVariable.getScaleFactor();
+                    accuracyOfPixelVariable.setScaleFactor(originalScaleFactor * scaleFactor);
+                }
+            }
+        }
+
+        final MetadataAttribute pixelFootprintAttribute = specificProductHeader.getAttribute("Pixel_Footprint_Scale");
+        if (pixelFootprintAttribute != null) {
+            final double scaleFactor = pixelFootprintAttribute.getData().getElemDouble();
+            if (scaleFactor != 1.0) {
+                final VariableDescriptor footprintAxis1Variable = variableDescriptors.get("Footprint_Axis1");
+                if (footprintAxis1Variable != null) {
+                    final double originalScaleFactor = footprintAxis1Variable.getScaleFactor();
+                    footprintAxis1Variable.setScaleFactor(originalScaleFactor * scaleFactor);
+                }
+
+                final VariableDescriptor footprintAxis2Variable = variableDescriptors.get("Footprint_Axis2");
+                if (footprintAxis2Variable != null) {
+                    final double originalScaleFactor = footprintAxis2Variable.getScaleFactor();
+                    footprintAxis2Variable.setScaleFactor(originalScaleFactor * scaleFactor);
+                }
+            }
+        }
     }
 
     @Override
