@@ -185,8 +185,8 @@ public class EEToNetCDFExportDialog extends ProductChangeAwareDialog {
         propertyContainer.setValue(BindingConstants.ROI_TYPE, BindingConstants.ROI_TYPE_AREA);
     }
 
-
-    private void setAreaToGlobe(PropertyContainer propertyContainer) {
+    // package access for testing only tb 2014-08-04
+    static void setAreaToGlobe(PropertyContainer propertyContainer) {
         propertyContainer.setValue(RegionBoundsInputUI.PROPERTY_NORTH_BOUND, 90.0);
         propertyContainer.setValue(RegionBoundsInputUI.PROPERTY_EAST_BOUND, 180.0);
         propertyContainer.setValue(RegionBoundsInputUI.PROPERTY_SOUTH_BOUND, -90.0);

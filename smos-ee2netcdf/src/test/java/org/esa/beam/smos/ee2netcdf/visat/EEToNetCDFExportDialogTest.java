@@ -1,5 +1,8 @@
 package org.esa.beam.smos.ee2netcdf.visat;
 
+import com.bc.ceres.binding.Property;
+import com.bc.ceres.binding.PropertyContainer;
+import org.esa.beam.framework.ui.RegionBoundsInputUI;
 import org.esa.beam.smos.ee2netcdf.TestHelper;
 import org.junit.Test;
 
@@ -101,5 +104,17 @@ public class EEToNetCDFExportDialogTest {
 
         assertTrue(EEToNetCDFExportDialog.listToString(targetFiles).contains("..."));
     }
+
+    // @todo 1 tb/tb continue here 2014-08-04
+//    @Test
+//    public void testSetAreaToGlobe() {
+//        final PropertyContainer propertyContainer = new PropertyContainer();
+//
+//        EEToNetCDFExportDialog.setAreaToGlobe(propertyContainer);
+//
+//        final Property north = propertyContainer.getProperty(RegionBoundsInputUI.PROPERTY_NORTH_BOUND);
+//        assertNotNull(north);
+//        assertEquals(90.0, (double)north.getValue(), 1e-8);
+//    }
 }
 
