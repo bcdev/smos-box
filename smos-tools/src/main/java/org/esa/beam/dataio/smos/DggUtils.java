@@ -57,7 +57,7 @@ public class DggUtils {
     }
 
     // package access for testing only tb 2014-07-21
-    static Rectangle2D createGridPointRectangle(double lon, double lat) {
+    public static Rectangle2D createGridPointRectangle(double lon, double lat) {
         // the average width of a grid point is about 0.04
         lon -= 0.02;
         if (lon < -180.0) {

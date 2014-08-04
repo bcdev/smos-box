@@ -700,6 +700,8 @@ public class GPToNetCDFExporterOpIntegrationTest {
             assertEquals(-1.8890000581741333, array.getFloat(0), 1e-8);
             assertEquals(-1.6920000314712524, array.getFloat(1), 1e-8);
 
+            getVariableVerified("Chi_2", targetFile);
+
         } finally {
             if (product != null) {
                 product.dispose();
