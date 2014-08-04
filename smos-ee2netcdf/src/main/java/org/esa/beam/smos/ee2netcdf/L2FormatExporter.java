@@ -69,6 +69,13 @@ class L2FormatExporter extends AbstractFormatExporter {
             if (chi2ScaleAttribute == null) {
                 return;
             }
+
+            final double scaleFactor = chi2ScaleAttribute.getData().getElemDouble();
+            if (scaleFactor != 1.0) {
+                final VariableDescriptor chi_2_variable = variableDescriptors.get("Chi_2");
+                final double originalScaleFactor = chi_2_variable.getScaleFactor();
+                chi_2_variable.setScaleFactor(originalScaleFactor * scaleFactor);
+            }
         }
     }
 

@@ -700,7 +700,14 @@ public class GPToNetCDFExporterOpIntegrationTest {
             assertEquals(-1.8890000581741333, array.getFloat(0), 1e-8);
             assertEquals(-1.6920000314712524, array.getFloat(1), 1e-8);
 
-            getVariableVerified("Chi_2", targetFile);
+            final Variable chi_2 = getVariableVerified("Chi_2", targetFile);
+            assertEquals(DataType.BYTE, chi_2.getDataType());
+            assertAttribute("_FillValue", 0.0, chi_2);
+            assertAttribute("scale_factor", 0.20784314954653382, chi_2);
+            assertAttribute("scale_offset", 0.0, chi_2);
+            array = chi_2.read(new int[]{131}, new int[]{2});
+            assertEquals(0, array.getByte(0));
+            assertEquals(0, array.getByte(1));
 
         } finally {
             if (product != null) {
