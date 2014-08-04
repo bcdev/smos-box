@@ -1,13 +1,17 @@
 package org.esa.beam.smos.ee2netcdf;
 
+import org.esa.beam.framework.datamodel.MetadataElement;
+import org.esa.beam.framework.datamodel.Product;
+import org.esa.beam.smos.ee2netcdf.variable.VariableDescriptor;
 import org.junit.Test;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.TreeSet;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 public class ExporterUtilsTest {
 
@@ -41,6 +45,56 @@ public class ExporterUtilsTest {
         assertEquals("SM_OPER_MIR_BWLF1C_20111026T143206_20111026T152520_503_001_1.zip", iterator.next().getName());
     }
 
+    @Test
+    public void testGetSpecificProductHeader_noVariableHeader() {
+        final Product product = new Product("hic", "haec", 2, 2);
+
+        assertNull(ExporterUtils.getSpecificProductHeader(product));
+    }
+
+    @Test
+    public void testGetSpecificProductHeader_noSpecificHeader() {
+        final Product product = new Product("helge", "schneider", 2, 2);
+        final MetadataElement metadataRoot = product.getMetadataRoot();
+        metadataRoot.addElement(new MetadataElement("Variable_Header"));
+
+        assertNull(ExporterUtils.getSpecificProductHeader(product));
+    }
+
+    @Test
+    public void testGetSpecificProductHeader() {
+        final Product product = new Product("nasen", "mann", 2, 2);
+        final MetadataElement metadataRoot = product.getMetadataRoot();
+        final MetadataElement variable_header = new MetadataElement("Variable_Header");
+        final MetadataElement sph = new MetadataElement("Specific_Product_Header");
+        variable_header.addElement(sph);
+        metadataRoot.addElement(variable_header);
+
+        final MetadataElement specificProductHeader = ExporterUtils.getSpecificProductHeader(product);
+        assertSame(sph, specificProductHeader);
+    }
+
+    @Test
+    public void testCorrectScaleFactor_variableNotPresent() {
+        Map<String, VariableDescriptor> variableDescriptors = new HashMap<>();
+        variableDescriptors.put("_its_here", new VariableDescriptor());
+
+        ExporterUtils.correctScaleFactor(variableDescriptors, "the_missing", 2.8);
+    }
+
+    @Test
+    public void testCorrectScaleFactor() {
+        Map<String, VariableDescriptor> variableDescriptors = new HashMap<>();
+        variableDescriptors.put("the_one", new VariableDescriptor());
+        final VariableDescriptor corrected = new VariableDescriptor();
+        corrected.setScaleFactor(2.8);
+        variableDescriptors.put("corrected", corrected);
+
+        ExporterUtils.correctScaleFactor(variableDescriptors, "corrected", 2);
+
+        assertEquals(5.6, corrected.getScaleFactor(), 1e-8);
+    }
+
     private String getResourcePath() {
         File testDir = new File("./smos-ee2netcdf/src/test/resources/org/esa/beam/smos/ee2netcdf/");
         if (!testDir.exists()) {
@@ -48,5 +102,4 @@ public class ExporterUtilsTest {
         }
         return testDir.getPath();
     }
-
 }
