@@ -7,6 +7,7 @@ import org.apache.commons.cli.*;
 import org.esa.beam.framework.gpf.annotations.Parameter;
 import org.esa.beam.framework.gpf.annotations.ParameterDescriptorFactory;
 import org.esa.beam.smos.gui.BindingConstants;
+import org.esa.beam.util.StringUtils;
 import org.esa.beam.util.logging.BeamLogManager;
 
 import java.io.File;
@@ -40,7 +41,7 @@ public class GPToNetCDFExporterTool {
         PARAMETER_NAMES.put(BindingConstants.INSTITUTION, "institution");
         PARAMETER_NAMES.put(BindingConstants.OVERWRITE_TARGET, "overwrite-target");
         PARAMETER_NAMES.put(BindingConstants.REGION, "region");
-        PARAMETER_NAMES.put(BindingConstants.SOURCE_DIRECTORY, "source-directory");
+        PARAMETER_NAMES.put(BindingConstants.SOURCE_DIRECTORY, "source-product-paths");
         PARAMETER_NAMES.put(BindingConstants.TARGET_DIRECTORY, "target-directory");
         PARAMETER_NAMES.put(BindingConstants.VARIABLES, "variables");
         PARAMETER_NAMES.put(BindingConstants.COMPRESSION_LEVEL, "compression-level");
@@ -101,7 +102,7 @@ public class GPToNetCDFExporterTool {
                 printVersion();
                 return;
             }
-            if (commandLine.getArgs().length == 0 && !commandLine.hasOption("source-directory")) {
+            if (commandLine.getArgs().length == 0 && !commandLine.hasOption("source-product-paths")) {
                 printHelp();
                 return;
             }
@@ -141,12 +142,10 @@ public class GPToNetCDFExporterTool {
             }
         }
 
-        if (exportParameter.getSourceDirectory() != null) {
-            final String sourceDirectoryPath = exportParameter.getSourceDirectory().getPath();
-            final TreeSet<File> inputFileSet = ExporterUtils.createInputFileSet(new String[]{sourceDirectoryPath + File.separator + "*.hdr",
-                    sourceDirectoryPath + File.separator + "*.HDR",
-                    sourceDirectoryPath + File.separator + "*.zip",
-                    sourceDirectoryPath + File.separator + "*.ZIP"});
+        if (commandLine.hasOption("source-product-paths")) {
+            final String sourceProductPathsCSV = commandLine.getOptionValue("source-product-paths");
+            final String[] sourceProductPaths = StringUtils.split(sourceProductPathsCSV, new char[]{','}, true);
+            final TreeSet<File> inputFileSet = ExporterUtils.createInputFileSet(sourceProductPaths);
 
             for (File inputFile : inputFileSet) {
                 if (inputFile.isDirectory()) {
