@@ -41,7 +41,6 @@ public class GPToNetCDFExporterTool {
         PARAMETER_NAMES.put(BindingConstants.INSTITUTION, "institution");
         PARAMETER_NAMES.put(BindingConstants.OVERWRITE_TARGET, "overwrite-target");
         PARAMETER_NAMES.put(BindingConstants.REGION, "region");
-        PARAMETER_NAMES.put(BindingConstants.SOURCE_DIRECTORY, "source-product-paths");
         PARAMETER_NAMES.put(BindingConstants.TARGET_DIRECTORY, "target-directory");
         PARAMETER_NAMES.put(BindingConstants.VARIABLES, "variables");
         PARAMETER_NAMES.put(BindingConstants.COMPRESSION_LEVEL, "compression-level");
@@ -239,6 +238,14 @@ public class GPToNetCDFExporterTool {
         options.addOption("h", "help", false, "Display help information.");
         options.addOption("v", "version", false, "Display version information.");
         options.addOption(createOption("l", LOG_LEVEL_OPTION_NAME, Level.class, LOG_LEVEL_DESCRIPTION));
+        OptionBuilder.withLongOpt("source-product-paths");
+        OptionBuilder.hasArg(true);
+        OptionBuilder.withArgName(String.class.getSimpleName().toLowerCase());
+        OptionBuilder.withDescription("Comma-separated list of file paths specifying the source products.\n" +
+                "Each path may contain the wildcards '**' (matches recursively any directory),\n" +
+                "'*' (matches any character sequence in path names) and\n" +
+                "'?' (matches any single character).");
+        options.addOption(OptionBuilder.create());
 
         final Set<String> parameterNames = PARAMETER_NAMES.keySet();
         final Field[] fields = ExportParameter.class.getDeclaredFields();
