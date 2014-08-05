@@ -46,6 +46,29 @@ public class ExporterUtilsTest {
     }
 
     @Test
+    public void testEnsureNoDuplicateDblFiles_noDuplicates() {
+        final TreeSet<File> files = new TreeSet<>();
+        files.add(new File("SM_OPER_MIR_BWSD1C_20100201T134256_20100201T140057_324_002_1.zip"));
+        files.add(new File("SM_OPER_MIR_OSUDP2_20120514T181819_20120514T191137_550_001_1.zip"));
+        files.add(new File("SM_OPER_MIR_SCLF1C_20100119T002827_20100119T012226_323_001_1.zip"));
+
+        final TreeSet<File> cleanedSet = ExporterUtils.ensureNoDuplicateDblFiles(files);
+        assertEquals(3, cleanedSet.size());
+    }
+
+    @Test
+    public void testEnsureNoDuplicateDblFiles_duplicatesRemoved() {
+        final TreeSet<File> files = new TreeSet<>();
+        files.add(new File("SM_OPER_MIR_BWSD1C_20100201T134256_20100201T140057_324_002_1.zip"));
+        files.add(new File("SM_OPER_MIR_OSUDP2_20120514T181819_20120514T191137_550_001_1.hdr"));
+        files.add(new File("SM_OPER_MIR_OSUDP2_20120514T181819_20120514T191137_550_001_1.dbl"));
+        files.add(new File("SM_OPER_MIR_SCLF1C_20100119T002827_20100119T012226_323_001_1.zip"));
+
+        final TreeSet<File> cleanedSet = ExporterUtils.ensureNoDuplicateDblFiles(files);
+        assertEquals(3, cleanedSet.size());
+    }
+
+    @Test
     public void testGetSpecificProductHeader_noVariableHeader() {
         final Product product = new Product("hic", "haec", 2, 2);
 

@@ -4,6 +4,7 @@ import org.esa.beam.framework.datamodel.MetadataElement;
 import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.framework.gpf.OperatorException;
 import org.esa.beam.smos.ee2netcdf.variable.VariableDescriptor;
+import org.esa.beam.util.io.FileUtils;
 import org.esa.beam.util.io.WildcardMatcher;
 
 import java.io.File;
@@ -22,15 +23,41 @@ class ExporterUtils {
     }
 
     static TreeSet<File> createInputFileSet(String[] sourceProductPaths) {
-        final TreeSet<File> sourceFileSet = new TreeSet<>();
+        final TreeSet<File> globbedFileSet = new TreeSet<>();
         try {
             for (String sourceProductPath : sourceProductPaths) {
                 sourceProductPath = sourceProductPath.trim();
-                WildcardMatcher.glob(sourceProductPath, sourceFileSet);
+                WildcardMatcher.glob(sourceProductPath, globbedFileSet);
             }
         } catch (IOException e) {
             throw new OperatorException(e.getMessage());
         }
+
+        return ensureNoDuplicateDblFiles(globbedFileSet);
+    }
+
+    static TreeSet<File> ensureNoDuplicateDblFiles(TreeSet<File> globbedFileSet) {
+        final TreeSet<File> sourceFileSet = new TreeSet<>();
+        for (final File inputFile : globbedFileSet) {
+            final String extension = FileUtils.getExtension(inputFile);
+            if (".DBL".equalsIgnoreCase(extension) || ".HDR".equalsIgnoreCase(extension)) {
+                final File exchangedFile = FileUtils.exchangeExtension(inputFile, ".HDR");
+                boolean alreadyPresent = false;
+                for (final File sourceFile : sourceFileSet) {
+                    if (sourceFile.compareTo(exchangedFile) == 0) {
+                        alreadyPresent = true;
+                        break;
+                    }
+                }
+                if (!alreadyPresent) {
+                    sourceFileSet.add(exchangedFile);
+                }
+
+            } else {
+                sourceFileSet.add(inputFile);
+            }
+        }
+
         return sourceFileSet;
     }
 
