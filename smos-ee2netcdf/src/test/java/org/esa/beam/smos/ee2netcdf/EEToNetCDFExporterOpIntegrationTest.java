@@ -112,6 +112,7 @@ public class EEToNetCDFExporterOpIntegrationTest {
         final File file = TestHelper.getResourceFile("SM_OPER_MIR_OSUDP2_20091204T001853_20091204T011255_310_001_1.zip");
 
         Product product = null;
+        Product targetProduct = null;
         try {
             product = ProductIO.readProduct(file);
 
@@ -127,9 +128,17 @@ public class EEToNetCDFExporterOpIntegrationTest {
             assertEquals(1569057, expectedOutputFile.length());
 
             // @todo 2 tb/tb more assertions 2013-03-25
+            targetProduct = ProductIO.readProduct(expectedOutputFile);
+            assertNotNull(targetProduct);
+            assertEquals(684, targetProduct.getSceneRasterWidth());
+            assertEquals(138, targetProduct.getSceneRasterHeight());
+
         } finally {
             if (product != null) {
                 product.dispose();
+            }
+            if (targetProduct != null) {
+                targetProduct.dispose();
             }
         }
     }
