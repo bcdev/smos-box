@@ -24,8 +24,12 @@ public class DateTimeUtils {
         FILE_NAME_FORMAT.setTimeZone(TIME_ZONE_UTC);
     }
 
+    public static Calendar getUtcCalendar() {
+        return new GregorianCalendar(TIME_ZONE_UTC);
+    }
+
     public static Date cfiDateToUtc(int days, long seconds, long microseconds) {
-        final Calendar calendar = new GregorianCalendar(TIME_ZONE_UTC);
+        final Calendar calendar = getUtcCalendar();
 
         calendar.set(Calendar.YEAR, 2000);
         calendar.set(Calendar.MONTH, 0);

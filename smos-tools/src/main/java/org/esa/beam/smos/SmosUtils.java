@@ -9,7 +9,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.TimeZone;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -46,8 +45,7 @@ public class SmosUtils {
         final int month = Integer.parseInt(monthString);
         final int day = Integer.parseInt(dayString);
 
-        // @todo 1 pm/* review this code... it doesn't set a time zone, so if some other code sets time zone to UTC, then the day can change. Better to just use a different class than Date for the return value.
-        final Calendar cal = GregorianCalendar.getInstance();
+        final Calendar cal = DateTimeUtils.getUtcCalendar();
         //noinspection MagicConstant
         cal.set(year, month - 1, day);
         return cal.getTime();

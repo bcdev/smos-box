@@ -5,9 +5,11 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.Calendar;
 import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -128,5 +130,12 @@ public class DateTimeUtilsTest {
         date = DateTimeUtils.cfiDateToUtc(0, 0, 1000);
         variableHeaderFormat = DateTimeUtils.toFileNameFormat(date);
         assertEquals("20000101T000000", variableHeaderFormat);
+    }
+
+    @Test
+    public void testGetUtcCalendar()  {
+        final Calendar calendar = DateTimeUtils.getUtcCalendar();
+        assertNotNull(calendar);
+        assertEquals("Coordinated Universal Time", calendar.getTimeZone().getDisplayName());
     }
 }
