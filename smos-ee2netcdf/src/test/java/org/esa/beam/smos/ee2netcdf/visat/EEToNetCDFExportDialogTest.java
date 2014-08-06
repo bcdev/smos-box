@@ -1,8 +1,5 @@
 package org.esa.beam.smos.ee2netcdf.visat;
 
-import com.bc.ceres.binding.Property;
-import com.bc.ceres.binding.PropertyContainer;
-import org.esa.beam.framework.ui.RegionBoundsInputUI;
 import org.esa.beam.smos.ee2netcdf.TestHelper;
 import org.junit.Test;
 
@@ -38,11 +35,11 @@ public class EEToNetCDFExportDialogTest {
         final List<File> targetFiles = EEToNetCDFExportDialog.getTargetFiles(wildCardpath, targetDir);
         assertNotNull(targetFiles);
         assertEquals(4, targetFiles.size());
-        assertEquals(new File(targetDir, "SM_OPEB_MIR_SMUDP2_20140413T185915_20140413T195227_551_026_1.nc").getAbsolutePath(),
-                targetFiles.get(0).getAbsolutePath());
         assertEquals(new File(targetDir, "SM_OPER_MIR_BWLF1C_20111026T143206_20111026T152520_503_001_1.nc").getAbsolutePath(),
-                targetFiles.get(1).getAbsolutePath());
+                targetFiles.get(0).getAbsolutePath());
         assertEquals(new File(targetDir, "SM_OPER_MIR_OSUDP2_20091204T001853_20091204T011255_310_001_1.nc").getAbsolutePath(),
+                targetFiles.get(1).getAbsolutePath());
+        assertEquals(new File(targetDir, "SM_OPER_MIR_SMUDP2_20120514T163815_20120514T173133_551_001_1.nc").getAbsolutePath(),
                 targetFiles.get(2).getAbsolutePath());
         assertEquals(new File(targetDir, "SM_REPB_MIR_SCLF1C_20110201T151254_20110201T151308_505_152_1.nc").getAbsolutePath(),
                 targetFiles.get(3).getAbsolutePath());

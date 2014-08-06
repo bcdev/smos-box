@@ -679,7 +679,7 @@ public class GPToNetCDFExporterOpIntegrationTest {
 
     @Test
     public void testExportSMUDP2() throws IOException, ParseException, InvalidRangeException {
-        final File file = TestHelper.getResourceFile("SM_OPEB_MIR_SMUDP2_20140413T185915_20140413T195227_551_026_1.zip");
+        final File file = TestHelper.getResourceFile("SM_OPER_MIR_SMUDP2_20120514T163815_20120514T173133_551_001_1.zip");
 
         Product product = null;
         NetcdfFile targetFile = null;
@@ -691,13 +691,13 @@ public class GPToNetCDFExporterOpIntegrationTest {
                     parameterMap,
                     new Product[]{product});
 
-            final File outputFile = new File(targetDirectory, "SM_OPEB_MIR_SMUDP2_20140413T185915_20140413T195227_551_026_1.nc");
+            final File outputFile = new File(targetDirectory, "SM_OPER_MIR_SMUDP2_20120514T163815_20120514T173133_551_001_1.nc");
             assertTrue(outputFile.isFile());
-            assertEquals(676066, outputFile.length());
+            assertEquals(3257075, outputFile.length());
 
             targetFile = NetcdfFileOpener.open(outputFile);
 
-            final int numGridPoints = 157;
+            final int numGridPoints = 44273;
             final ExportParameter exportParameter = new ExportParameter();
             assertCorrectGlobalAttributes(targetFile, numGridPoints, exportParameter);
 
@@ -706,23 +706,23 @@ public class GPToNetCDFExporterOpIntegrationTest {
             assertNoDimension("n_radiometric_accuracy", targetFile);
             assertNoDimension("n_snapshots", targetFile);
 
-            assertGridPointIdVariable(targetFile, 131, new int[]{2002428, 2002941});
+            assertGridPointIdVariable(targetFile, 131, new int[]{6206536, 6206537});
 
             final Variable latVariable = getVariableVerified("Latitude", targetFile);
             assertEquals(DataType.FLOAT, latVariable.getDataType());
             assertAttribute("units", "deg", latVariable);
             assertAttribute("_FillValue", -999.0, latVariable);
             Array array = latVariable.read(new int[]{130}, new int[]{2});
-            assertEquals(43.858001708984375, array.getFloat(0), 1e-8);
-            assertEquals(43.86000061035156, array.getFloat(1), 1e-8);
+            assertEquals(-76.60199737548828, array.getFloat(0), 1e-8);
+            assertEquals(-76.60800170898438, array.getFloat(1), 1e-8);
 
             final Variable lonVariable = getVariableVerified("Longitude", targetFile);
             assertEquals(DataType.FLOAT, lonVariable.getDataType());
             assertAttribute("units", "deg", lonVariable);
             assertAttribute("_FillValue", -999.0, lonVariable);
             array = lonVariable.read(new int[]{129}, new int[]{2});
-            assertEquals(-1.8890000581741333, array.getFloat(0), 1e-8);
-            assertEquals(-1.6920000314712524, array.getFloat(1), 1e-8);
+            assertEquals(-81.25199890136719, array.getFloat(0), 1e-8);
+            assertEquals(-80.6969985961914, array.getFloat(1), 1e-8);
 
             final Variable chi_2 = getVariableVerified("Chi_2", targetFile);
             assertEquals(DataType.BYTE, chi_2.getDataType());
@@ -730,8 +730,8 @@ public class GPToNetCDFExporterOpIntegrationTest {
             assertAttribute("scale_factor", 0.20784314954653382, chi_2);
             assertAttribute("scale_offset", 0.0, chi_2);
             array = chi_2.read(new int[]{131}, new int[]{2});
-            assertEquals(0, array.getByte(0));
-            assertEquals(0, array.getByte(1));
+            assertEquals(69, array.getByte(0));
+            assertEquals(101, array.getByte(1));
 
         } finally {
             if (product != null) {
