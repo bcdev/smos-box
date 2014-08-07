@@ -136,6 +136,6 @@ public class DateTimeUtilsTest {
     public void testGetUtcCalendar()  {
         final Calendar calendar = DateTimeUtils.getUtcCalendar();
         assertNotNull(calendar);
-        assertEquals("Coordinated Universal Time", calendar.getTimeZone().getDisplayName());
+        assertEquals("UTC", calendar.getTimeZone().getID());
     }
 }
