@@ -105,7 +105,13 @@ class GridPointExportDialog extends ProductChangeAwareDialog {
         }
 
         final GridPointExportSwingWorker swingWorker = new GridPointExportSwingWorker(appContext, exportParameter.getClone());
-        // @todo 2 tb/tb save last selected directories 2014-05-28
+
+        GuiHelper.setDefaultSourceDirectory(exportParameter.getSourceDirectory(), appContext);
+        final File exportedFile = exportParameter.getTargetFile();
+        if (exportedFile != null) {
+            GuiHelper.setDefaultTargetDirectory(exportedFile.getParentFile(), appContext);
+        }
+
         swingWorker.execute();
     }
 
