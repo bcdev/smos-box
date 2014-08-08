@@ -10,7 +10,7 @@
 
     <files>
         <file>
-            <source>${project.basedir}/src/main/bin/smosEEToNetCDF.bat</source>
+            <source>${project.basedir}/src/main/bin/smosGPToNetCDF.bat</source>
             <outputDirectory>/</outputDirectory>
             <lineEnding>dos</lineEnding>
             <fileMode>0755</fileMode>
@@ -18,7 +18,7 @@
         </file>
 
         <file>
-            <source>${project.basedir}/src/main/bin/smosEEToNetCDF.sh</source>
+            <source>${project.basedir}/src/main/bin/smosGPToNetCDF.sh</source>
             <outputDirectory>/</outputDirectory>
             <lineEnding>unix</lineEnding>
             <fileMode>0755</fileMode>
