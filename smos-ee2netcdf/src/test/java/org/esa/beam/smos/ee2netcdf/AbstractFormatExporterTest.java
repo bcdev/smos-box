@@ -181,6 +181,16 @@ public class AbstractFormatExporterTest {
     }
 
     @Test
+    public void testSetDataType_Short() {
+        final VariableDescriptor variableDescriptor = new VariableDescriptor();
+
+        AbstractFormatExporter.setDataType(variableDescriptor, "short");
+
+        assertEquals(DataType.SHORT, variableDescriptor.getDataType());
+        assertFalse(variableDescriptor.isUnsigned());
+    }
+
+    @Test
     public void testSetDataType_ULong() {
         final VariableDescriptor variableDescriptor = new VariableDescriptor();
 

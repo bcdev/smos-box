@@ -274,6 +274,8 @@ abstract class AbstractFormatExporter implements FormatExporter {
         } else if ("ushort".equalsIgnoreCase(dataTypeName)) {
             variableDescriptor.setDataType(DataType.SHORT);
             variableDescriptor.setUnsigned(true);
+        } else if ("short".equalsIgnoreCase(dataTypeName)) {
+            variableDescriptor.setDataType(DataType.SHORT);
         } else if ("ulong".equalsIgnoreCase(dataTypeName)) {
             variableDescriptor.setDataType(DataType.LONG);
             variableDescriptor.setUnsigned(true);
