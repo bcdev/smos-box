@@ -26,7 +26,7 @@
         </file>
 
         <file>
-            <source>${project.basedir}/src/main/doc/SMOS-BOX-NetCDF-Converter-1.0-Manual.pdf</source>
+            <source>${project.basedir}/src/main/doc/SMOS-BOX-FormatConversionUserGuide-1.0-forAcceptance.pdf</source>
             <outputDirectory>/</outputDirectory>
             <fileMode>0755</fileMode>
             <filtered>false</filtered>
