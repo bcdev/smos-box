@@ -24,8 +24,8 @@
     <entries>
       <dirEntry mountPoint="22" file="../../../target/smos-box-bin/modules" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="subdir" subDirectory="lib" excludeSuffixes="" dirMode="755" overrideDirMode="false">
         <exclude>
-          <entry location="smos-dgg-3.0-SNAPSHOT.jar" fileType="regular" />
-          <entry location="smos-lsmask-3.0-SNAPSHOT.jar" fileType="regular" />
+          <entry location="smos-dgg-3.0.jar" fileType="regular" />
+          <entry location="smos-lsmask-3.0.jar" fileType="regular" />
         </exclude>
       </dirEntry>
       <fileEntry mountPoint="22" file="../../../smos-ee2netcdf/src/main/bin/smosEEToNetCDF.bat" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" />

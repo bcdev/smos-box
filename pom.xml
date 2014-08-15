@@ -7,7 +7,7 @@
     <name>SMOS-Box</name>
     <groupId>org.esa.beam.smos</groupId>
     <artifactId>smos-box</artifactId>
-    <version>3.0-SNAPSHOT</version>
+    <version>3.0</version>
 
     <packaging>pom</packaging>
 
@@ -89,9 +89,6 @@
     <properties>
         <ceres.version>0.14</ceres.version>
         <ceres.version.updated>0.14.1</ceres.version.updated>
-        <beam.version>5.0</beam.version>
-        <beam.version.updated>5.0.1</beam.version.updated>
-        <netcdf.version.updated>5.0.2-SNAPSHOT</netcdf.version.updated>
     </properties>
 
 
@@ -132,7 +129,7 @@
             <dependency>
                 <groupId>com.bc.ceres</groupId>
                 <artifactId>ceres-glayer</artifactId>
-                <version>${ceres.version.updated}</version>
+                <version>0.14.1</version>
             </dependency>
 
             <dependency>
@@ -146,12 +143,12 @@
             <dependency>
                 <groupId>org.esa.beam</groupId>
                 <artifactId>beam-bootstrap</artifactId>
-                <version>${beam.version}</version>
+                <version>5.0</version>
             </dependency>
             <dependency>
                 <groupId>org.esa.beam</groupId>
                 <artifactId>beam-core</artifactId>
-                <version>${beam.version.updated}</version>
+                <version>5.0.2</version>
                 <exclusions>
                     <exclusion>
                         <groupId>org.esa.beam</groupId>
@@ -162,12 +159,12 @@
             <dependency>
                 <groupId>org.esa.beam</groupId>
                 <artifactId>beam-ui</artifactId>
-                <version>${beam.version}</version>
+                <version>5.0.1</version>
             </dependency>
             <dependency>
                 <groupId>org.esa.beam</groupId>
                 <artifactId>beam-gpf</artifactId>
-                <version>${beam.version}</version>
+                <version>5.0.1</version>
                 <exclusions>
                     <exclusion>
                         <groupId>org.esa.beam</groupId>
@@ -178,34 +175,34 @@
             <dependency>
                 <groupId>org.esa.beam</groupId>
                 <artifactId>beam-netcdf</artifactId>
-                <version>${netcdf.version.updated}</version>
+                <version>5.0.2</version>
             </dependency>
             <dependency>
                 <groupId>org.esa.beam</groupId>
                 <artifactId>beam-binning</artifactId>
-                <version>${beam.version}</version>
+                <version>5.0.1</version>
             </dependency>
             <dependency>
                 <groupId>org.esa.beam</groupId>
                 <artifactId>beam-reader-tests</artifactId>
-                <version>${beam.version}</version>
+                <version>5.0</version>
             </dependency>
             <dependency>
                 <groupId>org.esa.beam</groupId>
                 <artifactId>beam-reader-tests</artifactId>
                 <type>test-jar</type>
                 <scope>test</scope>
-                <version>${beam.version}</version>
+                <version>5.0</version>
             </dependency>
             <dependency>
                 <groupId>org.esa.beam</groupId>
                 <artifactId>blue-marble-worldmap</artifactId>
-                <version>${beam.version}</version>
+                <version>5.0</version>
             </dependency>
             <dependency>
                 <groupId>org.esa.beam</groupId>
                 <artifactId>beam-visat</artifactId>
-                <version>${beam.version}</version>
+                <version>5.0</version>
             </dependency>
 
             <!-- SMOS Libraries ############################################# -->
