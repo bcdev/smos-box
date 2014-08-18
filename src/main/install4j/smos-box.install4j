@@ -201,7 +201,7 @@ File[] smosModuleFiles = modulesDir.listFiles(new FileFilter() {
                  name.startsWith("beam-gpt-5.0") or
                  name.startsWith("beam-netcdf-5.0") or
                  name.startsWith("beam-netcdf-5.0.1") or
-                 name.startsWith("beam-ui-5.0")
+                 name.startsWith("beam-ui-5.0");
         return accept;
     }
 });
