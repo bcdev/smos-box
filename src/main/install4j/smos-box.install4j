@@ -194,13 +194,13 @@ if (!existingBeamVersion.startsWith(requiredBeamVersion)) {
 File[] smosModuleFiles = modulesDir.listFiles(new FileFilter() {
     public boolean accept(File file) {
         String name = file.getName();
-        boolean accept = name.startsWith("smos-") or
-                 name.startsWith("beam-binning-5.0") or
-                 name.startsWith("beam-core-5.0") or
-                 name.startsWith("beam-core-5.0.1") or
-                 name.startsWith("beam-gpt-5.0") or
-                 name.startsWith("beam-netcdf-5.0") or
-                 name.startsWith("beam-netcdf-5.0.1") or
+        boolean accept = name.startsWith("smos-") ||
+                 name.startsWith("beam-binning-5.0") ||
+                 name.startsWith("beam-core-5.0") ||
+                 name.startsWith("beam-core-5.0.1") ||
+                 name.startsWith("beam-gpt-5.0") ||
+                 name.startsWith("beam-netcdf-5.0") ||
+                 name.startsWith("beam-netcdf-5.0.1") ||
                  name.startsWith("beam-ui-5.0");
         return accept;
     }
