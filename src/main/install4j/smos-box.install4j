@@ -207,7 +207,7 @@ File[] smosModuleFiles = modulesDir.listFiles(new FileFilter() {
 });
 
 if (smosModuleFiles != null &amp;&amp; smosModuleFiles.length &gt; 0) {
-    StringBuilder sb = new StringBuilder("Following existing BEAM/SMOS-Box modules will be removed:\n");
+    StringBuilder sb = new StringBuilder("Following existing BEAM/SMOS-Box modules will be updated:\n");
     for (int i = 0; i &lt; smosModuleFiles.length; i++) {
         File file = smosModuleFiles[i];
         sb.append("  " + file.getName() + "\n");
