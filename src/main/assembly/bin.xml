@@ -91,6 +91,7 @@
                             <include>com.bc.ceres:ceres-binio</include>
                         </includes>
                     </dependencySet>
+                    -->
                     <dependencySet>
                         <fileMode>0444</fileMode>
                         <unpack>false</unpack>
@@ -99,9 +100,12 @@
                         </outputFileNameMapping>
                         <includes>
                             <include>org.esa.beam:beam-core</include>
+                            <include>org.esa.beam:beam-binning</include>
+                            <include>org.esa.beam:beam-gpt</include>
+                            <include>org.esa.beam:beam-netcdf</include>
+                            <include>org.esa.beam:beam-ui</include>
                         </includes>
                     </dependencySet>
-                    -->
                 </dependencySets>
             </binaries>
         </moduleSet>

@@ -194,12 +194,20 @@ if (!existingBeamVersion.startsWith(requiredBeamVersion)) {
 File[] smosModuleFiles = modulesDir.listFiles(new FileFilter() {
     public boolean accept(File file) {
         String name = file.getName();
-        return name.startsWith("smos-");
+        boolean accept = name.startsWith("smos-") or
+                 name.startsWith("beam-binning-5.0") or
+                 name.startsWith("beam-core-5.0") or
+                 name.startsWith("beam-core-5.0.1") or
+                 name.startsWith("beam-gpt-5.0") or
+                 name.startsWith("beam-netcdf-5.0") or
+                 name.startsWith("beam-netcdf-5.0.1") or
+                 name.startsWith("beam-ui-5.0")
+        return accept;
     }
 });
 
 if (smosModuleFiles != null &amp;&amp; smosModuleFiles.length &gt; 0) {
-    StringBuilder sb = new StringBuilder("Following existing BEAM SMOS-Box modules will be removed:\n");
+    StringBuilder sb = new StringBuilder("Following existing BEAM/SMOS-Box modules will be removed:\n");
     for (int i = 0; i &lt; smosModuleFiles.length; i++) {
         File file = smosModuleFiles[i];
         sb.append("  " + file.getName() + "\n");
@@ -236,7 +244,7 @@ if (smosModuleFiles != null &amp;&amp; smosModuleFiles.length &gt; 0) {
     }
     
     if (sb.length() &gt; 0) {
-        Util.showMessage("Following existing BEAM SMOS-Box modules could not be removed:\n"
+        Util.showMessage("Following existing BEAM/SMOS-Box modules could not be removed:\n"
                           + sb + "Please remove them manually from the BEAM modules directory at\n"
                           + modulesDir);
     }
