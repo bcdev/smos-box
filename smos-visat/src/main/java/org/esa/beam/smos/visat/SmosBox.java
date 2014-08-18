@@ -21,6 +21,7 @@ import com.bc.ceres.glayer.Layer;
 import com.bc.ceres.glayer.LayerFilter;
 import com.bc.ceres.glayer.LayerType;
 import com.bc.ceres.glayer.LayerTypeRegistry;
+import com.bc.ceres.glayer.support.ImageLayer;
 import com.bc.ceres.glayer.support.LayerUtils;
 import org.esa.beam.dataio.smos.L1cScienceSmosFile;
 import org.esa.beam.dataio.smos.ProductFile;
@@ -143,6 +144,7 @@ public class SmosBox implements VisatPlugIn {
     private Layer createWorldMapLayer() {
         final LayerType layerType = getWorldMapLayerType();
         final PropertySet template = layerType.createLayerConfig(null);
+        template.setValue(ImageLayer.PROPERTY_NAME_PIXEL_BORDER_SHOWN, false);
         return layerType.createLayer(null, template);
     }
 
