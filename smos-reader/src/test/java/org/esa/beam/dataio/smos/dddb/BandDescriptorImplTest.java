@@ -15,7 +15,7 @@ public class BandDescriptorImplTest {
 
     @Test
     public void testConstruction_standardPropertySet() {
-        final String[] tokens = new String[] {"false", "theBand", "theMember", "18", "19", "20.0", "21.1", "22.2", "23.3", "true", "24.4", "pixelExpression", "unit", "description", "codingName", "flagDescriptors"};
+        final String[] tokens = new String[] {"false", "theBand", "theMember", "18", "19", "20.0", "21.1", "22.2", "23.3", "true", "24.4", "pixelExpression", "unit", "description", "codingName", "flagDescriptors", "ancilliaryBandName"};
         final Dddb dddb = mock(Dddb.class);
         when(dddb.getFlagDescriptors(anyString())).thenReturn(new FlagDescriptors(new ArrayList<String[]>()));
 
@@ -36,13 +36,14 @@ public class BandDescriptorImplTest {
         assertEquals("description", descriptor.getDescription());
         assertEquals("codingName", descriptor.getFlagCodingName());
         assertNotNull(descriptor.getFlagDescriptors());
+        assertEquals("ancilliaryBandName", descriptor.getAncilliaryBandName());
         assertTrue(descriptor.isGridPointData());
         assertNull(descriptor.getDimensionNames());
     }
 
     @Test
     public void testConstruction_extendedPropertySet() {
-        final String[] tokens = new String[] {"false", "theBand", "theMember", "18", "19", "20.0", "21.1", "22.2", "23.3", "true", "24.4", "pixelExpression", "unit", "description", "codingName", "flagDescriptors", "false", "dimension_name"};
+        final String[] tokens = new String[] {"false", "theBand", "theMember", "18", "19", "20.0", "21.1", "22.2", "23.3", "true", "24.4", "pixelExpression", "unit", "description", "codingName", "flagDescriptors", "ancilliaryBandName", "false", "dimension_name"};
         final Dddb dddb = mock(Dddb.class);
         when(dddb.getFlagDescriptors(anyString())).thenReturn(new FlagDescriptors(new ArrayList<String[]>()));
 
@@ -94,7 +95,7 @@ public class BandDescriptorImplTest {
 
     @Test
     public void testConstruction_withDefaults_extendedPropertySet() {
-        final String[] tokens = new String[] {"*", "theBand", "*", "*", "*", "*", "*", "*", "*", "*", "*", "pixelExpression", "*", "*", "*", "flagDescriptors", "*", "*"};
+        final String[] tokens = new String[] {"*", "theBand", "*", "*", "*", "*", "*", "*", "*", "*", "*", "pixelExpression", "*", "*", "*", "flagDescriptors", "*", "*", "*"};
         final Dddb dddb = mock(Dddb.class);
 
         final BandDescriptorImpl descriptor = new BandDescriptorImpl(tokens, dddb);

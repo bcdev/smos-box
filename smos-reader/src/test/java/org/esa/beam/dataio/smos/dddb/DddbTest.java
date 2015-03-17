@@ -38,6 +38,8 @@ public class DddbTest {
     private static final String DBL_SM_XXXX_MIR_OSUDP2_0200 = "DBL_SM_XXXX_MIR_OSUDP2_0200";
     private static final String DBL_SM_XXXX_MIR_OSUDP2_0300 = "DBL_SM_XXXX_MIR_OSUDP2_0300";
     private static final String DBL_SM_XXXX_MIR_SMUDP2_0200 = "DBL_SM_XXXX_MIR_SMUDP2_0200";
+    private static final String DBL_SM_XXXX_AUX_DGGROU_0400 = "DBL_SM_XXXX_AUX_DGGROU_0400";
+    private static final String DBL_SM_XXXX_AUX_DGGTFO_0300 = "DBL_SM_XXXX_AUX_DGGTFO_0300";
     private Dddb dddb;
 
     @Before
@@ -46,7 +48,7 @@ public class DddbTest {
     }
 
     @Test
-    public void testGetBandDescriptors() {
+    public void testGetBandDescriptors_ECMWF() {
         final Family<BandDescriptor> descriptors = dddb.getBandDescriptors(DBL_SM_XXXX_AUX_ECMWF_0200);
         assertEquals(57, descriptors.asList().size());
 
@@ -354,6 +356,32 @@ public class DddbTest {
     }
 
     @Test
+    public void testGetDGGROU_v0400Descriptors() {
+        final Family<BandDescriptor> descriptors = dddb.getBandDescriptors(DBL_SM_XXXX_AUX_DGGROU_0400);
+        assertEquals(11, descriptors.asList().size());
+
+        final BandDescriptor dt_branch_hr_asc = descriptors.getMember("DT_Branch_HR_Asc");
+        assertNotNull(dt_branch_hr_asc);
+
+        final BandDescriptor hr_asc = descriptors.getMember("HR_Asc");
+        assertNotNull(hr_asc);
+        assertEquals("HR_DQX_Asc", hr_asc.getAncilliaryBandName());
+    }
+
+    @Test
+    public void testGetDGGTFO_v0300Descriptors() {
+        final Family<BandDescriptor> descriptors = dddb.getBandDescriptors(DBL_SM_XXXX_AUX_DGGTFO_0300);
+        assertEquals(7, descriptors.asList().size());
+
+        final BandDescriptor date_stamp_fo = descriptors.getMember("Date_Stamp_FO");
+        assertNotNull(date_stamp_fo);
+
+        final BandDescriptor tau_nad_fo = descriptors.getMember("Tau_Nad_FO");
+        assertNotNull(tau_nad_fo);
+        assertEquals("Tau_Nad_FO_DQX", tau_nad_fo.getAncilliaryBandName());
+    }
+
+    @Test
     public void testGetOriginalName() {
         final Properties properties = new Properties();
         properties.setProperty("a_key", "a_value");
@@ -491,6 +519,11 @@ public class DddbTest {
 
         @Override
         public Family<FlagDescriptor> getFlagDescriptors() {
+            return null;
+        }
+
+        @Override
+        public String getAncilliaryBandName() {
             return null;
         }
 
