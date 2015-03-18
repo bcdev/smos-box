@@ -42,6 +42,7 @@ public class DddbTest {
     private static final String DBL_SM_XXXX_AUX_DGGTFO_0300 = "DBL_SM_XXXX_AUX_DGGTFO_0300";
     private static final String DBL_SM_XXXX_MIR_BWLF1C_0200 = "DBL_SM_XXXX_MIR_BWLF1C_0200";
     private static final String DBL_SM_XXXX_MIR_BWND1C_0200 = "DBL_SM_XXXX_MIR_BWND1C_0200";
+    private static final String DBL_SM_XXXX_MIR_BWNF1C_0200 = "DBL_SM_XXXX_MIR_BWNF1C_0200";
     private Dddb dddb;
 
     @Before
@@ -407,6 +408,19 @@ public class DddbTest {
         final BandDescriptor bt_value_y = descriptors.getMember("BT_Value_Y");
         assertNotNull(bt_value_y);
         assertEquals("Pixel_Radiometric_Accuracy_Y", bt_value_y.getAncilliaryBandName());
+    }
+
+    @Test
+    public void testGetBWNF1C_v0200Descriptors() {
+        final Family<BandDescriptor> descriptors = dddb.getBandDescriptors(DBL_SM_XXXX_MIR_BWNF1C_0200);
+        assertEquals(25, descriptors.asList().size());
+
+        final BandDescriptor flags_xy = descriptors.getMember("Flags_XY");
+        assertNotNull(flags_xy);
+
+        final BandDescriptor bt_value_xy_real = descriptors.getMember("BT_Value_XY_Real");
+        assertNotNull(bt_value_xy_real);
+        assertEquals("Pixel_Radiometric_Accuracy_XY", bt_value_xy_real.getAncilliaryBandName());
     }
 
     @Test
