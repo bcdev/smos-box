@@ -29,7 +29,7 @@ import static org.junit.Assert.*;
 
 public class DddbTest {
 
-    private static final String DBL_SM_XXXX_AUX_ECMWF_0200 = "DBL_SM_XXXX_AUX_ECMWF__0200";
+    private static final String DBL_SM_XXXX_AUX_ECMWF__0200 = "DBL_SM_XXXX_AUX_ECMWF__0200";
     private static final String DBL_SM_XXXX_MIR_SMDAP2_0200 = "DBL_SM_XXXX_MIR_SMDAP2_0200";
     private static final String DBL_SM_XXXX_MIR_SMDAP2_0201 = "DBL_SM_XXXX_MIR_SMDAP2_0201";
     private static final String DBL_SM_XXXX_MIR_SMDAP2_0300 = "DBL_SM_XXXX_MIR_SMDAP2_0300";
@@ -40,6 +40,8 @@ public class DddbTest {
     private static final String DBL_SM_XXXX_MIR_SMUDP2_0200 = "DBL_SM_XXXX_MIR_SMUDP2_0200";
     private static final String DBL_SM_XXXX_AUX_DGGROU_0400 = "DBL_SM_XXXX_AUX_DGGROU_0400";
     private static final String DBL_SM_XXXX_AUX_DGGTFO_0300 = "DBL_SM_XXXX_AUX_DGGTFO_0300";
+    private static final String DBL_SM_XXXX_MIR_BWLF1C_0200 = "DBL_SM_XXXX_MIR_BWLF1C_0200";
+    private static final String DBL_SM_XXXX_MIR_BWND1C_0200 = "DBL_SM_XXXX_MIR_BWND1C_0200";
     private Dddb dddb;
 
     @Before
@@ -49,7 +51,7 @@ public class DddbTest {
 
     @Test
     public void testGetBandDescriptors_ECMWF() {
-        final Family<BandDescriptor> descriptors = dddb.getBandDescriptors(DBL_SM_XXXX_AUX_ECMWF_0200);
+        final Family<BandDescriptor> descriptors = dddb.getBandDescriptors(DBL_SM_XXXX_AUX_ECMWF__0200);
         assertEquals(57, descriptors.asList().size());
 
         final BandDescriptor descriptor = descriptors.getMember("RR");
@@ -88,7 +90,7 @@ public class DddbTest {
 
     @Test
     public void testGetFlagDescriptors() {
-        final Family<FlagDescriptor> descriptors = dddb.getFlagDescriptors(DBL_SM_XXXX_AUX_ECMWF_0200 + "_flags1");
+        final Family<FlagDescriptor> descriptors = dddb.getFlagDescriptors(DBL_SM_XXXX_AUX_ECMWF__0200 + "_flags1");
         assertEquals(21, descriptors.asList().size());
 
         FlagDescriptor descriptor;
@@ -104,12 +106,12 @@ public class DddbTest {
 
     @Test
     public void testGetFlagDescriptorsFromBandDescriptor() {
-        final Family<BandDescriptor> bandDescriptor = dddb.getBandDescriptors(DBL_SM_XXXX_AUX_ECMWF_0200);
+        final Family<BandDescriptor> bandDescriptor = dddb.getBandDescriptors(DBL_SM_XXXX_AUX_ECMWF__0200);
         final Family<FlagDescriptor> flagDescriptors = bandDescriptor.getMember("F1").getFlagDescriptors();
         assertNotNull(flagDescriptors);
 
-        assertNotNull(dddb.getFlagDescriptors(DBL_SM_XXXX_AUX_ECMWF_0200 + "_flags1"));
-        assertSame(flagDescriptors, dddb.getFlagDescriptors(DBL_SM_XXXX_AUX_ECMWF_0200 + "_flags1"));
+        assertNotNull(dddb.getFlagDescriptors(DBL_SM_XXXX_AUX_ECMWF__0200 + "_flags1"));
+        assertSame(flagDescriptors, dddb.getFlagDescriptors(DBL_SM_XXXX_AUX_ECMWF__0200 + "_flags1"));
     }
 
     @Test
@@ -379,6 +381,32 @@ public class DddbTest {
         final BandDescriptor tau_nad_fo = descriptors.getMember("Tau_Nad_FO");
         assertNotNull(tau_nad_fo);
         assertEquals("Tau_Nad_FO_DQX", tau_nad_fo.getAncilliaryBandName());
+    }
+
+    @Test
+    public void testGetBWLF1C_v0200Descriptors() {
+        final Family<BandDescriptor> descriptors = dddb.getBandDescriptors(DBL_SM_XXXX_MIR_BWLF1C_0200);
+        assertEquals(25, descriptors.asList().size());
+
+        final BandDescriptor footprint_axis2_xy = descriptors.getMember("Footprint_Axis2_XY");
+        assertNotNull(footprint_axis2_xy);
+
+        final BandDescriptor bt_value_xy_real = descriptors.getMember("BT_Value_XY_Real");
+        assertNotNull(bt_value_xy_real);
+        assertEquals("Pixel_Radiometric_Accuracy_XY", bt_value_xy_real.getAncilliaryBandName());
+    }
+
+    @Test
+    public void testGetBWND1C_v0200Descriptors() {
+        final Family<BandDescriptor> descriptors = dddb.getBandDescriptors(DBL_SM_XXXX_MIR_BWND1C_0200);
+        assertEquals(18, descriptors.asList().size());
+
+        final BandDescriptor flags_x = descriptors.getMember("Flags_X");
+        assertNotNull(flags_x);
+
+        final BandDescriptor bt_value_y = descriptors.getMember("BT_Value_Y");
+        assertNotNull(bt_value_y);
+        assertEquals("Pixel_Radiometric_Accuracy_Y", bt_value_y.getAncilliaryBandName());
     }
 
     @Test
